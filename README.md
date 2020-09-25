@@ -2,15 +2,15 @@
 
 “Home” - is an all-in-one social service that will cover all aspects of your communication with your home and neighbors.
 It include next modules: 
-Communication with residents of the house, notification
-Suggestions / wishes residents of the house
-Bots for social chats and networks
-Reporting system
-Voting system
-Communal payments
-OSBB module
-Volunteer module to help people with disabilities 
-Parking module
+- Communication with residents of the house, notification
+- Suggestions / wishes residents of the house
+- Bots for social chats and networks
+- Reporting system
+- Voting system
+- Communal payments
+- OSBB module
+- Volunteer module to help people with disabilities 
+- Parking module
 
 
 **Badges will go here**
