@@ -1,14 +1,17 @@
-<a href="https://softserve.academy/"><img src="https://s.057.ua/section/newsInternalIcon/upload/images/news/icon/000/050/792/vnutr_5ce4f980ef15f.jpg" title="SoftServe IT Academy" alt="SoftServe IT Academy"></a>
+# Home
 
-***INSERT GRAPHIC HERE (include hyperlink in image)***
+“Home” - is an all-in-one social service that will cover all aspects of your communication with your home and neighbors.
+It include next modules: 
+Communication with residents of the house, notification
+Suggestions / wishes residents of the house
+Bots for social chats and networks
+Reporting system
+Voting system
+Communal payments
+OSBB module
+Volunteer module to help people with disabilities 
+Parking module
 
-# Repository Title Goes Here
-
-> Subtitle or Short Description Goes Here
-
-> ideally one sentence
-
-> include terms/tags that can be searched
 
 **Badges will go here**
 
@@ -23,10 +26,10 @@
 - license
 - etc.
 
-[![Build Status](https://img.shields.io/travis/ita-social-projects/GreenCity/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/GreenCity)
-[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/GreenCity/master?style=flat-square)](https://coveralls.io)
-[![Github Issues](https://img.shields.io/github/issues/ita-social-projects/GreenCity?style=flat-square)](https://github.com/ita-social-projects/GreenCity/issues)
-[![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/GreenCity?style=flat-square)](https://github.com/ita-social-projects/GreenCity/pulls)
+[![Build Status](https://img.shields.io/travis/ita-social-projects/Home/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/Home)
+[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/Home/master?style=flat-square)](https://coveralls.io)
+[![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
+[![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/pulls)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - For more on these wonderful  badges, refer to <a href="https://shields.io/" target="_blank">shields.io</a>.
