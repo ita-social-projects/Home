@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>home</artifactId>
-        <groupId>com.project</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>com.softserveinc.ita.homeproject</groupId>
+        <version>${revision}</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <artifactId>home-data</artifactId>
-            <groupId>com.project</groupId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 
