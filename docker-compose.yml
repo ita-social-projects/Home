@@ -1,0 +1,39 @@
+version: '3.1'
+networks:
+  homeproject-network:
+    driver: bridge
+services:
+  data-base:
+    image: postgres:latest
+    container_name: db-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      - homeproject-network
+    ports:
+      - 5432:5432
+
+
+
+  home:
+    container_name: home-project
+    build:
+      ./
+    ports:
+      - 8081:8080
+    restart: always
+    networks:
+      - homeproject-network
+    environment:
+      DATASOURCE_NAME: postgres
+      DATASOURCE_PASSWORD: password
+      DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/postgres
+    links:
+      - data-base
+    depends_on:
+      - data-base
+
+
+
+
