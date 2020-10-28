@@ -11,6 +11,10 @@
 
     <packaging>jar</packaging>
 
+    <properties>
+        <yaml.name>openapi.yaml</yaml.name>
+    </properties>
+
     <artifactId>home-server-stub</artifactId>
 
     <dependencies>
@@ -46,7 +50,7 @@
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*/Service.yaml</includes>
+                            <includes>*/${yaml.name}</includes>
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -63,7 +67,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.build.outputDirectory}/yaml/Service.yaml</inputSpec>
+                            <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
                             <generatorName>jaxrs-jersey</generatorName>
                             <configOptions>
                                 <java8>true</java8>
