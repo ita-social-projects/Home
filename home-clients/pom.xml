@@ -73,6 +73,8 @@
                         <configuration>
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
                             <generatorName>java</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
