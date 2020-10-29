@@ -71,6 +71,7 @@
                             <generatorName>jaxrs-jersey</generatorName>
                             <configOptions>
                                 <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
                                 <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-server-stub</artifactId>

@@ -75,6 +75,8 @@
                             <generatorName>java</generatorName>
                             <configOptions>
                                 <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
+                                <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <library>jersey2</library>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-clients</artifactId>
