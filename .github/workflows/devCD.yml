@@ -12,7 +12,7 @@ jobs:
       - uses: CDNievas/heroku-action@v1.0 # This is the action
         with:
           heroku_email: "home.project.academy@gmail.com"
-          heroku_app_name: "Home"
+          heroku_app_name: "home-project-academy"
       - name: Deploy to Heroku
         if:  job.status == 'success'
         run: |
