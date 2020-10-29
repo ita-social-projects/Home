@@ -13,5 +13,12 @@
 
     <artifactId>home-open-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.openapitools.openapistylevalidator</groupId>
+            <artifactId>openapi-style-validator-maven-plugin</artifactId>
+            <version>1.4</version>
+        </dependency>
+    </dependencies>
 
 </project>
