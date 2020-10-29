@@ -1,0 +1,20 @@
+name: dev branch Deploy to Heroku
+
+on:
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: CDNievas/heroku-action@v1.0 # This is the action
+        with:
+          heroku_email: "home.project.academy@gmail.com"
+          heroku_app_name: "Home"
+      - name: Deploy to Heroku
+        if:  job.status == 'success'
+        run: |
+          git remote add heroku https://git.heroku.com/home-project-academy.git
+          git push heroku HEAD:dev
