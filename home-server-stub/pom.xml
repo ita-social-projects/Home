@@ -85,6 +85,7 @@
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi/server</output>
                         </configuration>
                     </execution>
                 </executions>
@@ -104,7 +105,7 @@
                 <configuration>
                     <executable>mvn</executable>
                     <!-- optional -->
-                    <workingDirectory>${project.build.directory}/generated-sources/openapi</workingDirectory>
+                    <workingDirectory>${project.build.directory}/generated-sources/openapi/server</workingDirectory>
                     <arguments>
                         <argument>clean</argument>
                         <argument>install</argument>

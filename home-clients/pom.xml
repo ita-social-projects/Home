@@ -24,10 +24,6 @@
             <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +88,7 @@
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/client</templateDirectory>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi/client</output>
                         </configuration>
                     </execution>
                 </executions>
@@ -111,7 +108,7 @@
                 <configuration>
                     <executable>mvn</executable>
                     <!-- optional -->
-                    <workingDirectory>${project.build.directory}/generated-sources/openapi</workingDirectory>
+                    <workingDirectory>${project.build.directory}/generated-sources/openapi/client</workingDirectory>
                     <arguments>
                         <argument>clean</argument>
                         <argument>install</argument>
