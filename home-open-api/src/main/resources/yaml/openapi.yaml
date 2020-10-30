@@ -1,0 +1,438 @@
+openapi: 3.0.0
+info:
+  title: Voting
+  description: This element contains voting units created by owner based on the OpenAPI 3.0 specification.
+  version: 1.0.0
+tags:
+  - name: voting
+    description: Votings management operations
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /api/votings :
+    get:
+      tags:
+        - Voting
+      summary: Returns a list of active votings.
+      responses:
+        '200':    # status code
+          description: Successfully returns a list of active votings.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VotingDTO'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /api/variantsByVoting/{id}:
+    get:
+      tags:
+        - Voting
+      summary: Returns a voteslist in chosen voting .
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: voting id
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        '200':    # status code
+          description: Successfully returns a list of votes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VotingVariantsDTO'
+
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /api/voting/{id}:
+    post:
+      tags:
+        - voting
+      summary: Allows to vote for chosen variant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: vote id
+          schema:
+            type : integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteVariantDTO'
+      responses:
+        '201':
+          description: Voted
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - voting
+      summary: Editing an existing voting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: vote id
+          schema:
+            type : integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VotingUpdateDTO'
+      responses:
+        '200':    # status code
+          description: Successfully edited voting.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - voting
+      summary: Delete an existing voting
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: vote id
+          schema:
+            type : integer
+            format: int64
+      responses:
+        '200':
+          description: Chat deleted
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /api/voting:
+    post:
+      tags:
+        - voting
+      summary: Create new voting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVotingDTO'
+      responses:
+        '201':    # status code
+          description: Successfully created new voting.
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Voting:
+      required:
+        - name
+        - shortDescription
+        - startDate
+        - endDate
+        - fullDescription
+        - variants
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21.10.2020
+        endDate :
+          type: string
+          format: date-time
+          example: 25.10.2020
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        createDate:
+          type: string
+          format: date-time
+          example: 21.10.2020
+        updateDate:
+          type: string
+          format: date-time
+          example: 21.10.2020
+        isActive:
+          type: boolean
+          example: true
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
+              users:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - user
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Petrov
+    Variant:
+      required:
+        - desription
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: yes
+        createDate:
+          type: string
+          format: date-time
+          example: 21.10.2020
+        updateDate:
+          type: string
+          format: date-time
+          example: 21.10.2020
+        isActive:
+          type: boolean
+          example: true
+        voting:
+          type: object
+        users:
+          type: array
+          items:
+            type: object
+            required:
+              - user
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: Petrov
+
+    VotingDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21.10.2020
+        endDate :
+          type: string
+          format: date-time
+          example: 25.10.2020
+    VotingVariantsDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21.10.2020
+        endDate :
+          type: string
+          format: date-time
+          example: 25.10.2020
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
+              users:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - user
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Petrov
+    VoteVariantDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: yes
+        voting:
+          type: object
+    CreateVotingDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Enter name
+        shortDescription :
+          type: string
+          example: Enter short description
+        startDate :
+          type: string
+          format: date-time
+          example: Enter date
+        endDate :
+          type: string
+          format: date-time
+          example: Enter Date
+        fullDescriptoin:
+          type: string
+          example: Enter Full description
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: Enter vote text
+    VotingUpdateDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21.10.2020
+        endDate :
+          type: string
+          format: date-time
+          example: 25.10.2020
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
