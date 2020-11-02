@@ -206,6 +206,24 @@
         <version>2.1.1</version>
     </dependency>
 
+    <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-beans</artifactId>
+         <version>5.2.8.RELEASE</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>2.0.5</version>
+    </dependency>
+
+    <dependency>
+         <groupId>org.glassfish.jersey.media</groupId>
+         <artifactId>jersey-media-json-jackson</artifactId>
+         <version>2.29.1</version>
+    </dependency>
+
   </dependencies>
   <repositories>
     <repository>
@@ -220,7 +238,7 @@
     <java.version>{{#java8}}1.8{{/java8}}{{^java8}}1.7{{/java8}}</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-    <swagger-core-version>1.5.18</swagger-core-version>
+    <swagger-core-version>1.5.13</swagger-core-version>
 {{#useBeanValidation}}
     <beanvalidation-version>1.1.0.Final</beanvalidation-version>
 {{/useBeanValidation}}
