@@ -1412,22 +1412,22 @@ components:
         startDate :
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         endDate :
           type: string
           format: date-time
-          example: 25.10.2020
+          example: 2020-11-01T19:23Z
         fullDescriptoin:
           type: string
           example: conditions of bench installing
         createDate:
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         updateDate:
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         isActive:
           type: boolean
           example: true
@@ -1471,11 +1471,11 @@ components:
         createDate:
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         updateDate:
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         isActive:
           type: boolean
           example: true
@@ -1509,11 +1509,11 @@ components:
         startDate :
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         endDate :
           type: string
           format: date-time
-          example: 25.10.2020
+          example: 2020-11-01T19:23Z
     VariantList:
       type: object
       properties:
@@ -1529,11 +1529,11 @@ components:
         startDate :
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         endDate :
           type: string
           format: date-time
-          example: 25.10.2020
+          example: 2020-11-01T19:23Z
         fullDescriptoin:
           type: string
           example: conditions of bench installing
@@ -1625,11 +1625,11 @@ components:
         startDate :
           type: string
           format: date-time
-          example: 21.10.2020
+          example: 2020-11-01T19:23Z
         endDate :
           type: string
           format: date-time
-          example: 25.10.2020
+          example: 2020-11-01T19:23Z
         fullDescriptoin:
           type: string
           example: conditions of bench installing
@@ -1672,11 +1672,11 @@ components:
         createDate:
           type: string
           format: date-time
-          example: 26-11-2020 20:32
+          example: 2020-11-01T19:23Z
         updateDate:
           type: string
           format: date-time
-          example: 26-11-2020 20:32
+          example: 2020-11-01T19:23Z
         description:
           type: string
         source:
@@ -1713,8 +1713,8 @@ components:
           format: url
         createOrUpdateDate:
           type: string
-          format: datetime
-          example: 24-05-2020 15:14
+          format: date-time
+          example: 2020-11-01T19:23Z
 
     CreateNewsRequest:
       required:
@@ -1821,7 +1821,7 @@ components:
         orderDate:
           type: string
           format: date-time
-          example: 26-11-2020 10:00
+          example: 2020-11-01T19:23Z
 
     Executor:
       required:
@@ -1859,7 +1859,7 @@ components:
               orderDate:
                 type: string
                 format: date-time
-                example: 26-11-2020 10:00
+                example: 2020-11-01T19:23Z
         phoneNumber:
           type: string
           example: +380981256856
@@ -1929,7 +1929,8 @@ components:
             example: Viktor Vasilenko
           orderDate:
             type: string
-            example: 26.04.2020
+            format: date-time
+            example: 2020-11-01T19:23Z
 
     ExecutorList:
       type: array
@@ -1984,7 +1985,8 @@ components:
           example: Viktor Vasilenko
         orderDate:
           type: string
-          example: 26.04.2020
+          format: date-time
+          example: 2020-11-01T19:23Z
 
     ReadExecutor:
       type: object
@@ -2030,7 +2032,7 @@ components:
               orderDate:
                 type: string
                 format: date-time
-                example: 26-11-2020 10:00
+                example: 2020-11-01T19:23Z
 
     CreateService:
       type: object
@@ -2073,7 +2075,7 @@ components:
         orderDate:
           type: string
           format: date-time
-          example: 26-11-2020 10:00
+          example: 2020-11-01T19:23Z
 
     CreateExecutor:
       type: object
@@ -2192,11 +2194,11 @@ components:
         date_created:
           type: string
           format: date-time
-          example: 26-11-2020 20:32
+          example: 2020-11-01T19:23Z
         date_updated:
           type: string
           format: date-time
-          example: 26-11-2021 20:32
+          example: 2020-11-01T19:23Z
         icon_link:
           type: string
           example: "aw.link/sndfnjk74"
@@ -2282,11 +2284,11 @@ components:
         date_created:
           type: string
           format: date-time
-          example: 26-11-2020 20:32
+          example: 2020-11-01T19:23Z
         date_updated:
           type: string
           format: date-time
-          example: 26-11-2021 20:32
+          example: 2020-11-01T19:23Z
         from_id:
           type: number
           format: int64
