@@ -1,46 +1,87 @@
 openapi: 3.0.0
 info:
-  title: Voting
-  description: This element contains voting units created by owner based on the OpenAPI 3.0 specification.
+  title: HOME Project - Open API 3.0
+  description: "OpenAPI 3.0 specification for HOME Project code generation"
   version: 1.0.0
+servers:
+  - url: /api/0
 tags:
   - name: voting
     description: Votings management operations
-    externalDocs:
-      description: Find out more
-      url: http://swagger.io
+  - name: news
+    description: News management operations
+  - name: service
+    description: Orders management operations
+  - name: myaccount
+    description: My account configuration
+  - name: chat
+    description: Chats management operations
+  - name: message
+    description: Messages management operations
+  - name: neighbors
+    description: Find some information about neighbors
+  - name: user
+    description: User management operations
 paths:
-  /api/votings :
+  /votings :
     get:
       tags:
-        - Voting
-      summary: Returns a list of active votings.
+        - voting
+      summary: Returns a list of active votings
+      description: This endpoint shows all votings to user
+      operationId: getAllVotings
       responses:
-        '200':    # status code
-          description: Successfully returns a list of active votings.
+        "200":
+          description: Successfully returns a list of active votings
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/VotingDTO'
-
-        '400':
-          description: Invalid request
+                  $ref: '#/components/schemas/VotingList'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - voting
+      summary: Create new voting
+      description: Add a voting
+      operationId: addVoting
+      requestBody:
+        description: Successfully created new voting
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVoting'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-  /api/variantsByVoting/{id}:
+                $ref: '#/components/schemas/Voting'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+  /votings/{voting_id}/variants:
     get:
       tags:
-        - Voting
-      summary: Returns a voteslist in chosen voting .
+        - voting
+      summary: Returns a voteslist in chosen voting
+      description: View an existing votelist
+      operationId: getAllVariants
       parameters:
-        - name: id
+        - name: voting_id
           in: path
           required: true
           description: voting id
@@ -49,32 +90,26 @@ paths:
             format: int64
             example: 1
       responses:
-        '200':    # status code
+        "200":
           description: Successfully returns a list of votes.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/VotingVariantsDTO'
-
-
-        '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-  /api/voting/{id}:
+                  $ref: '#/components/schemas/VariantList'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - voting
       summary: Allows to vote for chosen variant
+      description: Add a vote in voting
+      operationId: choose vote
       parameters:
-        - name: id
+        - name: voting_id
           in: path
           required: true
           description: vote id
@@ -86,25 +121,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VoteVariantDTO'
+              $ref: '#/components/schemas/PostVariant'
       responses:
-        '201':
-          description: Voted
-        '400':
-          description: Invalid request
+        "201":
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Variant'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+  /votings/{voting_id}:
     put:
       tags:
         - voting
-      summary: Editing an existing voting
+      summary: Edit an existing voting
+      description: Editing an existing voting
+      operationId: updateVoting
       parameters:
-        - name: id
+        - name: voting_id
           in: path
           required: true
           description: vote id
@@ -116,68 +159,1236 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VotingUpdateDTO'
+              $ref: '#/components/schemas/UpdateVoting'
       responses:
-        '200':    # status code
-          description: Successfully edited voting.
-        '400':
-          description: Invalid request
+        "200":
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Voting'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - voting
       summary: Delete an existing voting
+      operationId: deleteVoting
       parameters:
-        - name: id
+        - name: voting_id
           in: path
           required: true
-          description: vote id
+          description: voting id
           schema:
             type : integer
             format: int64
       responses:
-        '200':
-          description: Chat deleted
-        '400':
-          description: Invalid request
+        "204":
+          description: Succesful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /news:
+    post:
+      tags:
+        - news
+      summary: Add a news to the home page
+      description: Add a news to the home page
+      operationId: addNews
+      requestBody:
+        description: Create a news
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewsRequest'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-  /api/voting:
+                $ref: '#/components/schemas/News'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      tags:
+        - news
+      summary: Get all news to the home page
+      description: This endpoint delivers all news to the Home Page
+      operationId: getAllNews
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadAllNews'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+  /news/{name}:
+    get:
+      tags:
+        - news
+      summary: Get an existing news by name
+      description: View an existing news by its Name
+      operationId: getNews
+      parameters:
+        - name: name
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadNews'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - news
+      summary: Update an existing news
+      description: Update an existing news by Name
+      operationId: updateNews
+      parameters:
+        - name: name
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing news
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNewsRequest'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - news
+      summary: Delete the chosen news
+      operationId: deleteNews
+      parameters:
+        - name: name
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /orders:
+    get:
+      tags:
+        - service
+      summary: Returns a list of orders
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
     post:
       tags:
-        - voting
-      summary: Create new voting
+        - service
+      summary: Create a service order
+      requestBody:
+        description: Add a new order
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /orders/{order_id}:
+    get:
+      tags:
+        - service
+      summary: Returns information about the order
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          description: ID of the order
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: Order by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadOrder'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - service
+      summary: Delete order
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          description: ID of the order
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /services:
+    get:
+      tags:
+        - service
+      summary: Returns a list of services
+      responses:
+        "200":
+          description: List of services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceList'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - service
+      summary: Create service
+      requestBody:
+        description: Add a new service
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateService'
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /services/{service_id}:
+    get:
+      tags:
+        - service
+      summary: Returns information about the service
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          description:  Service id
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: Service id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadService'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - service
+      summary: Update service
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          description: Service id
+          schema:
+            type : integer
+            format: int64
+            example: 1
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateVotingDTO'
+              $ref: '#/components/schemas/UpdateService'
       responses:
-        '201':    # status code
-          description: Successfully created new voting.
-        '400':
-          description: Invalid request
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - service
+      summary: Delete service
+      parameters:
+        - name: service_id
+          in: path
+          required: true
+          description: Service id
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /executors:
+    get:
+      tags:
+        - service
+      summary: Returns a list of executors
+      responses:
+        "200":
+          description: List of executors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutorList'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - service
+      summary: Create executor
+      requestBody:
+        description: Add a new executor
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExecutor'
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Executor'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /executors/{executor_id}:
+    get:
+      tags:
+        - service
+      summary: Returns information about the executor
+      parameters:
+        - name: executor_id
+          in: path
+          required: true
+          description: ID of the executor
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: Executor by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadExecutor'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - service
+      summary: Update executor
+      parameters:
+        - name: executor_id
+          in: path
+          required: true
+          description: Executor id
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExecutor'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Executor'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - service
+      summary: Delete executor
+      parameters:
+        - name: executor_id
+          in: path
+          required: true
+          description: Executor id
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /myaccount:
+    get:
+      tags:
+        - myaccount
+      summary: Get all inform about your account
+      description: This endpoint delivers all information about user
+      operationId: getMyAccountFromAcc
+      responses:
+        "200":
+          description: Successful operation
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  message:
-                    type: string
+                items:
+                  $ref: '#/components/schemas/MyAccountResponse'
+        "404":
+          description: News not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /myaccount/{user_id}:
+    put:
+      tags:
+        - myaccount
+      summary: Update current user
+      description: Update current user
+      operationId: updateUserFromAcc
+      parameters:
+        - name: "user_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - myaccount
+      summary: Delete the chosen account
+      operationId: deleteUserFromAcc
+      parameters:
+        - name: user_id
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Succesful operation
+        "400":
+          description: Invalid name supplied
+        "404":
+          description: News not found
+
+  /neighbors/{name}:
+    get:
+      tags:
+        - neighbors
+      summary: Get uset by name
+      description: Find inform about user by Name
+      operationId: getUserInfo
+      parameters:
+        - name: name
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindInfo'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /neighbors/{flat}:
+    get:
+      tags:
+        - neighbors
+      summary: Get an existing news by name
+      description: Find inform about by flat
+      operationId: getUserbyFlat
+      parameters:
+        - name: flat
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindInfo'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/:
+    get:
+      tags:
+        - chat
+      summary: Gets all chats
+      description: Get all chats
+      operationId: getAllChats
+      responses:
+        '200':
+          description: Got all chats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadAllChats'
+        '5XX':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - chat
+      summary: Add a new chat
+      description: Add a new chat
+      operationId: addChats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChat'
+      responses:
+        '201':
+          description: Chat is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '5XX':
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}:
+    get:
+      tags:
+        - chat
+      summary: Gets specific chat by id
+      description: Gets specific chat by id
+      operationId: getChats
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: Got specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadChat'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - chat
+      summary: Updates a specific chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChat'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - chat
+      summary: Deletes a chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '204':
+          description: Chat is deleted
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}/messages:
+    get:
+      tags:
+        - message
+      summary: Gets back the chat history of messages by id
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: Got all messages from specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadAllMessages'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}/messages/{message_id}:
+    get:
+      tags:
+        - message
+      summary: Gets message from specific chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: Got message from specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadMessage'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - message
+      summary: Creates a new message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessage'
+      responses:
+        '201':
+          description: Message in chat is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - message
+      summary: Updates a message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMessage'
+      responses:
+        '200':
+          description: Message in chat is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - message
+      summary: Deletes a message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '204':
+          description: Message in chat is deleted
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /users:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        description: Create a new User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - user
+      summary: "Get all users"
+      description: ''
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserList"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+  /users/{id}:
+    get:
+      tags:
+        - user
+      summary: "Get user by user name"
+      description: ''
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - user
+      summary: Update current user
+      description: Update current user
+      operationId: updateUser
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - user
+      summary: Delete user by ID
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/{id}/pass:
+    put:
+      tags:
+        - user
+      summary: Update user's password
+      description: Update user's password
+      operationId: updatePassword
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type : integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePassword'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "5XX":
+          $ref: '#/components/responses/InternalServerError'
 
 components:
+  responses:
+    BadRequest:
+      description: Validation Exception
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: You do not have permission to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict with current state of the resourse
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Voting:
       required:
@@ -283,8 +1494,7 @@ components:
               name:
                 type: string
                 example: Petrov
-
-    VotingDTO:
+    VotingList:
       type: object
       properties:
         id:
@@ -304,7 +1514,7 @@ components:
           type: string
           format: date-time
           example: 25.10.2020
-    VotingVariantsDTO:
+    VariantList:
       type: object
       properties:
         id:
@@ -353,7 +1563,7 @@ components:
                     name:
                       type: string
                       example: Petrov
-    VoteVariantDTO:
+    PostVariant:
       type: object
       properties:
         id:
@@ -364,7 +1574,7 @@ components:
           example: yes
         voting:
           type: object
-    CreateVotingDTO:
+    CreateVoting:
       type: object
       properties:
         id:
@@ -400,7 +1610,7 @@ components:
               description:
                 type: string
                 example: Enter vote text
-    VotingUpdateDTO:
+    UpdateVoting:
       type: object
       properties:
         id:
@@ -436,3 +1646,791 @@ components:
               description:
                 type: string
                 example: yes
+    News:
+      required:
+        - title
+        - type
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: news-in-the-local-area
+        title:
+          type: string
+          example: News In The Local Area
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        createDate:
+          type: string
+          format: date-time
+          example: 26-11-2020 20:32
+        updateDate:
+          type: string
+          format: date-time
+          example: 26-11-2020 20:32
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    ReadAllNews:
+      type: object
+      properties:
+        title:
+          type: string
+        photo:
+          type: string
+          format: url
+        description:
+          type: string
+        type:
+          type: string
+          enum: [Country, Local, Area]
+
+    ReadNews:
+      type: object
+      properties:
+        title:
+          type: string
+        photo:
+          type: string
+          format: url
+        text:
+          type: string
+        source:
+          type: string
+          format: url
+        createOrUpdateDate:
+          type: string
+          format: datetime
+          example: 24-05-2020 15:14
+
+    CreateNewsRequest:
+      required:
+        - title
+        - type
+        - description
+        - text
+      type: object
+      properties:
+        title:
+          type: string
+          example: News in the Some Area
+        name:
+          type: string
+          example: news-in-the-some-area
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    UpdateNewsRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    Service:
+      required:
+        - name
+        - executors
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Mechanic
+        isActive:
+          type: boolean
+        executors:
+          type: array
+          items:
+            type: object
+            required:
+              - executor
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: Vasiliy Ivanov
+              phoneNumber:
+                type: string
+                example: +380981256856
+
+    Order:
+      required:
+        - name
+        - user
+        - executor
+        - orderDate
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: mechanic
+        isActive:
+          type: boolean
+        executor:
+          type: string
+          example: Ivan Ivanov
+        user:
+          type: string
+          example: Viktor Vasilenko
+        orderDate:
+          type: string
+          format: date-time
+          example: 26-11-2020 10:00
+
+    Executor:
+      required:
+        - name
+        - orders
+        - services
+        - phoneNumber
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Ivan Ivanov
+        isActive:
+          type: boolean
+        orders:
+          type: array
+          items:
+            type: object
+            required:
+              - order
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: mechanic
+              user:
+                type: string
+                example: Viktor Vasilenko
+              orderDate:
+                type: string
+                format: date-time
+                example: 26-11-2020 10:00
+        phoneNumber:
+          type: string
+          example: +380981256856
+        services:
+          type: array
+          items:
+            type: object
+            required:
+              - service
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: mechanic
+
+    ServiceList:
+      type: array
+      items:
+        type: object
+        required:
+          - service
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: mechanic
+          executors:
+            type: array
+            items:
+              type: object
+              required:
+                - executor
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 1
+                name:
+                  type: string
+                  example: Ivan Ivanov
+                phoneNumber:
+                  type: string
+                  example: +380981256856
+
+    OrderList:
+      type: array
+      items:
+        type: object
+        required:
+          - order
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: mechanic
+          executor:
+            type: string
+            example: Ivan Ivanov
+          user:
+            type: string
+            example: Viktor Vasilenko
+          orderDate:
+            type: string
+            example: 26.04.2020
+
+    ExecutorList:
+      type: array
+      items:
+        type: object
+        required:
+          - executor
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: Vasiliy Ivanov
+          phoneNumber:
+            type: string
+            example: +380981256856
+
+    ReadService:
+      type: object
+      required:
+        - service
+      properties:
+        name:
+          type: string
+          example: mechanic
+        executor:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Vasiliy Ivanov
+              phoneNumber:
+                type: string
+                example: +380981256856
+
+    ReadOrder:
+      type: object
+      required:
+        - order
+      properties:
+        name:
+          type: string
+          example: mechanic
+        executor:
+          type: string
+          example: Ivan Ivanov
+        user:
+          type: string
+          example: Viktor Vasilenko
+        orderDate:
+          type: string
+          example: 26.04.2020
+
+    ReadExecutor:
+      type: object
+      required:
+        - executor
+      properties:
+        name:
+          type: string
+          example: Vasiliy Ivanov
+        phoneNumber:
+          type: string
+          example: +380981256856
+        services:
+          type: array
+          items:
+            type: object
+            required:
+              - service
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: mechanic
+        orders:
+          type: array
+          items:
+            type: object
+            required:
+              - order
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+              name:
+                type: string
+                example: mechanic
+              user:
+                type: string
+                example: Viktor Vasilenko
+              orderDate:
+                type: string
+                format: date-time
+                example: 26-11-2020 10:00
+
+    CreateService:
+      type: object
+      required:
+        - service
+      properties:
+        name:
+          type: string
+          example: mechanic
+        executors:
+          type: array
+          items:
+            type: object
+            required:
+              - executor
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+              name:
+                type: string
+                example: Ivan Ivanov
+              phoneNumber:
+                type: string
+                example: +380981256856
+
+    CreateOrder:
+      type: object
+      properties:
+        name:
+          type: string
+          example: mechanic
+        executor:
+          type: string
+          example: Ivan Ivanov
+        user:
+          type: string
+          example: Viktor Vasilenko
+        orderDate:
+          type: string
+          format: date-time
+          example: 26-11-2020 10:00
+
+    CreateExecutor:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ivan Ivanov
+        phoneNumber:
+          type: string
+          example: +380981256856
+        services:
+          type: array
+          items:
+            type: object
+            required:
+              - service
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: mechanic
+
+    UpdateService:
+      type: object
+      properties:
+        name:
+          type: string
+          example: mechanic
+        executor:
+          type: string
+          example: Ivan Ivanov
+
+    UpdateExecutor:
+      type: object
+      required:
+        - executor
+      properties:
+        name:
+          type: string
+          example: Ivan Ivanov
+        phoneNumber:
+          type: string
+          example: +380981256856
+        services:
+          type: array
+          items:
+            type: object
+            required:
+              - service
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: mechanic
+
+    MyAccountResponse:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        photo:
+          type: string
+          format: url
+        phone_number:
+          type: string
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        photoUrl:
+          type: string
+          format: url
+        password:
+          type: string
+        e-mail:
+          type: string
+        # documents:
+        #   type: string
+        #   format: url
+
+    FindInfo:
+      type: object
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        photo:
+          type: string
+          format: url
+        phone_number:
+          type: string
+        flat:
+          type: integer
+
+    Chat:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 23
+        name:
+          type: string
+          example: "chat of the floor 4, building 5"
+        date_created:
+          type: string
+          format: date-time
+          example: 26-11-2020 20:32
+        date_updated:
+          type: string
+          format: date-time
+          example: 26-11-2021 20:32
+        icon_link:
+          type: string
+          example: "aw.link/sndfnjk74"
+        members:
+          type: array
+          items:
+            type: string
+            example: "10, 8, 56, 9"
+
+    ReadAllChats:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 5
+        name:
+          type: string
+          example: "super-chat"
+        icon:
+          type: string
+          example: "/link-here"
+        members:
+          type: array
+          items:
+            type: string
+            example: "9, 65, 45, 6"
+
+    ReadChat:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "super chat"
+        icon:
+          type: string
+          example: "/link-here"
+        members:
+          type: array
+          items:
+            type: string
+            example: "4, 6, 87, 6"
+
+    CreateChat:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "New super chat"
+        icon:
+          type: string
+          example: "/link/here/to/icon"
+        members:
+          type: array
+          items:
+            type: string
+            example: "10, 5, 7, 4"
+
+    UpdateChat:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "supe chat"
+        icon:
+          type: string
+          example: "/link/here/to/icon"
+        members:
+          type: array
+          items:
+            type: string
+            example: "4, 6, 7, 234"
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          example: 197
+        body:
+          type: string
+          example: "aws.imagelink/trh6u59"
+        date_created:
+          type: string
+          format: date-time
+          example: 26-11-2020 20:32
+        date_updated:
+          type: string
+          format: date-time
+          example: 26-11-2021 20:32
+        from_id:
+          type: number
+          format: int64
+          example: 45
+        to_id:
+          type: number
+          format: int64
+          example: 76
+        type:
+          type: string
+          enum: [text, image, file]
+          example: image
+        is_important:
+          type: boolean
+
+    ReadAllMessages:
+      type: array
+      items:
+        type: object
+        properties:
+          body:
+            type: string
+            example: "hello Ivan, doing cleanup doing?"
+          from_id:
+            type: number
+            example: 3
+          to_id:
+            type: number
+            example: 7
+
+    ReadMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "yes, I want to vote for Grisha"
+        from_id:
+          type: number
+          example: 3
+        to_id:
+          type: number
+          example: 7
+
+    CreateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "Hi! New in chat"
+        from_id:
+          type: number
+          example: 7
+        to_id:
+          type: number
+          example: 10
+        type:
+          type: string
+          example: "text"
+        is_important:
+          type: boolean
+          example: true
+
+    UpdateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "I want to change OSBB"
+        is_important:
+          type: boolean
+          example: true
+
+    CreateUser:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    UserList:
+      type: array
+      items:
+        type: object
+        properties:
+          schema:
+            $ref: "#/components/schemas/User"
+
+    UpdatePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          example: passWord123
+
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Petro
+        lastName:
+          type: string
+          example: Petrov
+        email:
+          type: string
+          example: home@gmail.com
+        password:
+          type: string
+          example: passWord123
+        role:
+          type: string
+          enum: [user, owner, admin, executor]
+          example: user
+        houseId:
+          type: integer
+          example: 1
+        orders:
+          type: string
+          $ref: '#/components/schemas/OrderList'
+        phone:
+          type: string
+          example: (0562) 345 432
+        mobilePhone:
+          type: string
+          example: (067) 123 321 1
+        activStatus:
+          type: boolean
+          enum: [true, false]
+        createDate:
+          type: integer
+          format: int64
+          example: 14567643524235346346345
+        updateDate:
+          type: integer
+          format: int64
+          example: 14567643524235346346345
+
+    Error:
+      type: object
+      properties:
+        responseCode:
+          type: string
+        description:
+          type: string
+        errorMessage:
+          type: string
