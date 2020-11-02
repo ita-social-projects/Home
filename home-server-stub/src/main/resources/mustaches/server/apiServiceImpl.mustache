@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 {{/useBeanValidation}}
 {{>generatedAnnotation}}
 {{#operations}}
-public class {{classname}}ServiceImpl extends {{classname}}Service {
+public class {{classname}}ServiceImpl implements {{classname}}Service {
     {{#operation}}
     @Override
     public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}, {{/allParams}}SecurityContext securityContext) throws NotFoundException {

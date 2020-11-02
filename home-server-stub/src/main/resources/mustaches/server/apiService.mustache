@@ -18,9 +18,9 @@ import javax.validation.constraints.*;
 {{/useBeanValidation}}
 {{>generatedAnnotation}}
 {{#operations}}
-public abstract class {{classname}}Service {
+public interface {{classname}}Service {
     {{#operation}}
-    public abstract Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}},{{/allParams}}SecurityContext securityContext) throws NotFoundException;
+    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}},{{/allParams}}SecurityContext securityContext) throws NotFoundException;
     {{/operation}}
 }
 {{/operations}}
