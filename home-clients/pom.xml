@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
@@ -74,10 +74,10 @@
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
-                                <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <library>jersey2</library>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
-                                <artifactId>home-clients</artifactId>
+                                <artifactId>home-java-client</artifactId>
+                                <artifactVersion>${revision}</artifactVersion>
                                 <groupId>${project.groupId}</groupId>
                                 <modelPackage>com.softserveinc.ita.homeproject.model</modelPackage>
                                 <apiPackage>com.softserveinc.ita.homeproject.api</apiPackage>
