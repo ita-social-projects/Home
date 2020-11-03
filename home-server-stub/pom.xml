@@ -72,9 +72,9 @@
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
-                                <legacyDiscriminatorBehavior>false</legacyDiscriminatorBehavior>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
-                                <artifactId>home-server-stub</artifactId>
+                                <artifactId>home-generated-server</artifactId>
+                                <artifactVersion>${revision}</artifactVersion>
                                 <groupId>${project.groupId}</groupId>
                                 <modelPackage>com.softserveinc.ita.homeproject.model</modelPackage>
                                 <apiPackage>com.softserveinc.ita.homeproject.api</apiPackage>
