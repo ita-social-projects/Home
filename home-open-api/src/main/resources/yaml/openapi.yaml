@@ -1028,7 +1028,28 @@ components:
           type: string
         password:
           type: string
-
+    OrderList:
+      type: array
+      items:
+        type: object
+        required:
+          - order
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: mechanic
+          executor:
+            type: string
+            example: Ivan Ivanov
+          customer:
+            type: string
+            example: Viktor Vasilenko
+          orderDate:
+            type: string
+            example: 26.04.2020
     User:
       type: object
       properties:
@@ -1055,8 +1076,11 @@ components:
           type: integer
           example: 1
         orders:
-          type: string
-          $ref: '#/components/schemas/OrderList'
+          type: array
+          items:
+            type: object
+            required:
+              - $ref: '#/components/schemas/Order'
         phone:
           type: string
           example: (0562) 345 432
@@ -1096,8 +1120,11 @@ components:
           type: integer
           example: 1
         orders:
-          type: string
-          $ref: '#/components/schemas/OrderList'
+          type: array
+          items:
+            type: object
+            required:
+              - $ref: '#/components/schemas/Order'
         phone:
           type: string
           example: (0562) 345 432
