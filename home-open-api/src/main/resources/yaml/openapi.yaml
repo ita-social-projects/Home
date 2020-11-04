@@ -11,7 +11,9 @@ tags:
   - name: chats
     description: Operations with chats
   - name: messages
-    description: Operations with messages
+    description: Operations with messages-
+  - name: user
+    description: user management
 paths:
   /news:
     post:
@@ -178,7 +180,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
-
   /chats:
     get:
       tags:
@@ -244,7 +245,6 @@ paths:
           $ref: '#/components/responses/Conflict'
         'default':
           $ref: '#/components/responses/InternalServerError'
-
   /chats/{chat_id}:
     get:
       tags:
@@ -333,7 +333,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
-
   /chats/{chat_id}/messages:
     get:
       tags:
@@ -373,7 +372,6 @@ paths:
                 $ref: '#/components/schemas/ReadAllMessages'
         "default":
           $ref: '#/components/responses/InternalServerError'
-
   /chats/{chat_id}/messages/{message_id}:
     get:
       tags:
@@ -523,6 +521,165 @@ paths:
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
+          $ref: '#/components/responses/InternalServerError'
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        description: Create a new User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - User
+      summary: "Get all users"
+      description: ''
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          required: false
+          description: "The number of items to skip before starting to collect the response"
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          required: false
+          description: "The number of items to return"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /users/{id}:
+    get:
+      tags:
+        - User
+      summary: "Get user by user name"
+      description: ''
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - User
+      summary: Update current user
+      description: Update current user
+      operationId: updateUser
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        description: Update current user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - User
+      summary: Delete user by ID
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
           $ref: '#/components/responses/InternalServerError'
 
 components:
@@ -863,3 +1020,96 @@ components:
         is_important:
           type: boolean
           example: true
+
+    CreateUser:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: Petro
+        lastName:
+          type: string
+          example: Petrov
+        email:
+          type: string
+          example: home@gmail.com
+        password:
+          type: string
+          example: passWord123
+        role:
+          type: string
+          enum: [ user, owner, admin, executor ]
+          example: user
+        houseId:
+          type: integer
+          example: 1
+        orders:
+          type: string
+          $ref: '#/components/schemas/OrderList'
+        phone:
+          type: string
+          example: (0562) 345 432
+        mobilePhone:
+          type: string
+          example: (067) 123 321 1
+        activStatus:
+          type: boolean
+          enum: [ true, false ]
+        createDate:
+          type: string
+          format: date-time
+        updateDate:
+          type: string
+          format: date-time
+
+    UpdateUser:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Petro
+        lastName:
+          type: string
+          example: Petrov
+        email:
+          type: string
+          example: home@gmail.com
+        password:
+          type: string
+          example: passWord123
+        role:
+          type: string
+          enum: [ user, owner, admin, executor ]
+          example: user
+        houseId:
+          type: integer
+          example: 1
+        orders:
+          type: string
+          $ref: '#/components/schemas/OrderList'
+        phone:
+          type: string
+          example: (0562) 345 432
+        mobilePhone:
+          type: string
+          example: (067) 123 321 1
+        activStatus:
+          type: boolean
+          enum: [ true, false ]
+        createDate:
+          type: string
+          format: date-time
+        updateDate:
+          type: string
+          format: date-time
