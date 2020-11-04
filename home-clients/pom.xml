@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>home</artifactId>
         <groupId>com.softserveinc.ita.homeproject</groupId>
@@ -11,6 +11,114 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <yaml.name>openapi.yaml</yaml.name>
+    </properties>
+
     <artifactId>home-clients</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-open-api</artifactId>
+            <version>${revision}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>resource-dependencies</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                                    <artifactId>home-open-api</artifactId>
+                                    <version>${revision}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>*/${yaml.name}</includes>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
+                            <generatorName>java</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <java8>true</java8>
+                                <dateLibrary>java8</dateLibrary>
+                                <library>jersey2</library>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <artifactId>home-java-client</artifactId>
+                                <artifactVersion>${revision}</artifactVersion>
+                                <groupId>${project.groupId}</groupId>
+                                <modelPackage>com.softserveinc.ita.homeproject.model</modelPackage>
+                                <apiPackage>com.softserveinc.ita.homeproject.api</apiPackage>
+                                <invokerPackage>com.softserveinc.ita.homeproject</invokerPackage>
+                                <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
+                                <parentGroupId>${project.parent.groupId}</parentGroupId>
+                                <parentVersion>${project.parent.version}</parentVersion>
+                            </configOptions>
+                            <templateDirectory>${project.build.resources[0].directory}/mustaches/client</templateDirectory>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi/client</output>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>mvn</executable>
+                    <!-- optional -->
+                    <workingDirectory>${project.build.directory}/generated-sources/openapi/client</workingDirectory>
+                    <arguments>
+                        <argument>clean</argument>
+                        <argument>install</argument>
+                    </arguments>
+                    <environmentVariables>
+                        <LANG>en_US</LANG>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

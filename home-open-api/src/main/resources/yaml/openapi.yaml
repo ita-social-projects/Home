@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  title: HOME Project - Open API 3.0
+  description: "OpenAPI 3.0 specification for HOME Project code generation"
+  version: 1.0.0
+servers:
+  - url: /api/0
+tags:
+  - name: news
+    description: News management operations
+paths:
+  /news:
+    post:
+      tags:
+        - news
+      summary: Add a news to the home page
+      description: Add a news to the home page
+      operationId: addNews
+      requestBody:
+        description: Create a news
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostNews'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    get:
+      tags:
+        - news
+      summary: Get all news to the home page
+      description: This endpoint delivers all news to the Home Page
+      operationId: getAllNews
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - Country
+              - Local
+              - Area
+          required: false
+          description: Filter news by type.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadNews'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+  /news/{id}:
+    get:
+      tags:
+        - news
+      summary: Get an existing news by its id
+      description: View an existing news by its Identifier
+      operationId: getNews
+      parameters:
+        - name: id
+          in: path
+          description: Id value that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadNews'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - news
+      summary: Update an existing news
+      description: Update an existing news by Identifier
+      operationId: updateNews
+      parameters:
+        - name: id
+          in: path
+          description: Id value that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update an existing news
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNews'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - news
+      summary: Delete the chosen news
+      operationId: deleteNews
+      parameters:
+        - name: id
+          in: path
+          description: Id value that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    BadRequest:
+      description: Validation Exception
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: You do not have permission to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict with current state of the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+
+  schemas:
+    News:
+      required:
+        - title
+        - type
+        - description
+        - text
+        - createDate
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: News In The Local Area
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        createDate:
+          type: string
+          format: date-time
+        updateDate:
+          type: string
+          format: date-time
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    ReadNews:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        photoUrl:
+          type: string
+          format: url
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        createOrUpdateDate:
+          type: string
+          format: date-time
+        text:
+          type: string
+        source:
+          type: string
+          format: url
+
+    PostNews:
+      required:
+        - title
+        - type
+        - description
+        - text
+      type: object
+      properties:
+        title:
+          type: string
+          example: News in the Some Area
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    UpdateNews:
+      type: object
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+          enum: [Country, Local, Area]
+          example: Local
+        photoUrl:
+          type: string
+          format: url
+        description:
+          type: string
+        source:
+          type: string
+        text:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        responseCode:
+          type: string
+        description:
+          type: string
+        errorMessage:
+          type: string
