@@ -18,8 +18,8 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-server-stub</artifactId>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
         </dependency>
         <dependency>
