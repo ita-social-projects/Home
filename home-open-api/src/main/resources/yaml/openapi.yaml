@@ -8,6 +8,10 @@ servers:
 tags:
   - name: news
     description: News management operations
+  - name: chats
+    description: Operations with chats
+  - name: messages
+    description: Operations with messages
 paths:
   /news:
     post:
@@ -175,6 +179,352 @@ paths:
         "default":
           $ref: '#/components/responses/InternalServerError'
 
+  /chats:
+    get:
+      tags:
+        - chats
+      summary: Gets all chats
+      description: Get all chats
+      operationId: getAllChats
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 3
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: Got all chats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadAllChats'
+        'default':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - chats
+      summary: Add a new chat
+      description: Add a new chat
+      operationId: addChats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChat'
+      responses:
+        '201':
+          description: Chat is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        'default':
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}:
+    get:
+      tags:
+        - chats
+      summary: Gets specific chat by id
+      description: Gets specific chat by id
+      operationId: getChats
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: Got specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadChat'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        'default':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - chats
+      summary: Updates a specific chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChat'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - chats
+      summary: Deletes a chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '204':
+          description: Chat is deleted
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}/messages:
+    get:
+      tags:
+        - messages
+      summary: Gets back the chat history of messages by id
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 50
+            default: 10
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: Got all messages from specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadAllMessages'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+  /chats/{chat_id}/messages/{message_id}:
+    get:
+      tags:
+        - messages
+      summary: Gets message from specific chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: Got message from specific chat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadMessage'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - messages
+      summary: Creates a new message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessage'
+      responses:
+        '201':
+          description: Message in chat is created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - messages
+      summary: Updates a message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMessage'
+      responses:
+        '200':
+          description: Message in chat is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - messages
+      summary: Deletes a message in chat
+      parameters:
+        - name: chat_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+        - name: message_id
+          in: path
+          required: true
+          description: ID of the message
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '204':
+          description: Message in chat is deleted
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   responses:
     BadRequest:
@@ -213,7 +563,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
 
   schemas:
     News:
@@ -329,3 +678,188 @@ components:
           type: string
         errorMessage:
           type: string
+
+    Chat:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 23
+        name:
+          type: string
+          example: "chat of the floor 4, building 5"
+        date_created:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        date_updated:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        icon_link:
+          type: string
+          example: "aw.link/sndfnjk74"
+        members:
+          type: array
+          items:
+            type: string
+            example: "10, 8, 56, 9"
+
+    ReadAllChats:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 5
+        name:
+          type: string
+          example: "super-chat"
+        icon:
+          type: string
+          example: "/link-here"
+        members:
+          type: array
+          items:
+            type: string
+            example: "9, 65, 45, 6"
+
+    ReadChat:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 4
+        name:
+          type: string
+          example: "super chat"
+        icon:
+          type: string
+          example: "/link-here"
+        members:
+          type: array
+          items:
+            type: string
+            example: "4, 6, 87, 6"
+
+    CreateChat:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "New super chat"
+        icon:
+          type: string
+          example: "/link/here/to/icon"
+        members:
+          type: array
+          items:
+            type: string
+            example: "10, 5, 7, 4"
+
+    UpdateChat:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "supe chat"
+        icon:
+          type: string
+          example: "/link/here/to/icon"
+        members:
+          type: array
+          items:
+            type: string
+            example: "4, 6, 7, 234"
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 197
+        body:
+          type: string
+          example: "aws.imagelink/trh6u59"
+        date_created:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        date_updated:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        from_id:
+          type: number
+          example: 45
+        to_id:
+          type: number
+          example: 76
+        type:
+          type: string
+          enum: [text, image, file]
+          example: image
+        is_important:
+          type: boolean
+
+    ReadAllMessages:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: number
+            example: 197
+          body:
+            type: string
+            example: "hello Ivan, doing cleanup doing?"
+          from_id:
+            type: number
+            example: 3
+          to_id:
+            type: number
+            example: 7
+
+    ReadMessage:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 197
+        body:
+          type: string
+          example: "yes, I want to vote for Grisha"
+        from_id:
+          type: number
+          example: 3
+        to_id:
+          type: number
+          example: 7
+
+    CreateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "Hi! New in chat"
+        from_id:
+          type: number
+          example: 7
+        to_id:
+          type: number
+          example: 10
+        type:
+          type: string
+          example: "text"
+        is_important:
+          type: boolean
+          example: true
+
+    UpdateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "I want to change OSBB"
+        is_important:
+          type: boolean
+          example: true
