@@ -14,6 +14,8 @@ tags:
     description: Operations with messages-
   - name: user
     description: user management
+  - name: voting
+    description: Votings management operations
 paths:
   /news:
     post:
@@ -681,7 +683,206 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-
+  /votings :
+    get:
+      tags:
+        - voting
+      summary: Returns a list of active votings
+      description: This endpoint shows all votings to user
+      operationId: getAllVotings
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date-time
+          required: false
+          description: Filter votings by endDate
+      responses:
+        "200":
+          description: Successfully returns a list of active votings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VotingList'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - voting
+      summary: Create new voting
+      description: Add a voting
+      operationId: addVoting
+      requestBody:
+        description: Successfully created new voting
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVoting'
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voting'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+  /votings/{voting_id}/variants:
+    get:
+      tags:
+        - voting
+      summary: Returns a voteslist in chosen voting
+      description: View an existing votelist
+      operationId: getAllVariants
+      parameters:
+        - name: voting_id
+          in: path
+          required: true
+          description: voting id
+          schema:
+            type : integer
+      responses:
+        "200":
+          description: Successfully returns a list of votes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VariantList'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - voting
+      summary: Allows to vote for chosen variant
+      description: Add a vote in voting
+      operationId: choose vote
+      parameters:
+        - name: voting_id
+          in: path
+          required: true
+          description: vote id
+          schema:
+            type : integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostVariant'
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+  /votings/{voting_id}:
+    put:
+      tags:
+        - voting
+      summary: Edit an existing voting
+      description: Editing an existing voting
+      operationId: updateVoting
+      parameters:
+        - name: voting_id
+          in: path
+          required: true
+          description: vote id
+          schema:
+            type : integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVoting'
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Voting'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - voting
+      summary: Delete an existing voting
+      operationId: deleteVoting
+      parameters:
+        - name: voting_id
+          in: path
+          required: true
+          description: voting id
+          schema:
+            type : integer
+      responses:
+        "204":
+          description: Succesful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "default":
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -1140,3 +1341,256 @@ components:
         updateDate:
           type: string
           format: date-time
+    Voting:
+      required:
+        - name
+        - shortDescription
+        - startDate
+        - endDate
+        - fullDescription
+        - variants
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 25-10-2020 00:00
+        endDate :
+          type: string
+          format: date-time
+          example: 27-10-2020 00:00
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        createDate:
+          type: string
+          format: date-time
+          example: 21-10-2020 00:00
+        updateDate:
+          type: string
+          format: date-time
+          example: 22-10-2020 00:00
+        isActive:
+          type: boolean
+          example: true
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
+              users:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - user
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Petrov
+    Variant:
+      required:
+        - desription
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: yes
+        createDate:
+          type: string
+          format: date-time
+          example: 21-10-2020 00:00
+        updateDate:
+          type: string
+          format: date-time
+          example: 22-10-2020 00:00
+        isActive:
+          type: boolean
+          example: true
+        voting:
+          type: object
+        users:
+          type: array
+          items:
+            type: object
+            required:
+              - user
+            properties:
+              id:
+                type: integer
+                example: 1
+              name:
+                type: string
+                example: Petrov
+    VotingList:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 22-10-2020 00:00
+        endDate :
+          type: string
+          format: date-time
+          example: 23-10-2020 00:00
+    VariantList:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21-10-2020 00:00
+        endDate :
+          type: string
+          format: date-time
+          example: 25-10-2020 00:00
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
+              users:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - user
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Petrov
+    PostVariant:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: yes
+        voting:
+          type: object
+    CreateVoting:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Enter name
+        shortDescription :
+          type: string
+          example: Enter short description
+        startDate :
+          type: string
+          format: date-time
+          example: Enter date
+        endDate :
+          type: string
+          format: date-time
+          example: Enter Date
+        fullDescriptoin:
+          type: string
+          example: Enter Full description
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: Enter vote text
+    UpdateVoting:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ivanov
+        shortDescription :
+          type: string
+          example: bench installing
+        startDate :
+          type: string
+          format: date-time
+          example: 21-10-2020 00:00
+        endDate :
+          type: string
+          format: date-time
+          example: 25-10-2020 00:00
+        fullDescriptoin:
+          type: string
+          example: conditions of bench installing
+        variants :
+          type: array
+          items:
+            type: object
+            required:
+              - vote
+            properties:
+              id:
+                type: integer
+                example: 1
+              description:
+                type: string
+                example: yes
