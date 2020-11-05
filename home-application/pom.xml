@@ -41,7 +41,7 @@
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-server-stub</artifactId>
+            <artifactId>home-server-generator</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

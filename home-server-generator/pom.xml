@@ -15,7 +15,7 @@
         <yaml.name>openapi.yaml</yaml.name>
     </properties>
 
-    <artifactId>home-server-stub</artifactId>
+    <artifactId>home-server-generator</artifactId>
 
     <dependencies>
         <dependency>

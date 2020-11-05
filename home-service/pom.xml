@@ -18,13 +18,13 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <artifactId>home-server-stub</artifactId>
+            <artifactId>home-server-generator</artifactId>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-generated-server</artifactId>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
