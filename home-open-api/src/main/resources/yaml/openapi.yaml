@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: HOME Project - Open API 3.0
-  description: "OpenAPI 3.0 specification for HOME Project code generation"
+  title: HomePage - OpenAPI 3.0
+  description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
   version: 1.0.0
 servers:
   - url: /api/0

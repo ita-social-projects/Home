@@ -15,7 +15,7 @@
         <yaml.name>openapi.yaml</yaml.name>
     </properties>
 
-    <artifactId>home-server-stub</artifactId>
+    <artifactId>home-server-generator</artifactId>
 
     <dependencies>
         <dependency>
@@ -23,6 +23,10 @@
             <artifactId>home-open-api</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jersey</artifactId>
         </dependency>
     </dependencies>
 
