@@ -35,8 +35,11 @@ import javax.validation.Valid;
 {{#operations}}
 public class {{classname}}  {
 
-   @Autowired
-   private {{classname}}Service delegate;
+    private final {{classname}}Service delegate;
+
+    public {{classname}}({{classname}}Service delegate) {
+        this.delegate = delegate;
+    }
 
 {{#operation}}
     @{{httpMethod}}
