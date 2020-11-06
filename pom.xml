@@ -49,6 +49,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub ita-social-projects Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/ita-social-projects/Home</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
