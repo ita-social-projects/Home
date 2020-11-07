@@ -9,6 +9,108 @@ tags:
   - name: news
     description: News management operations
 paths:
+  /users:
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: Create a new user
+      operationId: createUser
+      requestBody:
+        description: Create a new User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUser'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/login:
+    post:
+      tags:
+        - User
+      summary: Login user
+      description: Login user into an application
+      operationId: login
+      requestBody:
+        description: Login user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUser'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /users/details:
+    get:
+      tags:
+        - User
+      summary: Show user details
+      description: Show details of the current user
+      operationId: getUserDetails
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - basicAuth: [ ]
+
+  /users/logout:
+    delete:
+      tags:
+        - User
+      summary: Logout current user
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - basicAuth: [ ]
+
   /news:
     post:
       tags:
@@ -40,6 +142,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         "default":
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - basicAuth: [ ]
 
     get:
       tags:
@@ -150,6 +254,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         "default":
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - basicAuth: [ ]
 
     delete:
       tags:
@@ -174,8 +280,15 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - basicAuth: [ ]
 
 components:
+  securitySchemes:
+    basicAuth:
+     type: http
+     scheme: basic
+
   responses:
     BadRequest:
       description: Validation Exception
@@ -319,6 +432,36 @@ components:
           type: string
         text:
           type: string
+
+    PostUser:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: Petro
+        lastName:
+          type: string
+          example: Petrov
+        email:
+          type: string
+          example: home@gmail.com
+        password:
+          type: string
+          example: passWord123
+        role:
+          type: string
+          enum: [user, owner, admin, executor]
+          example: user
 
     Error:
       type: object
