@@ -7,21 +7,18 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Role {
+public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "account_role",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+    @JoinTable(name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<User> users;
-
-    @ManyToMany(mappedBy = "roles")
-    private Set<Permission> permissions;
+    private Set<Role> roles;
 
     @Column(name = "name")
     private String name;

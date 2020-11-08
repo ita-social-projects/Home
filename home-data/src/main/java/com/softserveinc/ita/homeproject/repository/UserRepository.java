@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.model.repository;
+package com.softserveinc.ita.homeproject.repository;
 
 import com.softserveinc.ita.homeproject.model.User;
 import org.springframework.data.repository.CrudRepository;

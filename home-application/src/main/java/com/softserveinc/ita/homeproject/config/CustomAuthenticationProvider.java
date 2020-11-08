@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.config;
 
 import com.softserveinc.ita.homeproject.model.User;
-import com.softserveinc.ita.homeproject.model.repository.UserRepository;
+import com.softserveinc.ita.homeproject.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +27,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
@@ -38,7 +37,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         if (user.getEmail().equals(email) && passwordEncoder.matches(password, encodedPassword)){
             List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole())); // description is a string
+            authorities.add(new SimpleGrantedAuthority(user.getRoles().toString())); // description is a string
 
             return new UsernamePasswordAuthenticationToken(email, password, authorities);
         }

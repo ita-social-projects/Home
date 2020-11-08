@@ -5,7 +5,7 @@ import com.softserveinc.ita.homeproject.api.NotFoundException;
 import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.model.PostUser;
 import com.softserveinc.ita.homeproject.model.User;
-import com.softserveinc.ita.homeproject.model.repository.UserRepository;
+import com.softserveinc.ita.homeproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
