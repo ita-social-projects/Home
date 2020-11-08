@@ -1292,6 +1292,91 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
+  /myaccount:
+    get:
+      tags:
+        - myaccount
+      summary: Get all inform about your account
+      description: This endpoint delivers all information about user
+      operationId: getMyAccount
+      responses:
+        "200":
+          description: Succesful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "404":
+          description: News not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /myaccount/{user_id}:
+    put:
+      tags:
+        - myaccount
+      summary: Update information
+      description: Update some configuration
+      operationId: updateUserAcc
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update user inform
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - myaccount
+      summary: Delete account
+      operationId: deleteAcc
+      parameters:
+        - name: user_id
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Succesful operation
+        "400":
+          description: Invalid name supplied
+        "404":
+          description: News not found
+        default:
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
