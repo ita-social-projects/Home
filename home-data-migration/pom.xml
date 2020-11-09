@@ -12,5 +12,35 @@
     <packaging>jar</packaging>
 
     <artifactId>home-data-migration</artifactId>
-
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <propertyFile>home-data-migration/src/main/resources/liquibase.properties</propertyFile>
+<!--                    <url>jdbc:mysql://localhost:3306 </url>-->
+<!--                    <username>root</username>-->
+<!--                    <password>1234</password>-->
+<!--                    <driver>com.mysql.cj.jdbc.Driver</driver>-->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.21</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>
