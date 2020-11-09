@@ -917,7 +917,7 @@ paths:
                 $ref: '#/components/schemas/OrderList'
         "400":
           $ref: '#/components/responses/BadRequest'
-        "5XX":
+        "500":
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
@@ -1781,7 +1781,6 @@ components:
           example: (067) 123 321 1
         activStatus:
           type: boolean
-          enum: [ true, false ]
         createDate:
           type: string
           format: date-time
@@ -1837,7 +1836,6 @@ components:
           example: (067) 123 321 1
         activStatus:
           type: boolean
-          enum: [ true, false ]
         createDate:
           type: string
           format: date-time
