@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -26,8 +27,12 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role_id")
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "account_role",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @EqualsAndHashCode.Exclude
     private Set<Role> roles;
 
 }

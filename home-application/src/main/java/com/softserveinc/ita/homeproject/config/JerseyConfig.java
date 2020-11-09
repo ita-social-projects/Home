@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.config;
 
 import com.softserveinc.ita.homeproject.api.JacksonJsonProvider;
+import com.softserveinc.ita.homeproject.api.NewsApi;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -23,10 +24,11 @@ public class JerseyConfig extends ResourceConfig {
         // register endpoints
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
-        this.registerClasses(scanner.findCandidateComponents("com.softserveinc.ita.homeproject.api").stream()
-                .map(beanDefinition -> ClassUtils
-                        .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
-                .collect(Collectors.toSet()));
+//        this.registerClasses(scanner.findCandidateComponents("com.softserveinc.ita.homeproject.api").stream()
+//                .map(beanDefinition -> ClassUtils
+//                        .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
+//                .collect(Collectors.toSet()));
+        register(NewsApi.class);
         // register jackson for json
         register(JacksonJsonProvider.class);
     }

@@ -1,7 +1,10 @@
 package com.softserveinc.ita.homeproject.config;
 
+import com.softserveinc.ita.homeproject.model.Permission;
+import com.softserveinc.ita.homeproject.model.Role;
 import com.softserveinc.ita.homeproject.model.User;
 import com.softserveinc.ita.homeproject.repository.UserRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -32,12 +37,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
-        String encodedPassword = passwordEncoder.encode(password);
         User user = userRepository.findByEmail(email).orElseThrow();
 
-        if (user.getEmail().equals(email) && passwordEncoder.matches(password, encodedPassword)){
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRoles().toString())); // description is a string
+        if (user.getEmail().equals(email) && passwordEncoder.matches(password, user.getPassword())){
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            for ( Role role: user.getRoles()){
+                for (Permission perm : role.getPermissions()) {
+                    authorities.add(new SimpleGrantedAuthority(perm.getName()));
+                }
+
+            }
 
             return new UsernamePasswordAuthenticationToken(email, password, authorities);
         }
