@@ -83,7 +83,7 @@
                 <executions>
                     <execution>
                         <id>resource-dependencies</id>
-                        <phase>generate-sources</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
