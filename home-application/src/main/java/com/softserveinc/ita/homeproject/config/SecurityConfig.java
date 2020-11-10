@@ -9,8 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Configuration
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationProvider authProvider;
@@ -26,12 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/0/users/login", "/api/0/users").permitAll()
-                .antMatchers("/api/0/news").hasAuthority("admin")
-                .anyRequest().authenticated()
-                .and().httpBasic();
+//        http.csrf().disable()
+////                .authorizeRequests()
+////                .antMatchers("/api/0/users/login", "/api/0/users").permitAll()
+////                .antMatchers("/api/0/news").hasAuthority("admin")
+//                .anyRequest().authenticated()
+//                .and().httpBasic();
     }
 
     @Bean
