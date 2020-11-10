@@ -86,6 +86,7 @@
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
+                                <useBeanValidation>false</useBeanValidation>
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
                             <addCompileSourceRoot>false</addCompileSourceRoot>

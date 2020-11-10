@@ -8,6 +8,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
+import javax.validation.Valid;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
@@ -24,11 +25,10 @@ public class JerseyConfig extends ResourceConfig {
         // register endpoints
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
-//        this.registerClasses(scanner.findCandidateComponents("com.softserveinc.ita.homeproject.api").stream()
-//                .map(beanDefinition -> ClassUtils
-//                        .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
-//                .collect(Collectors.toSet()));
-        register(NewsApi.class);
+        this.registerClasses(scanner.findCandidateComponents("com.softserveinc.ita.homeproject.api").stream()
+                .map(beanDefinition -> ClassUtils
+                        .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
+                .collect(Collectors.toSet()));
         // register jackson for json
         register(JacksonJsonProvider.class);
     }

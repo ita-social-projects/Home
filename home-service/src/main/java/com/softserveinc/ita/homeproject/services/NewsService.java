@@ -15,8 +15,9 @@ import javax.ws.rs.core.SecurityContext;
 
 @Service
 public class NewsService implements NewsApiService {
+
     @Override
-    //@PreAuthorize("hasAuthority('CREATE_NEWS_PERMISSION')")
+    @PreAuthorize("hasAuthority('CREATE_NEWS_PERMISSION')")
     public Response addNews(PostNews postNews, SecurityContext securityContext) throws NotFoundException {
         // do some magic!
         return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
