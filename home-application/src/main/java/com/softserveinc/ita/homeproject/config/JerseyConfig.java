@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.config;
 
 import com.softserveinc.ita.homeproject.api.JacksonJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         // register endpoints
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-
+        property(ServletProperties.FILTER_FORWARD_ON_404, true);
         // register endpoints
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));

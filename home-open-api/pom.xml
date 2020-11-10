@@ -21,4 +21,35 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>3.0.11</version>
+                <executions>
+                    <execution>
+                        <id>convert</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.outputDirectory}/yaml/openapi.yaml</inputSpec>
+
+                            <!-- Use "openapi" to convert YAML->JSON or "openapi-yaml" to convert JSON->YAML -->
+                            <language>openapi</language>
+
+                            <!-- Output directory, relative to the project directory. Default is ${project.build.directory}/generated-sources/swagger -->
+                            <output>${project.build.outputDirectory}/json/</output>
+                            <configOptions>
+                                <!-- Default output file name is openapi.json or openapi.yaml -->
+                                <outputFile>openapi.json</outputFile>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
