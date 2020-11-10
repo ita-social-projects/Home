@@ -7,10 +7,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
-//@Configuration
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configuration
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationProvider authProvider;
@@ -26,17 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-////                .authorizeRequests()
-////                .antMatchers("/api/0/users/login", "/api/0/users").permitAll()
-////                .antMatchers("/api/0/news").hasAuthority("admin")
-//                .anyRequest().authenticated()
-//                .and().httpBasic();
+        http
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().
+            csrf().disable()
+            .httpBasic();
     }
-
-    @Bean
-    public static BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(8);
-    }
-
 }
