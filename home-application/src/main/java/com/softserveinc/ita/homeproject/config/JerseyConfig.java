@@ -1,14 +1,12 @@
 package com.softserveinc.ita.homeproject.config;
 
 import com.softserveinc.ita.homeproject.api.JacksonJsonProvider;
-import com.softserveinc.ita.homeproject.api.NewsApi;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
-import javax.validation.Valid;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;

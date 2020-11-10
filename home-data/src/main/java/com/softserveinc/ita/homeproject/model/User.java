@@ -33,6 +33,19 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "expired")
+    private Boolean expired;
+
+    @Column(name = "locked")
+    private Boolean locked;
+
+    @Column(name = "credentials_expired")
+    private Boolean credentialsExpired;
+
+    @Column(name = "enabled")
+    private Boolean enabled;
+
+
     @Column(name = "password")
     private String password;
 

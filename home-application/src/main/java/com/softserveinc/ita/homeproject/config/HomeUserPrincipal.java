@@ -44,21 +44,21 @@ public class HomeUserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !user.getExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !user.getCredentialsExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getEnabled();
     }
 }
