@@ -11,12 +11,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: onekiloparsec/heroku-node-deploy-subfolder@v1.0.4
         with:
-          api_key: ${{secrets.HEROKU_API_KEY}}    #HEROKU_API_KEY - repository owner's personal github token
-          email: ${{secrets.HEROKU_EMAIL}}        #"home.project.academy@gmail.com" - add to github secrets
+          api_key: ${{secrets.HEROKU_API_KEY}}    
+          email: ${{secrets.HEROKU_EMAIL}}        
           app_name: "home-project-academy"
           branch: "dev"
-      - name: Deploy to Heroku
-        if:  job.status == 'success'
+      - name: Deploy to Heroku      
         run: |
           git remote add heroku https://github.com/ita-social-projects/Home.git
           git push heroku HEAD:dev
