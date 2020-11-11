@@ -18,10 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author <a href="mailto:okhome@softserveinc.com">Oleksandr Khomenko</a>
- * <br>
- */
 @Component
 @Profile("dev")
 public class DataLoader implements ApplicationRunner {
