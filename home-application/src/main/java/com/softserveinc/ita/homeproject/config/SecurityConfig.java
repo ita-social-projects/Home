@@ -19,9 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     private final UserDetailsService userDetailsService;
-
 
     public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;

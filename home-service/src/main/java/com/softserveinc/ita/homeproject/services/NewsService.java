@@ -5,6 +5,7 @@ import com.softserveinc.ita.homeproject.api.NewsApiService;
 import com.softserveinc.ita.homeproject.api.NotFoundException;
 import com.softserveinc.ita.homeproject.model.PostNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Service
+@Profile("dev")
 public class NewsService implements NewsApiService {
 
     @Override

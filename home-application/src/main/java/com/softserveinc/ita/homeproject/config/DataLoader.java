@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * <br>
  */
 @Component
+@Profile("dev")
 public class DataLoader implements ApplicationRunner {
 
     private final UserRepository userRepository;
