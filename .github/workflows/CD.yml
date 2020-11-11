@@ -17,5 +17,5 @@ jobs:
           branch: "dev"
       - name: Deploy to Heroku      
         run: |
-          git remote add heroku https://github.com/ita-social-projects/Home.git
-          git push heroku HEAD:dev
+          git remote add github https://github.com/ita-social-projects/Home.git
+          git push girhub HEAD:dev
