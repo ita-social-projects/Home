@@ -35,17 +35,20 @@ public class DataLoader implements ApplicationRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public void run(ApplicationArguments args) {
-        user1( "USER", "user@example.com", "READ_NEWS_PERMISSION");
-        user1( "ADMIN", "admin@example.com", "UPDATE_NEWS_PERMISSION", "READ_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION");
+        saveUser( "USER", "user@example.com", "READ_NEWS_PERMISSION");
+        saveUser( "ADMIN", "admin@example.com", "UPDATE_NEWS_PERMISSION", "READ_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION");
     }
 
-    private void user1(String admin1, String email, String... read_news_permission) {
-        Set<Permission> perm2 = Arrays.stream(read_news_permission).map(perm -> Permission.builder().name(perm).build()).collect(Collectors.toSet());
-        permissionRepository.saveAll(perm2);
-        Role admin = Role.builder().name(admin1).permissions(perm2)
+    private void saveUser(String roleName, String email, String... permissions) {
+        Set<Permission> perms = Arrays.stream(permissions)
+                .map(permission -> Permission.builder().name(permission).build())
+                .collect(Collectors.toSet());
+        permissionRepository.saveAll(perms);
+        Role role = Role.builder().name(roleName).permissions(perms)
                 .build();
-        roleRepository.save(admin);
+        roleRepository.save(role);
         userRepository.save(User.builder()
                 .firstName("User")
                 .lastName("User")
@@ -55,7 +58,8 @@ public class DataLoader implements ApplicationRunner {
                 .locked(false)
                 .credentialsExpired(false)
                 .enabled(true)
-                .roles(new HashSet<>() {{add(admin);}})
+                .roles(new HashSet<>() {{add(role);}})
                 .build());
     }
+
 }
