@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.repository;
+package com.softserveinc.ita.homeproject.homedata.repository;
 
-import com.softserveinc.ita.homeproject.model.User;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

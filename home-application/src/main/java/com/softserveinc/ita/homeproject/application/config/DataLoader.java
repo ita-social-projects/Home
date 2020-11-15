@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.config;
+package com.softserveinc.ita.homeproject.application.config;
 
-import com.softserveinc.ita.homeproject.model.Permission;
-import com.softserveinc.ita.homeproject.model.Role;
-import com.softserveinc.ita.homeproject.model.User;
-import com.softserveinc.ita.homeproject.repository.PermissionRepository;
-import com.softserveinc.ita.homeproject.repository.RoleRepository;
-import com.softserveinc.ita.homeproject.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.entity.Permission;
+import com.softserveinc.ita.homeproject.homedata.entity.Role;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.repository.PermissionRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

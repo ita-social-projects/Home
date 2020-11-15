@@ -1,14 +1,17 @@
-package com.softserveinc.ita.homeproject.model;
+package com.softserveinc.ita.homeproject.homedata.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Getter
@@ -24,8 +27,6 @@ public class Permission {
     private Long id;
 
     @ManyToMany(mappedBy = "permissions")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Set<Role> roles;
 
     @Column(name = "name")

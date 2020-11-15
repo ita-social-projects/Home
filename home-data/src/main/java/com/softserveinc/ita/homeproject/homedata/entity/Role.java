@@ -1,15 +1,20 @@
-package com.softserveinc.ita.homeproject.model;
+package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Column;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
 import java.util.Set;
 
 @Entity
@@ -25,12 +30,9 @@ public class Role {
     private Long id;
 
     @ManyToMany(mappedBy = "roles")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Set<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @EqualsAndHashCode.Exclude
     @JoinTable(name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
