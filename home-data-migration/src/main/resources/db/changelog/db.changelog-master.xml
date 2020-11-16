@@ -9,9 +9,11 @@
 <!--        <dbms type="mariadb"/>-->
 <!--    </preConditions>-->
 
-    <changeSet id="20201108" author="Artur">
+    <changeSet id="202011092145" author="Artur" context="first_migration">
         <tagDatabase tag="db_init"/>
     </changeSet>
-
     <include file="v-1.0/db.changelog-v.1.0.xml" relativeToChangelogFile="true"/>
+
+
+
    </databaseChangeLog>

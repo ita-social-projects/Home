@@ -14,10 +14,16 @@
     <artifactId>home-data-migration</artifactId>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
+
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.21</version>
         </dependency>
     </dependencies>
     <build>
@@ -27,19 +33,30 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.6.3</version>
                 <configuration>
-                    <propertyFile>liquibase.properties</propertyFile>
-<!--                    <url>jdbc:mysql://localhost:3306 </url>-->
-<!--                    <username>root</username>-->
-<!--                    <password>1234</password>-->
-<!--                    <driver>com.mysql.cj.jdbc.Driver</driver>-->
+                    <!--                    <propertyFile>liquibase.properties</propertyFile>-->
+                    <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                    <url>${db_HOST}</url>
+                    <username>${db_USERNAME}</username>
+                    <password>${db_PASSWORD}</password>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+<!--                    <driver>com.mysql.jdbc.jdbc2.optional.MysqlDataSource.</driver>-->
                 </configuration>
                 <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.21</version>
-                    </dependency>
+<!--                    <dependency>-->
+<!--                        <groupId>mysql</groupId>-->
+<!--                        <artifactId>mysql-connector-java</artifactId>-->
+<!--                        <version>8.0.21</version>-->
+<!--                    </dependency>-->
                 </dependencies>
+                <executions>
+                    <execution>
+                        <id>202011092145</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
