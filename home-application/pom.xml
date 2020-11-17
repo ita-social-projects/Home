@@ -45,6 +45,11 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-service</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
