@@ -1731,7 +1731,6 @@ components:
       type: object
       properties:
         id:
-          nullable: false
           type: integer
           example: 1
         firstName:
@@ -2326,7 +2325,6 @@ components:
           example: mechanic
         executor:
           type: string
-          pattern: '.w'
           example: Ivan Ivanov
     UpdateExecutor:
       type: object
