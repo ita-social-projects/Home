@@ -515,8 +515,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         "403":
           $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /users:
@@ -584,8 +582,6 @@ paths:
                   $ref: "#/components/schemas/User"
         '400':
           $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
   /users/{id}:
@@ -1744,49 +1740,17 @@ components:
         email:
           type: string
           example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
         role:
           type: string
           enum: [ user, owner, admin, executor ]
           example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
+            type: string
+            example: (0562) 345 432
         activStatus:
           type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
     UpdateUser:
       type: object
       properties:
@@ -1796,52 +1760,17 @@ components:
         lastName:
           type: string
           example: Petrov
-        email:
-          type: string
-          example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
         role:
           type: string
           enum: [ user, owner, admin, executor ]
           example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
+            type: string
+            example: (0562) 345 432
         activStatus:
           type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
     Voting:
       required:
         - name
@@ -2392,6 +2321,7 @@ components:
           example: mechanic
         executor:
           type: string
+          pattern: '.w'
           example: Ivan Ivanov
     UpdateExecutor:
       type: object
