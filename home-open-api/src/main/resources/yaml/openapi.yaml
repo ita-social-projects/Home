@@ -1700,8 +1700,10 @@ components:
       type: object
       properties:
         email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
         password:
+          pattern: '[a-zA-Z0-9]{8,}'
           type: string
     OrderList:
       type: array
@@ -1729,6 +1731,7 @@ components:
       type: object
       properties:
         id:
+          nullable: false
           type: integer
           example: 1
         firstName:
@@ -1755,9 +1758,11 @@ components:
       type: object
       properties:
         firstName:
+          pattern: '\w+'
           type: string
           example: Petro
         lastName:
+          pattern: '\w+'
           type: string
           example: Petrov
         role:
