@@ -24,25 +24,21 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @Override
     public Response updateUser(Integer id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
         return Response.ok().entity(userServiceImpl.update(id.longValue(), updateUser)).build();
     }
 
     @Override
     public Response usersGet(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
         return Response.ok().entity(userServiceImpl.getAll()).build();
     }
 
     @Override
     public Response usersIdDelete(Integer id, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
         return Response.ok().entity(userServiceImpl.deleteById(id.longValue())).build();
     }
 
     @Override
     public Response usersIdGet(Integer id, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
         return Response.ok().entity(userServiceImpl.getById(id.longValue())).build();
     }
 }

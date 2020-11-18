@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(CreateUser payload) {
         if (userRepository.existsByEmail(payload.getEmail())) {
-            throw new Exception(); // there hrow already exist exception
+            throw new Exception(); // here throw already exist exception
         } else {
             User toCreate = conversionService.convert(payload, User.class);
             return userRepository.save(toCreate);
