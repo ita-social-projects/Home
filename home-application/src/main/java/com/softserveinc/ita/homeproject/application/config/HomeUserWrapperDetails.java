@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,18 +12,19 @@ import java.util.stream.Collectors;
 
 public class HomeUserWrapperDetails implements UserDetails {
 
-    private User user;
+    private final User user;
 
-    public HomeUserWrapperDetails(User user) {
+    private final Collection<Permission> userPermissions;
+
+    public HomeUserWrapperDetails(User user, Collection<Permission> userPermissions) {
         this.user = user;
+        this.userPermissions = userPermissions;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities;
-        authorities = user.getRoles().stream()
-                .map(role -> role.getPermissions())
-                .flatMap(roles -> roles.stream())
+        authorities = userPermissions.stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                 .collect(Collectors.toSet());
 

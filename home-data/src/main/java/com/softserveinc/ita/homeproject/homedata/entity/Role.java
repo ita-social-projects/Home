@@ -14,7 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.ManyToMany;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
-import javax.persistence.FetchType;
 import java.util.Set;
 
 @Entity
@@ -32,7 +31,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "role_permission",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
