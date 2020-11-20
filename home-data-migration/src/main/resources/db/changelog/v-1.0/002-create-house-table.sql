@@ -4,3 +4,4 @@ CREATE TABLE house (
                             house_number varchar (255) character set utf8 not null,
                               primary key (id)
 ) ;
+

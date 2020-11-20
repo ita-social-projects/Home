@@ -9,3 +9,4 @@ CREATE TABLE if not exists public.users (
 --                             user_role enum ('USER', 'ADMIN', 'STAFF','OWNER') default 'USER',
                             active boolean not null default false
                               );
+

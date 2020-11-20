@@ -12,3 +12,5 @@ public class Main {
         liquibaseUpdate.runLiquibase(user, pass);
     }
 }
+
+
