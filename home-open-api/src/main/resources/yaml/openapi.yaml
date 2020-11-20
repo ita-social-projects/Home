@@ -515,8 +515,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         "403":
           $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /users:
@@ -541,7 +539,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "403":
@@ -581,11 +579,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
   /users/{id}:
@@ -608,7 +604,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -642,7 +638,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1307,7 +1303,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         "404":
           description: News not found
           content:
@@ -1343,7 +1339,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/ReadUser'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1704,8 +1700,10 @@ components:
       type: object
       properties:
         email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
         password:
+          pattern: '[a-zA-Z0-9]{8,}'
           type: string
     OrderList:
       type: array
@@ -1729,7 +1727,7 @@ components:
           orderDate:
             type: string
             example: 26.04.2020
-    User:
+    ReadUser:
       type: object
       properties:
         id:
@@ -1744,104 +1742,39 @@ components:
         email:
           type: string
           example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
         role:
           type: string
           enum: [ user, owner, admin, executor ]
           example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
+            type: string
+            example: (0562) 345 432
         activStatus:
           type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
     UpdateUser:
       type: object
       properties:
         firstName:
+          pattern: '\w+'
           type: string
           example: Petro
         lastName:
+          pattern: '\w+'
           type: string
           example: Petrov
-        email:
-          type: string
-          example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
         role:
           type: string
           enum: [ user, owner, admin, executor ]
           example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
+            type: string
+            example: (0562) 345 432
         activStatus:
           type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
     Voting:
       required:
         - name
