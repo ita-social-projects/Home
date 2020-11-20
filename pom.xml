@@ -30,9 +30,9 @@
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
 
         <!-- Password and root name for liquibase-->
-        <db_USERNAME>root</db_USERNAME>
+        <db_USERNAME>postgres</db_USERNAME>
         <db_PASSWORD>1234</db_PASSWORD>
-        <db_HOST>jdbc:mysql://localhost:3306/test?createDatabaseIfNotExist=true&amp;serverTimezone=UTC</db_HOST>
+        <db_HOST>jdbc:postgresql://localhost:5432/test</db_HOST>
     </properties>
 
     <dependencyManagement>

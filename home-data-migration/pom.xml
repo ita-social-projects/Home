@@ -21,10 +21,27 @@
             <version>4.0.0</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.21</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.postgresql</groupId>-->
+<!--            <artifactId>postgresql</artifactId>-->
+<!--            <version>42.2.16</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -38,15 +55,9 @@
                     <url>${db_HOST}</url>
                     <username>${db_USERNAME}</username>
                     <password>${db_PASSWORD}</password>
-                    <driver>com.mysql.cj.jdbc.Driver</driver>
-<!--                    <driver>com.mysql.jdbc.jdbc2.optional.MysqlDataSource.</driver>-->
+                    <driver>org.postgresql.Driver</driver>
                 </configuration>
                 <dependencies>
-<!--                    <dependency>-->
-<!--                        <groupId>mysql</groupId>-->
-<!--                        <artifactId>mysql-connector-java</artifactId>-->
-<!--                        <version>8.0.21</version>-->
-<!--                    </dependency>-->
                 </dependencies>
                 <executions>
                     <execution>

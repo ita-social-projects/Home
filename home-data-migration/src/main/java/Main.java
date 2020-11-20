@@ -1,13 +1,14 @@
-// FIXME Basepackage here
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        String pass, user;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please, enter the username");
+        user = scanner.nextLine();
+        System.out.println("Please, enter the password");
+        pass = scanner.nextLine();
         LiquibaseUpdate liquibaseUpdate = new LiquibaseUpdate();
-        liquibaseUpdate.runLiquibase(
-                "root", // FIXME should be taken from args
-                "1234", // FIXME should be taken from args
-                "jdbc:mysql://localhost:3306/test?createDatabaseIfNotExist=true&serverTimezone=UTC", // FIXME should be taken from args
-                "classpath:/db/changelog/db.changelog-master.xml" // FIXME should be taken from args
-        );
+        liquibaseUpdate.runLiquibase(user, pass);
     }
 }
