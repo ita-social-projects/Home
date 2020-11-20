@@ -23,30 +23,30 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize("hasAuthority('CREATE_USER_PERMISSION')")
     @Override
     public Response createUser(CreateUser createUser, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.create(createUser)).build();
+        return Response.ok().entity(userServiceImpl.createUser(createUser)).build();
     }
 
     @PreAuthorize("hasAuthority('UPDATE_USER_PERMISSION')")
     @Override
     public Response updateUser(Integer id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.update(id.longValue(), updateUser)).build();
+        return Response.ok().entity(userServiceImpl.updateUser(id.longValue(), updateUser)).build();
     }
 
     @PreAuthorize("hasAuthority('GET_USERS_PERMISSION')")
     @Override
     public Response usersGet(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.getAll()).build();
+        return Response.ok().entity(userServiceImpl.getAllUsers()).build();
     }
 
     @PreAuthorize("hasAuthority('DELETE_USER_PERMISSION')")
     @Override
     public Response usersIdDelete(Integer id, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.deleteById(id.longValue())).build();
+        return Response.ok().entity(userServiceImpl.deactivateUser(id.longValue())).build();
     }
 
     @PreAuthorize("hasAuthority('GET_USER_PERMISSION')")
     @Override
     public Response usersIdGet(Integer id, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.getById(id.longValue())).build();
+        return Response.ok().entity(userServiceImpl.getUserByParameter(id.longValue())).build();
     }
 }

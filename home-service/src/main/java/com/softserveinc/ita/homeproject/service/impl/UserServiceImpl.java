@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import com.softserveinc.ita.homeproject.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,50 +26,51 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(CreateUser payload) {
+    public ReadUser createUser(CreateUser payload) {
         if (userRepository.findByEmail(payload.getEmail()).isPresent()) {
             throw new RuntimeException();  //TODO: here throw already exist exception
         } else {
             User toCreate = conversionService.convert(payload, User.class);
-//          User toCreate = new User();
-//          toCreate.setEmail(payload.getEmail());
-//          toCreate.setPassword(payload.getPassword());
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName("USER")));
-            return userRepository.save(toCreate);
+
+            userRepository.save(toCreate);
+
+            return conversionService.convert(toCreate, ReadUser.class);
         }
     }
 
     @Override
-    public User update(Long id, UpdateUser payload) {
+    public ReadUser updateUser(Long id, UpdateUser payload) {
         if (userRepository.findById(id).isPresent()) {
             User toUpdate = conversionService.convert(payload, User.class);
-            return userRepository.save(toUpdate);
+            userRepository.save(toUpdate);
+            return conversionService.convert(payload, ReadUser.class);
         } else {
             throw new RuntimeException();  //TODO: here throw not found exception
         }
     }
 
     @Override
-    public Collection<User> getAll() {
+    public Collection<ReadUser> getAllUsers() {
         return userRepository.findAll().stream()
-               .map(user -> conversionService.convert(user, User.class))  //TODO: here change returning class
+                .map(user -> conversionService.convert(user, ReadUser.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public User getById(Long id) {
+    public ReadUser getUserByParameter(Long id) {
         User toGet = userRepository.findById(id)
                 .orElseThrow();  //TODO: here throw not found exception
-        return conversionService.convert(toGet, User.class);  //TODO: here change returning class
+        return conversionService.convert(toGet, ReadUser.class);
     }
 
     @Override
-    public boolean deleteById(Long id) {
+    public Long deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
                 .orElseThrow();  //TODO: here throw not found exception
-        toDelete.setExpired(true);
-        return true;
+        toDelete.setEnabled(false);
+        return id;
     }
 }
