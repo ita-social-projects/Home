@@ -666,6 +666,14 @@ paths:
       responses:
         "204":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1699,12 +1707,22 @@ components:
     CreateUser:
       type: object
       properties:
+        firstName:
+          pattern: '\w+'
+          type: string
+          example: "Petro"
+        lastName:
+          pattern: '\w+'
+          type: string
+          example: "Zinchenko"
         email:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
+          example: "p.t.z@gmail.com"
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
+          example: "mySuperStrongPass"
     OrderList:
       type: array
       items:
@@ -1742,17 +1760,11 @@ components:
         email:
           type: string
           example: home@gmail.com
-        role:
-          type: string
-          enum: [ user, owner, admin, executor ]
-          example: user
         contacts:
           type: array
           items:
             type: string
-            example: (0562) 345 432
-        activStatus:
-          type: boolean
+            example: "+380506617305"
     UpdateUser:
       type: object
       properties:
@@ -1764,17 +1776,11 @@ components:
           pattern: '\w+'
           type: string
           example: Petrov
-        role:
-          type: string
-          enum: [ user, owner, admin, executor ]
-          example: user
         contacts:
           type: array
           items:
             type: string
-            example: (0562) 345 432
-        activStatus:
-          type: boolean
+            example: "+380506617305"
     Voting:
       required:
         - name
