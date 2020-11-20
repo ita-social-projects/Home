@@ -539,7 +539,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "403":
@@ -579,7 +579,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         default:
@@ -604,7 +604,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -638,7 +638,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1303,7 +1303,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         "404":
           description: News not found
           content:
@@ -1339,7 +1339,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/ReadUser'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1727,7 +1727,7 @@ components:
           orderDate:
             type: string
             example: 26.04.2020
-    User:
+    ReadUser:
       type: object
       properties:
         id:
