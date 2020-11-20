@@ -52,6 +52,7 @@ public class User {
     @Column(name = "enabled")
     private Boolean enabled;
 
+
     @Column(name = "password")
     private String password;
 

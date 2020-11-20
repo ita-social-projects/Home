@@ -29,7 +29,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     @ManyToMany(fetch = FetchType.LAZY)
