@@ -31,7 +31,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostNews'
+              $ref: '#/components/schemas/CreateNews'
         required: true
       responses:
         "201":
@@ -93,6 +93,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadNews'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /news/{id}:
@@ -1419,7 +1421,6 @@ components:
     News:
       required:
         - title
-        - type
         - description
         - text
         - createDate
@@ -1431,10 +1432,7 @@ components:
         title:
           type: string
           example: News In The Local Area
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
+          maximum: 50
         photoUrl:
           type: string
           format: url
@@ -1462,10 +1460,6 @@ components:
         photoUrl:
           type: string
           format: url
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
         createOrUpdateDate:
           type: string
           format: date-time
@@ -1474,10 +1468,9 @@ components:
         source:
           type: string
           format: url
-    PostNews:
+    CreateNews:
       required:
         - title
-        - type
         - description
         - text
       type: object
@@ -1485,10 +1478,6 @@ components:
         title:
           type: string
           example: News in the Some Area
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
         photoUrl:
           type: string
           format: url
@@ -1503,10 +1492,6 @@ components:
       properties:
         title:
           type: string
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
         photoUrl:
           type: string
           format: url

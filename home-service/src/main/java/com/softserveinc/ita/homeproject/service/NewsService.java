@@ -1,9 +1,8 @@
 package com.softserveinc.ita.homeproject.service;
 
-import com.softserveinc.ita.homeproject.model.News;
+import com.softserveinc.ita.homeproject.homedata.entity.News;
+import com.softserveinc.ita.homeproject.service.dto.ServiceNewsDto;
 
-import java.util.Collection;
-
-public interface NewsService extends GenericServiceInterface<News, Object>{
+public interface NewsService extends GenericServiceInterface<News, ServiceNewsDto>{
 
 }
