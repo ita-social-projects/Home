@@ -41,7 +41,8 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize("hasAuthority('DELETE_USER_PERMISSION')")
     @Override
     public Response usersIdDelete(Integer id, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userServiceImpl.deactivateUser(id.longValue())).build();
+        userServiceImpl.deactivateUser(id.longValue());
+        return Response.ok().entity(Response.status(Response.Status.OK)).build();
     }
 
     @PreAuthorize("hasAuthority('GET_USER_PERMISSION')")

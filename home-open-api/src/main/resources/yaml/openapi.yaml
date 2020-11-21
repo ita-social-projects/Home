@@ -666,14 +666,6 @@ paths:
       responses:
         "204":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":

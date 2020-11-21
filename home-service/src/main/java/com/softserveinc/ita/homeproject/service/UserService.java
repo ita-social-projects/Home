@@ -16,5 +16,5 @@ public interface UserService {
 
     ReadUser getUserByParameter(Long id);
 
-    Long deactivateUser(Long id);
+    void deactivateUser(Long id);
 }

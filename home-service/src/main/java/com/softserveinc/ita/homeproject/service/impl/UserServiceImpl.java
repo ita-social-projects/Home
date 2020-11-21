@@ -67,10 +67,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long deactivateUser(Long id) {
+    public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
                 .orElseThrow();  //TODO: here throw not found exception
         toDelete.setEnabled(false);
-        return id;
     }
 }
