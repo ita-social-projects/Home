@@ -13,8 +13,7 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
-        <generation.files>ApiException.java,ApiOriginFilter.java,JacksonJsonProvider.java,LocalDateProvider.java,NotFoundException.java,OffsetDateTimeProvider.java,RFC3339DateFormat.java,StringUtil.java,Bootstrap.java
-        </generation.files>
+        <generation.files>ApiException.java,NotFoundException.java,pom.xml</generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>

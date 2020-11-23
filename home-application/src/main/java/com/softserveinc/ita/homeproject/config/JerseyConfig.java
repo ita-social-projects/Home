@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.config;
 
-import com.softserveinc.ita.homeproject.api.JacksonJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
