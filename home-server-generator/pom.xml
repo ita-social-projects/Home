@@ -13,6 +13,8 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
+        <generation.files>ApiException.java,ApiOriginFilter.java,JacksonJsonProvider.java,LocalDateProvider.java,NotFoundException.java,OffsetDateTimeProvider.java,RFC3339DateFormat.java,StringUtil.java,Bootstrap.java
+        </generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>
@@ -27,6 +29,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jersey</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>4.3.1</version>
         </dependency>
     </dependencies>
 
@@ -75,6 +82,7 @@
                             <generatorName>jaxrs-jersey</generatorName>
                             <configOptions>
                                 <java8>true</java8>
+                                <useTags>true</useTags>
                                 <dateLibrary>java8</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
@@ -88,6 +96,7 @@
                                 <parentVersion>${project.parent.version}</parentVersion>
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
+                            <supportingFilesToGenerate>${generation.files}</supportingFilesToGenerate>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi/server</output>
                         </configuration>
