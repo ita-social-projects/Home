@@ -529,7 +529,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserDto'
+              $ref: '#/components/schemas/CreateUser'
         required: true
       responses:
         '201':
@@ -539,7 +539,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReadUserDto'
+                  $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "403":
@@ -580,7 +580,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ReadUserDto"
+                  $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         default:
@@ -607,7 +607,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReadUserDto"
+                $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -634,7 +634,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserDto'
+              $ref: '#/components/schemas/UpdateUser'
         required: true
       responses:
         '200':
@@ -642,7 +642,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReadUserDto"
+                $ref: "#/components/schemas/ReadUser"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1317,7 +1317,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReadUserDto'
+                  $ref: '#/components/schemas/ReadUser'
         "404":
           description: News not found
           content:
@@ -1345,7 +1345,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUserDto'
+              $ref: '#/components/schemas/UpdateUser'
         required: true
       responses:
         "200":
@@ -1353,7 +1353,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadUserDto'
+                $ref: '#/components/schemas/ReadUser'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1710,7 +1710,7 @@ components:
         is_important:
           type: boolean
           example: true
-    CreateUserDto:
+    CreateUser:
       type: object
       properties:
         firstName:
@@ -1751,7 +1751,7 @@ components:
           orderDate:
             type: string
             example: 26.04.2020
-    ReadUserDto:
+    ReadUser:
       type: object
       properties:
         id:
@@ -1772,7 +1772,7 @@ components:
           items:
             type: string
             example: "+380506617305"
-    UpdateUserDto:
+    UpdateUser:
       type: object
       properties:
         firstName:
