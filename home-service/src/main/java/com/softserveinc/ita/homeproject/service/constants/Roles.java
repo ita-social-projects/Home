@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.constants;
+package com.softserveinc.ita.homeproject.service.constants;
 
 public interface Roles {
     String userRole = "USER";

@@ -17,21 +17,6 @@
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <artifactId>home-server-generator</artifactId>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <artifactId>home-generated-server</artifactId>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <artifactId>home-application</artifactId>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <version>${revision}</version>
-        </dependency>
     </dependencies>
 
 </project>

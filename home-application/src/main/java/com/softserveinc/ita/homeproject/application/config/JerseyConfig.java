@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+
 import com.softserveinc.ita.homeproject.api.JacksonJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;

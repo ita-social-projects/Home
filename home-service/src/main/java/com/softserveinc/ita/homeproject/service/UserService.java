@@ -1,20 +1,20 @@
 package com.softserveinc.ita.homeproject.service;
 
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
+import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
+import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
 
 import java.util.Collection;
 
 public interface UserService {
 
-    ReadUser createUser(CreateUser createUserDto);
+    ReadUserDto createUser(CreateUserDto createUserDto);
 
-    ReadUser updateUser(Long id, UpdateUser updateUserDto);
+    ReadUserDto updateUser(Long id, UpdateUserDto updateUserDto);
 
-    Collection<ReadUser> getAllUsers();
+    Collection<ReadUserDto> getAllUsers();
 
-    ReadUser getUserById(Long id);
+    ReadUserDto getUserById(Long id);
 
     void deactivateUser(Long id);
 }

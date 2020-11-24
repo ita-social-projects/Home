@@ -3,9 +3,14 @@ package com.softserveinc.ita.homeproject.application.apiservice;
 import com.softserveinc.ita.homeproject.api.NotFoundException;
 import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import com.softserveinc.ita.homeproject.service.UserService;
+import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
+import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
+import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -13,43 +18,63 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.createUserPermission;
+import static com.softserveinc.ita.homeproject.service.constants.Permissions.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
+    private final ConversionService conversionService;
 
-    @PreAuthorize("hasAuthority('CREATE_USER_PERMISSION')")
+    @PreAuthorize(createUserPermission)
     @Override
     public Response createUser(CreateUser createUser, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userService.createUser(createUser)).build();
+        CreateUserDto createUserDto = conversionService.convert(createUser, CreateUserDto.class);
+        ReadUserDto readUserDto = userService.createUser(createUserDto);
+        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+
+        return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
 
-    @PreAuthorize("hasAuthority('UPDATE_USER_PERMISSION')")
+    @PreAuthorize(getUserByIdPermission)
     @Override
-    public Response updateUser(Integer id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userService.updateUser(id.longValue(), updateUser)).build();
+    public Response getUser(Long id, SecurityContext securityContext) throws NotFoundException {
+        ReadUserDto readUserDto = userService.getUserById(id);
+        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+
+        return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @PreAuthorize("hasAuthority('GET_USERS_PERMISSION')")
+    @PreAuthorize(getAllUsersPermission)
     @Override
-    public Response usersGet(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userService.getAllUsers()).build();
+    public Response queryUsers(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
+        List<ReadUser> readUserList = userService.getAllUsers().stream()
+                .map(readUserDto -> conversionService.convert(readUserDto, ReadUser.class))
+                .collect(Collectors.toList());
+
+        return Response.status(Response.Status.OK).entity(readUserList).build();
     }
 
-    @PreAuthorize("hasAuthority('DELETE_USER_PERMISSION')")
+    @PreAuthorize(deactivateUserPermission)
     @Override
-    public Response usersIdDelete(Integer id, SecurityContext securityContext) throws NotFoundException {
-        userService.deactivateUser(id.longValue());
-        return Response.ok().entity(Response.status(Response.Status.OK)).build();
+    public Response removeUser(Long id, SecurityContext securityContext) throws NotFoundException {
+        userService.deactivateUser(id);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize("hasAuthority('GET_USER_PERMISSION')")
+    @PreAuthorize(updateUserPermission)
     @Override
-    public Response usersIdGet(Integer id, SecurityContext securityContext) throws NotFoundException {
-        return Response.ok().entity(userService.getUserById(id.longValue())).build();
+    public Response updateUser(Long id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
+        UpdateUserDto updateUserDto = conversionService.convert(updateUser, UpdateUserDto.class);
+        ReadUserDto readUserDto = userService.updateUser(id, updateUserDto);
+        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+
+        return Response.status(Response.Status.OK).entity(readUser).build();
     }
+
 }
