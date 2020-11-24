@@ -520,7 +520,7 @@ paths:
   /users:
     post:
       tags:
-        - User
+        - user
       summary: Create user
       description: Create a new user
       operationId: createUser
@@ -550,9 +550,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     get:
       tags:
-        - User
+        - user
       summary: "Get all users"
       description: ''
+      operationId: queryUsers
       parameters:
         - in: query
           name: offset
@@ -587,9 +588,10 @@ paths:
   /users/{id}:
     get:
       tags:
-        - User
+        - user
       summary: "Get user by user name"
       description: ''
+      operationId: getUser
       parameters:
         - name: "id"
           in: "path"
@@ -597,6 +599,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       responses:
         '200':
@@ -613,7 +616,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - User
+        - user
       summary: Update current user
       description: Update current user
       operationId: updateUser
@@ -624,6 +627,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       requestBody:
         description: Update current user
@@ -653,8 +657,9 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - User
+        - user
       summary: Delete user by ID
+      operationId: removeUser
       parameters:
         - name: "id"
           in: "path"
@@ -662,6 +667,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       responses:
         "204":
@@ -1750,6 +1756,7 @@ components:
       properties:
         id:
           type: integer
+          format: int64
           example: 1
         firstName:
           type: string
