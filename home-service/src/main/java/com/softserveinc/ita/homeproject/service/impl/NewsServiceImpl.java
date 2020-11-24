@@ -56,12 +56,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Collection<ReadNewsDto> getAll() {
 
-       List<News> entityCollection = new ArrayList<>();
+       List<News> newsList = new ArrayList<>();
         for (News news : newsRepository.findAll()) {
-            entityCollection.add(news);
+            newsList.add(news);
         }
 
-        return entityCollection.stream()
+        return newsList.stream()
                 .map(entity -> ConvertToGetNewsServiceDto(entity)).collect(Collectors.toList());
     }
 
@@ -73,32 +73,23 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        if (newsRepository.findById(id).isPresent()) {
+    public void deleteById(Long id) {
+            newsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cannot find news with given ID!"));
             newsRepository.deleteById(id);
-            return true;
-        } else {
-            return  false;
-        }
     }
 
-    private ReadNewsDto ConvertToGetNewsServiceDto(News newsResponse) {
+    private ReadNewsDto ConvertToGetNewsServiceDto(News news) {
         ReadNewsDto toApiService = ReadNewsDto.builder()
-                .id(newsResponse.getId())
-                .title(newsResponse.getTitle())
-                .text(newsResponse.getText())
-                .description(newsResponse.getDescription())
-                .photoUrl(newsResponse.getPhotoUrl())
-                .source(newsResponse.getSource())
+                .id(news.getId())
+                .createdAt(news.getCreateDate())
+                .title(news.getTitle())
+                .text(news.getText())
+                .description(news.getDescription())
+                .photoUrl(news.getPhotoUrl())
+                .source(news.getSource())
                 .build();
 
-        Optional<LocalDateTime> latestChangeDate = Optional.ofNullable(newsResponse.getUpdateDate());    ;
-        if (latestChangeDate.isEmpty()) {
-            latestChangeDate = Optional.of(newsResponse.getCreateDate());
-        } else{
-            toApiService.setUpdatedAt(latestChangeDate.get());
-        }
-        toApiService.setCreatedAt(newsResponse.getCreateDate());
+        Optional.ofNullable(news.getUpdateDate()).ifPresent(toApiService::setUpdatedAt);
 
         return toApiService;
     }

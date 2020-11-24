@@ -32,7 +32,7 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     @Override
     public Response addNews(CreateNews createNews, SecurityContext securityContext) {
-        CreateOrUpdateNewsDto toCreate = CreateOrUpdateNewsDto.builder()
+        CreateOrUpdateNewsDto createNewsDto = CreateOrUpdateNewsDto.builder()
                 .title(createNews.getTitle())
                 .description(createNews.getDescription())
                 .text(createNews.getText())
@@ -40,7 +40,7 @@ public class NewsApiServiceImpl implements NewsApiService {
                 .source(createNews.getSource())
                 .dateTime(LocalDateTime.now())
                 .build();
-        News response = convertToNewsView(newsService.create(toCreate));
+        News response = convertToNewsView(newsService.create(createNewsDto));
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
@@ -52,23 +52,23 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize, SecurityContext securityContext) {
-        List<ReadNews> readNewsList = newsService.getAll().stream()
+        List<ReadNews> readNewsResponseList = newsService.getAll().stream()
                 .map(newsDto -> convertToReadNews(newsDto))
                 .collect(Collectors.toList());
-        return Response.ok().entity(readNewsList).build();
+        return Response.ok().entity(readNewsResponseList).build();
     }
 
     @Override
     public Response getNews(Long id, SecurityContext securityContext) {
-        ReadNewsDto dto = newsService.getById(id);
-        ReadNews toResponse = convertToReadNews(dto);
-        return Response.ok().entity(toResponse).build();
+        ReadNewsDto readNewsDto = newsService.getById(id);
+        ReadNews newsApiResponse = convertToReadNews(readNewsDto);
+        return Response.ok().entity(newsApiResponse).build();
     }
 
 
     @Override
     public Response updateNews(Long id, UpdateNews updateNews, SecurityContext securityContext) {
-        CreateOrUpdateNewsDto toUpdate = CreateOrUpdateNewsDto.builder()
+        CreateOrUpdateNewsDto updateNewsDto = CreateOrUpdateNewsDto.builder()
                 .title(updateNews.getTitle())
                 .dateTime(LocalDateTime.now())
                 .description(updateNews.getDescription())
@@ -77,31 +77,31 @@ public class NewsApiServiceImpl implements NewsApiService {
                 .source(updateNews.getSource())
                 .build();
 
-        News response = convertToNewsView(newsService.update(id, toUpdate));
+        News response = convertToNewsView(newsService.update(id, updateNewsDto));
         return Response.ok().entity(response).build();
     }
 
-    private ReadNews convertToReadNews(ReadNewsDto dto) {
+    private ReadNews convertToReadNews(ReadNewsDto readNewsDto) {
         ReadNews toResponse = new ReadNews();
-        toResponse.setId(dto.getId());
-        toResponse.setCreateOrUpdateDate(OffsetDateTime.of(dto.getCreatedAt(), ZoneOffset.UTC));
-        toResponse.setTitle(dto.getTitle());
-        toResponse.setDescription(dto.getDescription());
-        toResponse.setText(dto.getText());
-        toResponse.setPhotoUrl(dto.getPhotoUrl());
-        toResponse.setSource(dto.getSource());
+        toResponse.setId(readNewsDto.getId());
+        toResponse.setCreateOrUpdateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), ZoneOffset.UTC));
+        toResponse.setTitle(readNewsDto.getTitle());
+        toResponse.setDescription(readNewsDto.getDescription());
+        toResponse.setText(readNewsDto.getText());
+        toResponse.setPhotoUrl(readNewsDto.getPhotoUrl());
+        toResponse.setSource(readNewsDto.getSource());
         return toResponse;
     }
-    private News convertToNewsView(ReadNewsDto dto) {
+    private News convertToNewsView(ReadNewsDto readNewsDto) {
         News toView = new News();
-        toView.setId(dto.getId());
-        toView.setCreateDate(OffsetDateTime.of(dto.getCreatedAt(), ZoneOffset.UTC));
-        if(Objects.nonNull(dto.getUpdatedAt())) toView.setUpdateDate(OffsetDateTime.of(dto.getUpdatedAt(), ZoneOffset.UTC));
-        toView.setTitle(dto.getTitle());
-        toView.setDescription(dto.getDescription());
-        toView.setText(dto.getText());
-        toView.setPhotoUrl(dto.getPhotoUrl());
-        toView.setSource(dto.getSource());
+        toView.setId(readNewsDto.getId());
+        toView.setCreateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), ZoneOffset.UTC));
+        if(Objects.nonNull(readNewsDto.getUpdatedAt())) toView.setUpdateDate(OffsetDateTime.of(readNewsDto.getUpdatedAt(), ZoneOffset.UTC));
+        toView.setTitle(readNewsDto.getTitle());
+        toView.setDescription(readNewsDto.getDescription());
+        toView.setText(readNewsDto.getText());
+        toView.setPhotoUrl(readNewsDto.getPhotoUrl());
+        toView.setSource(readNewsDto.getSource());
         return toView;
     }
 

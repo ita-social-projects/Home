@@ -10,5 +10,5 @@ public interface NewsService {
     ReadNewsDto update(Long id, CreateOrUpdateNewsDto payload);
     Collection<ReadNewsDto> getAll();
     ReadNewsDto getById(Long id);
-    boolean deleteById(Long id);
+    void deleteById(Long id);
 }
