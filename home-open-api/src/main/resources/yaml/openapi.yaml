@@ -74,16 +74,6 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
-        - in: query
-          name: type
-          schema:
-            type: string
-            enum:
-              - Country
-              - Local
-              - Area
-          required: false
-          description: Filter news by type.
       responses:
         "200":
           description: Successful operation
@@ -111,6 +101,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         "200":
           description: Successful operation
@@ -135,6 +126,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         description: Update an existing news
         content:
@@ -173,6 +165,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         "204":
           description: Successful operation
@@ -1419,15 +1412,11 @@ components:
             $ref: '#/components/schemas/Error'
   schemas:
     News:
-      required:
-        - title
-        - description
-        - text
-        - createDate
       type: object
       properties:
         id:
           type: integer
+          format: int64
           example: 1
         title:
           type: string
@@ -1453,6 +1442,7 @@ components:
       properties:
         id:
           type: integer
+          format: int64
         title:
           type: string
         description:
@@ -1469,10 +1459,6 @@ components:
           type: string
           format: url
     CreateNews:
-      required:
-        - title
-        - description
-        - text
       type: object
       properties:
         title:
@@ -1480,7 +1466,6 @@ components:
           example: News in the Some Area
         photoUrl:
           type: string
-          format: url
         description:
           type: string
         source:
@@ -1494,7 +1479,6 @@ components:
           type: string
         photoUrl:
           type: string
-          format: url
         description:
           type: string
         source:

@@ -43,7 +43,7 @@ public class News {
     @Column(name = "photo_url")
     String photoUrl;
 
-    @Column(name = "source_url")
-    String sourceUrl;
+    @Column(name = "source")
+    String source;
 
 }

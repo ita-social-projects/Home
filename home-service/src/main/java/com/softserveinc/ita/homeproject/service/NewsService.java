@@ -1,8 +1,14 @@
 package com.softserveinc.ita.homeproject.service;
 
-import com.softserveinc.ita.homeproject.homedata.entity.News;
-import com.softserveinc.ita.homeproject.service.dto.ServiceNewsDto;
+import com.softserveinc.ita.homeproject.service.dto.CreateOrUpdateNewsDto;
+import com.softserveinc.ita.homeproject.service.dto.ReadNewsDto;
 
-public interface NewsService extends GenericServiceInterface<News, ServiceNewsDto>{
+import java.util.Collection;
 
+public interface NewsService {
+    ReadNewsDto create(CreateOrUpdateNewsDto payload);
+    ReadNewsDto update(Long id, CreateOrUpdateNewsDto payload);
+    Collection<ReadNewsDto> getAll();
+    ReadNewsDto getById(Long id);
+    boolean deleteById(Long id);
 }
