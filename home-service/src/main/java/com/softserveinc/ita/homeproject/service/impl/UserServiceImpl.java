@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findById(id).isPresent()) {
             User toUpdate = conversionService.convert(updateUserDto, User.class);
             userRepository.save(toUpdate);
-            return conversionService.convert(updateUserDto, ReadUserDto.class);
+            return conversionService.convert(toUpdate, ReadUserDto.class);
         } else {
             throw new NotFoundException(404, "User with this Id is not found");
         }
