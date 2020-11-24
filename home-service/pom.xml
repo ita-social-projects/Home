@@ -27,6 +27,11 @@
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <artifactId>home-application</artifactId>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

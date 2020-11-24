@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.softserveinc.ita.homeproject.application.constants.Roles.userRole;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,14 +28,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ReadUser createUser(CreateUser payload) {
-        if (userRepository.findByEmail(payload.getEmail()).isPresent()) {
+    public ReadUser createUser(CreateUser createUserDto) {
+        if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new RuntimeException();  //TODO: here throw already exist exception
         } else {
-            User toCreate = conversionService.convert(payload, User.class);
+            User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
-            toCreate.setRoles(Set.of(roleRepository.findByName("USER")));
+            toCreate.setRoles(Set.of(roleRepository.findByName(userRole)));
 
             userRepository.save(toCreate);
 
@@ -42,11 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ReadUser updateUser(Long id, UpdateUser payload) {
+    public ReadUser updateUser(Long id, UpdateUser updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
-            User toUpdate = conversionService.convert(payload, User.class);
+            User toUpdate = conversionService.convert(updateUserDto, User.class);
             userRepository.save(toUpdate);
-            return conversionService.convert(payload, ReadUser.class);
+            return conversionService.convert(updateUserDto, ReadUser.class);
         } else {
             throw new RuntimeException();  //TODO: here throw not found exception
         }
@@ -60,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ReadUser getUserByParameter(Long id) {
+    public ReadUser getUserById(Long id) {
         User toGet = userRepository.findById(id)
                 .orElseThrow();  //TODO: here throw not found exception
         return conversionService.convert(toGet, ReadUser.class);

@@ -8,13 +8,13 @@ import java.util.Collection;
 
 public interface UserService {
 
-    ReadUser createUser(CreateUser payload);
+    ReadUser createUser(CreateUser createUserDto);
 
-    ReadUser updateUser(Long id, UpdateUser payload);
+    ReadUser updateUser(Long id, UpdateUser updateUserDto);
 
     Collection<ReadUser> getAllUsers();
 
-    ReadUser getUserByParameter(Long id);
+    ReadUser getUserById(Long id);
 
     void deactivateUser(Long id);
 }
