@@ -7,7 +7,6 @@ import {{modelPackage}}.*;
 {{/imports}}
 
 import java.util.List;
-import {{package}}.NotFoundException;
 
 import java.io.InputStream;
 
@@ -20,7 +19,7 @@ import javax.validation.constraints.*;
 {{#operations}}
 public interface {{classname}}Service {
     {{#operation}}
-    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}},{{/allParams}}SecurityContext securityContext) throws NotFoundException;
+    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}},{{/allParams}}SecurityContext securityContext);
     {{/operation}}
 }
 {{/operations}}

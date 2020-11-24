@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiParam;
 
 import java.util.Map;
 import java.util.List;
-import {{package}}.NotFoundException;
 
 import java.io.InputStream;
 
@@ -57,8 +56,7 @@ public class {{classname}}  {
     @io.swagger.annotations.ApiResponses(value = { {{#responses}}
         @io.swagger.annotations.ApiResponse(code = {{{code}}}, message = "{{{message}}}", response = {{{baseType}}}.class{{#containerType}}, responseContainer = "{{{containerType}}}"{{/containerType}}){{#hasMore}},
         {{/hasMore}}{{/responses}} })
-    public Response {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}},{{/allParams}}@Context SecurityContext securityContext)
-    throws NotFoundException {
+    public Response {{nickname}}({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}},{{/allParams}}@Context SecurityContext securityContext) {
         return delegate.{{nickname}}({{#allParams}}{{#isFormParam}}{{#isFile}}{{paramName}}InputStream, {{paramName}}Detail{{/isFile}}{{/isFormParam}}{{^isFile}}{{paramName}}{{/isFile}}{{^isFormParam}}{{#isFile}}{{paramName}}{{/isFile}}{{/isFormParam}}, {{/allParams}}securityContext);
     }
 {{/operation}}

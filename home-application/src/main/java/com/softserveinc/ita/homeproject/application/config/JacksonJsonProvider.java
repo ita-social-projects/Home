@@ -1,21 +1,15 @@
-package {{apiPackage}};
+package com.softserveinc.ita.homeproject.application.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-{{#java8}}
-import com.fasterxml.jackson.datatype.jsr310.*;
-{{/java8}}
-{{^java8}}
-import com.fasterxml.jackson.datatype.joda.*;
-{{/java8}}
-
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
+import java.text.SimpleDateFormat;
 
 @Provider
 @Produces({MediaType.APPLICATION_JSON})
@@ -24,15 +18,10 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
     public JacksonJsonProvider() {
 
         ObjectMapper objectMapper = new ObjectMapper()
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-{{#java8}}
-            .registerModule(new JavaTimeModule())
-{{/java8}}
-{{^java8}}
-            .registerModule(new JodaModule())
-{{/java8}}
-            .setDateFormat(new RFC3339DateFormat());
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .registerModule(new JavaTimeModule())
+                .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
 
         setMapper(objectMapper);
     }

@@ -7,7 +7,6 @@ import {{modelPackage}}.*;
 {{/imports}}
 
 import java.util.List;
-import {{package}}.NotFoundException;
 
 import java.io.InputStream;
 
@@ -21,9 +20,8 @@ import javax.validation.constraints.*;
 public class {{classname}}ServiceImpl implements {{classname}}Service {
     {{#operation}}
     @Override
-    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}, {{/allParams}}SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+    public Response {{nickname}}({{#allParams}}{{>serviceQueryParams}}{{>servicePathParams}}{{>serviceHeaderParams}}{{>serviceBodyParams}}{{>serviceFormParams}}, {{/allParams}}SecurityContext securityContext) {
+        return Response.ok().build();
     }
     {{/operation}}
 }
