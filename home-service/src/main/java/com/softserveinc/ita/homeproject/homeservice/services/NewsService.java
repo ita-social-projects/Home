@@ -1,7 +1,7 @@
-package com.softserveinc.ita.homeproject.service;
+package com.softserveinc.ita.homeproject.homeservice.services;
 
-import com.softserveinc.ita.homeproject.service.dto.CreateOrUpdateNewsDto;
-import com.softserveinc.ita.homeproject.service.dto.ReadNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
 
 import java.util.Collection;
 

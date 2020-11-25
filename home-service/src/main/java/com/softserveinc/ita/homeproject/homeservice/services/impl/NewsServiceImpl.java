@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.service.impl;
+package com.softserveinc.ita.homeproject.homeservice.services.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
-import com.softserveinc.ita.homeproject.service.NewsService;
-import com.softserveinc.ita.homeproject.service.dto.CreateOrUpdateNewsDto;
-import com.softserveinc.ita.homeproject.service.dto.ReadNewsDto;
-import com.softserveinc.ita.homeproject.service.exceptions.NotFoundException;
+import com.softserveinc.ita.homeproject.homeservice.services.NewsService;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.exceptions.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +56,6 @@ public class NewsServiceImpl implements NewsService {
 
         return ConvertToGetNewsServiceDto(newsToUpdate);
     }
-
 
     @Override
     public Collection<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize) {

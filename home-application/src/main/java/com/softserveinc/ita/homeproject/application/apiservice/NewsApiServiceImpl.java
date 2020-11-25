@@ -5,9 +5,9 @@ import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.News;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import com.softserveinc.ita.homeproject.service.NewsService;
-import com.softserveinc.ita.homeproject.service.dto.CreateOrUpdateNewsDto;
-import com.softserveinc.ita.homeproject.service.dto.ReadNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.services.NewsService;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
@@ -65,7 +65,6 @@ public class NewsApiServiceImpl implements NewsApiService {
         return Response.ok().entity(newsApiResponse).build();
     }
 
-
     @Override
     public Response updateNews(Long id, UpdateNews updateNews, SecurityContext securityContext) {
         CreateOrUpdateNewsDto updateNewsDto = CreateOrUpdateNewsDto.builder()
@@ -92,17 +91,18 @@ public class NewsApiServiceImpl implements NewsApiService {
         toResponse.setSource(readNewsDto.getSource());
         return toResponse;
     }
+
     private News convertToNewsView(ReadNewsDto readNewsDto) {
         News toView = new News();
         toView.setId(readNewsDto.getId());
         toView.setCreateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), ZoneOffset.UTC));
-        if(Objects.nonNull(readNewsDto.getUpdatedAt())) toView.setUpdateDate(OffsetDateTime.of(readNewsDto.getUpdatedAt(), ZoneOffset.UTC));
         toView.setTitle(readNewsDto.getTitle());
         toView.setDescription(readNewsDto.getDescription());
         toView.setText(readNewsDto.getText());
         toView.setPhotoUrl(readNewsDto.getPhotoUrl());
         toView.setSource(readNewsDto.getSource());
+        if(Objects.nonNull(readNewsDto.getUpdatedAt()))
+            toView.setUpdateDate(OffsetDateTime.of(readNewsDto.getUpdatedAt(), ZoneOffset.UTC));
         return toView;
     }
-
 }
