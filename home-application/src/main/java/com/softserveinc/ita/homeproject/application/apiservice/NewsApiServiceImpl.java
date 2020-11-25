@@ -52,7 +52,7 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize, SecurityContext securityContext) {
-        List<ReadNews> readNewsResponseList = newsService.getAll().stream()
+        List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
                 .map(newsDto -> convertToReadNews(newsDto))
                 .collect(Collectors.toList());
         return Response.ok().entity(readNewsResponseList).build();

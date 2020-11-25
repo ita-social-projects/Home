@@ -5,11 +5,15 @@ import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.service.NewsService;
 import com.softserveinc.ita.homeproject.service.dto.CreateOrUpdateNewsDto;
 import com.softserveinc.ita.homeproject.service.dto.ReadNewsDto;
+import com.softserveinc.ita.homeproject.service.exceptions.NotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +44,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public ReadNewsDto update(Long id, CreateOrUpdateNewsDto updateNewsServiceDto)  {
-        News newsToUpdate = newsRepository.findById(id).orElseThrow();
+        News newsToUpdate = newsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
         newsToUpdate.setTitle(updateNewsServiceDto.getTitle());
         newsToUpdate.setText(updateNewsServiceDto.getText());
         newsToUpdate.setUpdateDate(updateNewsServiceDto.getDateTime());
@@ -54,10 +59,10 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public Collection<ReadNewsDto> getAll() {
+    public Collection<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize) {
 
        List<News> newsList = new ArrayList<>();
-        for (News news : newsRepository.findAll()) {
+        for (News news : newsRepository.findAll(PageRequest.of(pageNumber, pageSize))) {
             newsList.add(news);
         }
 
@@ -67,14 +72,16 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public ReadNewsDto getById(Long id) {
-        News newsResponse = newsRepository.findById(id).orElseThrow();
+        News newsResponse = newsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
 
         return ConvertToGetNewsServiceDto(newsResponse);
     }
 
     @Override
     public void deleteById(Long id) {
-            newsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cannot find news with given ID!"));
+            newsRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
             newsRepository.deleteById(id);
     }
 
