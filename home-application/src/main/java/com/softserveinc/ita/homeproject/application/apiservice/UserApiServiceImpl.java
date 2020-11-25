@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
-import com.softserveinc.ita.homeproject.api.NotFoundException;
 import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;

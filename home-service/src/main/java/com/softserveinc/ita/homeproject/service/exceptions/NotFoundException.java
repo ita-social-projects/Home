@@ -1,9 +1,10 @@
 package com.softserveinc.ita.homeproject.service.exceptions;
 
+import org.springframework.http.HttpStatus;
+
 public class NotFoundException extends ApiException{
-    private int code;
-    public NotFoundException (int code, String msg) {
-        super(code, msg);
-        this.code = code;
+
+    public NotFoundException(HttpStatus status, String msg) {
+        super(status, msg);
     }
 }

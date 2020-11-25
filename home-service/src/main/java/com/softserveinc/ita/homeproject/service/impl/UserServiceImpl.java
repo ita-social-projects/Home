@@ -12,6 +12,7 @@ import com.softserveinc.ita.homeproject.service.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto createUser(CreateUserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistException(409, "User with this email is already existing");
+            throw new AlreadyExistException(HttpStatus.CONFLICT, "User with this email is already existing");
         } else {
             User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setEnabled(true);
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(toUpdate);
             return conversionService.convert(toUpdate, ReadUserDto.class);
         } else {
-            throw new NotFoundException(404, "User with this Id is not found");
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found");
         }
     }
 
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(404, "User with this Id is not found"));
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found"));
         return conversionService.convert(toGet, ReadUserDto.class);
     }
 
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(404, "User with this Id is not found"));
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found"));
         toDelete.setEnabled(false);
     }
 }
