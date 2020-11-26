@@ -7,8 +7,8 @@ import com.softserveinc.ita.homeproject.service.UserService;
 import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
 import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
 import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
-import com.softserveinc.ita.homeproject.service.exceptions.AlreadyExistException;
-import com.softserveinc.ita.homeproject.service.exceptions.NotFoundException;
+import com.softserveinc.ita.homeproject.service.exception.AlreadyExistException;
+import com.softserveinc.ita.homeproject.service.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.convert.ConversionService;
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.service.constants.Roles.userRole;
+import static com.softserveinc.ita.homeproject.service.constants.Roles.USER_ROLE;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +35,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto createUser(CreateUserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistException(HttpStatus.CONFLICT, "User with this email is already existing");
+            throw new AlreadyExistException(HttpStatus.CONFLICT, "User with email" + createUserDto.getEmail() +" is already exists");
         } else {
             User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
-            toCreate.setRoles(Set.of(roleRepository.findByName(userRole)));
+            toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
 
             userRepository.save(toCreate);
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(toUpdate);
             return conversionService.convert(toUpdate, ReadUserDto.class);
         } else {
-            throw new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found");
+            throw new NotFoundException(HttpStatus.NOT_FOUND, "User with id:" + id + " is not found");
         }
     }
 
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found"));
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with id:"+ id + " is not found"));
         return conversionService.convert(toGet, ReadUserDto.class);
     }
 
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with this Id is not found"));
+                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
     }
 }

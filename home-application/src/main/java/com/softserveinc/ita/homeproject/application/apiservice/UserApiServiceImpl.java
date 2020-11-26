@@ -30,7 +30,7 @@ public class UserApiServiceImpl implements UsersApiService {
     private final UserService userService;
     private final ConversionService conversionService;
 
-    @PreAuthorize(createUserPermission)
+    @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser, SecurityContext securityContext) throws NotFoundException {
         CreateUserDto createUserDto = conversionService.convert(createUser, CreateUserDto.class);
@@ -40,7 +40,7 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
 
-    @PreAuthorize(getUserByIdPermission)
+    @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id, SecurityContext securityContext) throws NotFoundException {
         ReadUserDto readUserDto = userService.getUserById(id);
@@ -49,7 +49,7 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @PreAuthorize(getAllUsersPermission)
+    @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
     public Response queryUsers(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
         List<ReadUser> readUserList = userService.getAllUsers().stream()
@@ -59,7 +59,7 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.OK).entity(readUserList).build();
     }
 
-    @PreAuthorize(deactivateUserPermission)
+    @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
     public Response removeUser(Long id, SecurityContext securityContext) throws NotFoundException {
         userService.deactivateUser(id);
@@ -67,7 +67,7 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(updateUserPermission)
+    @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
         UpdateUserDto updateUserDto = conversionService.convert(updateUser, UpdateUserDto.class);

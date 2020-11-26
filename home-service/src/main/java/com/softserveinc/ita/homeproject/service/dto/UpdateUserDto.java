@@ -9,7 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-public class UpdateUserDto extends BaseUserServiceDto{
+public class UpdateUserDto {
+
+    private String firstName;
+
+    private String lastName;
 
     private List<String> contacts;
 }

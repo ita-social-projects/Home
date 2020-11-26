@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.ManyToMany;
-import javax.persistence.FetchType;
 import java.util.Set;
 
 @Getter

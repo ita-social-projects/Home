@@ -9,7 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-public class ReadUserDto extends BaseUserServiceDto{
+public class ReadUserDto {
+
+    private String firstName;
+
+    private String lastName;
 
     private Long id;
 

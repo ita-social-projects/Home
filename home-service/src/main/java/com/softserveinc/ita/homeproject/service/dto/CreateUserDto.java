@@ -7,7 +7,11 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class CreateUserDto extends BaseUserServiceDto{
+public class CreateUserDto {
+
+    private String firstName;
+
+    private String lastName;
 
     private String email;
 

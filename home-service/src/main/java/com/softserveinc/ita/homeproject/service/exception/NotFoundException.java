@@ -1,8 +1,8 @@
-package com.softserveinc.ita.homeproject.service.exceptions;
+package com.softserveinc.ita.homeproject.service.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends ApiException{
+public class NotFoundException extends CustomException {
 
     public NotFoundException(HttpStatus status, String msg) {
         super(status, msg);
