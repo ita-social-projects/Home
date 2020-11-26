@@ -556,22 +556,22 @@ paths:
       operationId: queryUsers
       parameters:
         - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: "The number of items to skip before starting to collect the response"
-        - in: query
-          name: limit
+          name: pageNumber
           schema:
             type: integer
             minimum: 1
-            maximum: 100
-            default: 20
+            default: 1
           required: false
-          description: "The number of items to return"
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
       responses:
         '200':
           description: successful operation

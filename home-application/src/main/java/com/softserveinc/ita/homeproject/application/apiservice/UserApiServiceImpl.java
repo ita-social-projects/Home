@@ -51,8 +51,8 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    public Response queryUsers(@Min(0) Integer offset, @Min(1) @Max(100) Integer limit, SecurityContext securityContext) throws NotFoundException {
-        List<ReadUser> readUserList = userService.getAllUsers().stream()
+    public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, SecurityContext securityContext) throws NotFoundException {
+        List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
                 .map(readUserDto -> conversionService.convert(readUserDto, ReadUser.class))
                 .collect(Collectors.toList());
 

@@ -10,13 +10,16 @@ import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
 import com.softserveinc.ita.homeproject.service.exception.AlreadyExistException;
 import com.softserveinc.ita.homeproject.service.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,6 @@ public class UserServiceImpl implements UserService {
     private final ConversionService conversionService;
     private final RoleRepository roleRepository;
 
-    @SneakyThrows
     @Transactional
     @Override
     public ReadUserDto createUser(CreateUserDto createUserDto) {
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
+            toCreate.setCreateDate(LocalDateTime.now());
 
             userRepository.save(toCreate);
 
@@ -48,11 +51,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @SneakyThrows
     @Override
     public ReadUserDto updateUser(Long id, UpdateUserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
             User toUpdate = conversionService.convert(updateUserDto, User.class);
+            toUpdate.setUpdateDate(LocalDateTime.now());
             userRepository.save(toUpdate);
             return conversionService.convert(toUpdate, ReadUserDto.class);
         } else {
@@ -61,13 +64,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<ReadUserDto> getAllUsers() {
-        return userRepository.findAll().stream()
+    public Collection<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+        List<User> userList = new ArrayList<>();
+        for (User user : userRepository.findAll(PageRequest.of(pageNumber, pageSize))) {
+            userList.add(user);
+        }
+
+        return userList.stream()
                 .map(user -> conversionService.convert(user, ReadUserDto.class))
                 .collect(Collectors.toList());
     }
 
-    @SneakyThrows
     @Override
     public ReadUserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
@@ -75,7 +82,6 @@ public class UserServiceImpl implements UserService {
         return conversionService.convert(toGet, ReadUserDto.class);
     }
 
-    @SneakyThrows
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)

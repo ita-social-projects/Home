@@ -12,7 +12,7 @@ public interface UserService {
 
     ReadUserDto updateUser(Long id, UpdateUserDto updateUserDto);
 
-    Collection<ReadUserDto> getAllUsers();
+    Collection<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize);
 
     ReadUserDto getUserById(Long id);
 
