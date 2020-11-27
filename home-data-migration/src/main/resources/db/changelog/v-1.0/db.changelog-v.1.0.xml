@@ -7,6 +7,4 @@
 
 
     <include file="001-changeset-users-table.xml" relativeToChangelogFile="true"/>
-<!--    <include file="002-changeset-house-table.xml" relativeToChangelogFile="true"/>-->
 </databaseChangeLog>
-
