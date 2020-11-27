@@ -8,3 +8,4 @@
 
     <include file="001-changeset-users-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
+

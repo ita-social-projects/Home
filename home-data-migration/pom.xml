@@ -43,7 +43,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>202011092145</id>
+                        <id>2020-11-25-init-db</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>update</goal>
@@ -80,3 +80,4 @@
         </plugins>
     </build>
 </project>
+

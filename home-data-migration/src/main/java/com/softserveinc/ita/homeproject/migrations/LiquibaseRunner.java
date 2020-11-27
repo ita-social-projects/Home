@@ -12,3 +12,4 @@ public class LiquibaseRunner {
         liquibaseUpdate.runLiquibase(user, pass);
     }
 }
+

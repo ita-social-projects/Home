@@ -57,3 +57,4 @@ public class LiquibaseUpdate {
         return url;
     }
 }
+

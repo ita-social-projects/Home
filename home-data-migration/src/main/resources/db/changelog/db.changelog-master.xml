@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
-    <changeSet id="202011092145" author="Artur" context="first_migration">
+    <changeSet id="2020-11-25-init-db" author="Artur" context="first_migration">
         <tagDatabase tag="db_init"/>
     </changeSet>
     <include file="v-1.0/db.changelog-v.1.0.xml" relativeToChangelogFile="true"/>
