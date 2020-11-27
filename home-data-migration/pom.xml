@@ -12,5 +12,52 @@
     <packaging>jar</packaging>
 
     <artifactId>home-data-migration</artifactId>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
 
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <!--                    <propertyFile>liquibase.properties</propertyFile>-->
+                    <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                    <url>${db_HOST}</url>
+                    <username>${db_USERNAME}</username>
+                    <password>${db_PASSWORD}</password>
+                    <driver>org.postgresql.Driver</driver>
+                </configuration>
+                <dependencies>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>202011092145</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
+
+

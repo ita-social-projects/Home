@@ -28,6 +28,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+
+        <!-- Password and root name for liquibase-->
+        <db_USERNAME>postgres</db_USERNAME>
+        <db_PASSWORD>1234</db_PASSWORD>
+        <db_HOST>jdbc:postgresql://localhost:5432/test</db_HOST>
     </properties>
 
     <dependencyManagement>
@@ -76,6 +81,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.5</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <outputDirectory>${project.build.directory}</outputDirectory>
