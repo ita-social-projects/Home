@@ -13,7 +13,7 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
-        <generation.files>pom.xml</generation.files>
+        <generation.files>OffsetDateTimeProvider.java,pom.xml</generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>
