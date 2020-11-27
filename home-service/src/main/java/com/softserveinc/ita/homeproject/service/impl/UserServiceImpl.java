@@ -11,17 +11,14 @@ import com.softserveinc.ita.homeproject.service.exception.AlreadyExistException;
 import com.softserveinc.ita.homeproject.service.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.softserveinc.ita.homeproject.service.constants.Roles.USER_ROLE;
 
@@ -64,15 +61,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
-        List<User> userList = new ArrayList<>();
-        for (User user : userRepository.findAll(PageRequest.of(pageNumber, pageSize))) {
-            userList.add(user);
-        }
-
-        return userList.stream()
-                .map(user -> conversionService.convert(user, ReadUserDto.class))
-                .collect(Collectors.toList());
+    public Page<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+        return userRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
+                .map(user -> conversionService.convert(user, ReadUserDto.class));
     }
 
     @Override

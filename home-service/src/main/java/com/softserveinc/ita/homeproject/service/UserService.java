@@ -3,8 +3,7 @@ package com.softserveinc.ita.homeproject.service;
 import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
 import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
 import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
-
-import java.util.Collection;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
 
@@ -12,7 +11,7 @@ public interface UserService {
 
     ReadUserDto updateUser(Long id, UpdateUserDto updateUserDto);
 
-    Collection<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize);
+    Page<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize);
 
     ReadUserDto getUserById(Long id);
 
