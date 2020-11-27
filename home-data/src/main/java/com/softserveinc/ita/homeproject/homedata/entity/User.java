@@ -62,7 +62,7 @@ public class User {
     private LocalDateTime updateDate;
 
     @Column(name = "contacts")
-    private Set<String> contacts;
+    private String contacts;
 
     @ManyToMany
     @JoinTable(name = "account_role",
