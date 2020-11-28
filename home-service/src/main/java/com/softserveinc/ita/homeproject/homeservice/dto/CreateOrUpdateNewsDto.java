@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class CreateOrUpdateNewsDto extends BaseNewsDto {
 
-    private LocalDateTime dateTime;
+    private LocalDateTime createOrUpdateTime;
 }

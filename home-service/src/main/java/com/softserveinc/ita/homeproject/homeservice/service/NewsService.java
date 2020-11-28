@@ -1,14 +1,13 @@
-package com.softserveinc.ita.homeproject.homeservice.services;
+package com.softserveinc.ita.homeproject.homeservice.service;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
-
-import java.util.Collection;
+import org.springframework.data.domain.Page;
 
 public interface NewsService {
     ReadNewsDto create(CreateOrUpdateNewsDto payload);
     ReadNewsDto update(Long id, CreateOrUpdateNewsDto payload);
-    Collection<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize);
+    Page<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize);
     ReadNewsDto getById(Long id);
     void deleteById(Long id);
 }

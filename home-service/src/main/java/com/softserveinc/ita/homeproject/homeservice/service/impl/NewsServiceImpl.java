@@ -1,20 +1,20 @@
-package com.softserveinc.ita.homeproject.homeservice.services.impl;
+package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
-import com.softserveinc.ita.homeproject.homeservice.services.NewsService;
+import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
-import com.softserveinc.ita.homeproject.homeservice.exceptions.NotFoundException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -28,11 +28,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public ReadNewsDto create(CreateOrUpdateNewsDto createNewsServiceDto) {
+        createNewsServiceDto.setCreateOrUpdateTime(LocalDateTime.now());
         News news = News.builder()
                 .description(createNewsServiceDto.getDescription())
                 .title(createNewsServiceDto.getTitle())
                 .text(createNewsServiceDto.getText())
-                .createDate(createNewsServiceDto.getDateTime())
+                .createDate(createNewsServiceDto.getCreateOrUpdateTime())
                 .photoUrl(createNewsServiceDto.getPhotoUrl())
                 .source(createNewsServiceDto.getSource())
                 .build();
@@ -44,11 +45,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public ReadNewsDto update(Long id, CreateOrUpdateNewsDto updateNewsServiceDto)  {
+        updateNewsServiceDto.setCreateOrUpdateTime(LocalDateTime.now());
         News newsToUpdate = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
+                .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
         newsToUpdate.setTitle(updateNewsServiceDto.getTitle());
         newsToUpdate.setText(updateNewsServiceDto.getText());
-        newsToUpdate.setUpdateDate(updateNewsServiceDto.getDateTime());
+        newsToUpdate.setUpdateDate(updateNewsServiceDto.getCreateOrUpdateTime());
         newsToUpdate.setDescription(updateNewsServiceDto.getDescription());
         newsToUpdate.setPhotoUrl(updateNewsServiceDto.getPhotoUrl());
         newsToUpdate.setSource(updateNewsServiceDto.getSource());
@@ -58,21 +60,15 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Collection<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize) {
-
-       List<News> newsList = new ArrayList<>();
-        for (News news : newsRepository.findAll(PageRequest.of(pageNumber, pageSize))) {
-            newsList.add(news);
-        }
-
-        return newsList.stream()
-                .map(entity -> ConvertToGetNewsServiceDto(entity)).collect(Collectors.toList());
+    public Page<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize) {
+        return newsRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
+                .map(page -> ConvertToGetNewsServiceDto(page));
     }
 
     @Override
     public ReadNewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
+                .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
 
         return ConvertToGetNewsServiceDto(newsResponse);
     }
@@ -80,7 +76,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void deleteById(Long id) {
             newsRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Can't find news with given ID"));
+                    .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
             newsRepository.deleteById(id);
     }
 

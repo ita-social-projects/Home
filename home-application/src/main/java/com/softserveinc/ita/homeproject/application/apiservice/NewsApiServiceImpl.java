@@ -1,11 +1,12 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.NewsApiService;
+import com.softserveinc.ita.homeproject.homeservice.constants.Timezone;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.News;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import com.softserveinc.ita.homeproject.homeservice.services.NewsService;
+import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,7 +37,6 @@ public class NewsApiServiceImpl implements NewsApiService {
                 .text(createNews.getText())
                 .photoUrl(createNews.getPhotoUrl())
                 .source(createNews.getSource())
-                .dateTime(LocalDateTime.now())
                 .build();
         News response = convertToNewsView(newsService.create(createNewsDto));
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -69,7 +67,6 @@ public class NewsApiServiceImpl implements NewsApiService {
     public Response updateNews(Long id, UpdateNews updateNews, SecurityContext securityContext) {
         CreateOrUpdateNewsDto updateNewsDto = CreateOrUpdateNewsDto.builder()
                 .title(updateNews.getTitle())
-                .dateTime(LocalDateTime.now())
                 .description(updateNews.getDescription())
                 .text(updateNews.getText())
                 .photoUrl(updateNews.getPhotoUrl())
@@ -83,7 +80,7 @@ public class NewsApiServiceImpl implements NewsApiService {
     private ReadNews convertToReadNews(ReadNewsDto readNewsDto) {
         ReadNews toResponse = new ReadNews();
         toResponse.setId(readNewsDto.getId());
-        toResponse.setCreateOrUpdateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), ZoneOffset.UTC));
+        toResponse.setCreateOrUpdateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), Timezone.UTC_TIMEZONE));
         toResponse.setTitle(readNewsDto.getTitle());
         toResponse.setDescription(readNewsDto.getDescription());
         toResponse.setText(readNewsDto.getText());
@@ -95,14 +92,14 @@ public class NewsApiServiceImpl implements NewsApiService {
     private News convertToNewsView(ReadNewsDto readNewsDto) {
         News toView = new News();
         toView.setId(readNewsDto.getId());
-        toView.setCreateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), ZoneOffset.UTC));
+        toView.setCreateDate(OffsetDateTime.of(readNewsDto.getCreatedAt(), Timezone.UTC_TIMEZONE));
         toView.setTitle(readNewsDto.getTitle());
         toView.setDescription(readNewsDto.getDescription());
         toView.setText(readNewsDto.getText());
         toView.setPhotoUrl(readNewsDto.getPhotoUrl());
         toView.setSource(readNewsDto.getSource());
         if(Objects.nonNull(readNewsDto.getUpdatedAt()))
-            toView.setUpdateDate(OffsetDateTime.of(readNewsDto.getUpdatedAt(), ZoneOffset.UTC));
+            toView.setUpdateDate(OffsetDateTime.of(readNewsDto.getUpdatedAt(), Timezone.UTC_TIMEZONE));
         return toView;
     }
 }

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.exceptions;
+package com.softserveinc.ita.homeproject.homeservice.exception;
 
 public class NotFoundException extends ApiException{
     public NotFoundException(String message) {
