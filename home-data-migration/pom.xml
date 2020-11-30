@@ -12,6 +12,35 @@
     <packaging>jar</packaging>
 
     <artifactId>home-data-migration</artifactId>
+
+    <profiles>
+        <profile>
+            <id>liquibase.migration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.liquibase</groupId>
+                        <artifactId>liquibase-maven-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <configuration>
+                            <propertyFile>migration.properties</propertyFile>
+                            <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                            <driver>org.postgresql.Driver</driver>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>init-db</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>update</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -31,27 +60,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.6.3</version>
-                <configuration>
-                    <propertyFile>migration.properties</propertyFile>
-                    <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
-                    <driver>org.postgresql.Driver</driver>
-                </configuration>
-                <dependencies>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>2020-11-25-init-db</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>update</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
@@ -60,7 +68,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <archive>
+                    <archive>'
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>com.softserveinc.ita.homeproject.migrations.LiquibaseRunner</mainClass>

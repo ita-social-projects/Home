@@ -13,7 +13,6 @@
         <module>home-server-generator</module>
         <module>home-data-migration</module>
     </modules>
-
     <groupId>com.softserveinc.ita.homeproject</groupId>
     <artifactId>home</artifactId>
     <version>${revision}</version>
