@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto createUser(CreateUserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistException(HttpStatus.CONFLICT, "User with email" + createUserDto.getEmail() +" is already exists");
+            throw new AlreadyExistException("User with email" + createUserDto.getEmail() +" is already exists");
         } else {
             User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setEnabled(true);
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(toUpdate);
             return conversionService.convert(toUpdate, ReadUserDto.class);
         } else {
-            throw new NotFoundException(HttpStatus.NOT_FOUND, "User with id:" + id + " is not found");
+            throw new NotFoundException("User with id:" + id + " is not found");
         }
     }
 
@@ -69,14 +69,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ReadUserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with id:"+ id + " is not found"));
+                .orElseThrow(() -> new NotFoundException("User with id:"+ id + " is not found"));
         return conversionService.convert(toGet, ReadUserDto.class);
     }
 
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(HttpStatus.NOT_FOUND, "User with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
     }
 }
