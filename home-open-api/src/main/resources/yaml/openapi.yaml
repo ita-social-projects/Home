@@ -510,14 +510,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         "403":
           $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /users:
     post:
       tags:
-        - User
+        - user
       summary: Create user
       description: Create a new user
       operationId: createUser
@@ -536,7 +534,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "403":
@@ -547,9 +545,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     get:
       tags:
-        - User
+        - user
       summary: "Get all users"
       description: ''
+      operationId: queryUsers
       parameters:
         - in: query
           name: offset
@@ -576,19 +575,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
+                  $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
   /users/{id}:
     get:
       tags:
-        - User
+        - user
       summary: "Get user by user name"
       description: ''
+      operationId: getUser
       parameters:
         - name: "id"
           in: "path"
@@ -596,6 +594,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       responses:
         '200':
@@ -603,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -612,7 +611,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - User
+        - user
       summary: Update current user
       description: Update current user
       operationId: updateUser
@@ -623,6 +622,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       requestBody:
         description: Update current user
@@ -637,7 +637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/ReadUser"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -652,8 +652,9 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - User
+        - user
       summary: Delete user by ID
+      operationId: removeUser
       parameters:
         - name: "id"
           in: "path"
@@ -661,10 +662,19 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
             example: 1
       responses:
         "204":
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1302,7 +1312,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/ReadUser'
         "404":
           description: News not found
           content:
@@ -1338,7 +1348,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/ReadUser'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1672,10 +1682,22 @@ components:
     CreateUser:
       type: object
       properties:
+        firstName:
+          pattern: '\w+'
+          type: string
+          example: "Petro"
+        lastName:
+          pattern: '\w+'
+          type: string
+          example: "Zinchenko"
         email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
+          example: "p.t.z@gmail.com"
         password:
+          pattern: '[a-zA-Z0-9]{8,}'
           type: string
+          example: "mySuperStrongPass"
     OrderList:
       type: array
       items:
@@ -1698,11 +1720,12 @@ components:
           orderDate:
             type: string
             example: 26.04.2020
-    User:
+    ReadUser:
       type: object
       properties:
         id:
           type: integer
+          format: int64
           example: 1
         firstName:
           type: string
@@ -1713,104 +1736,27 @@ components:
         email:
           type: string
           example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
-        role:
-          type: string
-          enum: [ user, owner, admin, executor ]
-          example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
-        activStatus:
-          type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
+            type: string
+            example: "+380506617305"
     UpdateUser:
       type: object
       properties:
         firstName:
+          pattern: '\w+'
           type: string
           example: Petro
         lastName:
+          pattern: '\w+'
           type: string
           example: Petrov
-        email:
-          type: string
-          example: home@gmail.com
-        password:
-          type: string
-          example: passWord123
-        role:
-          type: string
-          enum: [ user, owner, admin, executor ]
-          example: user
-        houseId:
-          type: integer
-          example: 1
-        orders:
+        contacts:
           type: array
           items:
-            type: object
-            required:
-              - order
-            properties:
-              id:
-                type: integer
-                example: 1
-              name:
-                type: string
-                example: mechanic
-              customer:
-                type: string
-                example: Viktor Vasilenko
-              orderDate:
-                type: string
-                format: date-time
-        phone:
-          type: string
-          example: (0562) 345 432
-        mobilePhone:
-          type: string
-          example: (067) 123 321 1
-        activStatus:
-          type: boolean
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
+            type: string
+            example: "+380506617305"
     Voting:
       required:
         - name
