@@ -1,7 +1,7 @@
 master
 ## JIRA
 
-* [com.softserveinc.ita.homeproject.migrations.LiquibaseRunner JIRA ticket](https://jira.softserve.academy/secure/RapidBoard.jspa?rapidView=id)
+* [Main JIRA ticket](https://jira.softserve.academy/secure/RapidBoard.jspa?rapidView=id)
 
 
 ## Code reviewers
