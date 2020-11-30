@@ -1760,10 +1760,8 @@ components:
           type: string
           example: home@gmail.com
         contacts:
-          type: array
-          items:
-            type: string
-            example: "+380506617305"
+          type: string
+          example: "+380506617305"
     UpdateUser:
       type: object
       properties:
