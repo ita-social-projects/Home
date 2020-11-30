@@ -1,21 +1,30 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@SuperBuilder
-public class ReadNewsDto extends BaseNewsDto {
+@Builder
+public class ReadNewsDto {
 
-    Long id;
+    private Long id;
 
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
-    LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
+
+    private String title;
+
+    private String photoUrl;
+
+    private String description;
+
+    private String source;
+
+    private String text;
 
 }
