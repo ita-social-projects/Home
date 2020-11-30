@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.exception;
 
-public class ApiException extends RuntimeException {
-    public ApiException(String message) {
+public class HomeException extends RuntimeException {
+    public HomeException(String message) {
         super(message);
     }
 }

@@ -2,8 +2,9 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.UpdateNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
-import com.softserveinc.ita.homeproject.homeservice.dto.CreateOrUpdateNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
 import org.springframework.data.domain.Page;
@@ -27,15 +28,15 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ReadNewsDto create(CreateOrUpdateNewsDto createNewsServiceDto) {
-        createNewsServiceDto.setCreateOrUpdateTime(LocalDateTime.now());
+    public ReadNewsDto create(CreateNewsDto createNewsDto) {
+        createNewsDto.setCreateTime(LocalDateTime.now());
         News news = News.builder()
-                .description(createNewsServiceDto.getDescription())
-                .title(createNewsServiceDto.getTitle())
-                .text(createNewsServiceDto.getText())
-                .createDate(createNewsServiceDto.getCreateOrUpdateTime())
-                .photoUrl(createNewsServiceDto.getPhotoUrl())
-                .source(createNewsServiceDto.getSource())
+                .description(createNewsDto.getDescription())
+                .title(createNewsDto.getTitle())
+                .text(createNewsDto.getText())
+                .createDate(createNewsDto.getCreateTime())
+                .photoUrl(createNewsDto.getPhotoUrl())
+                .source(createNewsDto.getSource())
                 .build();
         newsRepository.save(news);
 
@@ -44,16 +45,16 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ReadNewsDto update(Long id, CreateOrUpdateNewsDto updateNewsServiceDto)  {
-        updateNewsServiceDto.setCreateOrUpdateTime(LocalDateTime.now());
+    public ReadNewsDto update(Long id, UpdateNewsDto updateNewsDto)  {
+        updateNewsDto.setUpdateTime(LocalDateTime.now());
         News newsToUpdate = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
-        newsToUpdate.setTitle(updateNewsServiceDto.getTitle());
-        newsToUpdate.setText(updateNewsServiceDto.getText());
-        newsToUpdate.setUpdateDate(updateNewsServiceDto.getCreateOrUpdateTime());
-        newsToUpdate.setDescription(updateNewsServiceDto.getDescription());
-        newsToUpdate.setPhotoUrl(updateNewsServiceDto.getPhotoUrl());
-        newsToUpdate.setSource(updateNewsServiceDto.getSource());
+        newsToUpdate.setTitle(updateNewsDto.getTitle());
+        newsToUpdate.setText(updateNewsDto.getText());
+        newsToUpdate.setUpdateDate(updateNewsDto.getUpdateTime());
+        newsToUpdate.setDescription(updateNewsDto.getDescription());
+        newsToUpdate.setPhotoUrl(updateNewsDto.getPhotoUrl());
+        newsToUpdate.setSource(updateNewsDto.getSource());
         newsRepository.save(newsToUpdate);
 
         return ConvertToGetNewsServiceDto(newsToUpdate);

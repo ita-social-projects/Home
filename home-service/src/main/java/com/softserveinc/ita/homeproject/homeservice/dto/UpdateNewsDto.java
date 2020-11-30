@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class CreateOrUpdateNewsDto  {
+public class UpdateNewsDto {
 
     private String title;
 
@@ -21,5 +21,5 @@ public class CreateOrUpdateNewsDto  {
 
     private String text;
 
-    private LocalDateTime createOrUpdateTime;
+    private LocalDateTime updateTime;
 }
