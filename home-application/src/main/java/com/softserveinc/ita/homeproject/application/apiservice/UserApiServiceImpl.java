@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +30,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
-    public Response createUser(CreateUser createUser, SecurityContext securityContext) throws NotFoundException {
+    public Response createUser(CreateUser createUser) {
         CreateUserDto createUserDto = conversionService.convert(createUser, CreateUserDto.class);
         ReadUserDto readUserDto = userService.createUser(createUserDto);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
@@ -42,7 +40,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
-    public Response getUser(Long id, SecurityContext securityContext) throws NotFoundException {
+    public Response getUser(Long id) {
         ReadUserDto readUserDto = userService.getUserById(id);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
 
@@ -51,7 +49,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, SecurityContext securityContext) throws NotFoundException {
+    public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
         List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
                 .map(readUserDto -> conversionService.convert(readUserDto, ReadUser.class))
                 .collect(Collectors.toList());
@@ -61,7 +59,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
-    public Response removeUser(Long id, SecurityContext securityContext) throws NotFoundException {
+    public Response removeUser(Long id) {
         userService.deactivateUser(id);
 
         return Response.status(Response.Status.NO_CONTENT).build();
@@ -69,7 +67,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
-    public Response updateUser(Long id, UpdateUser updateUser, SecurityContext securityContext) throws NotFoundException {
+    public Response updateUser(Long id, UpdateUser updateUser) {
         UpdateUserDto updateUserDto = conversionService.convert(updateUser, UpdateUserDto.class);
         ReadUserDto readUserDto = userService.updateUser(id, updateUserDto);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
