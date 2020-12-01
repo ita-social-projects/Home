@@ -5,9 +5,7 @@ import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import com.softserveinc.ita.homeproject.service.UserService;
-import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
-import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
-import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
+import com.softserveinc.ita.homeproject.service.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,8 +29,8 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        CreateUserDto createUserDto = conversionService.convert(createUser, CreateUserDto.class);
-        ReadUserDto readUserDto = userService.createUser(createUserDto);
+        UserDto createUserDto = conversionService.convert(createUser, UserDto.class);
+        UserDto readUserDto = userService.createUser(createUserDto);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
@@ -41,7 +39,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        ReadUserDto readUserDto = userService.getUserById(id);
+        UserDto readUserDto = userService.getUserById(id);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
@@ -68,8 +66,8 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UpdateUserDto updateUserDto = conversionService.convert(updateUser, UpdateUserDto.class);
-        ReadUserDto readUserDto = userService.updateUser(id, updateUserDto);
+        UserDto updateUserDto = conversionService.convert(updateUser, UserDto.class);
+        UserDto readUserDto = userService.updateUser(id, updateUserDto);
         ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();

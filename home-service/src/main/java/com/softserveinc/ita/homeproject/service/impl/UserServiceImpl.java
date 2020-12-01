@@ -4,16 +4,13 @@ import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.service.UserService;
-import com.softserveinc.ita.homeproject.service.dto.CreateUserDto;
-import com.softserveinc.ita.homeproject.service.dto.ReadUserDto;
-import com.softserveinc.ita.homeproject.service.dto.UpdateUserDto;
+import com.softserveinc.ita.homeproject.service.dto.UserDto;
 import com.softserveinc.ita.homeproject.service.exception.AlreadyExistException;
 import com.softserveinc.ita.homeproject.service.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ReadUserDto createUser(CreateUserDto createUserDto) {
+    public UserDto createUser(UserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistException("User with email" + createUserDto.getEmail() +" is already exists");
         } else {
@@ -44,33 +41,33 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(toCreate);
 
-            return conversionService.convert(toCreate, ReadUserDto.class);
+            return conversionService.convert(toCreate, UserDto.class);
         }
     }
 
     @Override
-    public ReadUserDto updateUser(Long id, UpdateUserDto updateUserDto) {
+    public UserDto updateUser(Long id, UserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
             User toUpdate = conversionService.convert(updateUserDto, User.class);
             toUpdate.setUpdateDate(LocalDateTime.now());
             userRepository.save(toUpdate);
-            return conversionService.convert(toUpdate, ReadUserDto.class);
+            return conversionService.convert(toUpdate, UserDto.class);
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
         }
     }
 
     @Override
-    public Page<ReadUserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
+    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
         return userRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
-                .map(user -> conversionService.convert(user, ReadUserDto.class));
+                .map(user -> conversionService.convert(user, UserDto.class));
     }
 
     @Override
-    public ReadUserDto getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User with id:"+ id + " is not found"));
-        return conversionService.convert(toGet, ReadUserDto.class);
+                .orElseThrow(() -> new NotFoundException("User with id:" + id + " is not found"));
+        return conversionService.convert(toGet, UserDto.class);
     }
 
     @Override
