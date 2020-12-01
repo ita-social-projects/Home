@@ -551,22 +551,22 @@ paths:
       operationId: queryUsers
       parameters:
         - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: "The number of items to skip before starting to collect the response"
-        - in: query
-          name: limit
+          name: pageNumber
           schema:
             type: integer
             minimum: 1
-            maximum: 100
-            default: 20
+            default: 1
           required: false
-          description: "The number of items to return"
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
       responses:
         '200':
           description: successful operation
@@ -667,14 +667,6 @@ paths:
       responses:
         "204":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1710,10 +1702,8 @@ components:
           type: string
           example: home@gmail.com
         contacts:
-          type: array
-          items:
-            type: string
-            example: "+380506617305"
+          type: string
+          example: "+380506617305"
     UpdateUser:
       type: object
       properties:

@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -51,9 +52,17 @@ public class User {
     @Column(name = "enabled")
     private Boolean enabled;
 
-
     @Column(name = "password")
     private String password;
+
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
+
+    @Column(name = "contacts")
+    private String contacts;
 
     @ManyToMany
     @JoinTable(name = "account_role",
