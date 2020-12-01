@@ -2,20 +2,15 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.UpdateNewsDto;
-import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
-import com.softserveinc.ita.homeproject.homeservice.dto.CreateNewsDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.ReadNewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
+import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
-import java.util.Optional;
-
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -28,15 +23,14 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ReadNewsDto create(CreateNewsDto createNewsDto) {
-        createNewsDto.setCreateTime(LocalDateTime.now());
+    public NewsDto create(NewsDto newsDto) {
         News news = News.builder()
-                .description(createNewsDto.getDescription())
-                .title(createNewsDto.getTitle())
-                .text(createNewsDto.getText())
-                .createDate(createNewsDto.getCreateTime())
-                .photoUrl(createNewsDto.getPhotoUrl())
-                .source(createNewsDto.getSource())
+                .description(newsDto.getDescription())
+                .title(newsDto.getTitle())
+                .text(newsDto.getText())
+                .createDate(LocalDateTime.now())
+                .photoUrl(newsDto.getPhotoUrl())
+                .source(newsDto.getSource())
                 .build();
         newsRepository.save(news);
 
@@ -45,29 +39,28 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public ReadNewsDto update(Long id, UpdateNewsDto updateNewsDto)  {
-        updateNewsDto.setUpdateTime(LocalDateTime.now());
+    public NewsDto update(Long id, NewsDto newsDto)  {
         News newsToUpdate = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
-        newsToUpdate.setTitle(updateNewsDto.getTitle());
-        newsToUpdate.setText(updateNewsDto.getText());
-        newsToUpdate.setUpdateDate(updateNewsDto.getUpdateTime());
-        newsToUpdate.setDescription(updateNewsDto.getDescription());
-        newsToUpdate.setPhotoUrl(updateNewsDto.getPhotoUrl());
-        newsToUpdate.setSource(updateNewsDto.getSource());
+        newsToUpdate.setTitle(newsDto.getTitle());
+        newsToUpdate.setText(newsDto.getText());
+        newsToUpdate.setUpdateDate(LocalDateTime.now());
+        newsToUpdate.setDescription(newsDto.getDescription());
+        newsToUpdate.setPhotoUrl(newsDto.getPhotoUrl());
+        newsToUpdate.setSource(newsDto.getSource());
         newsRepository.save(newsToUpdate);
 
         return ConvertToGetNewsServiceDto(newsToUpdate);
     }
 
     @Override
-    public Page<ReadNewsDto> getAll(Integer pageNumber, Integer pageSize) {
+    public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
         return newsRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
                 .map(page -> ConvertToGetNewsServiceDto(page));
     }
 
     @Override
-    public ReadNewsDto getById(Long id) {
+    public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
 
@@ -81,19 +74,14 @@ public class NewsServiceImpl implements NewsService {
             newsRepository.deleteById(id);
     }
 
-    private ReadNewsDto ConvertToGetNewsServiceDto(News news) {
-        ReadNewsDto toApiService = ReadNewsDto.builder()
+    private NewsDto ConvertToGetNewsServiceDto(News news) {
+       return NewsDto.builder()
                 .id(news.getId())
-                .createdAt(news.getCreateDate())
                 .title(news.getTitle())
                 .text(news.getText())
                 .description(news.getDescription())
                 .photoUrl(news.getPhotoUrl())
                 .source(news.getSource())
                 .build();
-
-        Optional.ofNullable(news.getUpdateDate()).ifPresent(toApiService::setUpdatedAt);
-
-        return toApiService;
     }
 }

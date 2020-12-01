@@ -39,7 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/News'
+                $ref: '#/components/schemas/ReadNews'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -140,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/News'
+                $ref: '#/components/schemas/ReadNews'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1421,7 +1421,7 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    News:
+    ReadNews:
       type: object
       properties:
         id:
@@ -1435,39 +1435,12 @@ components:
         photoUrl:
           type: string
           format: url
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
         description:
           type: string
         source:
           type: string
         text:
           type: string
-    ReadNews:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-        description:
-          type: string
-        photoUrl:
-          type: string
-          format: url
-        createOrUpdateDate:
-          type: string
-          format: date-time
-        text:
-          type: string
-        source:
-          type: string
-          format: url
     CreateNews:
       type: object
       properties:

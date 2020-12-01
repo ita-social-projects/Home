@@ -4,18 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
-public class ReadNewsDto {
+public class NewsDto {
 
     private Long id;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
 
     private String title;
 
@@ -26,5 +20,4 @@ public class ReadNewsDto {
     private String source;
 
     private String text;
-
 }
