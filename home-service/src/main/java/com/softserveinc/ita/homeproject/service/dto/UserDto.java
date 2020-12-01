@@ -7,15 +7,18 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class ReadUserDto {
+public class UserDto {
+
+    private Long id;
 
     private String firstName;
 
     private String lastName;
 
-    private Long id;
+    private String email;
+
+    private String password;
 
     private String contacts;
 
-    private String email;
 }
