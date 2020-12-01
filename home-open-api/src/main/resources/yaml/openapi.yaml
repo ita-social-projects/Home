@@ -1310,7 +1310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         default:
           $ref: '#/components/responses/InternalServerError'
 
@@ -1381,37 +1381,37 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Forbidden:
       description: You do not have permission to perform this action
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Conflict:
       description: Conflict with current state of the resource
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     InternalServerError:
       description: Something went wrong
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
   schemas:
     ReadNews:
       type: object
@@ -1460,13 +1460,11 @@ components:
           type: string
         text:
           type: string
-    Error:
+    ApiError:
       type: object
       properties:
         responseCode:
-          type: string
-        description:
-          type: string
+          type: integer
         errorMessage:
           type: string
     Chat:
