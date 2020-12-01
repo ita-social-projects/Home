@@ -4,8 +4,8 @@ import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import com.softserveinc.ita.homeproject.service.UserService;
-import com.softserveinc.ita.homeproject.service.dto.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.service.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.homeservice.constants.Permissions.*;
 
 @Service
 @RequiredArgsConstructor

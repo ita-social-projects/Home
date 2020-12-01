@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.service.exception;
+package com.softserveinc.ita.homeproject.homeservice.exception;
 
 public class HomeException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.service.constants;
+package com.softserveinc.ita.homeproject.homeservice.constants;
 
 public interface Permissions {
     String CREATE_USER_PERMISSION = "hasAuthority('CREATE_USER_PERMISSION')";

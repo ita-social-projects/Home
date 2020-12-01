@@ -1,12 +1,12 @@
-package com.softserveinc.ita.homeproject.service.impl;
+package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.service.UserService;
-import com.softserveinc.ita.homeproject.service.dto.UserDto;
-import com.softserveinc.ita.homeproject.service.exception.AlreadyExistException;
-import com.softserveinc.ita.homeproject.service.exception.NotFoundException;
+import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.softserveinc.ita.homeproject.service.constants.Roles.USER_ROLE;
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 @Service
 @RequiredArgsConstructor

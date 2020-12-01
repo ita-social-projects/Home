@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.service;
+package com.softserveinc.ita.homeproject.homeservice.service;
 
-import com.softserveinc.ita.homeproject.service.dto.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
