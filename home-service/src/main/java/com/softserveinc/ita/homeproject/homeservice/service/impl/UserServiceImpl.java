@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ConversionService conversionService;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -34,13 +36,13 @@ public class UserServiceImpl implements UserService {
             throw new AlreadyExistException("User with email" + createUserDto.getEmail() +" is already exists");
         } else {
             User toCreate = conversionService.convert(createUserDto, User.class);
+            toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
 
             userRepository.save(toCreate);
-
             return conversionService.convert(toCreate, UserDto.class);
         }
     }
@@ -48,10 +50,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
-            User toUpdate = conversionService.convert(updateUserDto, User.class);
-            toUpdate.setUpdateDate(LocalDateTime.now());
-            userRepository.save(toUpdate);
-            return conversionService.convert(toUpdate, UserDto.class);
+
+            User fromDB = userRepository.findById(id).get();
+
+            if (updateUserDto.getFirstName() != null) {
+                fromDB.setFirstName(updateUserDto.getFirstName());
+            }
+
+            if (updateUserDto.getLastName() != null) {
+                fromDB.setLastName(updateUserDto.getLastName());
+            }
+
+            if (updateUserDto.getContacts() != null) {
+                fromDB.setContacts(updateUserDto.getContacts());
+            }
+
+            fromDB.setUpdateDate(LocalDateTime.now());
+            userRepository.save(fromDB);
+            return conversionService.convert(fromDB, UserDto.class);
+
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
         }
