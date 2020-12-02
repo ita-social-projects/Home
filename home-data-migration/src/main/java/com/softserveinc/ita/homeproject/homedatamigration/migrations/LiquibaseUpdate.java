@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.migrations;
+package com.softserveinc.ita.homeproject.homedatamigration.migrations;
 
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -8,6 +8,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.integration.commandline.CommandLineResourceAccessor;
 import liquibase.resource.CompositeResourceAccessor;
 import liquibase.resource.FileSystemResourceAccessor;
+import org.postgresql.Driver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,7 @@ public class LiquibaseUpdate {
         String path = getFromProperties(PATHNAME);
         String changelogName = getFromProperties(CHANGELOG);
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            DriverManager.registerDriver(new org.postgresql.Driver());
+            DriverManager.registerDriver(new Driver());
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
             FileSystemResourceAccessor fileSystemResourceAccessor = new FileSystemResourceAccessor();

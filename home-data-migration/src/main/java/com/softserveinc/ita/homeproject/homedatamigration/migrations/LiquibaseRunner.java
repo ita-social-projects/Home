@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.migrations;
+package com.softserveinc.ita.homeproject.homedatamigration.migrations;
 
 import java.util.Scanner;
 
