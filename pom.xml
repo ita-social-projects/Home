@@ -28,6 +28,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <lombok.version>1.18.16</lombok.version>
+        <mupstruct.version>1.4.1.Final</mupstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -50,7 +52,18 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mupstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mupstruct.version}</version>
         </dependency>
     </dependencies>
 

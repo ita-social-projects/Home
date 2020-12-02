@@ -11,11 +11,35 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>home-service</artifactId>
+
+    <properties>
+        <mupstruct.version>1.4.1.Final</mupstruct.version>
+    </properties>
     <dependencies>
         <dependency>
             <artifactId>home-data</artifactId>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <artifactId>home-server-generator</artifactId>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <artifactId>home-generated-server</artifactId>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mupstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mupstruct.version}</version>
         </dependency>
     </dependencies>
 

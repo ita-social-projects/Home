@@ -2,10 +2,13 @@ package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.NewsApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
+import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.CreateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.ReadNewsDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
@@ -15,24 +18,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NewsApiServiceImpl implements NewsApiService {
 
     private final NewsService newsService;
-
-    public NewsApiServiceImpl(NewsService newsService) {
-        this.newsService = newsService;
-    }
+    private final CreateNewsDtoMapper createNewsDtoMapper;
+    private final ReadNewsDtoMapper readNewsDtoMapper;
 
     @Override
     public Response addNews(CreateNews createNews) {
-        NewsDto newsDto = NewsDto.builder()
-                .title(createNews.getTitle())
-                .description(createNews.getDescription())
-                .text(createNews.getText())
-                .photoUrl(createNews.getPhotoUrl())
-                .source(createNews.getSource())
-                .build();
-        ReadNews response = convertToReadNews(newsService.create(newsDto));
+        NewsDto newsDto = createNewsDtoMapper.convertViewToDto(createNews);
+        NewsDto readNewsDto = newsService.create(newsDto);
+        ReadNews response = readNewsDtoMapper.convertDtoToView(readNewsDto);
+
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
@@ -45,15 +43,17 @@ public class NewsApiServiceImpl implements NewsApiService {
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
         List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
-                .map(newsDto -> convertToReadNews(newsDto))
+                .map(readNewsDtoMapper::convertDtoToView)
                 .collect(Collectors.toList());
+
         return Response.ok().entity(readNewsResponseList).build();
     }
 
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
-        ReadNews newsApiResponse = convertToReadNews(readNewsDto);
+        ReadNews newsApiResponse = readNewsDtoMapper.convertDtoToView(readNewsDto);
+
         return Response.ok().entity(newsApiResponse).build();
     }
 

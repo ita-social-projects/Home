@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Column;
 import java.time.LocalDateTime;
 
@@ -19,11 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class News {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+public class News extends BaseEntity {
 
     @Column(name = "create_date")
     LocalDateTime createDate;
