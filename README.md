@@ -141,7 +141,7 @@ api.secret=${API_SECRET}
 - Mentor of SoftServe ITA - @DzigMS
 
 Developers that have worked on a project during:
-####September - December 2020
+#### September - December 2020
 - @mykytam
 - @reeztl
 - @Prosperro-de
@@ -149,7 +149,7 @@ Developers that have worked on a project during:
 - @omelchenkotimur
 - @Arthurpanda
 
-####December 2020 - ... 2021
+#### December 2020 - ... 2021
 
 ---
 
