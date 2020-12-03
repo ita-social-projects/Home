@@ -1444,19 +1444,18 @@ components:
           type: string
           example: News in the Some Area
           minLength: 1
-          maxLength: 50
+          maxLength: 70
         photoUrl:
           type: string
         description:
           type: string
           minLength: 1
-          maxLength: 50
+          maxLength: 150
         source:
           type: string
         text:
           type: string
           minLength: 1
-          maxLength: 150
     UpdateNews:
       type: object
       properties:
