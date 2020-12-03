@@ -36,8 +36,9 @@ It include next modules:
 
 ---
 
-## Table of Contents (Optional)
+## Table of Contents
 
+- [About the project](#About-the-project)
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
   - [Environment](#Environment)
@@ -59,12 +60,17 @@ It include next modules:
 
 ---
 
+## About the project
+- You can read more about the project's technologies and modules description  in   <a href="https://github.com/ita-social-projects/Home/tree/dev/home-docs" target="_blank">home-docs</a> package.
+
 ## Installation
 
 - All the `code` required to get started
 - Images of what it should look like
 
 ### Required to install
+- Java 11
+- PostgreSQL
 
 ### Environment
 environmental variables
@@ -86,6 +92,9 @@ api.secret=${API_SECRET}
 ### Setup
 
 ### How to run local
+1. You should create environmental variables that are defined in application.properties file.
+2. You should create database `home`.
+3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidoc.html
 
 ### How to run Docker
 
@@ -99,6 +108,7 @@ api.secret=${API_SECRET}
 ---
 
 ## Documentation
+- You can find OpenApi specification for the project [here](https://home-project-academy.herokuapp.com/api/0/apidoc.html)
 
 ---
 
@@ -112,7 +122,7 @@ api.secret=${API_SECRET}
     - 🍴 Fork this repo!
 
 - **Option 2**
-    - 👯 Clone this repo to your local machine using `https://github.com/ita-social-projects/SOMEREPO.git`
+    - 👯 Clone this repo to your local machine using `https://github.com/ita-social-projects/Home.git`
 
 #### Step 2
 
@@ -127,6 +137,19 @@ api.secret=${API_SECRET}
 ---
 
 ## Team
+- Technical Expert of the project - @kh0ma
+- Mentor of SoftServe ITA - @DzigMS
+
+Developers that have worked on a project during:
+####September - December 2020
+- @mykytam
+- @reeztl
+- @Prosperro-de
+- @alexorlenko
+- @omelchenkotimur
+- @Arthurpanda
+
+####December 2020 - ... 2021
 
 ---
 
