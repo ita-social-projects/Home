@@ -18,8 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Permissions.*;
-
 @Component
 @Profile("dev")
 public class DataLoader implements ApplicationRunner {
@@ -39,8 +37,10 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        saveUser( "USER", "user@example.com", "READ_NEWS_PERMISSION");
-        saveUser( "ADMIN", "admin@example.com", CREATE_USER_PERMISSION, UPDATE_USER_PERMISSION, GET_USER_BY_ID_PERMISSION, GET_ALL_USERS_PERMISSION, DEACTIVATE_USER_PERMISSION, "UPDATE_NEWS_PERMISSION", "READ_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION");
+        saveUser( "USER", "user@example.com", "GET_NEWS_PERMISSION" ,"GET_USER_PERMISSION");
+        saveUser( "ADMIN", "admin@example.com",
+                "CREATE_USER_PERMISSION", "UPDATE_USER_PERMISSION", "GET_USERS_PERMISSION", "GET_USER_PERMISSION", "DELETE_USER_PERMISSION",
+                "UPDATE_NEWS_PERMISSION", "GET_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION", "DELETE_NEWS_PERMISSION");
     }
 
     private void saveUser(String roleName, String email, String... permissions) {

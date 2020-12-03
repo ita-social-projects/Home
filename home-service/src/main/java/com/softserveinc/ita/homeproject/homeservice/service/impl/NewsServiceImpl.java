@@ -34,7 +34,7 @@ public class NewsServiceImpl implements NewsService {
                 .build();
         newsRepository.save(news);
 
-        return ConvertToGetNewsServiceDto(news);
+        return convertToGetNewsServiceDto(news);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class NewsServiceImpl implements NewsService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             newsRepository.save(fromDB);
-            return ConvertToGetNewsServiceDto(fromDB);
+            return convertToGetNewsServiceDto(fromDB);
 
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
@@ -77,7 +77,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
         return newsRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
-                .map(page -> ConvertToGetNewsServiceDto(page));
+                .map(page -> convertToGetNewsServiceDto(page));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class NewsServiceImpl implements NewsService {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
 
-        return ConvertToGetNewsServiceDto(newsResponse);
+        return convertToGetNewsServiceDto(newsResponse);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class NewsServiceImpl implements NewsService {
             newsRepository.deleteById(id);
     }
 
-    private NewsDto ConvertToGetNewsServiceDto(News news) {
+    private NewsDto convertToGetNewsServiceDto(News news) {
        return NewsDto.builder()
                 .id(news.getId())
                 .title(news.getTitle())

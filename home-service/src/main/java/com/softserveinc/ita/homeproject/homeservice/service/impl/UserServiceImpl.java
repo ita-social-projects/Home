@@ -1,8 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistException;
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
-            return conversionService.convert(fromDB, UserDto.class);
+            return convertToUserDto(fromDB);
 
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
@@ -92,5 +94,15 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
+    }
+
+    private UserDto convertToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .contacts(user.getContacts())
+                .build();
     }
 }
