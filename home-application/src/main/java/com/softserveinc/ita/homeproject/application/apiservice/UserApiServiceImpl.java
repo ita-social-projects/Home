@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.CreateUserDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.ReadUserDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.UpdateUserDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
@@ -29,6 +30,7 @@ public class UserApiServiceImpl implements UsersApiService {
     private final CreateUserDtoMapper createUserDtoMapper;
     private final ConversionService conversionService;
     private final ReadUserDtoMapper readUserDtoMapper;
+    private final UpdateUserDtoMapper updateUserDtoMapper;
 
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
@@ -70,9 +72,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = conversionService.convert(updateUser, UserDto.class);
+        UserDto updateUserDto = updateUserDtoMapper.convertViewToDto(updateUser);
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }

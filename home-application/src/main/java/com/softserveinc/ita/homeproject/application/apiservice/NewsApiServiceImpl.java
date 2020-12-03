@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.api.NewsApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.CreateNewsDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.ReadNewsDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.UpdateNewsDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
@@ -24,6 +25,7 @@ public class NewsApiServiceImpl implements NewsApiService {
     private final NewsService newsService;
     private final CreateNewsDtoMapper createNewsDtoMapper;
     private final ReadNewsDtoMapper readNewsDtoMapper;
+    private final UpdateNewsDtoMapper updateNewsDtoMapper;
 
     @Override
     public Response addNews(CreateNews createNews) {
@@ -59,27 +61,10 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
-        NewsDto updateNewsDto = NewsDto.builder()
-                .title(updateNews.getTitle())
-                .description(updateNews.getDescription())
-                .text(updateNews.getText())
-                .photoUrl(updateNews.getPhotoUrl())
-                .source(updateNews.getSource())
-                .build();
-
-        ReadNews response = convertToReadNews(newsService.update(id, updateNewsDto));
+        NewsDto updateNewsDto = updateNewsDtoMapper.convertViewToDto(updateNews);
+        NewsDto readNewsDto = newsService.update(id, updateNewsDto);
+        ReadNews response = readNewsDtoMapper.convertDtoToView(readNewsDto);
         return Response.ok().entity(response).build();
-    }
-
-    private ReadNews convertToReadNews(NewsDto readNewsDto) {
-        ReadNews toResponse = new ReadNews();
-        toResponse.setId(readNewsDto.getId());
-        toResponse.setTitle(readNewsDto.getTitle());
-        toResponse.setDescription(readNewsDto.getDescription());
-        toResponse.setText(readNewsDto.getText());
-        toResponse.setPhotoUrl(readNewsDto.getPhotoUrl());
-        toResponse.setSource(readNewsDto.getSource());
-        return toResponse;
     }
 
 }
