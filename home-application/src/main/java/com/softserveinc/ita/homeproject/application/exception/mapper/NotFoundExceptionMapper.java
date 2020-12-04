@@ -7,6 +7,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * NotFoundExceptionMapper class is used to return exception
+ * response with HTTP status code, when the element is not found.
+ *
+ * @see javax.ws.rs.ext.ExceptionMapper
+ *
+ * @author Ihor Svyrydenko
+ */
 @Provider
 public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
     @Override

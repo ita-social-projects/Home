@@ -7,6 +7,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+/**
+ * AlreadyExistExceptionMapper class is used to return exception
+ * response with HTTP status code, when the element already exists.
+ *
+ * @see javax.ws.rs.ext.ExceptionMapper
+ *
+ * @author Ihor Svyrydenko
+ */
 @Provider
 public class AlreadyExistExceptionMapper implements ExceptionMapper<AlreadyExistException> {
     @Override
