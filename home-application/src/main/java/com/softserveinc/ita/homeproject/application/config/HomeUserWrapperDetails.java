@@ -10,6 +10,13 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * HomeUserWrapperDetails provides core user information for security.
+ *
+ * @see org.springframework.security.core.userdetails.UserDetails
+ *
+ * @author Ihor Svyrydenko
+ */
 public class HomeUserWrapperDetails implements UserDetails {
 
     private final User user;

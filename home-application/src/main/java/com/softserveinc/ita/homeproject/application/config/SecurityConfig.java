@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * SecurityConfig class configures security in application.
- * HttpBasic auth is used at this moment.
+ * Class provides HttpBasic auth for the application.
  *
  * @author Ihor Svyrydenko
  */

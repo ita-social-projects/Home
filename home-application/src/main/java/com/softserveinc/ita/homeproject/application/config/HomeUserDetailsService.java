@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * HomeUserDetailsService class is used to
+ *
+ * @author Ihor Svyrydenko
+ */
 @Component
 public class HomeUserDetailsService implements UserDetailsService {
 
@@ -21,6 +26,13 @@ public class HomeUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * loadUserByUsername method is used to load user from database
+     *
+     * @param email email that we search user with
+     * @return an UserDetails instance
+     * @throws UsernameNotFoundException
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
