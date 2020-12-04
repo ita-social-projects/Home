@@ -14,6 +14,12 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * UserApiServiceImpl class is the interlayer between generated
+ * News controller and service layer of the application.
+ *
+ * @author Ihor Svyrydenko
+ */
 @Service
 public class NewsApiServiceImpl implements NewsApiService {
 
@@ -23,6 +29,13 @@ public class NewsApiServiceImpl implements NewsApiService {
         this.newsService = newsService;
     }
 
+    /**
+     * addNews method is implementation of HTTP POST
+     * method, that is used to create a new news.
+     *
+     * @param createNews incoming data needed for creation of user
+     * @return returns Response to generated controller
+     */
     @Override
     public Response addNews(CreateNews createNews) {
         NewsDto newsDto = NewsDto.builder()
@@ -36,12 +49,27 @@ public class NewsApiServiceImpl implements NewsApiService {
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
+    /**
+     * deleteNews method is implementation of HTTP DELETE
+     * method, that is used to delete news.
+     *
+     * @param id id of the news that needs to be deleted
+     * @return returns Response to generated controller
+     */
     @Override
     public Response deleteNews(Long id) {
         newsService.deleteById(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    /**
+     * getAllNews method is implementation of HTTP GET
+     * method, that is used to get all news from database.
+     *
+     * @param pageNumber number of the returned page with elements
+     * @param pageSize amount of the returned elements
+     * @return returns Response to generated controller
+     */
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
         List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
@@ -50,6 +78,13 @@ public class NewsApiServiceImpl implements NewsApiService {
         return Response.ok().entity(readNewsResponseList).build();
     }
 
+    /**
+     * getNews method is implementation of HTTP GET method,
+     * that is used to get one element of news by id from database.
+     *
+     * @param id id of the news in the database
+     * @return returns Response to generated controller
+     */
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
@@ -57,6 +92,14 @@ public class NewsApiServiceImpl implements NewsApiService {
         return Response.ok().entity(newsApiResponse).build();
     }
 
+    /**
+     * updateNews method is implementation of HTTP PUT
+     * method, that is update the existing news.
+     *
+     * @param id id of the news that needs to be updated
+     * @param updateNews incoming data needed for news update
+     * @return returns Response to generated controller
+     */
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
         NewsDto updateNewsDto = NewsDto.builder()
