@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
  * NewsRepository is the interface that is needed
  * for interaction with News in the database.
  *
- * @author Mykyta Morar
+ * @author Ihor Svyrydenko
  */
 @Repository
 public interface NewsRepository extends PagingAndSortingRepository<News, Long> {
