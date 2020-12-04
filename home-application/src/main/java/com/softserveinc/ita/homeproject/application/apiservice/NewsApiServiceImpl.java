@@ -2,9 +2,9 @@ package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.NewsApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.CreateNewsDtoMapper;
-import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.ReadNewsDtoMapper;
-import com.softserveinc.ita.homeproject.homeservice.mapperViewToDto.UpdateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.CreateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.ReadNewsDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.UpdateNewsDtoMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
@@ -30,8 +30,8 @@ public class NewsApiServiceImpl implements NewsApiService {
     @Override
     public Response addNews(CreateNews createNews) {
         NewsDto newsDto = createNewsDtoMapper.convertViewToDto(createNews);
-        NewsDto readNewsDto = newsService.create(newsDto);
-        ReadNews response = readNewsDtoMapper.convertDtoToView(readNewsDto);
+        NewsDto createdNewsDto = newsService.create(newsDto);
+        ReadNews response = readNewsDtoMapper.convertDtoToView(createdNewsDto);
 
         return Response.status(Response.Status.CREATED).entity(response).build();
     }

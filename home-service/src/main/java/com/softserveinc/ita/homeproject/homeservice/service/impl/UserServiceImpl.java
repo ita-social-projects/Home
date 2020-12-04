@@ -6,7 +6,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
-import com.softserveinc.ita.homeproject.homeservice.mapperEntityToDto.UserMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapperentity.UserMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;

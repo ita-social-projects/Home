@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapperEntityToDto;
+package com.softserveinc.ita.homeproject.homeservice.mapperentity;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;

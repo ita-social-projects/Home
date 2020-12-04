@@ -12,9 +12,6 @@
 
     <artifactId>home-service</artifactId>
 
-    <properties>
-        <mupstruct.version>1.4.1.Final</mupstruct.version>
-    </properties>
     <dependencies>
         <dependency>
             <artifactId>home-data</artifactId>
@@ -34,12 +31,12 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${mupstruct.version}</version>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>${mupstruct.version}</version>
+            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 

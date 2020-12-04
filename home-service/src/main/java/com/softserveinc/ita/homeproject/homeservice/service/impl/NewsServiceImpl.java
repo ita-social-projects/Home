@@ -4,7 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
-import com.softserveinc.ita.homeproject.homeservice.mapperEntityToDto.NewsMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapperentity.NewsMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

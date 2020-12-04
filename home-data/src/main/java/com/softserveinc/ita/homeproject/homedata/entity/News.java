@@ -1,17 +1,12 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Column;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

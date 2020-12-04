@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapperViewToDto;
+package com.softserveinc.ita.homeproject.application.mapper;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.model.ReadNews;
