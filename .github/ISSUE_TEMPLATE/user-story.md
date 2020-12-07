@@ -17,7 +17,7 @@ Add mockup if needed
 A clear and concise description of what you want to happen.
 
 **Epic link**
-E.g.: Epic #100 [Epic](https://jira.softserve.academy/browse/100)
+E.g.: Epic #100 [Epic](https://app.zenhub.com/workspaces/home-project-5f7b77ff8db73a001cb17009)
 
 **Labels to be added**
 "User story", Correspondind Functionality (e.g. User), Priority ("pri: "), "Corresponding Epic"
