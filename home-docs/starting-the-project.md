@@ -3,11 +3,9 @@
 ### Starting the project locally
 When you have successfully cloned the project, you need to do some steps to start the application.
 Make sure that you have Java 11 installed.
-Firstly, you need create database `home` using PostgreSQL. 
-Then you need to create environmental variables that are defined in `application.properties` file.  
-If you want to fill database with data, you need to activate `dev` profile 
-and use `spring.jpa.hibernate.ddl-auto=create` in `application.properties`.
-Secondly, build the project using `mvn clean install`.  
+Firstly, you need to create environmental variables that are defined in `application.properties` file.
+Secondly, you need to use Liquibase to run the database migration for the application.
+Finally, build the project using `mvn clean install`.  
 Now you can run it.
 
 ### Continuous integration and continuous deployment

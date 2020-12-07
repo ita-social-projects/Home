@@ -71,6 +71,7 @@ It include next modules:
 ### Required to install
 - Java 11
 - PostgreSQL
+- Maven
 
 ### Environment
 environmental variables
