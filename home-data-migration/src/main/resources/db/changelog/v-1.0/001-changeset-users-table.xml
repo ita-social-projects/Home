@@ -6,13 +6,31 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="33" author="Arthurpanda">
-        <sqlFile dbms="postgresql"
-                 encoding="utf8"
-                 endDelimiter="\nGO"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"
-                 path="001-create-users-table.sql"/>
+        <createTable tableName="users">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contact" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="flat" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
-
 </databaseChangeLog>

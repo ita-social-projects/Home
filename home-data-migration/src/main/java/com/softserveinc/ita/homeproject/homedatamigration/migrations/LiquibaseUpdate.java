@@ -52,7 +52,7 @@ public class LiquibaseUpdate {
         }
     }
 
-    public void  runLiquibase() throws LiquibaseException, SQLException {
+    public void runLiquibase() throws LiquibaseException, SQLException {
         String path = getFromProperties(PROPERTYFILENAME, PATHNAME);
         Connection connection = DriverManager.getConnection(url, user, password);
         DriverManager.registerDriver(new Driver());
