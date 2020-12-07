@@ -1,10 +1,9 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistException;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistApiException;
 import com.softserveinc.ita.homeproject.model.ApiError;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -16,12 +15,12 @@ import javax.ws.rs.ext.Provider;
  * @author Ihor Svyrydenko
  */
 @Provider
-public class AlreadyExistExceptionMapper implements ExceptionMapper<AlreadyExistException> {
+public class AlreadyExistExceptionMapper extends BaseApiExceptionMapper<AlreadyExistApiException> {
     @Override
-    public Response toResponse(AlreadyExistException exception) {
-        return Response.status(Response.Status.CONFLICT)
+    public Response toResponse(AlreadyExistApiException exception, Response.Status responseStatus) {
+        return Response.status(responseStatus)
                 .entity(new ApiError()
-                        .responseCode(Response.Status.CONFLICT.getStatusCode())
+                        .responseCode(responseStatus.getStatusCode())
                         .errorMessage(exception.getMessage()))
                 .build();
     }
