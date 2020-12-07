@@ -6,7 +6,5 @@ CREATE TABLE public.users (
                             password varchar (255)  not null,
                             contact varchar (255) not null,
                             flat varchar (255) not null,
---                             user_role enum ('USER', 'ADMIN', 'STAFF','OWNER') default 'USER',
                             active boolean not null
                               );
-
