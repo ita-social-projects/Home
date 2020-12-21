@@ -19,6 +19,7 @@
         <postgresql.verson>42.2.16</postgresql.verson>
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+        <picocli.version>4.5.2</picocli.version>
     </properties>
 
     <profiles>
@@ -54,7 +55,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>3.9.6</version>
+            <version>${picocli.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>

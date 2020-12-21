@@ -7,25 +7,19 @@ import liquibase.exception.LiquibaseException;
 import liquibase.integration.commandline.CommandLineResourceAccessor;
 import liquibase.resource.CompositeResourceAccessor;
 import org.postgresql.Driver;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LiquibaseUpdate {
-    private Connection connection_for_db;
+
     //    name of references in migration.properties
-    static final String PATHNAME = "changelog.path";
-    final static String PROPERTYFILENAME = "migration";
+    static final String PATH_NAME = "changelog.path";
+    final static String PROPERTY_FILE_NAME = "migration";
 
-    public LiquibaseUpdate(Connection connection_for_db) {
-        this.connection_for_db = connection_for_db;
-    }
-
-    public void runLiquibase() throws LiquibaseException, SQLException {
-        String path = getFromProperties(PROPERTYFILENAME, PATHNAME);
-        Connection connection = connection_for_db;
+    public void runLiquibase(Connection connection) throws LiquibaseException, SQLException {
+        String path = getFromProperties(PROPERTY_FILE_NAME, PATH_NAME);
         DriverManager.registerDriver(new Driver());
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         CommandLineResourceAccessor commandLineResourceAccessor = new CommandLineResourceAccessor(classLoader);
