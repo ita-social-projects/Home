@@ -11,7 +11,8 @@ import javax.persistence.JoinColumn;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

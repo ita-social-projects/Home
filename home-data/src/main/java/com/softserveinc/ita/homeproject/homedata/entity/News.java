@@ -6,7 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Column;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

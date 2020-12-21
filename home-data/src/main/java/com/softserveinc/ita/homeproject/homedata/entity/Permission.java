@@ -7,7 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
