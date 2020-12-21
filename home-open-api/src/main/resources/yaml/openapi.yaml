@@ -1438,6 +1438,8 @@ components:
         text:
           type: string
     CreateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
@@ -1452,6 +1454,8 @@ components:
         text:
           type: string
     UpdateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
@@ -1645,6 +1649,8 @@ components:
           type: boolean
           example: true
     CreateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
@@ -1703,6 +1709,8 @@ components:
           type: string
           example: "+380506617305"
     UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
