@@ -31,7 +31,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostNews'
+              $ref: '#/components/schemas/CreateNews'
         required: true
       responses:
         "201":
@@ -39,7 +39,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/News'
+                $ref: '#/components/schemas/ReadNews'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -74,16 +74,6 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
-        - in: query
-          name: type
-          schema:
-            type: string
-            enum:
-              - Country
-              - Local
-              - Area
-          required: false
-          description: Filter news by type.
       responses:
         "200":
           description: Successful operation
@@ -93,6 +83,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadNews'
+        "404":
+          $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /news/{id}:
@@ -109,6 +101,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         "200":
           description: Successful operation
@@ -133,6 +126,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         description: Update an existing news
         content:
@@ -146,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/News'
+                $ref: '#/components/schemas/ReadNews'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -171,6 +165,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       responses:
         "204":
           description: Successful operation
@@ -556,22 +551,22 @@ paths:
       operationId: queryUsers
       parameters:
         - in: query
-          name: offset
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-          required: false
-          description: "The number of items to skip before starting to collect the response"
-        - in: query
-          name: limit
+          name: pageNumber
           schema:
             type: integer
             minimum: 1
-            maximum: 100
-            default: 20
+            default: 1
           required: false
-          description: "The number of items to return"
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
       responses:
         '200':
           description: successful operation
@@ -672,14 +667,6 @@ paths:
       responses:
         "204":
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1426,82 +1413,34 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    News:
-      required:
-        - title
-        - type
-        - description
-        - text
-        - createDate
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        title:
-          type: string
-          example: News In The Local Area
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
-        photoUrl:
-          type: string
-          format: url
-        createDate:
-          type: string
-          format: date-time
-        updateDate:
-          type: string
-          format: date-time
-        description:
-          type: string
-        source:
-          type: string
-        text:
-          type: string
     ReadNews:
       type: object
       properties:
         id:
           type: integer
+          format: int64
+          example: 1
         title:
           type: string
-        description:
-          type: string
+          example: News In The Local Area
+          maximum: 50
         photoUrl:
           type: string
           format: url
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
-        createOrUpdateDate:
-          type: string
-          format: date-time
-        text:
+        description:
           type: string
         source:
           type: string
-          format: url
-    PostNews:
-      required:
-        - title
-        - type
-        - description
-        - text
+        text:
+          type: string
+    CreateNews:
       type: object
       properties:
         title:
           type: string
           example: News in the Some Area
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
         photoUrl:
           type: string
-          format: url
         description:
           type: string
         source:
@@ -1513,13 +1452,8 @@ components:
       properties:
         title:
           type: string
-        type:
-          type: string
-          enum: [Country, Local, Area]
-          example: Local
         photoUrl:
           type: string
-          format: url
         description:
           type: string
         source:
@@ -1768,10 +1702,8 @@ components:
           type: string
           example: home@gmail.com
         contacts:
-          type: array
-          items:
-            type: string
-            example: "+380506617305"
+          type: string
+          example: "+380506617305"
     UpdateUser:
       type: object
       properties:

@@ -18,6 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * DataLoader is the class that is used to upload the data into database.
+ * To use it, please activate Spring profile - dev.
+ *
+ * @author Mykyta Morar
+ * @author Ihor Svyrydenko
+ */
 @Component
 @Profile("dev")
 public class DataLoader implements ApplicationRunner {
@@ -41,6 +48,13 @@ public class DataLoader implements ApplicationRunner {
         saveUser( "ADMIN", "admin@example.com", "UPDATE_NEWS_PERMISSION", "READ_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION");
     }
 
+    /**
+     * Saves user with incoming parameters in the database.
+     *
+     * @param roleName the name of role
+     * @param email email of the user
+     * @param permissions permissions that are given to the user
+     */
     private void saveUser(String roleName, String email, String... permissions) {
         Set<Permission> perms = Arrays.stream(permissions)
                 .map(permission -> Permission.builder().name(permission).build())

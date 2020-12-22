@@ -12,6 +12,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * SecurityConfig class configures security in application.
+ * Class provides HttpBasic auth for the application.
+ *
+ * @author Ihor Svyrydenko
+ */
 @Configuration
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
