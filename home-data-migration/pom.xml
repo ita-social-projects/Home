@@ -32,9 +32,12 @@
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <version>${liquibase.version}</version>
                         <configuration>
-                            <propertyFile>migration.properties</propertyFile>
+                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                             <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
                             <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://ec2-34-254-24-116.eu-west-1.compute.amazonaws.com:5432/d1pi5jhrf0fbun</url>
+                            <username>hwkbjsunlfuchw</username>
+                            <password>c9039cc29d3150b2288c58d1eb988c7ea9a3a5b38eb117f39b5cb9bbf6fccd76</password>
                         </configuration>
                         <executions>
                             <execution>

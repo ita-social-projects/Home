@@ -11,15 +11,19 @@ import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
 
-@Command (name = "Liquibase-update", description = "use full url or url, password and user")
+@Command (name = "Liquibase-update",
+        version = "0.0.1",
+        mixinStandardHelpOptions = true,
+        description = "This application updates DB by using liquibase scripts. " +
+                "Use full URL or combination of URL, user and password.")
 public class LiquibaseRunner implements Callable<Integer> {
 
-    @Option(names = {"-us", "--user"}, description = "set user")
-    String user ;
-    @Option(names = {"-p", "--password"}, description = "set password")
-    String password;
-    @Option(names = {"-u", "--url"}, description = "set url", required = true)
+    @Option(names = {"-u", "--url"}, description = "set url for your DB connection", required = true)
     String url;
+    @Option(names = {"-us", "--user"}, description = "set username for your DB connection")
+    String user ;
+    @Option(names = {"-p", "--password"}, description = "set password for your DB connection")
+    String password;
 
     public static void main(String[] args) throws LiquibaseException, SQLException {
         int exitCode = new CommandLine(new LiquibaseRunner()).execute(args);
