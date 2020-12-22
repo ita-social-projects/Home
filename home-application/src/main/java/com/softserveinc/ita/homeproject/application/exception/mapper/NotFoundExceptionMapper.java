@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundApiExcepti
 import com.softserveinc.ita.homeproject.model.ApiError;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -15,13 +16,10 @@ import javax.ws.rs.ext.Provider;
  * @author Ihor Svyrydenko
  */
 @Provider
-public class NotFoundExceptionMapper extends BaseApiExceptionMapper<NotFoundApiException> {
+public class NotFoundExceptionMapper extends BaseApiExceptionMapper<NotFoundApiException>{
+
     @Override
-    public Response toResponse(NotFoundApiException exception, Response.Status responseStatus) {
-        return Response.status(Response.Status.NOT_FOUND)
-                .entity(new ApiError()
-                        .responseCode(Response.Status.NOT_FOUND.getStatusCode())
-                        .errorMessage(exception.getMessage()))
-                .build();
+    protected Response.Status getStatus() {
+        return Response.Status.NOT_FOUND;
     }
 }

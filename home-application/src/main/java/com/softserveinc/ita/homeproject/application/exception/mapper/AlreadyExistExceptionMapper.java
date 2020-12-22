@@ -16,12 +16,9 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 public class AlreadyExistExceptionMapper extends BaseApiExceptionMapper<AlreadyExistApiException> {
+
     @Override
-    public Response toResponse(AlreadyExistApiException exception, Response.Status responseStatus) {
-        return Response.status(responseStatus)
-                .entity(new ApiError()
-                        .responseCode(responseStatus.getStatusCode())
-                        .errorMessage(exception.getMessage()))
-                .build();
+    protected Response.Status getStatus() {
+        return Response.Status.BAD_REQUEST;
     }
 }
