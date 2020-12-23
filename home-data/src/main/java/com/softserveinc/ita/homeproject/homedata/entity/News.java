@@ -15,24 +15,24 @@ import java.time.LocalDateTime;
 public class News extends BaseEntity {
 
     @Column(name = "create_date")
-    LocalDateTime createDate;
+    private LocalDateTime createDate;
     
     @Column(name = "update_date")
-    LocalDateTime updateDate;
+    private LocalDateTime updateDate;
 
     @Column(name = "title")
-    String title;
+    private String title;
 
     @Column(name = "text")
-    String text;
+    private String text;
 
     @Column(name = "description")
-    String description;
+    private String description;
 
     @Column(name = "photo_url")
-    String photoUrl;
+    private String photoUrl;
 
     @Column(name = "source")
-    String source;
+    private String source;
 
 }
