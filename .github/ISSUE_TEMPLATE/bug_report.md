@@ -40,7 +40,7 @@ WHERE id=<item1_id>;"
 
 **User story and test case links**
 E.g.: "User story #100
-[Test case](https://jira.softserve.academy/browse/100)"
+[Test case](https://app.zenhub.com/workspaces/home-project-5f7b77ff8db73a001cb17009)"
 
 **Labels to be added**
 "Bug", Priority ("pri: "), Severity ("severity:"), Type ("UI, "Functional"), "API" (for back-end bugs).
