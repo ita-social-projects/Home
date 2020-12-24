@@ -1,13 +1,13 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 @Getter
 @Setter
-@SuperBuilder
-public class UserDto {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto extends BaseDto {
 
     private Long id;
 
@@ -20,5 +20,4 @@ public class UserDto {
     private String password;
 
     private String contacts;
-
 }
