@@ -1413,13 +1413,17 @@ components:
           schema:
             $ref: '#/components/schemas/ApiError'
   schemas:
-    ReadNews:
+    BaseView:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 1
+    ReadNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
         title:
           type: string
           example: News In The Local Area
@@ -1434,6 +1438,8 @@ components:
         text:
           type: string
     CreateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       required:
         - title
         - description
@@ -1457,6 +1463,8 @@ components:
           type: string
           minLength: 1
     UpdateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
@@ -1508,11 +1516,10 @@ components:
             type: string
             example: "10, 8, 56, 9"
     ReadAllChats:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 5
         name:
           type: string
           example: "super-chat"
@@ -1525,11 +1532,10 @@ components:
             type: string
             example: "9, 65, 45, 6"
     ReadChat:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 4
         name:
           type: string
           example: "super chat"
@@ -1599,13 +1605,12 @@ components:
         is_important:
           type: boolean
     ReadAllMessages:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: array
       items:
         type: object
         properties:
-          id:
-            type: number
-            example: 197
           body:
             type: string
             example: "hello Ivan, doing cleanup doing?"
@@ -1616,11 +1621,10 @@ components:
             type: number
             example: 7
     ReadMessage:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 197
         body:
           type: string
           example: "yes, I want to vote for Grisha"
@@ -1658,6 +1662,8 @@ components:
           type: boolean
           example: true
     CreateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       required:
         - firstName
         - lastName
@@ -1690,12 +1696,10 @@ components:
           minLength: 8
           maxLength: 128
     ReadUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
         firstName:
           type: string
           example: Petro
@@ -1709,6 +1713,8 @@ components:
           type: string
           example: "+380506617305"
     UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
@@ -1729,6 +1735,9 @@ components:
           minLength: 10
           maxLength: 13
 
+        contacts:
+          type: string
+          example: "+380506617305"
     Voting:
       required:
         - name
@@ -2155,6 +2164,8 @@ components:
             type: string
             example: +380981256856
     ReadService:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - service
@@ -2174,6 +2185,8 @@ components:
                 type: string
                 example: +380981256856
     ReadOrder:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - order
@@ -2191,6 +2204,8 @@ components:
           type: string
           format: date-time
     ReadExecutor:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - executor

@@ -1,7 +1,7 @@
 master
-## JIRA
+## ZenHub
 
-* [Main JIRA ticket](https://jira.softserve.academy/secure/RapidBoard.jspa?rapidView=id)
+* [Main ZenHub ticket](https://app.zenhub.com/workspaces/home-project-5f7b77ff8db73a001cb17009/)
 
 
 ## Code reviewers
@@ -23,6 +23,7 @@ ToDo
 ## Testing approach
 
 ToDo
+
 ## CHECK LIST
 - [ ]  СI passed
 - [ ]  Сode coverage >=95%

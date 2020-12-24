@@ -12,10 +12,27 @@ import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 import java.util.stream.Collectors;
 
+/**
+ * JerseyConfig is used for scan and registration of classes.
+ * It lets you manually register classes and instances of
+ * resources and providers manually.
+ *
+ * Basically what happens is that the implementor of the initializer
+ * can tell the servlet container what classes to look for, and the
+ * servlet container will pass those classes to the initializer method.
+ *
+ * @see org.glassfish.jersey.server.ResourceConfig it extends Application
+ *
+ * @author Mykyta Morar
+ * @author Ihor Svyrydenko
+ */
 @Component
 @ApplicationPath("/api/0")
 public class JerseyConfig extends ResourceConfig {
 
+    /**
+     * Constructor is used to register endpoints and Jackson
+     */
     public JerseyConfig() {
         // register endpoints
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
