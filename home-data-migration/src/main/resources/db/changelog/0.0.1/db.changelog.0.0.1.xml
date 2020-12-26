@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="1" author="Arthurpanda">
+    <changeSet id="Issue33.001" author="Arthurpanda">
         <createTable tableName="users">
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -34,7 +34,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="pLytvynenko">
+    <changeSet id="Issue33.002" author="pLytvynenko">
         <createTable tableName="role">
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -45,7 +45,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="3" author="pLytvynenko">
+    <changeSet id="Issue33.003" author="pLytvynenko">
         <createTable tableName="permission">
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
@@ -56,7 +56,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="4" author="pLytvynenko">
+    <changeSet id="Issue33.004" author="pLytvynenko">
         <createTable tableName="role_permission">
             <column name="ROLE_ID" type="BIGINT">
                 <constraints nullable="false"
@@ -75,7 +75,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="5" author="pLytvynenko">
+    <changeSet id="Issue33.005" author="pLytvynenko">
         <createTable tableName="news">
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true"
@@ -106,7 +106,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="6" author="pLytvynenko">
+    <changeSet id="Issue33.006" author="pLytvynenko">
         <createTable tableName="account">
             <column name="ID" type="BIGINT">
                 <constraints nullable="false"
@@ -149,7 +149,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="7" author="pLytvynenko">
+    <changeSet id="Issue33.007" author="pLytvynenko">
         <createTable tableName="account_role">
             <column name="ROLE_ID" type="BIGINT">
                 <constraints nullable="false"

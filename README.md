@@ -50,6 +50,7 @@ It include next modules:
   - [How to work with swagger UI](#How-to-work-with-swagger-UI)
   - [How to run tests](#How-to-run-tests)
   - [How to Checkstyle](#How-to-Checkstyle)
+  - [How to run data migration](#How-to-run-data-migration)
 - [Documentation](#Documentation))
 - [Contributing](#contributing)
   - [git flow](#git-flow)
@@ -105,6 +106,19 @@ api.secret=${API_SECRET}
 ### How to work with swagger UI
 ### How to run tests
 ### How to Checkstyle
+### How to run data migration
+You can update DB with this CLI application. For that purpose you should run it from home-data-migration directory in two ways.
+1. Use full URL(--url) for connection to your DB
+   
+   `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/?user=user&password=password`
+   
+2. Use URL(--url), username(-u or --user) and password(-p or --password) for connection to your DB
+
+    `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432 -u=user -p=password`
+
+- Also, you can write "-h" option to get help. 
+  
+  `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar -h` 
 
 ---
 

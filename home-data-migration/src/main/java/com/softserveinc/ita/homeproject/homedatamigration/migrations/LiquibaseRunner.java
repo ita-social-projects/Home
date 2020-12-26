@@ -18,12 +18,12 @@ import java.util.concurrent.Callable;
                 "Use full URL or combination of URL, user and password.")
 public class LiquibaseRunner implements Callable<Integer> {
 
-    @Option(names = {"-u", "--url"}, description = "set url for your DB connection", required = true)
-    String url;
-    @Option(names = {"-us", "--user"}, description = "set username for your DB connection")
-    String user ;
+    @Option(names = {"--url"}, description = "set url for your DB connection. It is required option.", required = true)
+    private String url;
+    @Option(names = {"-u", "--user"}, description = "set username for your DB connection")
+    private String user;
     @Option(names = {"-p", "--password"}, description = "set password for your DB connection")
-    String password;
+    private String password;
 
     public static void main(String[] args) throws LiquibaseException, SQLException {
         int exitCode = new CommandLine(new LiquibaseRunner()).execute(args);
@@ -32,8 +32,8 @@ public class LiquibaseRunner implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        // Full url to connecting to Db on Heroku: "jdbc:postgresql://ec2-34-254-24-116.eu-west-1.compute.amazonaws.com:5432/d1pi5jhrf0fbun?user=hwkbjsunlfuchw&password=c9039cc29d3150b2288c58d1eb988c7ea9a3a5b38eb117f39b5cb9bbf6fccd76";
-        Connection connection = (user != null && password != null) ? getConnection(url, user, password) : getConnection(url);
+        boolean connectionCondition = user != null && password != null;
+        Connection connection = (connectionCondition) ? getConnection(url, user, password) : getConnection(url);
         new LiquibaseUpdate().runLiquibase(connection);
         return 0;
     }
