@@ -2,11 +2,8 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,7 +22,7 @@ public class Role extends BaseEntity{
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Permission> permissions;
+    private List<Permission> permissions;
 
     @Column(name = "name")
     private String name;

@@ -1,15 +1,16 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.NewsApiService;
-import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.application.mapper.CreateNewsDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadNewsDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
@@ -17,6 +18,8 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
  * UserApiServiceImpl class is the interlayer between generated
@@ -40,6 +43,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * @param createNews incoming data needed for creation of user
      * @return returns Response to generated controller
      */
+    @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
     public Response addNews(CreateNews createNews) {
         NewsDto newsDto = createNewsDtoMapper.convertViewToDto(createNews);
@@ -56,6 +60,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * @param id id of the news that needs to be deleted
      * @return returns Response to generated controller
      */
+    @PreAuthorize(DELETE_NEWS_PERMISSION)
     @Override
     public Response deleteNews(Long id) {
         newsService.deleteById(id);
@@ -70,6 +75,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * @param pageSize amount of the returned elements
      * @return returns Response to generated controller
      */
+    @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
         List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
@@ -86,6 +92,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * @param id id of the news in the database
      * @return returns Response to generated controller
      */
+    @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
@@ -102,6 +109,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * @param updateNews incoming data needed for news update
      * @return returns Response to generated controller
      */
+    @PreAuthorize(UPDATE_NEWS_PERMISSION)
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
         NewsDto updateNewsDto = updateNewsDtoMapper.convertViewToDto(updateNews);

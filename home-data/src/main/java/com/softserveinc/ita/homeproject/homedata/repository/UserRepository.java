@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,5 +24,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
      * @return an instance of Optional(User) class
      */
     Optional<User> findByEmail(String email);
+    Page<User> findAllByEnabledTrue(Pageable var1);
 
 }
