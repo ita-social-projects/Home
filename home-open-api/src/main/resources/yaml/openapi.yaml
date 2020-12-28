@@ -83,6 +83,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadNews'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -109,6 +111,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadNews'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -211,6 +215,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadAllChats'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         'default':
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -264,6 +270,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadChat'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         'default':
@@ -365,6 +373,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadAllMessages'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "default":
           $ref: '#/components/responses/InternalServerError'
   /chats/{chat_id}/messages/{message_id}:
@@ -394,6 +404,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadMessage'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -537,6 +549,8 @@ paths:
                   $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "403":
           $ref: '#/components/responses/Forbidden'
         "409":
@@ -578,6 +592,8 @@ paths:
                   $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
   /users/{id}:
@@ -605,6 +621,8 @@ paths:
                 $ref: "#/components/schemas/ReadUser"
         '400':
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         default:
@@ -718,6 +736,8 @@ paths:
                   $ref: '#/components/schemas/VotingList'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "default":
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -773,6 +793,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VariantList'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -914,6 +936,8 @@ paths:
                 $ref: '#/components/schemas/OrderList'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "500":
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -965,6 +989,8 @@ paths:
                 $ref: '#/components/schemas/ReadOrder'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -1027,6 +1053,8 @@ paths:
                 $ref: '#/components/schemas/ServiceList'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "default":
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -1078,6 +1106,8 @@ paths:
                 $ref: '#/components/schemas/ReadService'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -1176,6 +1206,8 @@ paths:
                 $ref: '#/components/schemas/ExecutorList'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "default":
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -1227,6 +1259,8 @@ paths:
                 $ref: '#/components/schemas/ReadExecutor'
         "400":
           $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           $ref: '#/components/responses/NotFound'
         "default":
@@ -1305,6 +1339,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReadUser'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           description: News not found
           content:
@@ -1370,11 +1406,19 @@ paths:
           description: Succesful operation
         "400":
           description: Invalid name supplied
+        "401":
+          $ref: '#/components/responses/Unauthorized'
         "404":
           description: News not found
         default:
           $ref: '#/components/responses/InternalServerError'
+security:
+  - basicAuth: []
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   responses:
     BadRequest:
       description: Validation Exception
