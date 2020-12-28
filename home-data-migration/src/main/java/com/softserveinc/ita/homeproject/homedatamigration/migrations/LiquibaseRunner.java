@@ -32,9 +32,9 @@ public class LiquibaseRunner implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        boolean connectionCondition = user != null && password != null;
-        Connection connection = (connectionCondition) ? getConnection(url, user, password) : getConnection(url);
-        new LiquibaseUpdate().runLiquibase(connection);
+        boolean isCredentialsProvided = user != null && password != null;
+        Connection connection = isCredentialsProvided ? getConnection(url, user, password) : getConnection(url);
+        new LiquibaseUpdate(connection).runLiquibase();
         return 0;
     }
 
