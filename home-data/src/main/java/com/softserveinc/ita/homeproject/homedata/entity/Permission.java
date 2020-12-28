@@ -2,10 +2,10 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +16,7 @@ import java.util.Set;
 public class Permission extends BaseEntity {
 
     @ManyToMany(mappedBy = "permissions")
-    private Set<Role> roles;
+    private List<Role> roles;
 
     @Column(name = "name")
     private String name;

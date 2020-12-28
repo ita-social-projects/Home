@@ -1734,7 +1734,6 @@ components:
           example: "+380506617305"
           minLength: 10
           maxLength: 13
-
         contacts:
           type: string
           example: "+380506617305"
@@ -2044,7 +2043,6 @@ components:
         orderDate:
           type: string
           format: date-time
-
     OrderList:
       type: array
       items:
@@ -2067,7 +2065,6 @@ components:
           orderDate:
             type: string
             example: 26.04.2020
-
     Executor:
       required:
         - name

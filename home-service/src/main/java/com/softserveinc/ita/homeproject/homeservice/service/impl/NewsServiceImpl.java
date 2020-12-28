@@ -30,21 +30,10 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.save(news);
 
         return newsMapper.convertEntityToDto(news);
-        return convertToGetNewsServiceDto(news);
     }
 
     @Override
     @Transactional
-    public NewsDto update(Long id, NewsDto newsDto) {
-        News newsToUpdate = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
-        newsToUpdate.setTitle(newsDto.getTitle());
-        newsToUpdate.setText(newsDto.getText());
-        newsToUpdate.setUpdateDate(LocalDateTime.now());
-        newsToUpdate.setDescription(newsDto.getDescription());
-        newsToUpdate.setPhotoUrl(newsDto.getPhotoUrl());
-        newsToUpdate.setSource(newsDto.getSource());
-        newsRepository.save(newsToUpdate);
     public NewsDto update(Long id, NewsDto newsDto)  {
 
         if (newsRepository.findById(id).isPresent()) {
@@ -73,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             newsRepository.save(fromDB);
-            return convertToGetNewsServiceDto(fromDB);
+            return newsMapper.convertEntityToDto(fromDB);
 
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
@@ -84,17 +73,13 @@ public class NewsServiceImpl implements NewsService {
     public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
         return newsRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
                 .map(newsMapper::convertEntityToDto);
-        return newsRepository.findAll(PageRequest.of(pageNumber-1, pageSize))
-                .map(page -> convertToGetNewsServiceDto(page));
     }
 
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
-
         return newsMapper.convertEntityToDto(newsResponse);
-        return convertToGetNewsServiceDto(newsResponse);
     }
 
     @Override
@@ -102,19 +87,6 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
         newsRepository.deleteById(id);
-    }
-
-    private NewsDto ConvertToGetNewsServiceDto(News news) {
-        return NewsDto.builder()
-    private NewsDto convertToGetNewsServiceDto(News news) {
-       return NewsDto.builder()
-                .id(news.getId())
-                .title(news.getTitle())
-                .text(news.getText())
-                .description(news.getDescription())
-                .photoUrl(news.getPhotoUrl())
-                .source(news.getSource())
-                .build();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.constants;
+package com.softserveinc.ita.homeproject.application.constants;
 
 /**
  * Permissions interface is used to store

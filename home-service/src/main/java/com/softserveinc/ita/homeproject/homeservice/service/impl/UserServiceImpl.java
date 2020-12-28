@@ -1,18 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
 import com.softserveinc.ita.homeproject.homeservice.mapperentity.UserMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
+import static com.softserveinc.ita.homeproject.application.constants.Roles.USER_ROLE;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +26,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final ConversionService conversionService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -41,7 +36,6 @@ public class UserServiceImpl implements UserService {
             throw new AlreadyExistException("User with email" + createUserDto.getEmail() + " is already exists");
         } else {
             User toCreate = userMapper.convertDtoToEntity(createUserDto);
-            User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
@@ -51,7 +45,6 @@ public class UserServiceImpl implements UserService {
             userRepository.save(toCreate);
 
             return userMapper.convertEntityToDto(toCreate);
-            return conversionService.convert(toCreate, UserDto.class);
         }
     }
 
@@ -75,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
-            return convertToUserDto(fromDB);
+            return userMapper.convertEntityToDto(fromDB);
 
         } else {
             throw new NotFoundException("User with id:" + id + " is not found");
@@ -84,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return userRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
+        return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
                 .map(userMapper::convertEntityToDto);
     }
 
@@ -100,15 +93,7 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
+        userRepository.save(toDelete);
     }
 
-    private UserDto convertToUserDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .contacts(user.getContacts())
-                .build();
-    }
 }

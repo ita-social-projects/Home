@@ -1,16 +1,15 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.UsersApiService;
-import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
  * UserApiServiceImpl class is the interlayer between generated
@@ -34,7 +33,6 @@ public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
     private final CreateUserDtoMapper createUserDtoMapper;
-    private final ConversionService conversionService;
     private final ReadUserDtoMapper readUserDtoMapper;
     private final UpdateUserDtoMapper updateUserDtoMapper;
 

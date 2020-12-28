@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -58,9 +58,9 @@ public class DataLoader implements ApplicationRunner {
      * @param permissions permissions that are given to the user
      */
     private void saveUser(String roleName, String email, String... permissions) {
-        Set<Permission> perms = Arrays.stream(permissions)
+        List<Permission> perms = Arrays.stream(permissions)
                 .map(permission -> Permission.builder().name(permission).build())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         permissionRepository.saveAll(perms);
         Role role = Role.builder().name(roleName).permissions(perms)
                 .build();
