@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.BaseApiException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BaseHomeException;
 import com.softserveinc.ita.homeproject.model.ApiError;
 
 import javax.ws.rs.core.Response;
@@ -14,16 +14,22 @@ import javax.ws.rs.ext.ExceptionMapper;
  *
  * @author Mykyta Morar
  */
-public abstract class BaseApiExceptionMapper<T extends BaseApiException>  implements ExceptionMapper<T> {
+public abstract class BaseExceptionMapper<T extends Throwable>  implements ExceptionMapper<T> {
+
     @Override
     public Response toResponse(T exception) {
-        return Response.status(getStatus())
+     Response.Status status = getStatus();
+        return Response.status(status)
                 .entity(new ApiError()
-                        .responseCode(getStatus().getStatusCode())
-                        .errorMessage(exception.getMessage()))
-                .build();
+                        .responseCode(status.getStatusCode())
+                        .errorMessage(extractMessage(exception)))
+                        .build();
     }
-
     protected abstract Response.Status getStatus();
 
+    protected abstract String extractMessage(T exception);
+
+
 }
+
+

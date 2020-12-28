@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundApiException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +41,7 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public NewsDto update(Long id, NewsDto newsDto)  {
         News newsToUpdate = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundApiException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
         newsToUpdate.setTitle(newsDto.getTitle());
         newsToUpdate.setText(newsDto.getText());
         newsToUpdate.setUpdateDate(LocalDateTime.now());
@@ -62,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundApiException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
 
         return ConvertToGetNewsServiceDto(newsResponse);
     }
@@ -70,7 +70,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void deleteById(Long id) {
             newsRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundApiException("Can't find news with given ID:" + id));
+                    .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
             newsRepository.deleteById(id);
     }
 

@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundApiException;
-import com.softserveinc.ita.homeproject.model.ApiError;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
@@ -16,7 +14,7 @@ import javax.ws.rs.ext.Provider;
  * @author Ihor Svyrydenko
  */
 @Provider
-public class NotFoundExceptionMapper extends BaseApiExceptionMapper<NotFoundApiException>{
+public class NotFoundHomeExceptionMapper extends BaseHomeExceptionMapper<NotFoundHomeException> {
 
     @Override
     protected Response.Status getStatus() {

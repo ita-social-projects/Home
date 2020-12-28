@@ -5,8 +5,8 @@ import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistApiException;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundApiException;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistApiException("User with email" + createUserDto.getEmail() +" is already exists");
+            throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() +" is already exists");
         } else {
             User toCreate = conversionService.convert(createUserDto, User.class);
             toCreate.setEnabled(true);
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(toUpdate);
             return conversionService.convert(toUpdate, UserDto.class);
         } else {
-            throw new NotFoundApiException("User with id:" + id + " is not found");
+            throw new NotFoundHomeException("User with id:" + id + " is not found");
         }
     }
 
@@ -66,14 +66,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundApiException("User with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         return conversionService.convert(toGet, UserDto.class);
     }
 
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundApiException("User with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
     }
 }
