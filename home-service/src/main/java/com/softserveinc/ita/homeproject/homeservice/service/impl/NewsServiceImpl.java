@@ -64,9 +64,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void deleteById(Long id) {
-            newsRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
-            newsRepository.deleteById(id);
+        newsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+        newsRepository.deleteById(id);
     }
 
     private NewsDto ConvertToGetNewsServiceDto(News news) {
