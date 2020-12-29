@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapperentity.NewsMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class NewsServiceImpl implements NewsService {
             return newsMapper.convertEntityToDto(fromDB);
 
         } else {
-            throw new NotFoundException("User with id:" + id + " is not found");
+            throw new NotFoundHomeException("Can't find news with given ID:" + id);
         }
     }
 
@@ -78,14 +78,15 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+
         return newsMapper.convertEntityToDto(newsResponse);
     }
 
     @Override
     public void deleteById(Long id) {
         newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
         newsRepository.deleteById(id);
     }
 

@@ -13,7 +13,6 @@
         <module>home-server-generator</module>
         <module>home-data-migration</module>
     </modules>
-
     <groupId>com.softserveinc.ita.homeproject</groupId>
     <artifactId>home</artifactId>
     <version>${revision}</version>
@@ -30,6 +29,7 @@
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <lombok.version>1.18.16</lombok.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -101,6 +101,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten.maven.plugin.version}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <outputDirectory>${project.build.directory}</outputDirectory>
