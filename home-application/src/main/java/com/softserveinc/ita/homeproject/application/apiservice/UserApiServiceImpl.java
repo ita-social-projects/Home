@@ -1,13 +1,15 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.UsersApiService;
+import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
  * UserApiServiceImpl class is the interlayer between generated
@@ -30,7 +32,9 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Permissions
 public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
-    private final ConversionService conversionService;
+    private final CreateUserDtoMapper createUserDtoMapper;
+    private final ReadUserDtoMapper readUserDtoMapper;
+    private final UpdateUserDtoMapper updateUserDtoMapper;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -42,9 +46,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = conversionService.convert(createUser, UserDto.class);
+        UserDto createUserDto = createUserDtoMapper.convertViewToDto(createUser);
         UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -60,7 +64,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -77,7 +81,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
         List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
-                .map(readUserDto -> conversionService.convert(readUserDto, ReadUser.class))
+                .map(readUserDtoMapper::convertDtoToView)
                 .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).entity(readUserList).build();
@@ -109,9 +113,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = conversionService.convert(updateUser, UserDto.class);
+        UserDto updateUserDto = updateUserDtoMapper.convertViewToDto(updateUser);
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = conversionService.convert(readUserDto, ReadUser.class);
+        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }

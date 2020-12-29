@@ -1310,7 +1310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ApiError'
         default:
           $ref: '#/components/responses/InternalServerError'
 
@@ -1381,45 +1381,49 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Forbidden:
       description: You do not have permission to perform this action
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     Conflict:
       description: Conflict with current state of the resource
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
     InternalServerError:
       description: Something went wrong
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
   schemas:
-    ReadNews:
+    BaseView:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 1
+    ReadNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
         title:
           type: string
           example: News In The Local Area
@@ -1434,39 +1438,56 @@ components:
         text:
           type: string
     CreateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - title
+        - description
+        - text
       type: object
       properties:
         title:
           type: string
           example: News in the Some Area
+          minLength: 1
+          maxLength: 70
         photoUrl:
           type: string
         description:
           type: string
+          minLength: 1
+          maxLength: 150
         source:
           type: string
         text:
           type: string
+          minLength: 1
     UpdateNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
           type: string
+          minLength: 1
+          maxLength: 50
         photoUrl:
           type: string
         description:
           type: string
+          minLength: 1
+          maxLength: 50
         source:
           type: string
         text:
           type: string
-    Error:
+          minLength: 1
+          maxLength: 150
+    ApiError:
       type: object
       properties:
         responseCode:
-          type: string
-        description:
-          type: string
+          type: integer
         errorMessage:
           type: string
     Chat:
@@ -1495,11 +1516,10 @@ components:
             type: string
             example: "10, 8, 56, 9"
     ReadAllChats:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 5
         name:
           type: string
           example: "super-chat"
@@ -1512,11 +1532,10 @@ components:
             type: string
             example: "9, 65, 45, 6"
     ReadChat:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 4
         name:
           type: string
           example: "super chat"
@@ -1586,13 +1605,12 @@ components:
         is_important:
           type: boolean
     ReadAllMessages:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: array
       items:
         type: object
         properties:
-          id:
-            type: number
-            example: 197
           body:
             type: string
             example: "hello Ivan, doing cleanup doing?"
@@ -1603,11 +1621,10 @@ components:
             type: number
             example: 7
     ReadMessage:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: number
-          example: 197
         body:
           type: string
           example: "yes, I want to vote for Grisha"
@@ -1645,53 +1662,44 @@ components:
           type: boolean
           example: true
     CreateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
       type: object
       properties:
         firstName:
           pattern: '\w+'
           type: string
           example: "Petro"
+          minLength: 1
+          maxLength: 50
         lastName:
           pattern: '\w+'
           type: string
           example: "Zinchenko"
+          minLength: 1
+          maxLength: 50
         email:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "p.t.z@gmail.com"
+          minLength: 3
+          maxLength: 254
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
           example: "mySuperStrongPass"
-    OrderList:
-      type: array
-      items:
-        type: object
-        required:
-          - order
-        properties:
-          id:
-            type: integer
-            example: 1
-          name:
-            type: string
-            example: mechanic
-          executor:
-            type: string
-            example: Ivan Ivanov
-          customer:
-            type: string
-            example: Viktor Vasilenko
-          orderDate:
-            type: string
-            example: 26.04.2020
+          minLength: 8
+          maxLength: 128
     ReadUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
         firstName:
           type: string
           example: Petro
@@ -1701,25 +1709,34 @@ components:
         email:
           type: string
           example: home@gmail.com
-        contacts:
+        contact:
           type: string
           example: "+380506617305"
     UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
           pattern: '\w+'
           type: string
           example: Petro
+          minLength: 1
+          maxLength: 50
         lastName:
           pattern: '\w+'
           type: string
           example: Petrov
+          minLength: 1
+          maxLength: 50
+        contact:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
         contacts:
-          type: array
-          items:
-            type: string
-            example: "+380506617305"
+          type: string
+          example: "+380506617305"
     Voting:
       required:
         - name
@@ -2026,6 +2043,28 @@ components:
         orderDate:
           type: string
           format: date-time
+    OrderList:
+      type: array
+      items:
+        type: object
+        required:
+          - order
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: mechanic
+          executor:
+            type: string
+            example: Ivan Ivanov
+          customer:
+            type: string
+            example: Viktor Vasilenko
+          orderDate:
+            type: string
+            example: 26.04.2020
     Executor:
       required:
         - name
@@ -2122,6 +2161,8 @@ components:
             type: string
             example: +380981256856
     ReadService:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - service
@@ -2141,6 +2182,8 @@ components:
                 type: string
                 example: +380981256856
     ReadOrder:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - order
@@ -2158,6 +2201,8 @@ components:
           type: string
           format: date-time
     ReadExecutor:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
       type: object
       required:
         - executor

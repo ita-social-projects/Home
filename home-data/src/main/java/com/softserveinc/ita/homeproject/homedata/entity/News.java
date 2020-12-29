@@ -1,15 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Column;
 import java.time.LocalDateTime;
 
@@ -19,31 +12,27 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class News {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+public class News extends BaseEntity {
 
     @Column(name = "create_date")
-    LocalDateTime createDate;
+    private LocalDateTime createDate;
     
     @Column(name = "update_date")
-    LocalDateTime updateDate;
+    private LocalDateTime updateDate;
 
     @Column(name = "title")
-    String title;
+    private String title;
 
     @Column(name = "text")
-    String text;
+    private String text;
 
     @Column(name = "description")
-    String description;
+    private String description;
 
     @Column(name = "photo_url")
-    String photoUrl;
+    private String photoUrl;
 
     @Column(name = "source")
-    String source;
+    private String source;
 
 }
