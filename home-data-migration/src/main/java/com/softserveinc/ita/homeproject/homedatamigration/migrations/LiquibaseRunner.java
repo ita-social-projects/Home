@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.homedatamigration.migrations;
 
-import liquibase.exception.LiquibaseException;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,7 +23,7 @@ public class LiquibaseRunner implements Callable<Integer> {
     @Option(names = {"-p", "--password"}, description = "set password for your DB connection")
     private String password;
 
-    public static void main(String[] args) throws LiquibaseException, SQLException {
+    public static void main(String[] args) {
         int exitCode = new CommandLine(new LiquibaseRunner()).execute(args);
         System.exit(exitCode);
     }

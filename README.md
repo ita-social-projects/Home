@@ -118,7 +118,11 @@ You can update DB with this CLI application. For that purpose you should run it 
 
 - Also, you can write "-h" option to get help. 
   
-  `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar -h` 
+  `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar -h`
+
+- You can run it with Maven using command:
+  
+  `mvn clean package -Pliquibase.migration`
 
 ---
 

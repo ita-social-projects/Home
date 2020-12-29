@@ -33,7 +33,7 @@
                         <version>${liquibase.version}</version>
                         <configuration>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                            <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                            <changeLogFile>db/changelog/master.xml</changeLogFile>
                             <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5433/postgres</url>
                             <username>postgres</username>
@@ -69,6 +69,10 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.verson}</version>
+        </dependency>
+        <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
