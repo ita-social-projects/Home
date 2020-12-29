@@ -1440,19 +1440,28 @@ components:
     CreateNews:
       allOf:
         - $ref: '#/components/schemas/BaseView'
+      required:
+        - title
+        - description
+        - text
       type: object
       properties:
         title:
           type: string
           example: News in the Some Area
+          minLength: 1
+          maxLength: 70
         photoUrl:
           type: string
         description:
           type: string
+          minLength: 1
+          maxLength: 150
         source:
           type: string
         text:
           type: string
+          minLength: 1
     UpdateNews:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -1460,14 +1469,20 @@ components:
       properties:
         title:
           type: string
+          minLength: 1
+          maxLength: 50
         photoUrl:
           type: string
         description:
           type: string
+          minLength: 1
+          maxLength: 50
         source:
           type: string
         text:
           type: string
+          minLength: 1
+          maxLength: 150
     ApiError:
       type: object
       properties:
@@ -1649,46 +1664,37 @@ components:
     CreateUser:
       allOf:
         - $ref: '#/components/schemas/BaseView'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
       type: object
       properties:
         firstName:
           pattern: '\w+'
           type: string
           example: "Petro"
+          minLength: 1
+          maxLength: 50
         lastName:
           pattern: '\w+'
           type: string
           example: "Zinchenko"
+          minLength: 1
+          maxLength: 50
         email:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "p.t.z@gmail.com"
+          minLength: 3
+          maxLength: 254
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
           example: "mySuperStrongPass"
-    OrderList:
-      type: array
-      items:
-        type: object
-        required:
-          - order
-        properties:
-          id:
-            type: integer
-            example: 1
-          name:
-            type: string
-            example: mechanic
-          executor:
-            type: string
-            example: Ivan Ivanov
-          customer:
-            type: string
-            example: Viktor Vasilenko
-          orderDate:
-            type: string
-            example: 26.04.2020
+          minLength: 8
+          maxLength: 128
     ReadUser:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -1703,7 +1709,7 @@ components:
         email:
           type: string
           example: home@gmail.com
-        contacts:
+        contact:
           type: string
           example: "+380506617305"
     UpdateUser:
@@ -1715,10 +1721,19 @@ components:
           pattern: '\w+'
           type: string
           example: Petro
+          minLength: 1
+          maxLength: 50
         lastName:
           pattern: '\w+'
           type: string
           example: Petrov
+          minLength: 1
+          maxLength: 50
+        contact:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
         contacts:
           type: string
           example: "+380506617305"
@@ -2028,6 +2043,28 @@ components:
         orderDate:
           type: string
           format: date-time
+    OrderList:
+      type: array
+      items:
+        type: object
+        required:
+          - order
+        properties:
+          id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: mechanic
+          executor:
+            type: string
+            example: Ivan Ivanov
+          customer:
+            type: string
+            example: Viktor Vasilenko
+          orderDate:
+            type: string
+            example: 26.04.2020
     Executor:
       required:
         - name

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,8 +44,10 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        saveUser( "USER", "user@example.com", "READ_NEWS_PERMISSION");
-        saveUser( "ADMIN", "admin@example.com", "UPDATE_NEWS_PERMISSION", "READ_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION");
+        saveUser( "USER", "user@example.com", "GET_NEWS_PERMISSION" ,"GET_USER_PERMISSION");
+        saveUser( "ADMIN", "admin@example.com",
+                "CREATE_USER_PERMISSION", "UPDATE_USER_PERMISSION", "GET_USERS_PERMISSION", "GET_USER_PERMISSION", "DELETE_USER_PERMISSION",
+                "UPDATE_NEWS_PERMISSION", "GET_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION", "DELETE_NEWS_PERMISSION");
     }
 
     /**
@@ -56,9 +58,9 @@ public class DataLoader implements ApplicationRunner {
      * @param permissions permissions that are given to the user
      */
     private void saveUser(String roleName, String email, String... permissions) {
-        Set<Permission> perms = Arrays.stream(permissions)
+        List<Permission> perms = Arrays.stream(permissions)
                 .map(permission -> Permission.builder().name(permission).build())
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         permissionRepository.saveAll(perms);
         Role role = Role.builder().name(roleName).permissions(perms)
                 .build();

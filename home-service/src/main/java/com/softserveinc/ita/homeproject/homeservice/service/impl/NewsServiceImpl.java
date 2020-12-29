@@ -34,18 +34,39 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public NewsDto update(Long id, NewsDto newsDto) {
-        News newsToUpdate = newsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
-        newsToUpdate.setTitle(newsDto.getTitle());
-        newsToUpdate.setText(newsDto.getText());
-        newsToUpdate.setUpdateDate(LocalDateTime.now());
-        newsToUpdate.setDescription(newsDto.getDescription());
-        newsToUpdate.setPhotoUrl(newsDto.getPhotoUrl());
-        newsToUpdate.setSource(newsDto.getSource());
-        newsRepository.save(newsToUpdate);
+    public NewsDto update(Long id, NewsDto newsDto)  {
 
-        return ConvertToGetNewsServiceDto(newsToUpdate);
+        if (newsRepository.findById(id).isPresent()) {
+
+            News fromDB = newsRepository.findById(id).get();
+
+            if (newsDto.getTitle() != null) {
+                fromDB.setTitle(newsDto.getTitle());
+            }
+
+            if (newsDto.getText() != null) {
+                fromDB.setText(newsDto.getText());
+            }
+
+            if (newsDto.getDescription() != null) {
+                fromDB.setDescription(newsDto.getDescription());
+            }
+
+            if (newsDto.getPhotoUrl() != null) {
+                fromDB.setPhotoUrl(newsDto.getPhotoUrl());
+            }
+
+            if (newsDto.getSource() != null) {
+                fromDB.setSource(newsDto.getSource());
+            }
+
+            fromDB.setUpdateDate(LocalDateTime.now());
+            newsRepository.save(fromDB);
+            return newsMapper.convertEntityToDto(fromDB);
+
+        } else {
+            throw new NotFoundHomeException("Can't find news with given ID:" + id;
+        }
     }
 
     @Override
@@ -67,17 +88,6 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
         newsRepository.deleteById(id);
-    }
-
-    private NewsDto ConvertToGetNewsServiceDto(News news) {
-        return NewsDto.builder()
-                .id(news.getId())
-                .title(news.getTitle())
-                .text(news.getText())
-                .description(news.getDescription())
-                .photoUrl(news.getPhotoUrl())
-                .source(news.getSource())
-                .build();
     }
 
 }
