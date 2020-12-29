@@ -65,7 +65,7 @@ public class NewsServiceImpl implements NewsService {
             return newsMapper.convertEntityToDto(fromDB);
 
         } else {
-            throw new NotFoundHomeException("Can't find news with given ID:" + id;
+            throw new NotFoundHomeException("Can't find news with given ID:" + id);
         }
     }
 
