@@ -120,6 +120,7 @@
                                 </artifactItem>
                             </artifactItems>
                             <includes>*/openapi.yaml,*/openapi.json,**/dist/*</includes>
+                            <excludes>**/dist/index.html</excludes>
                             <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                         </configuration>
                     </execution>
