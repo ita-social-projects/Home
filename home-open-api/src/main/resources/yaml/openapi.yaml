@@ -18,6 +18,8 @@ tags:
     description: Votings management operations
   - name: service
     description: Orders management operations
+  - name: osbb
+    description: osbb managment
 paths:
   /news:
     post:
@@ -1412,6 +1414,175 @@ paths:
           description: News not found
         default:
           $ref: '#/components/responses/InternalServerError'
+  /osbb:
+    post:
+      tags:
+        - osbb
+      summary: Create osbb
+      description: Create a new osbb
+      operationId: createOsbb
+      requestBody:
+        description: Create a new Osbb
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOsbb'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadOsbb'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - osbb
+      summary: "Get all osbb"
+      description: ''
+      operationId: queryOsbb
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadOsbb"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /osbb/{osbb_id}:
+    get:
+      tags:
+        - osbb
+      summary: "Get osbb by osbb name"
+      description: ''
+      operationId: getOsbb
+      parameters:
+        - name: "osbb_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadOsbb"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - osbb
+      summary: Update current osbb
+      description: Update current osbb
+      operationId: updateOsbb
+      parameters:
+        - name: "osbb_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current osbb
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOsbb'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadOsbb"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - osbb
+      summary: Delete osbb by ID
+      operationId: removeOsbb
+      parameters:
+        - name: "osbb_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 security:
   - basicAuth: []
 components:
@@ -1781,6 +1952,162 @@ components:
         contacts:
           type: string
           example: "+380506617305"
+    CreateOsbb:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - fullName
+        - shortName
+        - code
+        - account
+        - managerPerson
+        - address
+        - email
+        - phone
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        fullName:
+          pattern: '\w+'
+          type: string
+          example: "Homeowners association"
+          minLength: 1
+          maxLength: 150
+        shortName:
+          pattern: '\w+'
+          type: string
+          example: "HoAs"
+          minLength: 1
+          maxLength: 50
+        code:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        account:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        managerPerson:
+          pattern: '\w+'
+          type: string
+          example: "Petro Ivanov"
+          minLength: 1
+          maxLength: 100
+        address:
+          pattern: '\w+'
+          type: string
+          example: "Volodimera Sirenko build 35, flat 22"
+          minLength: 1
+          maxLength: 255
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "HoAs.live@gmail.com"
+          minLength: 3
+          maxLength: 254
+        phone:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+    ReadOsbb:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        shortName:
+          pattern: '\w+'
+          type: string
+          example: "HoAs"
+          minLength: 1
+          maxLength: 50
+        code:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        account:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        managerPerson:
+          pattern: '\w+'
+          type: string
+          example: "Petro Ivanov"
+          minLength: 1
+          maxLength: 100
+        address:
+          pattern: '\w+'
+          type: string
+          example: "Volodimera Sirenko build 35, flat 22"
+          minLength: 1
+          maxLength: 255
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "HoAs.live@gmail.com"
+          minLength: 3
+          maxLength: 254
+        phone:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+    UpdateOsbb:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        shortName:
+          pattern: '\w+'
+          type: string
+          example: "HoAs"
+          minLength: 1
+          maxLength: 50
+        code:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        account:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        managerPerson:
+          pattern: '\w+'
+          type: string
+          example: "Petro Ivanov"
+          minLength: 1
+          maxLength: 100
+        address:
+          pattern: '\w+'
+          type: string
+          example: "Volodimera Sirenko build 35, flat 22"
+          minLength: 1
+          maxLength: 255
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "HoAs.live@gmail.com"
+          minLength: 3
+          maxLength: 254
+        phone:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
     Voting:
       required:
         - name
