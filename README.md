@@ -96,7 +96,7 @@ api.secret=${API_SECRET}
 ### How to run local
 1. You should create environmental variables that are defined in application.properties file.
 2. You should create database `home`.
-3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidoc.html
+3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
 
 ### How to run Docker
 
