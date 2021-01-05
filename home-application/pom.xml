@@ -70,29 +70,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>rapidoc</artifactId>
-            <version>7.2.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>swagger2openapi</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>btoa</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>fast-json-patch</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>cross-fetch</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
     </dependencies>
 
     <build>
@@ -111,7 +88,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
+                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>resource-dependencies</id>
@@ -127,11 +104,24 @@
                                     <version>${revision}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.webjars.npm</groupId>
+                                    <artifactId>rapidoc</artifactId>
+                                    <version>${rapidoc.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*/openapi.json</includes>
-                            <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                            <includes>*/openapi.yaml,*/openapi.json,**/dist/*</includes>
+                            <excludes>**/dist/index.html</excludes>
+                            <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

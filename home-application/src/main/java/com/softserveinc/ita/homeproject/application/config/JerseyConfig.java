@@ -1,5 +1,10 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.Path;
+import javax.ws.rs.ext.Provider;
+import java.util.stream.Collectors;
+
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -7,24 +12,18 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.Path;
-import javax.ws.rs.ext.Provider;
-import java.util.stream.Collectors;
-
 /**
  * JerseyConfig is used for scan and registration of classes.
  * It lets you manually register classes and instances of
  * resources and providers manually.
- *
+ * <p>
  * Basically what happens is that the implementor of the initializer
  * can tell the servlet container what classes to look for, and the
  * servlet container will pass those classes to the initializer method.
  *
- * @see org.glassfish.jersey.server.ResourceConfig it extends Application
- *
  * @author Mykyta Morar
  * @author Ihor Svyrydenko
+ * @see org.glassfish.jersey.server.ResourceConfig it extends Application
  */
 @Component
 @ApplicationPath("/api/0")
@@ -36,7 +35,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         // register endpoints
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-        property(ServletProperties.FILTER_FORWARD_ON_404, true);
+        property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, ".*/apidocs/.*");
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
         // register endpoints
@@ -47,7 +46,7 @@ public class JerseyConfig extends ResourceConfig {
         register(JacksonJsonProvider.class);
     }
 
-    private ResourceConfig registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner){
+    private ResourceConfig registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
         registerClasses(scanner.findCandidateComponents(packageName).stream()
                 .map(beanDefinition -> ClassUtils
                         .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
