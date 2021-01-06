@@ -10,7 +10,7 @@ Now you can run it.
 
 ### Continuous integration and deployment
 Project uses GitHub actions for CI. 
-Each commit in Pull Request checked by CI using `mvn clean install`.
+Each commit in Pull Request is checked by CI using `mvn clean install`.
 Merging in the `dev` branch provokes CI to build artifacts, then updated `dev` is deployed to Heroku.
 
 ### Issues that you may face

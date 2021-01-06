@@ -24,7 +24,7 @@
  - There is project's documentation.
   
 ### home-open-api
- - This module is responsible for specification's storage and validation.  
+ - This module is responsible for storage and validation of the specification.  
  - It stores project's OpenApi 3.0 specification in `.yaml` file. 
  - When you want to change something in generated code, you need to change specification firstly.
   
@@ -35,4 +35,4 @@
 
 ### home-service
  - This module is responsible for service layer of the application.  
- - Services, their implementations, custom exceptions and overall business logic store here.
+ - Services, their implementations, custom exceptions and overall business logic are stored here.

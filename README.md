@@ -1,6 +1,6 @@
 # Home
 
-“Home” - is an all-in-one social service will cover all aspects of your communication with your home and neighbors.
+“Home” - is an all-in-one social service that will cover all aspects of your communication with your home and neighbors.
 It includes next modules: 
 - Communication with residents of the house, notification
 - Suggestions / wishes residents of the house
