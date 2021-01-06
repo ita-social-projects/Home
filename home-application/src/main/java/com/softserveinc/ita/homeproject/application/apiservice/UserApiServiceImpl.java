@@ -23,7 +23,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
- * User controller and service layer of the application
+ * User controller and service layer of the application.
  *
  * @author Mykyta Morar
  */
@@ -38,9 +38,9 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * createUser method is implementation of HTTP POST
-     * method to create a new user
+     * method for creating a new user.
      *
-     * @param createUser are incoming data needed for user creation
+     * @param createUser are incoming data needed for user's creation
      * @return returns Response to generated controller
      */
     @PreAuthorize(CREATE_USER_PERMISSION)
@@ -55,7 +55,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * getUser method is implementation of HTTP GET method
-     * to get user by id from database
+     * for getting user by id from database
      *
      * @param id is user's id in the database
      * @return returns Response to generated controller
@@ -71,9 +71,9 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * queryUsers method is implementation of HTTP GET
-     * method to get all users from database
+     * method for getting all users from database.
      *
-     * @param pageNumber is the number of the returned page with elements
+     * @param pageNumber is the number of returned page with elements
      * @param pageSize is amount of the returned elements
      * @return returns Response to generated controller
      */
@@ -89,7 +89,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * removeUser method is implementation of HTTP DELETE
-     * method to deactivate user's account
+     * method for deactivating user's account
      *
      * @param id is id of the user that has to be deactivated
      * @return returns Response to generated controller
@@ -104,7 +104,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * updateUser method is implementation of HTTP PUT
-     * method to update the existing user
+     * method for updating existing user.
      *
      * @param id is id of the user that has to be updated
      * @param updateUser are incoming data needed for user's update
