@@ -23,7 +23,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 /**
  * NewsApiServiceImpl class is the inter layer between generated
- * News controller and service layer of the application.
+ * News controller and service layer of the application
  *
  * @author Ihor Svyrydenko
  */

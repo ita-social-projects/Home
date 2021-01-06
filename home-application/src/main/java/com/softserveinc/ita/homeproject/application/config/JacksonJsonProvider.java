@@ -22,11 +22,10 @@ import java.text.SimpleDateFormat;
 public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
 
     /**
-     * Default constructor, provider is automatically configured
-     * to be used with JAX-RS implementation.
+     * Default constructor, provider, is automatically configured
+     * for usage with JAX-RS implementation
      */
     public JacksonJsonProvider() {
-
         ObjectMapper objectMapper = new ObjectMapper()
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)

@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
  *
  * @author Mykyta Morar
  * @author Ihor Svyrydenko
+ *
+ * ToDO Delete this class after configuring liquibase
  */
 @Component
 @Profile("dev")
