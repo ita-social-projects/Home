@@ -69,6 +69,7 @@ public class DataLoader implements ApplicationRunner {
                 .firstName("User")
                 .lastName("User")
                 .email(email)
+                .contacts("123")
                 .password(passwordEncoder.encode("password"))
                 .expired(false)
                 .locked(false)

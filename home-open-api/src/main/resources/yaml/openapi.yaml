@@ -581,6 +581,31 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: email
+          schema:
+            type: string
+        - in: query
+          name: firstName
+          schema:
+            type: string
+        - in: query
+          name: lastName
+          schema:
+            type: string
+        - in: query
+          name: contact
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
