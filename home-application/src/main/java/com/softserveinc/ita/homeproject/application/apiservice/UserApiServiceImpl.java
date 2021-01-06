@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
- * UserApiServiceImpl class is the interlayer between generated
- * User controller and service layer of the application.
+ * UserApiServiceImpl class is the inter layer between generated
+ * User controller and service layer of the application
  *
  * @author Mykyta Morar
  */
@@ -38,9 +38,9 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * createUser method is implementation of HTTP POST
-     * method, that is used to create a new user.
+     * method to create a new user
      *
-     * @param createUser incoming data needed for creation of user
+     * @param createUser are incoming data needed for user creation
      * @return returns Response to generated controller
      */
     @PreAuthorize(CREATE_USER_PERMISSION)
@@ -54,10 +54,10 @@ public class UserApiServiceImpl implements UsersApiService {
     }
 
     /**
-     * getUser method is implementation of HTTP GET method,
-     * that is used to get one user by id from database.
+     * getUser method is implementation of HTTP GET method
+     * to get user by id from database
      *
-     * @param id id of the user in the database
+     * @param id is user's id in the database
      * @return returns Response to generated controller
      */
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
@@ -71,10 +71,10 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * queryUsers method is implementation of HTTP GET
-     * method, that is used to get all users from database.
+     * method to get all users from database
      *
-     * @param pageNumber number of the returned page with elements
-     * @param pageSize amount of the returned elements
+     * @param pageNumber is the number of the returned page with elements
+     * @param pageSize is amount of the returned elements
      * @return returns Response to generated controller
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
@@ -89,9 +89,9 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * removeUser method is implementation of HTTP DELETE
-     * method, that is used to deactivate user's account.
+     * method to deactivate user's account
      *
-     * @param id id of the user that needs to be deactivated
+     * @param id is id of the user that has to be deactivated
      * @return returns Response to generated controller
      */
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
@@ -104,10 +104,10 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * updateUser method is implementation of HTTP PUT
-     * method, that is update the existing user.
+     * method to update the existing user
      *
-     * @param id id of the user that needs to be updated
-     * @param updateUser incoming data needed for user's update
+     * @param id is id of the user that has to be updated
+     * @param updateUser are incoming data needed for user's update
      * @return returns Response to generated controller
      */
     @PreAuthorize(UPDATE_USER_PERMISSION)

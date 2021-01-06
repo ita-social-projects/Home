@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
- * UserApiServiceImpl class is the interlayer between generated
+ * NewsApiServiceImpl class is the inter layer between generated
  * News controller and service layer of the application.
  *
  * @author Ihor Svyrydenko
@@ -38,9 +38,9 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     /**
      * addNews method is implementation of HTTP POST
-     * method, that is used to create a new news.
+     * method to create a new news
      *
-     * @param createNews incoming data needed for creation of user
+     * @param createNews are incoming data needed for creation new news
      * @return returns Response to generated controller
      */
     @PreAuthorize(CREATE_NEWS_PERMISSION)
@@ -55,9 +55,9 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     /**
      * deleteNews method is implementation of HTTP DELETE
-     * method, that is used to delete news.
+     * method to delete news
      *
-     * @param id id of the news that needs to be deleted
+     * @param id is the id of the news that has to be deleted
      * @return returns Response to generated controller
      */
     @PreAuthorize(DELETE_NEWS_PERMISSION)
@@ -69,10 +69,10 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     /**
      * getAllNews method is implementation of HTTP GET
-     * method, that is used to get all news from database.
+     * method to get all news from database
      *
-     * @param pageNumber number of the returned page with elements
-     * @param pageSize amount of the returned elements
+     * @param pageNumber is the number of the returned page with elements
+     * @param pageSize is amount of the returned elements
      * @return returns Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
@@ -86,10 +86,10 @@ public class NewsApiServiceImpl implements NewsApiService {
     }
 
     /**
-     * getNews method is implementation of HTTP GET method,
-     * that is used to get one element of news by id from database.
+     * getNews method is implementation of HTTP GET method
+     * to get news by id from database
      *
-     * @param id id of the news in the database
+     * @param id is news' id in the database
      * @return returns Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
@@ -103,10 +103,10 @@ public class NewsApiServiceImpl implements NewsApiService {
 
     /**
      * updateNews method is implementation of HTTP PUT
-     * method, that is update the existing news.
+     * method to update the existing news
      *
-     * @param id id of the news that needs to be updated
-     * @param updateNews incoming data needed for news update
+     * @param id is id of the news that has to be updated
+     * @param updateNews are incoming data needed for news update
      * @return returns Response to generated controller
      */
     @PreAuthorize(UPDATE_NEWS_PERMISSION)
