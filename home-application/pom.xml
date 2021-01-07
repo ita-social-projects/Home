@@ -8,10 +8,15 @@
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <packaging>jar</packaging>
-
     <artifactId>home-application</artifactId>
+
+    <properties>
+        <fabric8io.docker.maven.plugin.version>0.34.1</fabric8io.docker.maven.plugin.version>
+        <docker.jdk.version>openjdk:11-jdk-buster</docker.jdk.version>
+        <docker.postgres.version>postgres:latest</docker.postgres.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -123,6 +128,100 @@
                             <excludes>**/dist/index.html</excludes>
                             <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${fabric8io.docker.maven.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <alias>db-postgres</alias>
+                            <name>db-postgres</name>
+                            <build>
+                                <from>${docker.postgres.version}</from>
+                            </build>
+                            <run>
+                                <network>
+                                    <name>test-network</name>
+                                    <alias>db-postgres</alias>
+                                </network>
+                                <env>
+                                    <POSTGRES_DB>postgres</POSTGRES_DB>
+                                    <POSTGRES_USER>postgres</POSTGRES_USER>
+                                    <POSTGRES_PASSWORD>password</POSTGRES_PASSWORD>
+                                </env>
+                                <ports>
+                                    <port>5433:5432</port>
+                                </ports>
+                                <wait>
+                                    <log>database system is ready to accept connections</log>
+                                    <time>10000</time>
+                                </wait>
+                            </run>
+                        </image>
+                        <image>
+                            <name>${project.artifactId}</name>
+                            <build>
+                                <from>${docker.jdk.version}</from>
+                                <entryPoint>
+                                    <exec>
+                                        <args>java</args>
+                                        <args>-jar</args>
+                                        <args>/maven/${project.artifactId}-${project.version}.jar</args>
+                                    </exec>
+                                </entryPoint>
+                                <assembly>
+                                    <descriptorRef>artifact-with-dependencies</descriptorRef>
+                                </assembly>
+                            </build>
+                            <run>
+                                <network>
+                                    <name>test-network</name>
+                                    <alias>${project.artifactId}</alias>
+                                </network>
+                                <dependsOn>
+                                    <container>db-postgres</container>
+                                </dependsOn>
+                                <ports>
+                                    <port>8080:8080</port>
+                                </ports>
+                                <links>
+                                    <link>db-postgres</link>
+                                </links>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>build</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                         <id>run</id>
+                         <goals>
+                             <goal>start</goal>
+                         </goals>
+                     </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
