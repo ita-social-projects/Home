@@ -7,9 +7,11 @@ import com.softserveinc.ita.homeproject.homedata.repository.PermissionRepository
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,12 @@ import java.util.stream.Collectors;
 @Profile("dev")
 public class DataLoader implements ApplicationRunner {
 
+    @Value("${home.application.admin.email}")
+    private String adminEmail;
+
+    @Value("${home.application.admin.password}")
+    private String adminPassword;
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
@@ -47,7 +55,7 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         saveUser( "USER", "user@example.com", "GET_NEWS_PERMISSION" ,"GET_USER_PERMISSION");
-        saveUser( "ADMIN", "admin@example.com",
+        saveUser( "ADMIN", adminEmail,
                 "CREATE_USER_PERMISSION", "UPDATE_USER_PERMISSION", "GET_USERS_PERMISSION", "GET_USER_PERMISSION", "DELETE_USER_PERMISSION",
                 "UPDATE_NEWS_PERMISSION", "GET_NEWS_PERMISSION", "CREATE_NEWS_PERMISSION", "DELETE_NEWS_PERMISSION");
     }
@@ -71,7 +79,7 @@ public class DataLoader implements ApplicationRunner {
                 .firstName("User")
                 .lastName("User")
                 .email(email)
-                .password(passwordEncoder.encode("password"))
+                .password(passwordEncoder.encode(adminPassword))
                 .expired(false)
                 .locked(false)
                 .credentialsExpired(false)
