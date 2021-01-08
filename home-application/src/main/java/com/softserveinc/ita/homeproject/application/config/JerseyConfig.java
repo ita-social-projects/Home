@@ -15,11 +15,11 @@ import org.springframework.util.ClassUtils;
 /**
  * JerseyConfig is used for classes' scan and registration
  * It allows you manually register classes and instances of
- * resources and providers
+ * resources and providers.
  * <p>
  * Basically what happens here. The implementor of the initializer
  * can tell the servlet container which classes to look for, and the
- * servlet container will pass those classes to the initializer method
+ * servlet container will pass those classes to the initializer method.
  *
  * @author Mykyta Morar
  * @author Ihor Svyrydenko
