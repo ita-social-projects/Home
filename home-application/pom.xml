@@ -138,7 +138,8 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <id>build</id>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>build</goal>
                                     <goal>start</goal>
