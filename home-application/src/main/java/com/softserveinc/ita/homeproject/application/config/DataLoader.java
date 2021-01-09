@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -26,17 +25,15 @@ import java.util.stream.Collectors;
  *
  * @author Mykyta Morar
  * @author Ihor Svyrydenko
- *
- * ToDO Delete this class after configuring liquibase
  */
 @Component
 @Profile("dev")
 public class DataLoader implements ApplicationRunner {
 
-    @Value("${home.application.admin.email}")
+    @Value("${admin.email}")
     private String adminEmail;
 
-    @Value("${home.application.admin.password}")
+    @Value("${admin.password}")
     private String adminPassword;
 
     private final UserRepository userRepository;
@@ -63,9 +60,9 @@ public class DataLoader implements ApplicationRunner {
     /**
      * Saves user with incoming parameters in the database.
      *
-     * @param roleName the name of role
-     * @param email email of the user
-     * @param permissions permissions that are given to the user
+     * @param roleName is the name of role
+     * @param email is email of the user
+     * @param permissions are permissions that are given to the user
      */
     private void saveUser(String roleName, String email, String... permissions) {
         List<Permission> perms = Arrays.stream(permissions)
