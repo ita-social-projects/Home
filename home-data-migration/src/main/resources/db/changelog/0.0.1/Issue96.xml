@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="user" author="Abhai2016">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="account">
+            <column name="id" value="1"/>
+            <column name="first_name" value="User"/>
+            <column name="last_name" value="User"/>
+            <column name="email" value="user@example.com"/>
+            <column name="password" value="password"/>
+            <column name="expired" value="false"/>
+            <column name="locked" value="false"/>
+            <column name="credentials_expired" value="false"/>
+            <column name="enabled" value="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="admin" author="Abhai2016">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="account">
+            <column name="id" value="2"/>
+            <column name="email"  value="${admin.email}"/>
+            <column name="password" value="${admin.password}"/>
+            <column name="first_name" value="User"/>
+            <column name="last_name" value="User"/>
+            <column name="expired" value="false"/>
+            <column name="locked" value="false"/>
+            <column name="credentials_expired" value="false"/>
+            <column name="enabled" value="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="roles" author="Abhai2016">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role">
+            <column name="id" value="1"/>
+            <column name="name" value="ADMIN"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role">
+            <column name="id" value="2"/>
+            <column name="name" value="USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="permissions" author="Abhai2016">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="1"/>
+            <column name="name" value="GET_NEWS_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="2"/>
+            <column name="name" value="GET_USER_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="3"/>
+            <column name="name" value="CREATE_USER_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="4"/>
+            <column name="name" value="UPDATE_USER_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="5"/>
+            <column name="name" value="GET_USERS_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="6"/>
+            <column name="name" value="DELETE_USER_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="7"/>
+            <column name="name" value="UPDATE_NEWS_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="8"/>
+            <column name="name" value="CREATE_NEWS_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permission">
+            <column name="id" value="9"/>
+            <column name="name" value="DELETE_NEWS_PERMISSION"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -5,35 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="Issue33.001" author="Arthurpanda">
-        <createTable tableName="users">
-            <column name="ID" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="first_name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="email" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="password" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="contact" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="flat" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="active" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="Issue33.002" author="pLytvynenko">
         <createTable tableName="role">
             <column name="ID" type="BIGINT">
@@ -114,10 +85,10 @@
                              primaryKeyName="account_pkey"/>
             </column>
             <column name="CONTACTS" type="VARCHAR">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="CREATE_DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="CREDENTIALS_EXPIRED" type="BOOLEAN">
                 <constraints nullable="false"/>
@@ -144,7 +115,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="UPDATE_DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>

@@ -7,7 +7,6 @@
         <groupId>com.softserveinc.ita.homeproject</groupId>
         <version>${revision}</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>jar</packaging>
@@ -32,12 +31,7 @@
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <version>${liquibase.version}</version>
                         <configuration>
-                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                            <changeLogFile>db/changelog/master.xml</changeLogFile>
-                            <driver>org.postgresql.Driver</driver>
-                            <url>jdbc:postgresql://localhost:5433/postgres</url>
-                            <username>postgres</username>
-                            <password>password</password>
+                            <propertyFile>config/liquibase.properties</propertyFile>
                         </configuration>
                         <executions>
                             <execution>
@@ -56,11 +50,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>info.picocli</groupId>
-            <artifactId>picocli</artifactId>
-            <version>${picocli.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
@@ -71,8 +60,9 @@
             <version>${postgresql.verson}</version>
         </dependency>
         <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>4.6.1</version>
         </dependency>
     </dependencies>
 
