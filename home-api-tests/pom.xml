@@ -17,6 +17,17 @@
         <fabric8io.docker.maven.plugin.version>0.34.1</fabric8io.docker.maven.plugin.version>
         <docker.jdk.version>openjdk:11-jdk-buster</docker.jdk.version>
         <docker.postgres.version>postgres:latest</docker.postgres.version>
+        <postgres.db>postgres</postgres.db>
+        <postgres.user>postgres</postgres.user>
+        <postgres.password>password</postgres.password>
+        <postgres.url>jdbc:postgresql://db-postgres:5432/postgres</postgres.url>
+        <home.application.jar.name>home-application</home.application.jar.name>
+        <home.application.jar.version>0.0.1-SNAPSHOT</home.application.jar.version>
+        <home.data.migration.jar.name>home-data-migration</home.data.migration.jar.name>
+        <home.data.migration.jar.version>0.0.1-SNAPSHOT</home.data.migration.jar.version>
+        <postgres.port>5433:5432</postgres.port>
+        <liquibase.port>8000:8000</liquibase.port>
+        <home.application.port>8080:8080</home.application.port>
     </properties>
 
     <profiles>
@@ -40,19 +51,19 @@
                                     </build>
                                     <run>
                                         <env>
-                                            <POSTGRES_DB>postgres</POSTGRES_DB>
-                                            <POSTGRES_USER>postgres</POSTGRES_USER>
-                                            <POSTGRES_PASSWORD>password</POSTGRES_PASSWORD>
+                                            <POSTGRES_DB>${postgres.db}</POSTGRES_DB>
+                                            <POSTGRES_USER>${postgres.user}</POSTGRES_USER>
+                                            <POSTGRES_PASSWORD>${postgres.password}</POSTGRES_PASSWORD>
                                         </env>
                                         <ports>
-                                            <port>5433:5432</port>
+                                            <port>${postgres.port}</port>
                                         </ports>
                                         <wait>
                                             <log>database system is ready to accept connections</log>
                                         </wait>
                                     </run>
                                 </image>
-                                <!--<image>
+                                <image>
                                     <alias>liquibase</alias>
                                     <name>liquibase</name>
                                     <build>
@@ -61,10 +72,10 @@
                                             <exec>
                                                 <args>java</args>
                                                 <args>-jar</args>
-                                                <args>home-data-migration-0.0.1-SNAPSHOT.jar</args>
-                                                <args>-url=jdbc:postgresql://localhost:5433/postgres</args>
-                                                <args>-user=postgres</args>
-                                                <args>-password=password</args>
+                                                <args>${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar</args>
+                                                <args>--url=${postgres.url}</args>
+                                                <args>--user=${postgres.user}</args>
+                                                <args>--password=${postgres.password}</args>
                                             </exec>
                                         </entryPoint>
                                         <assembly>
@@ -72,7 +83,7 @@
                                             <inline>
                                                 <files>
                                                     <file>
-                                                        <source>${project.basedir}/target/home-data-migration-0.0.1-SNAPSHOT.jar</source>
+                                                        <source>${project.basedir}/target/${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar</source>
                                                         <outputDirectory>/</outputDirectory>
                                                     </file>
                                                 </files>
@@ -81,13 +92,16 @@
                                     </build>
                                     <run>
                                         <ports>
-                                            <port>8000:8000</port>
+                                            <port>${liquibase.port}</port>
                                         </ports>
                                         <links>
                                             <link>db-postgres</link>
                                         </links>
+                                        <wait>
+                                            <log>Successfully released change log lock</log>
+                                        </wait>
                                     </run>
-                                </image>-->
+                                </image>
                                 <image>
                                     <name>${project.artifactId}</name>
                                     <build>
@@ -96,7 +110,7 @@
                                             <exec>
                                                 <args>java</args>
                                                 <args>-jar</args>
-                                                <args>home-application-0.0.1-SNAPSHOT.jar</args>
+                                                <args>${home.application.jar.name}-${home.application.jar.version}.jar</args>
                                             </exec>
                                         </entryPoint>
                                         <assembly>
@@ -104,7 +118,7 @@
                                             <inline>
                                                 <files>
                                                     <file>
-                                                        <source>${project.basedir}/target/home-application-0.0.1-SNAPSHOT.jar</source>
+                                                        <source>${project.basedir}/target/${home.application.jar.name}-${home.application.jar.version}.jar</source>
                                                         <outputDirectory>/</outputDirectory>
                                                     </file>
                                                 </files>
@@ -113,7 +127,7 @@
                                     </build>
                                     <run>
                                         <ports>
-                                            <port>8080:8080</port>
+                                            <port>${home.application.port}</port>
                                         </ports>
                                         <links>
                                             <link>db-postgres</link>
@@ -167,21 +181,21 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.softserveinc.ita.homeproject</groupId>
-                                    <artifactId>home-application</artifactId>
-                                    <version>0.0.1-SNAPSHOT</version>
+                                    <artifactId>${home.application.jar.name}</artifactId>
+                                    <version>${home.application.jar.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}</outputDirectory>
-                                    <destFileName>home-application-0.0.1-SNAPSHOT.jar</destFileName>
+                                    <destFileName>${home.application.jar.name}-${home.application.jar.version}.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>com.softserveinc.ita.homeproject</groupId>
-                                    <artifactId>home-data-migration</artifactId>
-                                    <version>0.0.1-SNAPSHOT</version>
+                                    <artifactId>${home.data.migration.jar.name}</artifactId>
+                                    <version>${home.data.migration.jar.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>target</outputDirectory>
-                                    <destFileName>home-data-migration-0.0.1-SNAPSHOT.jar</destFileName>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <destFileName>${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
