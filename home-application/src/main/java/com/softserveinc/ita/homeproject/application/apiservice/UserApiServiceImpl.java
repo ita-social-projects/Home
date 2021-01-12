@@ -55,7 +55,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * getUser method is implementation of HTTP GET method
-     * for getting user by id from database
+     * for getting user by id from database.
      *
      * @param id is user's id in the database
      * @return returns Response to generated controller
@@ -89,7 +89,7 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * removeUser method is implementation of HTTP DELETE
-     * method for deactivating user's account
+     * method for deactivating user's account.
      *
      * @param id is id of the user that has to be deactivated
      * @return returns Response to generated controller
