@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * HomeUserWrapperDetails provides core user information for security
+ * HomeUserWrapperDetails provides core user information for security.
  *
  * @see org.springframework.security.core.userdetails.UserDetails
  *

@@ -23,7 +23,7 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
 
     /**
      * Default constructor, provider, is automatically configured
-     * for usage with JAX-RS implementation
+     * for usage with JAX-RS implementation.
      */
     public JacksonJsonProvider() {
         ObjectMapper objectMapper = new ObjectMapper()
