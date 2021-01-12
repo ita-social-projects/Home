@@ -18,8 +18,8 @@ tags:
     description: Votings management operations
   - name: service
     description: Orders management operations
-  - name: osbb
-    description: osbb managment
+  - name: cooperation
+    description: cooperation managment
 paths:
   /news:
     post:
@@ -1414,19 +1414,19 @@ paths:
           description: News not found
         default:
           $ref: '#/components/responses/InternalServerError'
-  /osbb:
+  /cooperation:
     post:
       tags:
-        - osbb
-      summary: Create osbb
-      description: Create a new osbb
-      operationId: createOsbb
+        - cooperation
+      summary: Create cooperation
+      description: Create a new cooperation
+      operationId: createCooperation
       requestBody:
-        description: Create a new Osbb
+        description: Create a new cooperation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateOsbb'
+              $ref: '#/components/schemas/CreateCooperation'
         required: true
       responses:
         '201':
@@ -1436,7 +1436,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ReadOsbb'
+                  $ref: '#/components/schemas/ReadCooperation'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1449,10 +1449,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     get:
       tags:
-        - osbb
-      summary: "Get all osbb"
+        - cooperation
+      summary: "Get all cooperation"
       description: ''
-      operationId: queryOsbb
+      operationId: queryCooperation
       parameters:
         - in: query
           name: pageNumber
@@ -1479,22 +1479,22 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ReadOsbb"
+                  $ref: "#/components/schemas/ReadCooperation"
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /osbb/{osbb_id}:
+  /cooperation/{cooperation_id}:
     get:
       tags:
-        - osbb
-      summary: "Get osbb by osbb name"
+        - cooperation
+      summary: "Get cooperation by cooperation name"
       description: ''
-      operationId: getOsbb
+      operationId: getCooperation
       parameters:
-        - name: "osbb_id"
+        - name: "cooperation_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -1508,7 +1508,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReadOsbb"
+                $ref: "#/components/schemas/ReadCooperation"
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1519,12 +1519,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - osbb
-      summary: Update current osbb
-      description: Update current osbb
-      operationId: updateOsbb
+        - cooperation
+      summary: Update current cooperation
+      description: Update current cooperation
+      operationId: updateCooperation
       parameters:
-        - name: "osbb_id"
+        - name: "cooperation_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -1533,11 +1533,11 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: Update current osbb
+        description: Update current cooperation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateOsbb'
+              $ref: '#/components/schemas/UpdateCooperation'
         required: true
       responses:
         '200':
@@ -1545,7 +1545,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReadOsbb"
+                $ref: "#/components/schemas/ReadCooperation"
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1560,11 +1560,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - osbb
-      summary: Delete osbb by ID
-      operationId: removeOsbb
+        - cooperation
+      summary: Delete cooperation by ID
+      operationId: removeCooperation
       parameters:
-        - name: "osbb_id"
+        - name: "cooperation_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -1952,162 +1952,200 @@ components:
         contacts:
           type: string
           example: "+380506617305"
-    CreateOsbb:
+    CreateCooperation:
       allOf:
         - $ref: '#/components/schemas/BaseView'
       required:
-        - fullName
-        - shortName
-        - code
-        - account
-        - managerPerson
-        - address
-        - email
-        - phone
+        - name
+        - USREO
+        - IBAN
+        - addressCooperation
+        - emailCooperation
+        - phoneCooperation
+        - houses
       type: object
       properties:
-        id:
+        name:
+          pattern: '\w+'
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 34
+        addressCooperation:
+          $ref: '#/components/schemas/AddressCooperation'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    ReadCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        name:
+          pattern: '\w+'
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        addressCooperation:
+          $ref: '#/components/schemas/AddressCooperation'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    UpdateCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        name:
+          pattern: '\w+'
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          pattern: '\w+'
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          pattern: '\w+'
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        addressCooperation:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    Address:
+      type: object
+      properties:
+        region:
+          pattern: '\w+'
+          type: string
+          example: "Dnipropetrovsk region"
+          minLength: 1
+          maxLength: 50
+        city:
+          pattern: '\w+'
+          type: string
+          example: "Dnipro"
+          minLength: 1
+          maxLength: 50
+        district:
+          pattern: '\w+'
+          type: string
+          example: "Zavodskoy"
+          minLength: 1
+          maxLength: 50
+        street:
+          pattern: '\w+'
+          type: string
+          example: "Kirova"
+          minLength: 1
+          maxLength: 25
+        housingNumber:
+          pattern: '\w+'
+          type: string
+          example: "2/B"
+          minLength: 1
+          maxLength: 10
+        houseNumber:
+          pattern: '\w+'
+          type: string
+          example: "23-B"
+          minLength: 1
+          maxLength: 50
+        zipCode:
           type: integer
-          example: 1
-        fullName:
-          pattern: '\w+'
-          type: string
-          example: "Homeowners association"
+          example: 52956
           minLength: 1
-          maxLength: 150
-        shortName:
-          pattern: '\w+'
-          type: string
-          example: "HoAs"
-          minLength: 1
-          maxLength: 50
-        code:
-          pattern: '\w+'
-          type: string
-          example: "A2456FT90"
-          minLength: 1
-          maxLength: 12
-        account:
-          pattern: '\w+'
-          type: string
-          example: "Something else"
-          minLength: 1
-          maxLength: 50
-        managerPerson:
-          pattern: '\w+'
-          type: string
-          example: "Petro Ivanov"
-          minLength: 1
-          maxLength: 100
-        address:
-          pattern: '\w+'
-          type: string
-          example: "Volodimera Sirenko build 35, flat 22"
-          minLength: 1
-          maxLength: 255
-        email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "HoAs.live@gmail.com"
-          minLength: 3
-          maxLength: 254
-        phone:
-          type: string
-          example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-    ReadOsbb:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
+          maxLength: 10
+    House:
       type: object
       properties:
-        shortName:
-          pattern: '\w+'
-          type: string
-          example: "HoAs"
-          minLength: 1
-          maxLength: 50
-        code:
-          pattern: '\w+'
-          type: string
-          example: "A2456FT90"
-          minLength: 1
-          maxLength: 12
-        account:
-          pattern: '\w+'
-          type: string
-          example: "Something else"
-          minLength: 1
-          maxLength: 50
-        managerPerson:
-          pattern: '\w+'
-          type: string
-          example: "Petro Ivanov"
-          minLength: 1
-          maxLength: 100
-        address:
-          pattern: '\w+'
-          type: string
-          example: "Volodimera Sirenko build 35, flat 22"
-          minLength: 1
-          maxLength: 255
-        email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "HoAs.live@gmail.com"
-          minLength: 3
-          maxLength: 254
-        phone:
-          type: string
-          example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-    UpdateOsbb:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
+
+    PhoneCooperation:
       type: object
       properties:
-        shortName:
-          pattern: '\w+'
-          type: string
-          example: "HoAs"
-          minLength: 1
-          maxLength: 50
-        code:
-          pattern: '\w+'
-          type: string
-          example: "A2456FT90"
-          minLength: 1
-          maxLength: 12
-        account:
-          pattern: '\w+'
-          type: string
-          example: "Something else"
-          minLength: 1
-          maxLength: 50
-        managerPerson:
-          pattern: '\w+'
-          type: string
-          example: "Petro Ivanov"
-          minLength: 1
-          maxLength: 100
-        address:
-          pattern: '\w+'
-          type: string
-          example: "Volodimera Sirenko build 35, flat 22"
-          minLength: 1
-          maxLength: 255
-        email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "HoAs.live@gmail.com"
-          minLength: 3
-          maxLength: 254
         phone:
           type: string
           example: "+380506617305"
           minLength: 10
           maxLength: 13
+        telegram:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+        viber:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+    EmailCooperation:
+      type: object
+      properties:
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 3
+          maxLength: 254
     Voting:
       required:
         - name

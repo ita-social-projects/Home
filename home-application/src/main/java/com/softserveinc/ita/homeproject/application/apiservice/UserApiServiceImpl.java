@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.application.constants.Roles.ADMIN_ROLE;
+import static com.softserveinc.ita.homeproject.application.constants.Roles.USER_ROLE;
 
 /**
  * UserApiServiceImpl class is the interlayer between generated
