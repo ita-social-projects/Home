@@ -5,11 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="admin" author="Abhai2016">
+    <changeSet id="Issue96.001" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account">
             <column name="id" value="1"/>
+            <column name="create_date" value="2021-01-13 11:30:00"/>
             <column name="email"  value="${admin.email}"/>
             <column name="password" value="${admin.password}"/>
             <column name="first_name" value="User"/>
@@ -18,14 +19,16 @@
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
             <column name="enabled" value="true"/>
+            <column name="update_date" value="2021-01-13 11:30:00"/>
         </insert>
     </changeSet>
 
-    <changeSet id="user" author="Abhai2016">
+    <changeSet id="Issue96.002" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account">
             <column name="id" value="2"/>
+            <column name="create_date" value="2021-01-13 11:31:00"/>
             <column name="first_name" value="User"/>
             <column name="last_name" value="User"/>
             <column name="email" value="user@example.com"/>
@@ -34,10 +37,11 @@
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
             <column name="enabled" value="true"/>
+            <column name="update_date" value="2021-01-13 11:31:00"/>
         </insert>
     </changeSet>
 
-    <changeSet id="roles" author="Abhai2016">
+    <changeSet id="Issue96.003" author="Abhai2016">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role">
@@ -52,7 +56,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="permissions" author="Abhai2016">
+    <changeSet id="Issue96.004" author="Abhai2016">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permission">
@@ -109,7 +113,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="admin_role" author="Abhao2016">
+    <changeSet id="Issue96.005" author="Abhao2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account_role">
