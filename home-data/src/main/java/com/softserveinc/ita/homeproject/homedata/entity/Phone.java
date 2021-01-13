@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -11,14 +10,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Phone {
+public class Phone extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cooperation_id")
+    private Cooperation cooperation;
 
-    @OneToMany(mappedBy = "phone")
-    private Set<PhoneCooperation> phoneCooperations;
+    @Column
+    private String phone;
 
 }

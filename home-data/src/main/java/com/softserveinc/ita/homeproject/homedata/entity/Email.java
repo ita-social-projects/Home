@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -13,7 +12,11 @@ import java.util.Set;
 @Entity
 public class Email extends BaseEntity {
 
-    @OneToMany(mappedBy = "email")
-    private Set<EmailCooperation> emailCooperations;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cooperation_id")
+    private Cooperation cooperation;
+
+    @Column
+    private String email;
 
 }

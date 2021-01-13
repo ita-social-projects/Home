@@ -5,9 +5,9 @@ import org.springframework.data.domain.Page;
 
 public interface CooperationService {
 
-    CooperationDto createCooperation(CooperationDto createOsbbDto);
+    CooperationDto createCooperation(CooperationDto createCooperationDto);
 
-    CooperationDto updateCooperation(Long id, CooperationDto updateOsbbDto);
+    CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto);
 
     Page<CooperationDto> getAllCooperation(Integer pageNumber, Integer pageSize);
 

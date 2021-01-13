@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 public class Address extends BaseEntity {
 
-
-    @OneToOne(mappedBy = "cooperation")
+    @OneToOne
     private Cooperation cooperation;
 }

@@ -1984,7 +1984,7 @@ components:
           minLength: 1
           maxLength: 34
         addressCooperation:
-          $ref: '#/components/schemas/AddressCooperation'
+          $ref: '#/components/schemas/Address'
         houses:
           type: array
           items:
@@ -2021,7 +2021,7 @@ components:
           minLength: 1
           maxLength: 50
         addressCooperation:
-          $ref: '#/components/schemas/AddressCooperation'
+          $ref: '#/components/schemas/Address'
         houses:
           type: array
           items:
@@ -2099,13 +2099,13 @@ components:
           minLength: 1
           maxLength: 25
         housingNumber:
-          pattern: '\w+'
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "2/B"
           minLength: 1
           maxLength: 10
         houseNumber:
-          pattern: '\w+'
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "23-B"
           minLength: 1
@@ -2118,21 +2118,12 @@ components:
     House:
       type: object
       properties:
-
+        area:
+          type: integer
     PhoneCooperation:
       type: object
       properties:
         phone:
-          type: string
-          example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-        telegram:
-          type: string
-          example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-        viber:
           type: string
           example: "+380506617305"
           minLength: 10

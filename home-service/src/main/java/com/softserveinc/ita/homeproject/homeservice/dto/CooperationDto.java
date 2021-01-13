@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Address;
-import com.softserveinc.ita.homeproject.homedata.entity.EmailCooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.Email;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.PhoneCooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.Phone;
 import lombok.*;
 
 import java.util.Set;
@@ -13,15 +13,15 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CooperationDto extends BaseDto{
+public class CooperationDto extends BaseDto {
 
     private Long id;
 
     private String name;
 
-    private Set<PhoneCooperation> phoneCooperations;
+    private Set<Phone> phone;
 
-    private Set<EmailCooperation> emailCooperations;
+    private Set<Email> email;
 
     private Address addressCooperation;
 

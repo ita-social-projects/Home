@@ -26,7 +26,7 @@ public class CooperationServiceImpl implements CooperationService {
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
 
         Cooperation cooperation = cooperationMapper.convertDtoToEntity(createCooperationDto);
-        cooperation.setIsActive(true);
+        cooperation.setEnabled(true);
         cooperation.setRegisterDate(LocalDateTime.now());
 
         cooperationRepository.save(cooperation);
@@ -45,12 +45,12 @@ public class CooperationServiceImpl implements CooperationService {
                 fromDB.setName(updateCooperationDto.getName());
             }
 
-            if (updateCooperationDto.getPhoneCooperations() != null) {
-                fromDB.setPhoneCooperations(updateCooperationDto.getPhoneCooperations());
+            if (updateCooperationDto.getPhone() != null) {
+                fromDB.setPhones(updateCooperationDto.getPhone());
             }
 
-            if (updateCooperationDto.getEmailCooperations() != null) {
-                fromDB.setEmailCooperations(updateCooperationDto.getEmailCooperations());
+            if (updateCooperationDto.getEmail() != null) {
+                fromDB.setEmails(updateCooperationDto.getEmail());
             }
 
             if (updateCooperationDto.getAddressCooperation() != null) {
@@ -87,16 +87,16 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public CooperationDto getCooperationById(Long id) {
         Cooperation cooperationResponse = cooperationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("Osbb with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundHomeException("Cooperation with id:" + id + " is not found"));
         return cooperationMapper.convertEntityToDto(cooperationResponse);
     }
 
     @Override
     public void deactivateCooperation(Long id) {
-        Cooperation osbbDelete = cooperationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("Osbb with id:" + id + " is not found"));
-        osbbDelete.setIsActive(false);
-        cooperationRepository.save(osbbDelete);
+        Cooperation cooperationDelete = cooperationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundHomeException("Cooperation with id:" + id + " is not found"));
+        cooperationDelete.setEnabled(false);
+        cooperationRepository.save(cooperationDelete);
     }
 
 }

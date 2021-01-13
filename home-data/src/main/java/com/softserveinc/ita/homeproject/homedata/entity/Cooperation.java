@@ -34,16 +34,26 @@ public class Cooperation extends BaseEntity {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address addressCooperation;
 
-    @OneToMany(mappedBy = "cooperation")
-    private Set<EmailCooperation> emailCooperations;
+    @OneToMany
+    @JoinTable(
+            name = "cooperation_email",
+            joinColumns = {@JoinColumn(name = "cooperation_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "email_id", referencedColumnName = "id")}
+    )
+    private Set<Email> emails;
 
-    @OneToMany(mappedBy = "cooperation")
-    private Set<PhoneCooperation> phoneCooperations;
+    @OneToMany
+    @JoinTable(
+            name = "cooperation_phone",
+            joinColumns = {@JoinColumn(name = "cooperation_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "phone_id", referencedColumnName = "id")}
+    )
+    private Set<Phone> phones;
 
-    @OneToMany(mappedBy = "cooperation")
+    @OneToMany
     private Set<House> houses;
 
-    @Column(name = "isActive")
-    private Boolean isActive;
+    @Column(name = "enabled")
+    private Boolean enabled;
 
 }
