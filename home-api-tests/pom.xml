@@ -13,4 +13,49 @@
 
     <artifactId>home-api-tests</artifactId>
 
+    <properties>
+        <surefire-version>3.0.0-M5</surefire-version>
+    </properties>
+
+    <dependencies>
+            <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-generated-server</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.softserveinc.ita.homeproject</groupId>-->
+<!--            <artifactId>home-java-client</artifactId>-->
+<!--            <version>${revision}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
