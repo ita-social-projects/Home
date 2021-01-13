@@ -21,7 +21,7 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
      * Method for finding users in database by email
      *
      * @param email is the email of the user that is being searched
-     * @return returns an instance of Optional(User) class
+     * @return an instance of Optional(User) class
      */
     Optional<User> findByEmail(String email);
     Page<User> findAllByEnabledTrue(Pageable var1);

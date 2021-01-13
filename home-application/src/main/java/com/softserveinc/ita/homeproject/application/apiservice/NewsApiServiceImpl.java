@@ -41,7 +41,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * method for creating a new news.
      *
      * @param createNews are incoming data needed for creation new news
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
@@ -58,7 +58,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * method for deleting news.
      *
      * @param id is the id of the news that has to be deleted
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(DELETE_NEWS_PERMISSION)
     @Override
@@ -73,7 +73,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      *
      * @param pageNumber is the number of the returned page with elements
      * @param pageSize is amount of the returned elements
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
@@ -90,7 +90,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      * for getting news by id from database.
      *
      * @param id is id of the news in the database
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
@@ -107,7 +107,7 @@ public class NewsApiServiceImpl implements NewsApiService {
      *
      * @param id is id of the news that has to be updated
      * @param updateNews are incoming data needed for news update
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(UPDATE_NEWS_PERMISSION)
     @Override

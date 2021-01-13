@@ -32,8 +32,8 @@ public class HomeUserDetailsService implements UserDetailsService {
      * loadUserByUsername method is used to load user from database
      *
      * @param email is user's email by which we are gonna search user
-     * @return returns an UserDetails' instance
-     * @throws throws UsernameNotFoundException
+     * @return an UserDetails' instance
+     * @throws UsernameNotFoundException
      */
     @Override
     @Transactional

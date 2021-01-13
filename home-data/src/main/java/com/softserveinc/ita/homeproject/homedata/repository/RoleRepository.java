@@ -17,7 +17,7 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
      * Method for finding roles in database by name
      *
      * @param name is the name of the role
-     * @return returns an instance of Role class
+     * @return an instance of Role class
      */
     Role findByName(String name);
 }

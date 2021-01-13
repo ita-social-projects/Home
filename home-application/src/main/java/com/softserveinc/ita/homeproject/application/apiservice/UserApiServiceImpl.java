@@ -41,7 +41,7 @@ public class UserApiServiceImpl implements UsersApiService {
      * method for creating a new user.
      *
      * @param createUser are incoming data needed for user's creation
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
@@ -58,7 +58,7 @@ public class UserApiServiceImpl implements UsersApiService {
      * for getting user by id from database.
      *
      * @param id is user's id in the database
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
@@ -75,7 +75,7 @@ public class UserApiServiceImpl implements UsersApiService {
      *
      * @param pageNumber is the number of returned page with elements
      * @param pageSize is amount of the returned elements
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
@@ -92,7 +92,7 @@ public class UserApiServiceImpl implements UsersApiService {
      * method for deactivating user's account.
      *
      * @param id is id of the user that has to be deactivated
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
@@ -108,7 +108,7 @@ public class UserApiServiceImpl implements UsersApiService {
      *
      * @param id is id of the user that has to be updated
      * @param updateUser are incoming data needed for user's update
-     * @return returns Response to generated controller
+     * @return Response to generated controller
      */
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
