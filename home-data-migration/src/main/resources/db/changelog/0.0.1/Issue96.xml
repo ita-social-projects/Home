@@ -5,15 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="user" author="Abhai2016">
+    <changeSet id="admin" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account">
             <column name="id" value="1"/>
+            <column name="email"  value="${admin.email}"/>
+            <column name="password" value="${admin.password}"/>
             <column name="first_name" value="User"/>
             <column name="last_name" value="User"/>
-            <column name="email" value="user@example.com"/>
-            <column name="password" value="password"/>
             <column name="expired" value="false"/>
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
@@ -21,15 +21,15 @@
         </insert>
     </changeSet>
 
-    <changeSet id="admin" author="Abhai2016">
+    <changeSet id="user" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account">
             <column name="id" value="2"/>
-            <column name="email"  value="${admin.email}"/>
-            <column name="password" value="${admin.password}"/>
             <column name="first_name" value="User"/>
             <column name="last_name" value="User"/>
+            <column name="email" value="user@example.com"/>
+            <column name="password" value="{noop}password"/>
             <column name="expired" value="false"/>
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
@@ -106,6 +106,78 @@
                 tableName="permission">
             <column name="id" value="9"/>
             <column name="name" value="DELETE_NEWS_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="admin_role" author="Abhao2016">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="account_role">
+            <column name="role_id" value="1"/>
+            <column name="account_id" value="1"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="account_role">
+            <column name="role_id" value="2"/>
+            <column name="account_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="role_permission" author="Abhai2016">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="2"/>
+            <column name="permission_id" value="1"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="2"/>
+            <column name="permission_id" value="2"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="3"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="4"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="5"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="6"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="7"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="8"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permission">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="9"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
