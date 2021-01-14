@@ -23,36 +23,12 @@
         </insert>
     </changeSet>
 
-    <changeSet id="Issue96.002" author="Abhai2016">
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="account">
-            <column name="id" value="2"/>
-            <column name="create_date" value="2021-01-13 11:31:00"/>
-            <column name="first_name" value="User"/>
-            <column name="last_name" value="User"/>
-            <column name="email" value="user@example.com"/>
-            <column name="password" value="{bcrypt}$2a$10$utypjHc4n5ezvWOJQKYkmOb2mFZ.ee4Ksi.puvSpeo2lVsuVYHjJa"/>
-            <column name="expired" value="false"/>
-            <column name="locked" value="false"/>
-            <column name="credentials_expired" value="false"/>
-            <column name="enabled" value="true"/>
-            <column name="update_date" value="2021-01-13 11:31:00"/>
-        </insert>
-    </changeSet>
-
     <changeSet id="Issue96.003" author="Abhai2016">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role">
             <column name="id" value="1"/>
             <column name="name" value="ADMIN"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role">
-            <column name="id" value="2"/>
-            <column name="name" value="USER"/>
         </insert>
     </changeSet>
 
@@ -120,25 +96,19 @@
             <column name="role_id" value="1"/>
             <column name="account_id" value="1"/>
         </insert>
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="account_role">
-            <column name="role_id" value="2"/>
-            <column name="account_id" value="2"/>
-        </insert>
     </changeSet>
 
     <changeSet id="role_permission" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="role_permission">
-            <column name="role_id" value="2"/>
+            <column name="role_id" value="1"/>
             <column name="permission_id" value="1"/>
         </insert>
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="role_permission">
-            <column name="role_id" value="2"/>
+            <column name="role_id" value="1"/>
             <column name="permission_id" value="2"/>
         </insert>
         <insert  dbms="postgresql"
