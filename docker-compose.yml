@@ -8,3 +8,4 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - 5433:5432
+      
