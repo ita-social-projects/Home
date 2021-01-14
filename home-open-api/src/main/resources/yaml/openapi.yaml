@@ -2113,8 +2113,6 @@ components:
         zipCode:
           type: integer
           example: 52956
-          minLength: 1
-          maxLength: 10
     House:
       type: object
       properties:
