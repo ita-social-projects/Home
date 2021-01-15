@@ -4,27 +4,22 @@ import com.softserveinc.ita.homeproject.api.UsersApiService;
 import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.specifications.UserSpecification;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import cz.jirutka.rsql.parser.ast.RSQLOperators;
-import io.github.perplexhub.rsql.RSQLJPASupport;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
@@ -42,6 +37,7 @@ public class UserApiServiceImpl implements UsersApiService {
     private final CreateUserDtoMapper createUserDtoMapper;
     private final ReadUserDtoMapper readUserDtoMapper;
     private final UpdateUserDtoMapper updateUserDtoMapper;
+    private final UserSpecification userSpecification;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -84,8 +80,7 @@ public class UserApiServiceImpl implements UsersApiService {
      * @param pageSize   amount of the returned elements
      * @return returns Response to generated controller
      */
-    @PreAuthorize(GET_ALL_USERS_PERMISSION)
-    @Override
+
     public Response queryUsers(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
@@ -94,44 +89,15 @@ public class UserApiServiceImpl implements UsersApiService {
                                String firstName,
                                String lastName,
                                String contact) {
-        // Presentation - Domain mapping
-        RSQLJPASupport.addMapping(User.class, new HashMap<>(){{
-            put("contact", "contacts");
-//            put("flatNumber", "flat.number");
-        }});
 
-        // Access Control
-        RSQLJPASupport.addPropertyWhitelist(User.class, "email");
-//        RSQLJPASupport.addPropertyWhitelist(User.class, "flat.number");
-        RSQLJPASupport.addPropertyWhitelist(User.class, "firstName");
-        RSQLJPASupport.addPropertyWhitelist(User.class, "lastName");
-        RSQLJPASupport.addPropertyWhitelist(User.class, "contacts");
-
-        // Sorting
-        Specification<User> sortQuery = RSQLJPASupport.toSort(sort);
-
-        // Complex Searching
-        Specification<User> searchQuery = RSQLJPASupport.rsql(search);
-
-        // Simple Filtering
-        Specification<User> filterQuery = RSQLJPASupport.rsql(
-                new StringBuilder().
-                        append("email").append(RSQLOperators.EQUAL.getSymbol()).append(email).append(";").
-                        append("firstName").append(RSQLOperators.EQUAL.getSymbol()).append(firstName).append(";").
-                        append("lastName").append(RSQLOperators.EQUAL.getSymbol()).append(lastName).append(";").
-                        append("contact").append(RSQLOperators.EQUAL.getSymbol()).append(contact).
-                        toString()
-        );
-
-        // Final query
-        Specification<User> fullQuery = sortQuery.and(searchQuery).and(filterQuery);
-
-        List<ReadUser> readUserList = userService.findUsers(pageNumber, pageSize, fullQuery).stream()
+        List<ReadUser> readUserList = userService.findUsers(pageNumber, pageSize, userSpecification.getUsers(search, sort)).stream()
                 .map(readUserDtoMapper::convertDtoToView)
                 .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).entity(readUserList).build();
     }
+
+
 
     /**
      * removeUser method is implementation of HTTP DELETE
