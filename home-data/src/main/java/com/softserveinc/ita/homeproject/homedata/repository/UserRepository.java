@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author Mykyta Morar
  */
-@Repository
+
 public interface UserRepository extends PagingAndSortingRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     /**
@@ -28,6 +28,5 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>, 
      */
     Optional<User> findByEmail(String email);
     Page<User> findAllByEnabledTrue(Pageable var1);
-    @Override
-    Page<User> findAll(Specification<User> specification, Pageable pageable);
+
 }
