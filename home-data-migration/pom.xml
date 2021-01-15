@@ -33,6 +33,7 @@
                         <version>${liquibase.version}</version>
                         <configuration>
                             <changeLogFile>db/changelog/master.xml</changeLogFile>
+                            <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5433/postgres</url>
                             <username>postgres</username>
                             <password>password</password>
