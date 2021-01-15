@@ -18,21 +18,19 @@
         <docker.image.jdk.version>openjdk:11-jdk-buster</docker.image.jdk.version>
         <docker.image.postgres.version>postgres:latest</docker.image.postgres.version>
         <postgres.container.name>db-postgres</postgres.container.name>
-        <postgres.external.port>5433</postgres.external.port>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.user>postgres</postgres.user>
         <postgres.password>password</postgres.password>
-        <postgres.url>jdbc:postgresql://${postgres.container.name}:${postgres.internal.port}/${postgres.db}</postgres.url>
-        <datasource.url.property.name>spring.datasource.url</datasource.url.property.name>
+        <postgres.url>jdbc:postgresql://${postgres.container.name}:${postgres.internal.port}/${postgres.db}
+        </postgres.url>
+        <datasource.url.property>spring.datasource.url</datasource.url.property>
         <home.application.jar.name>home-application</home.application.jar.name>
         <home.application.jar.version>${revision}</home.application.jar.version>
         <home.data.migration.jar.name>home-data-migration</home.data.migration.jar.name>
         <home.data.migration.jar.version>${revision}</home.data.migration.jar.version>
         <liquibase.container.name>liquibase</liquibase.container.name>
-        <liquibase.external.port>8000</liquibase.external.port>
         <liquibase.internal.port>8000</liquibase.internal.port>
-        <home.application.external.port>8080</home.application.external.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <docker.artifacts.path>${project.build.directory}/docker/artifacts</docker.artifacts.path>
     </properties>
@@ -78,6 +76,26 @@
                                             </destFileName>
                                         </artifactItem>
                                     </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>reserve-tomcat-port</id>
+                                <goals>
+                                    <goal>reserve-network-port</goal>
+                                </goals>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <portNames>
+                                        <portName>home.application.external.port</portName>
+                                        <portName>liquibase.external.port</portName>
+                                        <portName>postgres.external.port</portName>
+                                    </portNames>
                                 </configuration>
                             </execution>
                         </executions>
@@ -163,7 +181,7 @@
                                             <exec>
                                                 <args>java</args>
                                                 <args>-jar</args>
-                                                <args>-D${datasource.url.property.name}=${postgres.url}</args>
+                                                <args>-D${datasource.url.property}=${postgres.url}</args>
                                                 <args>${home.application.jar.name}-${home.application.jar.version}.jar
                                                 </args>
                                             </exec>
@@ -203,6 +221,7 @@
                                 <id>start</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
+                                    <goal>stop</goal>
                                     <goal>build</goal>
                                     <goal>start</goal>
                                 </goals>
@@ -219,6 +238,14 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <home.application.external.port>${home.application.external.port}
+                                </home.application.external.port>
+                                <postgres.external.port>${postgres.external.port}</postgres.external.port>
+                                <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
+                            </systemPropertyVariables>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
