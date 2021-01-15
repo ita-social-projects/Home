@@ -20,10 +20,11 @@ import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
- * UserApiServiceImpl class is the interlayer between generated
+ * UserApiServiceImpl class is the inter layer between generated
  * User controller and service layer of the application.
  *
  * @author Mykyta Morar
@@ -41,10 +42,10 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * createUser method is implementation of HTTP POST
-     * method, that is used to create a new user.
+     * method for creating a new user.
      *
-     * @param createUser incoming data needed for creation of user
-     * @return returns Response to generated controller
+     * @param createUser are incoming data needed for user's creation
+     * @return Response to generated controller
      */
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
@@ -57,11 +58,11 @@ public class UserApiServiceImpl implements UsersApiService {
     }
 
     /**
-     * getUser method is implementation of HTTP GET method,
-     * that is used to get one user by id from database.
+     * getUser method is implementation of HTTP GET method
+     * for getting user by id from database.
      *
-     * @param id id of the user in the database
-     * @return returns Response to generated controller
+     * @param id is user's id in the database
+     * @return Response to generated controller
      */
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
@@ -74,11 +75,11 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * queryUsers method is implementation of HTTP GET
-     * method, that is used to get all users from database.
+     * method for getting all users from database.
      *
-     * @param pageNumber number of the returned page with elements
-     * @param pageSize   amount of the returned elements
-     * @return returns Response to generated controller
+     * @param pageNumber is the number of returned page with elements
+     * @param pageSize is amount of the returned elements
+     * @return Response to generated controller
      */
 
     public Response queryUsers(@Min(1) Integer pageNumber,
@@ -97,14 +98,12 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.OK).entity(readUserList).build();
     }
 
-
-
     /**
      * removeUser method is implementation of HTTP DELETE
-     * method, that is used to deactivate user's account.
+     * method for deactivating user's account.
      *
-     * @param id id of the user that needs to be deactivated
-     * @return returns Response to generated controller
+     * @param id is id of the user that has to be deactivated
+     * @return Response to generated controller
      */
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
@@ -116,11 +115,11 @@ public class UserApiServiceImpl implements UsersApiService {
 
     /**
      * updateUser method is implementation of HTTP PUT
-     * method, that is update the existing user.
+     * method for updating existing user.
      *
-     * @param id         id of the user that needs to be updated
-     * @param updateUser incoming data needed for user's update
-     * @return returns Response to generated controller
+     * @param id is id of the user that has to be updated
+     * @param updateUser are incoming data needed for user's update
+     * @return Response to generated controller
      */
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override

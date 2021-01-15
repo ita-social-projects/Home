@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.softserveinc.ita.homeproject.application.constants.Roles.USER_ROLE;
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 @Service
 @RequiredArgsConstructor
