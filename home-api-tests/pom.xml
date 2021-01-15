@@ -14,7 +14,7 @@
     <artifactId>home-api-tests</artifactId>
 
     <properties>
-        <fabric8io.docker.maven.plugin.version>0.34.1</fabric8io.docker.maven.plugin.version>
+        <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
         <docker.image.jdk.version>openjdk:11-jdk-buster</docker.image.jdk.version>
         <docker.image.postgres.version>postgres:latest</docker.image.postgres.version>
         <postgres.container.name>db-postgres</postgres.container.name>
@@ -85,7 +85,7 @@
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>reserve-tomcat-port</id>
+                                <id>reserve-port</id>
                                 <goals>
                                     <goal>reserve-network-port</goal>
                                 </goals>
@@ -174,6 +174,7 @@
                                     </run>
                                 </image>
                                 <image>
+                                    <alias>${project.artifactId}</alias>
                                     <name>${project.artifactId}</name>
                                     <build>
                                         <from>${docker.image.jdk.version}</from>

@@ -16,4 +16,4 @@ jobs:
       - name: Build and Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: mvn clean deploy  
+        run: mvn clean deploy -Pdocker
