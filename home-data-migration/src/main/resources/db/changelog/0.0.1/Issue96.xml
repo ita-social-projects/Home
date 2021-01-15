@@ -23,7 +23,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="Issue96.003" author="Abhai2016">
+    <changeSet id="Issue96.002" author="Abhai2016">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role">
@@ -32,7 +32,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="Issue96.004" author="Abhai2016">
+    <changeSet id="Issue96.003" author="Abhai2016">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permission">
@@ -89,7 +89,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="Issue96.005" author="Abhai2016">
+    <changeSet id="Issue96.004" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="account_role">
@@ -98,7 +98,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="role_permission" author="Abhai2016">
+    <changeSet id="Issue96.005" author="Abhai2016">
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="role_permission">
