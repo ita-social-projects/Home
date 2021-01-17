@@ -12,9 +12,7 @@ import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class NewsApiTest {
 
@@ -29,7 +27,7 @@ public class NewsApiTest {
         newsApi = new NewsApi(client);
     }
 
-    CreateNews createNews = new CreateNews()
+    private final CreateNews createNews = new CreateNews()
             .title("title")
             .description("description")
             .source("source")
@@ -47,7 +45,8 @@ public class NewsApiTest {
         ReadNews savedNews = newsApi.addNews(createNews);
 
         ReadNews news = newsApi.getNews(savedNews.getId());
-        assertNews(savedNews, news);
+        assertNotNull(news);
+        assertEquals(savedNews, news);
     }
 
     @Test
@@ -61,8 +60,8 @@ public class NewsApiTest {
                 .text("updatedText")
                 .photoUrl("updatedPhotoUrl");
 
-        ReadNews readNews = newsApi.updateNews(savedNews.getId(), updateNews);
-        assertNews(updateNews, readNews);
+        ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
+        assertNews(savedNews, updateNews, updatedNews);
     }
 
     @Test
@@ -77,6 +76,7 @@ public class NewsApiTest {
     @Test
     public void deleteNewsTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
+        assertNotNull(newsApi.getNews(savedNews.getId()));
 
         newsApi.deleteNews(savedNews.getId());
 
@@ -86,25 +86,17 @@ public class NewsApiTest {
     }
 
 
-    private void assertNews(UpdateNews expected, ReadNews actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getSource(), actual.getSource());
-        assertEquals(expected.getText(), actual.getText());
-        assertEquals(expected.getPhotoUrl(), actual.getPhotoUrl());
+    private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
+        assertNotNull(updated);
+        assertNotEquals(saved, updated);
+        assertEquals(update.getTitle(), updated.getTitle());
+        assertEquals(update.getDescription(), updated.getDescription());
+        assertEquals(update.getSource(), updated.getSource());
+        assertEquals(update.getText(), updated.getText());
+        assertEquals(update.getPhotoUrl(), updated.getPhotoUrl());
     }
 
     private void assertNews(CreateNews expected, ReadNews actual) {
-        assertNotNull(actual);
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getSource(), actual.getSource());
-        assertEquals(expected.getText(), actual.getText());
-        assertEquals(expected.getPhotoUrl(), actual.getPhotoUrl());
-    }
-
-    private void assertNews(ReadNews expected, ReadNews actual) {
         assertNotNull(actual);
         assertEquals(expected.getTitle(), actual.getTitle());
         assertEquals(expected.getDescription(), actual.getDescription());

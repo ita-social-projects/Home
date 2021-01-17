@@ -16,6 +16,7 @@
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
         <assertj-version>3.18.1</assertj-version>
+        <commons-lang3-version>3.11</commons-lang3-version>
     </properties>
 
     <dependencies>
@@ -43,6 +44,12 @@
             <artifactId>home-java-client</artifactId>
             <version>${revision}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3-version}</version>
         </dependency>
     </dependencies>
 
