@@ -1,7 +1,7 @@
 # Home
 
 “Home” - is an all-in-one social service that will cover all aspects of your communication with your home and neighbors.
-It include next modules: 
+It includes next modules: 
 - Communication with residents of the house, notification
 - Suggestions / wishes residents of the house
 - Bots for social chats and networks
@@ -26,6 +26,7 @@ It include next modules:
 - license
 - etc.
 
+[![Heroku Deploy](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)
 [![Build Status](https://img.shields.io/travis/ita-social-projects/Home/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/Home)
 [![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/Home/master?style=flat-square)](https://coveralls.io)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
@@ -51,7 +52,7 @@ It include next modules:
   - [How to run tests](#How-to-run-tests)
   - [How to Checkstyle](#How-to-Checkstyle)
   - [How to run data migration](#How-to-run-data-migration)
-- [Documentation](#Documentation))
+- [Documentation](#Documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
   - [issue flow](#git-flow)
@@ -62,7 +63,7 @@ It include next modules:
 ---
 
 ## About the project
-- You can read more about the project's technologies and modules description  in   <a href="https://github.com/ita-social-projects/Home/tree/dev/home-docs" target="_blank">home-docs</a> package.
+- You can read more about the project's technologies and modules' description  in   <a href="https://github.com/ita-social-projects/Home/tree/dev/home-docs" target="_blank">home-docs</a> package.
 
 ## Installation
 
@@ -168,14 +169,16 @@ Developers that have worked on a project during:
 - @omelchenkotimur
 - @Arthurpanda
 
-#### December 2020 - ... 2021
+#### December 2020 - March 2021
 
----
+- @alexorlenko
+- @Dandria1802
+- @Romanov-Niko
+- @PoLytvy
+- @OlTym
+- @Abhai2016
 
 ## FAQ
-
-- **How do I do *specifically* so and so?**
-    - No problem! Just do this.
 
 ---
 

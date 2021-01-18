@@ -32,12 +32,12 @@
                         <artifactId>liquibase-maven-plugin</artifactId>
                         <version>${liquibase.version}</version>
                         <configuration>
-                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                             <changeLogFile>db/changelog/master.xml</changeLogFile>
                             <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5433/postgres</url>
                             <username>postgres</username>
                             <password>password</password>
+                            <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                         <executions>
                             <execution>
