@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account")
+@Table(name = "users")
 public class User extends BaseEntity{
 
     @Column(name = "first_name")
@@ -54,8 +54,8 @@ public class User extends BaseEntity{
     private String contacts;
 
     @ManyToMany
-    @JoinTable(name = "account_role",
-            joinColumns = @JoinColumn(name = "account_id"),
+    @JoinTable(name = "user_cooperation",
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
