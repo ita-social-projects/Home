@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import java.util.List;
 
 @Getter
@@ -13,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "permissions")
 public class Permission extends BaseEntity {
 
     @ManyToMany(mappedBy = "permissions")
