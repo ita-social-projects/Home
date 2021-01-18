@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue104.001" author="pLytvynenko">
+        <createTable tableName="users">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="CONTACTS" type="VARCHAR">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CREATE_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREDENTIALS_EXPIRED" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIRST_NAME" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LOCKED" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="PASSWORD" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.002" author="pLytvynenko">
+        <createTable tableName="news">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="news_pkey"/>
+            </column>
+            <column name="CREATE_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHOTO_URL" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SOURCE" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TEXT" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITLE" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.003" author="pLytvynenko">
+        <createTable tableName="roles">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(20)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.004" author="pLytvynenko">
+        <createTable tableName="permissions">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(30)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.005" author="pLytvynenko">
+        <createTable tableName="role_permissions">
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="role_permission_pkey"
+                             references="roles(ID)"
+                             foreignKeyName="role_fk"/>
+            </column>
+            <column name="PERMISSION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="role_permission_pkey"
+                             references="permissions(ID)"
+                             foreignKeyName="permission_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.006" author="pLytvynenko">
+        <createTable tableName="addresses">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="REGION" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CITY" type="VARCHAR(25)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DISTRICT" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STREET" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOUSE_BLOCK" type="VARCHAR(7)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="HOUSE_NUMBER" type="VARCHAR(7)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ZIP_CODE" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.007" author="pLytvynenko">
+        <createTable tableName="cooperation">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(70)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USERO" type="VARCHAR(12)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="IBAN" type="VARCHAR(34)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="REGISTER_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS_ID" type="BIGINT">
+                <constraints nullable="false"
+                             unique="true"
+                             foreignKeyName="cooperation_fk"
+                             references="addresses(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.008" author="pLytvynenko">
+        <createTable tableName="houses">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="QUANTITY_FLAT" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOUSE_AREA" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADJOINING_AREA" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ADDRESS_ID" type="BIGINT">
+                <constraints nullable="false"
+                             unique="true"
+                             foreignKeyName="address_fk"
+                             references="addresses(ID)"/>
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             unique="true"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.009" author="pLytvynenko">
+        <createTable tableName="user_cooperation">
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="role_fk"
+                             references="roles(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.010" author="pLytvynenko">
+        <createTable tableName="emails">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.011" author="pLytvynenko">
+        <createTable tableName="phones">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PHONE" type="VARCHAR(15)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.012" author="pLytvynenko">
+        <createTable tableName="cooperation_emails">
+            <column name="EMAIL_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="email_fk"
+                             references="emails(ID)"/>
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.013" author="pLytvynenko">
+        <createTable tableName="cooperation_phones">
+            <column name="PHONE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="phone_fk"
+                             references="phones(ID)"/>
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue104.sequence" author="pLytvynenko">
+        <createSequence sequenceName="hibernate_sequence"
+                        incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>
