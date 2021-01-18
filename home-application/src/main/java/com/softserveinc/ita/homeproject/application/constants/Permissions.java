@@ -16,4 +16,5 @@ public interface Permissions {
     String UPDATE_NEWS_PERMISSION = "hasAuthority('UPDATE_NEWS_PERMISSION')";
     String GET_NEWS_PERMISSION = "hasAuthority('GET_NEWS_PERMISSION')";
     String DELETE_NEWS_PERMISSION = "hasAuthority('DELETE_NEWS_PERMISSION')";
+
 }

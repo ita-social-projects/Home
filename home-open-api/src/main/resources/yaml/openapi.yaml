@@ -22,6 +22,8 @@ tags:
     description: Operations with houses
   - name: cooperation
     description: Operations with cooperations
+  - name: cooperation
+    description: cooperation managment
 paths:
   /news:
     post:
@@ -1327,6 +1329,95 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
+  /myaccount:
+    get:
+      tags:
+        - myaccount
+      summary: Get all inform about your account
+      description: This endpoint delivers all information about user
+      operationId: getMyAccount
+      responses:
+        "200":
+          description: Succesful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadUser'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          description: News not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /myaccount/{user_id}:
+    put:
+      tags:
+        - myaccount
+      summary: Update information
+      description: Update some configuration
+      operationId: updateUserAcc
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update user inform
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadUser'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - myaccount
+      summary: Delete account
+      operationId: deleteAcc
+      parameters:
+        - name: user_id
+          in: path
+          description: Name value that need to be considered for filter
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Succesful operation
+        "400":
+          description: Invalid name supplied
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          description: News not found
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /cooperation:
     post:
       tags:
@@ -1478,264 +1569,6 @@ paths:
       operationId: removeCooperation
       parameters:
         - name: "cooperation_id"
-          in: "path"
-          description: "Use 1 for testing."
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-      responses:
-        "204":
-          description: Successful operation
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-  /myaccount:
-    get:
-      tags:
-        - myaccount
-      summary: Get all inform about your account
-      description: This endpoint delivers all information about user
-      operationId: getMyAccount
-      responses:
-        "200":
-          description: Succesful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReadUser'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "404":
-          description: News not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-
-  /myaccount/{user_id}:
-    put:
-      tags:
-        - myaccount
-      summary: Update information
-      description: Update some configuration
-      operationId: updateUserAcc
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Update user inform
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUser'
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadUser'
-        "400":
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        "409":
-          $ref: '#/components/responses/Conflict'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-    delete:
-      tags:
-        - myaccount
-      summary: Delete account
-      operationId: deleteAcc
-      parameters:
-        - name: user_id
-          in: path
-          description: Name value that need to be considered for filter
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Succesful operation
-        "400":
-          description: Invalid name supplied
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "404":
-          description: News not found
-        default:
-          $ref: '#/components/responses/InternalServerError'
-  /cooperation/cooperation_id/houses:
-    post:
-      tags:
-        - houses
-      summary: Create house
-      description: Create a new house
-      operationId: createHouse
-      requestBody:
-        description: Create a new House
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateHouse'
-        required: true
-      responses:
-        '201':
-          description: Successful created
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReadHouse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "409":
-          $ref: '#/components/responses/Conflict'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-    get:
-      tags:
-        - houses
-      summary: "Get all hauses"
-      description: ''
-      operationId: queryHouse
-      parameters:
-        - in: query
-          name: pageNumber
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadHouse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-  /cooperation/cooperation_id/houses/{house_id}:
-    get:
-      tags:
-        - houses
-      summary: "Get house by house name"
-      description: ''
-      operationId: getHouse
-      parameters:
-        - name: "house_id"
-          in: "path"
-          description: "Use 1 for testing."
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadHouse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-    put:
-      tags:
-        - houses
-      summary: Update current house
-      description: Update current house
-      operationId: updateHouse
-      parameters:
-        - name: "house_id"
-          in: "path"
-          description: "Use 1 for testing."
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-      requestBody:
-        description: Update current house
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateHouse'
-        required: true
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadHouse"
-        "400":
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        "409":
-          $ref: '#/components/responses/Conflict'
-        default:
-          $ref: '#/components/responses/InternalServerError'
-    delete:
-      tags:
-        - houses
-      summary: Delete house by ID
-      operationId: removeHouse
-      parameters:
-        - name: "house_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -1961,6 +1794,168 @@ components:
           items:
             type: string
             example: "4, 6, 7, 234"
+    Message:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 197
+        body:
+          type: string
+          example: "aws.imagelink/trh6u59"
+        date_created:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        date_updated:
+          type: string
+          format: date-time
+          example: 2020-11-01T19:23Z
+        from_id:
+          type: number
+          example: 45
+        to_id:
+          type: number
+          example: 76
+        type:
+          type: string
+          enum: [text, image, file]
+          example: image
+        is_important:
+          type: boolean
+    ReadAllMessages:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: array
+      items:
+        type: object
+        properties:
+          body:
+            type: string
+            example: "hello Ivan, doing cleanup doing?"
+          from_id:
+            type: number
+            example: 3
+          to_id:
+            type: number
+            example: 7
+    ReadMessage:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        body:
+          type: string
+          example: "yes, I want to vote for Grisha"
+        from_id:
+          type: number
+          example: 3
+        to_id:
+          type: number
+          example: 7
+    CreateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "Hi! New in chat"
+        from_id:
+          type: number
+          example: 7
+        to_id:
+          type: number
+          example: 10
+        type:
+          type: string
+          example: "text"
+        is_important:
+          type: boolean
+          example: true
+    UpdateMessage:
+      type: object
+      properties:
+        body:
+          type: string
+          example: "I want to change OSBB"
+        is_important:
+          type: boolean
+          example: true
+    CreateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+      type: object
+      properties:
+        firstName:
+          pattern: '\w+'
+          type: string
+          example: "Petro"
+          minLength: 1
+          maxLength: 50
+        lastName:
+          pattern: '\w+'
+          type: string
+          example: "Zinchenko"
+          minLength: 1
+          maxLength: 50
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 3
+          maxLength: 254
+        password:
+          pattern: '[a-zA-Z0-9]{8,}'
+          type: string
+          example: "mySuperStrongPass"
+          minLength: 8
+          maxLength: 128
+    ReadUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Petro
+        lastName:
+          type: string
+          example: Petrov
+        email:
+          type: string
+          example: home@gmail.com
+        contact:
+          type: string
+          example: "+380506617305"
+    UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        firstName:
+          pattern: '\w+'
+          type: string
+          example: Petro
+          minLength: 1
+          maxLength: 50
+        lastName:
+          pattern: '\w+'
+          type: string
+          example: Petrov
+          minLength: 1
+          maxLength: 50
+        contact:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+        contacts:
+          type: string
+          example: "+380506617305"
     CreateCooperation:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -2130,219 +2125,6 @@ components:
           example: "p.t.z@gmail.com"
           minLength: 3
           maxLength: 254
-    Message:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 197
-        body:
-          type: string
-          example: "aws.imagelink/trh6u59"
-        date_created:
-          type: string
-          format: date-time
-          example: 2020-11-01T19:23Z
-        date_updated:
-          type: string
-          format: date-time
-          example: 2020-11-01T19:23Z
-        from_id:
-          type: number
-          example: 45
-        to_id:
-          type: number
-          example: 76
-        type:
-          type: string
-          enum: [text, image, file]
-          example: image
-        is_important:
-          type: boolean
-    ReadAllMessages:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: array
-      items:
-        type: object
-        properties:
-          body:
-            type: string
-            example: "hello Ivan, doing cleanup doing?"
-          from_id:
-            type: number
-            example: 3
-          to_id:
-            type: number
-            example: 7
-    ReadMessage:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: object
-      properties:
-        body:
-          type: string
-          example: "yes, I want to vote for Grisha"
-        from_id:
-          type: number
-          example: 3
-        to_id:
-          type: number
-          example: 7
-    CreateMessage:
-      type: object
-      properties:
-        body:
-          type: string
-          example: "Hi! New in chat"
-        from_id:
-          type: number
-          example: 7
-        to_id:
-          type: number
-          example: 10
-        type:
-          type: string
-          example: "text"
-        is_important:
-          type: boolean
-          example: true
-    UpdateMessage:
-      type: object
-      properties:
-        body:
-          type: string
-          example: "I want to change OSBB"
-        is_important:
-          type: boolean
-          example: true
-    CreateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      required:
-        - firstName
-        - lastName
-        - email
-        - password
-      type: object
-      properties:
-        firstName:
-          pattern: '\w+'
-          type: string
-          example: "Petro"
-          minLength: 1
-          maxLength: 50
-        lastName:
-          pattern: '\w+'
-          type: string
-          example: "Zinchenko"
-          minLength: 1
-          maxLength: 50
-        email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "p.t.z@gmail.com"
-          minLength: 3
-          maxLength: 254
-        password:
-          pattern: '[a-zA-Z0-9]{8,}'
-          type: string
-          example: "mySuperStrongPass"
-          minLength: 8
-          maxLength: 128
-    ReadUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: object
-      properties:
-        firstName:
-          type: string
-          example: Petro
-        lastName:
-          type: string
-          example: Petrov
-        email:
-          type: string
-          example: home@gmail.com
-        contact:
-          type: string
-          example: "+380506617305"
-    UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: object
-      properties:
-        firstName:
-          pattern: '\w+'
-          type: string
-          example: Petro
-          minLength: 1
-          maxLength: 50
-        lastName:
-          pattern: '\w+'
-          type: string
-          example: Petrov
-          minLength: 1
-          maxLength: 50
-        contact:
-          type: string
-          example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-        contacts:
-          type: string
-          example: "+380506617305"
-    CreateHouse:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      required:
-        - quantity_flat
-        - house_area
-        - adjoining_area
-        - address_id
-        - cooperation_id
-      type: object
-      properties:
-        quantityFlat:
-          type: integer
-        houseArea:
-          type: string
-        adjoiningArea:
-          type: integer
-        addressId:
-          type: integer
-        cooperationId:
-          type: integer
-    ReadHouse:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: object
-      properties:
-        quantityFlat:
-          type: integer
-        houseArea:
-          type: string
-        adjoiningArea:
-          type: integer
-        addressId:
-          type: integer
-        cooperationId:
-          type: integer
-    UpdateHouse:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
-      type: object
-      properties:
-        quantityFlat:
-          type: integer
-        houseArea:
-          type: string
-        adjoiningArea:
-          type: integer
-        addressId:
-          type: integer
-        cooperationId:
-          type: integer
     Voting:
       required:
         - name
