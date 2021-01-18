@@ -12,7 +12,9 @@ jobs:
       - name: Set up JDK 1.11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.11 
+          java-version: 1.11
+      - name: Build data migration module
+        run: mvn -pl .,home-data-migration clean install
       - name: Build and Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ github.token }}
