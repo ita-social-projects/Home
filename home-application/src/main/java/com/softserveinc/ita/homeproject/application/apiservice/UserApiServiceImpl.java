@@ -82,6 +82,8 @@ public class UserApiServiceImpl implements UsersApiService {
      * @return Response to generated controller
      */
 
+    @PreAuthorize(GET_ALL_USERS_PERMISSION)
+    @Override
     public Response queryUsers(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
