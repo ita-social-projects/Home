@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.application.config;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
+import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * HomeUserDetailsService class is used to
+ * HomeUserDetailsService class provides user information
  *
  * @author Ihor Svyrydenko
  */
@@ -29,8 +31,8 @@ public class HomeUserDetailsService implements UserDetailsService {
     /**
      * loadUserByUsername method is used to load user from database
      *
-     * @param email email that we search user with
-     * @return an UserDetails instance
+     * @param email is user's email by which we are gonna search user
+     * @return an UserDetails' instance
      * @throws UsernameNotFoundException
      */
     @Override
@@ -39,8 +41,8 @@ public class HomeUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
         Set<Permission> perms = user.getRoles().stream()
-                .map(role -> role.getPermissions())
-                .flatMap(roles -> roles.stream())
+                .map(Role::getPermissions)
+                .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 
         return new HomeUserWrapperDetails(user, perms);
