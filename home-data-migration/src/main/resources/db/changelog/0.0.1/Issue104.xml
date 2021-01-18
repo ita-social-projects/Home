@@ -166,7 +166,7 @@
                 <constraints nullable="false"
                              unique="true"/>
             </column>
-            <column name="REGISTER_DATE" type="DATE">
+            <column name="REGISTER_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="UPDATE_DATE" type="TIMESTAMP">
@@ -192,7 +192,7 @@
             <column name="QUANTITY_FLAT" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="HOUSE_AREA" type="FLOAT">
+            <column name="HOUSE_AREA" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
             <column name="ADJOINING_AREA" type="INTEGER">

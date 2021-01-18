@@ -1,14 +1,13 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.CooperationApiService;
-import com.softserveinc.ita.homeproject.application.mapper.CreateCooperationDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.ReadCooperationDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.UpdateCooperationDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.*;
+import com.softserveinc.ita.homeproject.homedata.repository.HousesRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
+import com.softserveinc.ita.homeproject.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,10 @@ public class CooperationApiServiceImpl implements CooperationApiService {
     private final CreateCooperationDtoMapper createCooperationDtoMapper;
     private final UpdateCooperationDtoMapper updateCooperationDtoMapper;
     private final ReadCooperationDtoMapper readCooperationDtoMapper;
+    private final HouseService houseService;
+    private final CreateHouseDtoMapper createHouseDtoMapper;
+    private final ReadHouseDtoMapper readHouseDtoMapper;
+    private final UpdateHouseDtoMapper updateHouseDtoMapper;
 
     @Override
     public Response createCooperation(CreateCooperation createCooperation) {
@@ -34,8 +37,19 @@ public class CooperationApiServiceImpl implements CooperationApiService {
         CooperationDto readCooperationDto = cooperationService.createCooperation(cooperationDto);
         ReadCooperation readCooperation = readCooperationDtoMapper.convertDtoToView(readCooperationDto);
 
+
         return Response.status(Response.Status.CREATED).entity(readCooperation).build();
     }
+
+    @Override
+    public Response createHouse(@Min(1) Integer cooperationId, CreateHouse createHouse) {
+        HouseDto houseDto = createHouseDtoMapper.convertViewToDto(createHouse);
+        HouseDto createdHouseDto = houseService.createHouse(houseDto);
+        ReadHouse response = readHouseDtoMapper.convertDtoToView(createdHouseDto);
+
+        return Response.status(Response.Status.CREATED).entity(response).build();
+    }
+
 
     @Override
     public Response getCooperation(Long cooperationId) {
@@ -45,6 +59,15 @@ public class CooperationApiServiceImpl implements CooperationApiService {
 
         return Response.status(Response.Status.OK).entity(readCooperation).build();
     }
+
+    @Override
+    public Response getHouse(Long cooperationId, Long houseId) {
+        HouseDto readHouseDto = houseService.getHouseById(houseId);
+        ReadHouse houseApiResponse = readHouseDtoMapper.convertDtoToView(readHouseDto);
+
+        return Response.ok().entity(houseApiResponse).build();
+    }
+
 
     @Override
     public Response queryCooperation(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
@@ -57,11 +80,28 @@ public class CooperationApiServiceImpl implements CooperationApiService {
     }
 
     @Override
+    public Response queryHouse(@Min(1) Integer cooperationId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
+        List<ReadHouse> readHouseList = houseService.getAllHouses(pageNumber, pageSize).stream()
+                .map(readHouseDtoMapper::convertDtoToView)
+                .collect(Collectors.toList());
+
+        return Response.status(Response.Status.OK).entity(readHouseList).build();
+    }
+
+
+    @Override
     public Response removeCooperation(Long cooperationId) {
 
         cooperationService.deactivateCooperation(cooperationId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    @Override
+    public Response removeHouse(Long cooperationId, Long houseId) {
+        houseService.deleteById(houseId);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
 
     @Override
     public Response updateCooperation(Long cooperationId, UpdateCooperation updateCooperation) {
@@ -72,5 +112,14 @@ public class CooperationApiServiceImpl implements CooperationApiService {
 
         return Response.status(Response.Status.OK).entity(readCooperation).build();
     }
+
+    @Override
+    public Response updateHouse(Long cooperationId, Long houseId, UpdateHouse updateHouse) {
+        HouseDto updateHouseDto = updateHouseDtoMapper.convertViewToDto(updateHouse);
+        HouseDto readHouseDto = houseService.updateHouse(houseId, updateHouseDto);
+        ReadHouse response = readHouseDtoMapper.convertDtoToView(readHouseDto);
+        return Response.ok().entity(response).build();
+    }
+
 
 }

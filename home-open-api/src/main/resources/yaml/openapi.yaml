@@ -18,12 +18,10 @@ tags:
     description: Votings management operations
   - name: service
     description: Orders management operations
-  - name: houses
-    description: Operations with houses
-  - name: cooperation
-    description: Operations with cooperations
   - name: cooperation
     description: cooperation managment
+  - name: houses
+    description: Operations with house
 paths:
   /news:
     post:
@@ -1587,6 +1585,214 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/houses:
+    post:
+      tags:
+        - houses
+      summary: Create house
+      description: Create a new house
+      operationId: createHouse
+      parameters:
+        - name: cooperation_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      requestBody:
+        description: Create a new House
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHouse'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadHouse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - houses
+      summary: "Get all hauses"
+      description: ''
+      operationId: queryHouse
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - name: cooperation_id
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/houses/{house_id}:
+    get:
+      tags:
+        - houses
+      summary: "Get house by house name"
+      description: ''
+      operationId: getHouse
+      parameters:
+        - name: cooperation_id
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: house_id
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - houses
+      summary: Update current house
+      description: Update current house
+      operationId: updateHouse
+      parameters:
+        - name: cooperation_id
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current house
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateHouse'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadHouse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - houses
+      summary: Delete house by ID
+      operationId: removeHouse
+      parameters:
+        - name: cooperation_id
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 security:
   - basicAuth: []
 components:
@@ -1794,6 +2000,58 @@ components:
           items:
             type: string
             example: "4, 6, 7, 234"
+    CreateHouse:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
+        - cooperation_id
+      type: object
+      properties:
+        quantityFlat:
+          type: integer
+        houseArea:
+          type: string
+        adjoiningArea:
+          type: integer
+        address:
+          type: integer
+        cooperationId:
+          type: integer
+    ReadHouse:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        quantityFlat:
+          type: integer
+        houseArea:
+          type: string
+        adjoiningArea:
+          type: integer
+        addressId:
+          type: integer
+        cooperationId:
+          type: integer
+    UpdateHouse:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        quantityFlat:
+          type: integer
+        houseArea:
+          type: string
+        adjoiningArea:
+          type: integer
+        addressId:
+          type: integer
+        cooperationId:
+          type: integer
+          example: 0
     Message:
       type: object
       properties:
@@ -2728,3 +2986,4 @@ components:
               name:
                 type: string
                 example: mechanic
+

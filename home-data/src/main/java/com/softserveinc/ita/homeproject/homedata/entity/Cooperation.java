@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -16,8 +16,6 @@ import java.util.Set;
 @Table(name = "cooperation")
 public class Cooperation extends BaseEntity {
 
-    @Column(name = "name")
-    private String name;
 
     @Column(name = "usreo")
     private String USREO;
@@ -32,9 +30,6 @@ public class Cooperation extends BaseEntity {
 
     @Column(name = "registerDate")
     private LocalDateTime registerDate;
-
-    @Column(name = "updateDate")
-    private LocalDateTime updateDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -61,5 +56,7 @@ public class Cooperation extends BaseEntity {
 
     @Column(name = "enabled")
     private Boolean enabled;
+    @Column(name="updateDate")
+    private LocalDateTime updateDate;
 
 }
