@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.constants;
+package com.softserveinc.ita.homeproject.homeservice.constants;
 
 /**
  * Roles interface is used to store constants
