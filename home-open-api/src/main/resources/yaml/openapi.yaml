@@ -544,8 +544,6 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -600,7 +598,7 @@ paths:
     get:
       tags:
         - user
-      summary: "Get user by user name"
+      summary: "Get user by id"
       description: ''
       operationId: getUser
       parameters:
