@@ -8,7 +8,6 @@ import com.softserveinc.ita.homeproject.model.UpdateUser;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -78,12 +77,12 @@ public class UserApiTest {
     }
 
     @Test
-    @Disabled //TODO: add assert to check that user enabled flag is false
     public void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
         userApi.removeUser(savedUser.getId());
 
-        ReadUser user = userApi.getUser(savedUser.getId());
+        List<ReadUser> readUsers = userApi.queryUsers(1, 10);
+        readUsers.forEach(readUser -> assertNotEquals(savedUser.getId(), readUser.getId()));
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
