@@ -1,16 +1,14 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 
-import com.softserveinc.ita.homeproject.api.HousesApiService;
+import com.softserveinc.ita.homeproject.api.CooperationApiService;
 import com.softserveinc.ita.homeproject.application.mapper.CreateHouseDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadHouseDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateHouseDtoMapper;
 import com.softserveinc.ita.homeproject.homedata.repository.HousesRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +20,18 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class HouseApiServiceImpl implements HousesApiService {
+public class HouseApiServiceImpl implements CooperationApiService {
 
     private final HouseService houseService;
     private final CreateHouseDtoMapper createHouseDtoMapper;
     private final ReadHouseDtoMapper readHouseDtoMapper;
     private final UpdateHouseDtoMapper updateHouseDtoMapper;
     private final HousesRepository housesRepository;
+
+    @Override
+    public Response createCooperation(CreateCooperation createCooperation) {
+        return null;
+    }
 
     @Override
     public Response createHouse(CreateHouse createHouse) {
@@ -40,11 +43,21 @@ public class HouseApiServiceImpl implements HousesApiService {
     }
 
     @Override
+    public Response getCooperation(Long cooperationId) {
+        return null;
+    }
+
+    @Override
     public Response getHouse(Long houseId) {
         HouseDto readHouseDto = houseService.getHouseById(houseId);
         ReadHouse houseApiResponse = readHouseDtoMapper.convertDtoToView(readHouseDto);
 
         return Response.ok().entity(houseApiResponse).build();
+    }
+
+    @Override
+    public Response queryCooperation(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
+        return null;
     }
 
     @Override
@@ -57,9 +70,19 @@ public class HouseApiServiceImpl implements HousesApiService {
     }
 
     @Override
+    public Response removeCooperation(Long cooperationId) {
+        return null;
+    }
+
+    @Override
     public Response removeHouse(Long houseId) {
         houseService.deleteById(houseId);
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @Override
+    public Response updateCooperation(Long cooperationId, UpdateCooperation updateCooperation) {
+        return null;
     }
 
 

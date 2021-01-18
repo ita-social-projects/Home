@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class HomeUserDetailsService implements UserDetailsService {
 
+
     private final UserRepository userRepository;
 
     public HomeUserDetailsService(UserRepository userRepository) {
@@ -31,8 +32,8 @@ public class HomeUserDetailsService implements UserDetailsService {
     /**
      * loadUserByUsername method is used to load user from database
      *
-     * @param email is user's email by which we are gonna search user
-     * @return an UserDetails' instance
+     * @param email email that we search user with
+     * @return an UserDetails instance
      * @throws UsernameNotFoundException
      */
     @Override
@@ -41,8 +42,8 @@ public class HomeUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
         Set<Permission> perms = user.getRoles().stream()
-                .map(Role::getPermissions)
-                .flatMap(Collection::stream)
+                .map(role -> role.getPermissions())
+                .flatMap(roles -> roles.stream())
                 .collect(Collectors.toSet());
 
         return new HomeUserWrapperDetails(user, perms);

@@ -20,6 +20,8 @@ tags:
     description: Orders management operations
   - name: houses
     description: Operations with houses
+  - name: cooperation
+    description: Operations with cooperations
 paths:
   /news:
     post:
@@ -1325,6 +1327,175 @@ paths:
           $ref: '#/components/responses/NotFound'
         "default":
           $ref: '#/components/responses/InternalServerError'
+  /cooperation:
+    post:
+      tags:
+        - cooperation
+      summary: Create cooperation
+      description: Create a new cooperation
+      operationId: createCooperation
+      requestBody:
+        description: Create a new cooperation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCooperation'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadCooperation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - cooperation
+      summary: "Get all cooperation"
+      description: ''
+      operationId: queryCooperation
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadCooperation"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}:
+    get:
+      tags:
+        - cooperation
+      summary: "Get cooperation by cooperation name"
+      description: ''
+      operationId: getCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadCooperation"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - cooperation
+      summary: Update current cooperation
+      description: Update current cooperation
+      operationId: updateCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current cooperation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCooperation'
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadCooperation"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - cooperation
+      summary: Delete cooperation by ID
+      operationId: removeCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /myaccount:
     get:
       tags:
@@ -1414,7 +1585,7 @@ paths:
           description: News not found
         default:
           $ref: '#/components/responses/InternalServerError'
-  /houses:
+  /cooperation/cooperation_id/houses:
     post:
       tags:
         - houses
@@ -1486,7 +1657,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /houses/{house_id}:
+  /cooperation/cooperation_id/houses/{house_id}:
     get:
       tags:
         - houses
@@ -1790,6 +1961,175 @@ components:
           items:
             type: string
             example: "4, 6, 7, 234"
+    CreateCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      required:
+        - name
+        - USREO
+        - IBAN
+        - addressCooperation
+        - emailCooperation
+        - phoneCooperation
+        - houses
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 34
+        addressCooperation:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    ReadCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        addressCooperation:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    UpdateCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseView'
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        USREO:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        IBAN:
+          type: string
+          example: "Something else"
+          minLength: 1
+          maxLength: 50
+        addressCooperation:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          items:
+            $ref: "#/components/schemas/House"
+        phoneCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhoneCooperation"
+        emailCooperation:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailCooperation"
+    Address:
+      type: object
+      properties:
+        region:
+          type: string
+          example: "Dnipropetrovsk region"
+          minLength: 1
+          maxLength: 50
+        city:
+          type: string
+          example: "Dnipro"
+          minLength: 1
+          maxLength: 50
+        district:
+          type: string
+          example: "Zavodskoy"
+          minLength: 1
+          maxLength: 50
+        street:
+          type: string
+          example: "Kirova"
+          minLength: 1
+          maxLength: 25
+        housingNumber:
+          type: string
+          example: "2/B"
+          minLength: 1
+          maxLength: 10
+        houseNumber:
+          type: string
+          example: "23-B"
+          minLength: 1
+          maxLength: 50
+        zipCode:
+          type: integer
+          example: 52956
+    House:
+      type: object
+      properties:
+        area:
+          type: integer
+          example: 0
+    PhoneCooperation:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: "+380506617305"
+          minLength: 10
+          maxLength: 13
+    EmailCooperation:
+      type: object
+      properties:
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 3
+          maxLength: 254
     Message:
       type: object
       properties:
