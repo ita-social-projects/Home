@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
+    - name: Build data migration module
+      run: mvn -pl .,home-data-migration clean install
     - name: Build with Maven
       run: mvn clean install -Pdocker
 
