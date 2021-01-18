@@ -12,10 +12,6 @@ import javax.persistence.*;
 @Entity
 public class Houses extends BaseEntity {
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "addresses")
-    private Addresses address;
-
     @ManyToOne
     @JoinColumn(name = "cooperation_id")
     private Cooperation cooperation;

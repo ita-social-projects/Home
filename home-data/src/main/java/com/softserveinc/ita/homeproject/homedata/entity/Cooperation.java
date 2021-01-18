@@ -25,7 +25,5 @@ public class Cooperation extends BaseEntity {
     @Column(name = "registerDate")
     private LocalDateTime registerDate;
 
-    @OneToMany
-    private Set<Houses> houses;
 
 }
