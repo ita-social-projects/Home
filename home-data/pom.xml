@@ -16,6 +16,7 @@
 
     <properties>
         <postgresql.verson>42.2.16</postgresql.verson>
+        <rsql-jpa-spring-boot-starter.version>5.0.6</rsql-jpa-spring-boot-starter.version>
     </properties>
 
     <dependencies>
@@ -23,7 +24,7 @@
         <dependency>
             <groupId>io.github.perplexhub</groupId>
             <artifactId>rsql-jpa-spring-boot-starter</artifactId>
-            <version>5.0.6</version>
+            <version>${rsql-jpa-spring-boot-starter.version}</version>
         </dependency>
 
 
