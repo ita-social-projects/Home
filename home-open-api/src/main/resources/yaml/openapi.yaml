@@ -1966,19 +1966,16 @@ components:
       type: object
       properties:
         name:
-          pattern: '\w+'
           type: string
           example: "Home Association"
           minLength: 1
           maxLength: 50
         USREO:
-          pattern: '\w+'
           type: string
           example: "A2456FT90"
           minLength: 1
           maxLength: 12
         IBAN:
-          pattern: '\w+'
           type: string
           example: "Something else"
           minLength: 1
@@ -2003,19 +2000,16 @@ components:
       type: object
       properties:
         name:
-          pattern: '\w+'
           type: string
           example: "Home Association"
           minLength: 1
           maxLength: 50
         USREO:
-          pattern: '\w+'
           type: string
           example: "A2456FT90"
           minLength: 1
           maxLength: 12
         IBAN:
-          pattern: '\w+'
           type: string
           example: "Something else"
           minLength: 1
@@ -2040,19 +2034,16 @@ components:
       type: object
       properties:
         name:
-          pattern: '\w+'
           type: string
           example: "Home Association"
           minLength: 1
           maxLength: 50
         USREO:
-          pattern: '\w+'
           type: string
           example: "A2456FT90"
           minLength: 1
           maxLength: 12
         IBAN:
-          pattern: '\w+'
           type: string
           example: "Something else"
           minLength: 1
@@ -2075,37 +2066,31 @@ components:
       type: object
       properties:
         region:
-          pattern: '\w+'
           type: string
           example: "Dnipropetrovsk region"
           minLength: 1
           maxLength: 50
         city:
-          pattern: '\w+'
           type: string
           example: "Dnipro"
           minLength: 1
           maxLength: 50
         district:
-          pattern: '\w+'
           type: string
           example: "Zavodskoy"
           minLength: 1
           maxLength: 50
         street:
-          pattern: '\w+'
           type: string
           example: "Kirova"
           minLength: 1
           maxLength: 25
         housingNumber:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "2/B"
           minLength: 1
           maxLength: 10
         houseNumber:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "23-B"
           minLength: 1
@@ -2118,6 +2103,7 @@ components:
       properties:
         area:
           type: integer
+          example: 0
     PhoneCooperation:
       type: object
       properties:

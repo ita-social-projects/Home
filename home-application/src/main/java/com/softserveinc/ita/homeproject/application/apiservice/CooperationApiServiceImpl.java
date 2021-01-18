@@ -27,7 +27,6 @@ public class CooperationApiServiceImpl implements CooperationApiService {
     private final UpdateCooperationDtoMapper updateCooperationDtoMapper;
     private final ReadCooperationDtoMapper readCooperationDtoMapper;
 
-
     @Override
     public Response createCooperation(CreateCooperation createCooperation) {
 
@@ -38,7 +37,6 @@ public class CooperationApiServiceImpl implements CooperationApiService {
         return Response.status(Response.Status.CREATED).entity(readCooperation).build();
     }
 
-
     @Override
     public Response getCooperation(Long cooperationId) {
 
@@ -47,7 +45,6 @@ public class CooperationApiServiceImpl implements CooperationApiService {
 
         return Response.status(Response.Status.OK).entity(readCooperation).build();
     }
-
 
     @Override
     public Response queryCooperation(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
@@ -59,14 +56,12 @@ public class CooperationApiServiceImpl implements CooperationApiService {
         return Response.status(Response.Status.OK).entity(readCooperationList).build();
     }
 
-
     @Override
     public Response removeCooperation(Long cooperationId) {
 
         cooperationService.deactivateCooperation(cooperationId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-
 
     @Override
     public Response updateCooperation(Long cooperationId, UpdateCooperation updateCooperation) {

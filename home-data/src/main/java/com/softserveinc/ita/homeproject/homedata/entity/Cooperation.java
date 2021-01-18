@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,7 +40,7 @@ public class Cooperation extends BaseEntity {
             joinColumns = {@JoinColumn(name = "cooperation_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "email_id", referencedColumnName = "id")}
     )
-    private Set<Email> emails;
+    private List<Email> emails;
 
     @OneToMany
     @JoinTable(
@@ -48,10 +48,10 @@ public class Cooperation extends BaseEntity {
             joinColumns = {@JoinColumn(name = "cooperation_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "phone_id", referencedColumnName = "id")}
     )
-    private Set<Phone> phones;
+    private List<Phone> phones;
 
-    @OneToMany
-    private Set<House> houses;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<House> houses;
 
     @Column(name = "enabled")
     private Boolean enabled;

@@ -6,7 +6,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.entity.Phone;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,13 +19,13 @@ public class CooperationDto extends BaseDto {
 
     private String name;
 
-    private Set<Phone> phone;
+    private List<Phone> phone;
 
-    private Set<Email> email;
+    private List<Email> email;
 
     private Address addressCooperation;
 
-    private Set<House> houses;
+    private List<House> houses;
 
     private String USREO;
 
