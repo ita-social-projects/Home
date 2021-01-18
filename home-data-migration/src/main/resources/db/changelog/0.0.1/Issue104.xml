@@ -5,53 +5,75 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="Issue104.001" author="Arthurpanda">
+    <changeSet id="Issue104.001" author="pLytvynenko">
         <createTable tableName="users">
             <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints nullable="false"
+                             primaryKey="true"/>
             </column>
-            <column name="NAME" type="VARCHAR(50)">
+            <column name="CONTACTS" type="VARCHAR">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CREATE_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="MIDDLE_NAME" type="VARCHAR(50)">
+            <column name="CREDENTIALS_EXPIRED" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="SECOND_NAME" type="VARCHAR(50)">
+            <column name="ENABLED" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="PASPORT" type="VARCHAR(10)">
+            <column name="EXPIRED" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="LOGIN" type="VARCHAR(10)">
+            <column name="FIRST_NAME" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="PASSWORD" type="VARCHAR(15)">
+            <column name="LAST_NAME" type="VARCHAR">
                 <constraints nullable="false"/>
+            </column>
+            <column name="LOCKED" type="BOOLEAN">
+                <constraints nullable="true"/>
+            </column>
+            <column name="PASSWORD" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="Issue104.002" author="pLytvynenko">
-        <createTable tableName="adverts">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
+        <createTable tableName="news">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             primaryKeyName="news_pkey"/>
             </column>
-            <column name="TITLE" type="VARCHAR(150)">
+            <column name="CREATE_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="TEXT" type="TEXT">
+            <column name="DESCRIPTION" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="DATE" type="DATE">
+            <column name="PHOTO_URL" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="IS_MODERATED" type="BOOLEAN">
+            <column name="SOURCE" type="VARCHAR">
                 <constraints nullable="false"/>
             </column>
-            <column name="USER_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="user_fk"
-                             references="users(ID)"/>
+            <column name="TEXT" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TITLE" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>
@@ -73,7 +95,7 @@
             <column name="ID" type="NUMERIC">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="NAME" type="VARCHAR(20)">
+            <column name="NAME" type="VARCHAR(30)">
                 <constraints nullable="false"
                              unique="true"/>
             </column>
@@ -82,17 +104,14 @@
 
     <changeSet id="Issue104.005" author="pLytvynenko">
         <createTable tableName="role_permissions">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="ROLE_ID" type="BIGINT">
+            <column name="ROLE_ID" type="NUMERIC">
                 <constraints nullable="false"
                              primaryKey="true"
                              primaryKeyName="role_permission_pkey"
                              references="roles(ID)"
                              foreignKeyName="role_fk"/>
             </column>
-            <column name="PERMISSION_ID" type="BIGINT">
+            <column name="PERMISSION_ID" type="NUMERIC">
                 <constraints nullable="false"
                              primaryKey="true"
                              primaryKeyName="role_permission_pkey"
@@ -107,7 +126,7 @@
             <column name="ID" type="NUMERIC">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="REGION" type="VARCHAR(50)">
+            <column name="REGION" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="CITY" type="VARCHAR(25)">
@@ -116,16 +135,16 @@
             <column name="DISTRICT" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="STREET" type="VARCHAR(10)">
+            <column name="STREET" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="HOUSE_BLOCK" type="INTEGER">
+            <column name="HOUSE_BLOCK" type="VARCHAR(7)">
                 <constraints nullable="true"/>
             </column>
-            <column name="HOUSE_NUMBER" type="VARCHAR(255)">
+            <column name="HOUSE_NUMBER" type="VARCHAR(7)">
                 <constraints nullable="false"/>
             </column>
-            <column name="ZIP_CODE" type="INTEGER">
+            <column name="ZIP_CODE" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -136,7 +155,7 @@
             <column name="ID" type="NUMERIC">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="NAME" type="VARCHAR(50)">
+            <column name="NAME" type="VARCHAR(70)">
                 <constraints nullable="false"/>
             </column>
             <column name="USERO" type="VARCHAR(12)">
@@ -150,7 +169,10 @@
             <column name="REGISTER_DATE" type="DATE">
                 <constraints nullable="false"/>
             </column>
-            <column name="IS_ACTIVE" type="BOOLEAN">
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="ADDRESS_ID" type="NUMERIC">
@@ -192,59 +214,9 @@
     </changeSet>
 
     <changeSet id="Issue104.009" author="pLytvynenko">
-        <createTable tableName="flats">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="NUMBER" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="AREA" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="QUANTITY_TENANT" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="TITLE_DEED" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="HOUSE_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             unique="true"
-                             foreignKeyName="house_fk"
-                             references="houses(ID)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="Issue104.010" author="pLytvynenko">
-        <createTable tableName="user_flats">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="OWNER_PERCENT" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="user_fk"
-                             references="users(ID)"/>
-            </column>
-            <column name="FLAT_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="flat_fk"
-                             references="flats(ID)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="Issue104.011" author="pLytvynenko">
         <createTable tableName="user_cooperation">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
             <column name="COOPERATION_ID" type="NUMERIC">
-                <constraints nullable="false"
+                <constraints nullable="true"
                              foreignKeyName="cooperation_fk"
                              references="cooperation(ID)"/>
             </column>
@@ -261,18 +233,18 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="Issue104.012" author="pLytvynenko">
+    <changeSet id="Issue104.010" author="pLytvynenko">
         <createTable tableName="emails">
             <column name="ID" type="NUMERIC">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="EMAIL" type="VARCHAR(20)">
+            <column name="EMAIL" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="Issue104.013" author="pLytvynenko">
+    <changeSet id="Issue104.011" author="pLytvynenko">
         <createTable tableName="phones">
             <column name="ID" type="NUMERIC">
                 <constraints primaryKey="true" nullable="false"/>
@@ -283,11 +255,8 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="Issue104.014" author="pLytvynenko">
-        <createTable tableName="email_cooperation">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
+    <changeSet id="Issue104.012" author="pLytvynenko">
+        <createTable tableName="cooperation_emails">
             <column name="EMAIL_ID" type="NUMERIC">
                 <constraints nullable="false"
                              foreignKeyName="email_fk"
@@ -301,11 +270,8 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="Issue104.015" author="pLytvynenko">
-        <createTable tableName="phone_cooperation">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
+    <changeSet id="Issue104.013" author="pLytvynenko">
+        <createTable tableName="cooperation_phones">
             <column name="PHONE_ID" type="NUMERIC">
                 <constraints nullable="false"
                              foreignKeyName="phone_fk"
@@ -319,104 +285,9 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="Issue104.016" author="pLytvynenko">
-        <createTable tableName="phone_users">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="PHONE_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="phone_fk"
-                             references="phones(ID)"/>
-            </column>
-            <column name="USER_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="user_fk"
-                             references="users(ID)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="Issue104.017" author="pLytvynenko">
-        <createTable tableName="email_user">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="PHONE_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="phone_fk"
-                             references="phones(ID)"/>
-            </column>
-            <column name="USER_ID" type="NUMERIC">
-                <constraints nullable="false"
-                             foreignKeyName="user_fk"
-                             references="users(ID)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="Issue104.018" author="pLytvynenko">
-        <createTable tableName="vote">
-            <column name="ID" type="NUMERIC">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="TITLE" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DATE_BEGIN" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DATE_END" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="IS_OPEN" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PROS" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CONS" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="Issue104.sequence" author="pLytvynenko">
-        <createSequence sequenceName="hibernate_sequence"/>
-        <sql dbms="postgresql">
-            alter sequence hibernate_sequence owner to postgres;
-        </sql>
+        <createSequence sequenceName="hibernate_sequence"
+                        incrementBy="1"/>
     </changeSet>
-
-    <!--    <changeSet id="Issue33.005" author="pLytvynenko">-->
-    <!--        <createTable tableName="news">-->
-    <!--            <column name="ID" type="BIGINT">-->
-    <!--                <constraints primaryKey="true"-->
-    <!--                             nullable="false"-->
-    <!--                             primaryKeyName="news_pkey"/>-->
-    <!--            </column>-->
-    <!--            <column name="CREATE_DATE" type="TIMESTAMP">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="DESCRIPTION" type="VARCHAR">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="PHOTO_URL" type="VARCHAR">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="SOURCE" type="VARCHAR">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="TEXT" type="VARCHAR">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="TITLE" type="VARCHAR">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--            <column name="UPDATE_DATE" type="TIMESTAMP">-->
-    <!--                <constraints nullable="false"/>-->
-    <!--            </column>-->
-    <!--        </createTable>-->
-    <!--    </changeSet>-->
 
 </databaseChangeLog>
