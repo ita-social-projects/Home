@@ -3,8 +3,10 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Data
 @SuperBuilder
@@ -14,8 +16,6 @@ import java.math.BigDecimal;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(
-            columnDefinition = "NUMERIC(19,0)")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 }

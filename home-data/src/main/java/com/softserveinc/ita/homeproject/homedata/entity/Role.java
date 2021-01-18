@@ -12,13 +12,14 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "roles")
 public class Role extends BaseEntity{
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     @ManyToMany
-    @JoinTable(name = "role_permission",
+    @JoinTable(name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
