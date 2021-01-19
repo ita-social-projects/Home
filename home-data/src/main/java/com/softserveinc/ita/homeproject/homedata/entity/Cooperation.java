@@ -52,7 +52,7 @@ public class Cooperation extends BaseEntity {
     private List<Phone> phones;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<House> houses;
+    private List<Houses> houses;
 
     @Column(name = "enabled")
     private Boolean enabled;

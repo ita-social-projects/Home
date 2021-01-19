@@ -2018,7 +2018,7 @@ components:
         adjoiningArea:
           type: integer
         address:
-          type: integer
+          $ref: '#/components/schemas/Address'
         cooperationId:
           type: integer
     ReadHouse:
@@ -2247,7 +2247,7 @@ components:
         houses:
           type: array
           items:
-            $ref: "#/components/schemas/House"
+            $ref: "#/components/schemas/CreateHouse"
         phoneCooperation:
           type: array
           items:
@@ -2281,7 +2281,7 @@ components:
         houses:
           type: array
           items:
-            $ref: "#/components/schemas/House"
+            $ref: "#/components/schemas/CreateHouse"
         phoneCooperation:
           type: array
           items:
@@ -2315,7 +2315,7 @@ components:
         houses:
           type: array
           items:
-            $ref: "#/components/schemas/House"
+            $ref: "#/components/schemas/CreateHouse"
         phoneCooperation:
           type: array
           items:
@@ -2360,12 +2360,6 @@ components:
         zipCode:
           type: integer
           example: 52956
-    House:
-      type: object
-      properties:
-        area:
-          type: integer
-          example: 0
     PhoneCooperation:
       type: object
       properties:
