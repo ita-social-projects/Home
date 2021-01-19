@@ -18,11 +18,6 @@
     <artifactId>home-application</artifactId>
     <dependencies>
         <dependency>
-            <groupId>io.github.perplexhub</groupId>
-            <artifactId>rsql-jpa-spring-boot-starter</artifactId>
-            <version>${rsql-jpa-spring-boot-starter.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
