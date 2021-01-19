@@ -1,13 +1,11 @@
 package com.softserveinc.ita.homeproject.api.tests;
 
-import java.util.HashMap;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.softserveinc.ita.homeproject.ApiClient;
 import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ServerConfiguration;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
@@ -16,20 +14,9 @@ import com.softserveinc.ita.homeproject.model.UpdateNews;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NewsApiIT {
+class NewsApiIT {
 
-    private final NewsApi newsApi;
-
-    {
-        String applicationExternalPort = System.getProperty("home.application.external.port");
-        ApiClient client = new ApiClient();
-        client.setUsername("admin@example.com");
-        client.setPassword("password");
-        client.setServers(List.of(new ServerConfiguration("http://localhost:"+applicationExternalPort+"/api/0",
-                "No description provided", new HashMap())));
-        newsApi = new NewsApi(client);
-    }
-
+    private NewsApi newsApi;
     private final CreateNews createNews = new CreateNews()
             .title("title")
             .description("description")
@@ -37,14 +24,19 @@ public class NewsApiIT {
             .text("text")
             .photoUrl("photoUrl");
 
+    @BeforeEach
+    public void setUp() {
+        newsApi = new NewsApi(ApiClientUtil.getClient());
+    }
+
     @Test
-    public void createNewsTest() throws ApiException {
+    void createNewsTest() throws ApiException {
         ReadNews readNews = newsApi.addNews(createNews);
         assertNews(createNews, readNews);
     }
 
     @Test
-    public void getNewsByIdTest() throws ApiException {
+    void getNewsByIdTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
 
         ReadNews news = newsApi.getNews(savedNews.getId());
@@ -53,7 +45,7 @@ public class NewsApiIT {
     }
 
     @Test
-    public void updateNewsTest() throws ApiException {
+    void updateNewsTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
 
         UpdateNews updateNews = new UpdateNews()
@@ -68,7 +60,7 @@ public class NewsApiIT {
     }
 
     @Test
-    public void getAllNewsTest() throws ApiException {
+    void getAllNewsTest() throws ApiException {
         newsApi.addNews(createNews);
         List<ReadNews> allNews = newsApi.getAllNews(1, 10);
 
@@ -77,7 +69,7 @@ public class NewsApiIT {
     }
 
     @Test
-    public void deleteNewsTest() throws ApiException {
+    void deleteNewsTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
         assertNotNull(newsApi.getNews(savedNews.getId()));
 

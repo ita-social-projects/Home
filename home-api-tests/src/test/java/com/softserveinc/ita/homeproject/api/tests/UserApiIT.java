@@ -1,8 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests;
 
-import com.softserveinc.ita.homeproject.ApiClient;
 import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ServerConfiguration;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
@@ -10,10 +8,8 @@ import com.softserveinc.ita.homeproject.model.UpdateUser;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,38 +17,29 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UserApiIT {
+class UserApiIT {
 
-    private final UserApi userApi;
-
-    {
-        String applicationExternalPort = System.getProperty("home.application.external.port");
-        ApiClient client = new ApiClient();
-        client.setUsername("admin@example.com");
-        client.setPassword("password");
-        client.setServers(List.of(new ServerConfiguration("http://localhost:"+applicationExternalPort+"/api/0",
-                "No description provided", new HashMap())));
-        userApi = new UserApi(client);
-    }
-
+    private UserApi userApi;
     private final CreateUser createUser = new CreateUser()
             .firstName("firstName")
             .lastName("lastName")
             .password("password");
 
+
     @BeforeEach
-    public void generateRandomEmail() {
+    public void setUp() {
+        userApi = new UserApi(ApiClientUtil.getClient());
         createUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
     }
 
     @Test
-    public void createUserTest() throws ApiException {
+    void createUserTest() throws ApiException {
         ReadUser readUser = userApi.createUser(createUser);
         assertUser(createUser, readUser);
     }
 
     @Test
-    public void getAllUsersTest() throws ApiException {
+    void getAllUsersTest() throws ApiException {
         userApi.createUser(createUser);
         List<ReadUser> readUsers = userApi.queryUsers(1, 10);
 
@@ -61,7 +48,7 @@ public class UserApiIT {
     }
 
     @Test
-    public void getUserByIdTest() throws ApiException {
+    void getUserByIdTest() throws ApiException {
         ReadUser savedUsers = userApi.createUser(createUser);
         ReadUser user = userApi.getUser(savedUsers.getId());
 
@@ -70,7 +57,7 @@ public class UserApiIT {
     }
 
     @Test
-    public void updateUserTest() throws ApiException {
+    void updateUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
@@ -81,7 +68,7 @@ public class UserApiIT {
     }
 
     @Test
-    public void deleteUserTest() throws ApiException {
+    void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
         userApi.removeUser(savedUser.getId());
 
