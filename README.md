@@ -26,7 +26,7 @@ It includes next modules:
 - license
 - etc.
 
-[![Heroku Deploy](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)]
+[![Heroku Deploy](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)
 [![Build Status](https://img.shields.io/travis/ita-social-projects/Home/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/Home)
 [![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/Home/master?style=flat-square)](https://coveralls.io)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
