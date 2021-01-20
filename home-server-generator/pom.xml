@@ -13,7 +13,7 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
-        <generation.files>OffsetDateTimeProvider.java,pom.xml</generation.files>
+        <generation.files>pom.xml</generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>
@@ -75,7 +75,6 @@
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
                             <generatorName>jaxrs-jersey</generatorName>
                             <configOptions>
-                                <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
