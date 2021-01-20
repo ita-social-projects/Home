@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue121.001" author="pLytvynenko">
+        <renameColumn tableName="cooperation"
+                      oldColumnName="USERO"
+                      newColumnName="USREO"/>
+    </changeSet>
+
+    <changeSet id="Issue121.002" author="pLytvynenko">
+        <dropNotNullConstraint tableName="cooperation"
+                               columnName="UPDATE_DATE"/>
+    </changeSet>
+</databaseChangeLog>
