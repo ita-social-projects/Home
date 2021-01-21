@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Address;
+import com.softserveinc.ita.homeproject.homedata.entity.Addresses;
 import com.softserveinc.ita.homeproject.homedata.entity.Email;
 import com.softserveinc.ita.homeproject.homedata.entity.Houses;
 import com.softserveinc.ita.homeproject.homedata.entity.Phone;
@@ -23,7 +23,7 @@ public class CooperationDto extends BaseDto {
 
     private List<Email> email;
 
-    private Address addressCooperation;
+    private Addresses addressCooperation;
 
     private List<Houses> houses;
 

@@ -54,7 +54,7 @@ public class CooperationServiceImpl implements CooperationService {
             }
 
             if (updateCooperationDto.getAddressCooperation() != null) {
-                fromDB.setAddressCooperation(updateCooperationDto.getAddressCooperation());
+                fromDB.setAddressesCooperation(updateCooperationDto.getAddressCooperation());
             }
 
             if (updateCooperationDto.getUSREO() != null) {

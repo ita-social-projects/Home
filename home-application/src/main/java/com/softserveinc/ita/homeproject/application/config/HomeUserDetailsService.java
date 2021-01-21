@@ -14,11 +14,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * HomeUserDetailsService class provides user information
- *
- * @author Ihor Svyrydenko
- */
+
 @Component
 public class HomeUserDetailsService implements UserDetailsService {
 

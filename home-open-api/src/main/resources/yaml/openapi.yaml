@@ -1586,46 +1586,6 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
   /cooperation/{cooperation_id}/houses:
-    post:
-      tags:
-        - houses
-      summary: Create house
-      description: Create a new house
-      operationId: createHouse
-      parameters:
-        - name: cooperation_id
-          in: path
-          required: true
-          description: ID of the chat
-          schema:
-            type : integer
-            minimum: 1
-      requestBody:
-        description: Create a new House
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateHouse'
-        required: true
-      responses:
-        '201':
-          description: Successful created
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReadHouse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "403":
-          $ref: '#/components/responses/Forbidden'
-        "409":
-          $ref: '#/components/responses/Conflict'
-        default:
-          $ref: '#/components/responses/InternalServerError'
     get:
       tags:
         - houses
@@ -2018,7 +1978,7 @@ components:
         adjoiningArea:
           type: integer
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/Addresses'
         cooperationId:
           type: integer
     ReadHouse:
@@ -2032,8 +1992,8 @@ components:
           type: string
         adjoiningArea:
           type: integer
-        addressId:
-          type: integer
+        address:
+          $ref: '#/components/schemas/Addresses'
         cooperationId:
           type: integer
     UpdateHouse:
@@ -2047,8 +2007,8 @@ components:
           type: string
         adjoiningArea:
           type: integer
-        addressId:
-          type: integer
+        address:
+          $ref: '#/components/schemas/Addresses'
         cooperationId:
           type: integer
           example: 0
@@ -2243,7 +2203,7 @@ components:
           minLength: 1
           maxLength: 34
         addressCooperation:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/Addresses'
         houses:
           type: array
           items:
@@ -2277,7 +2237,7 @@ components:
           minLength: 1
           maxLength: 50
         addressCooperation:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/Addresses'
         houses:
           type: array
           items:
@@ -2311,7 +2271,7 @@ components:
           minLength: 1
           maxLength: 50
         addressCooperation:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/Addresses'
         houses:
           type: array
           items:
@@ -2324,7 +2284,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/EmailCooperation"
-    Address:
+    Addresses:
       type: object
       properties:
         region:

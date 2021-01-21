@@ -19,11 +19,9 @@ public class Cooperation extends BaseEntity {
 
     @Column(name = "usreo")
     private String USREO;
+
     @Column(name = "name")
     private String name;
-
-    @Column(name = "usero")
-    private String USERO;
 
     @Column(name = "iban")
     private String IBAN;
@@ -33,7 +31,7 @@ public class Cooperation extends BaseEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address addressCooperation;
+    private Addresses addressesCooperation;
 
     @OneToMany
     @JoinTable(

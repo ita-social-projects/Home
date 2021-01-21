@@ -42,16 +42,6 @@ public class CooperationApiServiceImpl implements CooperationApiService {
     }
 
     @Override
-    public Response createHouse(@Min(1) Integer cooperationId, CreateHouse createHouse) {
-        HouseDto houseDto = createHouseDtoMapper.convertViewToDto(createHouse);
-        HouseDto createdHouseDto = houseService.createHouse(houseDto);
-        ReadHouse response = readHouseDtoMapper.convertDtoToView(createdHouseDto);
-
-        return Response.status(Response.Status.CREATED).entity(response).build();
-    }
-
-
-    @Override
     public Response getCooperation(Long cooperationId) {
 
         CooperationDto cooperationDto = cooperationService.getCooperationById(cooperationId);

@@ -1,11 +1,6 @@
 package com.softserveinc.ita.homeproject.application.constants;
 
-/**
- * Permissions interface is used to store
- * permissions that need to be used in Authorization.
- *
- * @author Mykyta Morar
- */
+
 public interface Permissions {
     String CREATE_USER_PERMISSION = "hasAuthority('CREATE_USER_PERMISSION')";
     String UPDATE_USER_PERMISSION = "hasAuthority('UPDATE_USER_PERMISSION')";
