@@ -16,4 +16,11 @@ jobs:
       - name: Build and Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: mvn clean deploy -Papi-tests-infrastructure -Papi-tests
+        run: >-
+          mvn clean deploy
+          -Papi-tests-infrastructure
+          -Papi-tests
+          -Dpostgres.user=${{secrets.POSTGRES_USER}}
+          -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
+          -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
+          -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
