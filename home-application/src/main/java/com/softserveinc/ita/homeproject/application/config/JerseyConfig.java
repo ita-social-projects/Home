@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.application.config;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.glassfish.jersey.server.ResourceConfig;
