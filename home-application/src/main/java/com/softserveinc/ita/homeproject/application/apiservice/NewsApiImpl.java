@@ -31,7 +31,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 @Provider
 @NoArgsConstructor
-public class NewsApiServiceImpl implements NewsApi {
+public class NewsApiImpl implements NewsApi {
 
     private NewsService newsService;
     private CreateNewsDtoMapper createNewsDtoMapper;

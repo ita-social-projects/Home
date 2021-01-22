@@ -30,7 +30,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  */
 @Provider
 @NoArgsConstructor
-public class UserApiServiceImpl implements UsersApi {
+public class UserApiImpl implements UsersApi {
 
     private UserService userService;
     private CreateUserDtoMapper createUserDtoMapper;
