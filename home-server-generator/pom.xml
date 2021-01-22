@@ -73,9 +73,8 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
-                            <generatorName>jaxrs-jersey</generatorName>
+                            <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
-                                <dateLibrary>java8</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>
@@ -86,6 +85,10 @@
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
                             <supportingFilesToGenerate>${generation.files}</supportingFilesToGenerate>
