@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.apiservice;
+package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
