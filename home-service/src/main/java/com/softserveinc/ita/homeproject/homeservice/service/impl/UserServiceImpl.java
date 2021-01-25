@@ -3,9 +3,9 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.mapperentity.UserMapper;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ServiceMapper mapper;
 
     @Transactional
     @Override
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
         } else {
-            User toCreate = userMapper.convertDtoToEntity(createUserDto);
+            User toCreate =  (User) mapper.convertToEntity(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(toCreate);
 
-            return userMapper.convertEntityToDto(toCreate);
+            return (UserDto) mapper.convertToDto(toCreate, UserDto.class);
         }
     }
 
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
-            return userMapper.convertEntityToDto(fromDB);
+            return (UserDto) mapper.convertToDto(fromDB, UserDto.class);
 
         } else {
             throw new NotFoundHomeException("User with id:" + id + " is not found");
@@ -78,14 +78,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
         return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
-                .map(userMapper::convertEntityToDto);
+                .map((users) -> (UserDto) mapper.convertToDto(users, UserDto.class));
     }
 
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
-        return userMapper.convertEntityToDto(toGet);
+        return (UserDto) mapper.convertToDto(toGet, UserDto.class);
     }
 
     @Override
