@@ -39,7 +39,7 @@ public class JerseyConfig extends ResourceConfig {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
         // register endpoints
-        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.apiservice", scanner);
+        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.api", scanner);
         //  register exception mappers
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.exception.mapper", scanner);
         // register jackson for json
