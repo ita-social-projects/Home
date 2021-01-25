@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.UsersApiService;
-import com.softserveinc.ita.homeproject.application.mapper.ApplicationMapper;
+import com.softserveinc.ita.homeproject.application.mapper.ViewMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
@@ -30,7 +30,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
-    private final ApplicationMapper mapper;
+    private final ViewMapper mapper;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -42,9 +42,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = (UserDto) mapper.convertToDto(createUser, UserDto.class);
+        UserDto createUserDto =  mapper.convertToDto(createUser, new UserDto());
         UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = (ReadUser) mapper.convertToView(readUserDto, ReadUser.class);
+        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -60,7 +60,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = (ReadUser) mapper.convertToView(readUserDto, ReadUser.class);
+        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -77,7 +77,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
         List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
-                .map((userDto) -> (ReadUser) mapper.convertToView(userDto, ReadUser.class))
+                .map((userDto) -> mapper.convertToView(userDto, new ReadUser()))
                 .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).entity(readUserList).build();
@@ -109,9 +109,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = (UserDto) mapper.convertToDto(updateUser, UserDto.class);
+        UserDto updateUserDto = mapper.convertToDto(updateUser, new UserDto());
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = (ReadUser) mapper.convertToView(readUserDto, ReadUser.class);
+        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }

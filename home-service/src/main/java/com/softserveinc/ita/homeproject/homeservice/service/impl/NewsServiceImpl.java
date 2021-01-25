@@ -4,7 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapper.EntityMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,17 +19,17 @@ import java.time.LocalDateTime;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
-    private final ServiceMapper mapper;
+    private final EntityMapper mapper;
 
     @Override
     @Transactional
     public NewsDto create(NewsDto newsDto) {
-        News news = (News) mapper.convertToEntity(newsDto, News.class);
+        News news = mapper.convertToEntity(newsDto, new News());
         news.setCreateDate(LocalDateTime.now());
 
         newsRepository.save(news);
 
-        return (NewsDto) mapper.convertToDto(news, NewsDto.class);
+        return mapper.convertToDto(news, new NewsDto());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             newsRepository.save(fromDB);
-            return (NewsDto) mapper.convertToDto(fromDB, NewsDto.class);
+            return mapper.convertToDto(fromDB, new NewsDto());
 
         } else {
             throw new NotFoundHomeException("Can't find news with given ID:" + id);
@@ -72,7 +72,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
         return newsRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
-                .map((news) -> (NewsDto) mapper.convertToDto(news, NewsDto.class));
+                .map((news) -> mapper.convertToDto(news, new NewsDto()));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class NewsServiceImpl implements NewsService {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
 
-        return (NewsDto) mapper.convertToDto(newsResponse, NewsDto.class);
+        return mapper.convertToDto(newsResponse, new NewsDto());
     }
 
     @Override
