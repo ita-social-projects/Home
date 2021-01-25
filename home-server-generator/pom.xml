@@ -75,6 +75,7 @@
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
                             <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
+                                <dateLibrary>java8</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>
