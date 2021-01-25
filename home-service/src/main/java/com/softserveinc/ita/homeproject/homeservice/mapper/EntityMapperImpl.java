@@ -16,7 +16,7 @@ public class EntityMapperImpl implements EntityMapper {
 
     @Override
     public <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Dto dto) {
-        return mapper.map(entity, (Type) dto);
+        return mapper.map(entity, (Type) dto.getClass());
     }
 
     @Override
