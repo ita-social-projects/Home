@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
         } else {
-            User toCreate =  mapper.convertToEntity(createUserDto, new User());
+            User toCreate =  mapper.convertToEntity(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(toCreate);
 
-            return mapper.convertToDto(toCreate, new UserDto());
+            return mapper.convertToDto(toCreate, UserDto.class);
         }
     }
 
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
-            return mapper.convertToDto(fromDB, new UserDto());
+            return mapper.convertToDto(fromDB, UserDto.class);
 
         } else {
             throw new NotFoundHomeException("User with id:" + id + " is not found");
@@ -78,14 +78,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
         return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
-                .map((users) -> mapper.convertToDto(users, new UserDto()));
+                .map((users) -> mapper.convertToDto(users, UserDto.class));
     }
 
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
-        return mapper.convertToDto(toGet, new UserDto());
+        return mapper.convertToDto(toGet, UserDto.class);
     }
 
     @Override

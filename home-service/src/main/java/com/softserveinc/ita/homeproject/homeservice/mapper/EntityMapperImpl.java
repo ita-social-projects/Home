@@ -15,12 +15,12 @@ public class EntityMapperImpl implements EntityMapper {
     private final ModelMapper mapper;
 
     @Override
-    public <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Dto dto) {
-        return mapper.map(entity, (Type) dto.getClass());
+    public <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Class<Dto> dto) {
+        return mapper.map(entity, (Type) dto);
     }
 
     @Override
-    public <Entity extends BaseEntity> Entity convertToEntity(BaseDto dto, Entity entity) {
-        return mapper.map(dto, (Type) entity.getClass());
+    public <Entity extends BaseEntity> Entity convertToEntity(BaseDto dto, Class<Entity> entity) {
+        return mapper.map(dto, (Type) entity);
     }
 }

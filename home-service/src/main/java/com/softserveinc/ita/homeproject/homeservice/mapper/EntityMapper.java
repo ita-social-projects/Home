@@ -5,7 +5,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 
 public interface EntityMapper {
 
-    <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Dto dto);
+    <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Class<Dto> dto);
 
-    <Entity extends BaseEntity> Entity convertToEntity(BaseDto dto, Entity entity);
+    <Entity extends BaseEntity> Entity convertToEntity(BaseDto dto, Class<Entity> entity);
 }

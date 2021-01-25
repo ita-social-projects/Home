@@ -15,12 +15,12 @@ public class ViewMapperImpl implements ViewMapper {
     private final ModelMapper mapper;
 
     @Override
-    public <View extends BaseView> View convertToView(BaseDto dto, View view) {
-        return mapper.map(dto, (Type) view.getClass());
+    public <View extends BaseView> View convertToView(BaseDto dto, Class<View> view) {
+        return mapper.map(dto, (Type) view);
     }
 
     @Override
-    public <Dto extends BaseDto> Dto convertToDto(BaseView view, Dto dto) {
-        return mapper.map(view, (Type) dto.getClass());
+    public <Dto extends BaseDto> Dto convertToDto(BaseView view, Class<Dto> dto) {
+        return mapper.map(view, (Type) dto);
     }
 }

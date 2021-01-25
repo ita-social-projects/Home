@@ -42,9 +42,9 @@ public class NewsApiServiceImpl implements NewsApiService {
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
     public Response addNews(CreateNews createNews) {
-        NewsDto newsDto = mapper.convertToDto(createNews, new NewsDto());
+        NewsDto newsDto = mapper.convertToDto(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
-        ReadNews response = mapper.convertToView(createdNewsDto, new ReadNews());
+        ReadNews response = mapper.convertToView(createdNewsDto, ReadNews.class);
 
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
@@ -75,7 +75,7 @@ public class NewsApiServiceImpl implements NewsApiService {
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
         List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
-                .map((newsDto) -> mapper.convertToView(newsDto, new ReadNews()))
+                .map((newsDto) -> mapper.convertToView(newsDto, ReadNews.class))
                 .collect(Collectors.toList());
 
         return Response.ok().entity(readNewsResponseList).build();
@@ -92,7 +92,7 @@ public class NewsApiServiceImpl implements NewsApiService {
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
-        ReadNews newsApiResponse = mapper.convertToView(readNewsDto, new ReadNews());
+        ReadNews newsApiResponse = mapper.convertToView(readNewsDto, ReadNews.class);
 
         return Response.ok().entity(newsApiResponse).build();
     }
@@ -108,9 +108,9 @@ public class NewsApiServiceImpl implements NewsApiService {
     @PreAuthorize(UPDATE_NEWS_PERMISSION)
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
-        NewsDto updateNewsDto = mapper.convertToDto(updateNews, new NewsDto());
+        NewsDto updateNewsDto = mapper.convertToDto(updateNews, NewsDto.class);
         NewsDto readNewsDto = newsService.update(id, updateNewsDto);
-        ReadNews response = mapper.convertToView(readNewsDto, new ReadNews());
+        ReadNews response = mapper.convertToView(readNewsDto, ReadNews.class);
         return Response.ok().entity(response).build();
     }
 

@@ -42,9 +42,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto =  mapper.convertToDto(createUser, new UserDto());
+        UserDto createUserDto =  mapper.convertToDto(createUser, UserDto.class);
         UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
+        ReadUser readUser = mapper.convertToView(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -60,7 +60,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
+        ReadUser readUser = mapper.convertToView(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -77,7 +77,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @Override
     public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
         List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
-                .map((userDto) -> mapper.convertToView(userDto, new ReadUser()))
+                .map((userDto) -> mapper.convertToView(userDto, ReadUser.class))
                 .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).entity(readUserList).build();
@@ -109,9 +109,9 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = mapper.convertToDto(updateUser, new UserDto());
+        UserDto updateUserDto = mapper.convertToDto(updateUser, UserDto.class);
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = mapper.convertToView(readUserDto, new ReadUser());
+        ReadUser readUser = mapper.convertToView(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }

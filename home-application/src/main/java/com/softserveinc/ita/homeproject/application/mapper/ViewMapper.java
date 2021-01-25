@@ -4,7 +4,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseView;
 
 public interface ViewMapper {
-    <View extends BaseView> View convertToView(BaseDto dto, View view);
+    <View extends BaseView> View convertToView(BaseDto dto, Class<View> view);
 
-    <Dto extends BaseDto> Dto convertToDto(BaseView view, Dto dto);
+    <Dto extends BaseDto> Dto convertToDto(BaseView view, Class<Dto> dto);
 }
