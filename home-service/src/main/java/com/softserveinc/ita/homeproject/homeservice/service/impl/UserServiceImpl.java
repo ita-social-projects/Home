@@ -78,7 +78,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
-        return userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize)).map(userMapper::convertEntityToDto);
+        Specification<User> userSpecification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize)).map(userMapper::convertEntityToDto);
     }
 
     @Override

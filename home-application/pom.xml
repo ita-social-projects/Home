@@ -11,16 +11,7 @@
     <packaging>jar</packaging>
     <artifactId>home-application</artifactId>
 
-    <properties>
-        <rsql-jpa-spring-boot-starter.version>5.0.6</rsql-jpa-spring-boot-starter.version>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>io.github.perplexhub</groupId>
-            <artifactId>rsql-jpa-spring-boot-starter</artifactId>
-            <version>${rsql-jpa-spring-boot-starter.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
