@@ -3,16 +3,15 @@ package com.softserveinc.ita.homeproject.homeservice.mapper;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
 
 @Component
 @RequiredArgsConstructor
-public class EntityMapperImpl implements EntityMapper {
+public class IServiceMapperImpl implements IServiceMapper {
 
-    private final ModelMapper mapper;
+    private final ServiceMapper mapper;
 
     @Override
     public <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Class<Dto> dto) {

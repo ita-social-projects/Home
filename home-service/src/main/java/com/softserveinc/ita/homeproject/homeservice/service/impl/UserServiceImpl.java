@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.mapper.EntityMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapper.IServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EntityMapper mapper;
+    private final IServiceMapper mapper;
 
     @Transactional
     @Override
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
         } else {
-            User toCreate =  mapper.convertToEntity(createUserDto, User.class);
+            User toCreate = mapper.convertToEntity(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);

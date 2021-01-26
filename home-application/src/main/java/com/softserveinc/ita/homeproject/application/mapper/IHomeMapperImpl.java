@@ -3,16 +3,15 @@ package com.softserveinc.ita.homeproject.application.mapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseView;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
 
 @Component
 @RequiredArgsConstructor
-public class ViewMapperImpl implements ViewMapper {
+public class IHomeMapperImpl implements IHomeMapper {
 
-    private final ModelMapper mapper;
+    private final HomeMapper mapper;
 
     @Override
     public <View extends BaseView> View convertToView(BaseDto dto, Class<View> view) {

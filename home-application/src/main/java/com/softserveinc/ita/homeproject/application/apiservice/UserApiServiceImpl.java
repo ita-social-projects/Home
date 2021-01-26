@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.UsersApiService;
-import com.softserveinc.ita.homeproject.application.mapper.ViewMapper;
+import com.softserveinc.ita.homeproject.application.mapper.IHomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
@@ -30,7 +30,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
-    private final ViewMapper mapper;
+    private final IHomeMapper mapper;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -42,7 +42,7 @@ public class UserApiServiceImpl implements UsersApiService {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto =  mapper.convertToDto(createUser, UserDto.class);
+        UserDto createUserDto = mapper.convertToDto(createUser, UserDto.class);
         UserDto readUserDto = userService.createUser(createUserDto);
         ReadUser readUser = mapper.convertToView(readUserDto, ReadUser.class);
 
