@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.config;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config;
 
 import org.modelmapper.ModelMapper;
 

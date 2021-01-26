@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.config.CustomServiceMappingConfig;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.CustomServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
