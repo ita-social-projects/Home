@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.application.apiservice;
+package com.softserveinc.ita.homeproject.application.api;
 
-import com.softserveinc.ita.homeproject.api.NewsApiService;
+import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.application.mapper.CreateNewsDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadNewsDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateNewsDtoMapper;
@@ -9,13 +9,14 @@ import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +28,15 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  *
  * @author Ihor Svyrydenko
  */
-@Service
-@RequiredArgsConstructor
-public class NewsApiServiceImpl implements NewsApiService {
 
-    private final NewsService newsService;
-    private final CreateNewsDtoMapper createNewsDtoMapper;
-    private final ReadNewsDtoMapper readNewsDtoMapper;
-    private final UpdateNewsDtoMapper updateNewsDtoMapper;
+@Provider
+@NoArgsConstructor
+public class NewsApiImpl implements NewsApi {
+
+    private NewsService newsService;
+    private CreateNewsDtoMapper createNewsDtoMapper;
+    private ReadNewsDtoMapper readNewsDtoMapper;
+    private UpdateNewsDtoMapper updateNewsDtoMapper;
 
     /**
      * addNews method is implementation of HTTP POST
@@ -118,4 +120,23 @@ public class NewsApiServiceImpl implements NewsApiService {
         return Response.ok().entity(response).build();
     }
 
+    @Autowired
+    public void setNewsService(NewsService newsService) {
+        this.newsService = newsService;
+    }
+
+    @Autowired
+    public void setCreateNewsDtoMapper(CreateNewsDtoMapper createNewsDtoMapper) {
+        this.createNewsDtoMapper = createNewsDtoMapper;
+    }
+
+    @Autowired
+    public void setReadNewsDtoMapper(ReadNewsDtoMapper readNewsDtoMapper) {
+        this.readNewsDtoMapper = readNewsDtoMapper;
+    }
+
+    @Autowired
+    public void setUpdateNewsDtoMapper(UpdateNewsDtoMapper updateNewsDtoMapper) {
+        this.updateNewsDtoMapper = updateNewsDtoMapper;
+    }
 }

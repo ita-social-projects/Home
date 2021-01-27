@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.application.apiservice;
+package com.softserveinc.ita.homeproject.application.api;
 
-import com.softserveinc.ita.homeproject.api.UsersApiService;
+import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
 import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
@@ -9,13 +9,14 @@ import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +28,14 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  *
  * @author Mykyta Morar
  */
-@Service
-@RequiredArgsConstructor
-public class UserApiServiceImpl implements UsersApiService {
+@Provider
+@NoArgsConstructor
+public class UserApiImpl implements UsersApi {
 
-    private final UserService userService;
-    private final CreateUserDtoMapper createUserDtoMapper;
-    private final ReadUserDtoMapper readUserDtoMapper;
-    private final UpdateUserDtoMapper updateUserDtoMapper;
+    private UserService userService;
+    private CreateUserDtoMapper createUserDtoMapper;
+    private ReadUserDtoMapper readUserDtoMapper;
+    private UpdateUserDtoMapper updateUserDtoMapper;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -120,4 +121,23 @@ public class UserApiServiceImpl implements UsersApiService {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setCreateUserDtoMapper(CreateUserDtoMapper createUserDtoMapper) {
+        this.createUserDtoMapper = createUserDtoMapper;
+    }
+
+    @Autowired
+    public void setReadUserDtoMapper(ReadUserDtoMapper readUserDtoMapper) {
+        this.readUserDtoMapper = readUserDtoMapper;
+    }
+
+    @Autowired
+    public void setUpdateUserDtoMapper(UpdateUserDtoMapper updateUserDtoMapper) {
+        this.updateUserDtoMapper = updateUserDtoMapper;
+    }
 }
