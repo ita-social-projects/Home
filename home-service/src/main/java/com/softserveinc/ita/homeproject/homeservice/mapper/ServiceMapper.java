@@ -27,12 +27,7 @@ public class ServiceMapper {
         }
     }
 
-
-    public <Dto extends BaseDto> Dto convertToDto(BaseEntity entity, Class<Dto> dto) {
-        return modelMapper.map(entity, (Type) dto);
-    }
-
-    public <Entity extends BaseEntity> Entity convertToEntity(BaseDto dto, Class<Entity> entity) {
-        return modelMapper.map(dto, (Type) entity);
+    public <D> D convert(Object source, Class<D> destination) {
+        return modelMapper.map(source, destination);
     }
 }

@@ -27,12 +27,7 @@ public class HomeMapper {
         }
     }
 
-
-    public <View extends BaseView> View convertToView(BaseDto dto, Class<View> view) {
-        return modelMapper.map(dto, (Type) view);
-    }
-
-    public <Dto extends BaseDto> Dto convertToDto(BaseView view, Class<Dto> dto) {
-        return modelMapper.map(view, (Type) dto);
+    public <D> D convert(Object source, Class<D> destination) {
+        return modelMapper.map(source, destination);
     }
 }

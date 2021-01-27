@@ -24,12 +24,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public NewsDto create(NewsDto newsDto) {
-        News news = mapper.convertToEntity(newsDto, News.class);
+        News news = mapper.convert(newsDto, News.class);
         news.setCreateDate(LocalDateTime.now());
 
         newsRepository.save(news);
 
-        return mapper.convertToDto(news, NewsDto.class);
+        return mapper.convert(news, NewsDto.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class NewsServiceImpl implements NewsService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             newsRepository.save(fromDB);
-            return mapper.convertToDto(fromDB, NewsDto.class);
+            return mapper.convert(fromDB, NewsDto.class);
 
         } else {
             throw new NotFoundHomeException("Can't find news with given ID:" + id);
@@ -72,7 +72,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
         return newsRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
-                .map((news) -> mapper.convertToDto(news, NewsDto.class));
+                .map((news) -> mapper.convert(news, NewsDto.class));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class NewsServiceImpl implements NewsService {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
 
-        return mapper.convertToDto(newsResponse, NewsDto.class);
+        return mapper.convert(newsResponse, NewsDto.class);
     }
 
     @Override
