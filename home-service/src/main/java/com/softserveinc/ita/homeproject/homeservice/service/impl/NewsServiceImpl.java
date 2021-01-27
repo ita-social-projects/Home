@@ -4,7 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.mapper.IServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
-    private final IServiceMapper mapper;
+    private final ServiceMapper mapper;
 
     @Override
     @Transactional

@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.UsersApiService;
-import com.softserveinc.ita.homeproject.application.mapper.IHomeMapper;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
@@ -30,7 +30,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class UserApiServiceImpl implements UsersApiService {
 
     private final UserService userService;
-    private final IHomeMapper mapper;
+    private final HomeMapper mapper;
 
     /**
      * createUser method is implementation of HTTP POST

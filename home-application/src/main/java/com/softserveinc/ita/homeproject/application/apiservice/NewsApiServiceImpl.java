@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.apiservice;
 
 import com.softserveinc.ita.homeproject.api.NewsApiService;
-import com.softserveinc.ita.homeproject.application.mapper.IHomeMapper;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
@@ -30,7 +30,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class NewsApiServiceImpl implements NewsApiService {
 
     private final NewsService newsService;
-    private final IHomeMapper mapper;
+    private final HomeMapper mapper;
 
     /**
      * addNews method is implementation of HTTP POST
