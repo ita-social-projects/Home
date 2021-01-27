@@ -54,6 +54,12 @@
         <scope>provided</scope>
     </dependency>
 {{/useBeanValidation}}
+      <!-- Fix for Java 11 -->
+      <dependency>
+          <groupId>jakarta.xml.bind</groupId>
+          <artifactId>jakarta.xml.bind-api</artifactId>
+          <version>2.3.3</version>
+      </dependency>
     <dependency>
         <groupId>javax.ws.rs</groupId>
         <artifactId>javax.ws.rs-api</artifactId>
