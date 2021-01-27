@@ -32,6 +32,7 @@
         <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <rapidoc.version>7.2.1</rapidoc.version>
+        <modelMapper.version>2.3.9</modelMapper.version>
     </properties>
 
     <dependencyManagement>
@@ -60,7 +61,7 @@
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>2.3.9</version>
+            <version>${modelMapper.version}</version>
         </dependency>
     </dependencies>
 
