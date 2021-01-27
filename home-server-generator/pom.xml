@@ -13,7 +13,6 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
-        <generation.files>pom.xml</generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>
@@ -75,6 +74,7 @@
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
                             <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
+                                <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
@@ -92,7 +92,6 @@
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
-                            <supportingFilesToGenerate>${generation.files}</supportingFilesToGenerate>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi/server</output>
                         </configuration>
