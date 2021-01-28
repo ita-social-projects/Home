@@ -1,6 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +22,5 @@ public class UserDto extends BaseDto {
 
     private String password;
 
-    private String contacts;
+    private List<Contact> contacts;
 }

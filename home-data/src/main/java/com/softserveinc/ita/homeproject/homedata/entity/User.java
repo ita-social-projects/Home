@@ -2,13 +2,9 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -50,8 +46,8 @@ public class User extends BaseEntity{
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    @Column(name = "contacts")
-    private String contacts;
+    @OneToMany(mappedBy = "user")
+    private List<Contact> contacts;
 
     @ManyToMany
     @JoinTable(name = "user_cooperation",
