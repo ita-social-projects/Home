@@ -13,7 +13,6 @@
 
     <properties>
         <yaml.name>openapi.yaml</yaml.name>
-        <generation.files>OffsetDateTimeProvider.java,pom.xml</generation.files>
     </properties>
 
     <artifactId>home-server-generator</artifactId>
@@ -73,7 +72,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.build.outputDirectory}/yaml/${yaml.name}</inputSpec>
-                            <generatorName>jaxrs-jersey</generatorName>
+                            <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8</dateLibrary>
@@ -87,9 +86,12 @@
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
-                            <supportingFilesToGenerate>${generation.files}</supportingFilesToGenerate>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi/server</output>
                         </configuration>
