@@ -1,9 +1,7 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
@@ -33,9 +31,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class UserApiImpl implements UsersApi {
 
     private UserService userService;
-    private CreateUserDtoMapper createUserDtoMapper;
-    private ReadUserDtoMapper readUserDtoMapper;
-    private UpdateUserDtoMapper updateUserDtoMapper;
+    private HomeMapper mapper;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -47,9 +43,9 @@ public class UserApiImpl implements UsersApi {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = createUserDtoMapper.convertViewToDto(createUser);
+        UserDto createUserDto = mapper.convert(createUser, UserDto.class);
         UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -65,7 +61,7 @@ public class UserApiImpl implements UsersApi {
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -82,7 +78,7 @@ public class UserApiImpl implements UsersApi {
     @Override
     public Response queryUsers(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
         List<ReadUser> readUserList = userService.getAllUsers(pageNumber, pageSize).stream()
-                .map(readUserDtoMapper::convertDtoToView)
+                .map((userDto) -> mapper.convert(userDto, ReadUser.class))
                 .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).entity(readUserList).build();
@@ -114,9 +110,9 @@ public class UserApiImpl implements UsersApi {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = updateUserDtoMapper.convertViewToDto(updateUser);
+        UserDto updateUserDto = mapper.convert(updateUser, UserDto.class);
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -127,17 +123,5 @@ public class UserApiImpl implements UsersApi {
     }
 
     @Autowired
-    public void setCreateUserDtoMapper(CreateUserDtoMapper createUserDtoMapper) {
-        this.createUserDtoMapper = createUserDtoMapper;
-    }
-
-    @Autowired
-    public void setReadUserDtoMapper(ReadUserDtoMapper readUserDtoMapper) {
-        this.readUserDtoMapper = readUserDtoMapper;
-    }
-
-    @Autowired
-    public void setUpdateUserDtoMapper(UpdateUserDtoMapper updateUserDtoMapper) {
-        this.updateUserDtoMapper = updateUserDtoMapper;
-    }
+    public void setMapper(HomeMapper mapper) {this.mapper = mapper;}
 }
