@@ -1,14 +1,12 @@
 package com.softserveinc.ita.homeproject.application.mapper;
 
-import com.softserveinc.ita.homeproject.application.mapper.config.CustomHomeMappingConfig;
-import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.model.BaseView;
+import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.Type;
 import java.util.Set;
 
 @Component
@@ -16,14 +14,18 @@ import java.util.Set;
 public class HomeMapper {
 
     private ModelMapper modelMapper;
-    private final Set<CustomHomeMappingConfig> customHomeMappingConfigs;
+
+    @SuppressWarnings("rawtypes")
+    private final Set<HomeMappingConfig> homeMappingConfigs;
 
 
     @PostConstruct
+    @SuppressWarnings({"unchecked cast", "rawtypes"})
     public void init() {
         modelMapper = new ModelMapper();
-        for (CustomHomeMappingConfig customHomeMappingConfig : customHomeMappingConfigs) {
-            customHomeMappingConfig.addMapping(modelMapper);
+        for (HomeMappingConfig homeMappingConfig : homeMappingConfigs) {
+            TypeMap typeMap = modelMapper.typeMap(homeMappingConfig.getSourceType(), homeMappingConfig.getDestinationType());
+            homeMappingConfig.addMappings(typeMap);
         }
     }
 
