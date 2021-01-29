@@ -1,9 +1,7 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.NewsApi;
-import com.softserveinc.ita.homeproject.application.mapper.CreateNewsDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.ReadNewsDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.UpdateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
@@ -34,9 +32,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class NewsApiImpl implements NewsApi {
 
     private NewsService newsService;
-    private CreateNewsDtoMapper createNewsDtoMapper;
-    private ReadNewsDtoMapper readNewsDtoMapper;
-    private UpdateNewsDtoMapper updateNewsDtoMapper;
+    private HomeMapper mapper;
 
     /**
      * addNews method is implementation of HTTP POST
@@ -48,9 +44,9 @@ public class NewsApiImpl implements NewsApi {
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
     public Response addNews(CreateNews createNews) {
-        NewsDto newsDto = createNewsDtoMapper.convertViewToDto(createNews);
+        NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
-        ReadNews response = readNewsDtoMapper.convertDtoToView(createdNewsDto);
+        ReadNews response = mapper.convert(createdNewsDto, ReadNews.class);
 
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
@@ -81,7 +77,7 @@ public class NewsApiImpl implements NewsApi {
     @Override
     public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
         List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
-                .map(readNewsDtoMapper::convertDtoToView)
+                .map((newsDto) -> mapper.convert(newsDto, ReadNews.class))
                 .collect(Collectors.toList());
 
         return Response.ok().entity(readNewsResponseList).build();
@@ -98,7 +94,7 @@ public class NewsApiImpl implements NewsApi {
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
-        ReadNews newsApiResponse = readNewsDtoMapper.convertDtoToView(readNewsDto);
+        ReadNews newsApiResponse = mapper.convert(readNewsDto, ReadNews.class);
 
         return Response.ok().entity(newsApiResponse).build();
     }
@@ -114,9 +110,9 @@ public class NewsApiImpl implements NewsApi {
     @PreAuthorize(UPDATE_NEWS_PERMISSION)
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
-        NewsDto updateNewsDto = updateNewsDtoMapper.convertViewToDto(updateNews);
+        NewsDto updateNewsDto = mapper.convert(updateNews, NewsDto.class);
         NewsDto readNewsDto = newsService.update(id, updateNewsDto);
-        ReadNews response = readNewsDtoMapper.convertDtoToView(readNewsDto);
+        ReadNews response = mapper.convert(readNewsDto, ReadNews.class);
         return Response.ok().entity(response).build();
     }
 
@@ -126,17 +122,7 @@ public class NewsApiImpl implements NewsApi {
     }
 
     @Autowired
-    public void setCreateNewsDtoMapper(CreateNewsDtoMapper createNewsDtoMapper) {
-        this.createNewsDtoMapper = createNewsDtoMapper;
-    }
-
-    @Autowired
-    public void setReadNewsDtoMapper(ReadNewsDtoMapper readNewsDtoMapper) {
-        this.readNewsDtoMapper = readNewsDtoMapper;
-    }
-
-    @Autowired
-    public void setUpdateNewsDtoMapper(UpdateNewsDtoMapper updateNewsDtoMapper) {
-        this.updateNewsDtoMapper = updateNewsDtoMapper;
+    public void setMapper(HomeMapper mapper) {
+        this.mapper = mapper;
     }
 }
