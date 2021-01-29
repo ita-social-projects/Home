@@ -8,3 +8,9 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - 5433:5432
+  application:
+    image: homeacademy/home-project
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres
+    ports:
+      - 8080:8080
