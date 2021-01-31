@@ -1411,12 +1411,15 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 security:
-  - basicAuth: []
+  - OAuth: []
 components:
   securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
+    OAuth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: api/0/oauth/token
+          scopes: {}
   responses:
     BadRequest:
       description: Validation Exception
