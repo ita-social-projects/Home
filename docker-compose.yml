@@ -1,16 +1,27 @@
-version: '3.1'
+version: '3.9'
 
 services:
   db-postgres:
     image: postgres:latest
-    restart: always
     environment:
       POSTGRES_PASSWORD: password
     ports:
       - 5433:5432
-  application:
+
+  data-migration:
+    build:
+      context: .
+      dockerfile: docker-data-migration.dockerfile
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres?user=postgres&password=password
+    ports:
+      - 5000:5000
+    restart: on-failure
+
+  home-project:
     image: homeacademy/home-project
     environment:
       DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres
     ports:
       - 8080:8080
+    restart: on-failure
