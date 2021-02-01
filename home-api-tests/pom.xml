@@ -23,8 +23,6 @@
         <postgres.container.name>db-postgres</postgres.container.name>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
-        <postgres.user>postgres</postgres.user>
-        <postgres.password>password</postgres.password>
         <postgres.url>jdbc:postgresql://${postgres.container.name}:${postgres.internal.port}/${postgres.db}
         </postgres.url>
         <datasource.url.property>spring.datasource.url</datasource.url.property>
@@ -260,6 +258,8 @@
                                 </home.application.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
+                                <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -309,6 +309,24 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-clients</artifactId>
+            <version>1.0.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-clients</artifactId>
+            <version>1.0.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cz.jirutka.rsql</groupId>
+            <artifactId>rsql-parser</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

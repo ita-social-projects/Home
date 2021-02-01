@@ -1,19 +1,7 @@
-package com.softserveinc.ita.homeproject.application.apiservice;
+package com.softserveinc.ita.homeproject.application.api;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.softserveinc.ita.homeproject.api.UsersApiService;
-import com.softserveinc.ita.homeproject.application.mapper.CreateUserDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.DtoToViewMapper;
-import com.softserveinc.ita.homeproject.application.mapper.ReadUserDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.UpdateUserDtoMapper;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.api.UsersApi;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
@@ -22,16 +10,19 @@ import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
@@ -39,15 +30,14 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  *
  * @author Mykyta Morar
  */
-@Service
-@RequiredArgsConstructor
-public class UserApiServiceImpl extends CommonApiService<UserDto> implements UsersApiService {
+@Provider
+@NoArgsConstructor
+public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
 
-    private final UserService userService;
-    private final CreateUserDtoMapper createUserDtoMapper;
-    private final ReadUserDtoMapper readUserDtoMapper;
-    private final UpdateUserDtoMapper updateUserDtoMapper;
-    private final EntitySpecificationService<User> entitySpecificationService;
+    private UserService userService;
+    private HomeMapper mapper;
+    private EntitySpecificationService entitySpecificationService;
+
 
     /**
      * createUser method is implementation of HTTP POST
@@ -59,9 +49,9 @@ public class UserApiServiceImpl extends CommonApiService<UserDto> implements Use
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = createUserDtoMapper.convertViewToDto(createUser);
+        UserDto createUserDto = mapper.convert(createUser, UserDto.class);
         UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -77,7 +67,7 @@ public class UserApiServiceImpl extends CommonApiService<UserDto> implements Use
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -90,7 +80,6 @@ public class UserApiServiceImpl extends CommonApiService<UserDto> implements Use
      * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
-
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
     public Response queryUsers(@Min(1) Integer pageNumber,
@@ -117,7 +106,7 @@ public class UserApiServiceImpl extends CommonApiService<UserDto> implements Use
                 entitySpecificationService.getSpecification(filterMap, search, sort)
         );
 
-        return buildQueryResponse(users);
+        return buildQueryResponse(users, ReadUser.class);
     }
 
     /**
@@ -146,15 +135,27 @@ public class UserApiServiceImpl extends CommonApiService<UserDto> implements Use
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = updateUserDtoMapper.convertViewToDto(updateUser);
+        UserDto updateUserDto = mapper.convert(updateUser, UserDto.class);
         UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = readUserDtoMapper.convertDtoToView(readUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @Override
-    public DtoToViewMapper<UserDto, ?> getDtoToViewMapper() {
-        return readUserDtoMapper;
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
+
+    @Autowired
+    public void setMapper(HomeMapper mapper) {
+        super.setMapper(mapper);
+        this.mapper = mapper;
+    }
+
+    @Autowired
+    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
+        this.entitySpecificationService = entitySpecificationService;
+    }
+
 }

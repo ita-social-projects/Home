@@ -1,15 +1,12 @@
 package com.softserveinc.ita.homeproject.api.tests;
 
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NewsApiIT {
 
     private NewsApi newsApi;
+
     private final CreateNews createNews = new CreateNews()
             .title("title")
             .description("description")
@@ -27,21 +25,25 @@ class NewsApiIT {
     @BeforeEach
     public void setUp() {
         newsApi = new NewsApi(ApiClientUtil.getClient());
-    }
+     }
 
     @Test
     void createNewsTest() throws ApiException {
         ReadNews readNews = newsApi.addNews(createNews);
         assertNews(createNews, readNews);
+
+        newsApi.deleteNews(readNews.getId());
     }
 
     @Test
     void getNewsByIdTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
-
         ReadNews news = newsApi.getNews(savedNews.getId());
+
         assertNotNull(news);
         assertEquals(savedNews, news);
+
+        newsApi.deleteNews(savedNews.getId());
     }
 
     @Test
@@ -57,15 +59,8 @@ class NewsApiIT {
 
         ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
         assertNews(savedNews, updateNews, updatedNews);
-    }
 
-    @Test
-    void getAllNewsTest() throws ApiException {
-        newsApi.addNews(createNews);
-        List<ReadNews> allNews = newsApi.getAllNews(1, 10);
-
-        assertNotNull(allNews);
-        assertFalse(allNews.isEmpty());
+        newsApi.deleteNews(savedNews.getId());
     }
 
     @Test
@@ -79,7 +74,6 @@ class NewsApiIT {
                 .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
                 .withMessage("{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
     }
-
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
         assertNotNull(updated);

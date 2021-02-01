@@ -1,16 +1,14 @@
-package com.softserveinc.ita.homeproject.application.config;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.softserveinc.ita.homeproject.application.config.rsql;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

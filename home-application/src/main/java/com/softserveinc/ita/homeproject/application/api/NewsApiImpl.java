@@ -1,23 +1,26 @@
-package com.softserveinc.ita.homeproject.application.apiservice;
+package com.softserveinc.ita.homeproject.application.api;
 
-import com.softserveinc.ita.homeproject.api.NewsApiService;
-import com.softserveinc.ita.homeproject.application.mapper.CreateNewsDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.ReadNewsDtoMapper;
-import com.softserveinc.ita.homeproject.application.mapper.UpdateNewsDtoMapper;
+import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
+import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.ws.rs.ext.Provider;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
@@ -27,14 +30,15 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  *
  * @author Ihor Svyrydenko
  */
-@Service
-@RequiredArgsConstructor
-public class NewsApiServiceImpl implements NewsApiService {
 
-    private final NewsService newsService;
-    private final CreateNewsDtoMapper createNewsDtoMapper;
-    private final ReadNewsDtoMapper readNewsDtoMapper;
-    private final UpdateNewsDtoMapper updateNewsDtoMapper;
+@Provider
+@NoArgsConstructor
+public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
+
+    private NewsService newsService;
+    private HomeMapper mapper;
+    private EntitySpecificationService entitySpecificationService;
+
 
     /**
      * addNews method is implementation of HTTP POST
@@ -46,9 +50,9 @@ public class NewsApiServiceImpl implements NewsApiService {
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
     public Response addNews(CreateNews createNews) {
-        NewsDto newsDto = createNewsDtoMapper.convertViewToDto(createNews);
+        NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
-        ReadNews response = readNewsDtoMapper.convertDtoToView(createdNewsDto);
+        ReadNews response = mapper.convert(createdNewsDto, ReadNews.class);
 
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
@@ -72,17 +76,34 @@ public class NewsApiServiceImpl implements NewsApiService {
      * method for getting all news from database.
      *
      * @param pageNumber is the number of the returned page with elements
-     * @param pageSize is amount of the returned elements
+     * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
-    public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
-        List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
-                .map(readNewsDtoMapper::convertDtoToView)
-                .collect(Collectors.toList());
+    public Response getAllNews(@Min(1) Integer pageNumber,
+                               @Min(0) @Max(10) Integer pageSize,
+                               String sort,
+                               String search,
+                               String id,
+                               String title,
+                               String text,
+                               String source) {
 
-        return Response.ok().entity(readNewsResponseList).build();
+        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.ID, id);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TITLE, title);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TEXT, text);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.SOURCE, source);
+
+        Page<NewsDto> readNews = newsService.findNews(
+                pageNumber,
+                pageSize,
+                entitySpecificationService.getSpecification(filterMap, search, sort)
+        );
+
+        return buildQueryResponse(readNews, ReadNews.class);
     }
 
     /**
@@ -96,7 +117,7 @@ public class NewsApiServiceImpl implements NewsApiService {
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getById(id);
-        ReadNews newsApiResponse = readNewsDtoMapper.convertDtoToView(readNewsDto);
+        ReadNews newsApiResponse = mapper.convert(readNewsDto, ReadNews.class);
 
         return Response.ok().entity(newsApiResponse).build();
     }
@@ -105,17 +126,33 @@ public class NewsApiServiceImpl implements NewsApiService {
      * updateNews method is implementation of HTTP PUT
      * method for updating existing news.
      *
-     * @param id is id of the news that has to be updated
+     * @param id         is id of the news that has to be updated
      * @param updateNews are incoming data needed for news update
      * @return Response to generated controller
      */
     @PreAuthorize(UPDATE_NEWS_PERMISSION)
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
-        NewsDto updateNewsDto = updateNewsDtoMapper.convertViewToDto(updateNews);
+        NewsDto updateNewsDto = mapper.convert(updateNews, NewsDto.class);
         NewsDto readNewsDto = newsService.update(id, updateNewsDto);
-        ReadNews response = readNewsDtoMapper.convertDtoToView(readNewsDto);
+        ReadNews response = mapper.convert(readNewsDto, ReadNews.class);
         return Response.ok().entity(response).build();
     }
 
+
+    @Autowired
+    public void setNewsService(NewsService newsService) {
+        this.newsService = newsService;
+    }
+
+    @Autowired
+    public void setMapper(HomeMapper mapper) {
+        super.setMapper(mapper);
+        this.mapper = mapper;
+    }
+
+    @Autowired
+    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
+        this.entitySpecificationService = entitySpecificationService;
+    }
 }

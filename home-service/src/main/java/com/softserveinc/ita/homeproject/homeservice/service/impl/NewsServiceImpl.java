@@ -4,11 +4,12 @@ import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.mapperentity.NewsMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,22 +20,22 @@ import java.time.LocalDateTime;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
-    private final NewsMapper newsMapper;
+    private final ServiceMapper mapper;
 
     @Override
     @Transactional
     public NewsDto create(NewsDto newsDto) {
-        News news = newsMapper.convertDtoToEntity(newsDto);
+        News news = mapper.convert(newsDto, News.class);
         news.setCreateDate(LocalDateTime.now());
 
         newsRepository.save(news);
 
-        return newsMapper.convertEntityToDto(news);
+        return mapper.convert(news, NewsDto.class);
     }
 
     @Override
     @Transactional
-    public NewsDto update(Long id, NewsDto newsDto)  {
+    public NewsDto update(Long id, NewsDto newsDto) {
 
         if (newsRepository.findById(id).isPresent()) {
 
@@ -62,7 +63,7 @@ public class NewsServiceImpl implements NewsService {
 
             fromDB.setUpdateDate(LocalDateTime.now());
             newsRepository.save(fromDB);
-            return newsMapper.convertEntityToDto(fromDB);
+            return mapper.convert(fromDB, NewsDto.class);
 
         } else {
             throw new NotFoundHomeException("Can't find news with given ID:" + id);
@@ -70,9 +71,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
-        return newsRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
-                .map(newsMapper::convertEntityToDto);
+    public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
+        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize)).map(news->mapper.convert(news, NewsDto.class));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class NewsServiceImpl implements NewsService {
         News newsResponse = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
 
-        return newsMapper.convertEntityToDto(newsResponse);
+        return mapper.convert(newsResponse, NewsDto.class);
     }
 
     @Override
