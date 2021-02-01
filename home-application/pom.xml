@@ -12,11 +12,8 @@
     <artifactId>home-application</artifactId>
 
     <properties>
-        <jib.version>2.5.0</jib.version>
-        <image.path>registry.hub.docker.com/homeacademy/home-project</image.path>
-        <hub.docker.username>homeacademy</hub.docker.username>
-        <hub.docker.password>home28september</hub.docker.password>
         <spring.boot.version>2.4.2</spring.boot.version>
+        <image.path>registry.hub.docker.com/homeacademy/home-project</image.path>
     </properties>
 
     <dependencies>

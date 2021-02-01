@@ -32,6 +32,9 @@
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <rapidoc.version>7.2.1</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
+        <jib.version>2.7.1</jib.version>
+        <hub.docker.username>homeacademy</hub.docker.username>
+        <hub.docker.password>home28september</hub.docker.password>
     </properties>
 
     <dependencyManagement>
