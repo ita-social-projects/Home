@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -83,10 +82,10 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    public Response queryUsers(@Min(1) Integer pageNumber,
+    public Response getAllUsers(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
-                               String search,
+                               String filter,
                                String id,
                                String email,
                                String firstName,
@@ -104,7 +103,7 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
         Page<UserDto> users = userService.findUsers(
                 pageNumber,
                 pageSize,
-                entitySpecificationService.getSpecification(filterMap, search, sort)
+                entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
         return buildQueryResponse(users, ReadUser.class);

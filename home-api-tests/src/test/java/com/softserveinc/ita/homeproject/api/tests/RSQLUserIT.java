@@ -24,7 +24,7 @@ public class RSQLUserIT {
     private Integer pageNumber;
     private Integer pageSize;
     private String sort;
-    private String search;
+    private String filter;
     private String id;
     private String email;
     private String firstName;
@@ -46,10 +46,10 @@ public class RSQLUserIT {
 
         email = userList.get((int) (Math.random() * userList.size())).getEmail();
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -65,10 +65,10 @@ public class RSQLUserIT {
         firstName = userList.get((int) (Math.random() * userList.size())).getFirstName();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -85,10 +85,10 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -110,10 +110,10 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -134,10 +134,10 @@ public class RSQLUserIT {
         lastName = userList.get((int) (Math.random() * userList.size())).getLastName();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -150,13 +150,13 @@ public class RSQLUserIT {
 
     @Test
     void getAllUsersLikeIgnoreCaseTest() throws ApiException {
-        search = "firstName=ilike='AL'";
+        filter = "firstName=ilike='AL'";
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         email,
                         firstName,
@@ -172,10 +172,10 @@ public class RSQLUserIT {
 
         try {
             userApi
-                    .queryUsers(pageNumber,
+                    .getAllUsers(pageNumber,
                             pageSize,
                             sort,
-                            search,
+                            filter,
                             id,
                             email,
                             firstName,
@@ -211,7 +211,7 @@ public class RSQLUserIT {
         pageNumber = 1;
         pageSize = 10;
         sort = null;
-        search = null;
+        filter = null;
         id = null;
         email = null;
         firstName = null;

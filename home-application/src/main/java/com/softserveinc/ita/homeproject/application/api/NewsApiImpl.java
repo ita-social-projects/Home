@@ -84,7 +84,7 @@ public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
     public Response getAllNews(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
-                               String search,
+                               String filter,
                                String id,
                                String title,
                                String text,
@@ -100,7 +100,7 @@ public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
         Page<NewsDto> readNews = newsService.findNews(
                 pageNumber,
                 pageSize,
-                entitySpecificationService.getSpecification(filterMap, search, sort)
+                entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
         return buildQueryResponse(readNews, ReadNews.class);

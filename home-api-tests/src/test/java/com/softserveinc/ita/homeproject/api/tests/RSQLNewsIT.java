@@ -23,7 +23,7 @@ public class RSQLNewsIT {
     private Integer pageNumber;
     private Integer pageSize;
     private String sort;
-    private String search;
+    private String filter;
     private String id;
     private String title;
     private String text;
@@ -45,7 +45,7 @@ public class RSQLNewsIT {
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -62,7 +62,7 @@ public class RSQLNewsIT {
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -74,12 +74,12 @@ public class RSQLNewsIT {
 
     @Test
     void getAllUsersLikeIgnoreCaseTest() throws ApiException {
-        search = "source=ilike='Si'";
+        filter = "source=ilike='Si'";
         List<ReadNews> listNews = newsApi
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -97,7 +97,7 @@ public class RSQLNewsIT {
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -121,7 +121,7 @@ public class RSQLNewsIT {
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -140,7 +140,7 @@ public class RSQLNewsIT {
     void getAllUsersSortAndSearchTest() throws ApiException {
         List<String> sourceList = new ArrayList<>();
         sort = "source,asc";
-        search = new StringBuilder()
+        filter = new StringBuilder()
                 .append("id=bt=('")
                 .append(newsList.get(1).getId())
                 .append("',")
@@ -152,7 +152,7 @@ public class RSQLNewsIT {
                 .getAllNews(pageNumber,
                         pageSize,
                         sort,
-                        search,
+                        filter,
                         id,
                         title,
                         text,
@@ -176,7 +176,7 @@ public class RSQLNewsIT {
                     .getAllNews(pageNumber,
                             pageSize,
                             sort,
-                            search,
+                            filter,
                             id,
                             title,
                             text,
@@ -240,7 +240,7 @@ public class RSQLNewsIT {
         pageNumber = 1;
         pageSize = 10;
         sort = null;
-        search = null;
+        filter = null;
         id = null;
         title = null;
         text = null;

@@ -72,7 +72,7 @@ paths:
             type: string
             default: id,asc
         - in: query
-          name: search
+          name: filter
           schema:
             type: string
         - in: query
@@ -234,7 +234,7 @@ paths:
         - user
       summary: "Get all users"
       description: ''
-      operationId: queryUsers
+      operationId: getAllUsers
       parameters:
         - in: query
           name: pageNumber
@@ -259,7 +259,7 @@ paths:
             type: string
             default: id,asc
         - in: query
-          name: search
+          name: filter
           schema:
             type: string
         - in: query
