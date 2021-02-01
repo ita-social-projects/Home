@@ -285,19 +285,6 @@ paths:
       responses:
         '200':
           description: successful operation
-          headers:
-            Paging-count:
-              schema:
-                type: integer
-              description: Element count of current page.
-            Paging-total-pages:
-              schema:
-                type: integer
-              description: Total amout of pages.
-            Paging-total-count:
-              schema:
-                type: integer
-              description: Total amout of elements.
           content:
             application/json:
               schema:

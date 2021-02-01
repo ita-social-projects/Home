@@ -82,8 +82,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize)).map(user->mapper.convert(user, UserDto.class));
     }
 
-
-
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)

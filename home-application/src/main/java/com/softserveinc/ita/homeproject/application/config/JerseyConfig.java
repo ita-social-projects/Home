@@ -39,18 +39,17 @@ public class JerseyConfig extends ResourceConfig {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
         // register endpoints
-        this.registerPackageClasses("com.softserveinc.ita.homeproject.api", scanner);
+        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.api", scanner);
         //  register exception mappers
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.exception.mapper", scanner);
         // register jackson for json
         register(JacksonJsonProvider.class);
     }
 
-    private ResourceConfig registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
+    private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
         registerClasses(scanner.findCandidateComponents(packageName).stream()
                 .map(beanDefinition -> ClassUtils
                         .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
                 .collect(Collectors.toSet()));
-        return this;
     }
 }
