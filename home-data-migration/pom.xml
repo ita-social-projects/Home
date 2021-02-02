@@ -71,7 +71,11 @@
                             </to>
                             <container>
                                 <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
-                                <args>--url=jdbc:postgresql://db-postgres:5432/postgres?user=postgres&amp;password=password</args>
+                                <args>
+                                    <arg>--url=jdbc:postgresql://db-postgres:5432/postgres</arg>
+                                    <arg>-u=postgres</arg>
+                                    <arg>-p=password</arg>
+                                </args>
                             </container>
                         </configuration>
                         <executions>
