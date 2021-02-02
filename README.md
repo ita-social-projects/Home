@@ -72,7 +72,7 @@ It includes next modules:
 
 ### Required to install
 - Java 11
-- PostgreSQL
+- PostgreSQL/Docker
 - Maven
 
 ### Environment
