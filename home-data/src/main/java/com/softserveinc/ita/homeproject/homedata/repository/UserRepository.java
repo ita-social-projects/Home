@@ -3,12 +3,10 @@ package com.softserveinc.ita.homeproject.homedata.repository;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,11 +21,10 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>, 
     /**
      * Method for finding users in database by email
      *
-    // * @param email email of the user that is being searched
+     * @param email is the email of the user that is being searched
      * @return an instance of Optional(User) class
      */
     Optional<User> findByEmail(String email);
     Page<User> findAllByEnabledTrue(Pageable var1);
-    @Override
-    Page<User> findAll(Specification<User> specification, Pageable pageable);
+
 }
