@@ -82,7 +82,7 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    public Response getAllUsers(@Min(1) Integer pageNumber,
+    public Response queryUsers(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
                                String filter,

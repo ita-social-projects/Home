@@ -51,7 +51,7 @@ public class RSQLUserIT {
 
         email = userList.get((int) (Math.random() * userList.size())).getEmail();
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -70,7 +70,7 @@ public class RSQLUserIT {
         firstName = userList.get((int) (Math.random() * userList.size())).getFirstName();
 
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -90,7 +90,7 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -115,7 +115,7 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -139,7 +139,7 @@ public class RSQLUserIT {
         lastName = userList.get((int) (Math.random() * userList.size())).getLastName();
 
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -158,7 +158,7 @@ public class RSQLUserIT {
         filter = "firstName=ilike='AL'";
 
         List<ReadUser> readUsers = userApi
-                .getAllUsers(pageNumber,
+                .queryUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -177,7 +177,7 @@ public class RSQLUserIT {
 
         try {
             userApi
-                    .getAllUsers(pageNumber,
+                    .queryUsers(pageNumber,
                             pageSize,
                             sort,
                             filter,
