@@ -258,8 +258,10 @@
                                 </home.application.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
-                                <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
+                                <home.application.admin.username>${home.application.admin.username}
+                                </home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}
+                                </home.application.admin.password>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -309,12 +311,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-clients</artifactId>
-            <version>1.0.5</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
