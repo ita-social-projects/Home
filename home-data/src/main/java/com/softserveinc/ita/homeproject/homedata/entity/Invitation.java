@@ -2,9 +2,9 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -12,16 +12,25 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Invitation extends BaseEntity{
+public class Invitation extends BaseEntity {
     @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "status")
     private boolean status;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "create_datetime")
+    private LocalDateTime createDateTime;
 
-    @Column(name = "email")
-    private String email;
+    //TODO: It is needed to complete when Cooperation entity is done
+//    @ManyToOne
+//    @JoinColumn(name="cooperation_id", nullable=false)
+//    private Cooperation cooperation;
+
+    @OneToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 }
