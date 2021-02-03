@@ -19,6 +19,9 @@
 ### home-data-migration
  - This module is responsible for data migration. 
  - There is liquibase.
+ 
+### home-dev
+- There is local data for local development.
   
 ### home-docs
  - There is project's documentation.

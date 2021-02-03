@@ -46,7 +46,7 @@ It includes next modules:
   - [Clone](#Clone)
   - [Setup](#Setup)
   - [How to run local](#How-to-run-local)
-  - [How to run Docker](#How-to-run-Docker)
+  - [How to run with Docker](#How-to-run-Docker)
 - [Usage](#Usage)
   - [How to work with swagger UI](#How-to-work-with-swagger-UI)
   - [How to run tests](#How-to-run-tests)
@@ -99,7 +99,9 @@ api.secret=${API_SECRET}
 2. You should create database `home`.
 3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
 
-### How to run Docker
+### How to run with Docker
+
+Use `docker-compose up` command in home-dev/docker directory.
 
 ---
 
