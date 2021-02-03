@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
-import cz.jirutka.rsql.parser.RSQLParserException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RSQLUserIT {
     private List<ReadUser> userList = new ArrayList<>();
@@ -51,7 +46,7 @@ public class RSQLUserIT {
 
         email = userList.get((int) (Math.random() * userList.size())).getEmail();
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -70,7 +65,7 @@ public class RSQLUserIT {
         firstName = userList.get((int) (Math.random() * userList.size())).getFirstName();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -90,7 +85,7 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -115,7 +110,7 @@ public class RSQLUserIT {
         List<String> nameList = new ArrayList<>();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -139,7 +134,7 @@ public class RSQLUserIT {
         lastName = userList.get((int) (Math.random() * userList.size())).getLastName();
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -158,7 +153,7 @@ public class RSQLUserIT {
         filter = "firstName=ilike='AL'";
 
         List<ReadUser> readUsers = userApi
-                .queryUsers(pageNumber,
+                .getAllUsers(pageNumber,
                         pageSize,
                         sort,
                         filter,
@@ -175,21 +170,25 @@ public class RSQLUserIT {
     void wrongArgumentTest() {
         firstName = " ";
 
-        try {
-            userApi
-                    .queryUsers(pageNumber,
-                            pageSize,
-                            sort,
-                            filter,
-                            id,
-                            email,
-                            firstName,
-                            lastName,
-                            contact);
-            fail("Expected RSQLParserException");
-        } catch (RSQLParserException | ApiException thrown) {
-            assertNotEquals("", thrown.getMessage());
-        }
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi
+                        .getAllUsers(pageNumber,
+                                pageSize,
+                                sort,
+                                filter,
+                                id,
+                                email,
+                                firstName,
+                                lastName,
+                                contact))
+                .withMessage(new StringBuilder()
+                        .append("{").append("\"responseCode\"")
+                        .append(":400,")
+                        .append("\"errorMessage\"")
+                        .append(":")
+                        .append("\"Illegal argument for request.\"")
+                        .append("}").toString());
+
     }
 
     @AfterEach

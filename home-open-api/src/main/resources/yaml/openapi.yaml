@@ -234,7 +234,7 @@ paths:
         - user
       summary: "Get all users"
       description: ''
-      operationId: queryUsers
+      operationId: getAllUsers
       parameters:
         - in: query
           name: pageNumber

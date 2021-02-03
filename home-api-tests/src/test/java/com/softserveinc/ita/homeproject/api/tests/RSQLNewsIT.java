@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
-import cz.jirutka.rsql.parser.RSQLParserException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RSQLNewsIT {
     private NewsApi newsApi;
@@ -176,20 +171,24 @@ public class RSQLNewsIT {
     @Test
     void wrongArgumentTest() {
         text = " ";
-        try {
-            newsApi
-                    .getAllNews(pageNumber,
-                            pageSize,
-                            sort,
-                            filter,
-                            id,
-                            title,
-                            text,
-                            source);
-            fail("Expected RSQLParserException");
-        } catch (RSQLParserException | ApiException thrown) {
-            assertNotEquals("", thrown.getMessage());
-        }
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> newsApi.getAllNews(pageNumber,
+                        pageSize,
+                        sort,
+                        filter,
+                        id,
+                        title,
+                        text,
+                        source))
+                .withMessage(new StringBuilder()
+                        .append("{").append("\"responseCode\"")
+                        .append(":400,")
+                        .append("\"errorMessage\"")
+                        .append(":")
+                        .append("\"Illegal argument for request.\"")
+                        .append("}").toString());
+
     }
 
 
