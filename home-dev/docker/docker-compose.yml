@@ -14,11 +14,11 @@ services:
       retries: 3
 
   data-migration:
-    image: homeacademy/data-migration
+    build:
+      context: ../../
+      dockerfile: home-dev/docker-files/home-data-migration.dockerfile
     environment:
-      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres
-      DATASOURCE_USER: postgres
-      DATASOURCE_PASSWORD: password
+      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres?user=postgres&password=password
     ports:
       - 5000:5000
     depends_on:
@@ -26,7 +26,9 @@ services:
         condition: service_healthy
 
   home-project:
-    image: homeacademy/home-project
+    build:
+      context: ../../
+      dockerfile: home-dev/docker-files/home-application.dockerfile
     environment:
       DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres
     ports:
