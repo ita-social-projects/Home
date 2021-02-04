@@ -14,11 +14,11 @@ import javax.persistence.*;
         discriminatorType = DiscriminatorType.STRING)
 public class Contact extends BaseEntity{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cooperation_id")
     private Cooperation cooperation;
 

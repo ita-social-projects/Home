@@ -193,7 +193,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ReadUser'
+                $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -385,7 +385,7 @@ components:
           schema:
             $ref: '#/components/schemas/ApiError'
   schemas:
-    BaseView:
+    BaseReadView:
       type: object
       properties:
         id:
@@ -393,7 +393,7 @@ components:
           format: int64
     ReadNews:
       allOf:
-        - $ref: '#/components/schemas/BaseView'
+        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
         title:
@@ -410,8 +410,6 @@ components:
         text:
           type: string
     CreateNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       required:
         - title
         - description
@@ -435,8 +433,6 @@ components:
           type: string
           minLength: 1
     UpdateNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
@@ -463,8 +459,6 @@ components:
         errorMessage:
           type: string
     CreateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       required:
         - firstName
         - lastName
@@ -488,7 +482,7 @@ components:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "p.t.z@gmail.com"
-          minLength: 3
+          minLength: 5
           maxLength: 254
         password:
           pattern: '[a-zA-Z0-9]{8,}'
@@ -496,9 +490,13 @@ components:
           example: "mySuperStrongPass"
           minLength: 8
           maxLength: 128
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateContact'
     ReadUser:
       allOf:
-        - $ref: '#/components/schemas/BaseView'
+        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
         firstName:
@@ -511,11 +509,8 @@ components:
           type: string
           example: home@gmail.com
         contact:
-          type: string
-          example: "+380506617305"
+          $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
@@ -530,11 +525,70 @@ components:
           example: Petrov
           minLength: 1
           maxLength: 50
-        contact:
+    ContactType:
+      description: Indicates the type of contact.
+      type: string
+      enum: &contact_type_values
+        - email
+        - phone
+    ReadContact:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          email: '#/components/schemas/ReadEmailContact'
+          phone: '#/components/schemas/ReadPhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
+    ReadEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        email:
+          type: string
+          example: home@gmail.com
+    ReadPhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        phone:
           type: string
           example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-        contacts:
+    CreateContact:
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          email: '#/components/schemas/CreateEmailContact'
+          phone: '#/components/schemas/CreatePhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+    CreateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      properties:
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: home@gmail.com
+    CreatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      properties:
+        phone:
           type: string
           example: "+380506617305"
