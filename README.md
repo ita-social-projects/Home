@@ -72,7 +72,7 @@ It includes next modules:
 
 ### Required to install
 - Java 11
-- PostgreSQL 10+
+- Docker
 - Maven
 
 ### Environment
@@ -95,13 +95,7 @@ api.secret=${API_SECRET}
 ### Setup
 
 ### How to run local
-1. You should create environmental variables that are defined in application.properties file.
-2. You should create database `home`.
-3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
-
-### How to run with Docker
-
-Use `docker-compose up` command in home-dev/docker directory.
+About it you can read in `hom-dev` package.
 
 ---
 
