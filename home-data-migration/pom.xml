@@ -20,7 +20,7 @@
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
         <picocli.version>4.5.2</picocli.version>
-        <image.path>homeacademy/data-migration</image.path>
+        <image.path>localhost:5000/data-migration</image.path>
     </properties>
 
     <profiles>
@@ -46,43 +46,6 @@
                                 <phase>compile</phase>
                                 <goals>
                                     <goal>update</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>liquibase-containerization</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.google.cloud.tools</groupId>
-                        <artifactId>jib-maven-plugin</artifactId>
-                        <version>${jib.version}</version>
-                        <configuration>
-                            <to>
-                                <image>${image.path}</image>
-                                <auth>
-                                    <username>${hub.docker.username}</username>
-                                    <password>${hub.docker.password}</password>
-                                </auth>
-                            </to>
-                            <container>
-                                <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
-                                <args>
-                                    <arg>--url=jdbc:postgresql://db-postgres:5432/postgres</arg>
-                                    <arg>-u=postgres</arg>
-                                    <arg>-p=password</arg>
-                                </args>
-                            </container>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>build</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -148,6 +111,33 @@
                     <execution>
                         <id>default-jar</id>
                         <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+                <configuration>
+                    <to>
+                        <image>${image.path}</image>
+                    </to>
+                    <container>
+                        <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
+                        <args>
+                            <arg>--url=jdbc:postgresql://db-postgres:5432/postgres</arg>
+                            <arg>-u=postgres</arg>
+                            <arg>-p=password</arg>
+                        </args>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

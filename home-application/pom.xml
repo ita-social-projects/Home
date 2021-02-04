@@ -13,7 +13,7 @@
 
     <properties>
         <spring.boot.version>2.4.2</spring.boot.version>
-        <image.path>registry.hub.docker.com/homeacademy/home-project</image.path>
+        <image.path>localhost:5000/home-application</image.path>
     </properties>
 
     <dependencies>
@@ -59,40 +59,6 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>application-containerization</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.google.cloud.tools</groupId>
-                        <artifactId>jib-maven-plugin</artifactId>
-                        <version>${jib.version}</version>
-                        <configuration>
-                            <to>
-                                <image>${image.path}</image>
-                                <auth>
-                                    <username>${hub.docker.username}</username>
-                                    <password>${hub.docker.password}</password>
-                                </auth>
-                            </to>
-                            <container>
-                                <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
-                            </container>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     <build>
         <plugins>
             <plugin>
@@ -145,6 +111,28 @@
                             <excludes>**/dist/index.html</excludes>
                             <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+                <configuration>
+                    <to>
+                        <image>${image.path}</image>
+                    </to>
+                    <container>
+                        <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
