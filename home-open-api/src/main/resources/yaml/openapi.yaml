@@ -508,8 +508,10 @@ components:
         email:
           type: string
           example: home@gmail.com
-        contact:
-          $ref: '#/components/schemas/ReadContact'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadContact'
     UpdateUser:
       type: object
       properties:
@@ -575,6 +577,8 @@ components:
       properties:
         contact_type:
           $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
     CreateEmailContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'

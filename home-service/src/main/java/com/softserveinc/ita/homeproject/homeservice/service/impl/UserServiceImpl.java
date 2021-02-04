@@ -1,22 +1,22 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
+import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Set;
 
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
+            toCreate.getContacts().forEach(contact -> contact.setUser(toCreate));
 
             userRepository.save(toCreate);
 
@@ -62,9 +63,9 @@ public class UserServiceImpl implements UserService {
                 fromDB.setLastName(updateUserDto.getLastName());
             }
 
-            if (updateUserDto.getContacts() != null) {
-                fromDB.setContacts(updateUserDto.getContacts());
-            }
+//            if (updateUserDto.getContacts() != null) {
+//                fromDB.setContacts(updateUserDto.getContacts());
+//            }
 
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
