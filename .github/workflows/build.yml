@@ -18,12 +18,7 @@ jobs:
         mvn clean install
         -Papi-tests-infrastructure
         -Papi-tests
-        -Pliquibase-containerization
-        -Papplication-containerization
         -Dpostgres.user=${{secrets.POSTGRES_USER}}
         -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
         -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
         -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
-        -DDATASOURCE_URL=jdbc:postgresql://db-postgres:5432/postgres
-        -DDATASOURCE_USER=postgres
-        -DDATASOURCE_PASSWORD=password
