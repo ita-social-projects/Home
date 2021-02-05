@@ -124,11 +124,6 @@
                     </to>
                     <container>
                         <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
-                        <args>
-                            <arg>--url=jdbc:postgresql://db-postgres:5432/postgres</arg>
-                            <arg>-u=postgres</arg>
-                            <arg>-p=password</arg>
-                        </args>
                     </container>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
