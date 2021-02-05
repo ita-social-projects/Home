@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "invitations")
 public class Invitation extends BaseEntity {
     @Column(name = "name")
     private String name;
