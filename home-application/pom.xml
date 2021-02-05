@@ -13,7 +13,6 @@
 
     <properties>
         <spring.boot.version>2.4.2</spring.boot.version>
-        <image.path>localhost:5000/home-application</image.path>
     </properties>
 
     <dependencies>
@@ -120,7 +119,11 @@
                 <version>${jib.version}</version>
                 <configuration>
                     <to>
-                        <image>${image.path}</image>
+                        <image>${image.application.path}</image>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
                     </to>
                     <container>
                         <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>

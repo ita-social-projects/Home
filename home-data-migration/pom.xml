@@ -20,7 +20,6 @@
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
         <picocli.version>4.6.1</picocli.version>
-        <image.path>localhost:5000/data-migration</image.path>
     </properties>
 
     <profiles>
@@ -120,7 +119,11 @@
                 <version>${jib.version}</version>
                 <configuration>
                     <to>
-                        <image>${image.path}</image>
+                        <image>${image.liquibase.path}</image>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
                     </to>
                     <container>
                         <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>

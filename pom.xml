@@ -33,9 +33,21 @@
         <rapidoc.version>7.2.1</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
         <jib.version>2.7.1</jib.version>
-        <hub.docker.username>homeacademy</hub.docker.username>
-        <hub.docker.password>home28september</hub.docker.password>
+        <image.liquibase.path>localhost:5000/data-migration</image.liquibase.path>
+        <image.application.path>localhost:5000/home-application</image.application.path>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>dockerization</id>
+            <properties>
+                <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
+                <image.application.path>homeacademy/home-application</image.application.path>
+                <docker.username>homeacademy</docker.username>
+                <docker.password>home28september</docker.password>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
