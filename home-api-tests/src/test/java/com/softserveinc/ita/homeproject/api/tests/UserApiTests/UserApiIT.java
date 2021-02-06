@@ -1,7 +1,8 @@
-package com.softserveinc.ita.homeproject.api.tests;
+package com.softserveinc.ita.homeproject.api.tests.UserApiTests;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.api.tests.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
@@ -32,8 +33,6 @@ class UserApiIT {
         ReadUser readUser = userApi.createUser(createUser);
 
         assertUser(createUser, readUser);
-
-        userApi.removeUser(readUser.getId());
     }
 
     @Test
@@ -41,30 +40,26 @@ class UserApiIT {
         ReadUser savedUsers = userApi.createUser(createUser);
 
         ReadUser user = userApi.getUser(savedUsers.getId());
+
         assertNotNull(user);
         assertEquals(user, savedUsers);
-
-        userApi.removeUser(savedUsers.getId());
     }
 
     @Test
     void updateUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
-        
+
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
                 .lastName("updatedLastName");
 
         ReadUser updatedUser = userApi.updateUser(savedUser.getId(), updateUser);
         assertUser(savedUser, updateUser, updatedUser);
-
-        userApi.removeUser(updatedUser.getId());
     }
 
     @Test
     void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
-        userApi.removeUser(savedUser.getId());
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

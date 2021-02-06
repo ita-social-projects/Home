@@ -1,7 +1,8 @@
-package com.softserveinc.ita.homeproject.api.tests;
+package com.softserveinc.ita.homeproject.api.tests.NewsApiTests;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.api.tests.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
@@ -27,14 +28,12 @@ class NewsApiIT {
     @BeforeEach
     public void setUp() {
         newsApi = new NewsApi(ApiClientUtil.getClient());
-     }
+    }
 
     @Test
     void createNewsTest() throws ApiException {
         ReadNews readNews = newsApi.addNews(createNews);
         assertNews(createNews, readNews);
-
-        newsApi.deleteNews(readNews.getId());
     }
 
     @Test
@@ -44,8 +43,6 @@ class NewsApiIT {
 
         assertNotNull(news);
         assertEquals(savedNews, news);
-
-        newsApi.deleteNews(savedNews.getId());
     }
 
     @Test
@@ -61,8 +58,6 @@ class NewsApiIT {
 
         ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
         assertNews(savedNews, updateNews, updatedNews);
-
-        newsApi.deleteNews(savedNews.getId());
     }
 
     @Test
