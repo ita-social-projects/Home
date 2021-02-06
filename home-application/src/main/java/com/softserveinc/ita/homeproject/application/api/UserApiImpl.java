@@ -28,8 +28,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
-
-
 /**
  * UserApiServiceImpl class is the inter layer between generated
  * User controller and service layer of the application.
@@ -38,12 +36,11 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  */
 @Provider
 @NoArgsConstructor
-public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
+public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
     private UserService userService;
     private HomeMapper mapper;
     private EntitySpecificationService entitySpecificationService;
-
 
     /**
      * createUser method is implementation of HTTP POST
@@ -89,14 +86,14 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
     public Response getAllUsers(@Min(1) Integer pageNumber,
-                               @Min(0) @Max(10) Integer pageSize,
-                               String sort,
-                               String filter,
-                               String id,
-                               String email,
-                               String firstName,
-                               String lastName,
-                               String contact) {
+                                @Min(0) @Max(10) Integer pageSize,
+                                String sort,
+                                String filter,
+                                String id,
+                                String email,
+                                String firstName,
+                                String lastName,
+                                String contact) {
 
         Map<QueryParamEnum, String> filterMap = new HashMap<>();
 
@@ -155,7 +152,6 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
 
     @Autowired
     public void setMapper(HomeMapper mapper) {
-        super.setMapper(mapper);
         this.mapper = mapper;
     }
 
@@ -164,4 +160,8 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
         this.entitySpecificationService = entitySpecificationService;
     }
 
+    @Override
+    public HomeMapper getMapper() {
+        return mapper;
+    }
 }
