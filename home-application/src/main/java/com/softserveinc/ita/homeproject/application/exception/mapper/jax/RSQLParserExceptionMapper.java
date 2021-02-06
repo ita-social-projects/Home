@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
+public class RSQLParserExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
     @Override
     protected Response.Status getStatus() {
         return Response.Status.BAD_REQUEST;
@@ -15,6 +15,6 @@ public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserExc
 
     @Override
     protected String extractMessage(RSQLParserException exception) {
-        return "Illegal argument for request.";
+        return "Illegal argument in select query method in api implementation";
     }
 }
