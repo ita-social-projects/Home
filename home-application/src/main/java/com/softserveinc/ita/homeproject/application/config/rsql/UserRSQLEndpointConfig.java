@@ -11,12 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-//@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserRSQLEndpointConfig implements RSQLEndpointConfig<User, UserQueryParamEnum> {
 
     @Autowired
     private UserQueryConfig queryConfig;
-
 
     @Override
     public Map<UserQueryParamEnum, String> getMappings() {

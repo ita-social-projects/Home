@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class NewsQueryConfig implements QueryConfig<News> {
+
     @Override
     public Class<News> getEntityClass() {
         return News.class;

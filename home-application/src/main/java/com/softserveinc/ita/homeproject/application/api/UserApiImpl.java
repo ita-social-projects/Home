@@ -22,7 +22,13 @@ import javax.ws.rs.ext.Provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
+
+
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
@@ -77,7 +83,7 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
      * method for getting all users from database.
      *
      * @param pageNumber is the number of returned page with elements
-     * @param pageSize   is amount of the returned elements
+     * @param pageSize is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
@@ -128,7 +134,7 @@ public class UserApiImpl extends CommonApiService<UserDto> implements UsersApi {
      * updateUser method is implementation of HTTP PUT
      * method for updating existing user.
      *
-     * @param id         is id of the user that has to be updated
+     * @param id is id of the user that has to be updated
      * @param updateUser are incoming data needed for user's update
      * @return Response to generated controller
      */

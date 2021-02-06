@@ -22,7 +22,12 @@ import javax.ws.rs.ext.Provider;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
+
+
 
 /**
  * NewsApiServiceImpl class is the inter layer between generated
@@ -76,7 +81,7 @@ public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
      * method for getting all news from database.
      *
      * @param pageNumber is the number of the returned page with elements
-     * @param pageSize   is amount of the returned elements
+     * @param pageSize is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
@@ -126,7 +131,7 @@ public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
      * updateNews method is implementation of HTTP PUT
      * method for updating existing news.
      *
-     * @param id         is id of the news that has to be updated
+     * @param id is id of the news that has to be updated
      * @param updateNews are incoming data needed for news update
      * @return Response to generated controller
      */
@@ -138,7 +143,6 @@ public class NewsApiImpl extends CommonApiService<NewsDto> implements NewsApi {
         ReadNews response = mapper.convert(readNewsDto, ReadNews.class);
         return Response.ok().entity(response).build();
     }
-
 
     @Autowired
     public void setNewsService(NewsService newsService) {

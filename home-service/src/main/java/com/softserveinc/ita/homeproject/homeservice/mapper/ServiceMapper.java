@@ -30,7 +30,6 @@ public class ServiceMapper {
     }
 
     public <D> D convert(Object source, Class<D> destination) {
-
         return modelMapper.map(source, destination);
     }
 }

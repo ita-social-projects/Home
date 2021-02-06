@@ -1,17 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.query.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
-//@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserQueryConfig implements QueryConfig<User> {
 
     @Override
