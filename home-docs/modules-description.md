@@ -21,7 +21,7 @@
  - There is liquibase.
  
 ### home-dev
-- There is local data for local development.
+- Package for local development.
   
 ### home-docs
  - There is project's documentation.
