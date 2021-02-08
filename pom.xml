@@ -46,7 +46,7 @@
                 <image.application.path>homeacademy/home-application</image.application.path>
                 <docker.username>homeacademy</docker.username>
                 <docker.password>home28september</docker.password>
-                <jib.phase>convert</jib.phase>
+                <jib.phase>deploy</jib.phase>
             </properties>
         </profile>
     </profiles>
