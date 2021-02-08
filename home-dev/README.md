@@ -70,3 +70,9 @@ You can run it with Maven using command:
 You can run it with `install` lifecycle of the data-migration module in maven tab in IDEA with turned on `liquibase-migration` profile.
 
 ### How to run tests
+
+
+### Issues that you may face
+#### Generated classes are not visible in project.  
+Solution: in IDE mark packages <br> `home-server-generator/target/generated-sources/openapi/server/src/gen/java/main` <br>
+ as `Generated sources root`.
