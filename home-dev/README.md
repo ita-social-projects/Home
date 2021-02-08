@@ -75,4 +75,5 @@ You can run it with `install` lifecycle of the data-migration module in maven ta
 ### Issues that you may face
 #### Generated classes are not visible in project.  
 Solution: in IDE mark packages <br> `home-server-generator/target/generated-sources/openapi/server/src/gen/java/main` <br>
+<br> `home-clients/target/generated-sources/openapi/client/src/gen/java/main` <br>
  as `Generated sources root`.
