@@ -132,7 +132,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>${jib.phase}</phase>
                         <goals>
                             <goal>build</goal>
                         </goals>
