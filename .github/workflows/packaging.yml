@@ -2,13 +2,15 @@ name: CI & github packaging
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ dev, master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Set up JDK 1.11
         uses: actions/setup-java@v1
         with:
@@ -16,6 +18,7 @@ jobs:
       - name: Build and Publish to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
           mvn clean deploy
           -Papi-tests-infrastructure
@@ -24,3 +27,4 @@ jobs:
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
           -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
+          -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
