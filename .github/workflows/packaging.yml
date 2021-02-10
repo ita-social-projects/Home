@@ -20,8 +20,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          mvn -V -B -e
-            clean deploy sonar:sonar
+          mvn clean deploy
+            -V -B -e
+            sonar:sonar
             -Papi-tests-infrastructure
             -Papi-tests
             -Dpostgres.user=${{secrets.POSTGRES_USER}}
