@@ -21,8 +21,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
         mvn clean install
-          -V -B -e
-          sonar:sonar
+          -B -e sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
