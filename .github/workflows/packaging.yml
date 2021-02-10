@@ -20,11 +20,11 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          mvn clean deploy
-          -Papi-tests-infrastructure
-          -Papi-tests
-          -Dpostgres.user=${{secrets.POSTGRES_USER}}
-          -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
-          -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
-          -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
-          -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          mvn -V -B -e
+            clean deploy sonar:sonar
+            -Papi-tests-infrastructure
+            -Papi-tests
+            -Dpostgres.user=${{secrets.POSTGRES_USER}}
+            -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
+            -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
+            -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
