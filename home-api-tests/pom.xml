@@ -34,6 +34,10 @@
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <docker.artifacts.path>${project.build.directory}/docker/artifacts</docker.artifacts.path>
+        <commons-text-version>1.9</commons-text-version>
+        <rsql-common-version>5.0.6</rsql-common-version>
+
+
     </properties>
 
     <profiles>
@@ -311,6 +315,17 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.perplexhub</groupId>
+            <artifactId>rsql-common</artifactId>
+            <version>${rsql-common-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text-version}</version>
         </dependency>
     </dependencies>
 </project>
