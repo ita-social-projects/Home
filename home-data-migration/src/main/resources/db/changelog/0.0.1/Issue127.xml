@@ -17,11 +17,10 @@
             <column name="EMAIL" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="STATUS" type="BOOLEAN">
+            <column name="STATUS" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="create_datetime" type="TIMESTAMP">
-                <constraints nullable="false"/>
+            <column name="sent_datetime" type="TIMESTAMP">
             </column>
             <column name="COOPERATION_ID" type="BIGINT">
                 <constraints nullable="false"

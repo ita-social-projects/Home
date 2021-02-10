@@ -1,8 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
+import java.time.LocalDateTime;
+import javax.mail.MessagingException;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+
 public interface MailService {
 
-    void sendTextMessage(String receiver, String subject, String text);
-
-    void sendMessageWithAttachment(String receiver, String subject, String text);
+    LocalDateTime sendTextMessage(InvitationDto invitationDto) throws MessagingException;
 }
