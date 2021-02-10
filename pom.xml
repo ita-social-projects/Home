@@ -44,8 +44,8 @@
             <properties>
                 <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
                 <image.application.path>homeacademy/home-application</image.application.path>
-                <docker.username>${{secrets.DOCKER_USERNAME}}</docker.username>
-                <docker.password>${{secrets.DOCKER_PASSWORD}}</docker.password>
+                <docker.username>${dockerhub.username}</docker.username>
+                <docker.password>${dockerhub.password}</docker.password>
                 <jib.phase>deploy</jib.phase>
             </properties>
         </profile>
