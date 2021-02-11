@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 
 @Slf4j
 public class LiquibaseUpdate {
+    private String test1;
+    private String test2;
 
     private static final String PATH = "db/changelog/master.xml";
 
@@ -22,6 +24,7 @@ public class LiquibaseUpdate {
     }
 
     public void runLiquibase() throws Exception {
+        System.out.println(test2);
         DriverManager.registerDriver(new Driver());
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         CommandLineResourceAccessor resourceAccessor = new CommandLineResourceAccessor(classLoader);
