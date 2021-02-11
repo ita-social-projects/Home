@@ -67,13 +67,13 @@ public class QueryUserIT {
                 .build().perfom();
 
         assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r1.getFirstName() == null) {
+            if (r1.getLastName() == null) {
                 return -1;
             }
-            if (r2.getFirstName() == null) {
+            if (r2.getLastName() == null) {
                 return 1;
             }
-            return r1.getFirstName().compareTo(r2.getFirstName());
+            return r1.getLastName().compareTo(r2.getLastName());
         });
     }
 
