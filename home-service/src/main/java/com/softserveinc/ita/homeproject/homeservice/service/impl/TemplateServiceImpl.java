@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import org.springframework.stereotype.Service;
 
 import com.samskivert.mustache.Mustache;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 
@@ -17,12 +17,12 @@ import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 public class TemplateServiceImpl implements TemplateService {
 
     @Override
-    public String createMessageTextFromTemplate(InvitationDto invitationDto) {
+    public String createMessageTextFromTemplate(MailDto mailDto) {
         String text = "";
-        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(invitationDto.getName())))) {
+        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto.getName())))) {
             text = Mustache.compiler()
                 .compile(reader)
-                .execute(invitationDto);
+                .execute(mailDto);
         } catch (IOException e) {
             e.printStackTrace();
         }

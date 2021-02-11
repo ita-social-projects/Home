@@ -6,8 +6,8 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource({
-        "data-application.properties",
-        "service-application.properties"
+        "application-home-data.properties",
+        "application-home-service.properties"
 })
 public class HomeApplication {
     public static void main(String[] args) {

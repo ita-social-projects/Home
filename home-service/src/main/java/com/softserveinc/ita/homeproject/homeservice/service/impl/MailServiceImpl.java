@@ -1,19 +1,16 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.service.MailService;
-import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
-
+import java.time.LocalDateTime;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import java.time.LocalDateTime;
+import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
+import com.softserveinc.ita.homeproject.homeservice.service.MailService;
+import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,17 +31,17 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public LocalDateTime sendTextMessage(InvitationDto invitationDto) throws MessagingException {
-        log.debug("Message with invitation type {} is being created", invitationDto.getName());
+    public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
+        log.debug("Message with invitation type {} is being created", mailDto.getName());
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(sender);
-        helper.setTo(invitationDto.getEmail());
-        helper.setSubject(invitationDto.getName());
-        helper.setText(templateService.createMessageTextFromTemplate(invitationDto), true);
+        helper.setTo(mailDto.getEmail());
+        helper.setSubject(mailDto.getName());
+        helper.setText(templateService.createMessageTextFromTemplate(mailDto), true);
 
         mailSender.send(message);
-        log.info("Invitation with id {} was sent", invitationDto.getId());
+        log.info("Invitation with id {} was sent", mailDto.getId());
         return LocalDateTime.now();
     }
 }

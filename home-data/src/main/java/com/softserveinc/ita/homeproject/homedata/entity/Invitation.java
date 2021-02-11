@@ -23,8 +23,8 @@ public class Invitation extends BaseEntity {
     @Column(name = "status")
     private boolean status;
 
-    @Column(name = "create_datetime")
-    private LocalDateTime createDateTime;
+    @Column(name = "sent_datetime")
+    private LocalDateTime sentDateTime;
 
     //TODO: It is needed to complete when Cooperation entity is done
 //    @ManyToOne

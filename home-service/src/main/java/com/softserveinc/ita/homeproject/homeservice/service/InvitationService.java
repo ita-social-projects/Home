@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -14,5 +15,7 @@ public interface InvitationService {
     InvitationDto getInvitation(Long id);
 
     List<InvitationDto> getAllActiveInvitations();
+
+    void updateSentDateTime(Long id, LocalDateTime dateTime);
 
 }
