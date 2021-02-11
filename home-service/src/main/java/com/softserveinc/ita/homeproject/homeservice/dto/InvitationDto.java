@@ -11,6 +11,6 @@ public class InvitationDto extends BaseDto {
     private String name;
     private String email;
     private boolean status;
-    private LocalDateTime createDateTime;
+    private LocalDateTime sentDateTime;
     private Role role;
 }
