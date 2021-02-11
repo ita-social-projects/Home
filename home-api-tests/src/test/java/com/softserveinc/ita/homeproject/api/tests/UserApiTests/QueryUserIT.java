@@ -75,6 +75,7 @@ public class QueryUserIT {
             }
             return r1.getLastName().compareTo(r2.getLastName());
         });
+    }
 
     @Test
     void getAllUsersDescSortByFirstNameTest() throws ApiException {
