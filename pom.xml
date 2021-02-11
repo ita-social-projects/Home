@@ -36,6 +36,10 @@
         <jib.phase>package</jib.phase>
         <image.liquibase.path>localhost:5000/data-migration</image.liquibase.path>
         <image.application.path>localhost:5000/home-application</image.application.path>
+        <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.organization>ita-social-projects</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <profiles>
