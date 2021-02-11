@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests;
+package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import com.softserveinc.ita.homeproject.ApiClient;
 import com.softserveinc.ita.homeproject.ServerConfiguration;
@@ -20,3 +20,4 @@ public final class ApiClientUtil {
         return client;
     }
 }
+

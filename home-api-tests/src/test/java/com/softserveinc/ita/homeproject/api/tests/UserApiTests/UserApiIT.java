@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.UserApiTests;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
-import com.softserveinc.ita.homeproject.api.tests.ApiClientUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;

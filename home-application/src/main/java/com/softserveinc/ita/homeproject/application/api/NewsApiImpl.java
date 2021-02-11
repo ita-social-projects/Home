@@ -79,7 +79,7 @@ public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
      * method for getting all news from database.
      *
      * @param pageNumber is the number of the returned page with elements
-     * @param pageSize   is amount of the returned elements
+     * @param pageSize is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
@@ -129,7 +129,7 @@ public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
      * updateNews method is implementation of HTTP PUT
      * method for updating existing news.
      *
-     * @param id         is id of the news that has to be updated
+     * @param id is id of the news that has to be updated
      * @param updateNews are incoming data needed for news update
      * @return Response to generated controller
      */
