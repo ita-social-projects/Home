@@ -29,8 +29,7 @@ public class LiquibaseUpdate {
         try (Liquibase liquibase = new Liquibase(PATH, resourceAccessor, jdbcConnection)) {
             liquibase.update(new Contexts());
         } catch (Exception e) {
-            log.error("Running liquibase updating failed", e);
-            throw e;
+
         }
     }
 }
