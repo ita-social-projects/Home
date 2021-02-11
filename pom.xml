@@ -33,6 +33,10 @@
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <rapidoc.version>7.2.1</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
+        <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.organization>ita-social-projects</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>
