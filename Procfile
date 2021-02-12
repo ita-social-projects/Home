@@ -1,1 +1,0 @@
-heroku run bash --type=data-migration
