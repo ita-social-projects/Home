@@ -7,11 +7,11 @@ public abstract class BaseQuery {
     private String filter;
     private String id;
 
-    public void setPageNumber(int pageNumber) {
+    public void setPageNumber(Integer pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -55,11 +55,19 @@ public abstract class BaseQuery {
 
         protected abstract B getActualBuilder();
 
-        protected BaseBuilder(int pageNumber, Integer pageSize) {
+        protected BaseBuilder() {
             queryClass = getActual();
             queryBuilder = getActualBuilder();
+        }
+
+        public B pageNumber(Integer pageNumber) {
             queryClass.setPageNumber(pageNumber);
-            queryClass.setPageSize(pageSize);
+            return queryBuilder;
+        }
+
+        public B pageSize(Integer setPageSize) {
+            queryClass.setPageSize(setPageSize);
+            return queryBuilder;
         }
 
         public B sort(String sort) {

@@ -42,9 +42,8 @@ public class NewsQuery extends BaseQuery {
 
     public static class Builder extends BaseBuilder<NewsQuery, Builder> {
 
-        public Builder(int pageNumber, Integer pageSize, NewsApi newsApi) {
-            super(pageNumber, pageSize);
-            queryClass.setNewsApi(newsApi);
+        public Builder(NewsApi newsApi) {
+           queryClass.setNewsApi(newsApi);
         }
 
         public Builder title(String title) {

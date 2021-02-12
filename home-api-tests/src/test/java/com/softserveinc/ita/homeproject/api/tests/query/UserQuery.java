@@ -48,9 +48,8 @@ public class UserQuery extends BaseQuery {
 
     public static class Builder extends BaseBuilder<UserQuery, Builder> {
 
-        public Builder(int pageNumber, Integer pageSize, UserApi userApi) {
-            super(pageNumber, pageSize);
-            queryClass.setUserApi(userApi);
+        public Builder(UserApi userApi) {
+           queryClass.setUserApi(userApi);
         }
 
         public Builder email(String email) {
