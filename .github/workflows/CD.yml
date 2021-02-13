@@ -5,7 +5,6 @@ on:
     branches: [ dev, master ]
 
 jobs:
-
   package:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +24,7 @@ jobs:
           clean deploy sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
-          -Ppush.image
+          -Ppush.images
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
@@ -61,4 +60,3 @@ jobs:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run:
           heroku container:release -a home-project-academy web data-migration
-

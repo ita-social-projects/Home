@@ -44,7 +44,7 @@
 
     <profiles>
         <profile>
-            <id>push.image</id>
+            <id>push.images</id>
             <properties>
                 <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
                 <image.application.path>homeacademy/home-application</image.application.path>
