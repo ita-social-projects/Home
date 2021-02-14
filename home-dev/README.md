@@ -31,7 +31,7 @@ After that you will have your local registry, database and possibility successfu
 **How to launch**
 
 After successful building you can launch the project in Docker. 
-For that purpose just type `docker-compose pull && docker-compose up` command in `home-dev/launch` package.
+For that purpose just type `docker-compose up` command in `home-dev/launch` package.
 After that you will have data-migration container for filling database and running application container.
 
 

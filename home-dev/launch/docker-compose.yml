@@ -9,6 +9,7 @@ services:
       - 5001:5001
     networks:
       - home_network
+    pull_policy: always
 
   home-application:
     image: localhost:5000/home-application
@@ -18,6 +19,7 @@ services:
       - 8080:8080
     networks:
       - home_network
+    pull_policy: always
 
 networks:
   home_network:
