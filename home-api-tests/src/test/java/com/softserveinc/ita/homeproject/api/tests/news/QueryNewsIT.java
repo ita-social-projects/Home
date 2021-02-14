@@ -1,26 +1,24 @@
-package com.softserveinc.ita.homeproject.api.tests.NewsApiTests;
+package com.softserveinc.ita.homeproject.api.tests.news;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class QueryNewsIT {
-    private NewsApi newsApi;
-    private Integer pageNumber = 1;
-    private Integer pageSize = 10;
+    private NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     private final CreateNews expectedNews = new CreateNews()
             .description("description")
@@ -28,18 +26,30 @@ public class QueryNewsIT {
             .text("text")
             .photoUrl("photoUrl");
 
-    @BeforeEach
-    public void setUp() {
-        newsApi = new NewsApi(ApiClientUtil.getClient());
-        expectedNews.setTitle(RandomStringUtils.randomAlphabetic(7));
+
+    @Test
+    void getAllNews() throws ApiException {
+        List<ReadNews> expectedListNews = saveListNews();
+
+        List<ReadNews> actualListNews = new NewsQuery
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .build()
+                .perfom();
+
+        assertThat(actualListNews).isNotEmpty();
     }
 
     @Test
     void getAllNewsByTitleTest() throws ApiException {
+        expectedNews.setTitle(RandomStringUtils.randomAlphabetic(7));
         newsApi.addNews(expectedNews);
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
                 .title(expectedNews.getTitle())
                 .build()
                 .perfom();
@@ -49,25 +59,29 @@ public class QueryNewsIT {
 
     @Test
     void getAllNewsBySourceTest() throws ApiException {
+        expectedNews.setTitle(RandomStringUtils.randomAlphabetic(7));
         newsApi.addNews(expectedNews);
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
-                .source(expectedNews.getSource())
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .source("source")
                 .build()
                 .perfom();
 
-        actualListNews.forEach(readNews -> assertThat(readNews.getSource()).isEqualTo(expectedNews.getSource()));
+        actualListNews.forEach(readNews -> assertThat(readNews.getSource()).isEqualTo("source"));
     }
 
     @Test
     void getAllUsersLikeIgnoreCaseTest() throws ApiException {
         saveListNews();
-        String filter = "source=ilike='Si'";
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
-                .filter(filter)
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("source=ilike='Si'")
                 .build()
                 .perfom();
 
@@ -75,12 +89,14 @@ public class QueryNewsIT {
     }
 
     @Test
-    void getAllUsersDescSortBySourceTest() throws ApiException {
-        String sort = "source,desc";
+    void getAllNewsDescSortBySourceTest() throws ApiException {
+        saveListNews();
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
-                .sort(sort)
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .sort("source,desc")
                 .build()
                 .perfom();
 
@@ -98,11 +114,12 @@ public class QueryNewsIT {
     @Test
     void getAllNewsAscSortBySourceTest() throws ApiException {
         saveListNews();
-        String sort = "source,asc";
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
-                .sort(sort)
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .sort("source,asc")
                 .build()
                 .perfom();
 
@@ -120,15 +137,16 @@ public class QueryNewsIT {
     @Test
     void getAllUsersSortAndSearchTest() throws ApiException {
         List<ReadNews> expectedList = saveListNews();
-        String sort = "source,asc";
         String selector = "id";
         String arg1 = String.valueOf(expectedList.get(1).getId());
         String arg2 = String.valueOf(expectedList.get(expectedList.size() - 1).getId());
-        String filter = QueryFilterUtil.between(selector, arg1, arg2);
+        String filter = QueryFilterUtils.between(selector, arg1, arg2);
 
         List<ReadNews> actualListNews = new NewsQuery
-                .Builder(pageNumber, pageSize, newsApi)
-                .sort(sort)
+                .Builder(newsApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .sort("source,asc")
                 .filter(filter)
                 .build()
                 .perfom();
@@ -150,24 +168,51 @@ public class QueryNewsIT {
     }
 
     @Test
-    void wrongArgumentTest() throws ApiException {
-        newsApi.addNews(expectedNews);
-        String text = " ";
+    void emptyArgumentTest() {
         ApiException exception =
-                new ApiException(400, "Illegal argument in select query method in api implementation");
+                new ApiException(400, "The query argument for search is empty");
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> new NewsQuery
-                        .Builder(pageNumber, pageSize, newsApi)
-                        .text(text)
+                        .Builder(newsApi)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .text(" ")
                         .build()
                         .perfom())
-                .withMessage(new StringBuilder()
-                        .append("{\"responseCode\":")
-                        .append(exception.getCode())
-                        .append(",\"errorMessage\":\"")
-                        .append(exception.getMessage())
-                        .append("\"}").toString());
+                .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void wrongFilterPredicateExceptionTest() {
+        ApiException exception =
+                new ApiException(400, "Unknown operator: =ilik=");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new NewsQuery
+                        .Builder(newsApi)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .filter("source=ilik='Si'")
+                        .build()
+                        .perfom())
+                .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void wrongFilterFieldExceptionTest() {
+        ApiException exception =
+                new ApiException(400, "Unknown property: sourc from entity");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new NewsQuery
+                        .Builder(newsApi)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .filter("sourc=ilike='Si'")
+                        .build()
+                        .perfom())
+                .withMessage(createExceptionMessage(exception));
     }
 
     private List<CreateNews> createNewsList() {

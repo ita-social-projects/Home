@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests.NewsApiTests;
+package com.softserveinc.ita.homeproject.api.tests.news;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;

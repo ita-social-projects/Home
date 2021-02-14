@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests.UserApiTests;
+package com.softserveinc.ita.homeproject.api.tests.users;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;

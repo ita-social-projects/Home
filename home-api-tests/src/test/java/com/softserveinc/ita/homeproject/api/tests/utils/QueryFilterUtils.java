@@ -1,10 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
+import com.softserveinc.ita.homeproject.ApiException;
+
 import java.util.StringJoiner;
 
-public class QueryFilterUtil {
-    private QueryFilterUtil() {
-    }
+public final class QueryFilterUtils {
 
     public static String between(String selector, String arg1, String arg2) {
         StringJoiner joiner = new StringJoiner(", ", "(", ")");
@@ -20,4 +20,14 @@ public class QueryFilterUtil {
                 .concat(FilterPredicateEnum.IGNORE_CASE_LIKE.getPredicate())
                 .concat(arg);
     }
+
+    public static String createExceptionMessage(ApiException exception){
+        return new StringBuilder()
+                .append("{\"responseCode\":")
+                .append(exception.getCode())
+                .append(",\"errorMessage\":\"")
+                .append(exception.getMessage())
+                .append("\"}").toString();
+    }
+
 }
