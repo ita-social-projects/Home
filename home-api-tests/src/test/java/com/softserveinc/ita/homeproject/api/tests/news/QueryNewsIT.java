@@ -163,8 +163,6 @@ public class QueryNewsIT {
                 .equals(expectedList.get(1).getId())
                 && actualListNews.get(actualListNews.size() - 1).getId()
                 .equals(expectedList.get(expectedList.size() - 1).getId()));
-
-
     }
 
     @Test
