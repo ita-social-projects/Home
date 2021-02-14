@@ -1,17 +1,16 @@
-package com.softserveinc.ita.homeproject.application.quartz.config;
+package com.softserveinc.ita.homeproject.application.quartz;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
+
 @Slf4j
-@Configuration
-public class QuartzConfig {
+public class JobConfig {
     public static JobDetailFactoryBean createJobDetail(Class jobClass, String jobName) {
-        log.debug("createJobDetail(jobClass={}, jobName={})", jobClass.getName(), jobName);
+        log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
         factoryBean.setName(jobName);
         factoryBean.setJobClass(jobClass);
@@ -29,5 +28,5 @@ public class QuartzConfig {
         factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
         return factoryBean;
     }
-
+    
 }
