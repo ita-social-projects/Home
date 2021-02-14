@@ -35,6 +35,7 @@
         <home.application.internal.port>8080</home.application.internal.port>
         <docker.artifacts.path>${project.build.directory}/docker/artifacts</docker.artifacts.path>
         <commons-text-version>1.9</commons-text-version>
+             
     </properties>
     <profiles>
         <profile>
