@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
 import cz.jirutka.rsql.parser.RSQLParserException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.util.Arrays;
@@ -24,10 +25,13 @@ public final class ExceptionMapperUtils {
 
     public static String invalidDataApiExeptionParser(InvalidDataAccessApiUsageException exception) {
         String message = null;
-        String[] str = exception.getMessage().split("com", 2);
+        String exceptionMessage=exception.getMessage();
+        if(!StringUtils.isBlank(exceptionMessage)){
+        String[] str = exceptionMessage.split("com", 2);
         Optional<String> result = Arrays.stream(str).findFirst();
         if (result.isPresent()) {
             message = result.get().trim();
+        }
         }
         return message;
     }
