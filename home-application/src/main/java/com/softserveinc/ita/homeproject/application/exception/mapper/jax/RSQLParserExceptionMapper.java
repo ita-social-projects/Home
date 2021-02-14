@@ -6,6 +6,8 @@ import cz.jirutka.rsql.parser.RSQLParserException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.RSQLExceptionMessageParser;
+
 @Provider
 public class RSQLParserExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
     @Override
@@ -15,6 +17,8 @@ public class RSQLParserExceptionMapper extends BaseExceptionMapper<RSQLParserExc
 
     @Override
     protected String extractMessage(RSQLParserException exception) {
-        return "Illegal argument in select query method in api implementation";
+        return RSQLExceptionMessageParser(exception);
     }
 }
+
+
