@@ -1,11 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.query;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import io.github.perplexhub.rsql.RSQLJPASupport;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class EntitySpecificationService<T> {
@@ -19,7 +20,10 @@ public class EntitySpecificationService<T> {
         Specification<T> searchSpecification = RSQLJPASupport.toSpecification(search);
         Specification<T> sortSpecification = RSQLJPASupport.toSort(sort == null ? DEFAULT_SORT : sort);
 
-        return sortSpecification.and(filterSpecification).and(searchSpecification);
+        Optional<Specification<T>> optSearchSpecification = Optional.of(searchSpecification);
+        Optional<Specification<T>> optFilterSpecification = Optional.of(filterSpecification);
+
+        return sortSpecification.and(optFilterSpecification.get()).and(optSearchSpecification.get());
     }
 
     private static String toRQSQLString(Map<QueryParamEnum, String> filter) {
@@ -28,4 +32,5 @@ public class EntitySpecificationService<T> {
                 .map(entry -> entry.getKey().getParameter() + RSQL_EQUAL + entry.getValue())
                 .collect(Collectors.joining(RSQL_AND));
     }
+
 }
