@@ -1,8 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
@@ -17,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Set;
 
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
@@ -63,10 +64,6 @@ public class UserServiceImpl implements UserService {
                 fromDB.setLastName(updateUserDto.getLastName());
             }
 
-//            if (updateUserDto.getContacts() != null) {
-//                fromDB.setContacts(updateUserDto.getContacts());
-//            }
-
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
             return mapper.convert(fromDB, UserDto.class);
@@ -76,12 +73,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
         return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
                 .map((users) -> mapper.convert(users, UserDto.class));
     }
 
+    @Transactional
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)

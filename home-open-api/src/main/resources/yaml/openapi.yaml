@@ -10,6 +10,8 @@ tags:
     description: News management operations
   - name: user
     description: user management
+  - name: contact
+    description: contact management
 paths:
   /news:
     post:
@@ -243,15 +245,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{id}:
+  /users/{users_id}:
     get:
       tags:
         - user
       summary: "Get user by id"
-      description: ''
       operationId: getUser
       parameters:
-        - name: "id"
+        - name: "users_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -281,7 +282,7 @@ paths:
       description: Update current user
       operationId: updateUser
       parameters:
-        - name: "id"
+        - name: "users_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -321,7 +322,213 @@ paths:
       summary: Delete user by ID
       operationId: removeUser
       parameters:
-        - name: "id"
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /users/{users_id}/contacts:
+    post:
+      tags:
+        - contact
+      summary: "Create new contacts"
+      operationId: createContacts
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Create a new Contact
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContact'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadContact'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - contact
+      summary: "Get all contacts by user"
+      operationId: getAllContacts
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /users/{users_id}/contacts/{contacts_id}:
+    get:
+      tags:
+        - contact
+      summary: "Get contact by id"
+      operationId: getContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - contact
+      summary: "Update current contact"
+      operationId: updateContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current contact
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContact"
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - contact
+      summary: "Delete contact by ID"
+      operationId: removeContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -596,3 +803,30 @@ components:
         phone:
           type: string
           example: "+380506617305"
+    UpdateContact:
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          email: '#/components/schemas/UpdateEmailContact'
+          phone: '#/components/schemas/UpdatePhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
+    UpdateEmailContact:
+      type: object
+      properties:
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: other@gmail.com
+    UpdatePhoneContact:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: "+380966617305"
