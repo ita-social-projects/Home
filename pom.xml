@@ -32,6 +32,11 @@
         <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <rapidoc.version>7.2.1</rapidoc.version>
+        <modelMapper.version>2.3.9</modelMapper.version>
+        <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.organization>ita-social-projects</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>
@@ -58,9 +63,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelMapper.version}</version>
         </dependency>
     </dependencies>
 
@@ -83,19 +88,9 @@
                     <source>${java.version}</source>
                     <annotationProcessorPaths>
                         <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
-                        </path>
-                        <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId> lombok-mapstruct-binding</artifactId>
-                            <version>0.1.0</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

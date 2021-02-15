@@ -4,12 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto extends BaseDto {
-
-    private Long id;
 
     private String firstName;
 
