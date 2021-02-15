@@ -30,9 +30,6 @@ public class Invitation extends BaseEntity {
 //    @JoinColumn(name="cooperation_id", nullable=false)
 //    private Cooperation cooperation;
 
-    @Column(name = "cooperation_id")
-    private Long cooperationId;
-
     @OneToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

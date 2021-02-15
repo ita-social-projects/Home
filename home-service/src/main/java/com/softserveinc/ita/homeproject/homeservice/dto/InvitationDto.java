@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class InvitationDto extends BaseDto {
 
     private String name;
@@ -16,5 +17,6 @@ public class InvitationDto extends BaseDto {
     private boolean status;
     private LocalDateTime sentDateTime;
     private Role role;
-    private Long cooperationId;
+    //TODO: To complete when Cooperation entity is done
+//    private Cooperation cooperation;
 }
