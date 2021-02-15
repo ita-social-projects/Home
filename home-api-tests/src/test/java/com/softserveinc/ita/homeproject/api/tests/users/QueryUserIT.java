@@ -29,7 +29,6 @@ public class QueryUserIT {
             .lastName("White")
             .password("password");
 
-
     @Test
     void getAllUsers() throws ApiException {
         List<ReadUser> expectedListUser = saveListUser();
