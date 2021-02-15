@@ -25,14 +25,27 @@ public final class ExceptionMapperUtils {
 
     public static String invalidDataApiExeptionParser(InvalidDataAccessApiUsageException exception) {
         String message = null;
-        String exceptionMessage=exception.getMessage();
-        if(!StringUtils.isBlank(exceptionMessage)){
-        String[] str = exceptionMessage.split("com", 2);
-        Optional<String> result = Arrays.stream(str).findFirst();
-        if (result.isPresent()) {
-            message = result.get().trim();
-        }
+        String exceptionMessage = exception.getMessage();
+        if (!StringUtils.isBlank(exceptionMessage)) {
+            String[] str = exceptionMessage.split("com", 2);
+            Optional<String> result = Arrays.stream(str).findFirst();
+            if (result.isPresent()) {
+                if (result.get().contains("[")) {
+                    message = getProperty(result.get()).toString().trim();
+                } else {
+                    message = result.get().trim();
+                }
+            }
         }
         return message;
     }
+
+    private static StringBuilder getProperty(String result) {
+             StringBuilder  sb = new StringBuilder(result);
+            sb.delete(0, sb.indexOf("[") + 1);
+            sb.delete(sb.indexOf("]"), sb.length());
+            sb.insert(0, "Unknown property:").append(" from entity");
+        return sb;
+    }
 }
+

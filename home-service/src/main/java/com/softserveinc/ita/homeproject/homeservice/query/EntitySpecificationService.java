@@ -16,14 +16,15 @@ public class EntitySpecificationService<T> {
     public static final String RSQL_AND = ";";
 
     public Specification<T> getSpecification(Map<QueryParamEnum, String> filter, String search, String sort) {
-        Specification<T> filterSpecification = RSQLJPASupport.toSpecification(toRQSQLString(filter));
+
+       Specification<T> filterSpecification = RSQLJPASupport.toSpecification(toRQSQLString(filter));
         Specification<T> searchSpecification = RSQLJPASupport.toSpecification(search);
         Specification<T> sortSpecification = RSQLJPASupport.toSort(sort == null ? DEFAULT_SORT : sort);
 
-        Optional<Specification<T>> optSearchSpecification = Optional.of(searchSpecification);
-        Optional<Specification<T>> optFilterSpecification = Optional.of(filterSpecification);
+        return Optional.ofNullable(sortSpecification)
+                .map(spec->spec.and(filterSpecification))
+                .map(spec->spec.and(searchSpecification)).orElseThrow();
 
-        return sortSpecification.and(optFilterSpecification.get()).and(optSearchSpecification.get());
     }
 
     private static String toRQSQLString(Map<QueryParamEnum, String> filter) {
