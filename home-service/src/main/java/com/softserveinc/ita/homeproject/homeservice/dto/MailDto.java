@@ -1,8 +1,11 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MailDto extends BaseDto {
 
     private String name;

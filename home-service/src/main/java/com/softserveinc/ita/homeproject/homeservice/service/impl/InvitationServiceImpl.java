@@ -2,8 +2,9 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import org.springframework.stereotype.Service;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
@@ -28,25 +29,35 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
-    public void changeInvitationStatus(Set<Long> ids) {
-        invitationRepository.updateStatus(ids);
+    public void changeInvitationStatus(Long id) {
+        Invitation invitation = findInvitationById(id);
+        invitation.setStatus(true);
+        invitationRepository.save(invitation);
     }
 
     @Override
     public void updateSentDateTime(Long id, LocalDateTime dateTime) {
-        invitationRepository.updateSentDateTime(id, dateTime);
+        Invitation invitation = findInvitationById(id);
+        invitation.setSentDateTime(dateTime);
+        invitationRepository.save(invitation);
     }
 
     @Override
     public InvitationDto getInvitation(Long id) {
-        return invitationRepository.findById(id)
-            .map(invitation -> mapper.convert(invitation, InvitationDto.class)).orElse(null);
+        Invitation invitation = findInvitationById(id);
+        return mapper.convert(invitation, InvitationDto.class);
     }
 
-    @Override public List<InvitationDto> getAllActiveInvitations() {
-        List<Invitation> allNotSentInvitations = invitationRepository.getAllNotSentInvitations();
+    @Override
+    public List<InvitationDto> getAllActiveInvitations() {
+        List<Invitation> allNotSentInvitations = invitationRepository.findAllBySentDateTimeIsNull();
         return allNotSentInvitations.stream()
-            .map(invitation -> mapper.convert(invitation, InvitationDto.class))
-            .collect(Collectors.toList());
+                .map(invitation -> mapper.convert(invitation, InvitationDto.class))
+                .collect(Collectors.toList());
+    }
+
+    private Invitation findInvitationById(Long id) {
+        return invitationRepository.findById(id).orElseThrow(() ->
+                new InvitationException("Invitation with id " + id + " was not found"));
     }
 }

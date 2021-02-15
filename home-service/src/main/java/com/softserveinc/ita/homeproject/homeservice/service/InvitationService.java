@@ -10,7 +10,7 @@ public interface InvitationService {
 
     InvitationDto createInvitation(InvitationDto invitation);
 
-    void changeInvitationStatus(Set<Long> ids);
+    void changeInvitationStatus(Long id);
 
     InvitationDto getInvitation(Long id);
 

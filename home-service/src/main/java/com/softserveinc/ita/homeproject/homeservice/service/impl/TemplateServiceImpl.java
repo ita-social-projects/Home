@@ -16,6 +16,9 @@ import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 @Service
 public class TemplateServiceImpl implements TemplateService {
 
+    public static final Path REGISTRATION_TEMPLATE_PATH = Path.of("home-data/src/main/resources/template/invitation-to-registration.mustache");
+    public static final Path COOPERATION_TEMPLATE_PATH = Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
+
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         String text = "";
@@ -33,10 +36,10 @@ public class TemplateServiceImpl implements TemplateService {
         Path path;
         switch (invitationName) {
         case "invitation-to-registration":
-            path = Path.of("home-data/src/main/resources/template/invitation-to-registration.mustache");
+            path = REGISTRATION_TEMPLATE_PATH;
             break;
         case "invitation-to-cooperation":
-            path = Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
+            path = COOPERATION_TEMPLATE_PATH;
             break;
         default:
             throw new InvitationException("Wrong invitation name");
