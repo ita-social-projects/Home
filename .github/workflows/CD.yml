@@ -41,13 +41,6 @@ jobs:
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run: heroku container:login
-      - name: Deploy data-migration to Heroku
-        env:
-          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
-        run:
-          docker pull homeacademy/data-migration &&
-          docker tag homeacademy/data-migration registry.heroku.com/home-project-academy/data-migration &&
-          docker push registry.heroku.com/home-project-academy/data-migration
       - name: Deploy application to Heroku
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
@@ -59,4 +52,4 @@ jobs:
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run:
-          heroku container:release -a home-project-academy web data-migration
+          heroku container:release -a home-project-academy web
