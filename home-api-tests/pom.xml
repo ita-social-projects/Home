@@ -131,50 +131,6 @@
                                     </run>
                                 </image>
                                 <image>
-                                    <alias>${liquibase.container.name}</alias>
-                                    <name>${liquibase.container.name}</name>
-                                    <build>
-                                        <from>${docker.image.jdk.version}</from>
-                                        <entryPoint>
-                                            <exec>
-                                                <args>java</args>
-                                                <args>-jar</args>
-                                                <args>
-                                                    ${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar
-                                                </args>
-                                                <args>--url=${postgres.url}</args>
-                                                <args>--user=${postgres.user}</args>
-                                                <args>--password=${postgres.password}</args>
-                                            </exec>
-                                        </entryPoint>
-                                        <assembly>
-                                            <basedir>/</basedir>
-                                            <inline>
-                                                <files>
-                                                    <file>
-                                                        <source>
-                                                            ${docker.artifacts.path}/${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar
-                                                        </source>
-                                                        <outputDirectory>/</outputDirectory>
-                                                    </file>
-                                                </files>
-                                            </inline>
-                                        </assembly>
-                                    </build>
-                                    <run>
-                                        <ports>
-                                            <port>${liquibase.external.port}:${liquibase.internal.port}</port>
-                                        </ports>
-                                        <links>
-                                            <link>${postgres.container.name}</link>
-                                        </links>
-                                        <wait>
-                                            <log>Successfully released change log lock</log>
-                                            <time>10000</time>
-                                        </wait>
-                                    </run>
-                                </image>
-                                <image>
                                     <alias>${project.artifactId}</alias>
                                     <name>${project.artifactId}</name>
                                     <build>
