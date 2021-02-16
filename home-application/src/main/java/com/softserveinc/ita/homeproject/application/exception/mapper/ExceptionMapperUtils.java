@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public final class ExceptionMapperUtils {
 
-    public static String RSQLExceptionMessageParser(RSQLParserException exception) {
+    public static String BadRequestExceptionMessageParser(RSQLParserException exception) {
         String message = null;
         if (!exception.getMessage().contains("<EOF>")) {
             String[] str = exception.getMessage().split(":", 2);

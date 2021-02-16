@@ -6,7 +6,7 @@ import cz.jirutka.rsql.parser.RSQLParserException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.RSQLExceptionMessageParser;
+import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.BadRequestExceptionMessageParser;
 
 @Provider
 public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
@@ -17,7 +17,7 @@ public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserExc
 
     @Override
     protected String extractMessage(RSQLParserException exception) {
-        return RSQLExceptionMessageParser(exception);
+        return BadRequestExceptionMessageParser(exception);
     }
 }
 
