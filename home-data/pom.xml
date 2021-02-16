@@ -17,7 +17,7 @@
     <properties>
         <postgresql.verson>42.2.16</postgresql.verson>
         <rsql-jpa-spring-boot-starter.version>5.0.6</rsql-jpa-spring-boot-starter.version>
-         <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
     </properties>
 
     <dependencies>

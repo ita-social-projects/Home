@@ -261,10 +261,8 @@
                                 </postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}
                                 </liquibase.external.port>
-                                <home.application.admin.username>${home.application.admin.username}
-                                </home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}
-                                </home.application.admin.password>
+                                <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
