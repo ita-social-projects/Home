@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.RSQLExceptionMessageParser;
 
 @Provider
-public class RSQLParserExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
+public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserException> {
     @Override
     protected Response.Status getStatus() {
         return Response.Status.BAD_REQUEST;

@@ -41,10 +41,10 @@ public final class ExceptionMapperUtils {
     }
 
     private static StringBuilder getProperty(String result) {
-             StringBuilder  sb = new StringBuilder(result);
-            sb.delete(0, sb.indexOf("[") + 1);
-            sb.delete(sb.indexOf("]"), sb.length());
-            sb.insert(0, "Unknown property:").append(" from entity");
+        StringBuilder sb = new StringBuilder(result);
+        sb.delete(0, sb.indexOf("[") + 1);
+        sb.delete(sb.indexOf("]"), sb.length());
+        sb.insert(0, "Unknown property:").append(" from entity");
         return sb;
     }
 }
