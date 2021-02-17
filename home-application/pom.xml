@@ -11,10 +11,6 @@
     <packaging>jar</packaging>
     <artifactId>home-application</artifactId>
 
-    <properties>
-        <liquibase.version>4.3.1</liquibase.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,7 +64,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
                 <executions>
                     <execution>
                         <goals>

@@ -25,7 +25,7 @@
         <java.version>11</java.version>
         <revision>0.0.1-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.3.8.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <lombok.version>1.18.16</lombok.version>
         <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
