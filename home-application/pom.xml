@@ -40,6 +40,11 @@
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-data-migration</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-service</artifactId>
             <version>${revision}</version>
         </dependency>
