@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public final class ExceptionMapperUtils {
 
-    public static String BadRequestExceptionMessageParser(RSQLParserException exception) {
+    public static String getBadRequestExceptionMessageParser(RSQLParserException exception) {
         String message = null;
         if (!exception.getMessage().contains("<EOF>")) {
             String[] str = exception.getMessage().split(":", 2);
@@ -23,7 +23,7 @@ public final class ExceptionMapperUtils {
         return message;
     }
 
-    public static String invalidDataApiExeptionParser(InvalidDataAccessApiUsageException exception) {
+    public static String getInvalidDataApiExeptionParser(InvalidDataAccessApiUsageException exception) {
         String message = null;
         String exceptionMessage = exception.getMessage();
         if (!StringUtils.isBlank(exceptionMessage)) {
