@@ -6,7 +6,7 @@ import java.util.StringJoiner;
 
 public final class QueryFilterUtils {
 
-    public static String between(String selector, String arg1, String arg2) {
+    public static String getBetweenPredicate(String selector, String arg1, String arg2) {
         StringJoiner joiner = new StringJoiner(", ", "(", ")");
         joiner.add(arg1);
         joiner.add(arg2);
@@ -15,7 +15,7 @@ public final class QueryFilterUtils {
                 .concat(joiner.toString());
     }
 
-    public static String ignoreCaseLike(String selector, String arg) {
+    public static String getIgnoreCaseLikePredicate(String selector, String arg) {
         return selector
                 .concat(FilterPredicateEnum.IGNORE_CASE_LIKE.getPredicate())
                 .concat(arg);
