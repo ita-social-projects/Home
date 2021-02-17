@@ -257,10 +257,8 @@
                             <systemPropertyVariables>
                                 <home.application.external.port>${home.application.external.port}
                                 </home.application.external.port>
-                                <postgres.external.port>${postgres.external.port}
-                                </postgres.external.port>
-                                <liquibase.external.port>${liquibase.external.port}
-                                </liquibase.external.port>
+                                <postgres.external.port>${postgres.external.port}</postgres.external.port>
+                                <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
                                 <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
                             </systemPropertyVariables>
