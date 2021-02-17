@@ -17,7 +17,7 @@ public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserExc
 
     @Override
     protected String extractMessage(RSQLParserException exception) {
-        return BadRequestExceptionMessageParser(exception);
+        return getBadRequestExceptionMessageParser(exception);
     }
 }
 
