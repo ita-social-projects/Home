@@ -17,6 +17,6 @@ public class InvalidDataAccessApiExceptionMapper extends BaseExceptionMapper<Inv
     @Override
     protected String extractMessage(InvalidDataAccessApiUsageException exception) {
 
-        return invalidDataApiExeptionParser(exception);
+        return getInvalidDataApiExeptionParser(exception);
     }
 }
