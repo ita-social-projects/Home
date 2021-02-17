@@ -136,7 +136,7 @@ public class QueryUserIT {
     @Test
     void getAllUsersLikeIgnoreCaseTest() throws ApiException {
         saveListUser();
-        String filter = QueryFilterUtils.ignoreCaseLike("firstName", StringEscapeUtils.escapeJava("'AL'"));
+        String filter = QueryFilterUtils.getIgnoreCaseLikePredicate("firstName", StringEscapeUtils.escapeJava("'AL'"));
 
         List<ReadUser> actualListUsers = new UserQuery
                 .Builder(userApi)
