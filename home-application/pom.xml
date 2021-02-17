@@ -12,7 +12,6 @@
     <artifactId>home-application</artifactId>
 
     <properties>
-        <spring.boot.version>2.4.2</spring.boot.version>
         <liquibase.version>4.3.1</liquibase.version>
     </properties>
 
