@@ -818,6 +818,8 @@ components:
         primary:
           type: boolean
     UpdateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
         email:
@@ -825,6 +827,8 @@ components:
           type: string
           example: other@gmail.com
     UpdatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
         phone:
