@@ -140,7 +140,7 @@ public class QueryNewsIT {
         String selector = "id";
         String arg1 = String.valueOf(expectedList.get(1).getId());
         String arg2 = String.valueOf(expectedList.get(expectedList.size() - 1).getId());
-        String filter = QueryFilterUtils.between(selector, arg1, arg2);
+        String filter = QueryFilterUtils.getBetweenPredicate(selector, arg1, arg2);
 
         List<ReadNews> actualListNews = new NewsQuery
                 .Builder(newsApi)
