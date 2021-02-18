@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.api.tests;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,6 +26,7 @@ class UserApiIT {
             .firstName("firstName")
             .lastName("lastName")
             .password("password");
+
 
 
     @BeforeEach
@@ -74,6 +77,22 @@ class UserApiIT {
 
         List<ReadUser> readUsers = userApi.queryUsers(1, 10);
         readUsers.forEach(readUser -> assertNotEquals(savedUser.getId(), readUser.getId()));
+    }
+
+    @Test
+    void createUserInvalidParametersTest() {
+        CreateUser createUserInvalidParameters = new CreateUser()
+                .firstName("alan")
+                .lastName("walker")
+                .password("some p")
+                .email("email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUser(createUserInvalidParameters))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid" +
+                        " - should be from 8 to 128 signs long. It must contains lowercase, uppercase" +
+                        " letters or numbers. Parameter email is invalid - should be in format " +
+                        "'example@gmail.com'." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

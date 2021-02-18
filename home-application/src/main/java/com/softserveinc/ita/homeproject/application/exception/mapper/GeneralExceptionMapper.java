@@ -13,6 +13,7 @@ public class GeneralExceptionMapper extends BaseExceptionMapper<Throwable> {
     }
 
     protected String extractMessage(Throwable exception) {
+
         return "Unknown error. Please contact support.";
     }
 }

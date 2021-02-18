@@ -80,6 +80,25 @@ class NewsApiIT {
                 .withMessage("{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
     }
 
+    @Test
+    void createNewsInvalidParametersTest() {
+        CreateNews createNewsInvalidParameters = new CreateNews()
+                .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols" +
+                        " - title over 70 symbols")
+                .description("description description description description description description description" +
+                        " description description description description description description description" +
+                        " description description description description description description description")
+                .source("source")
+                .text("Some text")
+                .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> newsApi.addNews(createNewsInvalidParameters))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid" +
+                        " - should be from 1 to 150 signs long. Parameter title is invalid" +
+                        " - should be from 1 to 70 signs long." + "\"}");
+    }
+
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
         assertNotNull(updated);
