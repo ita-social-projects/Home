@@ -1,22 +1,23 @@
-package com.softserveinc.ita.homeproject.api.tests;
-
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+package com.softserveinc.ita.homeproject.api.tests.news;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class NewsApiIT {
 
     private NewsApi newsApi;
+
     private final CreateNews createNews = new CreateNews()
             .title("title")
             .description("description")
@@ -38,8 +39,8 @@ class NewsApiIT {
     @Test
     void getNewsByIdTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
-
         ReadNews news = newsApi.getNews(savedNews.getId());
+
         assertNotNull(news);
         assertEquals(savedNews, news);
     }
@@ -60,15 +61,6 @@ class NewsApiIT {
     }
 
     @Test
-    void getAllNewsTest() throws ApiException {
-        newsApi.addNews(createNews);
-        List<ReadNews> allNews = newsApi.getAllNews(1, 10);
-
-        assertNotNull(allNews);
-        assertFalse(allNews.isEmpty());
-    }
-
-    @Test
     void deleteNewsTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
         assertNotNull(newsApi.getNews(savedNews.getId()));
@@ -79,7 +71,6 @@ class NewsApiIT {
                 .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
                 .withMessage("{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
     }
-
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
         assertNotNull(updated);

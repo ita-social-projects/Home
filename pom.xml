@@ -34,8 +34,7 @@
         <modelMapper.version>2.3.9</modelMapper.version>
         <jib.version>2.7.1</jib.version>
         <jib.phase>package</jib.phase>
-        <image.liquibase.path>localhost:5000/data-migration</image.liquibase.path>
-        <image.application.path>localhost:5000/home-application</image.application.path>
+        <jib.goal>dockerBuild</jib.goal>
         <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
         <sonar.organization>ita-social-projects</sonar.organization>
@@ -50,6 +49,7 @@
                 <image.application.path>homeacademy/home-application</image.application.path>
                 <docker.username>${dockerhub.username}</docker.username>
                 <docker.password>${dockerhub.password}</docker.password>
+                <jib.goal>build</jib.goal>
                 <jib.phase>deploy</jib.phase>
             </properties>
         </profile>

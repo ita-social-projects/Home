@@ -11,6 +11,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
-                .map((users) -> mapper.convert(users, UserDto.class));
+    public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
+        Specification<User> userSpecification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize)).map(user->mapper.convert(user, UserDto.class));
     }
 
     @Override
