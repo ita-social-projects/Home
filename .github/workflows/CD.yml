@@ -1,21 +1,55 @@
-name: СD
+name: Packaging and Deploying
 
 on:
   push:
-    branches: [ dev ]
-    
+    branches: [ dev, master ]
+
 jobs:
-  deploy:
+  package:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: onekiloparsec/heroku-node-deploy-subfolder@v1.0.4
         with:
-          api_key: ${{secrets.HEROKU_API_KEY}}    
-          email: ${{secrets.HEROKU_EMAIL}}        
-          app_name: "home-project-academy"
-          branch: "dev"
-      - name: Deploy to Heroku      
-        run: |
-          git remote add github https://github.com/ita-social-projects/Home.git
-          git push github HEAD:dev
+          fetch-depth: 0
+      - name: Set up JDK 1.11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - name: Publish to GitHub Packages and Docker Hub
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >-
+          mvn -V -e -B
+          clean deploy sonar:sonar
+          -Papi-tests-infrastructure
+          -Papi-tests
+          -Ppush.images
+          -Dpostgres.user=${{secrets.POSTGRES_USER}}
+          -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
+          -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
+          -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
+          -Ddockerhub.username=${{secrets.DOCKER_USERNAME}}
+          -Ddockerhub.password=${{secrets.DOCKER_PASSWORD}}
+
+  deploy:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to Heroku Container registry
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run: heroku container:login
+      - name: Push image to Heroku
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run:
+          docker pull homeacademy/home-application &&
+          docker tag homeacademy/home-application registry.heroku.com/home-project-academy/web &&
+          docker push registry.heroku.com/home-project-academy/web
+      - name: Deploy application to Heroku
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
+        run:
+          heroku container:release -a home-project-academy web

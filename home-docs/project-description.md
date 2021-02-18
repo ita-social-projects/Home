@@ -6,6 +6,12 @@ MapStruct is also used to generate converters for DTOs.
 To run code generation you simply can build the application with Maven command `mvn clean install`.
 Controllers, DTOs and converters will be generated after that. 
 
+### Continuous integration and deployment
+Project uses GitHub actions for CI. 
+Each commit in Pull Request is checked by CI using `mvn clean install`.
+Merging in the `dev` branch provokes CI to build artifacts, then updated `dev` is deployed to Heroku.
+
+
 ## Technologies and tools used in the project
 - Java 11
 - Maven

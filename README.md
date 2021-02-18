@@ -15,19 +15,14 @@ It includes next modules:
 
 **Badges will go here**
 
-- build status
+- heroku deploy
 - coverage
 - issues (waffle.io maybe)
 - devDependencies
-- npm package
-- slack
-- downloads
-- gitter chat
 - license
 - etc.
 
 [![Heroku Deploy](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)
-[![Build Status](https://img.shields.io/travis/ita-social-projects/Home/master?style=flat-square)](https://travis-ci.org/github/ita-social-projects/Home)
 [![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/Home/master?style=flat-square)](https://coveralls.io)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/pulls)
@@ -46,12 +41,6 @@ It includes next modules:
   - [Clone](#Clone)
   - [Setup](#Setup)
   - [How to run local](#How-to-run-local)
-  - [How to run Docker](#How-to-run-Docker)
-- [Usage](#Usage)
-  - [How to work with swagger UI](#How-to-work-with-swagger-UI)
-  - [How to run tests](#How-to-run-tests)
-  - [How to Checkstyle](#How-to-Checkstyle)
-  - [How to run data migration](#How-to-run-data-migration)
 - [Documentation](#Documentation)
 - [Contributing](#contributing)
   - [git flow](#git-flow)
@@ -67,12 +56,9 @@ It includes next modules:
 
 ## Installation
 
-- All the `code` required to get started
-- Images of what it should look like
-
 ### Required to install
 - Java 11
-- PostgreSQL
+- Docker
 - Maven
 
 ### Environment
@@ -92,38 +78,8 @@ api.secret=${API_SECRET}
 
 - Clone this repo to your local machine using `https://github.com/ita-social-projects/Home`
 
-### Setup
-
 ### How to run local
-1. You should create environmental variables that are defined in application.properties file.
-2. You should create database `home`.
-3. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
-
-### How to run Docker
-
----
-
-## Usage
-### How to work with swagger UI
-### How to run tests
-### How to Checkstyle
-### How to run data migration
-You can update DB with this CLI application. For that purpose you should run it from home-data-migration directory in two ways.
-1. Use full URL(--url) for connection to your DB
-   
-   `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/?user=user&password=password`
-   
-2. Use URL(--url), username(-u or --user) and password(-p or --password) for connection to your DB
-
-    `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432 -u=user -p=password`
-
-- Also, you can write "-h" option to get help. 
-  
-  `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar -h`
-
-- You can run it with Maven using command:
-  
-  `mvn clean package -Pliquibase.migration`
+About it you can read in `hom-dev` package.
 
 ---
 
@@ -152,8 +108,6 @@ You can update DB with this CLI application. For that purpose you should run it 
 
 - 🔃 Create a new pull request using <a href="https://github.com/ita-social-projects/Home/compare/" target="_blank">github.com/ita-social-projects/Home</a>.
 
-### Issue flow
-
 ---
 
 ## Team
@@ -178,18 +132,12 @@ Developers that have worked on a project during:
 - @OlTym
 - @Abhai2016
 
-## FAQ
-
----
-
 ## Support
 
 Reach out to me at one of the following places!
 
 - Website at <a href="http://Website.com" target="_blank">`Website.com`</a>
 - Facebook at <a href="https://www.facebook.com/LiubomyrHalamaha/" target="_blank">`Liubomyr Halamaha`</a>
-- Insert more social links here.
-
 ---
 
 ## License
