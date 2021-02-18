@@ -26,7 +26,6 @@
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
-        <docker.artifacts.path>${project.build.directory}/docker/artifacts</docker.artifacts.path>
         <commons-text-version>1.9</commons-text-version>
     </properties>
     <profiles>
