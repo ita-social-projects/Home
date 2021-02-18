@@ -18,8 +18,8 @@
         <assertj-version>3.18.1</assertj-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
-        <docker.image.data.migration>homeacademy/data-migration</docker.image.data.migration>
-        <docker.image.application>homeacademy/home-application</docker.image.application>
+        <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
+        <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
