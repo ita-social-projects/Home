@@ -38,7 +38,7 @@ public class UserApiImpl implements UsersApi {
     @Override
     public Response createContacts(Long usersId, @Valid CreateContact createContact) {
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
-        ContactDto readContactDto = contactService.createContact(createContactDto);
+        ContactDto readContactDto = contactService.createContact(usersId, createContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.CREATED).entity(readContact).build();
