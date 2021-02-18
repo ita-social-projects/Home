@@ -30,13 +30,6 @@
     </properties>
     <profiles>
         <profile>
-            <id>push.images</id>
-            <properties>
-                <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
-                <docker.image.application>${image.application.path}</docker.image.application>
-            </properties>
-        </profile>
-        <profile>
             <id>api-tests-infrastructure</id>
             <build>
                 <plugins>
