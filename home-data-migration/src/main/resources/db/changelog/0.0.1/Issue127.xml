@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue127.001" author="pLytvynenko">
+        <createTable tableName="invitations">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="NAME" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sent_datetime" type="TIMESTAMP">
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="roles_fk"
+                             references="roles(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
