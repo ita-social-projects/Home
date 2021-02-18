@@ -1,25 +1,23 @@
 version: '3.8'
 
 services:
-  data-migration:
-    image: localhost:5000/data-migration
+  home-data-migration:
+    image: home-data-migration:0.0.1-SNAPSHOT
     environment:
-      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres?user=postgres&password=password
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
     ports:
       - 5001:5001
     networks:
       - home_network
-    pull_policy: always
 
   home-application:
-    image: localhost:5000/home-application
+    image: home-application:0.0.1-SNAPSHOT
     environment:
-      DATASOURCE_URL: jdbc:postgresql://db-postgres:5432/postgres
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
     ports:
       - 8080:8080
     networks:
       - home_network
-    pull_policy: always
 
 networks:
   home_network:
