@@ -128,7 +128,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>${jib.phase}</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>${jib.goal}</goal>
                         </goals>
