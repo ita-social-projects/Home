@@ -18,17 +18,24 @@
         <assertj-version>3.18.1</assertj-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
-        <docker.image.data.migration>homeacademy/data-migration</docker.image.data.migration>
-        <docker.image.application>homeacademy/home-application</docker.image.application>
+        <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
+        <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
+        <commons-text-version>1.9</commons-text-version>
     </properties>
-
     <profiles>
+        <profile>
+            <id>push.images</id>
+            <properties>
+                <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
+                <docker.image.application>${image.application.path}</docker.image.application>
+            </properties>
+        </profile>
         <profile>
             <id>api-tests-infrastructure</id>
             <build>
@@ -223,6 +230,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text-version}</version>
         </dependency>
     </dependencies>
 </project>

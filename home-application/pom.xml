@@ -139,7 +139,7 @@
                     <execution>
                         <phase>${jib.phase}</phase>
                         <goals>
-                            <goal>build</goal>
+                            <goal>${jib.goal}</goal>
                         </goals>
                     </execution>
                 </executions>
