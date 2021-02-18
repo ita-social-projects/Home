@@ -10,7 +10,7 @@ services:
         - home_network
 
   db-postgres:
-    image: postgres:latest
+    image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: password
