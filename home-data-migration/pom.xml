@@ -12,7 +12,6 @@
     <artifactId>home-data-migration</artifactId>
 
     <properties>
-        <liquibase.version>4.3.1</liquibase.version>
         <postgresql.verson>42.2.16</postgresql.verson>
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
