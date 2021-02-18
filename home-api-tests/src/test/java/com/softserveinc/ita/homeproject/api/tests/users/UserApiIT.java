@@ -1,33 +1,26 @@
-package com.softserveinc.ita.homeproject.api.tests;
+package com.softserveinc.ita.homeproject.api.tests.users;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class UserApiIT {
-
     private UserApi userApi;
+
     private final CreateUser createUser = new CreateUser()
             .firstName("firstName")
             .lastName("lastName")
             .password("password");
-
-
 
     @BeforeEach
     public void setUp() {
@@ -38,21 +31,14 @@ class UserApiIT {
     @Test
     void createUserTest() throws ApiException {
         ReadUser readUser = userApi.createUser(createUser);
+
         assertUser(createUser, readUser);
-    }
-
-    @Test
-    void getAllUsersTest() throws ApiException {
-        userApi.createUser(createUser);
-        List<ReadUser> readUsers = userApi.queryUsers(1, 10);
-
-        assertNotNull(readUsers);
-        assertFalse(readUsers.isEmpty());
     }
 
     @Test
     void getUserByIdTest() throws ApiException {
         ReadUser savedUsers = userApi.createUser(createUser);
+
         ReadUser user = userApi.getUser(savedUsers.getId());
 
         assertNotNull(user);
@@ -62,6 +48,7 @@ class UserApiIT {
     @Test
     void updateUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
+
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
                 .lastName("updatedLastName");
@@ -73,26 +60,6 @@ class UserApiIT {
     @Test
     void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
-        userApi.removeUser(savedUser.getId());
-
-        List<ReadUser> readUsers = userApi.queryUsers(1, 10);
-        readUsers.forEach(readUser -> assertNotEquals(savedUser.getId(), readUser.getId()));
-    }
-
-    @Test
-    void createUserInvalidParametersTest() {
-        CreateUser createUserInvalidParameters = new CreateUser()
-                .firstName("alan")
-                .lastName("walker")
-                .password("some p")
-                .email("email.com");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.createUser(createUserInvalidParameters))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid" +
-                        " - should be from 8 to 128 signs long. It must contains lowercase, uppercase" +
-                        " letters or numbers. Parameter email is invalid - should be in format " +
-                        "'example@gmail.com'." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

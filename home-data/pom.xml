@@ -16,9 +16,17 @@
 
     <properties>
         <postgresql.verson>42.2.16</postgresql.verson>
+        <rsql-jpa-spring-boot-starter.version>5.0.6</rsql-jpa-spring-boot-starter.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>io.github.perplexhub</groupId>
+            <artifactId>rsql-jpa-spring-boot-starter</artifactId>
+            <version>${rsql-jpa-spring-boot-starter.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -28,6 +36,12 @@
             <artifactId>postgresql</artifactId>
             <version>${postgresql.verson}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>
