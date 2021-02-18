@@ -25,5 +25,4 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
      */
     Optional<User> findByEmail(String email);
     Page<User> findAllByEnabledTrue(Pageable var1);
-
 }

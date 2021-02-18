@@ -8,4 +8,5 @@
     <include file="Issue96.xml" relativeToChangelogFile="true"/>
     <include file="Issue121.xml" relativeToChangelogFile="true"/>
     <include file="Issue127.xml" relativeToChangelogFile="true"/>
+    <include file="Issue127-QuartzConfig.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
