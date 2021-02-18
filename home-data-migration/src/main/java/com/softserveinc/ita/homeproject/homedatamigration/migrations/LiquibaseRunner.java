@@ -16,11 +16,11 @@ import java.util.concurrent.Callable;
                 "Use full URL or combination of URL, user and password.")
 public class LiquibaseRunner implements Callable<Integer> {
 
-    @Option(names = {"--url"}, description = "set url for your DB connection. It is required option.", required = true)
+    @Option(names = {"--url"}, description = "set url for your DB connection. It is required option.", defaultValue = "${DATASOURCE_URL}", required = true)
     private String url;
-    @Option(names = {"-u", "--user"}, description = "set username for your DB connection")
+    @Option(names = {"-u", "--user"}, description = "set username for your DB connection", defaultValue = "${DATASOURCE_USER}")
     private String user;
-    @Option(names = {"-p", "--password"}, description = "set password for your DB connection")
+    @Option(names = {"-p", "--password"}, description = "set password for your DB connection", defaultValue = "${DATASOURCE_PASSWORD}")
     private String password;
 
     public static void main(String[] args) {

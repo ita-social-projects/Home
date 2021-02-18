@@ -18,70 +18,22 @@
         <assertj-version>3.18.1</assertj-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
-        <docker.image.jdk.version>openjdk:11-jdk-buster</docker.image.jdk.version>
-        <docker.image.postgres.version>postgres:latest</docker.image.postgres.version>
-        <postgres.container.name>db-postgres</postgres.container.name>
+        <docker.image.data.migration>homeacademy/data-migration</docker.image.data.migration>
+        <docker.image.application>homeacademy/home-application</docker.image.application>
+        <docker.image.postgres>postgres</docker.image.postgres>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
-        <postgres.url>jdbc:postgresql://${postgres.container.name}:${postgres.internal.port}/${postgres.db}
-        </postgres.url>
-        <datasource.url.property>spring.datasource.url</datasource.url.property>
-        <home.application.jar.name>home-application</home.application.jar.name>
-        <home.application.jar.version>${revision}</home.application.jar.version>
-        <home.data.migration.jar.name>home-data-migration</home.data.migration.jar.name>
-        <home.data.migration.jar.version>${revision}</home.data.migration.jar.version>
-        <liquibase.container.name>liquibase</liquibase.container.name>
+        <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <docker.artifacts.path>${project.build.directory}/docker/artifacts</docker.artifacts.path>
         <commons-text-version>1.9</commons-text-version>
-             
     </properties>
     <profiles>
         <profile>
             <id>api-tests-infrastructure</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>${maven.dependency.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>copy</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>com.softserveinc.ita.homeproject</groupId>
-                                            <artifactId>${home.application.jar.name}</artifactId>
-                                            <version>${home.application.jar.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${docker.artifacts.path}</outputDirectory>
-                                            <destFileName>
-                                                ${home.application.jar.name}-${home.application.jar.version}.jar
-                                            </destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>com.softserveinc.ita.homeproject</groupId>
-                                            <artifactId>${home.data.migration.jar.name}</artifactId>
-                                            <version>${home.data.migration.jar.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${docker.artifacts.path}</outputDirectory>
-                                            <destFileName>
-                                                ${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar
-                                            </destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
@@ -111,10 +63,10 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <alias>${postgres.container.name}</alias>
-                                    <name>${postgres.container.name}</name>
+                                    <alias>${docker.image.postgres}</alias>
+                                    <name>${docker.image.postgres}</name>
                                     <build>
-                                        <from>${docker.image.postgres.version}</from>
+                                        <from>${docker.image.postgres}</from>
                                     </build>
                                     <run>
                                         <env>
@@ -132,42 +84,22 @@
                                     </run>
                                 </image>
                                 <image>
-                                    <alias>${liquibase.container.name}</alias>
-                                    <name>${liquibase.container.name}</name>
+                                    <alias>${docker.image.data.migration}</alias>
+                                    <name>${docker.image.data.migration}</name>
                                     <build>
-                                        <from>${docker.image.jdk.version}</from>
-                                        <entryPoint>
-                                            <exec>
-                                                <args>java</args>
-                                                <args>-jar</args>
-                                                <args>
-                                                    ${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar
-                                                </args>
-                                                <args>--url=${postgres.url}</args>
-                                                <args>--user=${postgres.user}</args>
-                                                <args>--password=${postgres.password}</args>
-                                            </exec>
-                                        </entryPoint>
-                                        <assembly>
-                                            <basedir>/</basedir>
-                                            <inline>
-                                                <files>
-                                                    <file>
-                                                        <source>
-                                                            ${docker.artifacts.path}/${home.data.migration.jar.name}-${home.data.migration.jar.version}.jar
-                                                        </source>
-                                                        <outputDirectory>/</outputDirectory>
-                                                    </file>
-                                                </files>
-                                            </inline>
-                                        </assembly>
+                                        <from>${docker.image.data.migration}</from>
                                     </build>
                                     <run>
+                                        <env>
+                                            <DATASOURCE_URL>${postgres.url}</DATASOURCE_URL>
+                                            <DATASOURCE_USER>${postgres.user}</DATASOURCE_USER>
+                                            <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
+                                        </env>
                                         <ports>
                                             <port>${liquibase.external.port}:${liquibase.internal.port}</port>
                                         </ports>
                                         <links>
-                                            <link>${postgres.container.name}</link>
+                                            <link>${docker.image.postgres}</link>
                                         </links>
                                         <wait>
                                             <log>Successfully released change log lock</log>
@@ -176,40 +108,22 @@
                                     </run>
                                 </image>
                                 <image>
-                                    <alias>${project.artifactId}</alias>
-                                    <name>${project.artifactId}</name>
+                                    <alias>${docker.image.application}</alias>
+                                    <name>${docker.image.application}</name>
                                     <build>
-                                        <from>${docker.image.jdk.version}</from>
-                                        <entryPoint>
-                                            <exec>
-                                                <args>java</args>
-                                                <args>-jar</args>
-                                                <args>-D${datasource.url.property}=${postgres.url}</args>
-                                                <args>${home.application.jar.name}-${home.application.jar.version}.jar
-                                                </args>
-                                            </exec>
-                                        </entryPoint>
-                                        <assembly>
-                                            <basedir>/</basedir>
-                                            <inline>
-                                                <files>
-                                                    <file>
-                                                        <source>
-                                                            ${docker.artifacts.path}/${home.application.jar.name}-${home.application.jar.version}.jar
-                                                        </source>
-                                                        <outputDirectory>/</outputDirectory>
-                                                    </file>
-                                                </files>
-                                            </inline>
-                                        </assembly>
+                                        <from>${docker.image.application}</from>
                                     </build>
                                     <run>
+                                        <env>
+                                            <DATASOURCE_URL>${postgres.url}</DATASOURCE_URL>
+                                            <DATASOURCE_USER>${postgres.user}</DATASOURCE_USER>
+                                            <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
+                                        </env>
                                         <ports>
-                                            <port>${home.application.external.port}:${home.application.internal.port}
-                                            </port>
+                                            <port>${home.application.external.port}:${home.application.internal.port}</port>
                                         </ports>
                                         <links>
-                                            <link>${postgres.container.name}</link>
+                                            <link>${docker.image.postgres}</link>
                                         </links>
                                         <wait>
                                             <log>Started HomeApplication</log>
