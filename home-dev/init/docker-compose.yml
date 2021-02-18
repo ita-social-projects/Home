@@ -9,7 +9,7 @@ services:
       networks:
         - home_network
 
-  db-postgres:
+  postgres:
     image: postgres
     restart: always
     environment:
