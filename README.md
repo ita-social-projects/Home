@@ -90,6 +90,10 @@ About it you can read in `hom-dev` package.
 
 ## Contributing
 
+Our images on Docker Hub
+
+    `https://hub.docker.com/u/homeacademy`
+
 ### Git flow
 > To get started...
 #### Step 1

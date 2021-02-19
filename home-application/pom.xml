@@ -37,6 +37,12 @@
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-data-migration</artifactId>
             <version>${revision}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
@@ -132,7 +138,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>${jib.phase}</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>${jib.goal}</goal>
                         </goals>

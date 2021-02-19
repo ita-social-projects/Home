@@ -33,12 +33,12 @@
         <rapidoc.version>7.2.1</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
         <jib.version>2.7.1</jib.version>
-        <jib.phase>package</jib.phase>
         <jib.goal>dockerBuild</jib.goal>
         <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
         <sonar.organization>ita-social-projects</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <liquibase.version>4.3.1</liquibase.version>
     </properties>
 
     <profiles>
@@ -50,7 +50,6 @@
                 <docker.username>${dockerhub.username}</docker.username>
                 <docker.password>${dockerhub.password}</docker.password>
                 <jib.goal>build</jib.goal>
-                <jib.phase>deploy</jib.phase>
             </properties>
         </profile>
     </profiles>
