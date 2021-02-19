@@ -11,10 +11,10 @@
                 <constraints nullable="false"
                              primaryKey="true"/>
             </column>
-            <column name="NAME" type="VARCHAR(20)">
+            <column name="NAME" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="EMAIL" type="VARCHAR(20)">
+            <column name="EMAIL" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="STATUS" type="BOOLEAN" defaultValueBoolean="false">
