@@ -2,25 +2,28 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.model.*;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
@@ -41,6 +44,7 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     private UserService userService;
     private HomeMapper mapper;
     private EntitySpecificationService entitySpecificationService;
+    private ContactService contactService;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -57,6 +61,15 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
+    }
+
+    @Override
+    public Response createContacts(Long usersId, @Valid CreateContact createContact) {
+        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
+        ContactDto readContactDto = contactService.createContact(usersId, createContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
 
     /**
@@ -111,6 +124,22 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
         return buildQueryResponse(users, ReadUser.class);
     }
+    @Override
+    public Response getContact(Long usersId, Long contactsId) {
+        ContactDto readContactDto = contactService.getContactById(contactsId);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
+    }
+
+    @Override
+    public Response getAllContacts(Long usersId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
+
+        List<ReadContact> readContactList = contactService.getAllContacts(usersId, pageNumber, pageSize).stream()
+                .map(contactDto -> mapper.convert(contactDto, ReadContact.class))
+                .collect(Collectors.toList());
+        return Response.status(Response.Status.OK).entity(readContactList).build();
+    }
 
     /**
      * removeUser method is implementation of HTTP DELETE
@@ -123,6 +152,13 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     @Override
     public Response removeUser(Long id) {
         userService.deactivateUser(id);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @Override
+    public Response removeContact(Long usersId, Long contactsId) {
+        contactService.deactivateContact(contactsId);
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -145,6 +181,15 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
+    @Override
+    public Response updateContact(Long usersId, Long contactsId, @Valid UpdateContact updateContact) {
+        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        ContactDto readContactDto = contactService.updateContact(contactsId, updateContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
+    }
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -158,6 +203,11 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     @Autowired
     public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
         this.entitySpecificationService = entitySpecificationService;
+    }
+
+    @Autowired
+    public void setContactService(ContactService contactService) {
+        this.contactService = contactService;
     }
 
     @Override
