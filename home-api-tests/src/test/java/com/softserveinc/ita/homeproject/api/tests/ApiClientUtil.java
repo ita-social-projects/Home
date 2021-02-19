@@ -27,23 +27,23 @@ public final class ApiClientUtil {
     public ApiClient getClient() throws Exception {
         //mvn clean install -Papi-tests-infrastructure -Papi-tests -Dpostgres.user=postgres -Dpostgres.password=password -Dhome.application.admin.username=admin@example.com -Dhome.application.admin.password=password -Dhome.application.client.id=client -Dhome.application.client.secret=secret
         String applicationExternalPort = System.getProperty("home.application.external.port");
-        String applicationAdminUsername = System.getProperty("home.application.admin.username");
+        /*String applicationAdminUsername = System.getProperty("home.application.admin.username");
         String applicationAdminPassword = System.getProperty("home.application.admin.password");
         String applicationClientId = System.getProperty("home.application.client.id");
-        String applicationClientSecret = System.getProperty("home.application.client.secret");
-        System.out.println(applicationExternalPort);
-        System.out.println(applicationAdminUsername);
-        System.out.println(applicationAdminPassword);
-        System.out.println(applicationClientId);
-        System.out.println(applicationClientSecret);
+        String applicationClientSecret = System.getProperty("home.application.client.secret");*/
+        //String applicationExternalPort = "8080";
+        String applicationAdminUsername = "admin@example.com";
+        String applicationAdminPassword = "password";
+        String applicationClientId = "client";
+        String applicationClientSecret = "secret";
         ApiClient client = new ApiClient();
-        client.setAccessToken(retrieveAccessToken(applicationAdminUsername, applicationAdminPassword, applicationClientId, applicationClientSecret));
+        client.setAccessToken(retrieveAccessToken(applicationAdminUsername, applicationAdminPassword, applicationClientId, applicationClientSecret, applicationExternalPort));
         client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
                 "No description provided", new HashMap())));
         return client;
     }
 
-    private String retrieveAccessToken(String username, String password, String clientId, String clientSecret) throws IOException, InterruptedException {
+    private String retrieveAccessToken(String username, String password, String clientId, String clientSecret, String port) throws IOException, InterruptedException {
         Map<Object, Object> data = new HashMap<>();
         data.put("grant_type", "password");
         data.put("password", password);
@@ -51,7 +51,7 @@ public final class ApiClientUtil {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(ofFormData(data))
-                .uri(URI.create("http://localhost:8080/oauth/token"))
+                .uri(URI.create("http://localhost:" + port + "/oauth/token"))
                 .setHeader("Authorization", encodeAuthorizationHeader(clientId, clientSecret))
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .build();
