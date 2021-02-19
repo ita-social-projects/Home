@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.model.BaseView;
+import com.softserveinc.ita.homeproject.model.BaseReadView;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
@@ -19,7 +19,7 @@ public abstract class CommonApi<R extends BaseDto> {
 
     public abstract HomeMapper getMapper();
 
-    Response buildQueryResponse(Page<R> page, Class<? extends BaseView> clazz) {
+    Response buildQueryResponse(Page<R> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();
