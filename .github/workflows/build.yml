@@ -28,3 +28,5 @@ jobs:
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
           -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
+          -Dhome.application.client.id=${{secrets.HOME_APPLICATION_CLIENT_ID}}
+          -Dhome.application.client.secret=${{secrets.HOME_APPLICATION_CLIENT_SECRET}}

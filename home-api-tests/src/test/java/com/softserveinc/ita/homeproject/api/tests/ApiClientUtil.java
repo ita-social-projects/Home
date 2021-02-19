@@ -25,13 +25,19 @@ public final class ApiClientUtil {
             .build();
 
     public ApiClient getClient() throws Exception {
+        //mvn clean install -Papi-tests-infrastructure -Papi-tests -Dpostgres.user=postgres -Dpostgres.password=password -Dhome.application.admin.username=admin@example.com -Dhome.application.admin.password=password -Dhome.application.client.id=client -Dhome.application.client.secret=secret
         String applicationExternalPort = System.getProperty("home.application.external.port");
-        String applicationAdminUsername = "admin@example.com";
-        String applicationAdminPassword = "password";
-        String applicationClientId = "client";
-        String applicationClientSecret = "secret";
+        String applicationAdminUsername = System.getProperty("home.application.admin.username");
+        String applicationAdminPassword = System.getProperty("home.application.admin.password");
+        String applicationClientId = System.getProperty("home.application.client.id");
+        String applicationClientSecret = System.getProperty("home.application.client.secret");
+        System.out.println(applicationExternalPort);
+        System.out.println(applicationAdminUsername);
+        System.out.println(applicationAdminPassword);
+        System.out.println(applicationClientId);
+        System.out.println(applicationClientSecret);
         ApiClient client = new ApiClient();
-        client.setBearerToken(retrieveAccessToken(applicationAdminUsername, applicationAdminPassword, applicationClientId, applicationClientSecret));
+        client.setAccessToken(retrieveAccessToken(applicationAdminUsername, applicationAdminPassword, applicationClientId, applicationClientSecret));
         client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
                 "No description provided", new HashMap())));
         return client;
