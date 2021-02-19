@@ -87,6 +87,10 @@
                                             <log>database system is ready to accept connections</log>
                                             <time>20000</time>
                                         </wait>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <date>default</date>
+                                        </log>
                                     </run>
                                 </image>
                                 <image>
@@ -111,6 +115,10 @@
                                             <log>Successfully released change log lock</log>
                                             <time>10000</time>
                                         </wait>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <date>default</date>
+                                        </log>
                                     </run>
                                 </image>
                                 <image>
@@ -124,6 +132,7 @@
                                             <DATASOURCE_URL>${postgres.url}</DATASOURCE_URL>
                                             <DATASOURCE_USER>${postgres.user}</DATASOURCE_USER>
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
+                                            <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                         </env>
                                         <ports>
                                             <port>${home.application.external.port}:${home.application.internal.port}</port>
@@ -135,6 +144,10 @@
                                             <log>Started HomeApplication</log>
                                             <time>30000</time>
                                         </wait>
+                                        <log>
+                                            <enabled>true</enabled>
+                                            <date>default</date>
+                                        </log>
                                     </run>
                                 </image>
                             </images>

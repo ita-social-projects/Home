@@ -13,24 +13,23 @@ This package created for local development.
 
 ##How to run
 1. You should define Java and Maven in your PATH.
-2. You should create database and local registry. You can see how to do it in [Docker](#Docker).
-3. You should build the project. Check [Maven](#Maven) section for this.
+2. You should build the project. Check [Maven](#Maven) section with **How to build** title.
+3. You should create database. You can see how to do it in [Docker](#Docker).
 4. If you did everything right, you will be able to launch the project. How to do it with Docker, check the [Docker](#Docker).
 How to do it with IDEA and Maven, check the [Maven](#Maven).
 5. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
 
 
 ##Docker
-**How to create database and local registry**
+**How to create database**
 
-For building project you should create your local registry where Maven will put project images. 
 For that purpose just use `docker-compose up` command in your terminal in `home-dev/init` package. 
-After that you will have your local registry, database and possibility successfully build the project.
+After that you will have your container with database.
 
 
 **How to launch**
 
-After successful building you can launch the project in Docker. 
+After successful building and creating database you can launch the project in Docker. 
 For that purpose just type `docker-compose up` command in `home-dev/launch` package.
 After that you will have data-migration container for filling database and running application container.
 

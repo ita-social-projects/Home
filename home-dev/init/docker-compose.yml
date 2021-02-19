@@ -1,15 +1,7 @@
 version: '3.8'
 
 services:
-  registry:
-      image: registry
-      restart: always
-      ports:
-        - 5000:5000
-      networks:
-        - home_network
-
-  db-postgres:
+  postgres:
     image: postgres
     restart: always
     environment:
