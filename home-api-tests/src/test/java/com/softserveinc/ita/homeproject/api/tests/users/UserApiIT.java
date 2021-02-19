@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -60,6 +61,22 @@ class UserApiIT {
     @Test
     void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
+    }
+
+    @Test
+    void createUserInvalidParametersTest() {
+        CreateUser createUserInvalidParameters = new CreateUser()
+                .firstName("alan")
+                .lastName("walker")
+                .password("some p")
+                .email("email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUser(createUserInvalidParameters))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid" +
+                        " - should be from 8 to 128 signs long. It must contains lowercase, uppercase" +
+                        " letters or numbers. Parameter email is invalid - should be in format " +
+                        "'example@gmail.com'." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
