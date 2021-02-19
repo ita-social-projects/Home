@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.quartz.config;
+package com.softserveinc.ita.homeproject.homeservice.quartz.config;
 
 import org.quartz.JobDetail;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
