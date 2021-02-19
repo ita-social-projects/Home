@@ -25,8 +25,8 @@ class NewsApiIT {
             .photoUrl("photoUrl");
 
     @BeforeEach
-    public void setUp() {
-        newsApi = new NewsApi(ApiClientUtil.getClient());
+    public void setUp() throws Exception {
+        newsApi = new NewsApi(new ApiClientUtil().getClient());
     }
 
     @Test

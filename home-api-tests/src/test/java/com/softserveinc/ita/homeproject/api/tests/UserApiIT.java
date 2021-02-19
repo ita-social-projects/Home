@@ -27,8 +27,8 @@ class UserApiIT {
 
 
     @BeforeEach
-    public void setUp() {
-        userApi = new UserApi(ApiClientUtil.getClient());
+    public void setUp() throws Exception {
+        userApi = new UserApi(new ApiClientUtil().getClient());
         createUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
     }
 

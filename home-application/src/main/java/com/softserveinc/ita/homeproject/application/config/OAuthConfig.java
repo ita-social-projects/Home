@@ -21,7 +21,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userService;
 
-    @Value("${jwt.clientId:glee-o-meter}")
+    @Value("${jwt.clientId:client}")
     private String clientId;
 
     @Value("${jwt.client-secret:secret}")
@@ -51,7 +51,7 @@ public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                //.scopes("read", "write")
+                .scopes("read", "write")
                 .resourceIds("api");
     }
 

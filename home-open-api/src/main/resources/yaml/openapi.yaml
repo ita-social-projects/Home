@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: HomePage - OpenAPI 3.0
   description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
@@ -348,7 +348,7 @@ components:
       type: oauth2
       flows:
         password:
-          tokenUrl: api/0/oauth/token
+          tokenUrl: http://localhost:8080/oauth/token
           scopes: {}
   responses:
     BadRequest:
