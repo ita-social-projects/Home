@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PhoneContactDto extends ContactDto{
 
-    private String phone;
+    private String contactPhone;
 }

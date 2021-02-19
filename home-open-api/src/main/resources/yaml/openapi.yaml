@@ -281,7 +281,11 @@ paths:
           schema:
             type: string
         - in: query
-          name: contact
+          name: contactPhone
+          schema:
+            type: string
+        - in: query
+          name: contactEmail
           schema:
             type: string
       responses:
@@ -792,8 +796,8 @@ components:
       description: Indicates the type of contact.
       type: string
       enum: &contact_type_values
-        - email
-        - phone
+        - contactEmail
+        - contactPhone
     ReadContact:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -801,8 +805,8 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          email: '#/components/schemas/ReadEmailContact'
-          phone: '#/components/schemas/ReadPhoneContact'
+          contactEmail: '#/components/schemas/ReadEmailContact'
+          contactPhone: '#/components/schemas/ReadPhoneContact'
       required:
         - contact_type
       properties:
@@ -815,7 +819,7 @@ components:
         - $ref: '#/components/schemas/ReadContact'
       type: object
       properties:
-        email:
+        contactEmail:
           type: string
           example: home@gmail.com
     ReadPhoneContact:
@@ -823,7 +827,7 @@ components:
         - $ref: '#/components/schemas/ReadContact'
       type: object
       properties:
-        phone:
+        contactPhone:
           type: string
           example: "+380506617305"
     CreateContact:
@@ -831,8 +835,8 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          email: '#/components/schemas/CreateEmailContact'
-          phone: '#/components/schemas/CreatePhoneContact'
+          contactEmail: '#/components/schemas/CreateEmailContact'
+          contactPhone: '#/components/schemas/CreatePhoneContact'
       required:
         - contact_type
       properties:
@@ -845,7 +849,7 @@ components:
         - $ref: '#/components/schemas/CreateContact'
       type: object
       properties:
-        email:
+        contactEmail:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: home@gmail.com
@@ -854,7 +858,7 @@ components:
         - $ref: '#/components/schemas/CreateContact'
       type: object
       properties:
-        phone:
+        contactPhone:
           type: string
           example: "+380506617305"
     UpdateContact:
@@ -862,8 +866,8 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          email: '#/components/schemas/UpdateEmailContact'
-          phone: '#/components/schemas/UpdatePhoneContact'
+          contactEmail: '#/components/schemas/UpdateEmailContact'
+          contactPhone: '#/components/schemas/UpdatePhoneContact'
       required:
         - contact_type
       properties:
@@ -876,7 +880,7 @@ components:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
-        email:
+        contactEmail:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: other@gmail.com
@@ -885,6 +889,6 @@ components:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
-        phone:
+        contactPhone:
           type: string
           example: "+380966617305"

@@ -10,7 +10,8 @@ public class UserQuery extends BaseQuery {
     private String email;
     private String firstName;
     private String lastName;
-    private String contact;
+    private String contactEmail;
+    private String contactPhone;
     private UserApi userApi;
 
     public void setEmail(String email) {
@@ -25,8 +26,12 @@ public class UserQuery extends BaseQuery {
         this.lastName = lastName;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     public void setUserApi(UserApi userApi) {
@@ -43,7 +48,8 @@ public class UserQuery extends BaseQuery {
                         email,
                         firstName,
                         lastName,
-                        contact);
+                        contactEmail,
+                        contactPhone);
     }
 
     public static class Builder extends BaseBuilder<UserQuery, Builder> {
@@ -67,8 +73,13 @@ public class UserQuery extends BaseQuery {
             return this;
         }
 
-        public Builder contact(String contact) {
-            queryClass.setContact(contact);
+        public Builder contactEmail(String contactEmail) {
+            queryClass.setContactEmail(contactEmail);
+            return this;
+        }
+
+        public Builder contactPhone(String contactPhone) {
+            queryClass.setContactPhone(contactPhone);
             return this;
         }
 

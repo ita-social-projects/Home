@@ -45,12 +45,12 @@ public class ContactServiceImpl implements ContactService {
             Contact contact = contactOptional.get();
             if (contact instanceof Phone) {
                 Phone phone = (Phone) contact;
-                phone.setPhone(((PhoneContactDto) updateContactDto).getPhone());
+                phone.setContactPhone(((PhoneContactDto) updateContactDto).getContactPhone());
                 contactRepository.save(contact);
                 return mapper.convert(phone, PhoneContactDto.class);
             } else {
                 Email email = (Email) contact;
-                email.setEmail(((EmailContactDto) updateContactDto).getEmail());
+                email.setContactEmail(((EmailContactDto) updateContactDto).getContactEmail());
                 contactRepository.save(contact);
                 return mapper.convert(email, EmailContactDto.class);
             }

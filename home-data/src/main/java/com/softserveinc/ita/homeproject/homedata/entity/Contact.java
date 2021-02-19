@@ -17,6 +17,9 @@ import lombok.Setter;
         discriminatorType = DiscriminatorType.STRING)
 public abstract class Contact extends BaseEntity {
 
+    @Column
+    private ContactType contactType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

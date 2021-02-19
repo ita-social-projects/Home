@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EmailContactDto extends ContactDto{
 
-    private String email;
+    private String contactEmail;
 }

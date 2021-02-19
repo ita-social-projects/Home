@@ -12,9 +12,9 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@DiscriminatorValue("email")
+@DiscriminatorValue("contactEmail")
 public class Email extends Contact {
 
     @Column
-    private String email;
+    private String contactEmail;
 }

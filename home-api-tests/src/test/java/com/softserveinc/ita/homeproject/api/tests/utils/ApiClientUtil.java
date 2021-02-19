@@ -1,4 +1,3 @@
-/*package com.softserveinc.ita.homeproject.api.tests;
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import com.softserveinc.ita.homeproject.ApiClient;
@@ -25,5 +24,5 @@ public final class ApiClientUtil {
                 "No description provided", new HashMap())));
         return client;
     }
-}*/
+}
 
