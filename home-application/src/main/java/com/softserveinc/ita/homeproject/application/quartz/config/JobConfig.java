@@ -1,14 +1,29 @@
-package com.softserveinc.ita.homeproject.application.quartz;
+package com.softserveinc.ita.homeproject.application.quartz.config;
 
+import com.softserveinc.ita.homeproject.application.quartz.jobs.SendEmailJob;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 
 @Slf4j
-public class JobConfig {
+@Configuration
+public class JobConfig extends BaseJobConfig {
+
+    @Bean
+    public JobDetailFactoryBean jobsDetails() {
+        return JobConfig.createJobDetail(SendEmailJob.class, "Send Email job");
+    }
+
+    @Bean
+    public SimpleTriggerFactoryBean trigger(JobDetail jobDetail) {
+        return JobConfig.createTrigger(jobDetail, 5000, "Send Email trigger");
+    }
+
     public static JobDetailFactoryBean createJobDetail(Class jobClass, String jobName) {
         log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
@@ -17,6 +32,7 @@ public class JobConfig {
         factoryBean.setDurability(true);
         return factoryBean;
     }
+
     public static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs, String triggerName) {
         log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})", jobDetail.toString(), pollFrequencyMs, triggerName);
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
@@ -28,5 +44,4 @@ public class JobConfig {
         factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
         return factoryBean;
     }
-    
 }
