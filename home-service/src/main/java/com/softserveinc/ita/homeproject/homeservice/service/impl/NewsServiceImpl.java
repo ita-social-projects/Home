@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public NewsDto update(Long id, NewsDto newsDto)  {
+    public NewsDto update(Long id, NewsDto newsDto) {
 
         if (newsRepository.findById(id).isPresent()) {
 
@@ -70,9 +71,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewsDto> getAll(Integer pageNumber, Integer pageSize) {
-        return newsRepository.findAll(PageRequest.of(pageNumber - 1, pageSize))
-                .map((news) -> mapper.convert(news, NewsDto.class));
+    public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
+        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize)).map(news->mapper.convert(news, NewsDto.class));
     }
 
     @Override
