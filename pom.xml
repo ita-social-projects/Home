@@ -39,6 +39,9 @@
         <sonar.organization>ita-social-projects</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <liquibase.version>4.3.1</liquibase.version>
+        <checkstyle.version>8.40</checkstyle.version>
+        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
+        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}\checkstyle-configuration.xml</checkstyle.configLocation>
     </properties>
 
     <profiles>
@@ -134,6 +137,33 @@
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>${checkstyle.configLocation}</configLocation>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
                         </goals>
                     </execution>
                 </executions>

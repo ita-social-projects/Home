@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -10,17 +13,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 class UserApiIT {
-    private UserApi userApi;
-
     private final CreateUser createUser = new CreateUser()
-            .firstName("firstName")
-            .lastName("lastName")
-            .password("password");
+        .firstName("firstName")
+        .lastName("lastName")
+        .password("password");
+
+    private UserApi userApi;
 
     @BeforeEach
     public void setUp() {
@@ -50,8 +49,8 @@ class UserApiIT {
         ReadUser savedUser = userApi.createUser(createUser);
 
         UpdateUser updateUser = new UpdateUser()
-                .firstName("updatedFirstName")
-                .lastName("updatedLastName");
+            .firstName("updatedFirstName")
+            .lastName("updatedLastName");
 
         ReadUser updatedUser = userApi.updateUser(savedUser.getId(), updateUser);
         assertUser(savedUser, updateUser, updatedUser);

@@ -8,7 +8,7 @@ public interface HomeMappingConfig<S, D> {
 
     @SuppressWarnings("unchecked cast")
     default Class<S> getSourceType() {
-        return (Class<S>) getResolvedClasses() [0];
+        return (Class<S>) getResolvedClasses()[0];
     }
 
     @SuppressWarnings("unchecked cast")
