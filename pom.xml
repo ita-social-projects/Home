@@ -41,7 +41,7 @@
         <liquibase.version>4.3.1</liquibase.version>
         <checkstyle.version>8.40</checkstyle.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
-        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}\checkstyle-configuration.xml</checkstyle.configLocation>
+        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/checkstyle-configuration.xml</checkstyle.configLocation>
     </properties>
 
     <profiles>
