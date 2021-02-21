@@ -35,32 +35,14 @@
         </module>
         <module name="ArrayTrailingComma"/>
         <module name="ArrayTypeStyle"/>
-
-
         <module name="AtclauseOrder"/>
-
-
-        <!--Discuss usage of this module with team-->
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>
-
-        <!--Violation at home-service\src\main\java\com\softserveinc\ita\homeproject\homeservice
-        \query\EntitySpecificationService.java:31:81:-->
-        <module name="AvoidInlineConditionals"/>
-
-
         <module name="AvoidNestedBlocks"/>
         <module name="AvoidStarImport"/>
-
-        <!--Violation at home-data-migration\src\main\java\com\softserveinc\ita\homeproject\homedatamigration
-        \migrations\LiquibaseUpdate.java:32:28:         -->
-<!--        <module name="CatchParameterName">-->
-<!--            <property name="format" value="^[a-z][a-zA-Z0-9]+$"/>-->
-<!--        </module>-->
-
         <module name="CommentsIndentation"/>
         <module name="ConstantName"/>
         <module name="CustomImportOrder">
@@ -100,10 +82,7 @@
         </module>
         <module name="LeftCurly"/>
         <module name="LocalVariableName"/>
-
-        <!--Check if ConstantName module rules are not violated-->
         <module name="MemberName"/>
-
         <module name="MethodName"/>
         <module name="MethodParamPad"/>
         <module name="MethodTypeParameterName"/>
