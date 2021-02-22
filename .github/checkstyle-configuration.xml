@@ -27,7 +27,7 @@
             <property name="ignoreStatic" value="false"/>
             <property name="ignoreOverriddenMethods" value="false"/>
             <property name="tokens"
-                      value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
+                      value="CLASS_DEF, INTERFACE_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF"/>
         </module>
         <module name="AnnotationLocation">
