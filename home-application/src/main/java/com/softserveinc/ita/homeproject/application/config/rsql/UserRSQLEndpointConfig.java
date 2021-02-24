@@ -21,8 +21,6 @@ public class UserRSQLEndpointConfig implements RSQLEndpointConfig<User, UserQuer
         HashMap<UserQueryParamEnum, String> map = new HashMap<>();
 
         map.put(UserQueryParamEnum.EMAIL, "email");
-        map.put(UserQueryParamEnum.CONTACT_PHONE, "contactPhone");
-        map.put(UserQueryParamEnum.CONTACT_EMAIL, "contactEmail");
         map.put(UserQueryParamEnum.FIRST_NAME, "firstName");
         map.put(UserQueryParamEnum.LAST_NAME, "lastName");
 

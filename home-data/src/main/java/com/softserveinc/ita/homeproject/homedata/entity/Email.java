@@ -8,9 +8,6 @@ import javax.persistence.Entity;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @DiscriminatorValue("contactEmail")
 public class Email extends Contact {

@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
@@ -14,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -37,13 +36,16 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  *
  * @author Mykyta Morar
  */
+
 @Provider
+@Component
 @NoArgsConstructor
 public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
+    @Autowired
     private UserService userService;
-    private HomeMapper mapper;
-    private EntitySpecificationService entitySpecificationService;
+
+    @Autowired
     private ContactService contactService;
 
     /**
@@ -113,8 +115,6 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
         filterMap.put(UserQueryParamEnum.ID, id);
         filterMap.put(UserQueryParamEnum.EMAIL, email);
-        filterMap.put(UserQueryParamEnum.CONTACT_PHONE, contactPhone);
-        filterMap.put(UserQueryParamEnum.CONTACT_EMAIL, contactEmail);
         filterMap.put(UserQueryParamEnum.LAST_NAME, lastName);
         filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
 
@@ -192,28 +192,4 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
-    @Autowired
-    public void setContactService(ContactService contactService) {
-        this.contactService = contactService;
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
 }

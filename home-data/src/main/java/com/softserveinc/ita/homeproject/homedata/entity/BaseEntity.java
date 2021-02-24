@@ -7,9 +7,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class BaseEntity {
 

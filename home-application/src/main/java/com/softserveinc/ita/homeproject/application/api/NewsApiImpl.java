@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -35,12 +36,12 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
  */
 
 @Provider
+@Component
 @NoArgsConstructor
 public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
 
+    @Autowired
     private NewsService newsService;
-    private HomeMapper mapper;
-    private EntitySpecificationService entitySpecificationService;
 
 
     /**
@@ -142,23 +143,4 @@ public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
         return Response.ok().entity(response).build();
     }
 
-    @Autowired
-    public void setNewsService(NewsService newsService) {
-        this.newsService = newsService;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
 }

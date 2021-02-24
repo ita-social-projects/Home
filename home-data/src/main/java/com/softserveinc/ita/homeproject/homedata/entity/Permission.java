@@ -11,8 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "permissions")
 public class Permission extends BaseEntity {

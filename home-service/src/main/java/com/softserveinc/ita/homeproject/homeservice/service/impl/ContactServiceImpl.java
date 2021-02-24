@@ -6,6 +6,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Phone;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -43,20 +44,37 @@ public class ContactServiceImpl implements ContactService {
         Optional<Contact> contactOptional = contactRepository.findById(id);
         if (contactOptional.isPresent()) {
             Contact contact = contactOptional.get();
-            if (contact instanceof Phone) {
-                Phone phone = (Phone) contact;
-                phone.setContactPhone(((PhoneContactDto) updateContactDto).getContactPhone());
-                contactRepository.save(contact);
-                return mapper.convert(phone, PhoneContactDto.class);
-            } else {
-                Email email = (Email) contact;
-                email.setContactEmail(((EmailContactDto) updateContactDto).getContactEmail());
-                contactRepository.save(contact);
-                return mapper.convert(email, EmailContactDto.class);
-            }
+            return checkContactType(contact, updateContactDto);
         } else {
             throw new NotFoundHomeException("User with id:" + id + " is not found");
         }
+    }
+
+    private ContactDto checkContactType(Contact contact, ContactDto updateContactDto) {
+        ContactDto contactDto = mapper.convert(contact, ContactDto.class);
+        if (contactDto.getContactTypeDto().equals(updateContactDto.getContactTypeDto())) {
+            if (updateContactDto.getContactTypeDto().equals(ContactTypeDto.contactPhone)) {
+                return updatePhone((Phone) contact, (PhoneContactDto) updateContactDto);
+            } else if (updateContactDto.getContactTypeDto().equals(ContactTypeDto.contactEmail)) {
+                return updateEmail((Email) contact, (EmailContactDto) updateContactDto);
+            } else {
+                throw new IllegalArgumentException("Invalid type of the contact");
+            }
+        } else  {
+            throw new IllegalArgumentException("Type of the contact doesn't match");
+        }
+    }
+
+    private ContactDto updatePhone(Phone phone, PhoneContactDto phoneContactDto) {
+        phone.setContactPhone(phoneContactDto.getContactPhone());
+        contactRepository.save(phone);
+        return mapper.convert(phone, PhoneContactDto.class);
+    }
+
+    private ContactDto updateEmail(Email email, EmailContactDto emailContactDto) {
+        email.setContactEmail(emailContactDto.getContactEmail());
+        contactRepository.save(email);
+        return mapper.convert(email, EmailContactDto.class);
     }
 
     @Transactional
