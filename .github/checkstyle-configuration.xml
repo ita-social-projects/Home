@@ -20,6 +20,8 @@
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
+    <module name="NewlineAtEndOfFile"/>
+
     <module name="TreeWalker">
         <module name="AbbreviationAsWordInName">
             <property name="allowedAbbreviationLength" value="4"/>
