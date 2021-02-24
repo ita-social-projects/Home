@@ -7,6 +7,5 @@ import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 public interface QueryConfig<T extends BaseEntity> {
 
     Class<T> getEntityClass();
-
     List<QueryParamEnum> getWhiteListEnums();
 }

@@ -1,10 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
-
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
@@ -21,16 +16,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final RoleRepository roleRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final ServiceMapper mapper;
 
     @Transactional
@@ -45,6 +42,7 @@ public class UserServiceImpl implements UserService {
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
+            toCreate.getContacts().forEach(contact -> contact.setUser(toCreate));
 
             userRepository.save(toCreate);
 
@@ -52,6 +50,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
@@ -66,10 +65,6 @@ public class UserServiceImpl implements UserService {
                 fromDB.setLastName(updateUserDto.getLastName());
             }
 
-            if (updateUserDto.getContacts() != null) {
-                fromDB.setContacts(updateUserDto.getContacts());
-            }
-
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
             return mapper.convert(fromDB, UserDto.class);
@@ -79,25 +74,25 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     @Override
     public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
-        Specification<User> userSpecification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(user -> mapper.convert(user, UserDto.class));
+        Specification<User> userSpecification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize)).map(user->mapper.convert(user, UserDto.class));
     }
 
+    @Transactional
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         return mapper.convert(toGet, UserDto.class);
     }
 
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
         userRepository.save(toDelete);
     }

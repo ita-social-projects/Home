@@ -1,13 +1,13 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class NewsRSQLEndpointConfig implements RSQLEndpointConfig<News, NewsQueryConfig.NewsQueryParamEnum> {

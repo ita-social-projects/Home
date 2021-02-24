@@ -1,7 +1,8 @@
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
-import java.util.StringJoiner;
 import com.softserveinc.ita.homeproject.ApiException;
+
+import java.util.StringJoiner;
 
 public final class QueryFilterUtils {
 
@@ -10,23 +11,23 @@ public final class QueryFilterUtils {
         joiner.add(arg1);
         joiner.add(arg2);
         return selector
-            .concat(FilterPredicateEnum.BETWEEN.getPredicate())
-            .concat(joiner.toString());
+                .concat(FilterPredicateEnum.BETWEEN.getPredicate())
+                .concat(joiner.toString());
     }
 
     public static String getIgnoreCaseLikePredicate(String selector, String arg) {
         return selector
-            .concat(FilterPredicateEnum.IGNORE_CASE_LIKE.getPredicate())
-            .concat(arg);
+                .concat(FilterPredicateEnum.IGNORE_CASE_LIKE.getPredicate())
+                .concat(arg);
     }
 
-    public static String createExceptionMessage(ApiException exception) {
+    public static String createExceptionMessage(ApiException exception){
         return new StringBuilder()
-            .append("{\"responseCode\":")
-            .append(exception.getCode())
-            .append(",\"errorMessage\":\"")
-            .append(exception.getMessage())
-            .append("\"}").toString();
+                .append("{\"responseCode\":")
+                .append(exception.getCode())
+                .append(",\"errorMessage\":\"")
+                .append(exception.getMessage())
+                .append("\"}").toString();
     }
 
 }

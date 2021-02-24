@@ -1,9 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -13,16 +9,21 @@ import com.softserveinc.ita.homeproject.model.UpdateNews;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 class NewsApiIT {
 
-    private final CreateNews createNews = new CreateNews()
-        .title("title")
-        .description("description")
-        .source("source")
-        .text("text")
-        .photoUrl("photoUrl");
-
     private NewsApi newsApi;
+
+    private final CreateNews createNews = new CreateNews()
+            .title("title")
+            .description("description")
+            .source("source")
+            .text("text")
+            .photoUrl("photoUrl");
 
     @BeforeEach
     public void setUp() {
@@ -49,11 +50,11 @@ class NewsApiIT {
         ReadNews savedNews = newsApi.addNews(createNews);
 
         UpdateNews updateNews = new UpdateNews()
-            .title("updatedTitle")
-            .description("updatedDescription")
-            .source("updatedSource")
-            .text("updatedText")
-            .photoUrl("updatedPhotoUrl");
+                .title("updatedTitle")
+                .description("updatedDescription")
+                .source("updatedSource")
+                .text("updatedText")
+                .photoUrl("updatedPhotoUrl");
 
         ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
         assertNews(savedNews, updateNews, updatedNews);
@@ -67,9 +68,8 @@ class NewsApiIT {
         newsApi.deleteNews(savedNews.getId());
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
-            .withMessage(
-                "{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
+                .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
+                .withMessage("{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {

@@ -1,11 +1,11 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getInvalidDataApiExeptionParser;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getInvalidDataApiExeptionParser;
 
 @Provider
 public class InvalidDataAccessApiExceptionMapper extends BaseExceptionMapper<InvalidDataAccessApiUsageException> {

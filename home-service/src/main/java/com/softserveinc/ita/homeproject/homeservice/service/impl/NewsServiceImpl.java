@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import java.time.LocalDateTime;
-
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
@@ -15,12 +13,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
-
     private final ServiceMapper mapper;
 
     @Override
@@ -73,14 +72,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
-        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(news -> mapper.convert(news, NewsDto.class));
+        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize)).map(news->mapper.convert(news, NewsDto.class));
     }
 
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
 
         return mapper.convert(newsResponse, NewsDto.class);
     }
@@ -88,7 +86,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void deleteById(Long id) {
         newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+                .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
         newsRepository.deleteById(id);
     }
 

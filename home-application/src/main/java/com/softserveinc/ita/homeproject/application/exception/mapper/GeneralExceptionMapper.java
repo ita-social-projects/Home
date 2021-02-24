@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 @Provider
 public class GeneralExceptionMapper extends BaseExceptionMapper<Throwable> {

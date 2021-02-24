@@ -22,11 +22,11 @@ public abstract class BaseExceptionMapper<T extends Throwable> implements Except
         log.info("Mapped error.", exception);
         Response.Status status = getStatus();
         return Response.status(status)
-            .type(MediaType.APPLICATION_JSON_TYPE)
-            .entity(new ApiError()
-                .responseCode(status.getStatusCode())
-                .errorMessage(extractMessage(exception)))
-            .build();
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity(new ApiError()
+                        .responseCode(status.getStatusCode())
+                        .errorMessage(extractMessage(exception)))
+                .build();
     }
 
     protected abstract Response.Status getStatus();

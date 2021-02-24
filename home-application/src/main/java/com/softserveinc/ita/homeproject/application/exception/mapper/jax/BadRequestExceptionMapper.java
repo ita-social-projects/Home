@@ -1,12 +1,12 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper.jax;
 
-import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getBadRequestExceptionMessageParser;
+import com.softserveinc.ita.homeproject.application.exception.mapper.BaseExceptionMapper;
+import cz.jirutka.rsql.parser.RSQLParserException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.application.exception.mapper.BaseExceptionMapper;
-import cz.jirutka.rsql.parser.RSQLParserException;
+import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getBadRequestExceptionMessageParser;
 
 @Provider
 public class BadRequestExceptionMapper extends BaseExceptionMapper<RSQLParserException> {

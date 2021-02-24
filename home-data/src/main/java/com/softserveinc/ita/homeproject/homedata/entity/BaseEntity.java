@@ -1,17 +1,14 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import lombok.*;
+
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @MappedSuperclass
 public abstract class BaseEntity {
 
