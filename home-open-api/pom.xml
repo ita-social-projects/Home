@@ -17,7 +17,32 @@
         <dependency>
             <groupId>org.openapitools.openapistylevalidator</groupId>
             <artifactId>openapi-style-validator-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools.empoa</groupId>
+            <artifactId>empoa-swagger-core</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools.openapistylevalidator</groupId>
+            <artifactId>openapi-style-validator-lib</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.parser.v3</groupId>
+            <artifactId>swagger-parser</artifactId>
+            <version>2.0.21</version>
         </dependency>
     </dependencies>
 
@@ -47,6 +72,23 @@
                                 <outputFile>openapi.json</outputFile>
                             </configOptions>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools.openapistylevalidator</groupId>
+                <artifactId>openapi-style-validator-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <inputFile>${project.basedir}/src/main/resources/yaml/openapi.yaml</inputFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
