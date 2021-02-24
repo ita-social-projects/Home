@@ -40,15 +40,7 @@ public class ConstraintViolationMapper extends BaseExceptionMapper<ConstraintVio
 
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
             result.append("Parameter ").append(entry.getKey()).append(" is invalid - ");
-            if (entry.getKey().equals("email")) {
-                result.append("should be in format 'example@gmail.com'. ");
-            } else if (entry.getKey().equals("password")) {
-                result.append("should be from 8 to 128 signs long. It must contains lowercase, uppercase letters or numbers. ");
-            } else if (entry.getKey().equals("title")) {
-                result.append("should be from 1 to 70 signs long. ");
-            } else if (entry.getKey().equals("description")) {
-                result.append("should be from 1 to 150 signs long. ");
-            } else result.append(entry.getValue()).append(". ");
+            result.append(entry.getValue()).append(". ");
         }
         return result.toString().trim();
     }
