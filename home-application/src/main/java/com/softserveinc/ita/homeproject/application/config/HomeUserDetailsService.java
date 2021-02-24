@@ -1,5 +1,9 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -9,10 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * HomeUserDetailsService class provides user information
@@ -39,11 +39,11 @@ public class HomeUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
+            .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
         Set<Permission> perms = user.getRoles().stream()
-                .map(Role::getPermissions)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+            .map(Role::getPermissions)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
 
         return new HomeUserWrapperDetails(user, perms);
     }
