@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.ArrayList;
+import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
@@ -11,33 +18,24 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 public class QueryUserIT {
 
-    private UserApi userApi = new UserApi(ApiClientUtil.getClient());
-
     private final CreateUser expectedUser = new CreateUser()
-            .firstName("Bill")
-            .lastName("White")
-            .password("password");
+        .firstName("Bill")
+        .lastName("White")
+        .password("password");
+
+    private UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
     @Test
     void getAllUsers() throws ApiException {
         List<ReadUser> expectedListUser = saveListUser();
 
         List<ReadUser> actualListUsers = new UserQuery.Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .build()
-                .perfom();
+            .pageNumber(1)
+            .pageSize(10)
+            .build()
+            .perfom();
 
         assertThat(actualListUsers).isNotEmpty();
     }
@@ -48,11 +46,11 @@ public class QueryUserIT {
         userApi.createUser(expectedUser);
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .email(expectedUser.getEmail())
-                .build().perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .email(expectedUser.getEmail())
+            .build().perfom();
 
         actualListUsers.forEach(readUser -> assertThat(readUser.getEmail()).isEqualTo(expectedUser.getEmail()));
     }
@@ -63,11 +61,11 @@ public class QueryUserIT {
         userApi.createUser(expectedUser);
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .firstName("Bill")
-                .build().perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .firstName("Bill")
+            .build().perfom();
 
         actualListUsers.forEach(readUser -> assertThat(readUser.getFirstName()).isEqualTo("Bill"));
     }
@@ -77,12 +75,12 @@ public class QueryUserIT {
         saveListUser();
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("lastName,asc")
-                .build()
-                .perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("lastName,asc")
+            .build()
+            .perfom();
 
         assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
             if (r1.getLastName() == null) {
@@ -100,11 +98,11 @@ public class QueryUserIT {
         saveListUser();
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("firstName,desc")
-                .build().perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("firstName,desc")
+            .build().perfom();
 
         assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
             if (r2.getFirstName() == null) {
@@ -123,11 +121,11 @@ public class QueryUserIT {
         userApi.createUser(expectedUser);
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .lastName("White")
-                .build().perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .lastName("White")
+            .build().perfom();
 
         actualListUsers.forEach(readUser -> assertThat(readUser.getLastName()).isEqualTo("White"));
     }
@@ -139,59 +137,60 @@ public class QueryUserIT {
         String filter = QueryFilterUtils.getIgnoreCaseLikePredicate("firstName", StringEscapeUtils.escapeJava("'AL'"));
 
         List<ReadUser> actualListUsers = new UserQuery
-                .Builder(userApi)
-                .pageNumber(1)
-                .pageSize(10)
-                .filter(filter)
-                .build()
-                .perfom();
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .filter(filter)
+            .build()
+            .perfom();
 
-        actualListUsers.forEach(readUser -> assertThat(readUser.getFirstName().toLowerCase()).contains("AL".toLowerCase()));
+        actualListUsers
+            .forEach(readUser -> assertThat(readUser.getFirstName().toLowerCase()).contains("AL".toLowerCase()));
     }
 
     @Test
     void emptyArgumentExceptionTest() {
         ApiException exception =
-                new ApiException(400, "The query argument for search is empty");
+            new ApiException(400, "The query argument for search is empty");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> new UserQuery.Builder(userApi)
-                        .firstName(" ")
-                        .pageNumber(1)
-                        .pageSize(10)
-                        .build()
-                        .perfom())
-                .withMessage(createExceptionMessage(exception));
+            .isThrownBy(() -> new UserQuery.Builder(userApi)
+                .firstName(" ")
+                .pageNumber(1)
+                .pageSize(10)
+                .build()
+                .perfom())
+            .withMessage(createExceptionMessage(exception));
     }
 
     @Test
     void wrongFilterFieldExceptionTest() {
         ApiException exception =
-                new ApiException(400, "Unknown property: firstNam from entity");
+            new ApiException(400, "Unknown property: firstNam from entity");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> new UserQuery.Builder(userApi)
-                        .pageNumber(1)
-                        .pageSize(10)
-                        .filter("firstNam=like='Al'")
-                        .build()
-                        .perfom())
-                .withMessage(createExceptionMessage(exception));
+            .isThrownBy(() -> new UserQuery.Builder(userApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("firstNam=like='Al'")
+                .build()
+                .perfom())
+            .withMessage(createExceptionMessage(exception));
     }
 
     @Test
     void wrongFilterPredicateExceptionTest() {
         ApiException exception =
-                new ApiException(400, "Unknown operator: =lik=");
+            new ApiException(400, "Unknown operator: =lik=");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> new UserQuery.Builder(userApi)
-                        .pageNumber(1)
-                        .pageSize(10)
-                        .filter("firstName=lik='Al'")
-                        .build()
-                        .perfom())
-                .withMessage(createExceptionMessage(exception));
+            .isThrownBy(() -> new UserQuery.Builder(userApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("firstName=lik='Al'")
+                .build()
+                .perfom())
+            .withMessage(createExceptionMessage(exception));
     }
 
     private List<ReadUser> saveListUser() throws ApiException {
@@ -206,34 +205,34 @@ public class QueryUserIT {
     private List<CreateUser> createUsersList() {
         List<CreateUser> list = new ArrayList<>();
         list.add(new CreateUser().
-                firstName("Alex").
-                lastName("Young").
-                email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+            firstName("Alex").
+            lastName("Young").
+            email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
+            password("password")
         );
         list.add(new CreateUser().
-                firstName("Bob").
-                lastName("Smith").
-                email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+            firstName("Bob").
+            lastName("Smith").
+            email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
+            password("password")
         );
         list.add(new CreateUser().
-                firstName("Jack").
-                lastName("Gray").
-                email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+            firstName("Jack").
+            lastName("Gray").
+            email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
+            password("password")
         );
         list.add(new CreateUser().
-                firstName("Sindy").
-                lastName("Black").
-                email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+            firstName("Sindy").
+            lastName("Black").
+            email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
+            password("password")
         );
         list.add(new CreateUser().
-                firstName("Victor").
-                lastName("Along").
-                email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+            firstName("Victor").
+            lastName("Along").
+            email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
+            password("password")
         );
         return list;
     }

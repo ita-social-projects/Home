@@ -1,13 +1,14 @@
 package com.softserveinc.ita.homeproject.homedatamigration.migrations;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.integration.commandline.CommandLineResourceAccessor;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.Driver;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 
 @Slf4j

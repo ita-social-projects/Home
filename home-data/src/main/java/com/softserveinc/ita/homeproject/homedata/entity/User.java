@@ -1,15 +1,18 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
 import java.time.LocalDateTime;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -17,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Column(name = "first_name")
     private String firstName;
@@ -54,8 +57,8 @@ public class User extends BaseEntity{
 
     @ManyToMany
     @JoinTable(name = "user_cooperation",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
