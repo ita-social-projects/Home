@@ -1,5 +1,18 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
@@ -15,19 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
-
 /**
  * UserApiServiceImpl class is the inter layer between generated
  * User controller and service layer of the application.
@@ -39,7 +39,9 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
     private UserService userService;
+
     private HomeMapper mapper;
+
     private EntitySpecificationService entitySpecificationService;
 
     /**
@@ -80,7 +82,7 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
      * method for getting all users from database.
      *
      * @param pageNumber is the number of returned page with elements
-     * @param pageSize is amount of the returned elements
+     * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
@@ -104,9 +106,9 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
 
         Page<UserDto> users = userService.findUsers(
-                pageNumber,
-                pageSize,
-                entitySpecificationService.getSpecification(filterMap, filter, sort)
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
         return buildQueryResponse(users, ReadUser.class);
@@ -131,7 +133,7 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
      * updateUser method is implementation of HTTP PUT
      * method for updating existing user.
      *
-     * @param id is id of the user that has to be updated
+     * @param id         is id of the user that has to be updated
      * @param updateUser are incoming data needed for user's update
      * @return Response to generated controller
      */
@@ -151,11 +153,6 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     }
 
     @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    @Autowired
     public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
         this.entitySpecificationService = entitySpecificationService;
     }
@@ -163,5 +160,10 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     @Override
     public HomeMapper getMapper() {
         return mapper;
+    }
+
+    @Autowired
+    public void setMapper(HomeMapper mapper) {
+        this.mapper = mapper;
     }
 }

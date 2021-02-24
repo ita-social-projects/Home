@@ -1,15 +1,17 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
+import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 
-import java.util.List;
-
 public class NewsQuery extends BaseQuery {
     private String title;
+
     private String text;
+
     private String source;
+
     private NewsApi newsApi;
 
     public void setTitle(String title) {
@@ -30,20 +32,20 @@ public class NewsQuery extends BaseQuery {
 
     public List<ReadNews> perfom() throws ApiException {
         return newsApi
-                .getAllNews(this.getPageNumber(),
-                        this.getPageSize(),
-                        this.getSort(),
-                        this.getFilter(),
-                        this.getId(),
-                        title,
-                        text,
-                        source);
+            .getAllNews(this.getPageNumber(),
+                this.getPageSize(),
+                this.getSort(),
+                this.getFilter(),
+                this.getId(),
+                title,
+                text,
+                source);
     }
 
     public static class Builder extends BaseBuilder<NewsQuery, Builder> {
 
         public Builder(NewsApi newsApi) {
-           queryClass.setNewsApi(newsApi);
+            queryClass.setNewsApi(newsApi);
         }
 
         public Builder title(String title) {
