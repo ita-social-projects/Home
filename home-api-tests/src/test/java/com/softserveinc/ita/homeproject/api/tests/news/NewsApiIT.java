@@ -86,9 +86,9 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> newsApi.addNews(createNewsInvalidParameters))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid" +
-                        " - should be from 1 to 150 signs long. Parameter title is invalid" +
-                        " - should be from 1 to 70 signs long." + "\"}");
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid - size must" +
+                        " be between 1 and 150. Parameter title is invalid - size must be between 1 " +
+                        "and 70." + "\"}");
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
