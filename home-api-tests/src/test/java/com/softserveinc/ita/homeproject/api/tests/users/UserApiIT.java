@@ -73,10 +73,9 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUserInvalidParameters))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid" +
-                        " - should be from 8 to 128 signs long. It must contains lowercase, uppercase" +
-                        " letters or numbers. Parameter email is invalid - should be in format " +
-                        "'example@gmail.com'." + "\"}");
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid - must match " +
+                        "\"[a-zA-Z0-9]{8,}\". Parameter email is invalid - must match " +
+                        "\\\"^[a-zA-Z0-9.!#$%&вЂ™*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$\\\"." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
