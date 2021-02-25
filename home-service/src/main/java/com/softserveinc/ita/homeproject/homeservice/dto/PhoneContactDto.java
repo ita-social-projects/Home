@@ -5,6 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class BaseDto {
-    private Long id;
+public class PhoneContactDto extends ContactDto{
+
+    private String contactPhone;
 }

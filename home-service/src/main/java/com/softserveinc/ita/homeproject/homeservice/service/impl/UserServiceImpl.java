@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
     private final ServiceMapper mapper;
 
-    @Transactional
     @Override
+    @Transactional
     public UserDto createUser(UserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
+            toCreate.getContacts().forEach(contact -> contact.setUser(toCreate));
 
             userRepository.save(toCreate);
 
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         if (userRepository.findById(id).isPresent()) {
 
@@ -66,10 +68,6 @@ public class UserServiceImpl implements UserService {
                 fromDB.setLastName(updateUserDto.getLastName());
             }
 
-            if (updateUserDto.getContacts() != null) {
-                fromDB.setContacts(updateUserDto.getContacts());
-            }
-
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
             return mapper.convert(fromDB, UserDto.class);
@@ -80,6 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
         Specification<User> userSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
@@ -88,6 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));

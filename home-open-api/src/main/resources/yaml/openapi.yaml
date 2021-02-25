@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   title: HomePage - OpenAPI 3.0
   description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
@@ -10,6 +10,8 @@ tags:
     description: News management operations
   - name: user
     description: user management
+  - name: contact
+    description: contact management
 paths:
   /news:
     post:
@@ -218,7 +220,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ReadUser'
+                $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -279,7 +281,11 @@ paths:
           schema:
             type: string
         - in: query
-          name: contact
+          name: contactPhone
+          schema:
+            type: string
+        - in: query
+          name: contactEmail
           schema:
             type: string
       responses:
@@ -297,15 +303,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{id}:
+  /users/{users_id}:
     get:
       tags:
         - user
       summary: "Get user by id"
-      description: ''
       operationId: getUser
       parameters:
-        - name: "id"
+        - name: "users_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -335,7 +340,7 @@ paths:
       description: Update current user
       operationId: updateUser
       parameters:
-        - name: "id"
+        - name: "users_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -375,7 +380,213 @@ paths:
       summary: Delete user by ID
       operationId: removeUser
       parameters:
-        - name: "id"
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /users/{users_id}/contacts:
+    post:
+      tags:
+        - contact
+      summary: "Create new contacts"
+      operationId: createContacts
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Create a new Contact
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContact'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadContact'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - contact
+      summary: "Get all contacts by user"
+      operationId: getAllContacts
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /users/{users_id}/contacts/{contacts_id}:
+    get:
+      tags:
+        - contact
+      summary: "Get contact by id"
+      operationId: getContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - contact
+      summary: "Update current contact"
+      operationId: updateContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Update current contact
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContact"
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "409":
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - contact
+      summary: "Delete contact by ID"
+      operationId: removeContact
+      parameters:
+        - name: "users_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contacts_id"
           in: "path"
           description: "Use 1 for testing."
           required: true
@@ -439,7 +650,7 @@ components:
           schema:
             $ref: '#/components/schemas/ApiError'
   schemas:
-    BaseView:
+    BaseReadView:
       type: object
       properties:
         id:
@@ -447,7 +658,7 @@ components:
           format: int64
     ReadNews:
       allOf:
-        - $ref: '#/components/schemas/BaseView'
+        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
         title:
@@ -464,8 +675,6 @@ components:
         text:
           type: string
     CreateNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       required:
         - title
         - description
@@ -489,8 +698,6 @@ components:
           type: string
           minLength: 1
     UpdateNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         title:
@@ -517,8 +724,6 @@ components:
         errorMessage:
           type: string
     CreateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       required:
         - firstName
         - lastName
@@ -542,7 +747,7 @@ components:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: "p.t.z@gmail.com"
-          minLength: 3
+          minLength: 5
           maxLength: 254
         password:
           pattern: '[a-zA-Z0-9]{8,}'
@@ -550,9 +755,13 @@ components:
           example: "mySuperStrongPass"
           minLength: 8
           maxLength: 128
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateContact'
     ReadUser:
       allOf:
-        - $ref: '#/components/schemas/BaseView'
+        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
         firstName:
@@ -564,12 +773,11 @@ components:
         email:
           type: string
           example: home@gmail.com
-        contact:
-          type: string
-          example: "+380506617305"
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseView'
       type: object
       properties:
         firstName:
@@ -584,11 +792,103 @@ components:
           example: Petrov
           minLength: 1
           maxLength: 50
-        contact:
+    ContactType:
+      description: Indicates the type of contact.
+      type: string
+      enum: &contact_type_values
+        - contactEmail
+        - contactPhone
+    ReadContact:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          contactEmail: '#/components/schemas/ReadEmailContact'
+          contactPhone: '#/components/schemas/ReadPhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
+    ReadEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        contactEmail:
+          type: string
+          example: home@gmail.com
+    ReadPhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        contactPhone:
           type: string
           example: "+380506617305"
-          minLength: 10
-          maxLength: 13
-        contacts:
+    CreateContact:
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          contactEmail: '#/components/schemas/CreateEmailContact'
+          contactPhone: '#/components/schemas/CreatePhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
+    CreateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      properties:
+        contactEmail:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: home@gmail.com
+    CreatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      properties:
+        contactPhone:
           type: string
           example: "+380506617305"
+    UpdateContact:
+      type: object
+      discriminator:
+        propertyName: contact_type
+        mapping:
+          contactEmail: '#/components/schemas/UpdateEmailContact'
+          contactPhone: '#/components/schemas/UpdatePhoneContact'
+      required:
+        - contact_type
+      properties:
+        contact_type:
+          $ref: '#/components/schemas/ContactType'
+        primary:
+          type: boolean
+    UpdateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
+      type: object
+      properties:
+        contactEmail:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: other@gmail.com
+    UpdatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
+      type: object
+      properties:
+        contactPhone:
+          type: string
+          example: "+380966617305"

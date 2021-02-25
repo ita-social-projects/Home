@@ -7,26 +7,32 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
@@ -35,14 +41,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @author Mykyta Morar
  */
 @Provider
-@NoArgsConstructor
+@Component
 public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
 
+    @Autowired
+    private ContactService contactService;
+
+    @Autowired
     private UserService userService;
-
-    private HomeMapper mapper;
-
-    private EntitySpecificationService entitySpecificationService;
 
     /**
      * createUser method is implementation of HTTP POST
@@ -59,6 +65,15 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
+    }
+
+    @Override
+    public Response createContacts(Long usersId, @Valid CreateContact createContact) {
+        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
+        ContactDto readContactDto = contactService.createContact(usersId, createContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
 
     /**
@@ -95,15 +110,15 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
                                 String email,
                                 String firstName,
                                 String lastName,
-                                String contact) {
+                                String contactEmail,
+                                String contactPhone) {
 
         Map<QueryParamEnum, String> filterMap = new HashMap<>();
 
         filterMap.put(UserQueryParamEnum.ID, id);
         filterMap.put(UserQueryParamEnum.EMAIL, email);
-        filterMap.put(UserQueryParamEnum.CONTACT, contact);
         filterMap.put(UserQueryParamEnum.LAST_NAME, lastName);
-        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
+        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName); // ToDo add query by email and phone
 
         Page<UserDto> users = userService.findUsers(
             pageNumber,
@@ -112,6 +127,22 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         );
 
         return buildQueryResponse(users, ReadUser.class);
+    }
+
+    @Override
+    public Response getContact(Long usersId, Long contactsId) {
+        ContactDto readContactDto = contactService.getContactById(contactsId);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
+    }
+
+    @Override
+    public Response getAllContacts(Long usersId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize) {
+        List<ReadContact> readContactList = contactService.getAllContacts(usersId, pageNumber, pageSize).stream()
+            .map(contactDto -> mapper.convert(contactDto, ReadContact.class))
+            .collect(Collectors.toList());
+        return Response.status(Response.Status.OK).entity(readContactList).build();
     }
 
     /**
@@ -125,6 +156,13 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     @Override
     public Response removeUser(Long id) {
         userService.deactivateUser(id);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @Override
+    public Response removeContact(Long usersId, Long contactsId) {
+        contactService.deactivateContact(contactsId);
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -147,23 +185,13 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
     @Override
-    public HomeMapper getMapper() {
-        return mapper;
+    public Response updateContact(Long usersId, Long contactsId, @Valid UpdateContact updateContact) {
+        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        ContactDto readContactDto = contactService.updateContact(contactsId, updateContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
 }

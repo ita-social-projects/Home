@@ -26,8 +26,7 @@ public class UserQueryConfig implements QueryConfig<User> {
         ID("id"),
         EMAIL("email"),
         FIRST_NAME("firstName"),
-        LAST_NAME("lastName"),
-        CONTACT("contact");
+        LAST_NAME("lastName");
 
         private final String parameter;
 

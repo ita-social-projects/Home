@@ -6,11 +6,13 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.model.BaseView;
-import lombok.NoArgsConstructor;
+import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.model.BaseReadView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 
-@NoArgsConstructor
+@Component
 public abstract class CommonApi<R extends BaseDto> {
 
     public static final String PAGING_COUNT = "Paging-count";
@@ -19,15 +21,19 @@ public abstract class CommonApi<R extends BaseDto> {
 
     public static final String PAGING_TOTAL_COUNT = "Paging-total-count";
 
-    public abstract HomeMapper getMapper();
+    @Autowired
+    protected HomeMapper mapper;
 
-    Response buildQueryResponse(Page<R> page, Class<? extends BaseView> clazz) {
+    @Autowired
+    protected EntitySpecificationService entitySpecificationService;
+
+    Response buildQueryResponse(Page<R> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();
 
         List<?> pageElements = page.stream()
-            .map(p -> getMapper().convert(p, clazz))
+            .map(p -> mapper.convert(p, clazz))
             .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK)

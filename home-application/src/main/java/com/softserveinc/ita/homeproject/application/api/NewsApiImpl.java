@@ -13,19 +13,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.NewsApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 /**
  * NewsApiServiceImpl class is the inter layer between generated
@@ -35,14 +33,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 
 @Provider
-@NoArgsConstructor
+@Component
 public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
 
+    @Autowired
     private NewsService newsService;
-
-    private HomeMapper mapper;
-
-    private EntitySpecificationService entitySpecificationService;
 
 
     /**
@@ -144,23 +139,4 @@ public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
         return Response.ok().entity(response).build();
     }
 
-    @Autowired
-    public void setNewsService(NewsService newsService) {
-        this.newsService = newsService;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
 }
