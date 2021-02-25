@@ -56,6 +56,20 @@
                 <version>1.4</version>
                 <configuration>
                     <inputFile>${project.basedir}/src/main/resources/yaml/openapi.yaml</inputFile>
+                    <validateInfoLicense>true</validateInfoLicense>
+                    <validateInfoDescription>true</validateInfoDescription>
+                    <validateInfoContact>true</validateInfoContact>
+                    <validateOperationOperationId>true</validateOperationOperationId>
+                    <validateOperationDescription>true</validateOperationDescription>
+                    <validateOperationTag>true</validateOperationTag>
+                    <validateOperationSummary>true</validateOperationSummary>
+                    <validateModelPropertiesExample>true</validateModelPropertiesExample>
+                    <validateModelNoLocalDef>true</validateModelNoLocalDef>
+                    <validateNaming>true</validateNaming>
+                    <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
+                    <pathNamingConvention>HyphenCase</pathNamingConvention>
+                    <parameterNamingConvention>CamelCase</parameterNamingConvention>
+                    <propertyNamingConvention>CamelCase</propertyNamingConvention>
                 </configuration>
                 <executions>
                     <execution>
