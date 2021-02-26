@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import java.util.stream.Collectors;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
-import java.util.stream.Collectors;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
@@ -48,8 +48,8 @@ public class JerseyConfig extends ResourceConfig {
 
     private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
         registerClasses(scanner.findCandidateComponents(packageName).stream()
-                .map(beanDefinition -> ClassUtils
-                        .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
-                .collect(Collectors.toSet()));
+            .map(beanDefinition -> ClassUtils
+                .resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
+            .collect(Collectors.toSet()));
     }
 }

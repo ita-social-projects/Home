@@ -1,28 +1,28 @@
-package com.softserveinc.ita.homeproject.api.tests;
+package com.softserveinc.ita.homeproject.api.tests.news;
 
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private NewsApi newsApi;
     private final CreateNews createNews = new CreateNews()
-            .title("title")
-            .description("description")
-            .source("source")
-            .text("text")
-            .photoUrl("photoUrl");
+        .title("title")
+        .description("description")
+        .source("source")
+        .text("text")
+        .photoUrl("photoUrl");
+
+    private NewsApi newsApi;
 
     @BeforeEach
     public void setUp() {
@@ -38,8 +38,8 @@ class NewsApiIT {
     @Test
     void getNewsByIdTest() throws ApiException {
         ReadNews savedNews = newsApi.addNews(createNews);
-
         ReadNews news = newsApi.getNews(savedNews.getId());
+
         assertNotNull(news);
         assertEquals(savedNews, news);
     }
@@ -49,23 +49,14 @@ class NewsApiIT {
         ReadNews savedNews = newsApi.addNews(createNews);
 
         UpdateNews updateNews = new UpdateNews()
-                .title("updatedTitle")
-                .description("updatedDescription")
-                .source("updatedSource")
-                .text("updatedText")
-                .photoUrl("updatedPhotoUrl");
+            .title("updatedTitle")
+            .description("updatedDescription")
+            .source("updatedSource")
+            .text("updatedText")
+            .photoUrl("updatedPhotoUrl");
 
         ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
         assertNews(savedNews, updateNews, updatedNews);
-    }
-
-    @Test
-    void getAllNewsTest() throws ApiException {
-        newsApi.addNews(createNews);
-        List<ReadNews> allNews = newsApi.getAllNews(1, 10);
-
-        assertNotNull(allNews);
-        assertFalse(allNews.isEmpty());
     }
 
     @Test
@@ -76,10 +67,10 @@ class NewsApiIT {
         newsApi.deleteNews(savedNews.getId());
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
-                .withMessage("{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
+            .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
+            .withMessage(
+                "{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
     }
-
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
         assertNotNull(updated);

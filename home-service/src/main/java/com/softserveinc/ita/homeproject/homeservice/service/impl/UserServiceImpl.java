@@ -1,32 +1,36 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
+import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final RoleRepository roleRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final ServiceMapper mapper;
 
     @Transactional
@@ -76,22 +80,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDto> getAllUsers(Integer pageNumber, Integer pageSize) {
-        return userRepository.findAllByEnabledTrue(PageRequest.of(pageNumber - 1, pageSize))
-                .map((users) -> mapper.convert(users, UserDto.class));
+    public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
+        Specification<User> userSpecification = specification
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
+            .map(user -> mapper.convert(user, UserDto.class));
     }
 
     @Override
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         return mapper.convert(toGet, UserDto.class);
     }
 
     @Override
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
         userRepository.save(toDelete);
     }
