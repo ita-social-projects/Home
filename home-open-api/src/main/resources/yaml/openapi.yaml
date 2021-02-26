@@ -180,6 +180,7 @@ paths:
       tags:
         - news
       summary: Delete the chosen news
+      description: Delete news by id
       operationId: deleteNews
       parameters:
         - name: id
@@ -233,7 +234,7 @@ paths:
       tags:
         - user
       summary: "Get all users"
-      description: ''
+      description: Get all users
       operationId: getAllUsers
       parameters:
         - in: query
@@ -302,7 +303,7 @@ paths:
       tags:
         - user
       summary: "Get user by id"
-      description: ''
+      description: Get user by id
       operationId: getUser
       parameters:
         - name: "id"
@@ -370,7 +371,8 @@ paths:
     delete:
       tags:
         - user
-      summary: Delete user by ID
+      summary: "Delete user by ID"
+      description: Delete euser by id
       operationId: removeUser
       parameters:
         - name: "id"
@@ -396,7 +398,7 @@ paths:
     post:
       tags:
         - cooperation
-      summary: Create cooperation
+      summary: "Create cooperation"
       description: Create a new cooperation
       operationId: createCooperation
       requestBody:
@@ -427,6 +429,7 @@ paths:
       tags:
         - cooperation
       summary: "Get all cooperation"
+      description: Get all cooperation
       operationId: queryCooperation
       parameters:
         - in: query
@@ -446,6 +449,32 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+            example: "some example"
+        - in: query
+          name: filter
+          schema:
+            type: string
+            example: "some example"
+        - in: query
+          name: name
+          schema:
+            type: string
+            example: "Dobro"
+        - in: query
+          name: iban
+          schema:
+            type: string
+            example:  "Something else"
+        - in: query
+          name: usreo
+          schema:
+            type: string
+            example:  "A9856738"
       responses:
         '200':
           description: successful operation
@@ -466,6 +495,7 @@ paths:
       tags:
         - cooperation
       summary: "Get cooperation by cooperation id"
+      description: Get cooperation by id
       operationId: getCooperation
       parameters:
         - name: "cooperation_id"
@@ -495,6 +525,7 @@ paths:
       tags:
         - cooperation
       summary: "Update current cooperation"
+      description: Update cooperation by id
       operationId: updateCooperation
       parameters:
         - name: "cooperation_id"
@@ -533,6 +564,7 @@ paths:
       tags:
         - cooperation
       summary: "Delete cooperation by ID"
+      description: Delete cooperation by id
       operationId: removeCooperation
       parameters:
         - name: "cooperation_id"
@@ -598,8 +630,16 @@ paths:
       tags:
         - house
       summary: "Get all houses"
+      description: Get all houses
       operationId: queryHouse
       parameters:
+        - name: "cooperation_id"
+          in: path
+          required: true
+          description: ID of the chat
+          schema:
+            type : integer
+            minimum: 1
         - in: query
           name: pageNumber
           schema:
@@ -617,13 +657,32 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
-        - name: "cooperation_id"
-          in: path
-          required: true
-          description: ID of the chat
+        - in: query
+          name: sort
           schema:
-            type : integer
-            minimum: 1
+            type: string
+            default: id,asc
+            example: "some example"
+        - in: query
+          name: filter
+          schema:
+            type: string
+            example: "some example"
+        - in: query
+          name: quantityFlat
+          schema:
+            type: integer
+            example: 12
+        - in: query
+          name: adjoiningArea
+          schema:
+            type: integer
+            example: 40
+        - in: query
+          name: houseArea
+          schema:
+            type: string
+            example: "some example"
       responses:
         '200':
           description: successful operation
@@ -644,6 +703,7 @@ paths:
       tags:
         - house
       summary: "Get house by house id"
+      description: Get house by id
       operationId: getHouse
       parameters:
         - name: "cooperation_id"
@@ -681,6 +741,7 @@ paths:
       tags:
         - house
       summary: "Update current house"
+      description: Update gouse by id
       operationId: updateHouse
       parameters:
         - name: "cooperation_id"
@@ -727,6 +788,7 @@ paths:
       tags:
         - house
       summary: "Delete house by ID"
+      description: Delete house by id
       operationId: removeHouse
       parameters:
         - name: "cooperation_id"
@@ -801,6 +863,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
     ReadNews:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -1061,10 +1124,13 @@ components:
       properties:
         quantityFlat:
           type: integer
+          example: 45
         houseArea:
           type: string
+          example: "some"
         adjoiningArea:
           type: integer
+          example: 12
         address:
           $ref: '#/components/schemas/Address'
     ReadHouse:
@@ -1074,23 +1140,30 @@ components:
       properties:
         quantityFlat:
           type: integer
+          example: 45
         houseArea:
           type: string
+          example: "some"
         adjoiningArea:
           type: integer
+          example: 12
         address:
           $ref: '#/components/schemas/Address'
         cooperationId:
           type: integer
+          example: 2
     UpdateHouse:
       type: object
       properties:
         quantityFlat:
           type: integer
+          example: 45
         houseArea:
           type: string
+          example: "some"
         adjoiningArea:
           type: integer
+          example: 12
         cooperationId:
           type: integer
           example: 0
