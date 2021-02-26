@@ -240,7 +240,7 @@ paths:
         - user
       summary: "Get all users"
       description: Get all users
-      operationId: queryUsers
+      operationId: getAllUsers
       parameters:
         - in: query
           name: pageNumber
@@ -516,7 +516,7 @@ components:
           example: example
         photoUrl:
           type: string
-          example: example
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
           minLength: 1
