@@ -55,7 +55,7 @@
                 <artifactId>openapi-style-validator-maven-plugin</artifactId>
                 <version>1.4</version>
                 <configuration>
-                    <inputFile>${project.basedir}/src/main/resources/yaml/openapi.yaml</inputFile>
+                    <inputFile>${project.build.resources[0].directory}/yaml/openapi.yaml</inputFile>
                     <validateInfoLicense>true</validateInfoLicense>
                     <validateInfoDescription>true</validateInfoDescription>
                     <validateInfoContact>true</validateInfoContact>
