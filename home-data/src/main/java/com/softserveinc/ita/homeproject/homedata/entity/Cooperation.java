@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Cooperation extends BaseEntity{
+public class Cooperation extends BaseEntity {
 
     @OneToMany(mappedBy = "cooperation")
     private List<Contact> contacts;
