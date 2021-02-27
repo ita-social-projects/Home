@@ -4,12 +4,10 @@ import com.softserveinc.ita.homeproject.homedata.entity.Email;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class EmailServiceMappingConfig implements ServiceMappingConfig<Email, ContactDto> {
 
     @Override
