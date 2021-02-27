@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public abstract class ContactDto extends BaseDto {
 
-    private ContactTypeDto contactTypeDto;
-
     private Boolean primary;
 }
