@@ -1,10 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper.config;
 
-import org.modelmapper.TypeMap;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.GenericTypeResolver;
 
 public interface ServiceMappingConfig<S, D> {
-    void addMappings(TypeMap<S, D> typeMap);
+    void addMappings(ModelMapper mapper);
 
     @SuppressWarnings("unchecked cast")
     default Class<S> getSourceType() {
