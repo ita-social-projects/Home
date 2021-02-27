@@ -52,8 +52,8 @@ public class UserQuery extends BaseQuery {
                 email,
                 firstName,
                 lastName,
-                contactEmail,
-                contactPhone);
+                contactPhone,
+                contactEmail);
     }
 
     public static class Builder extends BaseBuilder<UserQuery, Builder> {

@@ -110,15 +110,17 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
                                 String email,
                                 String firstName,
                                 String lastName,
-                                String contactEmail,
-                                String contactPhone) {
+                                String contactPhone,
+                                String contactEmail) {
 
         Map<QueryParamEnum, String> filterMap = new HashMap<>();
 
         filterMap.put(UserQueryParamEnum.ID, id);
         filterMap.put(UserQueryParamEnum.EMAIL, email);
         filterMap.put(UserQueryParamEnum.LAST_NAME, lastName);
-        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName); // ToDo add query by email and phone
+        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
+        filterMap.put(UserQueryParamEnum.CONTACT_PHONE, contactPhone);
+        filterMap.put(UserQueryParamEnum.CONTACT_EMAIL, contactEmail);
 
         Page<UserDto> users = userService.findUsers(
             pageNumber,
