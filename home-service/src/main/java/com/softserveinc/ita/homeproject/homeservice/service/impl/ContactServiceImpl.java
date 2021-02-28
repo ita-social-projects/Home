@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
+import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.Email;
 import com.softserveinc.ita.homeproject.homedata.entity.Phone;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -45,16 +46,21 @@ public class ContactServiceImpl implements ContactService {
         Optional<Contact> contactOptional = contactRepository.findById(id);
         if (contactOptional.isPresent()) {
             Contact contact = contactOptional.get();
-            return checkContactType(contact, updateContactDto);
+            ContactDto contactDto = mapper.convert(contact, ContactDto.class);
+            if (contactDto.getContactType().equals(updateContactDto.getContactType())) {
+                return checkContactType(contact, updateContactDto);
+            } else {
+                throw new IllegalArgumentException("Type of the contact doesn't match");
+            }
         } else {
             throw new NotFoundHomeException("User with id:" + id + " is not found");
         }
     }
 
-    private ContactDto checkContactType(Contact contact, ContactDto updateContactDto) { // ToDo add matching check
-        if (contact instanceof Phone) {
+    private ContactDto checkContactType(Contact contact, ContactDto updateContactDto) {
+        if (contact.getContactType().equals(ContactType.CONTACTPHONE)) {
             return updatePhone((Phone) contact, (PhoneContactDto) updateContactDto);
-        } else if (contact instanceof Email) {
+        } else if (contact.getContactType().equals(ContactType.CONTACTEMAIL)) {
             return updateEmail((Email) contact, (EmailContactDto) updateContactDto);
         } else {
             throw new IllegalArgumentException("Invalid type of the contact");

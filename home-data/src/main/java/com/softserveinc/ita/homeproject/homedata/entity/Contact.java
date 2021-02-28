@@ -1,7 +1,11 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -19,6 +23,10 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "contact_type")
 public abstract class Contact extends BaseEntity {
+
+    @Convert(converter = ContactTypeAttributeConverter.class)
+    @Column(name = "contact_type", insertable = false, updatable = false)
+    private ContactType contactType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
