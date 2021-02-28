@@ -5,8 +5,10 @@ import javax.persistence.AttributeConverter;
 public class ContactTypeAttributeConverter implements AttributeConverter<ContactType, String> {
     @Override
     public String convertToDatabaseColumn(ContactType attribute) {
-        if (attribute == null)
+        if (attribute == null) {
             return null;
+        }
+
 
         switch (attribute) {
             case CONTACTEMAIL:
@@ -20,8 +22,9 @@ public class ContactTypeAttributeConverter implements AttributeConverter<Contact
 
     @Override
     public ContactType convertToEntityAttribute(String dbData) {
-        if (dbData == null)
+        if (dbData == null) {
             return null;
+        }
 
         switch (dbData) {
             case "contactEmail":
