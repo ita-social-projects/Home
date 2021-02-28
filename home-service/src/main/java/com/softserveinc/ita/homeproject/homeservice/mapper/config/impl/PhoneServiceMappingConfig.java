@@ -8,11 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PhoneServiceMappingConfig implements ServiceMappingConfig<Phone, ContactDto> {
+public class PhoneServiceMappingConfig implements ServiceMappingConfig {
 
     @Override
     public void addMappings(ModelMapper mapper) {
-        mapper.typeMap(getSourceType(), getDestinationType())
+        mapper.typeMap(Phone.class, ContactDto.class)
             .setProvider(request -> mapper.map(request.getSource(), PhoneContactDto.class));
     }
 }

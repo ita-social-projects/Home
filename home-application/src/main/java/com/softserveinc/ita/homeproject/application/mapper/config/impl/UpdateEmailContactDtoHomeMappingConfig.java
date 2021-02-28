@@ -8,11 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UpdateEmailContactDtoHomeMappingConfig implements HomeMappingConfig<UpdateEmailContact, ContactDto> {
+public class UpdateEmailContactDtoHomeMappingConfig implements HomeMappingConfig {
 
     @Override
     public void addMappings(ModelMapper mapper) {
-        mapper.typeMap(getSourceType(), getDestinationType())
+        mapper.typeMap(UpdateEmailContact.class, ContactDto.class)
             .setProvider(request -> mapper.map(request.getSource(), EmailContactDto.class));
     }
 }

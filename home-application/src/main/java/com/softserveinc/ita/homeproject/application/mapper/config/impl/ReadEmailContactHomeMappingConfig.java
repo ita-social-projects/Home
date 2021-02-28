@@ -8,11 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReadEmailContactHomeMappingConfig implements HomeMappingConfig<EmailContactDto, ReadContact> {
+public class ReadEmailContactHomeMappingConfig implements HomeMappingConfig {
 
     @Override
     public void addMappings(ModelMapper mapper) {
-        mapper.typeMap(getSourceType(), getDestinationType())
+        mapper.typeMap(EmailContactDto.class, ReadContact.class)
             .setProvider(request -> mapper.map(request.getSource(), ReadEmailContact.class));
     }
 }

@@ -8,11 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailContactDtoServiceMappingConfig implements ServiceMappingConfig<EmailContactDto, Contact> {
+public class EmailContactDtoServiceMappingConfig implements ServiceMappingConfig {
 
     @Override
     public void addMappings(ModelMapper mapper) {
-        mapper.typeMap(getSourceType(), getDestinationType())
+        mapper.typeMap(EmailContactDto.class, Contact.class)
             .setProvider(request -> mapper.map(request.getSource(), Email.class));
     }
 }
