@@ -59,9 +59,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     private ContactDto checkContactType(Contact contact, ContactDto updateContactDto) {
-        if (contact.getContactType().equals(ContactType.CONTACTPHONE)) {
+        if (contact.getContactType().equals(ContactType.PHONE)) {
             return updatePhone((Phone) contact, (PhoneContactDto) updateContactDto);
-        } else if (contact.getContactType().equals(ContactType.CONTACTEMAIL)) {
+        } else if (contact.getContactType().equals(ContactType.EMAIL)) {
             return updateEmail((Email) contact, (EmailContactDto) updateContactDto);
         } else {
             throw new IllegalArgumentException("Invalid type of the contact");
@@ -69,13 +69,13 @@ public class ContactServiceImpl implements ContactService {
     }
 
     private ContactDto updatePhone(Phone phone, PhoneContactDto phoneContactDto) {
-        phone.setContactPhone(phoneContactDto.getContactPhone());
+        phone.setPhone(phoneContactDto.getPhone());
         contactRepository.save(phone);
         return mapper.convert(phone, PhoneContactDto.class);
     }
 
     private ContactDto updateEmail(Email email, EmailContactDto emailContactDto) {
-        email.setContactEmail(emailContactDto.getContactEmail());
+        email.setEmail(emailContactDto.getEmail());
         contactRepository.save(email);
         return mapper.convert(email, EmailContactDto.class);
     }

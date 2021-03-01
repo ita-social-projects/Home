@@ -11,10 +11,10 @@ public class ContactTypeAttributeConverter implements AttributeConverter<Contact
 
 
         switch (attribute) {
-            case CONTACTEMAIL:
-                return "contactEmail";
-            case CONTACTPHONE:
-                return "contactPhone";
+            case EMAIL:
+                return "email";
+            case PHONE:
+                return "phone";
             default:
                 throw new IllegalArgumentException(attribute + " not supported.");
         }
@@ -27,10 +27,10 @@ public class ContactTypeAttributeConverter implements AttributeConverter<Contact
         }
 
         switch (dbData) {
-            case "contactEmail":
-                return ContactType.CONTACTEMAIL;
-            case "contactPhone":
-                return ContactType.CONTACTPHONE;
+            case "email":
+                return ContactType.EMAIL;
+            case "phone":
+                return ContactType.PHONE;
             default:
                 throw new IllegalArgumentException(dbData + " not supported.");
         }

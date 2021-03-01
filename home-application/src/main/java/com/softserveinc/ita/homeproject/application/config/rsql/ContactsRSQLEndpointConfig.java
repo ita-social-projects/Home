@@ -21,9 +21,9 @@ public class ContactsRSQLEndpointConfig implements RSQLEndpointConfig<Contact, C
         HashMap<ContactQueryParamEnum, String> map = new HashMap<>();
 
         map.put(ContactQueryParamEnum.USER_ID, "user.id");
-        map.put(ContactQueryParamEnum.CONTACT_PHONE, "contactPhone");
-        map.put(ContactQueryParamEnum.CONTACT_EMAIL, "contactEmail");
-        map.put(ContactQueryParamEnum.PRIMARY, "primary");
+        map.put(ContactQueryParamEnum.PHONE, "phone");
+        map.put(ContactQueryParamEnum.EMAIL, "email");
+        map.put(ContactQueryParamEnum.MAIN, "main");
 
 
         return map;

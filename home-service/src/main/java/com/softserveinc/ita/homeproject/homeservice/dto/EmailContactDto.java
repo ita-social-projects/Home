@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class EmailContactDto extends ContactDto {
 
-    private String contactEmail;
+    private String email;
 }

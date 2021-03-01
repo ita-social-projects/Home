@@ -10,13 +10,14 @@
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="CONTACT_PHONE" type="VARCHAR(15)"/>
+            <column name="PHONE" type="VARCHAR(15)"/>
 
-            <column name="CONTACT_EMAIL" type="VARCHAR(50)"/>
+            <column name="EMAIL" type="VARCHAR(50)"/>
 
             <column name="CONTACT_TYPE" type="VARCHAR(31)">
                 <constraints nullable="false"/>
             </column>
+            <column name="MAIN" type="boolean"/>
             <column name="USER_ID" type="BIGINT">
                 <constraints foreignKeyName="user_fk"
                              references="users(ID)"/>

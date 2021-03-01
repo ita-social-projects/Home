@@ -36,4 +36,6 @@ public abstract class Contact extends BaseEntity {
     @JoinColumn(name = "cooperation_id")
     private Cooperation cooperation;
 
+    @Column(name = "main")
+    private Boolean main;
 }

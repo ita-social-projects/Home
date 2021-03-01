@@ -10,5 +10,5 @@ public abstract class ContactDto extends BaseDto {
 
     private ContactType contactType;
 
-    private Boolean primary;
+    private Boolean main;
 }

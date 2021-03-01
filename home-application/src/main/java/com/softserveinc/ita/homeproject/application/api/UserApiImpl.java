@@ -20,6 +20,7 @@ import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig.ContactQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
@@ -44,7 +45,7 @@ import org.springframework.stereotype.Component;
  */
 @Provider
 @Component
-public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
+public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Autowired
     private ContactService contactService;
@@ -142,52 +143,23 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
     }
 
     @Override
-    public Response getAllContacts(@Min(1) Integer pageNumber,
-                                   @Min(0) @Max(10) Integer pageSize,
-                                   String sort,
-                                   String filter,
-                                   String id,
-                                   String contactPhone,
-                                   String contactEmail,
-                                   String primary) {
-
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
-        return getAllContactsBySpecification(pageNumber, pageSize, sort, filter, id,
-            contactPhone, contactEmail, primary, filterMap);
-    }
-
-    @Override
-    public Response getAllContactsByUser(Long usersId,
+    public Response getAllContacts(Long usersId,
                                    @Min(1) Integer pageNumber,
                                    @Min(0) @Max(10) Integer pageSize,
                                    String sort,
                                    String filter,
                                    String id,
-                                   String contactPhone,
-                                   String contactEmail,
-                                   String primary) {
+                                   String phone,
+                                   String email,
+                                   String main) {
 
         Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
         filterMap.put(ContactQueryParamEnum.USER_ID, usersId.toString());
-
-        return getAllContactsBySpecification(pageNumber, pageSize, sort, filter, id,
-                                      contactPhone, contactEmail, primary, filterMap);
-    }
-
-    private Response getAllContactsBySpecification(@Min(1) Integer pageNumber,
-                                                   @Min(0) @Max(10) Integer pageSize,
-                                                   String sort,
-                                                   String filter,
-                                                   String id,
-                                                   String contactPhone,
-                                                   String contactEmail,
-                                                   String primary,
-                                                   Map<QueryParamEnum, String> filterMap) {
-
         filterMap.put(ContactQueryParamEnum.ID, id);
-        filterMap.put(ContactQueryParamEnum.CONTACT_PHONE, contactPhone);
-        filterMap.put(ContactQueryParamEnum.CONTACT_EMAIL, contactEmail);
-        filterMap.put(ContactQueryParamEnum.PRIMARY, primary);
+        filterMap.put(ContactQueryParamEnum.PHONE, phone);
+        filterMap.put(ContactQueryParamEnum.EMAIL, email);
+        filterMap.put(ContactQueryParamEnum.MAIN, main);
 
         Page<ContactDto> contacts = contactService.getAllContacts(
             pageNumber,
@@ -195,7 +167,7 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
             entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
-        return buildQueryResponseForContacts(contacts, ReadContact.class);
+        return buildQueryResponse(contacts, ReadContact.class);
     }
 
     /**
@@ -245,24 +217,6 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
-    }
-
-
-    private Response buildQueryResponseForContacts(Page<ContactDto> page, Class<? extends BaseReadView> clazz) {
-        long totalElements = page.getTotalElements();
-        int totalPages = page.getTotalPages();
-        int numberOfElements = page.getNumberOfElements();
-
-        List<?> pageElements = page.stream()
-            .map(p -> mapper.convert(p, clazz))
-            .collect(Collectors.toList());
-
-        return Response.status(Response.Status.OK)
-            .entity(pageElements)
-            .header(PAGING_COUNT, numberOfElements)
-            .header(PAGING_TOTAL_PAGES, totalPages)
-            .header(PAGING_TOTAL_COUNT, totalElements)
-            .build();
     }
 
 }

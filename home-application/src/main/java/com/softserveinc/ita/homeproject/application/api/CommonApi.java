@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
-public abstract class CommonApi<R extends BaseDto> {
+public abstract class CommonApi {
 
     public static final String PAGING_COUNT = "Paging-count";
 
@@ -27,7 +27,7 @@ public abstract class CommonApi<R extends BaseDto> {
     @Autowired
     protected EntitySpecificationService entitySpecificationService;
 
-    Response buildQueryResponse(Page<R> page, Class<? extends BaseReadView> clazz) {
+    <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();

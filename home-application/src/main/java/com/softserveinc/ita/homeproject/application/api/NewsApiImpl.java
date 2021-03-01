@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
+public class NewsApiImpl extends CommonApi implements NewsApi {
 
     @Autowired
     private NewsService newsService;

@@ -407,73 +407,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/contacts:
-    get:
-      tags:
-        - contact
-      summary: "Get all contacts"
-      description: "Get all contacts"
-      operationId: getAllContacts
-      parameters:
-        - in: query
-          name: pageNumber
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: pageSize
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: string
-        - in: query
-          name: contactPhone
-          schema:
-            type: string
-        - in: query
-          name: contactEmail
-          schema:
-            type: string
-        - in: query
-          name: primary
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadContact"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        default:
-          $ref: '#/components/responses/InternalServerError'
   /users/{users_id}/contacts:
     post:
       tags:
@@ -519,7 +452,7 @@ paths:
         - contact
       summary: "Get all contacts by user"
       description: "Get all contacts by user"
-      operationId: getAllContactsByUser
+      operationId: getAllContacts
       parameters:
         - name: "users_id"
           in: "path"
@@ -560,15 +493,15 @@ paths:
           schema:
             type: string
         - in: query
-          name: contactPhone
+          name: phone
           schema:
             type: string
         - in: query
-          name: contactEmail
+          name: email
           schema:
             type: string
         - in: query
-          name: primary
+          name: main
           schema:
             type: string
       responses:
@@ -880,7 +813,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateContact'
-          example: array
     ReadUser:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -899,7 +831,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadContact'
-          example: array
     UpdateUser:
       type: object
       properties:
@@ -919,8 +850,8 @@ components:
       description: Indicates the type of contact.
       type: string
       enum: &contact_type_values
-        - contactEmail
-        - contactPhone
+        - email
+        - phone
     ReadContact:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -928,14 +859,14 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          contactEmail: '#/components/schemas/ReadEmailContact'
-          contactPhone: '#/components/schemas/ReadPhoneContact'
+          email: '#/components/schemas/ReadEmailContact'
+          phone: '#/components/schemas/ReadPhoneContact'
       required:
         - contact_type
       properties:
         contact_type:
           $ref: '#/components/schemas/ContactType'
-        primary:
+        main:
           type: boolean
           example: false
     ReadEmailContact:
@@ -943,7 +874,7 @@ components:
         - $ref: '#/components/schemas/ReadContact'
       type: object
       properties:
-        contactEmail:
+        email:
           type: string
           example: home@gmail.com
     ReadPhoneContact:
@@ -951,7 +882,7 @@ components:
         - $ref: '#/components/schemas/ReadContact'
       type: object
       properties:
-        contactPhone:
+        phone:
           type: string
           example: "+380506617305"
     CreateContact:
@@ -959,14 +890,14 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          contactEmail: '#/components/schemas/CreateEmailContact'
-          contactPhone: '#/components/schemas/CreatePhoneContact'
+          email: '#/components/schemas/CreateEmailContact'
+          phone: '#/components/schemas/CreatePhoneContact'
       required:
         - contact_type
       properties:
         contact_type:
           $ref: '#/components/schemas/ContactType'
-        primary:
+        main:
           type: boolean
           example: false
     CreateEmailContact:
@@ -974,7 +905,7 @@ components:
         - $ref: '#/components/schemas/CreateContact'
       type: object
       properties:
-        contactEmail:
+        email:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: home@gmail.com
@@ -983,7 +914,7 @@ components:
         - $ref: '#/components/schemas/CreateContact'
       type: object
       properties:
-        contactPhone:
+        phone:
           type: string
           example: "+380506617305"
     UpdateContact:
@@ -991,14 +922,14 @@ components:
       discriminator:
         propertyName: contact_type
         mapping:
-          contactEmail: '#/components/schemas/UpdateEmailContact'
-          contactPhone: '#/components/schemas/UpdatePhoneContact'
+          email: '#/components/schemas/UpdateEmailContact'
+          phone: '#/components/schemas/UpdatePhoneContact'
       required:
         - contact_type
       properties:
         contact_type:
           $ref: '#/components/schemas/ContactType'
-        primary:
+        main:
           type: boolean
           example: false
     UpdateEmailContact:
@@ -1006,7 +937,7 @@ components:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
-        contactEmail:
+        email:
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: other@gmail.com
@@ -1015,6 +946,6 @@ components:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
       properties:
-        contactPhone:
+        phone:
           type: string
           example: "+380966617305"

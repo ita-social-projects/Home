@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PhoneContactDto extends ContactDto{
+public class PhoneContactDto extends ContactDto {
 
-    private String contactPhone;
+    private String phone;
 }

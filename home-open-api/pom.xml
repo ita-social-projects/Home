@@ -63,7 +63,7 @@
                     <validateOperationDescription>true</validateOperationDescription>
                     <validateOperationTag>true</validateOperationTag>
                     <validateOperationSummary>true</validateOperationSummary>
-                    <validateModelPropertiesExample>true</validateModelPropertiesExample>
+                    <validateModelPropertiesExample>false</validateModelPropertiesExample>
                     <validateModelNoLocalDef>true</validateModelNoLocalDef>
                     <validateNaming>false</validateNaming>
                     <ignoreHeaderXNaming>true</ignoreHeaderXNaming>

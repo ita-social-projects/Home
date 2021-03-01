@@ -2,9 +2,9 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 public enum ContactType {
   
-    CONTACTEMAIL("contactEmail"),
+    EMAIL("email"),
 
-    CONTACTPHONE("contactPhone");
+    PHONE("phone");
 
     private String value;
 
