@@ -10,9 +10,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class HouseDto extends BaseDto {
 
     private Integer quantityFlat;

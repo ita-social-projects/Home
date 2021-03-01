@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class CooperationServiceImpl implements CooperationService {
 
     private final CooperationRepository cooperationRepository;
-
     private final ServiceMapper mapper;
 
     @Override

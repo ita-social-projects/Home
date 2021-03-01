@@ -11,9 +11,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CooperationDto extends BaseDto {
 
     private String name;

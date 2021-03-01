@@ -4,14 +4,12 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
-
-import java.util.HashMap;
-import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
+import java.util.HashMap;
+import java.util.Map;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
@@ -22,7 +20,6 @@ import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +32,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 
 @Provider
-@NoArgsConstructor
 public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
 
     private NewsService newsService;

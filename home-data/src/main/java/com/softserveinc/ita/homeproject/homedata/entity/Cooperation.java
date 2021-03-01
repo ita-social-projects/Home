@@ -17,9 +17,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "cooperation")
 public class Cooperation extends BaseEntity {
