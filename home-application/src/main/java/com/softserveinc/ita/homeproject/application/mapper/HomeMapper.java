@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,10 +19,13 @@ public class HomeMapper {
     private ModelMapper modelMapper;
 
     @PostConstruct
+    @SuppressWarnings({"unchecked cast", "rawtypes"})
     public void init() {
         modelMapper = new ModelMapper();
         for (HomeMappingConfig homeMappingConfig : homeMappingConfigs) {
-            homeMappingConfig.addMappings(modelMapper);
+            TypeMap typeMap =
+                modelMapper.typeMap(homeMappingConfig.getSourceType(), homeMappingConfig.getDestinationType());
+            homeMappingConfig.addMappings(typeMap);
         }
     }
 
