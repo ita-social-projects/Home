@@ -407,11 +407,79 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+  /users/contacts:
+    get:
+      tags:
+        - contact
+      summary: "Get all contacts"
+      description: "Get all contacts"
+      operationId: getAllContacts
+      parameters:
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: contactPhone
+          schema:
+            type: string
+        - in: query
+          name: contactEmail
+          schema:
+            type: string
+        - in: query
+          name: primary
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /users/{users_id}/contacts:
     post:
       tags:
         - contact
       summary: "Create new contacts"
+      description: "Create new contacts"
       operationId: createContacts
       parameters:
         - name: "users_id"
@@ -450,7 +518,8 @@ paths:
       tags:
         - contact
       summary: "Get all contacts by user"
-      operationId: getAllContacts
+      description: "Get all contacts by user"
+      operationId: getAllContactsByUser
       parameters:
         - name: "users_id"
           in: "path"
@@ -477,6 +546,31 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: contactPhone
+          schema:
+            type: string
+        - in: query
+          name: contactEmail
+          schema:
+            type: string
+        - in: query
+          name: primary
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -499,6 +593,7 @@ paths:
       tags:
         - contact
       summary: "Get contact by id"
+      description: "Get contact by id"
       operationId: getContact
       parameters:
         - name: "users_id"
@@ -536,6 +631,7 @@ paths:
       tags:
         - contact
       summary: "Update current contact"
+      description: "Update current contact"
       operationId: updateContact
       parameters:
         - name: "users_id"
@@ -584,6 +680,7 @@ paths:
       tags:
         - contact
       summary: "Delete contact by ID"
+      description: "Delete contact by ID"
       operationId: removeContact
       parameters:
         - name: "users_id"
@@ -783,6 +880,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateContact'
+          example: array
     ReadUser:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -801,6 +899,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadContact'
+          example: array
     UpdateUser:
       type: object
       properties:
@@ -838,6 +937,7 @@ components:
           $ref: '#/components/schemas/ContactType'
         primary:
           type: boolean
+          example: false
     ReadEmailContact:
       allOf:
         - $ref: '#/components/schemas/ReadContact'
@@ -868,6 +968,7 @@ components:
           $ref: '#/components/schemas/ContactType'
         primary:
           type: boolean
+          example: false
     CreateEmailContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
@@ -899,6 +1000,7 @@ components:
           $ref: '#/components/schemas/ContactType'
         primary:
           type: boolean
+          example: false
     UpdateEmailContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'

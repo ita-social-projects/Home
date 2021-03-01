@@ -65,11 +65,9 @@
                     <validateOperationSummary>true</validateOperationSummary>
                     <validateModelPropertiesExample>true</validateModelPropertiesExample>
                     <validateModelNoLocalDef>true</validateModelNoLocalDef>
-                    <validateNaming>true</validateNaming>
+                    <validateNaming>false</validateNaming>
                     <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
                     <pathNamingConvention>HyphenCase</pathNamingConvention>
-                    <parameterNamingConvention>CamelCase</parameterNamingConvention>
-                    <propertyNamingConvention>CamelCase</propertyNamingConvention>
                 </configuration>
                 <executions>
                     <execution>

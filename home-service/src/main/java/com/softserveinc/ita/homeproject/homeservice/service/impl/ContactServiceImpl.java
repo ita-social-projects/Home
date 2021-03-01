@@ -18,6 +18,7 @@ import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,8 +82,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Transactional
     @Override
-    public Page<ContactDto> getAllContacts(Long usersId, Integer pageNumber, Integer pageSize) {
-        return contactRepository.getAllByUserId(usersId, PageRequest.of(pageNumber - 1, pageSize))
+    public Page<ContactDto> getAllContacts(Integer pageNumber, Integer pageSize,
+                                            Specification<Contact> specification) {
+        return contactRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(contact -> mapper.convert(contact, ContactDto.class));
     }
 
