@@ -2,6 +2,11 @@ openapi: 3.0.3
 info:
   title: HomePage - OpenAPI 3.0
   description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/mit-license.php
+  contact:
+    url: https://github.com/ita-social-projects/Home
   version: 1.0.0
 servers:
   - url: /api/0
@@ -180,6 +185,7 @@ paths:
       tags:
         - news
       summary: Delete the chosen news
+      description: Delete news by ID
       operationId: deleteNews
       parameters:
         - name: id
@@ -235,7 +241,7 @@ paths:
       tags:
         - user
       summary: "Get all users"
-      description: ''
+      description: Get all users
       operationId: getAllUsers
       parameters:
         - in: query
@@ -308,6 +314,7 @@ paths:
       tags:
         - user
       summary: "Get user by id"
+      description: Get user by id
       operationId: getUser
       parameters:
         - name: "users_id"
@@ -378,6 +385,7 @@ paths:
       tags:
         - user
       summary: Delete user by ID
+      description: Delete user by ID
       operationId: removeUser
       parameters:
         - name: "users_id"
@@ -656,6 +664,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
     ReadNews:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -668,12 +677,16 @@ components:
         photoUrl:
           type: string
           format: url
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
+          example: Gas turn off
         source:
           type: string
+          example: Example
         text:
           type: string
+          example: example
     CreateNews:
       required:
         - title
@@ -688,15 +701,19 @@ components:
           maxLength: 70
         photoUrl:
           type: string
+          example: url
         description:
           type: string
           minLength: 1
           maxLength: 150
+          example: example
         source:
           type: string
+          example: example
         text:
           type: string
           minLength: 1
+          example: example
     UpdateNews:
       type: object
       properties:
@@ -704,25 +721,32 @@ components:
           type: string
           minLength: 1
           maxLength: 50
+          example: example
         photoUrl:
           type: string
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
           minLength: 1
           maxLength: 50
+          example: example
         source:
           type: string
+          example: example
         text:
           type: string
           minLength: 1
           maxLength: 150
+          example: example
     ApiError:
       type: object
       properties:
         responseCode:
           type: integer
+          example: 404
         errorMessage:
           type: string
+          example: example
     CreateUser:
       required:
         - firstName
