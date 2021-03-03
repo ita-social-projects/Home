@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import org.springframework.data.domain.Page;
 
-public abstract class CommonApi<R extends BaseDto> {
+public abstract class CommonApi {
 
     public static final String PAGING_COUNT = "Paging-count";
 
@@ -18,7 +18,7 @@ public abstract class CommonApi<R extends BaseDto> {
 
     public abstract HomeMapper getMapper();
 
-    Response buildQueryResponse(Page<R> page, Class<? extends BaseReadView> clazz) {
+    <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();

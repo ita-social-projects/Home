@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ public class Cooperation extends BaseEntity {
     private String iban;
 
     @Column(name = "registerDate")
-    private LocalDateTime registerDate;
+    private LocalDate registerDate;
 
     @Column(name = "updateDate")
     private LocalDateTime updateDate;

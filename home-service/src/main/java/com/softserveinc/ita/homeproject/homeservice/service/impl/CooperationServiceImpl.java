@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
@@ -24,7 +25,7 @@ public class CooperationServiceImpl implements CooperationService {
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
         Cooperation cooperation = mapper.convert(createCooperationDto, Cooperation.class);
         cooperation.setEnabled(true);
-        cooperation.setRegisterDate(LocalDateTime.now());
+        cooperation.setRegisterDate(LocalDate.now());
         cooperationRepository.save(cooperation);
         return mapper.convert(cooperation, CooperationDto.class);
     }

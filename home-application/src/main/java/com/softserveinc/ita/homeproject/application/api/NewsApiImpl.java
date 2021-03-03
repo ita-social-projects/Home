@@ -32,7 +32,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 
 @Provider
-public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
+public class NewsApiImpl extends CommonApi implements NewsApi {
 
     private NewsService newsService;
 

@@ -32,7 +32,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @author Mykyta Morar
  */
 @Provider
-public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
+public class UserApiImpl extends CommonApi implements UsersApi {
 
     private UserService userService;
 

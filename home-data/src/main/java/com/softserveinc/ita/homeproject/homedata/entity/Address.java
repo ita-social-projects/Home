@@ -1,40 +1,40 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "addresses")
 public class Address extends BaseEntity {
 
-    @Column
+    @Column(name = "region")
     private String region;
 
-    @Column
+    @Column(name = "city")
     private String city;
 
-    @Column
+    @Column(name = "district")
     private String district;
 
-    @Column
+    @Column(name = "street")
     private String street;
 
-    @Column
+    @Column(name = "house_block")
     private String houseBlock;
 
-    @Column
+    @Column(name = "house_number")
     private String houseNumber;
 
-    @Column
+    @Column(name = "zip_code")
     private String zipCode;
 
-    @OneToOne
-    private Cooperation cooperation;
-
-    @OneToOne
-    private House houses;
+//    @OneToOne
+//    private Cooperation cooperation;
+//
+//    @OneToOne
+//    private House houses;
 }
