@@ -7,7 +7,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
