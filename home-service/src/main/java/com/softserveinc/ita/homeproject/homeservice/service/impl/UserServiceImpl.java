@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private static final String USER_WITH_ID = "User with id:";
+
     private static final String NOT_FOUND = " is not found";
 
     private final UserRepository userRepository;
