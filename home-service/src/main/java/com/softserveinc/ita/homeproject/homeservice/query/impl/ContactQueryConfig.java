@@ -27,7 +27,8 @@ public class ContactQueryConfig implements QueryConfig<Contact> {
         USER_ID("user.id"),
         PHONE("phone"),
         EMAIL("email"),
-        MAIN("main");
+        MAIN("main"),
+        TYPE("contactType");
 
         private final String parameter;
 

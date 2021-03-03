@@ -14,7 +14,7 @@
 
             <column name="EMAIL" type="VARCHAR(50)"/>
 
-            <column name="CONTACT_TYPE" type="VARCHAR(31)">
+            <column name="TYPE" type="VARCHAR(31)">
                 <constraints nullable="false"/>
             </column>
             <column name="MAIN" type="boolean"/>
@@ -26,6 +26,7 @@
                 <constraints foreignKeyName="cooperation_fk"
                              references="cooperation(ID)"/>
             </column>
+            <column name="ENABLED" type="boolean"/>
         </createTable>
     </changeSet>
 

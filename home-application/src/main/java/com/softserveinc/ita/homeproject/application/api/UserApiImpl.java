@@ -7,9 +7,8 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,12 +19,10 @@ import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig.ContactQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -53,6 +50,15 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @Autowired
     private UserService userService;
 
+    @Override
+    public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
+        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
+        ContactDto readContactDto = contactService.createContact(userId, createContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.CREATED).entity(readContact).build();
+    }
+
     /**
      * createUser method is implementation of HTTP POST
      * method for creating a new user.
@@ -70,15 +76,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
 
-    @Override
-    public Response createContacts(Long usersId, @Valid CreateContact createContact) {
-        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
-        ContactDto readContactDto = contactService.createContact(usersId, createContactDto);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
-
-        return Response.status(Response.Status.CREATED).entity(readContact).build();
-    }
-
     /**
      * getUser method is implementation of HTTP GET method
      * for getting user by id from database.
@@ -93,6 +90,45 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
+    }
+
+    @Override
+    public Response queryContactsOnUser(Long userId,
+                                        @Min(1) Integer pageNumber,
+                                        @Min(0) @Max(10) Integer pageSize,
+                                        String sort,
+                                        String filter,
+                                        String id,
+                                        String phone,
+                                        String email,
+                                        String main,
+                                        String type) {
+        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
+        filterMap.put(ContactQueryParamEnum.USER_ID, userId.toString());
+        filterMap.put(ContactQueryParamEnum.ID, id);
+        filterMap.put(ContactQueryParamEnum.PHONE, phone);
+        filterMap.put(ContactQueryParamEnum.EMAIL, email);
+        filterMap.put(ContactQueryParamEnum.MAIN, main);
+
+        if (type != null) {
+            filterMap.put(ContactQueryParamEnum.TYPE, type.toUpperCase());
+        }
+
+        Page<ContactDto> contacts = contactService.getAllContacts(
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
+        );
+
+        return buildQueryResponse(contacts, ReadContact.class);
+    }
+
+    @Override
+    public Response removeContactOnUser(Long userId, Long contactId) {
+        contactService.deactivateContact(contactId);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     /**
@@ -135,39 +171,11 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     }
 
     @Override
-    public Response getContact(Long usersId, Long contactsId) {
-        ContactDto readContactDto = contactService.getContactById(contactsId);
+    public Response getContactOnUser(Long userId, Long contactId) {
+        ContactDto readContactDto = contactService.getContactById(contactId);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
-    }
-
-    @Override
-    public Response getAllContacts(Long usersId,
-                                   @Min(1) Integer pageNumber,
-                                   @Min(0) @Max(10) Integer pageSize,
-                                   String sort,
-                                   String filter,
-                                   String id,
-                                   String phone,
-                                   String email,
-                                   String main) {
-
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
-
-        filterMap.put(ContactQueryParamEnum.USER_ID, usersId.toString());
-        filterMap.put(ContactQueryParamEnum.ID, id);
-        filterMap.put(ContactQueryParamEnum.PHONE, phone);
-        filterMap.put(ContactQueryParamEnum.EMAIL, email);
-        filterMap.put(ContactQueryParamEnum.MAIN, main);
-
-        Page<ContactDto> contacts = contactService.getAllContacts(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
-        return buildQueryResponse(contacts, ReadContact.class);
     }
 
     /**
@@ -186,10 +194,12 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     }
 
     @Override
-    public Response removeContact(Long usersId, Long contactsId) {
-        contactService.deactivateContact(contactsId);
+    public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
+        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        ContactDto readContactDto = contactService.updateContact(contactId, updateContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     /**
@@ -208,15 +218,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
-    }
-
-    @Override
-    public Response updateContact(Long usersId, Long contactsId, @Valid UpdateContact updateContact) {
-        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        ContactDto readContactDto = contactService.updateContact(contactsId, updateContactDto);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
-
-        return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
 }

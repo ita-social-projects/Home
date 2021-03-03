@@ -45,7 +45,10 @@ public class UserServiceImpl implements UserService {
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
-            toCreate.getContacts().forEach(contact -> contact.setUser(toCreate));
+            toCreate.getContacts().forEach(contact -> {
+                contact.setUser(toCreate);
+                contact.setEnabled(true);
+            });
 
             userRepository.save(toCreate);
 
@@ -95,10 +98,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
+        toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
     }
 

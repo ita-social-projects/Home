@@ -21,12 +21,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "contacts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "contact_type")
+@DiscriminatorColumn(name = "type")
 public abstract class Contact extends BaseEntity {
 
     @Convert(converter = ContactTypeAttributeConverter.class)
-    @Column(name = "contact_type", insertable = false, updatable = false)
-    private ContactType contactType;
+    @Column(name = "type", insertable = false, updatable = false)
+    private ContactType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -38,4 +38,7 @@ public abstract class Contact extends BaseEntity {
 
     @Column(name = "main")
     private Boolean main;
+
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

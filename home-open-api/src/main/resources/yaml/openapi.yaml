@@ -14,19 +14,19 @@ tags:
   - name: news
     description: News management operations
   - name: user
-    description: user management
+    description: User management operations
   - name: contact
-    description: contact management
+    description: Contact management operations
 paths:
   /news:
     post:
       tags:
         - news
-      summary: Add a news to the home page
-      description: Add a news to the home page
+      summary: Add a News to the home page
+      description: The endpoint adds a News to the home page
       operationId: addNews
       requestBody:
-        description: Create a news
+        description: A payload for creating a new News
         content:
           application/json:
             schema:
@@ -34,7 +34,7 @@ paths:
         required: true
       responses:
         "201":
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -52,8 +52,8 @@ paths:
     get:
       tags:
         - news
-      summary: Get all news to the home page
-      description: This endpoint delivers all news to the Home Page
+      summary: Get all News to the home page
+      description: This endpoint delivers all News to the Home Page
       operationId: getAllNews
       parameters:
         - in: query
@@ -63,7 +63,7 @@ paths:
             minimum: 1
             default: 1
           required: false
-          description: The number of current page.
+          description: The number of current page
         - in: query
           name: pageSize
           schema:
@@ -72,35 +72,41 @@ paths:
             maximum: 10
             default: 5
           required: false
-          description: The number of items to return.
+          description: The number of items to return
         - in: query
           name: sort
           schema:
             type: string
             default: id,asc
+          description: Arranging items in specific order
         - in: query
           name: filter
           schema:
             type: string
+          description: Filter items by fields
         - in: query
           name: id
           schema:
             type: string
+          description: The ID of the News
         - in: query
           name: title
           schema:
             type: string
+          description: The title of the News
         - in: query
           name: text
           schema:
             type: string
+          description: The content of the News
         - in: query
           name: source
           schema:
             type: string
+          description: The source of the News
       responses:
         "200":
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -117,20 +123,20 @@ paths:
     get:
       tags:
         - news
-      summary: Get an existing news by its id
-      description: View an existing news by its Identifier
+      summary: Get an existing news by its ID
+      description: View an existing news by its ID
       operationId: getNews
       parameters:
         - name: id
           in: path
-          description: Id value that need to be considered for filter
+          description: ID value that need to be considered for filter
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "200":
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -144,19 +150,19 @@ paths:
     put:
       tags:
         - news
-      summary: Update an existing news
-      description: Update an existing news by Identifier
+      summary: Update an existing News
+      description: Update an existing News by its ID
       operationId: updateNews
       parameters:
         - name: id
           in: path
-          description: Id value that need to be considered for filter
+          description: ID value that need to be considered for filter
           required: true
           schema:
             type: integer
             format: int64
       requestBody:
-        description: Update an existing news
+        description: A payload for updating an existing News
         content:
           application/json:
             schema:
@@ -164,7 +170,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -190,14 +196,14 @@ paths:
       parameters:
         - name: id
           in: path
-          description: Id value that need to be considered for filter
+          description: ID value that need to be considered for filter
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "204":
-          description: Successful operation
+          description: Success
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -211,10 +217,10 @@ paths:
       tags:
         - user
       summary: Create user
-      description: Create a new user
+      description: The endpoint creates a new User
       operationId: createUser
       requestBody:
-        description: Create a new User
+        description: A payload for creating a User
         content:
           application/json:
             schema:
@@ -222,7 +228,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful created
+          description: Successfully created
           content:
             application/json:
               schema:
@@ -240,8 +246,8 @@ paths:
     get:
       tags:
         - user
-      summary: "Get all users"
-      description: Get all users
+      summary: Get all Users
+      description: The endpoint getts all Users
       operationId: getAllUsers
       parameters:
         - in: query
@@ -251,7 +257,7 @@ paths:
             minimum: 1
             default: 1
           required: false
-          description: The number of current page.
+          description: The number of current page
         - in: query
           name: pageSize
           schema:
@@ -260,43 +266,51 @@ paths:
             maximum: 10
             default: 5
           required: false
-          description: The number of items to return.
+          description: The number of items to return
         - in: query
           name: sort
           schema:
             type: string
             default: id,asc
+          description: Arranging items in the specific order
         - in: query
           name: filter
           schema:
             type: string
+          description: Filter items by fields
         - in: query
           name: id
           schema:
             type: string
+          description: The ID of the User
         - in: query
           name: email
           schema:
             type: string
+          description: The email of the User
         - in: query
           name: firstName
           schema:
             type: string
+          description: The First Name of the User
         - in: query
           name: lastName
           schema:
             type: string
+          description: The Last name of the User
         - in: query
           name: contactPhone
           schema:
             type: string
+          description: Contact phone of the User
         - in: query
           name: contactEmail
           schema:
             type: string
+          description: Contact email of the User
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -309,17 +323,17 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{users_id}:
+  /users/{user_id}:
     get:
       tags:
         - user
-      summary: "Get user by id"
-      description: Get user by id
+      summary: Get User by ID
+      description: The endpoint gets User by ID
       operationId: getUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
@@ -327,7 +341,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -343,20 +357,20 @@ paths:
     put:
       tags:
         - user
-      summary: Update current user
-      description: Update current user
+      summary: Update current User
+      description: The endpoint updates current User by ID
       operationId: updateUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Update current user
+        description: A payload for updating current User
         content:
           application/json:
             schema:
@@ -364,7 +378,7 @@ paths:
         required: true
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -385,12 +399,12 @@ paths:
       tags:
         - user
       summary: Delete user by ID
-      description: Delete user by ID
+      description: The ednpoint deletes User by ID
       operationId: removeUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
@@ -398,7 +412,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Successful operation
+          description: Success
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -407,24 +421,24 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{users_id}/contacts:
+  /users/{user_id}/contacts:
     post:
       tags:
         - contact
-      summary: "Create new contacts"
-      description: "Create new contacts"
-      operationId: createContacts
+      summary: Create new Contact for the User
+      description: The endpoint creates a new Contact for the specified user ID
+      operationId: createContactOnUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Create a new Contact
+        description: A payload for creating a contact
         content:
           application/json:
             schema:
@@ -432,7 +446,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful created
+          description: Successfully created
           content:
             application/json:
               schema:
@@ -450,13 +464,13 @@ paths:
     get:
       tags:
         - contact
-      summary: "Get all contacts by user"
-      description: "Get all contacts by user"
-      operationId: getAllContacts
+      summary: Get all Contacts by User
+      description: The endpoint retrieves the list of contacts associated with the specified user ID
+      operationId: queryContactsOnUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
@@ -469,7 +483,7 @@ paths:
             minimum: 1
             default: 1
           required: false
-          description: The number of current page.
+          description: The number of current page
         - in: query
           name: pageSize
           schema:
@@ -478,35 +492,46 @@ paths:
             maximum: 10
             default: 5
           required: false
-          description: The number of items to return.
+          description: The number of items to return
         - in: query
           name: sort
           schema:
             type: string
             default: id,asc
+          description: Arraning items in specific order
         - in: query
           name: filter
           schema:
             type: string
+          description: Filter items by fields
         - in: query
           name: id
           schema:
             type: string
+          description: The ID of the Contact
         - in: query
           name: phone
           schema:
             type: string
+          description: Phone of the Contact
         - in: query
           name: email
           schema:
             type: string
+          description: Email of the Contact
         - in: query
           name: main
           schema:
             type: string
+          description: Specifies if its a main Contact of the User
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: Type of the Contact
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -521,25 +546,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{users_id}/contacts/{contacts_id}:
+  /users/{user_id}/contacts/{contact_id}:
     get:
       tags:
         - contact
-      summary: "Get contact by id"
-      description: "Get contact by id"
-      operationId: getContact
+      summary: Get Contact by ID
+      description: The endpoint retrieves an existing contact
+                   associated with the specified User by User and Contact IDs
+      operationId: getContactOnUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Contact
           required: true
           schema:
             type: integer
             format: int64
             example: 1
-        - name: "contacts_id"
+        - name: "contact_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Contact
           required: true
           schema:
             type: integer
@@ -547,7 +573,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -563,28 +589,29 @@ paths:
     put:
       tags:
         - contact
-      summary: "Update current contact"
-      description: "Update current contact"
-      operationId: updateContact
+      summary: Update Contact
+      description: The endpoint updates information on a contact that exists
+                  in the system by the specified User and Contact IDs
+      operationId: updateContactOnUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
             format: int64
             example: 1
-        - name: "contacts_id"
+        - name: "contact_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Contact
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Update current contact
+        description: A payload for updating an existing Contact
         content:
           application/json:
             schema:
@@ -592,7 +619,7 @@ paths:
         required: true
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -605,28 +632,27 @@ paths:
           $ref: '#/components/responses/Forbidden'
         "404":
           $ref: '#/components/responses/NotFound'
-        "409":
-          $ref: '#/components/responses/Conflict'
         default:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - contact
-      summary: "Delete contact by ID"
-      description: "Delete contact by ID"
-      operationId: removeContact
+      summary: Remove Contact
+      description: The endpoint removes an existing Contact on a User associated with the
+                   specified User and Contact IDs
+      operationId: removeContactOnUser
       parameters:
-        - name: "users_id"
+        - name: "user_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the User
           required: true
           schema:
             type: integer
             format: int64
             example: 1
-        - name: "contacts_id"
+        - name: "contact_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Contact
           required: true
           schema:
             type: integer
@@ -634,7 +660,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Successful operation
+          description: Success
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -847,7 +873,7 @@ components:
           minLength: 1
           maxLength: 50
     ContactType:
-      description: Indicates the type of contact.
+      description: Indicates the type of contact
       type: string
       enum: &contact_type_values
         - email
@@ -857,14 +883,14 @@ components:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
-        propertyName: contact_type
+        propertyName: type
         mapping:
           email: '#/components/schemas/ReadEmailContact'
           phone: '#/components/schemas/ReadPhoneContact'
       required:
-        - contact_type
+        - type
       properties:
-        contact_type:
+        type:
           $ref: '#/components/schemas/ContactType'
         main:
           type: boolean
@@ -888,14 +914,14 @@ components:
     CreateContact:
       type: object
       discriminator:
-        propertyName: contact_type
+        propertyName: type
         mapping:
           email: '#/components/schemas/CreateEmailContact'
           phone: '#/components/schemas/CreatePhoneContact'
       required:
-        - contact_type
+        - type
       properties:
-        contact_type:
+        type:
           $ref: '#/components/schemas/ContactType'
         main:
           type: boolean
@@ -920,14 +946,14 @@ components:
     UpdateContact:
       type: object
       discriminator:
-        propertyName: contact_type
+        propertyName: type
         mapping:
           email: '#/components/schemas/UpdateEmailContact'
           phone: '#/components/schemas/UpdatePhoneContact'
       required:
-        - contact_type
+        - type
       properties:
-        contact_type:
+        type:
           $ref: '#/components/schemas/ContactType'
         main:
           type: boolean
