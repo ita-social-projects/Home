@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper.config.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.Phone;
+import com.softserveinc.ita.homeproject.homedata.entity.PhoneContact;
 import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
@@ -19,6 +19,6 @@ public class PhoneContactDtoServiceMappingConfig implements ServiceMappingConfig
 
     @Override
     public void addMappings(TypeMap<PhoneContactDto, Contact> typeMap) {
-        typeMap.setProvider(request -> serviceMapper.convert(request.getSource(), Phone.class));
+        typeMap.setProvider(request -> serviceMapper.convert(request.getSource(), PhoneContact.class));
     }
 }

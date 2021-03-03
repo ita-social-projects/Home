@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
@@ -18,7 +18,7 @@ public class ContactsRSQLEndpointConfig implements RSQLEndpointConfig<Contact, C
 
     @Override
     public Map<ContactQueryParamEnum, String> getMappings() {
-        HashMap<ContactQueryParamEnum, String> map = new HashMap<>();
+        EnumMap<ContactQueryParamEnum, String> map = new EnumMap<>(ContactQueryParamEnum.class);
 
         map.put(ContactQueryParamEnum.USER_ID, "user.id");
         map.put(ContactQueryParamEnum.PHONE, "phone");

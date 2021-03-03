@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue("email")
-public class Email extends Contact {
+@DiscriminatorValue("phone")
+public class PhoneContact extends Contact {
 
-    private String email;
+    private String phone;
 }

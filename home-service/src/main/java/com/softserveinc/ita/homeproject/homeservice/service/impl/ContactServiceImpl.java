@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
-import com.softserveinc.ita.homeproject.homedata.entity.Email;
-import com.softserveinc.ita.homeproject.homedata.entity.Phone;
+import com.softserveinc.ita.homeproject.homedata.entity.EmailContact;
+import com.softserveinc.ita.homeproject.homedata.entity.PhoneContact;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
@@ -61,21 +61,21 @@ public class ContactServiceImpl implements ContactService {
 
     private ContactDto updateContact(Contact contact, ContactDto updateContactDto) {
         if (contact.getType().equals(ContactType.PHONE)) {
-            return updatePhone((Phone) contact, (PhoneContactDto) updateContactDto);
+            return updatePhone((PhoneContact) contact, (PhoneContactDto) updateContactDto);
         } else if (contact.getType().equals(ContactType.EMAIL)) {
-            return updateEmail((Email) contact, (EmailContactDto) updateContactDto);
+            return updateEmail((EmailContact) contact, (EmailContactDto) updateContactDto);
         } else {
             throw new NotFoundHomeException("Type of the contact is not found");
         }
     }
 
-    private ContactDto updatePhone(Phone phone, PhoneContactDto phoneContactDto) {
+    private ContactDto updatePhone(PhoneContact phone, PhoneContactDto phoneContactDto) {
         phone.setPhone(phoneContactDto.getPhone());
         contactRepository.save(phone);
         return mapper.convert(phone, PhoneContactDto.class);
     }
 
-    private ContactDto updateEmail(Email email, EmailContactDto emailContactDto) {
+    private ContactDto updateEmail(EmailContact email, EmailContactDto emailContactDto) {
         email.setEmail(emailContactDto.getEmail());
         contactRepository.save(email);
         return mapper.convert(email, EmailContactDto.class);
