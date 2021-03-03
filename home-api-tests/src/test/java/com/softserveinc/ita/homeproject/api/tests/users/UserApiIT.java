@@ -74,7 +74,7 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
                 .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter email is invalid - must meet"
-                    + " the requirements" + "\"}");
+                    + " the rule." + "\"}");
     }
 
     @Test
@@ -88,7 +88,7 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
             .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid - must meet"
-                + " the requirements" + "\"}");
+                + " the rule." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
