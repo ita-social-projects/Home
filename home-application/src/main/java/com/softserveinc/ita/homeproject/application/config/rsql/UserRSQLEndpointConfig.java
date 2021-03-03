@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -18,7 +18,7 @@ public class UserRSQLEndpointConfig implements RSQLEndpointConfig<User, UserQuer
 
     @Override
     public Map<UserQueryParamEnum, String> getMappings() {
-        HashMap<UserQueryParamEnum, String> map = new HashMap<>();
+        EnumMap<UserQueryParamEnum, String> map = new EnumMap<>(UserQueryParamEnum.class);
 
         map.put(UserQueryParamEnum.EMAIL, "email");
         map.put(UserQueryParamEnum.FIRST_NAME, "firstName");

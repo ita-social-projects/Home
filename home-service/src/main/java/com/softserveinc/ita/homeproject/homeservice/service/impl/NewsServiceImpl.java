@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
+
+    private static final String NOT_FOUND_NEWS = "Can't find news with given ID:";
 
     private final NewsRepository newsRepository;
 
@@ -38,9 +41,11 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public NewsDto update(Long id, NewsDto newsDto) {
 
-        if (newsRepository.findById(id).isPresent()) {
+        Optional<News> optionalNews = newsRepository.findById(id);
 
-            News fromDB = newsRepository.findById(id).get();
+        if (optionalNews.isPresent()) {
+
+            News fromDB = optionalNews.get();
 
             if (newsDto.getTitle() != null) {
                 fromDB.setTitle(newsDto.getTitle());
@@ -67,7 +72,7 @@ public class NewsServiceImpl implements NewsService {
             return mapper.convert(fromDB, NewsDto.class);
 
         } else {
-            throw new NotFoundHomeException("Can't find news with given ID:" + id);
+            throw new NotFoundHomeException(NOT_FOUND_NEWS + id);
         }
     }
 
@@ -80,16 +85,17 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS  + id));
 
         return mapper.convert(newsResponse, NewsDto.class);
     }
 
     @Override
-    public void deleteById(Long id) {
-        newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
-        newsRepository.deleteById(id);
+    public void deactivateNews(Long id) {
+        News toDelete = newsRepository.findById(id)
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS  + id));
+        toDelete.setEnabled(false);
+        newsRepository.save(toDelete);
     }
 
 }

@@ -15,7 +15,7 @@ import com.softserveinc.ita.homeproject.model.ReadNews;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryNewsIT {
+class QueryNewsIT {
     private final CreateNews expectedNews = new CreateNews()
         .description("description")
         .source("source")

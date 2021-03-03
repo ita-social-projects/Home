@@ -67,7 +67,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
     @PreAuthorize(DELETE_NEWS_PERMISSION)
     @Override
     public Response deleteNews(Long id) {
-        newsService.deleteById(id);
+        newsService.deactivateNews(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 

@@ -18,7 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryUserIT {
+class QueryUserIT {
 
     private final CreateUser expectedUser = new CreateUser()
         .firstName("Bill")

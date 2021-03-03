@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Entity
 public class News extends BaseEntity {
 
@@ -33,4 +35,6 @@ public class News extends BaseEntity {
     @Column(name = "source")
     private String source;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

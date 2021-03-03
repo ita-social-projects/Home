@@ -56,10 +56,7 @@ class UserApiIT {
         assertUser(savedUser, updateUser, updatedUser);
     }
 
-    @Test
-    void deleteUserTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createUser);
-    }
+    //ToDo deleteUserTest
 
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);
