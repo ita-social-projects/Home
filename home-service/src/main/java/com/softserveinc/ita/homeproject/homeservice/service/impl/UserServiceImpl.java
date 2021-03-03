@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UserDto updateUserDto) {
 
         Optional<User> optionalUser = userRepository.findById(id);
-
         if (optionalUser.isPresent()) {
 
             User fromDB = optionalUser.get();
@@ -84,7 +83,7 @@ public class UserServiceImpl implements UserService {
             return mapper.convert(fromDB, UserDto.class);
 
         } else {
-            throw new NotFoundHomeException(USER_WITH_ID + id + NOT_FOUND);
+            throw new NotFoundHomeException(USER_WITH_ID+ id + NOT_FOUND);
         }
     }
 

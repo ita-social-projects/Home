@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import io.github.perplexhub.rsql.RSQLJPASupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +23,8 @@ public class RSQLConfig {
         rsqlEndpointConfigSet.forEach(config -> {
             Class<? extends BaseEntity> entityClass = config.getQueryConfig().getEntityClass();
             for (Map.Entry<? extends QueryParamEnum, String> entry : config.getMappings().entrySet()) {
-                io.github.perplexhub.rsql.RSQLJPASupport.addMapping(entityClass, entry.getKey().getParameter(),
-                    entry.getValue());
+                io.github.perplexhub.rsql.RSQLCommonSupport
+                    .addMapping(entityClass, entry.getKey().getParameter(), entry.getValue());
             }
 
             io.github.perplexhub.rsql.RSQLCommonSupport.addPropertyWhitelist(

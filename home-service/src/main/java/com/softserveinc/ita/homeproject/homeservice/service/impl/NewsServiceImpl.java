@@ -42,7 +42,6 @@ public class NewsServiceImpl implements NewsService {
     public NewsDto update(Long id, NewsDto newsDto) {
 
         Optional<News> optionalNews = newsRepository.findById(id);
-
         if (optionalNews.isPresent()) {
 
             News fromDB = optionalNews.get();
@@ -85,17 +84,16 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS  + id));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS + id));
 
         return mapper.convert(newsResponse, NewsDto.class);
     }
 
     @Override
-    public void deactivateNews(Long id) {
-        News toDelete = newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS  + id));
-        toDelete.setEnabled(false);
-        newsRepository.save(toDelete);
+    public void deleteById(Long id) {
+        newsRepository.findById(id)
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS + id));
+        newsRepository.deleteById(id);
     }
 
 }
