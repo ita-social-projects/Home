@@ -18,7 +18,8 @@ public class ConstraintViolationMapper extends BaseExceptionMapper<ConstraintVio
 
     @Override
     protected Response.Status getStatus(){
-        return Response.Status.BAD_REQUEST;}
+        return Response.Status.BAD_REQUEST;
+    }
 
     @Override
     protected String extractMessage(ConstraintViolationException exception) {
