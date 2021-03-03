@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -73,22 +74,36 @@ class NewsApiIT {
     }
 
     @Test
-    void createNewsInvalidParametersTest() {
-        CreateNews createNewsInvalidParameters = new CreateNews()
-                .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols" +
-                        " - title over 70 symbols")
-                .description("description description description description description description description" +
-                        " description description description description description description description" +
-                        " description description description description description description description")
+    void createNewsInvalidTitleTest() {
+        CreateNews createNewsInvalidTitle = new CreateNews()
+                .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols"
+                    + " - title over 70 symbols")
+                .description("description")
                 .source("source")
                 .text("Some text")
                 .photoUrl("222222");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> newsApi.addNews(createNewsInvalidParameters))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid" +
-                        " - should be from 1 to 150 signs long. Parameter title is invalid" +
-                        " - should be from 1 to 70 signs long." + "\"}");
+                .isThrownBy(() -> newsApi.addNews(createNewsInvalidTitle))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter title is invalid"
+                    + " - should be from 1 to 70 signs long." + "\"}");
+    }
+
+    @Test
+    void createNewsInvalidDescriptionTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("description description description description description description description"
+                + " description description description description description description description"
+                + " description description description description description description description")
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.addNews(createNewsInvalidDescription))
+            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid"
+                + " - should be from 1 to 150 signs long." + "\"}");
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -63,19 +64,31 @@ class UserApiIT {
     }
 
     @Test
-    void createUserInvalidParametersTest() {
-        CreateUser createUserInvalidParameters = new CreateUser()
+    void createUserInvalidEmailTest() {
+        CreateUser createUserInvalidEmail = new CreateUser()
                 .firstName("alan")
                 .lastName("walker")
-                .password("some p")
+                .password("somePassword")
                 .email("email.com");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.createUser(createUserInvalidParameters))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid" +
-                        " - should be from 8 to 128 signs long. It must contains lowercase, uppercase" +
-                        " letters or numbers. Parameter email is invalid - should be in format " +
-                        "'example@gmail.com'." + "\"}");
+                .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter email is invalid - must meet"
+                    + " the requirements" + "\"}");
+    }
+
+    @Test
+    void createUserInvalidPasswordTest() {
+        CreateUser createUserInvalidPassword = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("some password")
+            .email("email@example.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
+            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter password is invalid - must meet"
+                + " the requirements" + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
