@@ -50,4 +50,9 @@
         <dropColumn tableName="users" columnName="CONTACTS"/>
     </changeSet>
 
+    <changeSet id="Issue134.007" author="Abhai2016">
+        <addColumn tableName="news">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

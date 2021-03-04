@@ -7,6 +7,11 @@ package com.softserveinc.ita.homeproject.application.constants;
  * @author Mykyta Morar
  */
 public final class Permissions {
+
+    private Permissions() {
+
+    }
+
     public static final String CREATE_USER_PERMISSION = "hasAuthority('CREATE_USER_PERMISSION')";
 
     public static final String UPDATE_USER_PERMISSION = "hasAuthority('UPDATE_USER_PERMISSION')";

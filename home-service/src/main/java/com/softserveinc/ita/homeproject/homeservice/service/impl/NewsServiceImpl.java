@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -31,6 +32,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsDto create(NewsDto newsDto) {
         News news = mapper.convert(newsDto, News.class);
         news.setCreateDate(LocalDateTime.now());
+        news.setEnabled(true);
 
         newsRepository.save(news);
 
@@ -77,7 +79,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
-        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
+        Specification<News> newsSpecification = specification
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return newsRepository.findAll(newsSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(news -> mapper.convert(news, NewsDto.class));
     }
 
@@ -90,10 +94,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        newsRepository.findById(id)
+    public void deactivateNews(Long id) {
+        News toDelete = newsRepository.findById(id)
             .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS + id));
-        newsRepository.deleteById(id);
+        toDelete.setEnabled(false);
+        newsRepository.save(toDelete);
     }
 
 }

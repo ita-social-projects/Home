@@ -7,6 +7,11 @@ package com.softserveinc.ita.homeproject.homeservice.constants;
  * @author Mykyta Morar
  */
 public final class Roles {
+
+    private Roles() {
+
+    }
+
     public static final String USER_ROLE = "USER";
 
     public static final String ADMIN_ROLE = "ADMIN";
