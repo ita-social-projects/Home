@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
