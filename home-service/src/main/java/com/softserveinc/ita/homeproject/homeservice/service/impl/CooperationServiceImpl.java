@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
@@ -73,9 +74,12 @@ public class CooperationServiceImpl implements CooperationService {
             if (updateCooperationDto.getIban() != null) {
                 fromDb.setIban(updateCooperationDto.getIban());
             }
-//            if (updateCooperationDto.getHouses() != null) {
-//                fromDb.setHouses(updateCooperationDto.getHouses());
-//            }
+            if (updateCooperationDto.getHouses() != null) {
+                fromDb.setHouses(updateCooperationDto.getHouses()
+                        .stream()
+                        .map(houseDto -> mapper.convert(houseDto, House.class))
+                        .collect(Collectors.toList()));
+            }
             if (updateCooperationDto.getAddress() != null) {
                 fromDb.setAddress(updateCooperationDto.getAddress());
             }
@@ -100,7 +104,7 @@ public class CooperationServiceImpl implements CooperationService {
     public CooperationDto getCooperationById(Long id) {
         Cooperation toGet = cooperationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("Cooperation with id: " + id + "is not found"));
-        List<House> houseList = houseRepository.findHousesByCooperation(toGet);
+        List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
         return mapper.convert(toGet, CooperationDto.class);
     }

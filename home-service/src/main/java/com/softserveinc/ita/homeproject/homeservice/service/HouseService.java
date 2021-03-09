@@ -14,8 +14,11 @@ public interface HouseService {
 
     Page<HouseDto> getAllHouses(Integer pageNumber, Integer pageSize, Specification<House> specification);
 
-    HouseDto getHouseById(Long id);
+    HouseDto getHouseById(Long coopId, Long id);
+//    HouseDto getHouseById(Long id);
 
     void deleteById(Long id);
+
+
 
 }

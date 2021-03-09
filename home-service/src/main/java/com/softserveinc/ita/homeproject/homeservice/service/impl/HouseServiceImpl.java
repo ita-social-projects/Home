@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,11 +73,21 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public HouseDto getHouseById(Long id) {
+    public HouseDto getHouseById(Long coopId, Long id) {
         House toGet = houseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+        if (!toGet.getCooperation().getId().equals(coopId)){
+            throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
+        }
         return mapper.convert(toGet, HouseDto.class);
     }
+
+//    @Override
+//    public HouseDto getHouseById(Long id) {
+//        House toGet = houseRepository.findById(id)
+//                        .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+//        return mapper.convert(toGet, HouseDto.class);
+//    }
 
     @Override
     public void deleteById(Long id) {

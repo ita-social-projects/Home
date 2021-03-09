@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
@@ -62,18 +63,24 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readCoop).build();
     }
 
+//    @PreAuthorize(GET_HOUSE_PERMISSION)
+//    @Override
+//    public Response getHouse(Long cooperationId, Long houseId) {
+////        CooperationDto cooperationDto = cooperationService.getCooperationById(cooperationId);
+//        HouseDto toGet = houseService.getHouseById(cooperationId, houseId);
+//        ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
+//
+//
+//        return Response.status(Response.Status.OK).entity(readHouse).build();
+//    }
+
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
     public Response getHouse(Long cooperationId, Long houseId) {
+        HouseDto toGet = houseService.getHouseById(cooperationId, houseId);
+        ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
-
-
-        return null;
-
-//        HouseDto readHouseDto = houseService.getHouseById(houseId);
-//        ReadHouse readHouse = mapper.convert(readHouseDto, ReadHouse.class);
-//
-//        return Response.status(Response.Status.OK).entity(readHouse).build();
+        return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
     @Override
@@ -96,15 +103,24 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return null;
     }
 
+    @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
     @Override
     public Response updateCooperation(Long cooperationId, @Valid UpdateCooperation updateCooperation) {
+        CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
+        CooperationDto toUpdate = cooperationService.updateCooperation(cooperationId, updateCoopDto);
+        ReadCooperation readCooperation = mapper.convert(toUpdate, ReadCooperation.class);
 
-        return null;
+        return Response.status(Response.Status.OK).entity(readCooperation).build();
     }
 
+    @PreAuthorize(UPDATE_HOUSE_PERMISSION)
     @Override
     public Response updateHouse(Long cooperationId, Long houseId, @Valid UpdateHouse updateHouse) {
-        return null;
+        HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
+        HouseDto toUpdate = houseService.updateHouse(houseId, updateHouseDto);
+        ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
+
+        return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
     @Override

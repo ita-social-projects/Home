@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface HouseRepository extends PagingAndSortingRepository<House, Long>, JpaSpecificationExecutor<House> {
 
-    List<House> findHousesByCooperation(Cooperation cooperation);
+    List<House> findHousesByCooperationId(Long id);
+
+
+
 }
