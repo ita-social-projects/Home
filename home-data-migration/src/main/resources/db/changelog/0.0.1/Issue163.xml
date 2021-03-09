@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue163.001" author="dmytro-dzhunenko">
+        <createSequence
+                minValue="1"
+                incrementBy="1"
+                schemaName="public"
+                sequenceName="base_sequence"
+        />
+        <createSequence
+                minValue="1"
+                incrementBy="1"
+                schemaName="public"
+                sequenceName="user_sequence"
+        />
+        <createSequence
+                minValue="1"
+                incrementBy="1"
+                schemaName="public"
+                sequenceName="news_sequence"
+        />
+        <createSequence
+                minValue="1"
+                incrementBy="1"
+                schemaName="public"
+                sequenceName="permission_sequence"
+        />
+        <createSequence
+                minValue="1"
+                incrementBy="1"
+                schemaName="public"
+                sequenceName="role_sequence"
+        />
+    </changeSet>
+
+</databaseChangeLog>
