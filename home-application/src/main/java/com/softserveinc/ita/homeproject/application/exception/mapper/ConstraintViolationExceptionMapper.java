@@ -22,7 +22,7 @@ public class ConstraintViolationExceptionMapper extends BaseExceptionMapper<Cons
 
     private String handleConstraintViolationExceptionMessage(ConstraintViolationException exception) {
         return exception.getConstraintViolations().stream()
-            .map(violation -> String.format("Field `%s` is invalid: %s.",
+            .map(violation -> String.format("Parameter `%s` is invalid - %s.",
                 getParameterFromPropertyPath(violation.getPropertyPath()),
                 violation.getMessage())
             )

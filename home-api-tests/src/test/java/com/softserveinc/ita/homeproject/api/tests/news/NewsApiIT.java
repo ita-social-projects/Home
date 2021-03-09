@@ -85,7 +85,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> newsApi.addNews(createNewsInvalidTitle))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter title is invalid"
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `title` is invalid"
                     + " - size must be between 1 and 70 signs." + "\"}");
     }
 
@@ -102,7 +102,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.addNews(createNewsInvalidDescription))
-            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter description is invalid"
+            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `description` is invalid"
                 + " - size must be between 1 and 150 signs." + "\"}");
     }
 
