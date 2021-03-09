@@ -32,9 +32,4 @@ public class Address extends BaseEntity {
     @Column(name = "zip_code")
     private String zipCode;
 
-//    @OneToOne
-//    private Cooperation cooperation;
-//
-//    @OneToOne
-//    private House houses;
 }

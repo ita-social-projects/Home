@@ -14,7 +14,7 @@ public class HouseDto extends BaseDto {
 
     private Integer quantityFlat;
 
-    private String houseArea;
+    private Double houseArea;
 
     private Integer adjoiningArea;
 

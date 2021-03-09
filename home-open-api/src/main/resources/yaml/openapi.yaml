@@ -1126,8 +1126,8 @@ components:
           type: integer
           example: 45
         houseArea:
-          type: string
-          example: "some"
+          type: number
+          example: 25
         adjoiningArea:
           type: integer
           example: 12
@@ -1142,16 +1142,16 @@ components:
           type: integer
           example: 45
         houseArea:
-          type: string
-          example: "some"
+          type: number
+          example: 25
         adjoiningArea:
           type: integer
           example: 12
         address:
           $ref: '#/components/schemas/Address'
-        cooperationId:
-          type: integer
-          example: 2
+#        cooperationId:
+#          type: integer
+#          example: 2
     UpdateHouse:
       type: object
       properties:
@@ -1159,13 +1159,13 @@ components:
           type: integer
           example: 45
         houseArea:
-          type: string
-          example: "some"
+          type: number
+          example: 25
         adjoiningArea:
           type: integer
           example: 12
-        cooperationId:
-          type: integer
-          example: 0
+#        cooperationId:
+#          type: integer
+#          example: 0
         address:
           $ref: '#/components/schemas/Address'

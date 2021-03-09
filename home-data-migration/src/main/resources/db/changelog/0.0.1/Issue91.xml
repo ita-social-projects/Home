@@ -18,6 +18,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="Issue91.002" author="denis-litvinov">
+        <dropNotNullConstraint tableName="houses"
+                               columnName="UPDATE_DATE"/>
+<!--        <dropForeignKeyConstraint baseTableName="houses"-->
+<!--                                  constraintName="houses_cooperation_id_key"/>-->
+        <dropUniqueConstraint tableName="houses"
+                              constraintName="houses_cooperation_id_key"
+                              uniqueColumns="cooperation_id"/>
+    </changeSet>
+
+
 </databaseChangeLog>
 
 

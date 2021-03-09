@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -22,12 +24,13 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
     private final ServiceMapper mapper;
-    private final CooperationService cooperationService;
+    private final CooperationRepository cooperationRepository;
 
+    @Transactional
     @Override
     public HouseDto createHouse(Long cooperationId, HouseDto createHouseDto) {
         House house = mapper.convert(createHouseDto, House.class);
-        Cooperation cooperation = mapper.convert(cooperationService.getCooperationById(cooperationId), Cooperation.class);
+        Cooperation cooperation = cooperationRepository.findById(cooperationId).get();
         house.setCooperation(cooperation);
         house.setCreateDate(LocalDateTime.now());
         houseRepository.save(house);
@@ -51,7 +54,6 @@ public class HouseServiceImpl implements HouseService {
             if (updateHouseDto.getAddress() != null) {
                 fromDb.setAddress(updateHouseDto.getAddress());
             }
-
             fromDb.setUpdateDate(LocalDateTime.now());
             houseRepository.save(fromDb);
             return mapper.convert(fromDb, HouseDto.class);

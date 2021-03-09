@@ -2,11 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.dto;
 
 import java.util.List;
 import com.softserveinc.ita.homeproject.homedata.entity.Address;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -17,7 +13,7 @@ public class CooperationDto extends BaseDto {
 
     private Address address;
 
-    private List<House> houses;
+    private List<HouseDto> houses;
 
     private String usreo;
 
