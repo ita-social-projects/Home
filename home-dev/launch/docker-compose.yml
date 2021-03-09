@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  home-data-migration:
+    image: home-data-migration:0.0.1-SNAPSHOT
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
+    ports:
+      - 5001:5001
+    networks:
+      - home_network
+
+  home-application:
+    image: home-application:0.0.1-SNAPSHOT
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    ports:
+      - 8080:8080
+    networks:
+      - home_network
+
+networks:
+  home_network:
+    external: true
+    name: home_network
+    driver: bridge

@@ -25,20 +25,38 @@
         <java.version>11</java.version>
         <revision>0.0.1-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.3.8.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <lombok.version>1.18.16</lombok.version>
-        <mapstruct.version>1.4.1.Final</mapstruct.version>
         <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <rapidoc.version>7.2.1</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
+        <jib.version>2.7.1</jib.version>
+        <jib.goal>dockerBuild</jib.goal>
         <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
         <sonar.organization>ita-social-projects</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <jacoco.version>0.8.6</jacoco.version>
+        <liquibase.version>4.3.1</liquibase.version>
+        <checkstyle.version>8.40</checkstyle.version>
+        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
+        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml</checkstyle.configLocation>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>push.images</id>
+            <properties>
+                <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
+                <image.application.path>homeacademy/home-application</image.application.path>
+                <docker.username>${dockerhub.username}</docker.username>
+                <docker.password>${dockerhub.password}</docker.password>
+                <jib.goal>build</jib.goal>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -120,6 +138,33 @@
                         <phase>clean</phase>
                         <goals>
                             <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>${checkstyle.configLocation}</configLocation>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
                         </goals>
                     </execution>
                 </executions>

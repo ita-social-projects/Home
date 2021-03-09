@@ -1,10 +1,13 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Column;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,7 +18,7 @@ public class News extends BaseEntity {
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    
+
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 

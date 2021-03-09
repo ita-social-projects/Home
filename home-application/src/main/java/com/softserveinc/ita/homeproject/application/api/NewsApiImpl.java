@@ -1,24 +1,31 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
+import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 /**
  * NewsApiServiceImpl class is the inter layer between generated
@@ -29,10 +36,14 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 @Provider
 @NoArgsConstructor
-public class NewsApiImpl implements NewsApi {
+public class NewsApiImpl extends CommonApi<NewsDto> implements NewsApi {
 
     private NewsService newsService;
+
     private HomeMapper mapper;
+
+    private EntitySpecificationService entitySpecificationService;
+
 
     /**
      * addNews method is implementation of HTTP POST
@@ -70,17 +81,34 @@ public class NewsApiImpl implements NewsApi {
      * method for getting all news from database.
      *
      * @param pageNumber is the number of the returned page with elements
-     * @param pageSize is amount of the returned elements
+     * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
-    public Response getAllNews(@Min(1)Integer pageNumber, @Min(0) @Max(10)Integer pageSize) {
-        List<ReadNews> readNewsResponseList = newsService.getAll(pageNumber, pageSize).stream()
-                .map((newsDto) -> mapper.convert(newsDto, ReadNews.class))
-                .collect(Collectors.toList());
+    public Response getAllNews(@Min(1) Integer pageNumber,
+                               @Min(0) @Max(10) Integer pageSize,
+                               String sort,
+                               String filter,
+                               String id,
+                               String title,
+                               String text,
+                               String source) {
 
-        return Response.ok().entity(readNewsResponseList).build();
+        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.ID, id);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TITLE, title);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TEXT, text);
+        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.SOURCE, source);
+
+        Page<NewsDto> readNews = newsService.findNews(
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
+        );
+
+        return buildQueryResponse(readNews, ReadNews.class);
     }
 
     /**
@@ -103,7 +131,7 @@ public class NewsApiImpl implements NewsApi {
      * updateNews method is implementation of HTTP PUT
      * method for updating existing news.
      *
-     * @param id is id of the news that has to be updated
+     * @param id         is id of the news that has to be updated
      * @param updateNews are incoming data needed for news update
      * @return Response to generated controller
      */
@@ -119,6 +147,16 @@ public class NewsApiImpl implements NewsApi {
     @Autowired
     public void setNewsService(NewsService newsService) {
         this.newsService = newsService;
+    }
+
+    @Autowired
+    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
+        this.entitySpecificationService = entitySpecificationService;
+    }
+
+    @Override
+    public HomeMapper getMapper() {
+        return mapper;
     }
 
     @Autowired

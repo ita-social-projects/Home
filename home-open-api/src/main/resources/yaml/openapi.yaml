@@ -2,6 +2,11 @@ openapi: 3.0.0
 info:
   title: HomePage - OpenAPI 3.0
   description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/mit-license.php
+  contact:
+    url: https://github.com/ita-social-projects/Home
   version: 1.0.0
 servers:
   - url: /api/0
@@ -66,6 +71,31 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: text
+          schema:
+            type: string
+        - in: query
+          name: source
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -153,6 +183,7 @@ paths:
       tags:
         - news
       summary: Delete the chosen news
+      description: Delete news by ID
       operationId: deleteNews
       parameters:
         - name: id
@@ -208,8 +239,8 @@ paths:
       tags:
         - user
       summary: "Get all users"
-      description: ''
-      operationId: queryUsers
+      description: Get all users
+      operationId: getAllUsers
       parameters:
         - in: query
           name: pageNumber
@@ -228,6 +259,35 @@ paths:
             default: 5
           required: false
           description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: string
+        - in: query
+          name: email
+          schema:
+            type: string
+        - in: query
+          name: firstName
+          schema:
+            type: string
+        - in: query
+          name: lastName
+          schema:
+            type: string
+        - in: query
+          name: contact
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -248,7 +308,7 @@ paths:
       tags:
         - user
       summary: "Get user by id"
-      description: ''
+      description: Get user by id
       operationId: getUser
       parameters:
         - name: "id"
@@ -319,6 +379,7 @@ paths:
       tags:
         - user
       summary: Delete user by ID
+      description: Delete user by ID
       operationId: removeUser
       parameters:
         - name: "id"
@@ -391,6 +452,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
     ReadNews:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -403,12 +465,16 @@ components:
         photoUrl:
           type: string
           format: url
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
+          example: Gas turn off
         source:
           type: string
+          example: Example
         text:
           type: string
+          example: example
     CreateNews:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -425,15 +491,19 @@ components:
           maxLength: 70
         photoUrl:
           type: string
+          example: url
         description:
           type: string
           minLength: 1
           maxLength: 150
+          example: example
         source:
           type: string
+          example: example
         text:
           type: string
           minLength: 1
+          example: example
     UpdateNews:
       allOf:
         - $ref: '#/components/schemas/BaseView'
@@ -443,25 +513,32 @@ components:
           type: string
           minLength: 1
           maxLength: 50
+          example: example
         photoUrl:
           type: string
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
           minLength: 1
           maxLength: 50
+          example: example
         source:
           type: string
+          example: example
         text:
           type: string
           minLength: 1
           maxLength: 150
+          example: example
     ApiError:
       type: object
       properties:
         responseCode:
           type: integer
+          example: 404
         errorMessage:
           type: string
+          example: example
     CreateUser:
       allOf:
         - $ref: '#/components/schemas/BaseView'
