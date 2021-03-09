@@ -1,8 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -59,6 +61,34 @@ class UserApiIT {
     @Test
     void deleteUserTest() throws ApiException {
         ReadUser savedUser = userApi.createUser(createUser);
+    }
+
+    @Test
+    void createUserInvalidEmailTest() {
+        CreateUser createUserInvalidEmail = new CreateUser()
+                .firstName("alan")
+                .lastName("walker")
+                .password("somePassword")
+                .email("email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `email` is invalid - must meet"
+                    + " the rule." + "\"}");
+    }
+
+    @Test
+    void createUserInvalidPasswordTest() {
+        CreateUser createUserInvalidPassword = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("some password")
+            .email("email@example.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
+            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `password` is invalid - must meet"
+                + " the rule." + "\"}");
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
