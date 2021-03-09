@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SequenceGenerator(name = "sequence", sequenceName = "news_sequence", allocationSize = 1)
 public class News extends BaseEntity {
 
     @Column(name = "create_date")

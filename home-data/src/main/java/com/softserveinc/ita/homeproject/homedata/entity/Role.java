@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "roles")
+@SequenceGenerator(name = "sequence", sequenceName = "role_sequence", allocationSize = 1)
 public class Role extends BaseEntity {
 
     @ManyToMany(mappedBy = "roles")
