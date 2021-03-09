@@ -50,6 +50,37 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.openapitools.openapistylevalidator</groupId>
+                <artifactId>openapi-style-validator-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <inputFile>${project.build.resources[0].directory}/yaml/openapi.yaml</inputFile>
+                    <validateInfoLicense>true</validateInfoLicense>
+                    <validateInfoDescription>true</validateInfoDescription>
+                    <validateInfoContact>true</validateInfoContact>
+                    <validateOperationOperationId>true</validateOperationOperationId>
+                    <validateOperationDescription>true</validateOperationDescription>
+                    <validateOperationTag>true</validateOperationTag>
+                    <validateOperationSummary>true</validateOperationSummary>
+                    <validateModelPropertiesExample>true</validateModelPropertiesExample>
+                    <validateModelNoLocalDef>true</validateModelNoLocalDef>
+                    <validateNaming>true</validateNaming>
+                    <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
+                    <pathNamingConvention>HyphenCase</pathNamingConvention>
+                    <parameterNamingConvention>CamelCase</parameterNamingConvention>
+                    <propertyNamingConvention>CamelCase</propertyNamingConvention>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
