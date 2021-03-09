@@ -1,11 +1,10 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-    import javax.validation.ConstraintViolationException;
-    import javax.validation.Path;
-    import javax.ws.rs.core.Response;
-    import javax.ws.rs.ext.Provider;
-
-    import java.util.stream.Collectors;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 
 @Provider
