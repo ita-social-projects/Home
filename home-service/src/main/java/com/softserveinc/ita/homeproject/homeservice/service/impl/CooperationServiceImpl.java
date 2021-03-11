@@ -40,24 +40,11 @@ public class CooperationServiceImpl implements CooperationService {
         Cooperation cooperation = mapper.convert(createCooperationDto, Cooperation.class);
         cooperation.setEnabled(true);
         cooperation.setRegisterDate(LocalDate.now());
-//        List<HouseDto> houseDtoList = createCooperationDto.getHouses();
-//        cooperation.setHouses(new ArrayList<>());
-//        for (HouseDto houseDto: houseDtoList){
-//            HouseDto createdHouseDto = houseService.createHouse(createCooperationDto.getId(), houseDto);
-//            House createdHouse = mapper.convert(createdHouseDto, House.class);
-//            cooperation.getHouses().add(createdHouse);
-//        }
-        cooperationRepository.save(cooperation);
-        CooperationDto createdCoopDto = mapper.convert(cooperation, CooperationDto.class);
-        if (createCooperationDto.getHouses() != null) {
-            createdCoopDto.setHouses(new ArrayList<>());
-            List<HouseDto> houseDtoList = createCooperationDto.getHouses();
-            for (HouseDto houseDto : houseDtoList) {
-                HouseDto createdHouseDto = houseService.createHouse(cooperation.getId(), houseDto);
-                createdCoopDto.getHouses().add(createdHouseDto);
-            }
-        }
-        return createdCoopDto;
+        cooperation.getHouses().forEach(element -> {
+            element.setCooperation(cooperation);
+            element.setCreateDate(LocalDateTime.now());
+        });
+        return mapper.convert(cooperation, CooperationDto.class);
     }
 
     @Override
@@ -74,15 +61,32 @@ public class CooperationServiceImpl implements CooperationService {
             if (updateCooperationDto.getIban() != null) {
                 fromDb.setIban(updateCooperationDto.getIban());
             }
-            if (updateCooperationDto.getHouses() != null) {
-                fromDb.setHouses(updateCooperationDto.getHouses()
-                        .stream()
-                        .map(houseDto -> mapper.convert(houseDto, House.class))
-                        .collect(Collectors.toList()));
-            }
             if (updateCooperationDto.getAddress() != null) {
                 fromDb.setAddress(updateCooperationDto.getAddress());
             }
+            if (updateCooperationDto.getHouses() != null) {
+
+                List<House> houseList = fromDb.getHouses();
+                if (houseList != null) {
+                    List<House> newHouseList = new ArrayList<>();
+                    for (House house : houseList) {
+                        HouseDto houseDto = mapper.convert(house, HouseDto.class);
+                        HouseDto updatedHouseDto = houseService.updateHouse(house.getId(), houseDto);
+                        House newHouse = mapper.convert(updatedHouseDto, House.class);
+                        newHouseList.add(newHouse);
+                    }
+                    fromDb.getHouses().clear();
+                    fromDb.setHouses(newHouseList);
+
+                } else {
+                    for (HouseDto houseDto : updateCooperationDto.getHouses()) {
+                        HouseDto createdHouseDto = houseService.createHouse(fromDb.getId(), houseDto);
+
+                    }
+
+                }
+            }
+
             fromDb.setUpdateDate(LocalDateTime.now());
             cooperationRepository.save(fromDb);
             return mapper.convert(fromDb, CooperationDto.class);

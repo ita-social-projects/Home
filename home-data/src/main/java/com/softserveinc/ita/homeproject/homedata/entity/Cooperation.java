@@ -36,7 +36,8 @@ public class Cooperation extends BaseEntity {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @Transient
+//    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<House> houses;
 
 }

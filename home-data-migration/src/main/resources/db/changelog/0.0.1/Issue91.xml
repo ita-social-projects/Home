@@ -21,13 +21,138 @@
     <changeSet id="Issue91.002" author="denis-litvinov">
         <dropNotNullConstraint tableName="houses"
                                columnName="UPDATE_DATE"/>
-<!--        <dropForeignKeyConstraint baseTableName="houses"-->
-<!--                                  constraintName="houses_cooperation_id_key"/>-->
+        <!--        <dropForeignKeyConstraint baseTableName="houses"-->
+        <!--                                  constraintName="houses_cooperation_id_key"/>-->
         <dropUniqueConstraint tableName="houses"
                               constraintName="houses_cooperation_id_key"
                               uniqueColumns="cooperation_id"/>
     </changeSet>
 
+    <changeSet id="Issue91.003" author="denis-litvinov">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="10"/>
+            <column name="name" value="CREATE_COOPERATION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="11"/>
+            <column name="name" value="UPDATE_COOPERATION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="12"/>
+            <column name="name" value="GET_COOPERATION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="13"/>
+            <column name="name" value="GET_COOPERATION'S_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="14"/>
+            <column name="name" value="DELETE_COOPERATION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="15"/>
+            <column name="name" value="CREATE_HOUSE_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="16"/>
+            <column name="name" value="UPDATE_HOUSE_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="17"/>
+            <column name="name" value="GET_HOUSE_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="18"/>
+            <column name="name" value="GET_HOUSES_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="19"/>
+            <column name="name" value="DELETE_HOUSES_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue91.004" author="denis-litvinov">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="10"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="11"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="12"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="13"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="14"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="15"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="16"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="17"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="18"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="19"/>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
 

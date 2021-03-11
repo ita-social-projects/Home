@@ -76,23 +76,20 @@ public class HouseServiceImpl implements HouseService {
     public HouseDto getHouseById(Long coopId, Long id) {
         House toGet = houseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
-        if (!toGet.getCooperation().getId().equals(coopId)){
+        if (!toGet.getCooperation().getId().equals(coopId)) {
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
         }
         return mapper.convert(toGet, HouseDto.class);
     }
 
-//    @Override
-//    public HouseDto getHouseById(Long id) {
-//        House toGet = houseRepository.findById(id)
-//                        .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
-//        return mapper.convert(toGet, HouseDto.class);
-//    }
 
     @Override
-    public void deleteById(Long id) {
-        houseRepository.findById(id)
+    public void deleteById(Long coopId, Long id) {
+        House toDelete = houseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
-        houseRepository.deleteById(id);
+        if (!toDelete.getCooperation().getId().equals(coopId)){
+            throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
+        }
+        houseRepository.delete(toDelete);
     }
 }

@@ -17,7 +17,7 @@ public interface HouseService {
     HouseDto getHouseById(Long coopId, Long id);
 //    HouseDto getHouseById(Long id);
 
-    void deleteById(Long id);
+    void deleteById(Long coopId, Long id);
 
 
 

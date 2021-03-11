@@ -18,7 +18,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.util.List;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
@@ -63,16 +62,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readCoop).build();
     }
 
-//    @PreAuthorize(GET_HOUSE_PERMISSION)
-//    @Override
-//    public Response getHouse(Long cooperationId, Long houseId) {
-////        CooperationDto cooperationDto = cooperationService.getCooperationById(cooperationId);
-//        HouseDto toGet = houseService.getHouseById(cooperationId, houseId);
-//        ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
-//
-//
-//        return Response.status(Response.Status.OK).entity(readHouse).build();
-//    }
 
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
@@ -83,24 +72,29 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
+    @PreAuthorize(GET_ALL_COOPERATION_PERMISSION)
     @Override
     public Response queryCooperation(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, String sort, String filter, String name, String iban, String usreo) {
         return null;
     }
 
+    @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
     public Response queryHouse(@Min(1) Integer cooperationId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, String sort, String filter, Integer quantityFlat, Integer adjoiningArea, String houseArea) {
         return null;
     }
 
+    @PreAuthorize(DEACTIVATE_COOPERATION_PERMISSION)
     @Override
     public Response removeCooperation(Long cooperationId) {
         return null;
     }
 
+    @PreAuthorize(DEACTIVATE_HOUSE_PERMISSION)
     @Override
     public Response removeHouse(Long cooperationId, Long houseId) {
-        return null;
+        houseService.deleteById(cooperationId, houseId);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
