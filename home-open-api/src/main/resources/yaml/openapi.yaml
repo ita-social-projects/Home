@@ -872,6 +872,18 @@ components:
           example: Petrov
           minLength: 1
           maxLength: 50
+        email:
+          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 5
+          maxLength: 254
+        password:
+          pattern: '[a-zA-Z0-9]{8,}'
+          type: string
+          example: "mySuperStrongPass"
+          minLength: 8
+          maxLength: 128
     ContactType:
       description: Indicates the type of contact
       type: string
