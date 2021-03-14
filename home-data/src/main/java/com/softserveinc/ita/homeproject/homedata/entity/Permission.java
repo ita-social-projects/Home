@@ -18,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "permissions")
-@SequenceGenerator(name = "sequence", sequenceName = "permission_sequence", allocationSize = 1)
+@SequenceGenerator(name = "sequence", sequenceName = "permissions_sequence")
 public class Permission extends BaseEntity {
 
     @ManyToMany(mappedBy = "permissions")
@@ -26,5 +26,4 @@ public class Permission extends BaseEntity {
 
     @Column(name = "name")
     private String name;
-
 }

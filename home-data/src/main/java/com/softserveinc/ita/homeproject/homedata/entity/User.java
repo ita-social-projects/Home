@@ -21,7 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-@SequenceGenerator(name = "sequence", sequenceName = "user_sequence", allocationSize = 1)
+@SequenceGenerator(name = "sequence", sequenceName = "users_sequence")
 public class User extends BaseEntity {
 
     @Column(name = "first_name")

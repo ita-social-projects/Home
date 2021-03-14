@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@SequenceGenerator(name = "sequence", sequenceName = "news_sequence", allocationSize = 1)
+@SequenceGenerator(name = "sequence", sequenceName = "news_sequence")
 public class News extends BaseEntity {
 
     @Column(name = "create_date")

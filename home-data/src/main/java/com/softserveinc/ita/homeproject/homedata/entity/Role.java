@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "roles")
-@SequenceGenerator(name = "sequence", sequenceName = "role_sequence", allocationSize = 1)
+@SequenceGenerator(name = "sequence", sequenceName = "roles_sequence")
 public class Role extends BaseEntity {
 
     @ManyToMany(mappedBy = "roles")
