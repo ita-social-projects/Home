@@ -6,16 +6,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +29,6 @@ public class UserServiceImpl implements UserService {
     private static final String USER_WITH_ID = "User with id:";
 
     private static final String NOT_FOUND = " is not found";
-
-    private final ContactService contactService;
 
     private final UserRepository userRepository;
 
@@ -91,43 +86,12 @@ public class UserServiceImpl implements UserService {
                 fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
             }
 
-            if (!updateUserDto.getContacts().isEmpty()) {
-                updateContacts(updateUserDto, fromDB);
-            }
-
             fromDB.setUpdateDate(LocalDateTime.now());
             userRepository.save(fromDB);
             return mapper.convert(fromDB, UserDto.class);
 
         } else {
             throw new NotFoundHomeException(USER_WITH_ID+ id + NOT_FOUND);
-        }
-    }
-
-    private void updateContacts(UserDto updateUserDto, User user) {
-        for (ContactDto contactDto: updateUserDto.getContacts()) {
-            if (contactDto.getId() != null) {
-                updateContact(contactDto, user);
-            } else {
-                contactService.createContact(user.getId(), contactDto);
-                Contact contact = mapper.convert(contactDto, Contact.class);
-                user.getContacts().add(contact);
-            }
-        }
-    }
-
-    private void updateContact(ContactDto contactDto, User user) {
-        boolean isFound = false;
-
-        for (Contact contact: user.getContacts()) {
-            if (contactDto.getId().equals(contact.getId())) {
-                contactService.updateContact(contact.getId(), contactDto);
-                isFound = true;
-            }
-        }
-
-        if (!isFound) {
-            throw new NotFoundHomeException("Contact with id " + contactDto.getId() + " wasn't found");
         }
     }
 

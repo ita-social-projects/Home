@@ -884,10 +884,6 @@ components:
           example: "mySuperStrongPass"
           minLength: 8
           maxLength: 128
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateContact'
     ContactType:
       description: Indicates the type of contact
       type: string
@@ -969,9 +965,6 @@ components:
       required:
         - type
       properties:
-        id:
-          type: integer
-          example: 1
         type:
           $ref: '#/components/schemas/ContactType'
         main:
