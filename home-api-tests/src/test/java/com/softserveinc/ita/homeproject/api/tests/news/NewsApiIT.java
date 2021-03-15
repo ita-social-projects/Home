@@ -2,65 +2,96 @@ package com.softserveinc.ita.homeproject.api.tests.news;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import javax.ws.rs.core.Response;
+import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private final CreateNews createNews = new CreateNews()
-        .title("title")
-        .description("description")
-        .source("source")
-        .text("text")
-        .photoUrl("photoUrl");
-
-    private NewsApi newsApi;
-
-    @BeforeEach
-    public void setUp() {
-        newsApi = new NewsApi(ApiClientUtil.getClient());
-    }
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
     void createNewsTest() throws ApiException {
-        ReadNews readNews = newsApi.addNews(createNews);
-        assertNews(createNews, readNews);
+        CreateNews expectedNews = createNews();
+
+        ApiResponse<ReadNews> response = newsApi.addNewsWithHttpInfo(expectedNews);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(),
+            response.getStatusCode());
+        assertNews(expectedNews, response.getData());
     }
 
     @Test
     void getNewsByIdTest() throws ApiException {
-        ReadNews savedNews = newsApi.addNews(createNews);
-        ReadNews news = newsApi.getNews(savedNews.getId());
+        CreateNews expectedNews = createNews();
 
-        assertNotNull(news);
-        assertEquals(savedNews, news);
+        ApiResponse<ReadNews> response = newsApi.getNewsWithHttpInfo(newsApi.addNews(expectedNews).getId());
+
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertNews(expectedNews, response.getData());
     }
 
     @Test
     void updateNewsTest() throws ApiException {
-        ReadNews savedNews = newsApi.addNews(createNews);
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.addNews(expectedNews);
 
         UpdateNews updateNews = new UpdateNews()
-            .title("updatedTitle")
-            .description("updatedDescription")
-            .source("updatedSource")
-            .text("updatedText")
-            .photoUrl("updatedPhotoUrl");
+            .title("UpdatedTitle")
+            .description("UpdatedDescription")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
 
-        ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
-        assertNews(savedNews, updateNews, updatedNews);
+        ApiResponse<ReadNews> response = newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertNews(savedNews, updateNews, response.getData());
     }
 
-    // ToDo deleteNewsTest
+    @Test
+    void deleteNewsTest() throws ApiException {
+        ReadNews expectedNews = newsApi.addNews(createNews().title("FirstTitle"));
+        newsApi.addNews(createNews().title("SecondTitle"));
+        newsApi.addNews(createNews().title("ThirdTitle"));
+
+        ApiResponse<Void> removeResponse = newsApi.deleteNewsWithHttpInfo(expectedNews.getId());
+
+        List<ReadNews> actualNewsList = new NewsQuery
+            .Builder(newsApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .build().perfom();
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removeResponse.getStatusCode());
+        assertFalse(actualNewsList.contains(expectedNews));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.getNews(expectedNews.getId()));
+    }
+
+    private CreateNews createNews(){
+        return new CreateNews()
+            .title("Title")
+            .description("Description")
+            .text("Text")
+            .photoUrl("http://someurl.example.com")
+            .source("Source");
+    }
 
     @Test
     void createNewsInvalidTitleTest() {

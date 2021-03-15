@@ -22,7 +22,7 @@ class QueryNewsIT {
         .text("text")
         .photoUrl("photoUrl");
 
-    private NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
     void getAllNews() throws ApiException {
