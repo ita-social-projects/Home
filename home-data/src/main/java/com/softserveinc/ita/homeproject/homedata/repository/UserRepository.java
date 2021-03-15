@@ -28,4 +28,5 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>, 
 
     Page<User> findAllByEnabledTrue(Pageable var1);
 
+
 }

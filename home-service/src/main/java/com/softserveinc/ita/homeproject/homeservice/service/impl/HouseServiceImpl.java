@@ -35,6 +35,7 @@ public class HouseServiceImpl implements HouseService {
         Cooperation cooperation = cooperationRepository.findById(cooperationId).get();
         house.setCooperation(cooperation);
         house.setCreateDate(LocalDateTime.now());
+        house.setEnabled(true);
         houseRepository.save(house);
         return mapper.convert(house, HouseDto.class);
     }
@@ -84,12 +85,13 @@ public class HouseServiceImpl implements HouseService {
 
 
     @Override
-    public void deleteById(Long coopId, Long id) {
+    public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
         if (!toDelete.getCooperation().getId().equals(coopId)){
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
         }
-        houseRepository.delete(toDelete);
+        toDelete.setEnabled(false);
+        houseRepository.save(toDelete);
     }
 }

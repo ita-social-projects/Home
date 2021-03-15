@@ -26,6 +26,9 @@ public class House extends BaseEntity {
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;

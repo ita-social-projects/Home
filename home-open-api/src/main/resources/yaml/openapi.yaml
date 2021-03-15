@@ -474,7 +474,7 @@ paths:
           name: iban
           schema:
             type: string
-            example:  "Something else"
+            example:  "77778"
         - in: query
           name: usreo
           schema:
@@ -1043,7 +1043,7 @@ components:
           maxLength: 12
         iban:
           type: string
-          example: "Something else"
+          example: "77778"
           minLength: 1
           maxLength: 34
         address:
@@ -1069,7 +1069,7 @@ components:
           maxLength: 12
         iban:
           type: string
-          example: "Something else"
+          example: "77778"
           minLength: 1
           maxLength: 50
         address:
@@ -1093,7 +1093,7 @@ components:
           maxLength: 12
         iban:
           type: string
-          example: "Something else"
+          example: "77778"
           minLength: 1
           maxLength: 50
         address:

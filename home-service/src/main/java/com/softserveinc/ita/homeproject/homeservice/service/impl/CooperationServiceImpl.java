@@ -43,10 +43,13 @@ public class CooperationServiceImpl implements CooperationService {
         cooperation.getHouses().forEach(element -> {
             element.setCooperation(cooperation);
             element.setCreateDate(LocalDateTime.now());
+            element.setEnabled(true);
         });
+        cooperationRepository.save(cooperation);
         return mapper.convert(cooperation, CooperationDto.class);
     }
 
+    @Transactional
     @Override
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
         if (cooperationRepository.findById(id).isPresent()) {
@@ -64,29 +67,6 @@ public class CooperationServiceImpl implements CooperationService {
             if (updateCooperationDto.getAddress() != null) {
                 fromDb.setAddress(updateCooperationDto.getAddress());
             }
-            if (updateCooperationDto.getHouses() != null) {
-
-                List<House> houseList = fromDb.getHouses();
-                if (houseList != null) {
-                    List<House> newHouseList = new ArrayList<>();
-                    for (House house : houseList) {
-                        HouseDto houseDto = mapper.convert(house, HouseDto.class);
-                        HouseDto updatedHouseDto = houseService.updateHouse(house.getId(), houseDto);
-                        House newHouse = mapper.convert(updatedHouseDto, House.class);
-                        newHouseList.add(newHouse);
-                    }
-                    fromDb.getHouses().clear();
-                    fromDb.setHouses(newHouseList);
-
-                } else {
-                    for (HouseDto houseDto : updateCooperationDto.getHouses()) {
-                        HouseDto createdHouseDto = houseService.createHouse(fromDb.getId(), houseDto);
-
-                    }
-
-                }
-            }
-
             fromDb.setUpdateDate(LocalDateTime.now());
             cooperationRepository.save(fromDb);
             return mapper.convert(fromDb, CooperationDto.class);

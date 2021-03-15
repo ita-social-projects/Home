@@ -154,6 +154,14 @@
         </insert>
     </changeSet>
 
+    <changeSet id="Issue91.005" author="denis-litvinov">
+        <addColumn tableName="houses">
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
 
 

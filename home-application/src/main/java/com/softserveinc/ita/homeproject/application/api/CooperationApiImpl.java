@@ -7,10 +7,13 @@ import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.validation.Valid;
@@ -18,6 +21,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
@@ -30,7 +36,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     private HomeMapper mapper;
 
-    private EntitySpecificationService specificationService;
+    private EntitySpecificationService entitySpecificationService;
 
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
@@ -81,19 +87,34 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
     public Response queryHouse(@Min(1) Integer cooperationId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, String sort, String filter, Integer quantityFlat, Integer adjoiningArea, String houseArea) {
-        return null;
+
+        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
+        filterMap.put(HouseQueryParamEnum.ID, String.valueOf(cooperationId));
+        filterMap.put(HouseQueryParamEnum.QUANTITY_FLAT, String.valueOf(quantityFlat));
+        filterMap.put(HouseQueryParamEnum.ADJOINING_AREA, String.valueOf(adjoiningArea));
+        filterMap.put(HouseQueryParamEnum.HOUSE_AREA, houseArea);
+
+        Page<HouseDto> readHouse = houseService.getAllHouses(
+                pageNumber,
+                pageSize,
+                entitySpecificationService.getSpecification(filterMap, filter, sort)
+        );
+
+        return buildQueryResponse(readHouse, ReadHouse.class);
     }
 
     @PreAuthorize(DEACTIVATE_COOPERATION_PERMISSION)
     @Override
     public Response removeCooperation(Long cooperationId) {
-        return null;
+        cooperationService.deactivateCooperation(cooperationId);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DEACTIVATE_HOUSE_PERMISSION)
     @Override
     public Response removeHouse(Long cooperationId, Long houseId) {
-        houseService.deleteById(cooperationId, houseId);
+        houseService.deactivateById(cooperationId, houseId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -138,7 +159,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     }
 
     @Autowired
-    public void setSpecificationService(EntitySpecificationService specificationService) {
-        this.specificationService = specificationService;
+    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
+        this.entitySpecificationService = entitySpecificationService;
     }
 }
