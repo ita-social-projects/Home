@@ -8,6 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.EmailContact;
 import com.softserveinc.ita.homeproject.homedata.entity.PhoneContact;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
@@ -16,7 +17,6 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import com.softserveinc.ita.homeproject.homeservice.exception.TypeOfTheContactDoesntMatchHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,18 +29,23 @@ public class ContactServiceImpl implements ContactService {
 
     private final ContactRepository contactRepository;
 
-    private final ServiceMapper mapper;
+    private final UserRepository userRepository;
 
-    private final UserService userService;
+    private final ServiceMapper mapper;
 
     @Override
     public ContactDto createContact(Long userId, ContactDto createContactDto) {
         Contact contact = mapper.convert(createContactDto, Contact.class);
-        User user = mapper.convert(userService.getUserById(userId), User.class);
+        User user = getUserById(userId);
         contact.setUser(user);
         contact.setEnabled(true);
         contactRepository.save(contact);
         return mapper.convert(contact, ContactDto.class);
+    }
+
+    private User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundHomeException("User with id " + id + "wasn't found"));
     }
 
     @Override
