@@ -1,10 +1,13 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
@@ -56,7 +59,18 @@ class UserApiIT {
         assertUser(savedUser, updateUser, updatedUser);
     }
 
-    //ToDo deleteUserTest
+    @Test
+    void deleteUserTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createUser);
+        userApi.removeUser(savedUser.getId());
+        List<ReadUser> actualListUsers = new UserQuery
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .email(savedUser.getEmail())
+            .build().perfom();
+        assertFalse(actualListUsers.contains(savedUser));
+    }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);

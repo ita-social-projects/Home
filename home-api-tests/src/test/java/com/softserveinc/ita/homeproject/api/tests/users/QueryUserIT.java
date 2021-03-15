@@ -25,7 +25,7 @@ class QueryUserIT {
         .lastName("White")
         .password("password");
 
-    private UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
     @Test
     void getAllUsers() throws ApiException {

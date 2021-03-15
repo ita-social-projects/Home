@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -25,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    private static final String USER_WITH_ID = "User with id:";
-
-    private static final String NOT_FOUND = " is not found";
 
     private final UserRepository userRepository;
 
@@ -64,11 +59,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
+        if (userRepository.findById(id).isPresent()) {
 
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-
-            User fromDB = optionalUser.get();
+            User fromDB = userRepository.findById(id).filter(User::getEnabled).get();
 
             if (updateUserDto.getFirstName() != null) {
                 fromDB.setFirstName(updateUserDto.getFirstName());
@@ -83,7 +76,7 @@ public class UserServiceImpl implements UserService {
             return mapper.convert(fromDB, UserDto.class);
 
         } else {
-            throw new NotFoundHomeException(USER_WITH_ID+ id + NOT_FOUND);
+            throw new NotFoundHomeException("User with id:" + id + " is not found");
         }
     }
 
@@ -99,16 +92,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto getUserById(Long id) {
-        User toGet = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException(USER_WITH_ID + id + NOT_FOUND));
+        User toGet = userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         return mapper.convert(toGet, UserDto.class);
     }
 
     @Override
     @Transactional
     public void deactivateUser(Long id) {
-        User toDelete = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException(USER_WITH_ID + id + NOT_FOUND));
+        User toDelete = userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
