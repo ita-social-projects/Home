@@ -1,9 +1,5 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +7,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +19,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements Serializable {
+@SequenceGenerator(name = "sequence", sequenceName = "users_sequence")
+public class User extends BaseEntity {
 
     @Column(name = "first_name")
     private String firstName;

@@ -1,9 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.contacts;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,7 +10,6 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
-import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ContactType;
@@ -24,7 +21,6 @@ import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadEmailContact;
 import com.softserveinc.ita.homeproject.model.ReadPhoneContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
-import org.assertj.core.api.ArraySortedAssert;
 import org.junit.jupiter.api.Test;
 
 public class QueryContactIT {

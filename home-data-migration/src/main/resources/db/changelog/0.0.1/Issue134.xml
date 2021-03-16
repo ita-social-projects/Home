@@ -55,4 +55,25 @@
             <column name="enabled" type="boolean"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="Issue134.008" author="VadymSokorenko">
+        <createProcedure>
+            create or replace procedure sequence_start_value_filling(table_name varchar, sequence_name varchar)
+            language plpgsql
+            as
+            $$
+            declare
+            start_value bigint;
+            begin
+            execute 'SELECT MAX(id) FROM ' || table_name INTO start_value;
+            perform setval(sequence_name, start_value);
+            end
+            $$;
+        </createProcedure>
+    </changeSet>
+
+    <changeSet id="Issue134.009" author="VadymSokorenko">
+        <createSequence incrementBy="50" sequenceName="contacts_sequence"/>
+        <sql>call sequence_start_value_filling('contacts','contacts_sequence')</sql>
+    </changeSet>
 </databaseChangeLog>

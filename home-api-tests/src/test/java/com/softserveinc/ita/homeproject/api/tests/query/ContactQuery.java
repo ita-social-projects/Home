@@ -4,7 +4,6 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
-import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 
