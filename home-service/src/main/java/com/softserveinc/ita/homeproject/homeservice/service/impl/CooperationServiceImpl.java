@@ -75,6 +75,7 @@ public class CooperationServiceImpl implements CooperationService {
         }
     }
 
+    @Transactional
     @Override
     public Page<CooperationDto> getAllCooperation(Integer pageNumber, Integer pageSize,
                                                   Specification<Cooperation> specification) {

@@ -644,6 +644,7 @@ paths:
           description: ID of the chat
           schema:
             type : integer
+            format: int64
             minimum: 1
         - in: query
           name: pageNumber
@@ -674,10 +675,16 @@ paths:
             type: string
             example: "some example"
         - in: query
+          name: houseId
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
           name: quantityFlat
           schema:
             type: integer
-            example: 12
+            example: 10
         - in: query
           name: adjoiningArea
           schema:
@@ -686,8 +693,8 @@ paths:
         - in: query
           name: houseArea
           schema:
-            type: string
-            example: "some example"
+            type: number
+            example: 20
       responses:
         '200':
           description: successful operation

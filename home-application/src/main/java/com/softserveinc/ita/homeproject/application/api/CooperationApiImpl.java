@@ -2,12 +2,12 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.CooperationQueryConfig.CooperationQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,20 +82,53 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_ALL_COOPERATION_PERMISSION)
     @Override
-    public Response queryCooperation(@Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, String sort, String filter, String name, String iban, String usreo) {
-        return null;
+    public Response queryCooperation(@Min(1) Integer pageNumber,
+                                     @Min(0) @Max(10) Integer pageSize,
+                                     String sort,
+                                     String filter,
+                                     String name,
+                                     String iban,
+                                     String usreo) {
+
+        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+
+        filterMap.put(CooperationQueryParamEnum.NAME, name);
+        filterMap.put(CooperationQueryParamEnum.IBAN, iban);
+        filterMap.put(CooperationQueryParamEnum.USREO, usreo);
+
+        Page<CooperationDto> readCooperation = cooperationService.getAllCooperation(
+                pageNumber,
+                pageSize,
+                entitySpecificationService.getSpecification(filterMap, filter, sort)
+        );
+
+        return buildQueryResponse(readCooperation, ReadCooperation.class);
     }
 
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
-    public Response queryHouse(@Min(1) Integer cooperationId, @Min(1) Integer pageNumber, @Min(0) @Max(10) Integer pageSize, String sort, String filter, Integer quantityFlat, Integer adjoiningArea, String houseArea) {
+    public Response queryHouse(@Min(1) Long cooperationId,
+                               @Min(1) Integer pageNumber,
+                               @Min(0) @Max(10) Integer pageSize,
+                               String sort,
+                               String filter,
+                               Long houseId,
+                               Integer quantityFlat,
+                               Integer adjoiningArea,
+                               BigDecimal houseArea) {
 
         Map<QueryParamEnum, String> filterMap = new HashMap<>();
 
-        filterMap.put(HouseQueryParamEnum.ID, String.valueOf(cooperationId));
-        filterMap.put(HouseQueryParamEnum.QUANTITY_FLAT, String.valueOf(quantityFlat));
-        filterMap.put(HouseQueryParamEnum.ADJOINING_AREA, String.valueOf(adjoiningArea));
-        filterMap.put(HouseQueryParamEnum.HOUSE_AREA, houseArea);
+        String quantityFlatValue = quantityFlat == null ? null : String.valueOf(quantityFlat);
+        String adjoiningAreaValue = adjoiningArea == null ? null : String.valueOf(adjoiningArea);
+        String houseAreaValue = houseArea == null ? null : houseArea.toString();
+        String houseIdValue = houseId == null ? null : houseId.toString();
+
+        filterMap.put(HouseQueryParamEnum.COOPERATION_ID, cooperationId.toString());
+        filterMap.put(HouseQueryParamEnum.ID, houseIdValue);
+        filterMap.put(HouseQueryParamEnum.QUANTITY_FLAT, quantityFlatValue);
+        filterMap.put(HouseQueryParamEnum.ADJOINING_AREA, adjoiningAreaValue);
+        filterMap.put(HouseQueryParamEnum.HOUSE_AREA, houseAreaValue);
 
         Page<HouseDto> readHouse = houseService.getAllHouses(
                 pageNumber,
@@ -140,7 +175,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @Override
     public HomeMapper getMapper() {
-        return null;
+        return mapper;
     }
 
     @Autowired
@@ -162,4 +197,5 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
         this.entitySpecificationService = entitySpecificationService;
     }
+
 }

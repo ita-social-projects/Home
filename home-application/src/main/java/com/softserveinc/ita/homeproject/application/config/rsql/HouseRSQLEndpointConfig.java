@@ -5,11 +5,13 @@ import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.HouseQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQueryParamEnum>{
+@Component
+public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQueryParamEnum> {
 
     @Autowired
     private HouseQueryConfig queryConfig;
@@ -18,9 +20,10 @@ public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQ
     public Map<HouseQueryParamEnum, String> getMappings() {
         HashMap<HouseQueryParamEnum, String> map = new HashMap<>();
 
+        map.put(HouseQueryParamEnum.COOPERATION_ID, "cooperation_id");
+        map.put(HouseQueryParamEnum.QUANTITY_FLAT, "quantityFlat");
         map.put(HouseQueryParamEnum.ADJOINING_AREA, "adjoiningArea");
         map.put(HouseQueryParamEnum.HOUSE_AREA, "houseArea");
-        map.put(HouseQueryParamEnum.QUANTITY_FLAT, "quantityFlat");
 
         return map;
     }

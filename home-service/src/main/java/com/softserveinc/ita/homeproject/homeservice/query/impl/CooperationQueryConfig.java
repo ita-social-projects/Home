@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.query.impl;
 
-import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import org.springframework.stereotype.Component;
@@ -9,31 +9,28 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class HouseQueryConfig implements QueryConfig<House> {
-
+public class CooperationQueryConfig implements QueryConfig<Cooperation> {
 
     @Override
-    public Class<House> getEntityClass() {
-        return House.class;
+    public Class<Cooperation> getEntityClass() {
+        return Cooperation.class;
     }
 
     @Override
     public List<QueryParamEnum> getWhiteListEnums() {
-        return Arrays.asList(HouseQueryParamEnum.values());
+        return Arrays.asList();
     }
 
-    public enum HouseQueryParamEnum implements QueryParamEnum {
+    public enum CooperationQueryParamEnum implements QueryParamEnum {
 
         ID("id"),
-        COOPERATION_ID("cooperation.id"),
-        QUANTITY_FLAT("quantityFlat"),
-        ADJOINING_AREA("adjoiningArea"),
-        HOUSE_AREA("houseArea");
-
+        NAME("name"),
+        IBAN("iban"),
+        USREO("usreo");
 
         private final String parameter;
 
-        HouseQueryParamEnum(String parameter) {
+        CooperationQueryParamEnum(String parameter) {
             this.parameter = parameter;
         }
 
@@ -41,6 +38,5 @@ public class HouseQueryConfig implements QueryConfig<House> {
         public String getParameter() {
             return this.parameter;
         }
-
     }
 }
