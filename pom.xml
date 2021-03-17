@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -39,9 +39,10 @@
         <sonar.organization>ita-social-projects</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <liquibase.version>4.3.1</liquibase.version>
-<!--        <checkstyle.version>8.40</checkstyle.version>-->
-<!--        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>-->
-<!--        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml</checkstyle.configLocation>-->
+        <checkstyle.version>8.40</checkstyle.version>
+        <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
+        <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml
+        </checkstyle.configLocation>
     </properties>
 
     <profiles>
@@ -141,33 +142,33 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
-<!--                <version>${maven.checkstyle.plugin.version}</version>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>com.puppycrawl.tools</groupId>-->
-<!--                        <artifactId>checkstyle</artifactId>-->
-<!--                        <version>${checkstyle.version}</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--                <configuration>-->
-<!--                    <configLocation>${checkstyle.configLocation}</configLocation>-->
-<!--                    <encoding>${project.build.sourceEncoding}</encoding>-->
-<!--                    <consoleOutput>true</consoleOutput>-->
-<!--                    <failsOnError>true</failsOnError>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>validate</id>-->
-<!--                        <phase>validate</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>checkstyle</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>${checkstyle.configLocation}</configLocation>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>checkstyle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

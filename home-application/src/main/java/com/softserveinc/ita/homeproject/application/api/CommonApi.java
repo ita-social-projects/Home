@@ -1,8 +1,9 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseReadView;

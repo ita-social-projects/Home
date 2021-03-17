@@ -1,8 +1,27 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_HOUSES_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_HOUSE_PERMISSION;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
@@ -11,23 +30,15 @@ import com.softserveinc.ita.homeproject.homeservice.query.impl.CooperationQueryC
 import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.model.CreateHouse;
+import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.model.UpdateHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
 
 @Provider
 public class CooperationApiImpl extends CommonApi implements CooperationApi {
@@ -97,9 +108,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         filterMap.put(CooperationQueryParamEnum.USREO, usreo);
 
         Page<CooperationDto> readCooperation = cooperationService.getAllCooperation(
-                pageNumber,
-                pageSize,
-                entitySpecificationService.getSpecification(filterMap, filter, sort)
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
         return buildQueryResponse(readCooperation, ReadCooperation.class);
@@ -131,9 +142,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         filterMap.put(HouseQueryParamEnum.HOUSE_AREA, houseAreaValue);
 
         Page<HouseDto> readHouse = houseService.getAllHouses(
-                pageNumber,
-                pageSize,
-                entitySpecificationService.getSpecification(filterMap, filter, sort)
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
         );
 
         return buildQueryResponse(readHouse, ReadHouse.class);
@@ -179,6 +190,11 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     }
 
     @Autowired
+    public void setMapper(HomeMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    @Autowired
     public void setCooperationService(CooperationService cooperationService) {
         this.cooperationService = cooperationService;
     }
@@ -186,11 +202,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Autowired
     public void setHouseService(HouseService houseService) {
         this.houseService = houseService;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
     }
 
     @Autowired

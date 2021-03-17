@@ -29,8 +29,4 @@ public interface Permissions {
     String DEACTIVATE_HOUSE_PERMISSION = "hasAuthority('DELETE_HOUSE_PERMISSION')";
 
 
-
-
-
-
 }

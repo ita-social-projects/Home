@@ -1,12 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.query.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class CooperationQueryConfig implements QueryConfig<Cooperation> {

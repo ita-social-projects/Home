@@ -4,12 +4,14 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
+
+import java.util.HashMap;
+import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.util.HashMap;
-import java.util.Map;
+
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;

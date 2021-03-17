@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
@@ -135,7 +135,8 @@
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                         </env>
                                         <ports>
-                                            <port>${home.application.external.port}:${home.application.internal.port}</port>
+                                            <port>${home.application.external.port}:${home.application.internal.port}
+                                            </port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
@@ -192,8 +193,10 @@
                                 </home.application.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
-                                <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
+                                <home.application.admin.username>${home.application.admin.username}
+                                </home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}
+                                </home.application.admin.password>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

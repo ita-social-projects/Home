@@ -5,12 +5,14 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
+
+import java.util.HashMap;
+import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.util.HashMap;
-import java.util.Map;
+
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;

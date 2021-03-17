@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
 import java.util.List;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Address;
 import lombok.Getter;
 import lombok.Setter;

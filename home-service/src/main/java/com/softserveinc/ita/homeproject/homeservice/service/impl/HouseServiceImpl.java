@@ -1,14 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.time.LocalDateTime;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,15 +17,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
+
     private final ServiceMapper mapper;
+
     private final CooperationRepository cooperationRepository;
 
     @Transactional
@@ -68,15 +67,15 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public Page<HouseDto> getAllHouses(Integer pageNumber, Integer pageSize, Specification<House> specification) {
         Specification<House> houseSpecification = specification
-                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return houseRepository.findAll(houseSpecification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(house -> mapper.convert(house, HouseDto.class));
+            .map(house -> mapper.convert(house, HouseDto.class));
     }
 
     @Override
     public HouseDto getHouseById(Long coopId, Long id) {
         House toGet = houseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
         if (!toGet.getCooperation().getId().equals(coopId)) {
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
         }
@@ -87,8 +86,8 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
-        if (!toDelete.getCooperation().getId().equals(coopId)){
+            .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+        if (!toDelete.getCooperation().getId().equals(coopId)) {
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
         }
         toDelete.setEnabled(false);
