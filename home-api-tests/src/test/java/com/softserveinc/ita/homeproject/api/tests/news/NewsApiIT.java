@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -70,6 +71,39 @@ class NewsApiIT {
             .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
             .withMessage(
                 "{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
+    }
+
+    @Test
+    void createNewsInvalidTitleTest() {
+        CreateNews createNewsInvalidTitle = new CreateNews()
+                .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols"
+                    + " - title over 70 symbols")
+                .description("description")
+                .source("source")
+                .text("Some text")
+                .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> newsApi.addNews(createNewsInvalidTitle))
+                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `title` is invalid"
+                    + " - size must be between 1 and 70 signs." + "\"}");
+    }
+
+    @Test
+    void createNewsInvalidDescriptionTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("description description description description description description description"
+                + " description description description description description description description"
+                + " description description description description description description description")
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.addNews(createNewsInvalidDescription))
+            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `description` is invalid"
+                + " - size must be between 1 and 150 signs." + "\"}");
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
