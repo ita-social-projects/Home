@@ -73,6 +73,11 @@
     </changeSet>
 
     <changeSet id="Issue134.009" author="VadymSokorenko">
+        <createSequence incrementBy="50" sequenceName="cooperation_sequence"/>
+        <sql>call sequence_start_value_filling('cooperation','cooperation_sequence')</sql>
+    </changeSet>
+
+    <changeSet id="Issue134.010" author="VadymSokorenko">
         <createSequence incrementBy="50" sequenceName="contacts_sequence"/>
         <sql>call sequence_start_value_filling('contacts','contacts_sequence')</sql>
     </changeSet>
