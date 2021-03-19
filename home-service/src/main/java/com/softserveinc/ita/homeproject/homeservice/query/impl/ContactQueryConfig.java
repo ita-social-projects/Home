@@ -28,7 +28,7 @@ public class ContactQueryConfig implements QueryConfig<Contact> {
         PHONE("phone"),
         EMAIL("email"),
         MAIN("main"),
-        TYPE("contactType");
+        TYPE("type");
 
         private final String parameter;
 

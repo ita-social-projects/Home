@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
@@ -13,6 +15,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.TypeOfTheContactDoesntMatchHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -33,10 +36,25 @@ public class ContactServiceImpl implements ContactService {
 
     private final ServiceMapper mapper;
 
+    @Transactional
     @Override
     public ContactDto createContact(Long userId, ContactDto createContactDto) {
-        Contact contact = mapper.convert(createContactDto, Contact.class);
         User user = getUserById(userId);
+
+        if (createContactDto.getMain()) {
+            List<Contact> allByUserIdAndType = contactRepository
+                .findAllByUserIdAndType(userId, mapper.convert(createContactDto.getType(), ContactType.class));
+            allByUserIdAndType
+                .stream()
+                .filter(Contact::getMain)
+                .findAny()
+                .ifPresent((contact) -> {
+                    throw new AlreadyExistHomeException("User with id "
+                        + userId + " already has main " + createContactDto.getType() + " contact");
+                });
+        }
+
+        Contact contact = mapper.convert(createContactDto, Contact.class);
         contact.setUser(user);
         contact.setEnabled(true);
         contactRepository.save(contact);
@@ -45,7 +63,7 @@ public class ContactServiceImpl implements ContactService {
 
     private User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundHomeException("User with id " + id + "wasn't found"));
+            .orElseThrow(() -> new NotFoundHomeException("User with id " + id + " wasn't found"));
     }
 
     @Override
@@ -88,17 +106,17 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Page<ContactDto> getAllContacts(Integer pageNumber, Integer pageSize,
-                                            Specification<Contact> specification) {
+                                           Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(contact -> mapper.convert(contact, ContactDto.class));
+            .map(contact -> mapper.convert(contact, ContactDto.class));
     }
 
     @Override
     public ContactDto getContactById(Long id) {
         Contact contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
+            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
         return mapper.convert(contactResponse, ContactDto.class);
     }
 

@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import javax.ws.rs.core.Response;
+
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.UserApi;
@@ -20,6 +22,7 @@ import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class UserApiIT {
@@ -29,8 +32,7 @@ class UserApiIT {
 
     @Test
     void createUserTest() throws ApiException {
-        CreateUser expectedUser = createTestUser()
-            .email("createUserTestExpcectedEmail@example.com");
+        CreateUser expectedUser = createTestUser();
 
         ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
 
@@ -41,8 +43,7 @@ class UserApiIT {
 
     @Test
     void getUserTest() throws ApiException {
-        CreateUser expectedUser = createTestUser()
-            .email("getUserTestExpcectedEmail@example.com");
+        CreateUser expectedUser = createTestUser();
 
         ApiResponse<ReadUser> response = userApi.getUserWithHttpInfo(userApi.createUser(expectedUser).getId());
 
@@ -54,7 +55,7 @@ class UserApiIT {
     @Test
     void updateUserTest() throws ApiException {
         ReadUser savedUser = userApi
-            .createUser(createTestUser().email("updateUserTestExpcectedEmail@example.com"));
+            .createUser(createTestUser());
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName");
@@ -68,14 +69,11 @@ class UserApiIT {
 
     @Test
     void deleteUserTest() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser()
-            .email("deleteUserTestExpcectedEmail@example.com"));
-        userApi.createUser(createTestUser()
-            .email("secondDeleteUserTestExpcectedEmail@example.com"));
-        userApi.createUser(createTestUser()
-            .email("thirdDeleteUserTestExpcectedEmail@example.com"));
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        userApi.createUser(createTestUser());
+        userApi.createUser(createTestUser());
 
-        ApiResponse<Void> removeResponse = userApi.removeUserWithHttpInfo(expectedUser.getId());
+        ApiResponse<Void> removeResponse = userApi.deleteUserWithHttpInfo(expectedUser.getId());
 
         List<ReadUser> actualUsersList = new UserQuery
             .Builder(userApi)
@@ -134,6 +132,7 @@ class UserApiIT {
             .firstName("firstName")
             .lastName("lastName")
             .password("password")
+            .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .contacts(createContactList());
     }
 

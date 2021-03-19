@@ -24,7 +24,7 @@ paths:
         - news
       summary: Add a News to the home page
       description: The endpoint adds a News to the home page
-      operationId: addNews
+      operationId: createNews
       requestBody:
         description: A payload for creating a new News
         content:
@@ -247,7 +247,7 @@ paths:
       tags:
         - user
       summary: Get all Users
-      description: The endpoint getts all Users
+      description: The endpoint gets all Users
       operationId: getAllUsers
       parameters:
         - in: query
@@ -400,7 +400,7 @@ paths:
         - user
       summary: Delete user by ID
       description: The ednpoint deletes User by ID
-      operationId: removeUser
+      operationId: deleteUser
       parameters:
         - name: "user_id"
           in: "path"
@@ -637,10 +637,10 @@ paths:
     delete:
       tags:
         - contact
-      summary: Remove Contact
-      description: The endpoint removes an existing Contact on a User associated with the
+      summary: Delete Contact
+      description: The endpoint deletes an existing Contact on a User associated with the
                    specified User and Contact IDs
-      operationId: removeContactOnUser
+      operationId: deleteContactOnUser
       parameters:
         - name: "user_id"
           in: "path"
@@ -729,7 +729,7 @@ components:
         title:
           type: string
           example: News In The Local Area
-          maximum: 50
+          maximum: 70
         photoUrl:
           type: string
           format: url

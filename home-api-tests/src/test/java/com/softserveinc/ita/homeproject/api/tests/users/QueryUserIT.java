@@ -5,8 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
@@ -82,15 +86,8 @@ class QueryUserIT {
             .build()
             .perfom();
 
-        assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r1.getLastName() == null) {
-                return -1;
-            }
-            if (r2.getLastName() == null) {
-                return 1;
-            }
-            return r1.getLastName().compareTo(r2.getLastName());
-        });
+        assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
+            .requireNonNull(u1.getLastName()).compareToIgnoreCase(Objects.requireNonNull(u2.getLastName())));
     }
 
     @Test
@@ -104,15 +101,8 @@ class QueryUserIT {
             .sort("firstName,desc")
             .build().perfom();
 
-        assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r2.getFirstName() == null) {
-                return -1;
-            }
-            if (r1.getFirstName() == null) {
-                return 1;
-            }
-            return r2.getFirstName().compareTo(r1.getFirstName());
-        });
+        assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
+            .requireNonNull(u2.getFirstName()).compareToIgnoreCase(Objects.requireNonNull(u1.getFirstName())));
     }
 
     @Test

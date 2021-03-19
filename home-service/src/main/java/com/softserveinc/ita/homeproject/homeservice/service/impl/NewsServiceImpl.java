@@ -42,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public NewsDto update(Long id, NewsDto newsDto) {
 
-        Optional<News> optionalNews = newsRepository.findById(id);
+        Optional<News> optionalNews = newsRepository.findById(id).filter(News::getEnabled);
         if (optionalNews.isPresent()) {
 
             News fromDB = optionalNews.get();
@@ -86,7 +86,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDto getById(Long id) {
-        News newsResponse = newsRepository.findById(id)
+        News newsResponse = newsRepository.findById(id).filter(News::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS + id));
 
         return mapper.convert(newsResponse, NewsDto.class);
@@ -94,7 +94,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void deactivateNews(Long id) {
-        News toDelete = newsRepository.findById(id)
+        News toDelete = newsRepository.findById(id).filter(News::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_NEWS + id));
         toDelete.setEnabled(false);
         newsRepository.save(toDelete);

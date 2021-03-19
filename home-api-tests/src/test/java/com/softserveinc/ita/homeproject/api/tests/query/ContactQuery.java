@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
 import java.util.List;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
@@ -8,6 +9,8 @@ import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 
 public class ContactQuery extends BaseQuery{
+
+    private Long userId;
 
     private String contactId;
 
@@ -24,6 +27,10 @@ public class ContactQuery extends BaseQuery{
     private UserApi userApi;
 
     private ReadUser readUser;
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public void setContactId(String contactId) {
         this.contactId = contactId;
@@ -57,9 +64,9 @@ public class ContactQuery extends BaseQuery{
         this.readUser = readUser;
     }
 
-    public List<ReadContact> perfom() throws ApiException {
+    public List<ReadContact> perform() throws ApiException {
         return contactApi
-            .queryContactsOnUser(readUser.getId(), this.getPageNumber(),
+            .queryContactsOnUser(this.userId, this.getPageNumber(),
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
@@ -74,6 +81,12 @@ public class ContactQuery extends BaseQuery{
 
         public Builder(ContactApi contactApi) {
             queryClass.setContactApi(contactApi);
+        }
+
+
+        public Builder userId(Long userId) {
+            queryClass.setUserId(userId);
+            return this;
         }
 
         public Builder contactId(String contactId) {

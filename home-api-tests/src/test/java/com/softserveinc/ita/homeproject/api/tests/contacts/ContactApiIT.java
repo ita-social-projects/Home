@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import javax.ws.rs.core.Response;
+
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.ContactApi;
@@ -26,6 +28,7 @@ import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 public class ContactApiIT {
@@ -37,8 +40,7 @@ public class ContactApiIT {
     void createContactTest() throws ApiException {
         CreateContact createEmailContact = createEmailContact();
         CreateContact createPhoneContact = createPhoneContact();
-        ReadUser expectedUser = userApi.createUser(createTestUser()
-            .email("createEmailTestExpcectedEmail@example.com"));
+        ReadUser expectedUser = userApi.createUser(createTestUser());
 
         ApiResponse<ReadContact> createEmailResponse = contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
             createEmailContact);
@@ -57,8 +59,7 @@ public class ContactApiIT {
     void getEmailTest() throws ApiException {
         CreateContact createEmailContact = createEmailContact();
         CreateContact createPhoneContact = createPhoneContact();
-        ReadUser expectedUser = userApi.createUser(createTestUser()
-            .email("getEmailTestExpcectedEmail@example.com"));
+        ReadUser expectedUser = userApi.createUser(createTestUser());
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
         ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
 
@@ -79,8 +80,7 @@ public class ContactApiIT {
     void updateEmailTest() throws ApiException {
         CreateContact createEmailContact = createEmailContact();
         CreateContact createPhoneContact = createPhoneContact();
-        ReadUser expectedUser = userApi.createUser(createTestUser()
-            .email("updateEmailTestExpcectedEmail@example.com"));
+        ReadUser expectedUser = userApi.createUser(createTestUser());
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
         ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
 
@@ -110,23 +110,22 @@ public class ContactApiIT {
 
     @Test
     void deleteEmailContact() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser()
-            .email("deleteEmailContact@example.com"));
+        ReadUser expectedUser = userApi.createUser(createTestUser());
 
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
-        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact());
 
         ApiResponse<Void> removeEmailResponse = contactApi
-            .removeContactOnUserWithHttpInfo(expectedUser.getId(),savedEmailContact.getId());
+            .deleteContactOnUserWithHttpInfo(expectedUser.getId(),savedEmailContact.getId());
         ApiResponse<Void> removePhoneResponse = contactApi
-            .removeContactOnUserWithHttpInfo(expectedUser.getId(),savedPhoneContact.getId());
+            .deleteContactOnUserWithHttpInfo(expectedUser.getId(),savedPhoneContact.getId());
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
+            .userId(expectedUser.getId())
             .pageNumber(1)
             .pageSize(10)
-            .readUser(expectedUser)
-            .build().perfom();
+            .build().perform();
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removeEmailResponse.getStatusCode());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removePhoneResponse.getStatusCode());
@@ -197,6 +196,7 @@ public class ContactApiIT {
             .firstName("firstName")
             .lastName("lastName")
             .password("password")
+            .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .contacts(createContactList());
     }
 

@@ -20,11 +20,11 @@ public class ContactsRSQLEndpointConfig implements RSQLEndpointConfig<Contact, C
     public Map<ContactQueryParamEnum, String> getMappings() {
         EnumMap<ContactQueryParamEnum, String> map = new EnumMap<>(ContactQueryParamEnum.class);
 
-        map.put(ContactQueryParamEnum.USER_ID, "user.id");
+        map.put(ContactQueryParamEnum.USER_ID, "user_id");
         map.put(ContactQueryParamEnum.PHONE, "phone");
         map.put(ContactQueryParamEnum.EMAIL, "email");
         map.put(ContactQueryParamEnum.MAIN, "main");
-        map.put(ContactQueryParamEnum.TYPE, "contactType");
+        map.put(ContactQueryParamEnum.TYPE, "type");
 
 
         return map;

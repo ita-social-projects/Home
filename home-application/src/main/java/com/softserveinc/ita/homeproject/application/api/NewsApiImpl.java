@@ -49,7 +49,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      */
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
-    public Response addNews(CreateNews createNews) {
+    public Response createNews(CreateNews createNews) {
         NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
         ReadNews response = mapper.convert(createdNewsDto, ReadNews.class);
@@ -90,12 +90,12 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                String text,
                                String source) {
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new HashMap<>();
 
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.ID, id);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TITLE, title);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TEXT, text);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.SOURCE, source);
+        filterMap.put("id", id);
+        filterMap.put("title", title);
+        filterMap.put("text", text);
+        filterMap.put("source", source);
 
         Page<NewsDto> readNews = newsService.findNews(
             pageNumber,

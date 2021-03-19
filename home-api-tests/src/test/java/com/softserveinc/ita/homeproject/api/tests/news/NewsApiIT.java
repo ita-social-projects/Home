@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import javax.ws.rs.core.Response;
+
 import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.NewsApi;
@@ -25,7 +27,7 @@ class NewsApiIT {
     void createNewsTest() throws ApiException {
         CreateNews expectedNews = createNews();
 
-        ApiResponse<ReadNews> response = newsApi.addNewsWithHttpInfo(expectedNews);
+        ApiResponse<ReadNews> response = newsApi.createNewsWithHttpInfo(expectedNews);
 
         assertEquals(Response.Status.CREATED.getStatusCode(),
             response.getStatusCode());
@@ -36,7 +38,7 @@ class NewsApiIT {
     void getNewsByIdTest() throws ApiException {
         CreateNews expectedNews = createNews();
 
-        ApiResponse<ReadNews> response = newsApi.getNewsWithHttpInfo(newsApi.addNews(expectedNews).getId());
+        ApiResponse<ReadNews> response = newsApi.getNewsWithHttpInfo(newsApi.createNews(expectedNews).getId());
 
 
         assertEquals(Response.Status.OK.getStatusCode(),
@@ -48,7 +50,7 @@ class NewsApiIT {
     void updateNewsTest() throws ApiException {
         CreateNews expectedNews = createNews();
 
-        ReadNews savedNews = newsApi.addNews(expectedNews);
+        ReadNews savedNews = newsApi.createNews(expectedNews);
 
         UpdateNews updateNews = new UpdateNews()
             .title("UpdatedTitle")
@@ -66,9 +68,9 @@ class NewsApiIT {
 
     @Test
     void deleteNewsTest() throws ApiException {
-        ReadNews expectedNews = newsApi.addNews(createNews().title("FirstTitle"));
-        newsApi.addNews(createNews().title("SecondTitle"));
-        newsApi.addNews(createNews().title("ThirdTitle"));
+        ReadNews expectedNews = newsApi.createNews(createNews().title("FirstTitle"));
+        newsApi.createNews(createNews().title("SecondTitle"));
+        newsApi.createNews(createNews().title("ThirdTitle"));
 
         ApiResponse<Void> removeResponse = newsApi.deleteNewsWithHttpInfo(expectedNews.getId());
 
@@ -104,7 +106,7 @@ class NewsApiIT {
                 .photoUrl("222222");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> newsApi.addNews(createNewsInvalidTitle))
+                .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
                 .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `title` is invalid"
                     + " - size must be between 1 and 70 signs." + "\"}");
     }
@@ -121,7 +123,7 @@ class NewsApiIT {
             .photoUrl("222222");
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> newsApi.addNews(createNewsInvalidDescription))
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
             .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `description` is invalid"
                 + " - size must be between 1 and 150 signs." + "\"}");
     }

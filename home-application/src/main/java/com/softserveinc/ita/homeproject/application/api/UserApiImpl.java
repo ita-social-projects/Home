@@ -17,9 +17,6 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig.ContactQueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateContact;
@@ -102,17 +99,14 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String email,
                                         String main,
                                         String type) {
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new HashMap<>();
 
-        filterMap.put(ContactQueryParamEnum.USER_ID, userId.toString());
-        filterMap.put(ContactQueryParamEnum.ID, id);
-        filterMap.put(ContactQueryParamEnum.PHONE, phone);
-        filterMap.put(ContactQueryParamEnum.EMAIL, email);
-        filterMap.put(ContactQueryParamEnum.MAIN, main);
-
-        if (type != null) {
-            filterMap.put(ContactQueryParamEnum.TYPE, type.toUpperCase());
-        }
+        filterMap.put("user_id", userId.toString());
+        filterMap.put("id", id);
+        filterMap.put("phone", phone);
+        filterMap.put("email", email);
+        filterMap.put("main", main);
+        filterMap.put("type", type);
 
         Page<ContactDto> contacts = contactService.getAllContacts(
             pageNumber,
@@ -124,7 +118,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     }
 
     @Override
-    public Response removeContactOnUser(Long userId, Long contactId) {
+    public Response deleteContactOnUser(Long userId, Long contactId) {
         contactService.deactivateContact(contactId);
 
         return Response.status(Response.Status.NO_CONTENT).build();
@@ -150,15 +144,14 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 String lastName,
                                 String contactPhone,
                                 String contactEmail) {
+        Map<String, String> filterMap = new HashMap<>();
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
-
-        filterMap.put(UserQueryParamEnum.ID, id);
-        filterMap.put(UserQueryParamEnum.EMAIL, email);
-        filterMap.put(UserQueryParamEnum.LAST_NAME, lastName);
-        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
-        filterMap.put(UserQueryParamEnum.CONTACT_PHONE, contactPhone);
-        filterMap.put(UserQueryParamEnum.CONTACT_EMAIL, contactEmail);
+        filterMap.put("id", id);
+        filterMap.put("email", email);
+        filterMap.put("lastName", lastName);
+        filterMap.put("firstName", firstName);
+        filterMap.put("contactPhone", contactPhone);
+        filterMap.put("contactEmail", contactEmail);
 
         Page<UserDto> users = userService.findUsers(
             pageNumber,
@@ -186,7 +179,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
-    public Response removeUser(Long id) {
+    public Response deleteUser(Long id) {
         userService.deactivateUser(id);
 
         return Response.status(Response.Status.NO_CONTENT).build();
