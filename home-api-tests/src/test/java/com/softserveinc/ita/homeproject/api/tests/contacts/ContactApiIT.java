@@ -31,7 +31,7 @@ import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class ContactApiIT {
+class ContactApiIT {
 
     private final ContactApi contactApi = new ContactApi(ApiClientUtil.getClient());
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());

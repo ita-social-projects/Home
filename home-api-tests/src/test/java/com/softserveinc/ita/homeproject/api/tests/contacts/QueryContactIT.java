@@ -26,7 +26,7 @@ import com.softserveinc.ita.homeproject.model.ReadUser;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryContactIT {
+class QueryContactIT {
 
     private final ContactApi contactApi = new ContactApi(ApiClientUtil.getClient());
 

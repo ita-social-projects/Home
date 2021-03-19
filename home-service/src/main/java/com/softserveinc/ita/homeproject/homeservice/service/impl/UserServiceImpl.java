@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -59,9 +60,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
-        if (userRepository.findById(id).isPresent()) {
 
-            User fromDB = userRepository.findById(id).filter(User::getEnabled).get();
+        Optional<User> optionalUser = userRepository.findById(id).filter(User::getEnabled);
+
+        if (optionalUser.isPresent()) {
+            User fromDB = optionalUser.get();
 
             if (updateUserDto.getFirstName() != null) {
                 fromDB.setFirstName(updateUserDto.getFirstName());

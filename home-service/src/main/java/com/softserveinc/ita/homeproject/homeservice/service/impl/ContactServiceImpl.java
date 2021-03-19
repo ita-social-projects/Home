@@ -40,15 +40,14 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDto createContact(Long userId, ContactDto createContactDto) {
         User user = getUserById(userId);
-
-        if (createContactDto.getMain()) {
+        if (Boolean.TRUE.equals(createContactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(userId, mapper.convert(createContactDto.getType(), ContactType.class));
             allByUserIdAndType
                 .stream()
                 .filter(Contact::getMain)
                 .findAny()
-                .ifPresent((contact) -> {
+                .ifPresent(contact -> {
                     throw new AlreadyExistHomeException("User with id "
                         + userId + " already has main " + createContactDto.getType() + " contact");
                 });
