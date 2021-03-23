@@ -22,6 +22,8 @@ public class NewsServiceImpl implements NewsService {
 
     private static final String NOT_FOUND_NEWS = "Can't find news with given ID:";
 
+    private static final String FORMAT = "%s %d";
+
     private final NewsRepository newsRepository;
 
     private final ServiceMapper mapper;
@@ -72,7 +74,7 @@ public class NewsServiceImpl implements NewsService {
             return mapper.convert(fromDB, NewsDto.class);
 
         } else {
-            throw new NotFoundHomeException(String.format("%s %d", NOT_FOUND_NEWS, id));
+            throw new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id));
         }
     }
 
@@ -87,7 +89,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto getById(Long id) {
         News newsResponse = newsRepository.findById(id).filter(News::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format("%s %d", NOT_FOUND_NEWS, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
 
         return mapper.convert(newsResponse, NewsDto.class);
     }
@@ -95,7 +97,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void deactivateNews(Long id) {
         News toDelete = newsRepository.findById(id).filter(News::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format("%s %d", NOT_FOUND_NEWS, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
         toDelete.setEnabled(false);
         newsRepository.save(toDelete);
     }

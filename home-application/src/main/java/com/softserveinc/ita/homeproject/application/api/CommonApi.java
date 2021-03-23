@@ -10,7 +10,6 @@ import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationSer
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
 
 public abstract class CommonApi {
 

@@ -14,8 +14,6 @@ import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
