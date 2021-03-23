@@ -27,6 +27,7 @@
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/home-api-tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
     <profiles>
         <profile>
@@ -133,9 +134,18 @@
                                             <DATASOURCE_USER>${postgres.user}</DATASOURCE_USER>
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
+                                            <MD5>d4db29ddfdb2753aaaa3e4dd67a0521e</MD5>
+                                            <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
+                                            <JAVA_OPTS> -javaagent:/jacoco/jacocoagent.jar %JAVA_OPTS%</JAVA_OPTS>
                                         </env>
+                                        <volumes>
+                                            <bind>
+                                                <hostPath>/jacoco/jacocoagent.jar</hostPath>
+                                            </bind>
+                                        </volumes>
                                         <ports>
                                             <port>${home.application.external.port}:${home.application.internal.port}</port>
+                                            <port>6300:6300</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
@@ -162,6 +172,7 @@
                                     <goal>start</goal>
                                 </goals>
                             </execution>
+                            <!-- TODO add jacoco report gathering after integration tests before stop-->
                             <execution>
                                 <id>stop</id>
                                 <phase>post-integration-test</phase>
@@ -201,6 +212,29 @@
                                 <goals>
                                     <goal>integration-test</goal>
                                     <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -248,6 +282,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <version>${jacoco.version}</version>
+            <classifier>runtime</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
