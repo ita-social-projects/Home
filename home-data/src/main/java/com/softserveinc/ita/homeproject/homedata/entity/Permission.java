@@ -17,7 +17,6 @@ import lombok.Setter;
 @SequenceGenerator(name = "sequence", sequenceName = "permissions_sequence")
 public class Permission extends BaseEntity {
 
-
     @ManyToMany(mappedBy = "permissions")
     private List<Role> roles;
 

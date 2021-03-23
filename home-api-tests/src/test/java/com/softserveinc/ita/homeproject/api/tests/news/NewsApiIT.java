@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -97,6 +98,8 @@ class NewsApiIT {
 
     @Test
     void createNewsInvalidTitleTest() {
+        ApiException exception = new ApiException(400,
+            "Parameter `title` is invalid - size must be between 1 and 70 signs.");
         CreateNews createNewsInvalidTitle = new CreateNews()
                 .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols"
                     + " - title over 70 symbols")
@@ -107,12 +110,13 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `title` is invalid"
-                    + " - size must be between 1 and 70 signs." + "\"}");
+                .withMessage(createExceptionMessage(exception));
     }
 
     @Test
     void createNewsInvalidDescriptionTest() {
+        ApiException exception = new ApiException(400,
+            "Parameter `description` is invalid - size must be between 1 and 150 signs.");
         CreateNews createNewsInvalidDescription = new CreateNews()
             .title("title")
             .description("description description description description description description description"
@@ -124,8 +128,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `description` is invalid"
-                + " - size must be between 1 and 150 signs." + "\"}");
+            .withMessage(createExceptionMessage(exception));
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {

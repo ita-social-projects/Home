@@ -9,7 +9,6 @@ public class ContactTypeAttributeConverter implements AttributeConverter<Contact
             return null;
         }
 
-
         switch (attribute) {
             case EMAIL:
                 return "email";

@@ -23,9 +23,9 @@ public final class QueryFilterUtils {
 
     public static String createExceptionMessage(ApiException exception) {
         return new StringBuilder()
-            .append("{\"responseCode\":")
+            .append("{\"response_code\":")
             .append(exception.getCode())
-            .append(",\"errorMessage\":\"")
+            .append(",\"error_message\":\"")
             .append(exception.getMessage())
             .append("\"}").toString();
     }

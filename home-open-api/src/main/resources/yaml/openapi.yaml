@@ -57,7 +57,7 @@ paths:
       operationId: getAllNews
       parameters:
         - in: query
-          name: pageNumber
+          name: page_number
           schema:
             type: integer
             minimum: 1
@@ -65,7 +65,7 @@ paths:
           required: false
           description: The number of current page
         - in: query
-          name: pageSize
+          name: page_size
           schema:
             type: integer
             minimum: 0
@@ -251,7 +251,7 @@ paths:
       operationId: getAllUsers
       parameters:
         - in: query
-          name: pageNumber
+          name: page_number
           schema:
             type: integer
             minimum: 1
@@ -259,7 +259,7 @@ paths:
           required: false
           description: The number of current page
         - in: query
-          name: pageSize
+          name: page_size
           schema:
             type: integer
             minimum: 0
@@ -289,22 +289,22 @@ paths:
             type: string
           description: The email of the User
         - in: query
-          name: firstName
+          name: first_name
           schema:
             type: string
           description: The First Name of the User
         - in: query
-          name: lastName
+          name: last_name
           schema:
             type: string
           description: The Last name of the User
         - in: query
-          name: contactPhone
+          name: contact_phone
           schema:
             type: string
           description: Contact phone of the User
         - in: query
-          name: contactEmail
+          name: contact_email
           schema:
             type: string
           description: Contact email of the User
@@ -477,7 +477,7 @@ paths:
             format: int64
             example: 1
         - in: query
-          name: pageNumber
+          name: page_number
           schema:
             type: integer
             minimum: 1
@@ -485,7 +485,7 @@ paths:
           required: false
           description: The number of current page
         - in: query
-          name: pageSize
+          name: page_size
           schema:
             type: integer
             minimum: 0
@@ -730,7 +730,7 @@ components:
           type: string
           example: News In The Local Area
           maximum: 70
-        photoUrl:
+        photo_url:
           type: string
           format: url
           example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
@@ -755,7 +755,7 @@ components:
           example: News in the Some Area
           minLength: 1
           maxLength: 70
-        photoUrl:
+        photo_url:
           type: string
           example: url
         description:
@@ -778,7 +778,7 @@ components:
           minLength: 1
           maxLength: 50
           example: example
-        photoUrl:
+        photo_url:
           type: string
           example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
@@ -797,27 +797,27 @@ components:
     ApiError:
       type: object
       properties:
-        responseCode:
+        response_code:
           type: integer
           example: 404
-        errorMessage:
+        error_message:
           type: string
           example: example
     CreateUser:
       required:
-        - firstName
-        - lastName
+        - first_name
+        - last_name
         - email
         - password
       type: object
       properties:
-        firstName:
+        first_name:
           pattern: '\w+'
           type: string
           example: "Petro"
           minLength: 1
           maxLength: 50
-        lastName:
+        last_name:
           pattern: '\w+'
           type: string
           example: "Zinchenko"
@@ -828,7 +828,7 @@ components:
           type: string
           example: "p.t.z@gmail.com"
           minLength: 5
-          maxLength: 254
+          maxLength: 320
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
@@ -837,6 +837,11 @@ components:
           maxLength: 128
         contacts:
           type: array
+          example:
+            - type: "email"
+            - id: 1
+            - main: false
+            - email: "createUserEmail@example.com"
           items:
             $ref: '#/components/schemas/CreateContact'
     ReadUser:
@@ -844,10 +849,10 @@ components:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
-        firstName:
+        first_name:
           type: string
           example: Petro
-        lastName:
+        last_name:
           type: string
           example: Petrov
         email:
@@ -855,18 +860,23 @@ components:
           example: home@gmail.com
         contacts:
           type: array
+          example:
+            - type: "email"
+            - id: 1
+            - main: false
+            - email: "readUserEmail@example.com"
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
       type: object
       properties:
-        firstName:
+        first_name:
           pattern: '\w+'
           type: string
           example: Petro
           minLength: 1
           maxLength: 50
-        lastName:
+        last_name:
           pattern: '\w+'
           type: string
           example: Petrov
@@ -936,14 +946,19 @@ components:
         type:
           $ref: '#/components/schemas/ContactType'
         main:
+          default: false
           type: boolean
           example: false
     CreateEmailContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
       type: object
+      required:
+        - email
       properties:
         email:
+          minLength: 5
+          maxLength: 320
           pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
           type: string
           example: home@gmail.com
@@ -951,8 +966,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
       type: object
+      required:
+        - phone
       properties:
         phone:
+          minLength: 9
+          maxLength: 13
           type: string
           example: "+380506617305"
     UpdateContact:

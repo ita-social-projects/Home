@@ -63,11 +63,14 @@
                     <validateOperationDescription>true</validateOperationDescription>
                     <validateOperationTag>true</validateOperationTag>
                     <validateOperationSummary>true</validateOperationSummary>
-                    <validateModelPropertiesExample>false</validateModelPropertiesExample>
+                    <validateModelPropertiesExample>true</validateModelPropertiesExample>
                     <validateModelNoLocalDef>true</validateModelNoLocalDef>
-                    <validateNaming>false</validateNaming>
+                    <pathNamingConvention>UnderscoreCase</pathNamingConvention>
+                    <parameterNamingConvention>UnderscoreCase</parameterNamingConvention>
+                    <headerNamingConvention>UnderscoreCase</headerNamingConvention>
+                    <propertyNamingConvention>UnderscoreCase</propertyNamingConvention>
+                    <validateNaming>true</validateNaming>
                     <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
-                    <pathNamingConvention>HyphenCase</pathNamingConvention>
                 </configuration>
                 <executions>
                     <execution>

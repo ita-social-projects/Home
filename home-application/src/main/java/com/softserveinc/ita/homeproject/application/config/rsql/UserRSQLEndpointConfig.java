@@ -25,8 +25,6 @@ public class UserRSQLEndpointConfig implements RSQLEndpointConfig<User, UserQuer
         map.put(UserQueryParamEnum.LAST_NAME, "lastName");
         map.put(UserQueryParamEnum.CONTACT_PHONE, "contacts.phone");
         map.put(UserQueryParamEnum.CONTACT_EMAIL, "contacts.email");
-
-
         return map;
     }
 

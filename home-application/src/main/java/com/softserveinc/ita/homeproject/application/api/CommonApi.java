@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-@Component
 public abstract class CommonApi {
 
     public static final String PAGING_COUNT = "Paging-count";

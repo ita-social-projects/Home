@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cooperation")
-@SequenceGenerator(name = "sequence", sequenceName = "cooperation_sequence")
+@Table(name = "cooperations")
+@SequenceGenerator(name = "sequence", sequenceName = "cooperations_sequence")
 public class Cooperation extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "cooperation")

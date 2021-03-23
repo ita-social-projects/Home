@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContactsRSQLEndpointConfig implements RSQLEndpointConfig<Contact, ContactQueryParamEnum> {
+public class ContactRSQLEndpointConfig implements RSQLEndpointConfig<Contact, ContactQueryParamEnum> {
 
     @Autowired
     private ContactQueryConfig queryConfig;
@@ -25,8 +25,6 @@ public class ContactsRSQLEndpointConfig implements RSQLEndpointConfig<Contact, C
         map.put(ContactQueryParamEnum.EMAIL, "email");
         map.put(ContactQueryParamEnum.MAIN, "main");
         map.put(ContactQueryParamEnum.TYPE, "type");
-
-
         return map;
     }
 
