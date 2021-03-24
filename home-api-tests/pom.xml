@@ -172,6 +172,15 @@
                                     <goal>start</goal>
                                 </goals>
                             </execution>
+                            <execution>
+                                <id>start</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                    <goal>build</goal>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
                             <!-- TODO add jacoco report gathering after integration tests before stop-->
                             <execution>
                                 <id>stop</id>
