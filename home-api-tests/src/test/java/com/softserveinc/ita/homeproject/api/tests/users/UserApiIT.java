@@ -1,70 +1,145 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.CreateContact;
+import com.softserveinc.ita.homeproject.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserApiIT {
-    private final CreateUser createUser = new CreateUser()
-        .firstName("firstName")
-        .lastName("lastName")
-        .password("password");
 
-    private UserApi userApi;
 
-    @BeforeEach
-    public void setUp() {
-        userApi = new UserApi(ApiClientUtil.getClient());
-        createUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
-    }
+    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
     @Test
     void createUserTest() throws ApiException {
-        ReadUser readUser = userApi.createUser(createUser);
+        CreateUser expectedUser = createTestUser();
 
-        assertUser(createUser, readUser);
+        ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(),
+            response.getStatusCode());
+        assertUser(expectedUser, response.getData());
     }
 
     @Test
-    void getUserByIdTest() throws ApiException {
-        ReadUser savedUsers = userApi.createUser(createUser);
+    void getUserTest() throws ApiException {
+        CreateUser expectedUser = createTestUser();
 
-        ReadUser user = userApi.getUser(savedUsers.getId());
+        ApiResponse<ReadUser> response = userApi.getUserWithHttpInfo(userApi.createUser(expectedUser).getId());
 
-        assertNotNull(user);
-        assertEquals(user, savedUsers);
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertUser(expectedUser, response.getData());
     }
 
     @Test
     void updateUserTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createUser);
-
+        ReadUser savedUser = userApi
+            .createUser(createTestUser());
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName");
 
-        ReadUser updatedUser = userApi.updateUser(savedUser.getId(), updateUser);
-        assertUser(savedUser, updateUser, updatedUser);
+        ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertUser(savedUser, updateUser, response.getData());
     }
 
     @Test
     void deleteUserTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createUser);
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        userApi.createUser(createTestUser());
+        userApi.createUser(createTestUser());
+
+        ApiResponse<Void> removeResponse = userApi.deleteUserWithHttpInfo(expectedUser.getId());
+
+        List<ReadUser> actualUsersList = new UserQuery
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .build().perfom();
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removeResponse.getStatusCode());
+        assertFalse(actualUsersList.contains(expectedUser));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.getUser(expectedUser.getId()));
+    }
+
+    private List<CreateContact> createContactList() {
+        List<CreateContact> createContactList = new ArrayList<>();
+        createContactList.add(new CreateEmailContact()
+            .email("primaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(true));
+
+        createContactList.add(new CreateEmailContact()
+            .email("secondaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(false));
+
+        createContactList.add(new CreateEmailContact()
+            .email("myemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(false));
+
+        createContactList.add(new CreateEmailContact()
+            .email("youremail@example.com")
+            .type(ContactType.EMAIL)
+            .main(false));
+
+        createContactList.add(new CreatePhoneContact()
+            .phone("+380509999999")
+            .type(ContactType.PHONE)
+            .main(true));
+
+        createContactList.add(new CreatePhoneContact()
+            .phone("+380679999999")
+            .type(ContactType.PHONE)
+            .main(false));
+
+        createContactList.add(new CreatePhoneContact()
+            .phone("+380639999999")
+            .type(ContactType.PHONE)
+            .main(false));
+
+        return createContactList;
+    }
+
+    private CreateUser createTestUser() {
+        return new CreateUser()
+            .firstName("firstName")
+            .lastName("lastName")
+            .password("password")
+            .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
+            .contacts(createContactList());
     }
 
     @Test
     void createUserInvalidEmailTest() {
+        ApiException exception = new ApiException(400, "Parameter `email` is invalid - must meet the rule.");
         CreateUser createUserInvalidEmail = new CreateUser()
                 .firstName("alan")
                 .lastName("walker")
@@ -73,12 +148,12 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `email` is invalid - must meet"
-                    + " the rule." + "\"}");
+                .withMessage(createExceptionMessage(exception));
     }
 
     @Test
     void createUserInvalidPasswordTest() {
+        ApiException exception = new ApiException(400, "Parameter `password` is invalid - must meet the rule.");
         CreateUser createUserInvalidPassword = new CreateUser()
             .firstName("alan")
             .lastName("walker")
@@ -87,8 +162,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
-            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `password` is invalid - must meet"
-                + " the rule." + "\"}");
+            .withMessage(createExceptionMessage(exception));
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

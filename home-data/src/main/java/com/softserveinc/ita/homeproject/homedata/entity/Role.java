@@ -10,16 +10,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Table(name = "roles")
 @SequenceGenerator(name = "sequence", sequenceName = "roles_sequence")
 public class Role extends BaseEntity {
