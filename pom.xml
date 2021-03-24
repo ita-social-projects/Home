@@ -203,9 +203,6 @@
                             <rules>
                                 <rule>
                                     <element>CLASS</element>
-                                    <excludes>
-                                        <exclude>com.asimio.demo.Application</exclude>
-                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
