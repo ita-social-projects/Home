@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "addresses")
+@SequenceGenerator(name = "sequence", sequenceName = "addresses_sequence")
 public class Address extends BaseEntity {
 
     @Column(name = "region")

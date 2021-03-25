@@ -419,8 +419,6 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/ReadCooperation'
         '400':
           $ref: '#/components/responses/BadRequest'
