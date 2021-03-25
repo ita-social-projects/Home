@@ -21,8 +21,6 @@
     <changeSet id="Issue91.002" author="denis-litvinov">
         <dropNotNullConstraint tableName="houses"
                                columnName="UPDATE_DATE"/>
-        <!--        <dropForeignKeyConstraint baseTableName="houses"-->
-        <!--                                  constraintName="houses_cooperation_id_key"/>-->
         <dropUniqueConstraint tableName="houses"
                               constraintName="houses_cooperation_id_key"
                               uniqueColumns="cooperation_id"/>
@@ -160,6 +158,18 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="Issue91.006" author="denis-litvinov">
+        <createSequence incrementBy="50" sequenceName="cooperations_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue91.007" author="denis-litvinov">
+        <createSequence incrementBy="50" sequenceName="houses_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue91.008" author="denis-litvinov">
+        <createSequence incrementBy="50" sequenceName="addresses_sequence"/>
     </changeSet>
 
 </databaseChangeLog>

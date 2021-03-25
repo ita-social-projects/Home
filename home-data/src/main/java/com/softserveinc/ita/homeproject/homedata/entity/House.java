@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "houses")
+@SequenceGenerator(name = "sequence", sequenceName = "houses_sequence")
 public class House extends BaseEntity {
 
     @Column(name = "quantity_flat")

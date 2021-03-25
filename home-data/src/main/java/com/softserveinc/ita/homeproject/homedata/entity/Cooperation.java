@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "cooperation")
+@SequenceGenerator(name = "sequence", sequenceName = "cooperations_sequence")
 public class Cooperation extends BaseEntity {
 
     @Column(name = "usreo")
