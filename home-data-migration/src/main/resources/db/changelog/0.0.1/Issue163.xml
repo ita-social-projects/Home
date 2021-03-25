@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue163.001" author="dmytro-dzhunenko">
+        <createProcedure>
+            create or replace procedure sequence_start_value_filling(table_name varchar, sequence_name varchar)
+            language plpgsql
+            as
+            $$
+            declare
+            start_value bigint;
+            begin
+            execute 'SELECT MAX(id) FROM ' || table_name INTO start_value;
+            perform setval(sequence_name, start_value);
+            end
+            $$;
+        </createProcedure>
+    </changeSet>
+
+    <changeSet id="Issue163.002" author="dmytro-dzhunenko">
+        <createSequence incrementBy="50" sequenceName="users_sequence"/>
+        <sql>call sequence_start_value_filling('users','users_sequence')</sql>
+    </changeSet>
+
+    <changeSet id="Issue163.003" author="dmytro-dzhunenko">
+        <createSequence incrementBy="50" sequenceName="news_sequence"/>
+        <sql>call sequence_start_value_filling('news','news_sequence')</sql>
+    </changeSet>
+
+    <changeSet id="Issue163.004" author="dmytro-dzhunenko">
+        <createSequence incrementBy="50" sequenceName="permissions_sequence"/>
+        <sql>call sequence_start_value_filling('permissions','permissions_sequence')</sql>
+    </changeSet>
+
+    <changeSet id="Issue163.005" author="dmytro-dzhunenko">
+        <createSequence incrementBy="50" sequenceName="roles_sequence"/>
+        <sql>call sequence_start_value_filling('roles','roles_sequence')</sql>
+    </changeSet>
+
+    <changeSet id="Issue163.006" author="dmytro-dzhunenko">
+        <dropProcedure procedureName="sequence_start_value_filling"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -9,6 +9,10 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 public final class ExceptionMapperUtils {
 
+    private ExceptionMapperUtils() {
+
+    }
+
     public static String getBadRequestExceptionMessageParser(RSQLParserException exception) {
         String message = null;
         if (!exception.getMessage().contains("<EOF>")) {

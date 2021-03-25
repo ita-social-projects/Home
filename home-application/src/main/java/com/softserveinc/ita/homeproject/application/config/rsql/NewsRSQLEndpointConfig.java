@@ -1,11 +1,12 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
+import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig.NewsQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,8 @@ public class NewsRSQLEndpointConfig implements RSQLEndpointConfig<News, NewsQuer
     private NewsQueryConfig queryConfig;
 
     @Override
-    public Map<NewsQueryConfig.NewsQueryParamEnum, String> getMappings() {
-        HashMap<NewsQueryConfig.NewsQueryParamEnum, String> map = new HashMap<>();
+    public Map<NewsQueryParamEnum, String> getMappings() {
+        EnumMap<NewsQueryParamEnum, String> map = new EnumMap<>(NewsQueryParamEnum.class);
 
         map.put(NewsQueryConfig.NewsQueryParamEnum.SOURCE, "source");
         map.put(NewsQueryConfig.NewsQueryParamEnum.TEXT, "text");

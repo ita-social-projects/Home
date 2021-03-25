@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
 import java.util.List;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.model.ReadNews;
