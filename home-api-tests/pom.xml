@@ -27,7 +27,10 @@
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
-        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/home-api-tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <docker-files>${basedir}/target/docker</docker-files>
+        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
+        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
     </properties>
     <profiles>
         <profile>
@@ -38,9 +41,95 @@
             </properties>
         </profile>
         <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-data-migration</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-application</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.softserveinc.ita.homeproject</groupId>
+                            <artifactId>home-generated-server</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-service</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-data</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <id>collect-coverage</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>dump</goal>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <port>${jacoco.agent.external.port}</port>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>api-tests-infrastructure</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-jacoco-agent</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.jacoco</groupId>
+                                            <artifactId>org.jacoco.agent</artifactId>
+                                            <version>${jacoco.version}</version>
+                                            <classifier>runtime</classifier>
+                                            <type>jar</type>
+                                            <destFileName>${jacoco-agent-name}</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${docker-files}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
@@ -54,6 +143,7 @@
                                 <configuration>
                                     <portNames>
                                         <portName>home.application.external.port</portName>
+                                        <portName>jacoco.agent.external.port</portName>
                                         <portName>liquibase.external.port</portName>
                                         <portName>postgres.external.port</portName>
                                     </portNames>
@@ -86,7 +176,7 @@
                                         </ports>
                                         <wait>
                                             <log>database system is ready to accept connections</log>
-                                            <time>20000</time>
+                                            <time>25000</time>
                                         </wait>
                                         <log>
                                             <enabled>true</enabled>
@@ -114,7 +204,7 @@
                                         </links>
                                         <wait>
                                             <log>Successfully released change log lock</log>
-                                            <time>10000</time>
+                                            <time>15000</time>
                                         </wait>
                                         <log>
                                             <enabled>true</enabled>
@@ -136,23 +226,23 @@
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                             <MD5>d4db29ddfdb2753aaaa3e4dd67a0521e</MD5>
                                             <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
-                                            <JAVA_OPTS> -javaagent:/jacoco/jacocoagent.jar %JAVA_OPTS%</JAVA_OPTS>
+                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS> <!-- -javaagent:/jacoco/${jacoco-agent-name} -->
                                         </env>
                                         <volumes>
                                             <bind>
-                                                <hostPath>/jacoco/jacocoagent.jar</hostPath>
+                                                <volume>${docker-files}:/jacoco</volume>
                                             </bind>
                                         </volumes>
                                         <ports>
                                             <port>${home.application.external.port}:${home.application.internal.port}</port>
-                                            <port>6300:6300</port>
+                                            <port>${jacoco.agent.external.port}:${jacoco.agent.internal.port}</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
                                         </links>
                                         <wait>
                                             <log>Started HomeApplication</log>
-                                            <time>30000</time>
+                                            <time>300000</time>
                                         </wait>
                                         <log>
                                             <enabled>true</enabled>
@@ -172,15 +262,6 @@
                                     <goal>start</goal>
                                 </goals>
                             </execution>
-                            <execution>
-                                <id>jacoco</id>
-                                <phase>post-integration-test</phase>
-                                <configuration>
-                                    <name>sonar.coverage.jacoco.xmlReportPaths</name>
-                                    <value>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml,${sonar.coverage.jacoco.xmlReportPaths}</value>
-                                </configuration>
-                            </execution>
-                            <!-- TODO add jacoco report gathering after integration tests before stop-->
                             <execution>
                                 <id>stop</id>
                                 <phase>post-integration-test</phase>
@@ -227,38 +308,9 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>jacoco</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>report-aggregate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <dependencies>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-data-migration</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -290,13 +342,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.agent</artifactId>
-            <version>${jacoco.version}</version>
-            <classifier>runtime</classifier>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
