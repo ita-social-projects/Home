@@ -42,7 +42,6 @@
         <checkstyle.version>8.41</checkstyle.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml</checkstyle.configLocation>
-        <jacoco.version>0.8.6</jacoco.version>
     </properties>
 
     <profiles>
