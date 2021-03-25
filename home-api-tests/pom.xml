@@ -30,6 +30,7 @@
         <docker-files>${basedir}/target/docker</docker-files>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
     <profiles>
         <profile>
