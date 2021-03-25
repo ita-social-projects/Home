@@ -48,6 +48,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
+        if(true) {
+            System.out.println(userId);
+        }
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
         ContactDto readContactDto = contactService.createContact(userId, createContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
