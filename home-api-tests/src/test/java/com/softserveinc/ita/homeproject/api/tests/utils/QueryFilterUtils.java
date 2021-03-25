@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import java.util.StringJoiner;
+
 import com.softserveinc.ita.homeproject.ApiException;
 
 public final class QueryFilterUtils {
@@ -22,9 +23,9 @@ public final class QueryFilterUtils {
 
     public static String createExceptionMessage(ApiException exception) {
         return new StringBuilder()
-            .append("{\"responseCode\":")
+            .append("{\"response_code\":")
             .append(exception.getCode())
-            .append(",\"errorMessage\":\"")
+            .append(",\"error_message\":\"")
             .append(exception.getMessage())
             .append("\"}").toString();
     }

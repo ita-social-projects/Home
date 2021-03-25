@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -33,8 +34,8 @@ public class UserServiceImpl implements UserService {
 
     private final ServiceMapper mapper;
 
-    @Transactional
     @Override
+    @Transactional
     public UserDto createUser(UserDto createUserDto) {
         if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
             throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
@@ -45,6 +46,10 @@ public class UserServiceImpl implements UserService {
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
             toCreate.setCreateDate(LocalDateTime.now());
+            toCreate.getContacts().forEach(contact -> {
+                contact.setUser(toCreate);
+                contact.setEnabled(true);
+            });
 
             userRepository.save(toCreate);
 
@@ -53,10 +58,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
-        if (userRepository.findById(id).isPresent()) {
 
-            User fromDB = userRepository.findById(id).get();
+        Optional<User> optionalUser = userRepository.findById(id).filter(User::getEnabled);
+
+        if (optionalUser.isPresent()) {
+            User fromDB = optionalUser.get();
 
             if (updateUserDto.getFirstName() != null) {
                 fromDB.setFirstName(updateUserDto.getFirstName());
@@ -66,8 +74,12 @@ public class UserServiceImpl implements UserService {
                 fromDB.setLastName(updateUserDto.getLastName());
             }
 
-            if (updateUserDto.getContacts() != null) {
-                fromDB.setContacts(updateUserDto.getContacts());
+            if (updateUserDto.getEmail() != null) {
+                fromDB.setEmail(updateUserDto.getEmail());
+            }
+
+            if (updateUserDto.getPassword() != null) {
+                fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
             }
 
             fromDB.setUpdateDate(LocalDateTime.now());
@@ -80,6 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
         Specification<User> userSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
@@ -88,17 +101,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto getUserById(Long id) {
-        User toGet = userRepository.findById(id)
+        User toGet = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         return mapper.convert(toGet, UserDto.class);
     }
 
     @Override
+    @Transactional
     public void deactivateUser(Long id) {
-        User toDelete = userRepository.findById(id)
+        User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
         toDelete.setEnabled(false);
+        toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
     }
 

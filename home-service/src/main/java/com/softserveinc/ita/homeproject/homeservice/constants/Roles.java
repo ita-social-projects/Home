@@ -6,9 +6,17 @@ package com.softserveinc.ita.homeproject.homeservice.constants;
  *
  * @author Mykyta Morar
  */
-public interface Roles {
-    String USER_ROLE = "USER";
-    String ADMIN_ROLE = "ADMIN";
-    String OWNER_ROLE = "OWNER";
-    String EXECUTOR_ROLE = "EXECUTOR";
+public final class Roles {
+
+    private Roles() {
+
+    }
+
+    public static final String USER_ROLE = "USER";
+
+    public static final String ADMIN_ROLE = "ADMIN";
+
+    public static final String OWNER_ROLE = "OWNER";
+
+    public static final String EXECUTOR_ROLE = "EXECUTOR";
 }

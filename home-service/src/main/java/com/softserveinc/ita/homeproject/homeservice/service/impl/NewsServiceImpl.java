@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
@@ -19,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
 
+    private static final String NOT_FOUND_NEWS = "Can't find news with given ID:";
+
+    private static final String FORMAT = "%s %d";
+
     private final NewsRepository newsRepository;
 
     private final ServiceMapper mapper;
@@ -28,6 +33,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsDto create(NewsDto newsDto) {
         News news = mapper.convert(newsDto, News.class);
         news.setCreateDate(LocalDateTime.now());
+        news.setEnabled(true);
 
         newsRepository.save(news);
 
@@ -38,9 +44,10 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     public NewsDto update(Long id, NewsDto newsDto) {
 
-        if (newsRepository.findById(id).isPresent()) {
+        Optional<News> optionalNews = newsRepository.findById(id).filter(News::getEnabled);
+        if (optionalNews.isPresent()) {
 
-            News fromDB = newsRepository.findById(id).get();
+            News fromDB = optionalNews.get();
 
             if (newsDto.getTitle() != null) {
                 fromDB.setTitle(newsDto.getTitle());
@@ -67,29 +74,32 @@ public class NewsServiceImpl implements NewsService {
             return mapper.convert(fromDB, NewsDto.class);
 
         } else {
-            throw new NotFoundHomeException("Can't find news with given ID:" + id);
+            throw new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id));
         }
     }
 
     @Override
     public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
-        return newsRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
+        Specification<News> newsSpecification = specification
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
+        return newsRepository.findAll(newsSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(news -> mapper.convert(news, NewsDto.class));
     }
 
     @Override
     public NewsDto getById(Long id) {
-        News newsResponse = newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
+        News newsResponse = newsRepository.findById(id).filter(News::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
 
         return mapper.convert(newsResponse, NewsDto.class);
     }
 
     @Override
-    public void deleteById(Long id) {
-        newsRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find news with given ID:" + id));
-        newsRepository.deleteById(id);
+    public void deactivateNews(Long id) {
+        News toDelete = newsRepository.findById(id).filter(News::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
+        toDelete.setEnabled(false);
+        newsRepository.save(toDelete);
     }
 
 }

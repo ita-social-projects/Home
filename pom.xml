@@ -30,7 +30,7 @@
         <lombok.version>1.18.16</lombok.version>
         <flatten.maven.plugin.version>1.2.5</flatten.maven.plugin.version>
         <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
-        <rapidoc.version>7.2.1</rapidoc.version>
+        <rapidoc.version>8.1.0</rapidoc.version>
         <modelMapper.version>2.3.9</modelMapper.version>
         <jib.version>2.7.1</jib.version>
         <jib.goal>dockerBuild</jib.goal>
@@ -40,7 +40,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <jacoco.version>0.8.6</jacoco.version>
         <liquibase.version>4.3.1</liquibase.version>
-        <checkstyle.version>8.40</checkstyle.version>
+        <checkstyle.version>8.41</checkstyle.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml</checkstyle.configLocation>
         <jacoco.version>0.8.6</jacoco.version>

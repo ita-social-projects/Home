@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
@@ -18,14 +21,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryUserIT {
+class QueryUserIT {
 
     private final CreateUser expectedUser = new CreateUser()
         .firstName("Bill")
         .lastName("White")
         .password("password");
 
-    private UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
     @Test
     void getAllUsers() throws ApiException {
@@ -82,15 +85,8 @@ public class QueryUserIT {
             .build()
             .perfom();
 
-        assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r1.getLastName() == null) {
-                return -1;
-            }
-            if (r2.getLastName() == null) {
-                return 1;
-            }
-            return r1.getLastName().compareTo(r2.getLastName());
-        });
+        assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
+            .requireNonNull(u1.getLastName()).compareToIgnoreCase(Objects.requireNonNull(u2.getLastName())));
     }
 
     @Test
@@ -104,15 +100,8 @@ public class QueryUserIT {
             .sort("firstName,desc")
             .build().perfom();
 
-        assertThat(actualListUsers).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r2.getFirstName() == null) {
-                return -1;
-            }
-            if (r1.getFirstName() == null) {
-                return 1;
-            }
-            return r2.getFirstName().compareTo(r1.getFirstName());
-        });
+        assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
+            .requireNonNull(u2.getFirstName()).compareToIgnoreCase(Objects.requireNonNull(u1.getFirstName())));
     }
 
     @Test

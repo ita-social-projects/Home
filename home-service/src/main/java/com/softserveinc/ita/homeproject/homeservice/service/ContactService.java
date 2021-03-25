@@ -1,0 +1,19 @@
+package com.softserveinc.ita.homeproject.homeservice.service;
+
+import com.softserveinc.ita.homeproject.homedata.entity.Contact;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
+
+public interface ContactService {
+
+    ContactDto createContact(Long userId, ContactDto createContactDto);
+
+    ContactDto updateContact(Long id, ContactDto updateContactDto);
+
+    Page<ContactDto> getAllContacts(Integer pageNumber, Integer pageSize, Specification<Contact> specification);
+
+    ContactDto getContactById(Long id);
+
+    void deactivateContact(Long id);
+}

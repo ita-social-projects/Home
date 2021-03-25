@@ -3,8 +3,11 @@ package com.softserveinc.ita.homeproject.api.tests.news;
 import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
@@ -15,14 +18,14 @@ import com.softserveinc.ita.homeproject.model.ReadNews;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryNewsIT {
+class QueryNewsIT {
     private final CreateNews expectedNews = new CreateNews()
         .description("description")
         .source("source")
         .text("text")
         .photoUrl("photoUrl");
 
-    private NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
     void getAllNews() throws ApiException {
@@ -41,7 +44,7 @@ public class QueryNewsIT {
     @Test
     void getAllNewsByTitleTest() throws ApiException {
         expectedNews.setTitle(RandomStringUtils.randomAlphabetic(7));
-        newsApi.addNews(expectedNews);
+        newsApi.createNews(expectedNews);
 
         List<ReadNews> actualListNews = new NewsQuery
             .Builder(newsApi)
@@ -57,7 +60,7 @@ public class QueryNewsIT {
     @Test
     void getAllNewsBySourceTest() throws ApiException {
         expectedNews.setTitle(RandomStringUtils.randomAlphabetic(7));
-        newsApi.addNews(expectedNews);
+        newsApi.createNews(expectedNews);
 
         List<ReadNews> actualListNews = new NewsQuery
             .Builder(newsApi)
@@ -97,15 +100,8 @@ public class QueryNewsIT {
             .build()
             .perfom();
 
-        assertThat(actualListNews).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r2.getSource() == null) {
-                return -1;
-            }
-            if (r1.getSource() == null) {
-                return 1;
-            }
-            return r2.getSource().compareTo(r1.getSource());
-        });
+        assertThat(actualListNews).isSortedAccordingTo((n1, n2) -> Objects
+            .requireNonNull(n2.getSource()).compareToIgnoreCase(Objects.requireNonNull(n1.getSource())));
     }
 
     @Test
@@ -120,15 +116,8 @@ public class QueryNewsIT {
             .build()
             .perfom();
 
-        assertThat(actualListNews).isNotEmpty().isSortedAccordingTo((r1, r2) -> {
-            if (r1.getSource() == null) {
-                return -1;
-            }
-            if (r2.getSource() == null) {
-                return 1;
-            }
-            return r1.getSource().compareTo(r2.getSource());
-        });
+        assertThat(actualListNews).isSortedAccordingTo((n1, n2) -> Objects
+            .requireNonNull(n1.getSource()).compareToIgnoreCase(Objects.requireNonNull(n2.getSource())));
     }
 
     @Test
@@ -254,7 +243,7 @@ public class QueryNewsIT {
         List<CreateNews> expectedList = createNewsList();
         List<ReadNews> actualList = new ArrayList<>();
         for (CreateNews cn : expectedList) {
-            actualList.add(newsApi.addNews(cn));
+            actualList.add(newsApi.createNews(cn));
         }
         return actualList;
     }
