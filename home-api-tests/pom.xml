@@ -28,8 +28,8 @@
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
         <docker-files>${basedir}/target/docker</docker-files>
-        <jococo-agent-name>jacocoagent.jar</jococo-agent-name>
-        <jococo.agent.internal.port>6300</jococo.agent.internal.port>
+        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
+        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
     </properties>
     <profiles>
         <profile>
@@ -91,7 +91,7 @@
                                     <goal>report-aggregate</goal>
                                 </goals>
                                 <configuration>
-                                    <port>${jococo.agent.external.port}</port>
+                                    <port>${jacoco.agent.external.port}</port>
                                 </configuration>
                             </execution>
                         </executions>
@@ -108,7 +108,7 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy-jococo-agent</id>
+                                <id>copy-jacoco-agent</id>
                                 <phase>initialize</phase>
                                 <goals>
                                     <goal>copy</goal>
@@ -121,7 +121,7 @@
                                             <version>${jacoco.version}</version>
                                             <classifier>runtime</classifier>
                                             <type>jar</type>
-                                            <destFileName>${jococo-agent-name}</destFileName>
+                                            <destFileName>${jacoco-agent-name}</destFileName>
                                         </artifactItem>
                                     </artifactItems>
                                     <outputDirectory>${docker-files}</outputDirectory>
@@ -142,7 +142,7 @@
                                 <configuration>
                                     <portNames>
                                         <portName>home.application.external.port</portName>
-                                        <portName>jococo.agent.external.port</portName>
+                                        <portName>jacoco.agent.external.port</portName>
                                         <portName>liquibase.external.port</portName>
                                         <portName>postgres.external.port</portName>
                                     </portNames>
@@ -224,16 +224,16 @@
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                             <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
-                                            <JAVA_TOOL_OPTIONS>-javaagent:/jococo/${jococo-agent-name}=port=${jococo.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS> <!-- -javaagent:/jococo/${jococo-agent-name} -->
+                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS> <!-- -javaagent:/jacoco/${jacoco-agent-name} -->
                                         </env>
                                         <volumes>
                                             <bind>
-                                                <volume>${docker-files}:/jococo</volume>
+                                                <volume>${docker-files}:/jacoco</volume>
                                             </bind>
                                         </volumes>
                                         <ports>
                                             <port>${home.application.external.port}:${home.application.internal.port}</port>
-                                            <port>${jococo.agent.external.port}:${jococo.agent.internal.port}</port>
+                                            <port>${jacoco.agent.external.port}:${jacoco.agent.internal.port}</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
