@@ -24,6 +24,7 @@ jobs:
           clean deploy sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
+          -Pjacoco
           -Ppush.images
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
