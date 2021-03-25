@@ -65,11 +65,12 @@
                     <validateOperationSummary>true</validateOperationSummary>
                     <validateModelPropertiesExample>true</validateModelPropertiesExample>
                     <validateModelNoLocalDef>true</validateModelNoLocalDef>
+                    <pathNamingConvention>UnderscoreCase</pathNamingConvention>
+                    <parameterNamingConvention>UnderscoreCase</parameterNamingConvention>
+                    <headerNamingConvention>UnderscoreCase</headerNamingConvention>
+                    <propertyNamingConvention>UnderscoreCase</propertyNamingConvention>
                     <validateNaming>true</validateNaming>
                     <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
-                    <pathNamingConvention>HyphenCase</pathNamingConvention>
-                    <parameterNamingConvention>CamelCase</parameterNamingConvention>
-                    <propertyNamingConvention>CamelCase</propertyNamingConvention>
                 </configuration>
                 <executions>
                     <execution>

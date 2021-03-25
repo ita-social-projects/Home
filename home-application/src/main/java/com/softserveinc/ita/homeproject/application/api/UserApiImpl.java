@@ -8,25 +8,27 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.UserQueryConfig.UserQueryParamEnum;
+import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
@@ -35,14 +37,23 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @author Mykyta Morar
  */
 @Provider
-@NoArgsConstructor
-public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
+@Component
+public class UserApiImpl extends CommonApi implements UsersApi {
 
+    @Autowired
+    private ContactService contactService;
+
+    @Autowired
     private UserService userService;
 
-    private HomeMapper mapper;
+    @Override
+    public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
+        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
+        ContactDto readContactDto = contactService.createContact(userId, createContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
-    private EntitySpecificationService entitySpecificationService;
+        return Response.status(Response.Status.CREATED).entity(readContact).build();
+    }
 
     /**
      * createUser method is implementation of HTTP POST
@@ -77,6 +88,42 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
+    @Override
+    public Response queryContactsOnUser(Long userId,
+                                        @Min(1) Integer pageNumber,
+                                        @Min(0) @Max(10) Integer pageSize,
+                                        String sort,
+                                        String filter,
+                                        String id,
+                                        String phone,
+                                        String email,
+                                        String main,
+                                        String type) {
+        Map<String, String> filterMap = new HashMap<>();
+
+        filterMap.put("user_id", userId.toString());
+        filterMap.put("id", id);
+        filterMap.put("phone", phone);
+        filterMap.put("email", email);
+        filterMap.put("main", main);
+        filterMap.put("type", type);
+
+        Page<ContactDto> contacts = contactService.getAllContacts(
+            pageNumber,
+            pageSize,
+            entitySpecificationService.getSpecification(filterMap, filter, sort)
+        );
+
+        return buildQueryResponse(contacts, ReadContact.class);
+    }
+
+    @Override
+    public Response deleteContactOnUser(Long userId, Long contactId) {
+        contactService.deactivateContact(contactId);
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
     /**
      * queryUsers method is implementation of HTTP GET
      * method for getting all users from database.
@@ -95,15 +142,16 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
                                 String email,
                                 String firstName,
                                 String lastName,
-                                String contact) {
+                                String contactPhone,
+                                String contactEmail) {
+        Map<String, String> filterMap = new HashMap<>();
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
-
-        filterMap.put(UserQueryParamEnum.ID, id);
-        filterMap.put(UserQueryParamEnum.EMAIL, email);
-        filterMap.put(UserQueryParamEnum.CONTACT, contact);
-        filterMap.put(UserQueryParamEnum.LAST_NAME, lastName);
-        filterMap.put(UserQueryParamEnum.FIRST_NAME, firstName);
+        filterMap.put("id", id);
+        filterMap.put("email", email);
+        filterMap.put("lastName", lastName);
+        filterMap.put("firstName", firstName);
+        filterMap.put("contactPhone", contactPhone);
+        filterMap.put("contactEmail", contactEmail);
 
         Page<UserDto> users = userService.findUsers(
             pageNumber,
@@ -112,6 +160,14 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         );
 
         return buildQueryResponse(users, ReadUser.class);
+    }
+
+    @Override
+    public Response getContactOnUser(Long userId, Long contactId) {
+        ContactDto readContactDto = contactService.getContactById(contactId);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     /**
@@ -123,10 +179,19 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
      */
     @PreAuthorize(DEACTIVATE_USER_PERMISSION)
     @Override
-    public Response removeUser(Long id) {
+    public Response deleteUser(Long id) {
         userService.deactivateUser(id);
 
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @Override
+    public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
+        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        ContactDto readContactDto = contactService.updateContact(contactId, updateContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+
+        return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     /**
@@ -147,23 +212,4 @@ public class UserApiImpl extends CommonApi<UserDto> implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
 }
