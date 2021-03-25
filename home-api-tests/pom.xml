@@ -226,7 +226,7 @@
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                             <MD5>d4db29ddfdb2753aaaa3e4dd67a0521e</MD5>
                                             <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
-                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS> <!-- -javaagent:/jacoco/${jacoco-agent-name} -->
+                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS>
                                         </env>
                                         <volumes>
                                             <bind>
