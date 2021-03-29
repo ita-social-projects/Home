@@ -80,6 +80,32 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-jacoco-agent</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.jacoco</groupId>
+                                            <artifactId>org.jacoco.agent</artifactId>
+                                            <version>${jacoco.version}</version>
+                                            <classifier>runtime</classifier>
+                                            <type>jar</type>
+                                            <destFileName>${jacoco-agent-name}</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${docker-files}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>${jacoco.version}</version>
@@ -104,32 +130,6 @@
             <id>api-tests-infrastructure</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-jacoco-agent</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.jacoco</groupId>
-                                            <artifactId>org.jacoco.agent</artifactId>
-                                            <version>${jacoco.version}</version>
-                                            <classifier>runtime</classifier>
-                                            <type>jar</type>
-                                            <destFileName>${jacoco-agent-name}</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                    <outputDirectory>${docker-files}</outputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
