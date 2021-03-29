@@ -24,7 +24,7 @@ jobs:
           clean install sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
-          -Pjacoco -Dsonar.coverage.jacoco.xmlReportPaths>=home-api-tests/target/site/jacoco-aggregate/jacoco.xml
+          -Pjacoco -Dsonar.coverage.jacoco.xmlReportPaths=home-api-tests/target/site/jacoco-aggregate/jacoco.xml
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
