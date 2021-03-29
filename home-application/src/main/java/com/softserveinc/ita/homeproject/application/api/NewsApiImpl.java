@@ -13,11 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.NewsApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
@@ -25,6 +21,7 @@ import com.softserveinc.ita.homeproject.model.UpdateNews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 /**
  * NewsApiServiceImpl class is the inter layer between generated
@@ -34,13 +31,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
  */
 
 @Provider
+@Component
 public class NewsApiImpl extends CommonApi implements NewsApi {
 
+    @Autowired
     private NewsService newsService;
-
-    private HomeMapper mapper;
-
-    private EntitySpecificationService entitySpecificationService;
 
 
     /**
@@ -52,7 +47,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      */
     @PreAuthorize(CREATE_NEWS_PERMISSION)
     @Override
-    public Response addNews(CreateNews createNews) {
+    public Response createNews(CreateNews createNews) {
         NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
         ReadNews response = mapper.convert(createdNewsDto, ReadNews.class);
@@ -70,7 +65,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
     @PreAuthorize(DELETE_NEWS_PERMISSION)
     @Override
     public Response deleteNews(Long id) {
-        newsService.deleteById(id);
+        newsService.deactivateNews(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -93,12 +88,12 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                String text,
                                String source) {
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new HashMap<>();
 
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.ID, id);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TITLE, title);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.TEXT, text);
-        filterMap.put(NewsQueryConfig.NewsQueryParamEnum.SOURCE, source);
+        filterMap.put("id", id);
+        filterMap.put("title", title);
+        filterMap.put("text", text);
+        filterMap.put("source", source);
 
         Page<NewsDto> readNews = newsService.findNews(
             pageNumber,
@@ -142,23 +137,4 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
         return Response.ok().entity(response).build();
     }
 
-    @Autowired
-    public void setNewsService(NewsService newsService) {
-        this.newsService = newsService;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
 }

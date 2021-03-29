@@ -35,4 +35,6 @@ public class News extends BaseEntity {
     @Column(name = "source")
     private String source;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

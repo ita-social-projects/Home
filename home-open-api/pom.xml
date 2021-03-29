@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>home</artifactId>
@@ -50,37 +50,38 @@
                     </execution>
                 </executions>
             </plugin>
-                        <plugin>
-                            <groupId>org.openapitools.openapistylevalidator</groupId>
-                            <artifactId>openapi-style-validator-maven-plugin</artifactId>
-                            <version>1.4</version>
-                            <configuration>
-                                <inputFile>${project.build.resources[0].directory}/yaml/openapi.yaml</inputFile>
-                                <validateInfoLicense>true</validateInfoLicense>
-                                <validateInfoDescription>true</validateInfoDescription>
-                                <validateInfoContact>true</validateInfoContact>
-                                <validateOperationOperationId>true</validateOperationOperationId>
-                                <validateOperationDescription>true</validateOperationDescription>
-                                <validateOperationTag>true</validateOperationTag>
-                                <validateOperationSummary>true</validateOperationSummary>
-                                <validateModelPropertiesExample>true</validateModelPropertiesExample>
-                                <validateModelNoLocalDef>true</validateModelNoLocalDef>
-                                <validateNaming>false</validateNaming>
-                                <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
-                                <pathNamingConvention>HyphenCase</pathNamingConvention>
-                                <parameterNamingConvention>CamelCase</parameterNamingConvention>
-                                <propertyNamingConvention>CamelCase</propertyNamingConvention>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>validate</id>
-                                    <phase>validate</phase>
-                                    <goals>
-                                        <goal>validate</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
+            <plugin>
+                <groupId>org.openapitools.openapistylevalidator</groupId>
+                <artifactId>openapi-style-validator-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <inputFile>${project.build.resources[0].directory}/yaml/openapi.yaml</inputFile>
+                    <validateInfoLicense>true</validateInfoLicense>
+                    <validateInfoDescription>true</validateInfoDescription>
+                    <validateInfoContact>true</validateInfoContact>
+                    <validateOperationOperationId>true</validateOperationOperationId>
+                    <validateOperationDescription>true</validateOperationDescription>
+                    <validateOperationTag>true</validateOperationTag>
+                    <validateOperationSummary>true</validateOperationSummary>
+                    <validateModelPropertiesExample>true</validateModelPropertiesExample>
+                    <validateModelNoLocalDef>true</validateModelNoLocalDef>
+                    <pathNamingConvention>UnderscoreCase</pathNamingConvention>
+                    <parameterNamingConvention>UnderscoreCase</parameterNamingConvention>
+                    <headerNamingConvention>UnderscoreCase</headerNamingConvention>
+                    <propertyNamingConvention>UnderscoreCase</propertyNamingConvention>
+                    <validateNaming>true</validateNaming>
+                    <ignoreHeaderXNaming>true</ignoreHeaderXNaming>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

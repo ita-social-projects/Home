@@ -6,7 +6,9 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
+import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 public abstract class CommonApi {
@@ -17,7 +19,11 @@ public abstract class CommonApi {
 
     public static final String PAGING_TOTAL_COUNT = "Paging-total-count";
 
-    public abstract HomeMapper getMapper();
+    @Autowired
+    protected HomeMapper mapper;
+
+    @Autowired
+    protected EntitySpecificationService entitySpecificationService;
 
     <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
@@ -25,7 +31,7 @@ public abstract class CommonApi {
         int numberOfElements = page.getNumberOfElements();
 
         List<?> pageElements = page.stream()
-            .map(p -> getMapper().convert(p, clazz))
+            .map(p -> mapper.convert(p, clazz))
             .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK)

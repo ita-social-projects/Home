@@ -39,17 +39,18 @@ import com.softserveinc.ita.homeproject.model.UpdateHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 
 @Provider
+@Component
 public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
+    @Autowired
     private CooperationService cooperationService;
 
+    @Autowired
     private HouseService houseService;
 
-    private HomeMapper mapper;
-
-    private EntitySpecificationService entitySpecificationService;
 
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
@@ -182,31 +183,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
-    }
-
-    @Override
-    public HomeMapper getMapper() {
-        return mapper;
-    }
-
-    @Autowired
-    public void setMapper(HomeMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    @Autowired
-    public void setCooperationService(CooperationService cooperationService) {
-        this.cooperationService = cooperationService;
-    }
-
-    @Autowired
-    public void setHouseService(HouseService houseService) {
-        this.houseService = houseService;
-    }
-
-    @Autowired
-    public void setSpecificationService(EntitySpecificationService entitySpecificationService) {
-        this.entitySpecificationService = entitySpecificationService;
     }
 
 }

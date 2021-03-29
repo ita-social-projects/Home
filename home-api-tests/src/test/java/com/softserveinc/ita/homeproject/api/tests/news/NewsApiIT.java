@@ -1,80 +1,105 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private final CreateNews createNews = new CreateNews()
-        .title("title")
-        .description("description")
-        .source("source")
-        .text("text")
-        .photoUrl("photoUrl");
-
-    private NewsApi newsApi;
-
-    @BeforeEach
-    public void setUp() {
-        newsApi = new NewsApi(ApiClientUtil.getClient());
-    }
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
     void createNewsTest() throws ApiException {
-        ReadNews readNews = newsApi.addNews(createNews);
-        assertNews(createNews, readNews);
+        CreateNews expectedNews = createNews();
+
+        ApiResponse<ReadNews> response = newsApi.createNewsWithHttpInfo(expectedNews);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(),
+            response.getStatusCode());
+        assertNews(expectedNews, response.getData());
     }
 
     @Test
     void getNewsByIdTest() throws ApiException {
-        ReadNews savedNews = newsApi.addNews(createNews);
-        ReadNews news = newsApi.getNews(savedNews.getId());
+        CreateNews expectedNews = createNews();
 
-        assertNotNull(news);
-        assertEquals(savedNews, news);
+        ApiResponse<ReadNews> response = newsApi.getNewsWithHttpInfo(newsApi.createNews(expectedNews).getId());
+
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertNews(expectedNews, response.getData());
     }
 
     @Test
     void updateNewsTest() throws ApiException {
-        ReadNews savedNews = newsApi.addNews(createNews);
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
 
         UpdateNews updateNews = new UpdateNews()
-            .title("updatedTitle")
-            .description("updatedDescription")
-            .source("updatedSource")
-            .text("updatedText")
-            .photoUrl("updatedPhotoUrl");
+            .title("UpdatedTitle")
+            .description("UpdatedDescription")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
 
-        ReadNews updatedNews = newsApi.updateNews(savedNews.getId(), updateNews);
-        assertNews(savedNews, updateNews, updatedNews);
+        ApiResponse<ReadNews> response = newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            response.getStatusCode());
+        assertNews(savedNews, updateNews, response.getData());
     }
 
     @Test
     void deleteNewsTest() throws ApiException {
-        ReadNews savedNews = newsApi.addNews(createNews);
-        assertNotNull(newsApi.getNews(savedNews.getId()));
+        ReadNews expectedNews = newsApi.createNews(createNews().title("FirstTitle"));
+        newsApi.createNews(createNews().title("SecondTitle"));
+        newsApi.createNews(createNews().title("ThirdTitle"));
 
-        newsApi.deleteNews(savedNews.getId());
+        ApiResponse<Void> removeResponse = newsApi.deleteNewsWithHttpInfo(expectedNews.getId());
 
+        List<ReadNews> actualNewsList = new NewsQuery
+            .Builder(newsApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .build().perfom();
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removeResponse.getStatusCode());
+        assertFalse(actualNewsList.contains(expectedNews));
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> newsApi.getNews(savedNews.getId()))
-            .withMessage(
-                "{\"responseCode\":404,\"errorMessage\":\"Can't find news with given ID:" + savedNews.getId() + "\"}");
+            .isThrownBy(() -> newsApi.getNews(expectedNews.getId()));
+    }
+
+    private CreateNews createNews(){
+        return new CreateNews()
+            .title("Title")
+            .description("Description")
+            .text("Text")
+            .photoUrl("http://someurl.example.com")
+            .source("Source");
     }
 
     @Test
     void createNewsInvalidTitleTest() {
+        ApiException exception = new ApiException(400,
+            "Parameter `title` is invalid - size must be between 1 and 70 signs.");
         CreateNews createNewsInvalidTitle = new CreateNews()
                 .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols"
                     + " - title over 70 symbols")
@@ -84,13 +109,14 @@ class NewsApiIT {
                 .photoUrl("222222");
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> newsApi.addNews(createNewsInvalidTitle))
-                .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `title` is invalid"
-                    + " - size must be between 1 and 70 signs." + "\"}");
+                .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
+                .withMessage(createExceptionMessage(exception));
     }
 
     @Test
     void createNewsInvalidDescriptionTest() {
+        ApiException exception = new ApiException(400,
+            "Parameter `description` is invalid - size must be between 1 and 150 signs.");
         CreateNews createNewsInvalidDescription = new CreateNews()
             .title("title")
             .description("description description description description description description description"
@@ -101,9 +127,8 @@ class NewsApiIT {
             .photoUrl("222222");
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> newsApi.addNews(createNewsInvalidDescription))
-            .withMessage("{\"responseCode\":400,\"errorMessage\":\"Parameter `description` is invalid"
-                + " - size must be between 1 and 150 signs." + "\"}");
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .withMessage(createExceptionMessage(exception));
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {

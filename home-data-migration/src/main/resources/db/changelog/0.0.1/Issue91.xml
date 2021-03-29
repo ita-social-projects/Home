@@ -49,7 +49,7 @@
                 schemaName="public"
                 tableName="permissions">
             <column name="id" value="13"/>
-            <column name="name" value="GET_COOPERATION'S_PERMISSION"/>
+            <column name="name" value="GET_COOPERATIONS_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"

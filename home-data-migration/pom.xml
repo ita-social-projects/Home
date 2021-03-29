@@ -16,6 +16,7 @@
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
         <picocli.version>4.6.1</picocli.version>
+        <checkstyle.configLocation>src/main/resources/checkstyle-configuration.xml</checkstyle.configLocation>
     </properties>
 
     <profiles>
@@ -32,7 +33,7 @@
                             <driver>org.postgresql.Driver</driver>
                             <url>jdbc:postgresql://localhost:5433/postgres</url>
                             <username>postgres</username>
-                            <password>user</password>
+                            <password>password</password>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                         <executions>

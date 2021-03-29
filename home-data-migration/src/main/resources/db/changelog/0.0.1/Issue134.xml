@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue134.001" author="alexorlenko">
+        <createTable tableName="contacts">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="PHONE" type="VARCHAR(15)"/>
+
+            <column name="EMAIL" type="VARCHAR(50)"/>
+
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAIN" type="boolean"/>
+            <column name="USER_ID" type="BIGINT">
+                <constraints foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints foreignKeyName="cooperation_fk"
+                             references="cooperation(ID)"/>
+            </column>
+            <column name="ENABLED" type="boolean"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue134.002" author="alexorlenko">
+        <dropTable tableName="cooperation_phones"/>
+    </changeSet>
+
+    <changeSet id="Issue134.003" author="alexorlenko">
+        <dropTable tableName="cooperation_emails"/>
+    </changeSet>
+
+    <changeSet id="Issue134.004" author="alexorlenko">
+        <dropTable tableName="phones"/>
+    </changeSet>
+
+    <changeSet id="Issue134.005" author="alexorlenko">
+        <dropTable tableName="emails"/>
+    </changeSet>
+
+    <changeSet id="Issue134.006" author="alexorlenko">
+        <dropColumn tableName="users" columnName="CONTACTS"/>
+    </changeSet>
+
+    <changeSet id="Issue134.007" author="Abhai2016">
+        <addColumn tableName="news">
+            <column name="enabled" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet  id="Issue134.008" author="VadymSokorenko">
+        <renameTable  newTableName="cooperations"
+                      oldTableName="cooperation"
+                      schemaName="public"/>
+    </changeSet>
+
+    <changeSet id="Issue134.009" author="VadymSokorenko">
+        <createSequence incrementBy="50" sequenceName="cooperations_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue134.010" author="VadymSokorenko">
+        <createSequence incrementBy="50" sequenceName="contacts_sequence"/>
+    </changeSet>
+</databaseChangeLog>

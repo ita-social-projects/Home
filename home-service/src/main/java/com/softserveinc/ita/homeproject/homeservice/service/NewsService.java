@@ -14,5 +14,5 @@ public interface NewsService {
 
     NewsDto getById(Long id);
 
-    void deleteById(Long id);
+    void deactivateNews(Long id);
 }

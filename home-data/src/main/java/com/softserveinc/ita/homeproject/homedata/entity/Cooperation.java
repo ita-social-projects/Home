@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,9 +19,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cooperation")
+@Table(name = "cooperations")
 @SequenceGenerator(name = "sequence", sequenceName = "cooperations_sequence")
-public class Cooperation extends BaseEntity {
+public class Cooperation extends BaseEntity implements Serializable{
 
     @Column(name = "usreo")
     private String usreo;
@@ -46,5 +47,8 @@ public class Cooperation extends BaseEntity {
 
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<House> houses;
+
+    @OneToMany(mappedBy = "cooperation")
+    private List<Contact> contacts;
 
 }

@@ -17,14 +17,14 @@ public class EntitySpecificationService<T> {
 
     public static final String RSQL_AND = ";";
 
-    private static String toRSQLString(Map<QueryParamEnum, String> filter) {
+    private static String toRSQLString(Map<String, String> filter) {
         return filter.entrySet().stream()
             .filter(entry -> entry.getValue() != null)
-            .map(entry -> entry.getKey().getParameter() + RSQL_EQUAL + entry.getValue())
+            .map(entry -> entry.getKey() + RSQL_EQUAL + entry.getValue())
             .collect(Collectors.joining(RSQL_AND));
     }
 
-    public Specification<T> getSpecification(Map<QueryParamEnum, String> filter, String search, String sort) {
+    public Specification<T> getSpecification(Map<String, String> filter, String search, String sort) {
 
         Specification<T> filterSpecification = RSQLJPASupport.toSpecification(toRSQLString(filter));
         Specification<T> searchSpecification = RSQLJPASupport.toSpecification(search);
