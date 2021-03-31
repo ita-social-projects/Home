@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Optional;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
@@ -53,8 +53,9 @@ public class CooperationServiceImpl implements CooperationService {
     @Transactional
     @Override
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
-        if (cooperationRepository.findById(id).isPresent()) {
-            Cooperation fromDb = cooperationRepository.findById(id).get();
+        Optional<Cooperation> optional = cooperationRepository.findById(id).filter(Cooperation::getEnabled);
+        if (optional.isPresent()) {
+            Cooperation fromDb = optional.get();
 
             if (updateCooperationDto.getName() != null) {
                 fromDb.setName(updateCooperationDto.getName());
@@ -88,7 +89,7 @@ public class CooperationServiceImpl implements CooperationService {
 
     @Override
     public CooperationDto getCooperationById(Long id) {
-        Cooperation toGet = cooperationRepository.findById(id)
+        Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("Cooperation with id: " + id + "is not found"));
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
@@ -97,7 +98,7 @@ public class CooperationServiceImpl implements CooperationService {
 
     @Override
     public void deactivateCooperation(Long id) {
-        Cooperation toDelete = cooperationRepository.findById(id)
+        Cooperation toDelete = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("Cooperation with id: " + id + "is not found"));
         toDelete.setEnabled(false);
         cooperationRepository.save(toDelete);

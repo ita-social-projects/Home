@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
@@ -31,7 +32,8 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public HouseDto createHouse(Long cooperationId, HouseDto createHouseDto) {
         House house = mapper.convert(createHouseDto, House.class);
-        Cooperation cooperation = cooperationRepository.findById(cooperationId).get();
+        Optional<Cooperation> optionalCoop = cooperationRepository.findById(cooperationId);
+        Cooperation cooperation = optionalCoop.get();
         house.setCooperation(cooperation);
         house.setCreateDate(LocalDateTime.now());
         house.setEnabled(true);
@@ -41,14 +43,15 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public HouseDto updateHouse(Long id, HouseDto updateHouseDto) {
-        if (houseRepository.findById(id).isPresent()) {
-            House fromDb = houseRepository.findById(id).get();
+        Optional<House> optionalHouse = houseRepository.findById(id).filter(House::getEnabled);
+        if (optionalHouse.isPresent()) {
+            House fromDb = optionalHouse.get();
 
             if (updateHouseDto.getQuantityFlat() != null) {
                 fromDb.setQuantityFlat(updateHouseDto.getQuantityFlat());
             }
             if (updateHouseDto.getAdjoiningArea() != null) {
-                fromDb.setAdjoiningArea(updateHouseDto.getQuantityFlat());
+                fromDb.setAdjoiningArea(updateHouseDto.getAdjoiningArea());
             }
             if (updateHouseDto.getHouseArea() != null) {
                 fromDb.setHouseArea(updateHouseDto.getHouseArea());
@@ -74,7 +77,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public HouseDto getHouseById(Long coopId, Long id) {
-        House toGet = houseRepository.findById(id)
+        House toGet = houseRepository.findById(id).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
         if (!toGet.getCooperation().getId().equals(coopId)) {
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
@@ -85,7 +88,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public void deactivateById(Long coopId, Long id) {
-        House toDelete = houseRepository.findById(id)
+        House toDelete = houseRepository.findById(id).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
         if (!toDelete.getCooperation().getId().equals(coopId)) {
             throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");

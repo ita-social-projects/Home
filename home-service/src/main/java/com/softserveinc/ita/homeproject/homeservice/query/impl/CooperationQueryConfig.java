@@ -18,7 +18,7 @@ public class CooperationQueryConfig implements QueryConfig<Cooperation> {
 
     @Override
     public List<QueryParamEnum> getWhiteListEnums() {
-        return Arrays.asList();
+        return Arrays.asList(CooperationQueryParamEnum.values());
     }
 
     public enum CooperationQueryParamEnum implements QueryParamEnum {

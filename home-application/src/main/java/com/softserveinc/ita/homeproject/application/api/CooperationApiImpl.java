@@ -102,11 +102,11 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                      String iban,
                                      String usreo) {
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new HashMap<>();
 
-        filterMap.put(CooperationQueryParamEnum.NAME, name);
-        filterMap.put(CooperationQueryParamEnum.IBAN, iban);
-        filterMap.put(CooperationQueryParamEnum.USREO, usreo);
+        filterMap.put("name", name);
+        filterMap.put("iban", iban);
+        filterMap.put("usreo", usreo);
 
         Page<CooperationDto> readCooperation = cooperationService.getAllCooperation(
             pageNumber,

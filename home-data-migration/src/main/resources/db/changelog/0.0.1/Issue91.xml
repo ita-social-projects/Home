@@ -85,7 +85,7 @@
                 schemaName="public"
                 tableName="permissions">
             <column name="id" value="19"/>
-            <column name="name" value="DELETE_HOUSES_PERMISSION"/>
+            <column name="name" value="DELETE_HOUSE_PERMISSION"/>
         </insert>
     </changeSet>
 
