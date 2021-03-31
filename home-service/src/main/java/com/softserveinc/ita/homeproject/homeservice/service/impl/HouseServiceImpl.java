@@ -33,11 +33,13 @@ public class HouseServiceImpl implements HouseService {
     public HouseDto createHouse(Long cooperationId, HouseDto createHouseDto) {
         House house = mapper.convert(createHouseDto, House.class);
         Optional<Cooperation> optionalCoop = cooperationRepository.findById(cooperationId);
-        Cooperation cooperation = optionalCoop.get();
-        house.setCooperation(cooperation);
-        house.setCreateDate(LocalDateTime.now());
-        house.setEnabled(true);
-        houseRepository.save(house);
+        if (optionalCoop.isPresent()){
+            Cooperation cooperation = optionalCoop.get();
+            house.setCooperation(cooperation);
+            house.setCreateDate(LocalDateTime.now());
+            house.setEnabled(true);
+            houseRepository.save(house);
+        }
         return mapper.convert(house, HouseDto.class);
     }
 

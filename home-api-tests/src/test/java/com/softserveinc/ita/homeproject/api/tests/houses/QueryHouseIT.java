@@ -22,7 +22,7 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryHouseIT {
+class QueryHouseIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 

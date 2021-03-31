@@ -20,7 +20,7 @@ import com.softserveinc.ita.homeproject.model.UpdateCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class CooperationApiIT {
+class CooperationApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 

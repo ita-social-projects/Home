@@ -1,11 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Address;
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

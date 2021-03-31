@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
@@ -20,7 +20,7 @@ public class CooperationRSQLEndpointConfig implements RSQLEndpointConfig
 
     @Override
     public Map<CooperationQueryParamEnum, String> getMappings() {
-        HashMap<CooperationQueryParamEnum, String> map = new HashMap<>();
+        EnumMap<CooperationQueryParamEnum, String> map = new EnumMap<>(CooperationQueryParamEnum.class);
 
         map.put(CooperationQueryParamEnum.NAME, "name");
         map.put(CooperationQueryParamEnum.IBAN, "iban");

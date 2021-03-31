@@ -21,13 +21,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.CooperationQueryConfig.CooperationQueryParamEnum;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;

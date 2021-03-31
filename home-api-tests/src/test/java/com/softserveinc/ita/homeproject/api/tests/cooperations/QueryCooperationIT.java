@@ -16,7 +16,7 @@ import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class QueryCooperationIT {
+class QueryCooperationIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 

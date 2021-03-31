@@ -21,7 +21,7 @@ import com.softserveinc.ita.homeproject.model.UpdateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class HouseApiIT {
+class HouseApiIT {
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
 
