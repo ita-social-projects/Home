@@ -129,18 +129,18 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
 
-        Map<QueryParamEnum, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new HashMap<>();
 
         String quantityFlatValue = quantityFlat == null ? null : String.valueOf(quantityFlat);
         String adjoiningAreaValue = adjoiningArea == null ? null : String.valueOf(adjoiningArea);
         String houseAreaValue = houseArea == null ? null : houseArea.toString();
         String houseIdValue = houseId == null ? null : houseId.toString();
 
-        filterMap.put(HouseQueryParamEnum.COOPERATION_ID, cooperationId.toString());
-        filterMap.put(HouseQueryParamEnum.ID, houseIdValue);
-        filterMap.put(HouseQueryParamEnum.QUANTITY_FLAT, quantityFlatValue);
-        filterMap.put(HouseQueryParamEnum.ADJOINING_AREA, adjoiningAreaValue);
-        filterMap.put(HouseQueryParamEnum.HOUSE_AREA, houseAreaValue);
+        filterMap.put("cooperation.id", cooperationId.toString());
+        filterMap.put("id", houseIdValue);
+        filterMap.put("quantityFlat", quantityFlatValue);
+        filterMap.put("adjoiningArea", adjoiningAreaValue);
+        filterMap.put("houseArea", houseAreaValue);
 
         Page<HouseDto> readHouse = houseService.getAllHouses(
             pageNumber,

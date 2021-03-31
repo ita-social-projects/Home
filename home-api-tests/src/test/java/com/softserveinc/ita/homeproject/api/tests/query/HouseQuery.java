@@ -8,6 +8,8 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 
 public class HouseQuery extends BaseQuery {
 
+    private Long cooperationId;
+
     private Long houseId;
 
     private Integer quantityFlat;
@@ -19,6 +21,10 @@ public class HouseQuery extends BaseQuery {
     private HouseApi houseApi;
 
     private ReadHouse readHouse;
+
+    public void setCooperationId(Long cooperationId) {
+        this.cooperationId = cooperationId;
+    }
 
     public void setHouseId(Long houseId) {
         this.houseId = houseId;
@@ -46,7 +52,7 @@ public class HouseQuery extends BaseQuery {
 
     public List<ReadHouse> perform() throws ApiException {
         return houseApi
-            .queryHouse(readHouse.getId(), this.getPageNumber(),
+            .queryHouse(cooperationId, this.getPageNumber(),
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
@@ -60,6 +66,12 @@ public class HouseQuery extends BaseQuery {
 
         public Builder(HouseApi houseApi){
             queryClass.setHouseApi(houseApi);
+        }
+
+
+        public Builder cooperationId(Long cooperationId){
+            queryClass.setCooperationId(cooperationId);
+            return this;
         }
 
         public Builder houseId(Long houseId){
