@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.CooperationQueryConfig;
@@ -7,12 +10,10 @@ import com.softserveinc.ita.homeproject.homeservice.query.impl.CooperationQueryC
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
-public class CooperationRSQLEndpointConfig implements RSQLEndpointConfig <Cooperation,
-                                                                          CooperationQueryConfig.CooperationQueryParamEnum>{
+public class CooperationRSQLEndpointConfig implements RSQLEndpointConfig
+    <Cooperation, CooperationQueryConfig.CooperationQueryParamEnum> {
 
     @Autowired
     private CooperationQueryConfig queryConfig;

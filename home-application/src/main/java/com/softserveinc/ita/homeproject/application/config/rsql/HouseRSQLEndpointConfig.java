@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.application.config.rsql;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig;
@@ -7,8 +10,6 @@ import com.softserveinc.ita.homeproject.homeservice.query.impl.HouseQueryConfig.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQueryParamEnum> {
