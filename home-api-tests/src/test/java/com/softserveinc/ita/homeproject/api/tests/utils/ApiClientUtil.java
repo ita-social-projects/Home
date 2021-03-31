@@ -25,5 +25,16 @@ public final class ApiClientUtil {
             "No description provided", new HashMap())));
         return client;
     }
+
+    public static ApiClient getUnauthorizedClient() {
+        String applicationExternalPort = System.getProperty("home.application.external.port");
+        ApiClient client = new ApiClient();
+        Logger logger = Logger.getLogger(ApiClient.class.getName());
+        client.getHttpClient()
+            .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
+        client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
+                "No description provided", new HashMap())));
+        return client;
+    }
 }
 
