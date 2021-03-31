@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          mvn -V -e -B
+          mvn -V -e -B -ntp
           clean install sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
