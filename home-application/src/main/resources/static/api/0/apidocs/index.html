@@ -3,30 +3,29 @@
 
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes" name="viewport">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
     <title>Home Project | REST API Documentation</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<rapi-doc
-        allow-api-list-style-selection="false"
-        default-schema-tab="model"
-        id="thedoc"
-        nav-accent-color="#AA8144"
-        nav-bg-color="#383F46"
-        nav-hover-bg-color="#282D3F"
-        nav-hover-text-color="#AA8144"
-        nav-text-color="#839999"
-        primary-color="#AA8144"
-        regular-font='Open Sans'
-        render-style="read"
-        schema-expand-level="3"
-        schema-style='tree'
-        spec-url="openapi.json"
-        theme="light"
-></rapi-doc>
+    <rapi-doc
+            id="thedoc"
+            spec-url="openapi.json"
+            theme="light"
+            allow-api-list-style-selection = "false"
+            render-style = "read"
+            regular-font = 'Open Sans'
+            schema-style = 'tree'
+            schema-expand-level = "3"
+            default-schema-tab = "model"
+            primary-color = "#AA8144"
+            nav-bg-color = "#383F46"
+            nav-text-color = "#839999"
+            nav-hover-bg-color = "#282D3F"
+            nav-hover-text-color = "#AA8144"
+            nav-accent-color = "#AA8144"
+    > </rapi-doc>
 
-<script src="rapidoc-min.js" type="text/javascript"></script>
-</body>
+    <script type="text/javascript" src="rapidoc-min.js"></script></body>
 </html>

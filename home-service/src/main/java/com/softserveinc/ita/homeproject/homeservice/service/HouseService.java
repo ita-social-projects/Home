@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import org.springframework.data.domain.Page;
@@ -14,8 +15,10 @@ public interface HouseService {
     Page<HouseDto> getAllHouses(Integer pageNumber, Integer pageSize, Specification<House> specification);
 
     HouseDto getHouseById(Long coopId, Long id);
+//    HouseDto getHouseById(Long id);
 
     void deactivateById(Long coopId, Long id);
+
 
 
 }

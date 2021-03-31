@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
@@ -90,63 +90,63 @@
     </changeSet>
 
     <changeSet id="Issue91.004" author="denis-litvinov">
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="10"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="11"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="12"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="13"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="14"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="15"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="16"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="17"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="18"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="19"/>
         </insert>

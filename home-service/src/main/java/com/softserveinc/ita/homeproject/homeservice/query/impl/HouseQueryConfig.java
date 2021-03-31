@@ -1,12 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.query.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class HouseQueryConfig implements QueryConfig<House> {

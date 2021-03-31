@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_PASSWORD: password
     ports:
-      - 5433:5432
+        - 5433:5432
     networks:
       - home_network
     healthcheck:

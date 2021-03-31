@@ -49,4 +49,5 @@ public final class Permissions {
     public static final String GET_HOUSES_PERMISSION = "hasAuthority('GET_HOUSES_PERMISSION')";
 
     public static final String DEACTIVATE_HOUSE_PERMISSION = "hasAuthority('DELETE_HOUSE_PERMISSION')";
+
 }

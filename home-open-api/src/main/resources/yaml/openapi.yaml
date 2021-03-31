@@ -238,7 +238,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadUser'
+                  $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -915,7 +915,7 @@ paths:
           required: true
           description: ID of the chat
           schema:
-            type: integer
+            type : integer
             format: int64
             minimum: 1
         - in: query
@@ -1469,7 +1469,6 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: "some example"
           items:
             $ref: "#/components/schemas/CreateHouse"
     ReadCooperation:
@@ -1496,7 +1495,6 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: "some example"
           items:
             $ref: "#/components/schemas/ReadHouse"
     UpdateCooperation:
@@ -1590,9 +1588,9 @@ components:
           example: 12
         address:
           $ref: '#/components/schemas/Address'
-    #        cooperationId:
-    #          type: integer
-    #          example: 2
+#        cooperationId:
+#          type: integer
+#          example: 2
     UpdateHouse:
       type: object
       properties:
@@ -1605,8 +1603,8 @@ components:
         adjoining_area:
           type: integer
           example: 12
-        #        cooperationId:
-        #          type: integer
-        #          example: 0
+#        cooperationId:
+#          type: integer
+#          example: 0
         address:
           $ref: '#/components/schemas/Address'
