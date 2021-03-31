@@ -17,6 +17,4 @@ public interface HouseService {
 
     void deactivateById(Long coopId, Long id);
 
-
-
 }

@@ -121,7 +121,6 @@ public class CooperationApiIT {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getIban(), actual.getIban());
         assertEquals(expected.getUsreo(), actual.getUsreo());
-        assertEquals(expected.getHouses(), actual.getHouses());
         assertEquals(expected.getAddress(), actual.getAddress());
     }
 

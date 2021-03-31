@@ -1469,6 +1469,7 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
+          example: List of houses
           items:
             $ref: "#/components/schemas/CreateHouse"
     ReadCooperation:
@@ -1495,6 +1496,7 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
+          example: List of houses
           items:
             $ref: "#/components/schemas/ReadHouse"
     UpdateCooperation:

@@ -20,19 +20,6 @@ public class QueryCooperationIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
-/*
-    @BeforeAll
-    void fillDatabaseWithRandomCoopsList() {
-        List<CreateCooperation> createCooperationList = createCooperationList();
-        createCooperationList.forEach(element -> {
-            try {
-                cooperationApi.createCooperation(element);
-            } catch (ApiException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-*/
 
     @Test
     void getAllCooperationAscSort() throws ApiException {
