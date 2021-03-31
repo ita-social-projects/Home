@@ -25,6 +25,7 @@ jobs:
           -Papi-tests-infrastructure
           -Papi-tests
           -Ppush.images
+          -Pjacoco -Dsonar.coverage.jacoco.xmlReportPaths=${{ github.workspace }}/home-api-tests/target/site/jacoco-aggregate/jacoco.xml
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
