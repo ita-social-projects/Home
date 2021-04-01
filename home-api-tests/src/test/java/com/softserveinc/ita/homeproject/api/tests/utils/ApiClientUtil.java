@@ -20,7 +20,7 @@ public final class ApiClientUtil {
         Logger logger = Logger.getLogger(ApiClient.class.getName());
         Level level = Level.INFO;
         if (verboseLogging.equals("false")) {
-            level = Level.WARNING;
+            level = Level.OFF;
         }
         client.getHttpClient()
             .register(new LoggingFeature(logger, level, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
