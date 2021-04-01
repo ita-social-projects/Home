@@ -18,14 +18,14 @@ public final class ApiClientUtil {
         String verboseLogging = System.getProperty("verbose.tests.logging");
         ApiClient client = new ApiClient();
         Logger logger = Logger.getLogger(ApiClient.class.getName());
-        if (verboseLogging.equals("false")) {
+        if (verboseLogging.equals("true")) {
             client.getHttpClient()
                 .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
-            client.setUsername(applicationAdminUsername);
-            client.setPassword(applicationAdminPassword);
-            client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
-                "No description provided", new HashMap())));
         }
+        client.setUsername(applicationAdminUsername);
+        client.setPassword(applicationAdminPassword);
+        client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
+            "No description provided", new HashMap())));
         return client;
     }
 }
