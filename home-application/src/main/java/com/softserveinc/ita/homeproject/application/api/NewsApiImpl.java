@@ -5,7 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
 
-import java.util.HashMap;
 import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -36,7 +35,6 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
 
     @Autowired
     private NewsService newsService;
-
 
     /**
      * addNews method is implementation of HTTP POST
@@ -79,6 +77,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
+    @SuppressWarnings("unchecked")
     public Response getAllNews(@Min(1) Integer pageNumber,
                                @Min(0) @Max(10) Integer pageSize,
                                String sort,
@@ -88,13 +87,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                String text,
                                String source) {
 
-        Map<String, String> filterMap = new HashMap<>();
-
-        filterMap.put("id", id);
-        filterMap.put("title", title);
-        filterMap.put("text", text);
-        filterMap.put("source", source);
-
+        Map<String, String> filterMap = getFilterMap();
         Page<NewsDto> readNews = newsService.findNews(
             pageNumber,
             pageSize,
@@ -136,5 +129,4 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
         ReadNews response = mapper.convert(readNewsDto, ReadNews.class);
         return Response.ok().entity(response).build();
     }
-
 }

@@ -6,7 +6,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
-import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -89,6 +88,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Response queryContactsOnUser(Long userId,
                                         @Min(1) Integer pageNumber,
                                         @Min(0) @Max(10) Integer pageSize,
@@ -99,14 +99,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String email,
                                         String main,
                                         String type) {
-        Map<String, String> filterMap = new HashMap<>();
 
+        Map<String, String> filterMap = getFilterMap();
         filterMap.put("user_id", userId.toString());
-        filterMap.put("id", id);
-        filterMap.put("phone", phone);
-        filterMap.put("email", email);
-        filterMap.put("main", main);
-        filterMap.put("type", type);
 
         Page<ContactDto> contacts = contactService.getAllContacts(
             pageNumber,
@@ -134,6 +129,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
+    @SuppressWarnings("unchecked")
     public Response getAllUsers(@Min(1) Integer pageNumber,
                                 @Min(0) @Max(10) Integer pageSize,
                                 String sort,
@@ -144,14 +140,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 String lastName,
                                 String contactPhone,
                                 String contactEmail) {
-        Map<String, String> filterMap = new HashMap<>();
 
-        filterMap.put("id", id);
-        filterMap.put("email", email);
-        filterMap.put("lastName", lastName);
-        filterMap.put("firstName", firstName);
-        filterMap.put("contactPhone", contactPhone);
-        filterMap.put("contactEmail", contactEmail);
+        Map<String, String> filterMap = getFilterMap();
 
         Page<UserDto> users = userService.findUsers(
             pageNumber,
@@ -211,5 +201,4 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
-
 }

@@ -21,8 +21,8 @@ public class UserRSQLEndpointConfig implements RSQLEndpointConfig<User, UserQuer
         EnumMap<UserQueryParamEnum, String> map = new EnumMap<>(UserQueryParamEnum.class);
 
         map.put(UserQueryParamEnum.EMAIL, "email");
-        map.put(UserQueryParamEnum.FIRST_NAME, "firstName");
-        map.put(UserQueryParamEnum.LAST_NAME, "lastName");
+        map.put(UserQueryParamEnum.FIRST_NAME, "first_name");
+        map.put(UserQueryParamEnum.LAST_NAME, "last_name");
         map.put(UserQueryParamEnum.CONTACT_PHONE, "contacts.phone");
         map.put(UserQueryParamEnum.CONTACT_EMAIL, "contacts.email");
         return map;
