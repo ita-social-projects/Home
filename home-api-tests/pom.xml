@@ -21,7 +21,7 @@
         <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
         <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
-        <docker.infrastructure>${docker.infrastructure}</docker.infrastructure>
+        <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
@@ -33,12 +33,6 @@
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
     </properties>
     <profiles>
-        <profile>
-            <id>remove.tests.information</id>
-            <properties>
-                <test.access.information>false</test.access.information>
-            </properties>
-        </profile>
         <profile>
             <id>push.images</id>
             <properties>
@@ -185,7 +179,7 @@
                                             <time>25000</time>
                                         </wait>
                                         <log>
-                                            <enabled>${docker.infrastructure}</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -213,7 +207,7 @@
                                             <time>15000</time>
                                         </wait>
                                         <log>
-                                            <enabled>${docker.infrastructure}</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -250,7 +244,7 @@
                                             <time>300000</time>
                                         </wait>
                                         <log>
-                                            <enabled>${docker.infrastructure}</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -299,7 +293,7 @@
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
                                 <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
-                                <verbose.tests.logging>${docker.infrastructure}</verbose.tests.logging>
+                                <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

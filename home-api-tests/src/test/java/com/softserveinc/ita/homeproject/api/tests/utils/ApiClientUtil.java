@@ -15,13 +15,15 @@ public final class ApiClientUtil {
         String applicationExternalPort = System.getProperty("home.application.external.port");
         String applicationAdminUsername = System.getProperty("home.application.admin.username");
         String applicationAdminPassword = System.getProperty("home.application.admin.password");
-        String verboseLogging = System.getProperty("verbose.tests.logging");
+        String verboseLogging = System.getProperty("verbose.tests.logging", "true");
         ApiClient client = new ApiClient();
         Logger logger = Logger.getLogger(ApiClient.class.getName());
-        if (verboseLogging.equals("true")) {
-            client.getHttpClient()
-                .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
+        Level levelOfLogging = Level.WARNING;
+        if (Boolean.parseBoolean(verboseLogging)) {
+            levelOfLogging = Level.INFO;
         }
+        client.getHttpClient()
+            .register(new LoggingFeature(logger, levelOfLogging, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
         client.setUsername(applicationAdminUsername);
         client.setPassword(applicationAdminPassword);
         client.setServers(List.of(new ServerConfiguration("http://localhost:" + applicationExternalPort + "/api/0",
