@@ -14,29 +14,33 @@ public final class ApiClientUtil {
     private static final String APPLICATION_ADMIN_USER_NAME = System.getProperty("home.application.admin.username");
     private static final String APPLICATION_ADMIN_PASSWORD = System.getProperty("home.application.admin.password");
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
-    private static final ApiClient CLIENT = new ApiClient();
 
     public static ApiClient getClient() {
-        setLoggingFeature();
-        CLIENT.setUsername(APPLICATION_ADMIN_USER_NAME);
-        CLIENT.setPassword(APPLICATION_ADMIN_PASSWORD);
-        CLIENT.setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
-        return CLIENT;
+        ApiClient client = new ApiClient();
+        setLoggingFeature(client);
+        client.setUsername(APPLICATION_ADMIN_USER_NAME);
+        client.setPassword(APPLICATION_ADMIN_PASSWORD);
+        setServers(client);
+        return client;
     }
 
     public static ApiClient getUnauthorizedClient() {
-        setLoggingFeature();
-        CLIENT.setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
-        return CLIENT;
+        ApiClient client = new ApiClient();
+        setLoggingFeature(client);
+        setServers(client);
+        return client;
     }
 
-    private static void setLoggingFeature() {
+    private static void setLoggingFeature(ApiClient client) {
         if (Boolean.parseBoolean(VERBOSE_LOGGING)) {
             Logger logger = Logger.getLogger(ApiClient.class.getName());
-            CLIENT.getHttpClient()
+            client.getHttpClient()
                .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
         }
+    }
+
+    private static void setServers(ApiClient client) {
+        client.setServers(List.of(new ServerConfiguration("http://localhost:" +
+                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
     }
 }
