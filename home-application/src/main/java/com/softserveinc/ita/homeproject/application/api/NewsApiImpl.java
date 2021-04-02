@@ -5,7 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
 
-import java.util.Map;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
@@ -87,13 +86,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                String text,
                                String source) {
 
-        Map<String, String> filterMap = getFilterMap();
-        Page<NewsDto> readNews = newsService.findNews(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
+        Page<NewsDto> readNews = queryApiService.getPageFromQuery(uriInfo, newsService);
         return buildQueryResponse(readNews, ReadNews.class);
     }
 

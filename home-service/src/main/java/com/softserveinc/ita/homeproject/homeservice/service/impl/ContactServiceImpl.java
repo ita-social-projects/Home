@@ -104,8 +104,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<ContactDto> getAllContacts(Integer pageNumber, Integer pageSize,
-                                           Specification<Contact> specification) {
+    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
+                                    Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))

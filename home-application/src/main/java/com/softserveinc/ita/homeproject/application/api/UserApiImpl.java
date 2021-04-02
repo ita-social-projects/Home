@@ -6,7 +6,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
-import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -100,15 +99,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String main,
                                         String type) {
 
-        Map<String, String> filterMap = getFilterMap();
-        filterMap.put("user_id", userId.toString());
-
-        Page<ContactDto> contacts = contactService.getAllContacts(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
+        Page<ContactDto> contacts = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(contacts, ReadContact.class);
     }
 
@@ -141,14 +132,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 String contactPhone,
                                 String contactEmail) {
 
-        Map<String, String> filterMap = getFilterMap();
-
-        Page<UserDto> users = userService.findUsers(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
+        Page<UserDto> users = queryApiService.getPageFromQuery(uriInfo, userService);
         return buildQueryResponse(users, ReadUser.class);
     }
 
