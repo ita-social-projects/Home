@@ -81,7 +81,7 @@ class HouseApiIT {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
 
-        ApiResponse<Void> response = houseApi.removeHouseWithHttpInfo(readCooperation.getId(), readHouse.getId());
+        ApiResponse<Void> response = houseApi.deleteHouseWithHttpInfo(readCooperation.getId(), readHouse.getId());
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)

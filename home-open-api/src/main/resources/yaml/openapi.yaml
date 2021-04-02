@@ -844,7 +844,7 @@ paths:
         - cooperation
       summary: "Delete cooperation by ID"
       description: Delete cooperation by id
-      operationId: removeCooperation
+      operationId: deleteCooperation
       parameters:
         - name: "cooperation_id"
           in: "path"
@@ -1073,7 +1073,7 @@ paths:
         - house
       summary: "Delete house by ID"
       description: Delete house by id
-      operationId: removeHouse
+      operationId: deleteHouse
       parameters:
         - name: "cooperation_id"
           in: "path"

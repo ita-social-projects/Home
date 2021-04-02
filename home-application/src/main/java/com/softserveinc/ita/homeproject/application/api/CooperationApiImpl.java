@@ -148,14 +148,14 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(DEACTIVATE_COOPERATION_PERMISSION)
     @Override
-    public Response removeCooperation(Long cooperationId) {
+    public Response deleteCooperation(Long cooperationId) {
         cooperationService.deactivateCooperation(cooperationId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DEACTIVATE_HOUSE_PERMISSION)
     @Override
-    public Response removeHouse(Long cooperationId, Long houseId) {
+    public Response deleteHouse(Long cooperationId, Long houseId) {
         houseService.deactivateById(cooperationId, houseId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

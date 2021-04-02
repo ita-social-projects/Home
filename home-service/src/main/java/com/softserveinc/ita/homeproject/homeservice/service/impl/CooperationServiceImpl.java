@@ -12,9 +12,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,13 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CooperationServiceImpl implements CooperationService {
 
+    private static final String NOT_FOUND_COOPERATION = "Can't find cooperation with given ID:";
+
+    private static final String FORMAT = "%s %d";
+
     private final CooperationRepository cooperationRepository;
 
-    private final HouseService houseService;
-
     private final ServiceMapper mapper;
-
-    private final EntitySpecificationService entitySpecificationService;
 
     private final HouseRepository houseRepository;
 
@@ -74,7 +72,7 @@ public class CooperationServiceImpl implements CooperationService {
             cooperationRepository.save(fromDb);
             return mapper.convert(fromDb, CooperationDto.class);
         } else {
-            throw new NotFoundHomeException("Can't find cooperation with given ID:" + id);
+            throw new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id));
         }
     }
 
@@ -91,7 +89,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public CooperationDto getCooperationById(Long id) {
         Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Cooperation with id: " + id + "is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id)));
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
         return mapper.convert(toGet, CooperationDto.class);
@@ -100,7 +98,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public void deactivateCooperation(Long id) {
         Cooperation toDelete = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Cooperation with id: " + id + "is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id)));
         toDelete.setEnabled(false);
         cooperationRepository.save(toDelete);
     }
