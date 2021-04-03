@@ -1,18 +1,18 @@
 package com.softserveinc.ita.homeproject.application.service;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
-import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
-import org.springframework.data.domain.Page;
-
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+
+import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
+import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
+import org.springframework.data.domain.Page;
 
 /**
  * QueryApiService - service that provides Spring Data Page by request query
@@ -94,7 +94,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      *
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
-     * @return Map<String, String> of query and path parameters required by EntitySpecificationService
+     * @return Map of query and path parameters required by EntitySpecificationService
      * to build Filter specification
      */
     default Map<String, String> getFilterMap(UriInfo uriInfo) {
