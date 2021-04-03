@@ -12,6 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+/**
+ * QueryApiServiceImpl class is implementation of QueryApiService - service
+ * that provides Spring Data Page by request query
+ *
+ * @author Oleksii Zinkevych
+ * @see com.softserveinc.ita.homeproject.application.service.QueryApiService
+ */
 @Service
 public class QueryApiServiceImpl<T extends BaseEntity, D extends BaseDto> implements QueryApiService<T, D> {
     private final EntitySpecificationService<T> specificationService;
