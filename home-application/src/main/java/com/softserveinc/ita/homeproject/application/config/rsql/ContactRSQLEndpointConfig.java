@@ -4,9 +4,9 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig.ContactQueryParamEnum;
+import com.softserveinc.ita.homeproject.application.service.QueryConfig;
+import com.softserveinc.ita.homeproject.application.service.impl.ContactQueryConfig;
+import com.softserveinc.ita.homeproject.application.service.impl.ContactQueryConfig.ContactQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

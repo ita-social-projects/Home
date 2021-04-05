@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.query;
+package com.softserveinc.ita.homeproject.application.service;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.query;
+package com.softserveinc.ita.homeproject.application.service.impl;
 
 import java.util.Map;
 import java.util.Optional;

@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.homeservice.query.impl;
+package com.softserveinc.ita.homeproject.application.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.application.service.QueryConfig;
+import com.softserveinc.ita.homeproject.application.service.QueryParamEnum;
 import org.springframework.stereotype.Component;
 
 @Component

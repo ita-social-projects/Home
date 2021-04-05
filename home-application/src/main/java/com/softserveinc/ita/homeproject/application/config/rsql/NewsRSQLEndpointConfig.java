@@ -4,9 +4,9 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.NewsQueryConfig.NewsQueryParamEnum;
+import com.softserveinc.ita.homeproject.application.service.QueryConfig;
+import com.softserveinc.ita.homeproject.application.service.impl.NewsQueryConfig;
+import com.softserveinc.ita.homeproject.application.service.impl.NewsQueryConfig.NewsQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
