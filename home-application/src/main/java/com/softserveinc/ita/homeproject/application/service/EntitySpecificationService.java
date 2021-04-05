@@ -16,8 +16,8 @@ public interface EntitySpecificationService<T> {
     /**
      *
      * @param filter - Map of query and path parameters required to build Specification
-     * @param search - filter value
-     * @param sort   - sort order value
+     * @param search - String filter value in a format according to RSQL documentation
+     * @param sort   - String sort order value in a format according to RSQL documentation
      * @return Spring Data Specification
      */
     Specification<T> getSpecification(MultivaluedMap<String, String> filter, String search, String sort);
