@@ -13,5 +13,12 @@ import org.springframework.data.jpa.domain.Specification;
  * @see org.springframework.data.jpa.domain.Specification
  */
 public interface EntitySpecificationService<T> {
+    /**
+     *
+     * @param filter - Map of query and path parameters required to build Specification
+     * @param search - filter value
+     * @param sort   - sort order value
+     * @return Spring Data Specification
+     */
     Specification<T> getSpecification(MultivaluedMap<String, String> filter, String search, String sort);
 }
