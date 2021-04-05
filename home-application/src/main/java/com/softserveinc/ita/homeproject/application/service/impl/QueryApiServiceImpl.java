@@ -6,9 +6,7 @@ import com.softserveinc.ita.homeproject.application.service.QueryApiService;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.query.EntitySpecificationService;
-import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +18,15 @@ import org.springframework.stereotype.Service;
  * @see com.softserveinc.ita.homeproject.application.service.QueryApiService
  */
 @Service
+@RequiredArgsConstructor
 public class QueryApiServiceImpl<T extends BaseEntity, D extends BaseDto> implements QueryApiService<T, D> {
     private final EntitySpecificationService<T> specificationService;
 
-    @Autowired
-    public QueryApiServiceImpl(EntitySpecificationService<T> specificationService) {
-        this.specificationService = specificationService;
-    }
-
     @Override
-    public Page<D> getPageFromQuery(UriInfo uriInfo, QueryableService<T, D> service) {
-        return service.findAll(getPageNumber(uriInfo), getPageSize(uriInfo), getSpecification(uriInfo));
-    }
-
-    private Specification<T> getSpecification(UriInfo uriInfo) {
-        return specificationService.getSpecification(getFilterMap(uriInfo), getFilter(uriInfo), getSort(uriInfo));
+    public Specification<T> getSpecification(UriInfo uriInfo) {
+        return specificationService.getSpecification(
+                QueryApiService.getFilterMap(uriInfo),
+                QueryApiService.getParameterValue(DefaultQueryParams.FILTER.getParameter(), uriInfo),
+                QueryApiService.getParameterValue(DefaultQueryParams.SORT.getParameter(), uriInfo));
     }
 }

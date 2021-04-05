@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.MultivaluedMap;
@@ -13,6 +14,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  * QueryApiService - service that provides Spring Data Page by request query
@@ -32,58 +34,34 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * @param service - implementation of QueryableService interface
      * @return Spring Data Page of DTOs according to request query
      */
-    Page<D> getPageFromQuery(UriInfo uriInfo, QueryableService<T, D> service);
-
-    /**
-     *
-     * @param uriInfo - object that implements UriInfo interface
-     *                  that provides access to application and request URI information
-     * @return Integer value of Spring Data Page number specified in a request
-     */
-    default Integer getPageNumber(UriInfo uriInfo) {
-        return Integer.valueOf(uriInfo.getQueryParameters()
-                .get(DefaultQueryParams.PAGE_NUMBER.getParameter())
-                .get(0));
+    default Page<D> getPageFromQuery(UriInfo uriInfo, QueryableService<T, D> service) {
+        return service.findAll(
+                Integer.valueOf(Objects.requireNonNull(
+                        getParameterValue(DefaultQueryParams.PAGE_NUMBER.getParameter(), uriInfo))),
+                Integer.valueOf(Objects.requireNonNull(
+                        getParameterValue(DefaultQueryParams.PAGE_SIZE.getParameter(), uriInfo))),
+                getSpecification(uriInfo));
     }
 
     /**
      *
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
-     * @return Integer value of Spring Data Page size specified in a request
+     * @return Spring Data Specification of entity
      */
-    default Integer getPageSize(UriInfo uriInfo) {
-        return Integer.valueOf(uriInfo.getQueryParameters()
-                .get(DefaultQueryParams.PAGE_SIZE.getParameter())
-                .get(0));
-    }
+    Specification<T> getSpecification(UriInfo uriInfo);
 
     /**
      *
+     * @param param   - String name of query parameter
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
-     * @return String value of Filter parameter specified in a request
+     * @return String value of specified query parameter
      */
-    default String getFilter(UriInfo uriInfo) {
-        if (uriInfo.getQueryParameters().get(DefaultQueryParams.FILTER.getParameter()) != null) {
+    static String getParameterValue(String param, UriInfo uriInfo) {
+        if (uriInfo.getQueryParameters().get(param) != null) {
             return uriInfo.getQueryParameters()
-                    .get(DefaultQueryParams.FILTER.getParameter())
-                    .get(0);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     *
-     * @param uriInfo - object that implements UriInfo interface
-     *                  that provides access to application and request URI information
-     * @return String value of Sort parameter specified in a request
-     */
-    default String getSort(UriInfo uriInfo) {
-        if (uriInfo.getQueryParameters().get(DefaultQueryParams.SORT.getParameter()) != null) {
-            return uriInfo.getQueryParameters()
-                    .get(DefaultQueryParams.SORT.getParameter())
+                    .get(param)
                     .get(0);
         } else {
             return null;
@@ -97,7 +75,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * @return Map of query and path parameters required by EntitySpecificationService
      * to build Filter specification
      */
-    default Map<String, String> getFilterMap(UriInfo uriInfo) {
+    static Map<String, String> getFilterMap(UriInfo uriInfo) {
         MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
         MultivaluedMap<String, String> pathParameters = uriInfo.getPathParameters();
         Map<String, String> filterMap = new HashMap<>();
