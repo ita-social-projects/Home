@@ -8,8 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
  * EntitySpecificationService - service that provides Spring Data Specification
  * by query parameters
  *
- * @param <T> - entity type
  * @author Oleksii Zinkevych
+ * @param <T> - entity type
  * @see org.springframework.data.jpa.domain.Specification
  */
 public interface EntitySpecificationService<T> {

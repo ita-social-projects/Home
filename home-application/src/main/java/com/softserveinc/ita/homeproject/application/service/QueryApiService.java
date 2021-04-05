@@ -18,9 +18,9 @@ import org.springframework.data.jpa.domain.Specification;
 /**
  * QueryApiService - service that provides Spring Data Page by request query
  *
+ * @author Oleksii Zinkevych
  * @param <T> - entity type
  * @param <D> - DTO type
- * @author Oleksii Zinkevych
  * @see javax.ws.rs.core.UriInfo
  */
 public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {

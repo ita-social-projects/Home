@@ -3,10 +3,10 @@ package com.softserveinc.ita.homeproject.application.config.rsql;
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.application.service.QueryConfig;
 import com.softserveinc.ita.homeproject.application.service.impl.UserQueryConfig;
 import com.softserveinc.ita.homeproject.application.service.impl.UserQueryConfig.UserQueryParamEnum;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
