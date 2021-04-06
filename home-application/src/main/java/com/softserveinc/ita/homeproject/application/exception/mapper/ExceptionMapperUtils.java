@@ -15,7 +15,7 @@ public final class ExceptionMapperUtils {
 
     public static String getBadRequestExceptionMessageParser(RSQLParserException exception) {
         String message = null;
-        if (!exception.getMessage().contains("<EOF>")) {
+        if (!exception.getMessage().contains("<EOF>") && !exception.getMessage().contains("\" <OR> \", \"\"")) {
             String[] str = exception.getMessage().split(":", 2);
             Optional<String> result = Arrays.stream(str).skip(1).findFirst();
             if (result.isPresent()) {
