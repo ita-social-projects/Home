@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.houses;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -86,6 +87,114 @@ class HouseApiIT {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.getHouse(readCooperation.getId(), readHouse.getId()));
+    }
+
+    @Test
+    void createInvalidRegionAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `region` is invalid - size must be between 1 and 50 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyRegionHouse = createHouse().address(createAddress().region(""));
+        CreateHouse longRegionHouse = createHouse().address(createAddress()
+            .region("Address over 50 symbols Address over 50 symbols Address over 50 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyRegionHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longRegionHouse))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createInvalidCityAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `city` is invalid - size must be between 1 and 50 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyCityHouse = createHouse().address(createAddress().city(""));
+        CreateHouse longCityHouse = createHouse().address(createAddress()
+            .city("Address over 50 symbols Address over 50 symbols Address over 50 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyCityHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longCityHouse))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createInvalidDistrictAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `district` is invalid - size must be between 1 and 50 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyDistrictHouse = createHouse().address(createAddress().district(""));
+        CreateHouse longDistrictHouse = createHouse().address(createAddress()
+            .district("Address over 50 symbols Address over 50 symbols Address over 50 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyDistrictHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longDistrictHouse))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createInvalidStreetAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `street` is invalid - size must be between 1 and 25 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyStreetHouse = createHouse();
+        CreateHouse longStreetHouse = createHouse();
+        emptyStreetHouse.setAddress(createAddress().street(""));
+        longStreetHouse.setAddress(createAddress()
+            .street("Address over 25 symbols Address over 25 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyStreetHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longStreetHouse))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createInvalidHouseBlockAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `houseBlock` is invalid - size must be between 1 and 10 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyHouseBlockHouse = createHouse();
+        CreateHouse longHouseBlockHouse = createHouse();
+        emptyHouseBlockHouse.setAddress(createAddress().houseBlock(""));
+        longHouseBlockHouse.setAddress(createAddress()
+            .houseBlock("Address over 10 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyHouseBlockHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longHouseBlockHouse))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createInvalidHouseNumberAddressTest() throws ApiException {
+        ApiException exception =
+            new ApiException(400, "Parameter `houseNumber` is invalid - size must be between 1 and 10 signs.");
+        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
+        CreateHouse emptyHouseNumberHouse = createHouse();
+        CreateHouse longHouseNumberHouse = createHouse();
+        emptyHouseNumberHouse.setAddress(createAddress().houseNumber(""));
+        longHouseNumberHouse.setAddress(createAddress()
+            .houseNumber("Address over 10 symbols."));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyHouseNumberHouse))
+            .withMessage(createExceptionMessage(exception));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longHouseNumberHouse))
+            .withMessage(createExceptionMessage(exception));
     }
 
     private void assertHouse(CreateHouse expected, ReadHouse actual) {

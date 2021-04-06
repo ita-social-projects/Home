@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -68,15 +69,63 @@ class CooperationApiIT {
     @Test
     void deleteCooperationTest() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
+        ApiException exception = new ApiException(404, "Can't find cooperation with given ID: " + readCoop.getId());
 
         ApiResponse<Void> response = cooperationApi.deleteCooperationWithHttpInfo(readCoop.getId());
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId())).withStackTraceContaining("\"response_code\":404");
+            .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId()))
+            .withMessage(createExceptionMessage(exception));
     }
 
-    
+    @Test
+    void createCooperationInvalidNameTest() {
+        ApiException exception = new ApiException(400, "Parameter `name` is invalid - size must be between 1 and 50 signs.");
+
+        CreateCooperation createCoopInvalidName = new CreateCooperation()
+            .name("Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation")
+            .usreo("usreo")
+            .iban("77778")
+            .address(createAddress())
+            .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidName))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createCooperationInvalidUsreoTest() {
+        ApiException exception = new ApiException(400, "Parameter `usreo` is invalid - size must be between 1 and 12 signs.");
+
+        CreateCooperation createCoopInvalidUsreo = new CreateCooperation()
+            .name("name")
+            .usreo("123456789101112131415")
+            .iban("77778")
+            .address(createAddress())
+            .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidUsreo))
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void createCooperationInvalidIbanTest() {
+        ApiException exception = new ApiException(400, "Parameter `iban` is invalid - size must be between 1 and 34 signs.");
+
+        CreateCooperation createCoopInvalidIban = new CreateCooperation()
+            .name("name")
+            .usreo("usreo")
+            .iban("12345678910111213141516171819202122232425")
+            .address(createAddress())
+            .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidIban))
+            .withMessage(createExceptionMessage(exception));
+    }
 
 
     private CreateCooperation createCooperation() {

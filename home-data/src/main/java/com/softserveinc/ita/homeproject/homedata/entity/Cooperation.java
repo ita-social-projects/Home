@@ -32,10 +32,10 @@ public class Cooperation extends BaseEntity implements Serializable{
     @Column(name = "iban")
     private String iban;
 
-    @Column(name = "registerDate")
+    @Column(name = "register_date")
     private LocalDate registerDate;
 
-    @Column(name = "updateDate")
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @Column(name = "enabled")

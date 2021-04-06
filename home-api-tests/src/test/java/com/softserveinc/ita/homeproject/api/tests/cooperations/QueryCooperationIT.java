@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Objects;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
+import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
@@ -65,7 +68,8 @@ class QueryCooperationIT {
             .filter("name=like=testedByFilters")
             .build().perform();
 
-        queryResponse.forEach(element -> assertTrue(Objects.requireNonNull(element.getName()).contains("testedByFilters")));
+        queryResponse
+            .forEach(element -> assertTrue(Objects.requireNonNull(element.getName()).contains("testedByFilters")));
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
     }
 
@@ -133,6 +137,66 @@ class QueryCooperationIT {
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
     }
 
+    @Test
+    void invalidPageSizeTest() {
+        ApiException exception = new ApiException(400, "Parameter `arg1` is invalid - must be greater than or equal to 1.");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> new CooperationQuery
+                .Builder(cooperationApi)
+                .pageNumber(1)
+                .pageSize(0)
+                .build()
+                .perform())
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void emptyArgumentTest() {
+        ApiException exception = new ApiException(400, "The query argument for search is empty");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> new CooperationQuery
+                .Builder(cooperationApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .name(" ")
+                .build()
+                .perform())
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void wrongFilterPredicateExceptionTest() {
+        ApiException exception =
+            new ApiException(400, "Unknown operator: =ike=");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> new CooperationQuery
+                .Builder(cooperationApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("name=ike=upd")
+                .build()
+                .perform())
+            .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void wrongFilterFieldExceptionTest() {
+        ApiException exception =
+            new ApiException(400, "Unknown property: ame from entity");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> new CooperationQuery
+                .Builder(cooperationApi)
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("ame=like=upd")
+                .build()
+                .perform())
+            .withMessage(createExceptionMessage(exception));
+    }
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()

@@ -91,7 +91,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @Override
     public Response queryContactsOnUser(Long userId,
                                         @Min(1) Integer pageNumber,
-                                        @Min(0) @Max(10) Integer pageSize,
+                                        @Min(1) @Max(10) Integer pageSize,
                                         String sort,
                                         String filter,
                                         String id,
@@ -135,7 +135,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
     public Response getAllUsers(@Min(1) Integer pageNumber,
-                                @Min(0) @Max(10) Integer pageSize,
+                                @Min(1) @Max(10) Integer pageSize,
                                 String sort,
                                 String filter,
                                 String id,
