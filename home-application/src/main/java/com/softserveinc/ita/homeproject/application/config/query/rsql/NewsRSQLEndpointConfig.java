@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.application.config.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.rsql;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.service.QueryConfig;
-import com.softserveinc.ita.homeproject.application.service.impl.NewsQueryConfig;
-import com.softserveinc.ita.homeproject.application.service.impl.NewsQueryConfig.NewsQueryParamEnum;
+import com.softserveinc.ita.homeproject.application.config.query.NewsQueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.NewsQueryConfig.NewsQueryParamEnum;
+import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
