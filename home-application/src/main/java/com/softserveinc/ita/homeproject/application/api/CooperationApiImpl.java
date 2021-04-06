@@ -90,15 +90,19 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_ALL_COOPERATION_PERMISSION)
     @Override
     public Response queryCooperation(@Min(1) Integer pageNumber,
-                                     @Min(0) @Max(10) Integer pageSize,
+                                     @Min(1) @Max(10) Integer pageSize,
                                      String sort,
                                      String filter,
+                                     Long id,
                                      String name,
                                      String iban,
                                      String usreo) {
 
         Map<String, String> filterMap = new HashMap<>();
 
+        String idValue = id == null ? null : id.toString();
+
+        filterMap.put("id", idValue);
         filterMap.put("name", name);
         filterMap.put("iban", iban);
         filterMap.put("usreo", usreo);
@@ -116,7 +120,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Override
     public Response queryHouse(@Min(1) Long cooperationId,
                                @Min(1) Integer pageNumber,
-                               @Min(0) @Max(10) Integer pageSize,
+                               @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
                                Long houseId,
@@ -126,12 +130,12 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
         Map<String, String> filterMap = new HashMap<>();
 
-        String quantityFlatValue = quantityFlat == null ? null : String.valueOf(quantityFlat);
-        String adjoiningAreaValue = adjoiningArea == null ? null : String.valueOf(adjoiningArea);
+        String quantityFlatValue = quantityFlat == null ? null : quantityFlat.toString();
+        String adjoiningAreaValue = adjoiningArea == null ? null : adjoiningArea.toString();
         String houseAreaValue = houseArea == null ? null : houseArea.toString();
         String houseIdValue = houseId == null ? null : houseId.toString();
 
-        filterMap.put("cooperation.id", cooperationId.toString());
+        filterMap.put("cooperation_id", cooperationId.toString());
         filterMap.put("id", houseIdValue);
         filterMap.put("quantityFlat", quantityFlatValue);
         filterMap.put("adjoiningArea", adjoiningAreaValue);

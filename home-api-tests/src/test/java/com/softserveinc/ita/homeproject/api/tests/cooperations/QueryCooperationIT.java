@@ -2,9 +2,11 @@ package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
@@ -52,7 +54,7 @@ class QueryCooperationIT {
     @Test
     void getAllCooperationFilteredBy() throws ApiException {
         CreateCooperation expected = createCooperation();
-        expected.setName("testedByFilters");
+        expected.setName(RandomStringUtils.randomAlphabetic(5).concat("testedByFilters"));
         cooperationApi.createCooperation(expected);
 
         List<ReadCooperation> queryResponse = new CooperationQuery
@@ -61,6 +63,22 @@ class QueryCooperationIT {
             .pageSize(10)
             .sort("id,asc")
             .filter("name=like=testedByFilters")
+            .build().perform();
+
+        queryResponse.forEach(element -> assertTrue(Objects.requireNonNull(element.getName()).contains("testedByFilters")));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+    }
+
+    @Test
+    void getAllCooperationById() throws ApiException {
+        ReadCooperation expected = cooperationApi.createCooperation(createCooperation());
+
+        List<ReadCooperation> queryResponse = new CooperationQuery
+            .Builder(cooperationApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .id(expected.getId())
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getName(), expected.getName()));

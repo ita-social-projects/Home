@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.Test;
 class CooperationApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-
 
     @Test
     void createCooperationTest() throws ApiException {
@@ -75,8 +73,10 @@ class CooperationApiIT {
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId()));
+            .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId())).withStackTraceContaining("\"response_code\":404");
     }
+
+    
 
 
     private CreateCooperation createCooperation() {
@@ -133,6 +133,5 @@ class CooperationApiIT {
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
     }
-
 
 }

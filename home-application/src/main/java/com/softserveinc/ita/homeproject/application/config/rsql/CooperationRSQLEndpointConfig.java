@@ -22,6 +22,7 @@ public class CooperationRSQLEndpointConfig implements RSQLEndpointConfig
     public Map<CooperationQueryParamEnum, String> getMappings() {
         EnumMap<CooperationQueryParamEnum, String> map = new EnumMap<>(CooperationQueryParamEnum.class);
 
+        map.put(CooperationQueryParamEnum.ID, "id");
         map.put(CooperationQueryParamEnum.NAME, "name");
         map.put(CooperationQueryParamEnum.IBAN, "iban");
         map.put(CooperationQueryParamEnum.USREO, "usreo");

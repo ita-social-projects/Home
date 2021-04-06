@@ -22,9 +22,9 @@ public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQ
         EnumMap<HouseQueryParamEnum, String> map = new EnumMap<>(HouseQueryParamEnum.class);
 
         map.put(HouseQueryParamEnum.COOPERATION_ID, "cooperation_id");
-        map.put(HouseQueryParamEnum.QUANTITY_FLAT, "quantityFlat");
-        map.put(HouseQueryParamEnum.ADJOINING_AREA, "adjoiningArea");
-        map.put(HouseQueryParamEnum.HOUSE_AREA, "houseArea");
+        map.put(HouseQueryParamEnum.QUANTITY_FLAT, "quantity_flat");
+        map.put(HouseQueryParamEnum.ADJOINING_AREA, "adjoining_area");
+        map.put(HouseQueryParamEnum.HOUSE_AREA, "house_area");
 
         return map;
     }

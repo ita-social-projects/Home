@@ -18,7 +18,7 @@ tags:
   - name: contact
     description: Contact management operations
   - name: cooperation
-    description: Cooperation managment
+    description: Cooperation management
   - name: house
     description: Operations with house
   - name: address
@@ -238,7 +238,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/ReadUser'
+                $ref: '#/components/schemas/ReadUser'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -679,7 +679,7 @@ paths:
     post:
       tags:
         - cooperation
-      summary: "Create cooperation"
+      summary: Create cooperation
       description: Create a new cooperation
       operationId: createCooperation
       requestBody:
@@ -691,7 +691,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful created
+          description: Successfully created
           content:
             application/json:
               schema:
@@ -723,7 +723,7 @@ paths:
           name: page_size
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 10
             default: 5
           required: false
@@ -733,12 +733,16 @@ paths:
           schema:
             type: string
             default: id,asc
-            example: "some example"
         - in: query
           name: filter
           schema:
             type: string
-            example: "some example"
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+            example: 1
         - in: query
           name: name
           schema:
@@ -890,7 +894,7 @@ paths:
         required: true
       responses:
         '201':
-          description: Successful created
+          description: Successfully created
           content:
             application/json:
               schema:
@@ -930,7 +934,7 @@ paths:
           name: page_size
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 10
             default: 5
           required: false
@@ -940,12 +944,10 @@ paths:
           schema:
             type: string
             default: id,asc
-            example: "some example"
         - in: query
           name: filter
           schema:
             type: string
-            example: "some example"
         - in: query
           name: house_id
           schema:
@@ -1500,6 +1502,11 @@ components:
           items:
             $ref: "#/components/schemas/ReadHouse"
     UpdateCooperation:
+      required:
+        - name
+        - usreo
+        - iban
+        - address
       type: object
       properties:
         name:
@@ -1590,10 +1597,12 @@ components:
           example: 12
         address:
           $ref: '#/components/schemas/Address'
-#        cooperationId:
-#          type: integer
-#          example: 2
     UpdateHouse:
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
       type: object
       properties:
         quantity_flat:
@@ -1605,8 +1614,5 @@ components:
         adjoining_area:
           type: integer
           example: 12
-#        cooperationId:
-#          type: integer
-#          example: 0
         address:
           $ref: '#/components/schemas/Address'

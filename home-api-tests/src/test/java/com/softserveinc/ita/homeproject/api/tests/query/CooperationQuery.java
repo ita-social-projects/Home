@@ -7,6 +7,8 @@ import com.softserveinc.ita.homeproject.model.ReadCooperation;
 
 public class CooperationQuery extends BaseQuery {
 
+    private Long id;
+
     private String name;
 
     private String iban;
@@ -16,6 +18,10 @@ public class CooperationQuery extends BaseQuery {
     private CooperationApi cooperationApi;
 
     private ReadCooperation readCooperation;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -43,6 +49,7 @@ public class CooperationQuery extends BaseQuery {
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
+                id,
                 name,
                 iban,
                 usreo);
@@ -52,6 +59,11 @@ public class CooperationQuery extends BaseQuery {
 
         public Builder(CooperationApi cooperationApi){
             queryClass.setCooperationApi(cooperationApi);
+        }
+
+        public Builder id(Long id){
+            queryClass.setId(id);
+            return this;
         }
 
         public Builder name(String name){
