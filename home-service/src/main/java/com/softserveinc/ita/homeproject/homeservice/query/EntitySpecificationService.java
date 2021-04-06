@@ -15,12 +15,15 @@ public class EntitySpecificationService<T> {
 
     public static final String RSQL_EQUAL = "==";
 
+    public static final String RSQL_EQUAL_OR = "=in=";
+
     public static final String RSQL_AND = ";";
 
     private static String toRSQLString(Map<String, String> filter) {
         return filter.entrySet().stream()
             .filter(entry -> entry.getValue() != null)
-            .map(entry -> entry.getKey() + RSQL_EQUAL + entry.getValue().toUpperCase())
+            .map(entry ->
+            entry.getKey() + RSQL_EQUAL_OR + "(" + entry.getValue() + "," + entry.getValue().toUpperCase() + ")")
             .collect(Collectors.joining(RSQL_AND));
     }
 

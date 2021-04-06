@@ -528,7 +528,6 @@ paths:
           name: type
           schema:
             type: string
-            enum: [email, phone]
           description: Type of the Contact
       responses:
         '200':
