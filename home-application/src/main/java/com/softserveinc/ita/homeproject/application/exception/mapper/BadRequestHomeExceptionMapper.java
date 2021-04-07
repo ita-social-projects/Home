@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 
@@ -11,6 +12,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeExce
  * @author Oleksii Zinkevych
  * @see javax.ws.rs.ext.ExceptionMapper
  */
+@Provider
 public class BadRequestHomeExceptionMapper extends BaseHomeExceptionMapper<BadRequestHomeException> {
     @Override
     protected Response.Status getStatus() {
