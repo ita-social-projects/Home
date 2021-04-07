@@ -16,16 +16,13 @@ public class EntitySpecificationServiceImpl<T> implements EntitySpecificationSer
 
     public static final String RSQL_EQUAL = "==";
 
-    public static final String RSQL_EQUAL_OR = "=in=";
-
     public static final String RSQL_AND = ";";
 
     private static String toRSQLString(MultivaluedMap<String, String> filter) {
         return filter.entrySet().stream()
                 .filter(entry -> entry.getValue() != null)
                 .map(entry -> entry.getValue().stream()
-                        .map(valueElement -> entry.getKey() + RSQL_EQUAL_OR
-                                + "(" + valueElement + "," + valueElement.toUpperCase() + ")")
+                        .map(valueElement -> entry.getKey() + RSQL_EQUAL + valueElement)
                         .collect(Collectors.joining(RSQL_AND)))
                 .collect(Collectors.joining(RSQL_AND));
     }
