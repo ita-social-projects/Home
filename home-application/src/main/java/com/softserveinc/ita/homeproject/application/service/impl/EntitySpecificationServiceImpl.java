@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class EntitySpecificationServiceImpl<T> implements EntitySpecificationService<T> {
 
-    public static final String DEFAULT_SORT = "id,desc";
-
     public static final String RSQL_EQUAL = "==";
 
     public static final String RSQL_AND = ";";
@@ -32,7 +30,7 @@ public class EntitySpecificationServiceImpl<T> implements EntitySpecificationSer
 
         Specification<T> filterSpecification = RSQLJPASupport.toSpecification(toRSQLString(filter));
         Specification<T> searchSpecification = RSQLJPASupport.toSpecification(search);
-        Specification<T> sortSpecification = RSQLJPASupport.toSort(sort == null ? DEFAULT_SORT : sort);
+        Specification<T> sortSpecification = RSQLJPASupport.toSort(sort);
 
         return Optional.ofNullable(sortSpecification)
                 .map(spec -> spec.and(filterSpecification))
