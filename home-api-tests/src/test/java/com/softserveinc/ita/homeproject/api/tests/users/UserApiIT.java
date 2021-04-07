@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ class UserApiIT {
 
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
 
     @Test
     void createUserTest() throws ApiException {
@@ -163,6 +165,14 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
             .withMessage(createExceptionMessage(exception));
+    }
+
+    @Test
+    void unauthorizedRequestTest() {
+        CreateUser expectedUser = createTestUser();
+        ApiException exception = assertThrows(ApiException.class,
+                () -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser));
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), exception.getCode());
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {
