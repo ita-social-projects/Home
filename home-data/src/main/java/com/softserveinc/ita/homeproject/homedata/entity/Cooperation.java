@@ -21,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "cooperations")
 @SequenceGenerator(name = "sequence", sequenceName = "cooperations_sequence")
-public class Cooperation extends BaseEntity implements Serializable{
+public class Cooperation extends BaseEntity {
 
     @Column(name = "usreo")
     private String usreo;

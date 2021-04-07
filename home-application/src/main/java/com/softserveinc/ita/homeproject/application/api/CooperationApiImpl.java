@@ -46,8 +46,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Autowired
     private HouseService houseService;
 
-
-
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override
     public Response createCooperation(@Valid CreateCooperation createCooperation) {
@@ -137,9 +135,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
         filterMap.put("cooperation_id", cooperationId.toString());
         filterMap.put("id", houseIdValue);
-        filterMap.put("quantityFlat", quantityFlatValue);
-        filterMap.put("adjoiningArea", adjoiningAreaValue);
-        filterMap.put("houseArea", houseAreaValue);
+        filterMap.put("quantity_flat", quantityFlatValue);
+        filterMap.put("adjoining_area", adjoiningAreaValue);
+        filterMap.put("house_area", houseAreaValue);
 
         Page<HouseDto> readHouse = houseService.getAllHouses(
             pageNumber,
@@ -183,5 +181,4 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
-
 }

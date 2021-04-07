@@ -24,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CooperationServiceImpl implements CooperationService {
 
-    private static final String NOT_FOUND_COOPERATION = "Can't find cooperation with given ID:";
-
-    private static final String FORMAT = "%s %d";
+    private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
     private final CooperationRepository cooperationRepository;
 
@@ -72,7 +70,7 @@ public class CooperationServiceImpl implements CooperationService {
             cooperationRepository.save(fromDb);
             return mapper.convert(fromDb, CooperationDto.class);
         } else {
-            throw new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id));
+            throw new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id));
         }
     }
 
@@ -89,7 +87,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public CooperationDto getCooperationById(Long id) {
         Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
         return mapper.convert(toGet, CooperationDto.class);
@@ -98,7 +96,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public void deactivateCooperation(Long id) {
         Cooperation toDelete = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_COOPERATION, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
         toDelete.setEnabled(false);
         cooperationRepository.save(toDelete);
     }

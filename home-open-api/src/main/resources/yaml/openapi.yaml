@@ -405,7 +405,7 @@ paths:
       tags:
         - user
       summary: Delete user by ID
-      description: The ednpoint deletes User by ID
+      description: The endpoint deletes User by ID
       operationId: deleteUser
       parameters:
         - name: "user_id"
@@ -563,7 +563,7 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          description: The ID of the Contact
+          description: The ID of the User
           required: true
           schema:
             type: integer
@@ -679,11 +679,11 @@ paths:
     post:
       tags:
         - cooperation
-      summary: Create cooperation
-      description: Create a new cooperation
+      summary: Create Cooperation
+      description: The endpoint creates a new Cooperation
       operationId: createCooperation
       requestBody:
-        description: Create a new cooperation
+        description: A payload for creating a Cooperation
         content:
           application/json:
             schema:
@@ -707,7 +707,7 @@ paths:
     get:
       tags:
         - cooperation
-      summary: "Get all cooperation"
+      summary: Get All Cooperations
       description: Get all cooperation
       operationId: queryCooperation
       parameters:
@@ -777,13 +777,13 @@ paths:
     get:
       tags:
         - cooperation
-      summary: "Get cooperation by cooperation id"
-      description: Get cooperation by id
+      summary: Get Cooperation by ID
+      description: The endpoint gets Cooperation by ID
       operationId: getCooperation
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
@@ -791,7 +791,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -807,20 +807,20 @@ paths:
     put:
       tags:
         - cooperation
-      summary: "Update current cooperation"
-      description: Update cooperation by id
+      summary: Update current Cooperation
+      description: The endpoint updates current Cooperation by ID
       operationId: updateCooperation
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Update current cooperation
+        description: A payload for updating current Cooperation
         content:
           application/json:
             schema:
@@ -828,7 +828,7 @@ paths:
         required: true
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -846,13 +846,13 @@ paths:
     delete:
       tags:
         - cooperation
-      summary: "Delete cooperation by ID"
-      description: Delete cooperation by id
+      summary: Delete cooperation by ID
+      description: The endpoint deletes Cooperation by ID
       operationId: deleteCooperation
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
@@ -873,20 +873,20 @@ paths:
     post:
       tags:
         - house
-      summary: "Create house"
-      description: Create a new house
+      summary: Create new House for the Cooperation
+      description: The endpoint creates a new House for the specified Cooperation ID
       operationId: createHouse
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Create a new house
+        description: A payload for creating a house
         content:
           application/json:
             schema:
@@ -910,14 +910,14 @@ paths:
     get:
       tags:
         - house
-      summary: "Get all houses"
-      description: Get all houses
+      summary: Get all Houses by Cooperation
+      description: The endpoint retrieves the list of houses associated with the specified cooperation ID
       operationId: queryHouse
       parameters:
         - name: "cooperation_id"
           in: path
           required: true
-          description: ID of the chat
+          description: The ID of the Cooperation
           schema:
             type : integer
             format: int64
@@ -971,7 +971,7 @@ paths:
             example: 20
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -988,13 +988,14 @@ paths:
     get:
       tags:
         - house
-      summary: "Get house by house id"
-      description: Get house by id
+      summary: Get House by ID
+      description: The endpoint retrieves an existing house
+        associated with the specified Cooperation by Cooperation and House IDs
       operationId: getHouse
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
@@ -1002,7 +1003,7 @@ paths:
             example: 1
         - name: "house_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the House
           required: true
           schema:
             type: integer
@@ -1010,7 +1011,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -1026,13 +1027,14 @@ paths:
     put:
       tags:
         - house
-      summary: "Update current house"
-      description: Update gouse by id
+      summary: Update current House
+      description: The endpoint updates information on a house that exists
+        in the system by the specified Cooperation and House IDs
       operationId: updateHouse
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
@@ -1040,14 +1042,14 @@ paths:
             example: 1
         - name: "house_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the House
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: Update current house
+        description: A payload for updating an existing House
         content:
           application/json:
             schema:
@@ -1055,7 +1057,7 @@ paths:
         required: true
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -1073,13 +1075,14 @@ paths:
     delete:
       tags:
         - house
-      summary: "Delete house by ID"
-      description: Delete house by id
+      summary: Delete house by ID
+      description: The endpoint deletes an existing House on a Cooperation associated with the
+        specified Coopeartion and House IDs
       operationId: deleteHouse
       parameters:
         - name: "cooperation_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the Cooperation
           required: true
           schema:
             type: integer
@@ -1087,7 +1090,7 @@ paths:
             example: 1
         - name: "house_id"
           in: "path"
-          description: "Use 1 for testing."
+          description: The ID of the House
           required: true
           schema:
             type: integer

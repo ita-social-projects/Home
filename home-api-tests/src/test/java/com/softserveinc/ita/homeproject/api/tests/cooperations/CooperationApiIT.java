@@ -69,14 +69,13 @@ class CooperationApiIT {
     @Test
     void deleteCooperationTest() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ApiException exception = new ApiException(404, "Can't find cooperation with given ID: " + readCoop.getId());
 
         ApiResponse<Void> response = cooperationApi.deleteCooperationWithHttpInfo(readCoop.getId());
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId()))
-            .withMessage(createExceptionMessage(exception));
+            .matches((actual) -> actual.getCode() == 404);
     }
 
     @Test
