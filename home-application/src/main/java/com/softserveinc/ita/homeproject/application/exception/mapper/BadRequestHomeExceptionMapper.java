@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
-
 import javax.ws.rs.core.Response;
+
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 
 /**
  * BadRequestHomeExceptionMapper class is used to return exception
