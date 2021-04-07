@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.service;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,9 +25,9 @@ import org.springframework.data.jpa.domain.Specification;
  * @see javax.ws.rs.core.UriInfo
  */
 public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
-    Set<String> EXCLUDED_PARAMETERS = new HashSet<>(Arrays.stream(DefaultQueryParams.values())
+    Set<String> EXCLUDED_PARAMETERS = Arrays.stream(DefaultQueryParams.values())
             .map(DefaultQueryParams::getParameter)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toSet());
 
     /**
      *
@@ -40,12 +41,19 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
         MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
         MultivaluedMap<String, String> pathParameters = uriInfo.getPathParameters();
         queryParameters.forEach((key, value) -> {
+            validateQueryParamValue(key, value);
             if(!(EXCLUDED_PARAMETERS.contains(key))) {
                 filterMap.put(key, value);
             }
         });
         pathParameters.forEach(filterMap::put);
         return filterMap;
+    }
+
+    private static void validateQueryParamValue(String queryParamName, List<String> queryParamValue) {
+        if (queryParamValue.size() > 1) {
+            throw new BadRequestHomeException("Query param '" + queryParamName + "' has more than one value");
+        }
     }
 
     /**
