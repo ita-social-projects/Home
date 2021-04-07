@@ -1,10 +1,13 @@
 package com.softserveinc.ita.homeproject.application.service;
 
+import static java.util.function.Predicate.not;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
@@ -25,9 +28,8 @@ import org.springframework.data.jpa.domain.Specification;
  * @see javax.ws.rs.core.UriInfo
  */
 public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
-    Set<String> EXCLUDED_PARAMETERS = Arrays.stream(DefaultQueryParams.values())
-            .map(DefaultQueryParams::getParameter)
-            .collect(Collectors.toSet());
+    Map<String, String> EXCLUDED_PARAMETERS = Arrays.stream(DefaultQueryParams.values())
+            .collect(Collectors.toMap(DefaultQueryParams::getParameter, DefaultQueryParams::getValue));
 
     /**
      *
@@ -37,16 +39,18 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * to build Filter specification
      */
     static MultivaluedMap<String, String> getFilterMap(UriInfo uriInfo) {
-        MultivaluedMap<String, String> filterMap = new MultivaluedHashMap<>();
-        MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-        MultivaluedMap<String, String> pathParameters = uriInfo.getPathParameters();
-        queryParameters.forEach((key, value) -> {
-            validateQueryParamValue(key, value);
-            if(!(EXCLUDED_PARAMETERS.contains(key))) {
-                filterMap.put(key, value);
-            }
-        });
-        pathParameters.forEach(filterMap::put);
+        MultivaluedMap<String, String> filterMap = Stream.of(uriInfo.getPathParameters(), uriInfo.getQueryParameters())
+                .flatMap(map -> map.entrySet().stream())
+                .filter(not(entry -> EXCLUDED_PARAMETERS.containsKey(entry.getKey())))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (v1, v2) -> {
+                            throw new BadRequestHomeException("Request contains same path and query params");
+                        },
+                        MultivaluedHashMap::new
+                ));
+        filterMap.forEach(QueryApiService::validateQueryParamValue);
         return filterMap;
     }
 
@@ -71,13 +75,13 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      *                  that provides access to application and request URI information
      * @return String value of specified query parameter
      */
-    static String getParameterValue(String param, UriInfo uriInfo) {
+    static Optional<String> getParameterValue(String param, UriInfo uriInfo) {
         if (uriInfo.getQueryParameters().get(param) != null) {
-            return uriInfo.getQueryParameters()
+            return Optional.of(uriInfo.getQueryParameters()
                     .get(param)
-                    .get(0);
+                    .get(0));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -89,31 +93,36 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * @return Spring Data Page of DTOs according to request query
      */
     default Page<D> getPageFromQuery(UriInfo uriInfo, QueryableService<T, D> service) {
-        return service.findAll(
-                Integer.valueOf(Objects.requireNonNull(
-                        getParameterValue(DefaultQueryParams.PAGE_NUMBER.getParameter(), uriInfo))),
-                Integer.valueOf(Objects.requireNonNull(
-                        getParameterValue(DefaultQueryParams.PAGE_SIZE.getParameter(), uriInfo))),
-                getSpecification(uriInfo));
+        int pageNumber = Integer.parseInt(getParameterValue(DefaultQueryParams.PAGE_NUMBER.getParameter(), uriInfo)
+                .orElse(DefaultQueryParams.PAGE_NUMBER.getValue()));
+        int pageSize = Integer.parseInt(getParameterValue(DefaultQueryParams.PAGE_SIZE.getParameter(), uriInfo)
+                .orElse(DefaultQueryParams.PAGE_SIZE.getValue()));
+        return service.findAll(pageNumber, pageSize, getSpecification(uriInfo));
     }
 
     /**
      * Enum of default query parameters that have to be excluded from filter map
      */
     enum DefaultQueryParams {
-        PAGE_NUMBER("page_number"),
-        PAGE_SIZE("page_size"),
-        FILTER("filter"),
-        SORT("sort");
+        PAGE_NUMBER("page_number", "1"),
+        PAGE_SIZE("page_size", "5"),
+        FILTER("filter", ""),
+        SORT("sort", "id,desc");
 
         private final String parameter;
+        private final String value;
 
-        DefaultQueryParams(String parameter) {
+        DefaultQueryParams(String parameter, String value) {
             this.parameter = parameter;
+            this.value = value;
         }
 
         public String getParameter() {
             return this.parameter;
+        }
+
+        public String getValue() {
+            return this.value;
         }
     }
 }
