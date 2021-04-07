@@ -41,6 +41,6 @@ public final class ApiClientUtil {
 
     private static void setServers(ApiClient client) {
         client.setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
+            APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
     }
 }

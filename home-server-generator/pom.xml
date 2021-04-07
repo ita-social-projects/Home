@@ -117,6 +117,7 @@
                     <arguments>
                         <argument>clean</argument>
                         <argument>install</argument>
+                        <argument>-ntp</argument>
                     </arguments>
                     <environmentVariables>
                         <LANG>en_US</LANG>
