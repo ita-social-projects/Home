@@ -35,7 +35,7 @@ public final class ApiClientUtil {
         if (Boolean.parseBoolean(VERBOSE_LOGGING)) {
             Logger logger = Logger.getLogger(ApiClient.class.getName());
             client.getHttpClient()
-                .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
+               .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
         }
     }
 
