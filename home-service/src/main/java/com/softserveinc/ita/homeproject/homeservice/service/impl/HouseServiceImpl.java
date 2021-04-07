@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class HouseServiceImpl implements HouseService {
 
+    private static final String HOUSE_WITH_ID_NOT_FOUND = "House with id: %d not found in this cooperation";
+
     private final HouseRepository houseRepository;
 
     private final ServiceMapper mapper;
@@ -80,9 +82,9 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public HouseDto getHouseById(Long coopId, Long id) {
         House toGet = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
         if (!toGet.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
+            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
         }
         return mapper.convert(toGet, HouseDto.class);
     }
@@ -91,9 +93,9 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("House with id: " + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
         if (!toDelete.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException("House with id: " + id + " not found in this cooperation");
+            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
         }
         toDelete.setEnabled(false);
         houseRepository.save(toDelete);
