@@ -73,7 +73,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * @param param   - String name of query parameter
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
-     * @return String value of specified query parameter
+     * @return Optional of String value of specified query parameter
      */
     static Optional<String> getParameterValue(String param, UriInfo uriInfo) {
         if (uriInfo.getQueryParameters().get(param) != null) {
