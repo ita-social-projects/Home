@@ -39,7 +39,9 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * to build Filter specification
      */
     static MultivaluedMap<String, String> getFilterMap(UriInfo uriInfo) {
-        MultivaluedMap<String, String> filterMap = Stream.of(uriInfo.getPathParameters(), uriInfo.getQueryParameters())
+        MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+        queryParams.forEach(QueryApiService::validateQueryParamValue);
+        return Stream.of(uriInfo.getPathParameters(), queryParams)
                 .flatMap(map -> map.entrySet().stream())
                 .filter(not(entry -> EXCLUDED_PARAMETERS.containsKey(entry.getKey())))
                 .collect(Collectors.toMap(
@@ -50,8 +52,6 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
                         },
                         MultivaluedHashMap::new
                 ));
-        filterMap.forEach(QueryApiService::validateQueryParamValue);
-        return filterMap;
     }
 
     private static void validateQueryParamValue(String queryParamName, List<String> queryParamValue) {
