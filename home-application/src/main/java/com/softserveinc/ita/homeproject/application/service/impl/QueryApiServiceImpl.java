@@ -24,10 +24,7 @@ public class QueryApiServiceImpl<T extends BaseEntity, D extends BaseDto> implem
     @Override
     public Specification<T> getSpecification(UriInfo uriInfo) {
         String filter = QueryApiService.getParameterValue(DefaultQueryParams.FILTER.getParameter(), uriInfo)
-                .orElse(DefaultQueryParams.FILTER.getValue());
-        if (filter.equals("")) {
-            filter = null;
-        }
+                .orElse(null);
         String sort = QueryApiService.getParameterValue(DefaultQueryParams.SORT.getParameter(), uriInfo)
                 .orElse(DefaultQueryParams.SORT.getValue());
         return specificationService.getSpecification(QueryApiService.getFilterMap(uriInfo), filter, sort);
