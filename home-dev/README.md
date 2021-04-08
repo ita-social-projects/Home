@@ -21,6 +21,26 @@ How to do it with IDEA and Maven, check the [Maven](#Maven).
 
 
 ##Docker
+**Environment variables**
+
+`DATASOURCE_URL`
+`DATASOURCE_USER`
+`DATASOURCE_PASSWORD`
+
+**How to run data migration in container by homeacademy/data-migration image**
+
+`$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/data-migration`
+
+**How to launch application in container by homeacademy/home-application image**
+
+`$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
+
+To configure Java Heap size inside a Docker container use `-e JAVA_OPTS="-Xms<size> -Xmx<size>"`
+
+`-Xms<size>` Set initial heap size
+`-Xmx<size>` Set maximum heap size	
+
+
 **How to create database**
 
 For that purpose just use `docker-compose up` command in your terminal in `home-dev/init` package. 
