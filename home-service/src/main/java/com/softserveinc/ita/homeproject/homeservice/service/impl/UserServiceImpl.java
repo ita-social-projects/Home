@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Page<UserDto> findUsers(Integer pageNumber, Integer pageSize, Specification<User> specification) {
+    public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
         Specification<User> userSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))

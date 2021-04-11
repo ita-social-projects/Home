@@ -79,7 +79,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewsDto> findNews(Integer pageNumber, Integer pageSize, Specification<News> specification) {
+    public Page<NewsDto> findAll(Integer pageNumber, Integer pageSize, Specification<News> specification) {
         Specification<News> newsSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return newsRepository.findAll(newsSpecification, PageRequest.of(pageNumber - 1, pageSize))
