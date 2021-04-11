@@ -20,7 +20,7 @@ jobs:
         with:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{secrets.DOCKER_PASSWORD}}
-          repository: homeacademy/home-application,homeacademy/data-migration
+          repository: homeacademy/home-application&; homeacademy/data-migration
           readme: "home-dev/README.md"
       - name: Publish to GitHub Packages and Docker Hub
         env:
