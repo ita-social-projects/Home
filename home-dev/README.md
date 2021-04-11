@@ -21,7 +21,8 @@ How to do it with IDEA and Maven, check the [Maven](#Maven).
 
 
 ##Docker
-**Environment variables**
+
+**Environment variables**  
 
 `DATASOURCE_URL`  
 
