@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.contacts;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,12 +60,11 @@ class ContactApiIT {
         CreateContact createEmailContact = createInvalidEmailContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
 
-        ApiException exception = new ApiException(400, "Parameter `email` is invalid - must meet the rule.");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
                 createEmailContact))
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
     @Test
@@ -74,14 +72,12 @@ class ContactApiIT {
         CreateContact createPhoneContact = createInvalidPhoneContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
 
-        String exceptionMessage = "Parameter `phone` is invalid - size must be between 9 and 13 signs." +
-            " Parameter `phone` is invalid - must meet the rule.";
-        ApiException exception = new ApiException(400, exceptionMessage);
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
                 createPhoneContact))
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `phone` is invalid - size must be between 9 and 13 signs.")
+            .withMessageContaining("Parameter `phone` is invalid - must meet the rule.");
     }
 
     @Test
