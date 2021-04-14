@@ -1,12 +1,12 @@
-package com.softserveinc.ita.homeproject.application.config.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.rsql;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryParamEnum;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
