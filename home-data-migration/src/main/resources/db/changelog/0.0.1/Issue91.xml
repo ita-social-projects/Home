@@ -10,8 +10,6 @@
             <column name="CREATE_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-        </addColumn>
-        <addColumn tableName="houses">
             <column name="UPDATE_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>

@@ -760,7 +760,7 @@ paths:
             example:  "A9856738"
       responses:
         '200':
-          description: successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -860,7 +860,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Successful operation
+          description: Success
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -971,7 +971,7 @@ paths:
             example: 20
       responses:
         '200':
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -1011,7 +1011,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -1057,7 +1057,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
@@ -1098,7 +1098,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Successful operation
+          description: Success
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1446,7 +1446,6 @@ components:
         phone:
           type: string
           example: "+380966617305"
-
     CreateCooperation:
       required:
         - name

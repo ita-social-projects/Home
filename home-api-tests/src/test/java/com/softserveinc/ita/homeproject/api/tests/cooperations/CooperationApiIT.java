@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -80,8 +79,6 @@ class CooperationApiIT {
 
     @Test
     void createCooperationInvalidNameTest() {
-        ApiException exception = new ApiException(400, "Parameter `name` is invalid - size must be between 1 and 50 signs.");
-
         CreateCooperation createCoopInvalidName = new CreateCooperation()
             .name("Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation")
             .usreo("usreo")
@@ -91,13 +88,12 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidName))
-            .withMessage(createExceptionMessage(exception));
+            .matches((actual) -> actual.getCode() == 400)
+            .withMessageContaining("Parameter `name` is invalid - size must be between 1 and 50 signs.");
     }
 
     @Test
     void createCooperationInvalidUsreoTest() {
-        ApiException exception = new ApiException(400, "Parameter `usreo` is invalid - size must be between 1 and 12 signs.");
-
         CreateCooperation createCoopInvalidUsreo = new CreateCooperation()
             .name("name")
             .usreo("123456789101112131415")
@@ -107,13 +103,12 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidUsreo))
-            .withMessage(createExceptionMessage(exception));
+            .matches((actual) -> actual.getCode() == 400)
+            .withMessageContaining("Parameter `usreo` is invalid - size must be between 1 and 12 signs.");
     }
 
     @Test
     void createCooperationInvalidIbanTest() {
-        ApiException exception = new ApiException(400, "Parameter `iban` is invalid - size must be between 1 and 34 signs.");
-
         CreateCooperation createCoopInvalidIban = new CreateCooperation()
             .name("name")
             .usreo("usreo")
@@ -123,7 +118,8 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidIban))
-            .withMessage(createExceptionMessage(exception));
+            .matches((actual) -> actual.getCode() == 400)
+            .withMessageContaining("Parameter `iban` is invalid - size must be between 1 and 34 signs.");
     }
 
 

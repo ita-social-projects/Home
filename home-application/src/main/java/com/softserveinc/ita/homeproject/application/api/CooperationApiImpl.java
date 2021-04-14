@@ -48,7 +48,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override
-    public Response createCooperation(@Valid CreateCooperation createCooperation) {
+    public Response createCooperation(CreateCooperation createCooperation) {
         CooperationDto createCoopDto = mapper.convert(createCooperation, CooperationDto.class);
         CooperationDto readCoopDto = cooperationService.createCooperation(createCoopDto);
         ReadCooperation readCoop = mapper.convert(readCoopDto, ReadCooperation.class);
