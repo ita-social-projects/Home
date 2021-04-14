@@ -1,10 +1,10 @@
 # How to run in docker
 
-####`homeacademy/data-migration`
+#### `homeacademy/data-migration`
 
 This image starts a data-migration for database in docker container
 
-####`homeacademy/home-application`
+#### `homeacademy/home-application`
 
 This image starts an application in docker container
 
@@ -17,22 +17,22 @@ This image starts an application in docker container
 
 This variable allows you to specify datasource URL and database name
 
-###`DATASOURCE_USER`, `DATASOURCE_PASSWORD`
+### `DATASOURCE_USER`, `DATASOURCE_PASSWORD`
 
 These variables allow you to set user and password of your database
 
 
-##How to run data migration in container
+## How to run data migration in container
 
-#####`$ docker pull homeacademy/data-migration`
+##### `$ docker pull homeacademy/data-migration`
 
-#####`$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/data-migration`
+##### `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/data-migration`
 
-##How to launch application in container
+## How to launch application in container
 
-#####`$ docker pull homeacademy/home-application`
+##### `$ docker pull homeacademy/home-application`
 
-#####`$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
+##### `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
 
 ## Java Heap size configuration inside of container
 
@@ -42,5 +42,5 @@ These variables allow you to set user and password of your database
 
 `-Xss<size>` - Set thread stack size
 
-####Example
+#### Example
 `-e JAVA_OPTS="-Xmx300m"`

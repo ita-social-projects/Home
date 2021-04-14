@@ -11,7 +11,7 @@ This package created for local development.
   - [How to run tests](#How-to-run-tests)
 
 
-##How to run
+## How to run
 1. You should define Java and Maven in your PATH.
 2. You should build the project. Check [Maven](#Maven) section with **How to build** title.
 3. You should create database. You can see how to do it in [Docker](#Docker).
@@ -20,7 +20,7 @@ How to do it with IDEA and Maven, check the [Maven](#Maven).
 5. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
 
 
-##Docker
+## Docker
 
 
 **How to create database**
@@ -40,7 +40,7 @@ After that you will have data-migration container for filling database and runni
 
 To close the application just type `docker-compose down` in `home-dev/launch` package to stop and remove data migration and application containers.
 
-##Maven
+## Maven
 
 **How to build**
 
