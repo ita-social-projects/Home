@@ -56,7 +56,7 @@ class ContactApiIT {
     }
 
     @Test
-    public void creatingContactWithInvalidEmailPatternTest() throws ApiException {
+    void creatingContactWithInvalidEmailPatternTest() throws ApiException {
         CreateContact createEmailContact = createInvalidEmailContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
 
@@ -68,7 +68,7 @@ class ContactApiIT {
     }
 
     @Test
-    public void creatingContactWithInvalidPhonePatternTest() throws ApiException {
+    void creatingContactWithInvalidPhonePatternTest() throws ApiException {
         CreateContact createPhoneContact = createInvalidPhoneContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
 
