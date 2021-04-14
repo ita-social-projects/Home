@@ -13,7 +13,7 @@ This image starts an application in docker container
 
 ## Environmental variables
 
-###`DATASOURCE_URL`
+### `DATASOURCE_URL`
 
 This variable allows you to specify datasource URL and database name
 
@@ -32,7 +32,7 @@ These variables allow you to set user and password of your database
 
 ##### `$ docker pull homeacademy/home-application`
 
-##### `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}' -e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
+##### `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}'-e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
 
 ## Java Heap size configuration inside of container
 
