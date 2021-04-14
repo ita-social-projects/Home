@@ -5,13 +5,13 @@ import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
-public interface HouseService {
+public interface HouseService extends QueryableService<House, HouseDto> {
 
     HouseDto createHouse(Long cooperationId, HouseDto createHouseDto);
 
     HouseDto updateHouse(Long id, HouseDto updateHouseDto);
 
-    Page<HouseDto> getAllHouses(Integer pageNumber, Integer pageSize, Specification<House> specification);
+    Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification);
 
     HouseDto getHouseById(Long coopId, Long id);
 

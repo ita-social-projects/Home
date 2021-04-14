@@ -12,8 +12,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_HOUSE_PERMISSION;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -96,21 +94,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                      String iban,
                                      String usreo) {
 
-        Map<String, String> filterMap = new HashMap<>();
-
-        String idValue = id == null ? null : id.toString();
-
-        filterMap.put("id", idValue);
-        filterMap.put("name", name);
-        filterMap.put("iban", iban);
-        filterMap.put("usreo", usreo);
-
-        Page<CooperationDto> readCooperation = cooperationService.getAllCooperation(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
+        Page<CooperationDto> readCooperation = queryApiService.getPageFromQuery(uriInfo, cooperationService);
         return buildQueryResponse(readCooperation, ReadCooperation.class);
     }
 
@@ -126,25 +110,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
 
-        Map<String, String> filterMap = new HashMap<>();
-
-        String quantityFlatValue = quantityFlat == null ? null : quantityFlat.toString();
-        String adjoiningAreaValue = adjoiningArea == null ? null : adjoiningArea.toString();
-        String houseAreaValue = houseArea == null ? null : houseArea.toString();
-        String houseIdValue = houseId == null ? null : houseId.toString();
-
-        filterMap.put("cooperation_id", cooperationId.toString());
-        filterMap.put("id", houseIdValue);
-        filterMap.put("quantity_flat", quantityFlatValue);
-        filterMap.put("adjoining_area", adjoiningAreaValue);
-        filterMap.put("house_area", houseAreaValue);
-
-        Page<HouseDto> readHouse = houseService.getAllHouses(
-            pageNumber,
-            pageSize,
-            entitySpecificationService.getSpecification(filterMap, filter, sort)
-        );
-
+        Page<HouseDto> readHouse = queryApiService.getPageFromQuery(uriInfo, houseService);
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
 

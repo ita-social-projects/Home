@@ -949,7 +949,7 @@ paths:
           schema:
             type: string
         - in: query
-          name: house_id
+          name: id
           schema:
             type: integer
             format: int64
