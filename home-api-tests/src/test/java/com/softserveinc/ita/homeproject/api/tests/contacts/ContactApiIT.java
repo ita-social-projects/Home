@@ -181,7 +181,7 @@ class ContactApiIT {
     @Test
     void getNonExistentContact() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
-        Long wrongId = 2L;
+        Long wrongId = 20000L;
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> contactApi
@@ -398,7 +398,7 @@ class ContactApiIT {
     @Test
     void deletingNonExistentAnyContactTest() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
-        Long wrongId = 10L;
+        Long wrongId = 10000L;
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> contactApi
