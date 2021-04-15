@@ -1262,7 +1262,7 @@ components:
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
           example: "p.t.z@gmail.com"
           minLength: 5
@@ -1323,11 +1323,11 @@ components:
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "p.t.z@gmail.com"
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           minLength: 5
-          maxLength: 254
+          maxLength: 320
+          type: string
+          example: example@gmail.com
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
@@ -1371,6 +1371,9 @@ components:
       type: object
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
           type: string
           example: "+380506617305"
     CreateContact:
@@ -1399,7 +1402,7 @@ components:
         email:
           minLength: 5
           maxLength: 320
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
           example: home@gmail.com
     CreatePhoneContact:
@@ -1410,6 +1413,7 @@ components:
         - phone
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
           minLength: 9
           maxLength: 13
           type: string
@@ -1435,7 +1439,9 @@ components:
       type: object
       properties:
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          minLength: 9
+          maxLength: 320
           type: string
           example: other@gmail.com
     UpdatePhoneContact:
@@ -1444,6 +1450,9 @@ components:
       type: object
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
           type: string
           example: "+380966617305"
     CreateCooperation:
