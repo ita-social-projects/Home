@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -61,34 +60,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
 
-        Optional<User> optionalUser = userRepository.findById(id).filter(User::getEnabled);
+        User fromDB = userRepository.findById(id)
+            .filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
 
-        if (optionalUser.isPresent()) {
-            User fromDB = optionalUser.get();
-
-            if (updateUserDto.getFirstName() != null) {
-                fromDB.setFirstName(updateUserDto.getFirstName());
-            }
-
-            if (updateUserDto.getLastName() != null) {
-                fromDB.setLastName(updateUserDto.getLastName());
-            }
-
-            if (updateUserDto.getEmail() != null) {
-                fromDB.setEmail(updateUserDto.getEmail());
-            }
-
-            if (updateUserDto.getPassword() != null) {
-                fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
-            }
-
-            fromDB.setUpdateDate(LocalDateTime.now());
-            userRepository.save(fromDB);
-            return mapper.convert(fromDB, UserDto.class);
-
-        } else {
-            throw new NotFoundHomeException("User with id:" + id + " is not found");
+        if (updateUserDto.getFirstName() != null) {
+            fromDB.setFirstName(updateUserDto.getFirstName());
         }
+
+        if (updateUserDto.getLastName() != null) {
+            fromDB.setLastName(updateUserDto.getLastName());
+        }
+
+        if (updateUserDto.getEmail() != null) {
+            fromDB.setEmail(updateUserDto.getEmail());
+        }
+
+        if (updateUserDto.getPassword() != null) {
+            fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
+        }
+
+        fromDB.setUpdateDate(LocalDateTime.now());
+        userRepository.save(fromDB);
+        return mapper.convert(fromDB, UserDto.class);
     }
 
     @Override

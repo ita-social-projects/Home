@@ -50,28 +50,25 @@ public class CooperationServiceImpl implements CooperationService {
     @Transactional
     @Override
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
-        Optional<Cooperation> optional = cooperationRepository.findById(id).filter(Cooperation::getEnabled);
-        if (optional.isPresent()) {
-            Cooperation fromDb = optional.get();
+        Cooperation fromDb = cooperationRepository.findById(id)
+                .filter(Cooperation::getEnabled)
+                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
 
-            if (updateCooperationDto.getName() != null) {
-                fromDb.setName(updateCooperationDto.getName());
-            }
-            if (updateCooperationDto.getUsreo() != null) {
-                fromDb.setUsreo(updateCooperationDto.getUsreo());
-            }
-            if (updateCooperationDto.getIban() != null) {
-                fromDb.setIban(updateCooperationDto.getIban());
-            }
-            if (updateCooperationDto.getAddress() != null) {
-                fromDb.setAddress(updateCooperationDto.getAddress());
-            }
-            fromDb.setUpdateDate(LocalDateTime.now());
-            cooperationRepository.save(fromDb);
-            return mapper.convert(fromDb, CooperationDto.class);
-        } else {
-            throw new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id));
+        if (updateCooperationDto.getName() != null) {
+            fromDb.setName(updateCooperationDto.getName());
         }
+        if (updateCooperationDto.getUsreo() != null) {
+            fromDb.setUsreo(updateCooperationDto.getUsreo());
+        }
+        if (updateCooperationDto.getIban() != null) {
+            fromDb.setIban(updateCooperationDto.getIban());
+        }
+        if (updateCooperationDto.getAddress() != null) {
+            fromDb.setAddress(updateCooperationDto.getAddress());
+        }
+        fromDb.setUpdateDate(LocalDateTime.now());
+        cooperationRepository.save(fromDb);
+        return mapper.convert(fromDb, CooperationDto.class);
     }
 
     @Transactional
