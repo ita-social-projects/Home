@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
+
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
@@ -62,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
         User fromDB = userRepository.findById(id)
             .filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
         if (updateUserDto.getFirstName() != null) {
             fromDB.setFirstName(updateUserDto.getFirstName());
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto getUserById(Long id) {
         User toGet = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
         return mapper.convert(toGet, UserDto.class);
     }
 
@@ -106,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
