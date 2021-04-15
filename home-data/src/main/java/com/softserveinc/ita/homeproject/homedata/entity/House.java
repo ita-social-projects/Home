@@ -1,13 +1,11 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -18,21 +16,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cooperations")
-@SequenceGenerator(name = "sequence", sequenceName = "cooperations_sequence")
-public class Cooperation extends BaseEntity {
+@Table(name = "houses")
+@SequenceGenerator(name = "sequence", sequenceName = "houses_sequence")
+public class House extends BaseEntity {
 
-    @Column(name = "usreo")
-    private String usreo;
+    @Column(name = "quantity_flat")
+    private Integer quantityFlat;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "house_area")
+    private Double houseArea;
 
-    @Column(name = "iban")
-    private String iban;
+    @Column(name = "adjoining_area")
+    private Integer adjoiningArea;
 
-    @Column(name = "register_date")
-    private LocalDate registerDate;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
 
     @Column(name = "update_date")
     private LocalDateTime updateDate;
@@ -44,10 +42,7 @@ public class Cooperation extends BaseEntity {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
-    private List<House> houses;
-
-    @OneToMany(mappedBy = "cooperation")
-    private List<Contact> contacts;
-
+    @ManyToOne
+    @JoinColumn(name = "cooperation_id")
+    private Cooperation cooperation;
 }

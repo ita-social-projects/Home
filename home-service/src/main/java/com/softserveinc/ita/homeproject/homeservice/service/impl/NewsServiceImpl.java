@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.News;
 import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
@@ -43,39 +42,33 @@ public class NewsServiceImpl implements NewsService {
     @Override
     @Transactional
     public NewsDto update(Long id, NewsDto newsDto) {
+        News fromDB = newsRepository.findById(id)
+            .filter(News::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
 
-        Optional<News> optionalNews = newsRepository.findById(id).filter(News::getEnabled);
-        if (optionalNews.isPresent()) {
-
-            News fromDB = optionalNews.get();
-
-            if (newsDto.getTitle() != null) {
-                fromDB.setTitle(newsDto.getTitle());
-            }
-
-            if (newsDto.getText() != null) {
-                fromDB.setText(newsDto.getText());
-            }
-
-            if (newsDto.getDescription() != null) {
-                fromDB.setDescription(newsDto.getDescription());
-            }
-
-            if (newsDto.getPhotoUrl() != null) {
-                fromDB.setPhotoUrl(newsDto.getPhotoUrl());
-            }
-
-            if (newsDto.getSource() != null) {
-                fromDB.setSource(newsDto.getSource());
-            }
-
-            fromDB.setUpdateDate(LocalDateTime.now());
-            newsRepository.save(fromDB);
-            return mapper.convert(fromDB, NewsDto.class);
-
-        } else {
-            throw new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id));
+        if (newsDto.getTitle() != null) {
+            fromDB.setTitle(newsDto.getTitle());
         }
+
+        if (newsDto.getText() != null) {
+            fromDB.setText(newsDto.getText());
+        }
+
+        if (newsDto.getDescription() != null) {
+            fromDB.setDescription(newsDto.getDescription());
+        }
+
+        if (newsDto.getPhotoUrl() != null) {
+            fromDB.setPhotoUrl(newsDto.getPhotoUrl());
+        }
+
+        if (newsDto.getSource() != null) {
+            fromDB.setSource(newsDto.getSource());
+        }
+
+        fromDB.setUpdateDate(LocalDateTime.now());
+        newsRepository.save(fromDB);
+        return mapper.convert(fromDB, NewsDto.class);
     }
 
     @Override
