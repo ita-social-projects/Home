@@ -217,7 +217,7 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("User with id:" + userId + " is not found");
+            .withMessageContaining("User with id: " + userId + " is not found");
     }
 
     @Test
@@ -338,7 +338,7 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.deleteUserWithHttpInfo(userId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("User with id:" + userId + " is not found");
+            .withMessageContaining("User with id: " + userId + " is not found");
     }
 
     @Test
