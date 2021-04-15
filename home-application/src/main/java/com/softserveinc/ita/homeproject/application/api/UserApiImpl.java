@@ -90,7 +90,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @SuppressWarnings("unchecked")
     public Response queryContactsOnUser(Long userId,
                                         @Min(1) Integer pageNumber,
-                                        @Min(0) @Max(10) Integer pageSize,
+                                        @Min(1) @Max(10) Integer pageSize,
                                         String sort,
                                         String filter,
                                         String id,
@@ -122,7 +122,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @Override
     @SuppressWarnings("unchecked")
     public Response getAllUsers(@Min(1) Integer pageNumber,
-                                @Min(0) @Max(10) Integer pageSize,
+                                @Min(1) @Max(10) Integer pageSize,
                                 String sort,
                                 String filter,
                                 String id,

@@ -29,4 +29,25 @@ public final class Permissions {
     public static final String GET_NEWS_PERMISSION = "hasAuthority('GET_NEWS_PERMISSION')";
 
     public static final String DELETE_NEWS_PERMISSION = "hasAuthority('DELETE_NEWS_PERMISSION')";
+
+    public static final String CREATE_COOPERATION_PERMISSION = "hasAuthority('CREATE_COOPERATION_PERMISSION')";
+
+    public static final String UPDATE_COOPERATION_PERMISSION = "hasAuthority('UPDATE_COOPERATION_PERMISSION')";
+
+    public static final String GET_COOPERATION_PERMISSION = "hasAuthority('GET_COOPERATION_PERMISSION')";
+
+    public static final String GET_ALL_COOPERATION_PERMISSION = "hasAuthority('GET_COOPERATIONS_PERMISSION')";
+
+    public static final String DEACTIVATE_COOPERATION_PERMISSION = "hasAuthority('DELETE_COOPERATION_PERMISSION')";
+
+    public static final String CREATE_HOUSE_PERMISSION = "hasAuthority('CREATE_HOUSE_PERMISSION')";
+
+    public static final String UPDATE_HOUSE_PERMISSION = "hasAuthority('UPDATE_HOUSE_PERMISSION')";
+
+    public static final String GET_HOUSE_PERMISSION = "hasAuthority('GET_HOUSE_PERMISSION')";
+
+    public static final String GET_HOUSES_PERMISSION = "hasAuthority('GET_HOUSES_PERMISSION')";
+
+    public static final String DEACTIVATE_HOUSE_PERMISSION = "hasAuthority('DELETE_HOUSE_PERMISSION')";
+
 }

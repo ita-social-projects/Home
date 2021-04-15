@@ -78,7 +78,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
     @Override
     @SuppressWarnings("unchecked")
     public Response getAllNews(@Min(1) Integer pageNumber,
-                               @Min(0) @Max(10) Integer pageSize,
+                               @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
                                String id,
