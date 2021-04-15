@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,8 @@ import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
-
+    private static final int BAD_REQUEST = 400;
+    private static final int NOT_FOUND = 404;
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
     private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
 
@@ -60,7 +60,8 @@ class UserApiIT {
             .createUser(createTestUser());
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
-            .lastName("updatedLastName");
+            .lastName("updatedLastName")
+            .email("example1@gmail.com");
 
         ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
 
@@ -87,6 +88,264 @@ class UserApiIT {
         assertFalse(actualUsersList.contains(expectedUser));
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.getUser(expectedUser.getId()));
+    }
+
+    @Test
+    void unauthorizedRequestTest() {
+        CreateUser expectedUser = createTestUser();
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser))
+            .matches(exception -> exception.getCode() == Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    @Test
+    void createUserWithEmptyFirstNameAndLastNameTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("")
+            .lastName("")
+            .password("somePassword")
+            .email("walker@email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+            .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
+    }
+
+    @Test
+    void createUserWithInvalidFirstNameAndLastNameTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+            .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+            .password("somePassword")
+            .email("walker@email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+            .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
+    }
+
+    @Test
+    void createUserWithEmptyEmailTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("somePassword")
+            .email("");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void createUserInvalidEmailTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("somePassword")
+            .email("email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void createUserWithEmptyPasswordTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("")
+            .email("email@example.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void createUserInvalidPasswordTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName("alan")
+            .lastName("walker")
+            .password("some password")
+            .email("email@example.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void createUserWithAllNullParametersTest() {
+        CreateUser createUser = new CreateUser()
+            .firstName(null)
+            .lastName(null)
+            .email(null)
+            .password(null);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(createUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
+            .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
+            .withMessageContaining("Parameter `email` is invalid - must not be null.")
+            .withMessageContaining("Parameter `password` is invalid - must not be null.");
+    }
+
+    @Test
+    void createNullUserTest() {
+        CreateUser expectedUser = null;
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.createUser(expectedUser))
+            .withMessageContaining("Missing the required parameter 'createUser' when calling createUser");
+    }
+
+    @Test
+    void getNonExistentUserTest() {
+        Long userId = 100L;
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("User with id:" + userId + " is not found");
+    }
+
+    @Test
+    void passNullWhenReceivingTest() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.getUserWithHttpInfo(null))
+            .withMessageContaining("Missing the required parameter 'userId' when calling getUser");
+    }
+
+    @Test
+    void updateUserWithEmptyFirstNameAndLastNameTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("")
+            .lastName("")
+            .email("mr.smith@gmail.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+            .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
+    }
+
+    @Test
+    void updateUserWithInvalidFirstNameAndLastNameTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+            .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+            .email("mr.smith@gmail.com");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+            .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
+    }
+
+    @Test
+    void updateUserWithEmptyEmailTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("John")
+            .lastName("Smith")
+            .email("");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateUserWithInvalidEmailTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("John")
+            .lastName("Smith")
+            .email("mr.smith@");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateUserWithEmptyPasswordTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("John")
+            .lastName("Smith")
+            .email("mr.smith@")
+            .password("");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateUserWithInvalidPasswordTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("John")
+            .lastName("Smith")
+            .email("mr.smith@")
+            .password("1234");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateUserWithNullParametersTest() throws ApiException {
+        ReadUser savedUser = userApi.createUser(createTestUser());
+        UpdateUser updateUser = new UpdateUser()
+            .firstName(null)
+            .lastName(null)
+            .email(null);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
+            .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
+            .withMessageContaining("Parameter `email` is invalid - must not be null.");
+    }
+
+    @Test
+    void deleteNonExistentUserTest() {
+        Long userId = 100L;
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.deleteUserWithHttpInfo(userId))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("User with id:" + userId + " is not found");
+    }
+
+    @Test
+    void passNullWhenDeleteUserTest() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> userApi.deleteUserWithHttpInfo(null))
+            .withMessageContaining("Missing the required parameter 'userId' when calling deleteUser");
     }
 
     private List<CreateContact> createContactList() {
@@ -136,42 +395,6 @@ class UserApiIT {
             .password("password")
             .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .contacts(createContactList());
-    }
-
-    @Test
-    void createUserInvalidEmailTest() {
-        CreateUser createUserInvalidEmail = new CreateUser()
-                .firstName("alan")
-                .lastName("walker")
-                .password("somePassword")
-                .email("email.com");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
-            .matches(exception -> exception.getCode() == 400)
-            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
-    }
-
-    @Test
-    void createUserInvalidPasswordTest() {
-        CreateUser createUserInvalidPassword = new CreateUser()
-            .firstName("alan")
-            .lastName("walker")
-            .password("some password")
-            .email("email@example.com");
-
-        assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
-            .matches(exception -> exception.getCode() == 400)
-            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
-    }
-
-    @Test
-    void unauthorizedRequestTest() {
-        CreateUser expectedUser = createTestUser();
-        ApiException exception = assertThrows(ApiException.class,
-                () -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser));
-        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), exception.getCode());
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

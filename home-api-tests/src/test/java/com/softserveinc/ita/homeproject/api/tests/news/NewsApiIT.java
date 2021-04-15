@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
+    private static final int BAD_REQUEST = 400;
+    private static final int NOT_FOUND = 404;
     private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
@@ -86,17 +88,38 @@ class NewsApiIT {
             .isThrownBy(() -> newsApi.getNews(expectedNews.getId()));
     }
 
-    private CreateNews createNews(){
-        return new CreateNews()
-            .title("Title")
-            .description("Description")
-            .text("Text")
-            .photoUrl("http://someurl.example.com")
-            .source("Source");
+    @Test
+    void createNewsWithNullTitleTest() {
+        CreateNews createNewsInvalidTitle = new CreateNews()
+            .title(null)
+            .description("description")
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `title` is invalid - must not be null.");
     }
 
     @Test
-    void createNewsInvalidTitleTest() {
+    void createNewsWithEmptyTitleTest() {
+        CreateNews createNewsInvalidTitle = new CreateNews()
+            .title("")
+            .description("description")
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
+    }
+
+    @Test
+    void createNewsWithInvalidTitleTest() {
         CreateNews createNewsInvalidTitle = new CreateNews()
                 .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols"
                     + " - title over 70 symbols")
@@ -107,12 +130,42 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
-            .matches(exception -> exception.getCode() == 400)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
     }
 
     @Test
-    void createNewsInvalidDescriptionTest() {
+    void createNewsWithNullDescriptionTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description(null)
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `description` is invalid - must not be null.");
+    }
+
+    @Test
+    void createNewsWithEmptyDescriptionTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("")
+            .source("source")
+            .text("Some text")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void createNewsWithInvalidDescriptionTest() {
         CreateNews createNewsInvalidDescription = new CreateNews()
             .title("title")
             .description("description description description description description description description"
@@ -124,8 +177,280 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == 400)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void createNewsWithNullTextTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("Some description")
+            .source("source")
+            .text(null)
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - must not be null.");
+    }
+
+    @Test
+    void createNewsWithEmptyTextTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("Some description")
+            .source("source")
+            .text("")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void createNewsWithInvalidTextTest() {
+        CreateNews createNewsInvalidDescription = new CreateNews()
+            .title("title")
+            .description("Description")
+            .source("source")
+            .text("I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie")
+            .photoUrl("222222");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void getNonExistentNewsTest() {
+        Long wrongId = 100L;
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.getNewsWithHttpInfo(wrongId))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("Can't find news with given ID: " + wrongId);
+    }
+
+    @Test
+    void passNullWhenReceivingNewsTest() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.getNewsWithHttpInfo(null))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Missing the required parameter 'id' when calling getNews");
+    }
+
+    @Test
+    void updateNewsWithNullTitleTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title(null)
+            .description("UpdatedDescription")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `title` is invalid - must not be null.");
+    }
+
+    @Test
+    void updateNewsWithEmptyTitleTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("")
+            .description("UpdatedDescription")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
+    }
+
+    @Test
+    void updateNewsWithInvalidTitleTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("title over 70 symbols - title over 70 symbols - title over 70 symbols - title over 70 symbols" +
+                " - title over 70 symbols")
+            .description("UpdatedDescription")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
+    }
+
+    @Test
+    void updateNewsWithNullDescriptionTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description(null)
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `description` is invalid - must not be null.");
+    }
+
+    @Test
+    void updateNewsWithEmptyDescriptionTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description("")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void updateNewsWithInvalidDescriptionTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description("description description description description description description description" +
+                " description description description description description description description" +
+                " description description description description description description description")
+            .text("UpdatedText")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void updateNewsWithNullTextTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description("Description")
+            .text(null)
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - must not be null.");
+    }
+
+    @Test
+    void updateNewsWithEmptyTextTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description("Description")
+            .text("")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void updateNewsWithInvalidTextTest() throws ApiException {
+        CreateNews expectedNews = createNews();
+
+        ReadNews savedNews = newsApi.createNews(expectedNews);
+
+        UpdateNews updateNews = new UpdateNews()
+            .title("Title Example")
+            .description("Description")
+            .text("I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie" +
+                " I will not illegally download any movie")
+            .photoUrl("http://updatedurl.example.com")
+            .source("UpdatedSource");
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
+    }
+
+    @Test
+    void deleteNonExistentNewsTest() {
+        Long wrongId = 100L;
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.deleteNewsWithHttpInfo(wrongId))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("Can't find news with given ID: " + wrongId);
+    }
+
+    @Test
+    void passNullWhenDeleteNewsTest() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> newsApi.deleteNewsWithHttpInfo(null))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Missing the required parameter 'id' when calling deleteNews");
+    }
+
+    private CreateNews createNews(){
+        return new CreateNews()
+            .title("Title")
+            .description("Description")
+            .text("Text")
+            .photoUrl("http://someurl.example.com")
+            .source("Source");
     }
 
     private void assertNews(ReadNews saved, UpdateNews update, ReadNews updated) {
