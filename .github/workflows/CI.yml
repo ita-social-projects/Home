@@ -19,12 +19,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          API_TESTS_VERBOSE_LOGGING: false
         run: >-
-          mvn -V -e -B
+          mvn -V -e -B -ntp
           clean install sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
+          -Pjacoco -Dsonar.coverage.jacoco.xmlReportPaths=${{ github.workspace }}/home-api-tests/target/site/jacoco-aggregate/jacoco.xml
           -Dpostgres.user=${{secrets.POSTGRES_USER}}
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
           -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
+          -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}

@@ -56,60 +56,98 @@ class ContactApiIT {
     }
 
     @Test
+    void creatingContactWithInvalidEmailPatternTest() throws ApiException {
+        CreateContact createEmailContact = createInvalidEmailContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
+                createEmailContact))
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void creatingContactWithInvalidPhonePatternTest() throws ApiException {
+        CreateContact createPhoneContact = createInvalidPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
+                createPhoneContact))
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `phone` is invalid - size must be between 9 and 13 signs.")
+            .withMessageContaining("Parameter `phone` is invalid - must meet the rule.");
+    }
+
+    @Test
     void getEmailTest() throws ApiException {
         CreateContact createEmailContact = createEmailContact();
-        CreateContact createPhoneContact = createPhoneContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
-        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
 
         ApiResponse<ReadContact> getEmailResponse = contactApi
             .getContactOnUserWithHttpInfo(expectedUser.getId(), savedEmailContact.getId());
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            getEmailResponse.getStatusCode());
+        assertEmailContact(createEmailContact, getEmailResponse.getData());
+    }
+
+    @Test
+    void getPhoneTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
         ApiResponse<ReadContact> getPhoneResponse = contactApi
             .getContactOnUserWithHttpInfo(expectedUser.getId(), savedPhoneContact.getId());
 
         assertEquals(Response.Status.OK.getStatusCode(),
-            getEmailResponse.getStatusCode());
-        assertEquals(Response.Status.OK.getStatusCode(),
             getPhoneResponse.getStatusCode());
-        assertEmailContact(createEmailContact, getEmailResponse.getData());
         assertPhoneContact(createPhoneContact, getPhoneResponse.getData());
     }
 
     @Test
     void updateEmailTest() throws ApiException {
         CreateContact createEmailContact = createEmailContact();
-        CreateContact createPhoneContact = createPhoneContact();
         ReadUser expectedUser = userApi.createUser(createTestUser());
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
-        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
 
         UpdateContact updateEmailContact = new UpdateEmailContact()
             .email("updatedEmailContact@example.com")
             .main(false)
             .type(ContactType.EMAIL);
 
+        ApiResponse<ReadContact> updateEmailResponse = contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+            savedEmailContact.getId(), updateEmailContact);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            updateEmailResponse.getStatusCode());
+        assertEmailContact(savedEmailContact, updateEmailContact, updateEmailResponse.getData());
+    }
+
+    @Test
+    void updatePhoneTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
         UpdateContact updatePhoneContact = new UpdatePhoneContact()
             .phone("+380567456595")
             .main(false)
             .type(ContactType.PHONE);
 
-
-        ApiResponse<ReadContact> updateEmailResponse = contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
-            savedEmailContact.getId(), updateEmailContact);
         ApiResponse<ReadContact> updatePhoneResponse = contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
             savedPhoneContact.getId(), updatePhoneContact);
 
         assertEquals(Response.Status.OK.getStatusCode(),
-            updateEmailResponse.getStatusCode());
-        assertEquals(Response.Status.OK.getStatusCode(),
             updatePhoneResponse.getStatusCode());
-        assertEmailContact(savedEmailContact, updateEmailContact, updateEmailResponse.getData());
         assertPhoneContact(savedPhoneContact, updatePhoneContact, updatePhoneResponse.getData());
     }
 
     @Test
-    void deleteEmailContact() throws ApiException {
+    void deletingEmailOrPhoneContactTest() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
 
         ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
@@ -144,9 +182,22 @@ class ContactApiIT {
             .type(ContactType.EMAIL);
     }
 
+    private CreateContact createInvalidEmailContact(){
+        return new CreateEmailContact()
+            .email("this.email.is.not.valid.for.this.example.write.now.that.is.why.we.have.bad.request.answer@gmail.com")
+            .main(false)
+            .type(ContactType.EMAIL);
+    }
+
     private CreateContact createPhoneContact() {
         return new CreatePhoneContact()
             .phone("+380632121212")
+            .main(false)
+            .type(ContactType.PHONE);
+    }
+    private CreateContact createInvalidPhoneContact() {
+        return new CreatePhoneContact()
+            .phone("+380632121212133")
             .main(false)
             .type(ContactType.PHONE);
     }

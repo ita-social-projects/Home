@@ -1,9 +1,10 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.service.impl;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import com.softserveinc.ita.homeproject.homedata.entity.User;

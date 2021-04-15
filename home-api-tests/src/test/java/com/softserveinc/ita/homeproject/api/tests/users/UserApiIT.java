@@ -1,11 +1,11 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ class UserApiIT {
 
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
 
     @Test
     void createUserTest() throws ApiException {
@@ -139,7 +140,6 @@ class UserApiIT {
 
     @Test
     void createUserInvalidEmailTest() {
-        ApiException exception = new ApiException(400, "Parameter `email` is invalid - must meet the rule.");
         CreateUser createUserInvalidEmail = new CreateUser()
                 .firstName("alan")
                 .lastName("walker")
@@ -148,12 +148,12 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUserInvalidEmail))
-                .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
     @Test
     void createUserInvalidPasswordTest() {
-        ApiException exception = new ApiException(400, "Parameter `password` is invalid - must meet the rule.");
         CreateUser createUserInvalidPassword = new CreateUser()
             .firstName("alan")
             .lastName("walker")
@@ -162,7 +162,16 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.createUser(createUserInvalidPassword))
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void unauthorizedRequestTest() {
+        CreateUser expectedUser = createTestUser();
+        ApiException exception = assertThrows(ApiException.class,
+                () -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser));
+        assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), exception.getCode());
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

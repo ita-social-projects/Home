@@ -7,6 +7,7 @@ There are several options on how to run home-api-tests.
 Terminal command should look like this:
   
   `mvn clean install
+  -Pjacoco
   -Papi-tests-infrastructure
   -Papi-tests
   -Dpostgres.user={your main postgres superuser}

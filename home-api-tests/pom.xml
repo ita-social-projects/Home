@@ -21,12 +21,16 @@
         <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
         <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
+        <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
+        <docker-files>${basedir}/target/docker</docker-files>
+        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
+        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
     </properties>
     <profiles>
         <profile>
@@ -35,6 +39,92 @@
                 <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
                 <docker.image.application>${image.application.path}</docker.image.application>
             </properties>
+        </profile>
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-data-migration</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-application</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.softserveinc.ita.homeproject</groupId>
+                            <artifactId>home-generated-server</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-service</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-data</artifactId>
+                    <version>${revision}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-jacoco-agent</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.jacoco</groupId>
+                                            <artifactId>org.jacoco.agent</artifactId>
+                                            <version>${jacoco.version}</version>
+                                            <classifier>runtime</classifier>
+                                            <type>jar</type>
+                                            <destFileName>${jacoco-agent-name}</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${docker-files}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <executions>
+                            <execution>
+                                <id>collect-coverage</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>dump</goal>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <port>${jacoco.agent.external.port}</port>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>api-tests-infrastructure</id>
@@ -53,6 +143,7 @@
                                 <configuration>
                                     <portNames>
                                         <portName>home.application.external.port</portName>
+                                        <portName>jacoco.agent.external.port</portName>
                                         <portName>liquibase.external.port</portName>
                                         <portName>postgres.external.port</portName>
                                     </portNames>
@@ -85,10 +176,10 @@
                                         </ports>
                                         <wait>
                                             <log>database system is ready to accept connections</log>
-                                            <time>20000</time>
+                                            <time>25000</time>
                                         </wait>
                                         <log>
-                                            <enabled>true</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -113,10 +204,10 @@
                                         </links>
                                         <wait>
                                             <log>Successfully released change log lock</log>
-                                            <time>10000</time>
+                                            <time>15000</time>
                                         </wait>
                                         <log>
-                                            <enabled>true</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -133,19 +224,27 @@
                                             <DATASOURCE_USER>${postgres.user}</DATASOURCE_USER>
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
+                                            <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
+                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS>
                                         </env>
+                                        <volumes>
+                                            <bind>
+                                                <volume>${docker-files}:/jacoco</volume>
+                                            </bind>
+                                        </volumes>
                                         <ports>
                                             <port>${home.application.external.port}:${home.application.internal.port}</port>
+                                            <port>${jacoco.agent.external.port}:${jacoco.agent.internal.port}</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
                                         </links>
                                         <wait>
                                             <log>Started HomeApplication</log>
-                                            <time>30000</time>
+                                            <time>300000</time>
                                         </wait>
                                         <log>
-                                            <enabled>true</enabled>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
                                             <date>default</date>
                                         </log>
                                     </run>
@@ -194,6 +293,7 @@
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
                                 <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
+                                <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -211,12 +311,6 @@
     </profiles>
 
     <dependencies>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-data-migration</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

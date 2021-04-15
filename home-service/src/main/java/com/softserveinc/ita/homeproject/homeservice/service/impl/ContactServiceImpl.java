@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
@@ -67,17 +66,15 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactDto updateContact(Long id, ContactDto updateContactDto) {
-        Optional<Contact> contactOptional = contactRepository.findById(id).filter(Contact::getEnabled);
-        if (contactOptional.isPresent()) {
-            Contact contact = contactOptional.get();
-            ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
-            if (existingContactType == updateContactDto.getType()) {
-                return updateContact(contact, updateContactDto);
-            } else {
-                throw new TypeOfTheContactDoesntMatchHomeException("Type of the contact doesn't match");
-            }
+        Contact contact = contactRepository.findById(id)
+            .filter(Contact::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+
+        ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
+        if (existingContactType == updateContactDto.getType()) {
+            return updateContact(contact, updateContactDto);
         } else {
-            throw new NotFoundHomeException("User with id:" + id + " is not found");
+            throw new TypeOfTheContactDoesntMatchHomeException("Type of the contact doesn't match");
         }
     }
 
@@ -104,8 +101,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<ContactDto> getAllContacts(Integer pageNumber, Integer pageSize,
-                                           Specification<Contact> specification) {
+    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
+                                    Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))

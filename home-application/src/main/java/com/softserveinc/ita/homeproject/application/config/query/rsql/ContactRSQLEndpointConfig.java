@@ -1,12 +1,12 @@
-package com.softserveinc.ita.homeproject.application.config.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.rsql;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+import com.softserveinc.ita.homeproject.application.config.query.ContactQueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.ContactQueryConfig.ContactQueryParamEnum;
+import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homeservice.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig;
-import com.softserveinc.ita.homeproject.homeservice.query.impl.ContactQueryConfig.ContactQueryParamEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
