@@ -21,13 +21,4 @@ public final class QueryFilterUtils {
             .concat(arg);
     }
 
-    public static String createExceptionMessage(ApiException exception) {
-        return new StringBuilder()
-            .append("{\"response_code\":")
-            .append(exception.getCode())
-            .append(",\"error_message\":\"")
-            .append(exception.getMessage())
-            .append("\"}").toString();
-    }
-
 }

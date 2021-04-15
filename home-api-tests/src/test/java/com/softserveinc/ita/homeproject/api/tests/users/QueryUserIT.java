@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.users;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -139,9 +138,6 @@ class QueryUserIT {
 
     @Test
     void emptyArgumentExceptionTest() {
-        ApiException exception =
-            new ApiException(400, "The query argument for search is empty");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new UserQuery.Builder(userApi)
                 .firstName(" ")
@@ -149,14 +145,12 @@ class QueryUserIT {
                 .pageSize(10)
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("The query argument for search is empty");
     }
 
     @Test
     void wrongFilterFieldExceptionTest() {
-        ApiException exception =
-            new ApiException(400, "Unknown property: firstNam from entity");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new UserQuery.Builder(userApi)
                 .pageNumber(1)
@@ -164,14 +158,12 @@ class QueryUserIT {
                 .filter("firstNam=like='Al'")
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Unknown property: firstNam from entity");
     }
 
     @Test
     void wrongFilterPredicateExceptionTest() {
-        ApiException exception =
-            new ApiException(400, "Unknown operator: =lik=");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new UserQuery.Builder(userApi)
                 .pageNumber(1)
@@ -179,7 +171,8 @@ class QueryUserIT {
                 .filter("firstName=lik='Al'")
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Unknown operator: =lik=");
     }
 
     private List<ReadUser> saveListUser() throws ApiException {
