@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,6 @@ import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
-    private static final int BAD_REQUEST = 400;
-    private static final int NOT_FOUND = 404;
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
     private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
 
@@ -61,7 +61,8 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName")
-            .email("example1@gmail.com");
+            .email("example1@gmail.com")
+            .password("somePassword");
 
         ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
 

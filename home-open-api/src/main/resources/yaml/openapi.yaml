@@ -1318,6 +1318,7 @@ components:
         - first_name
         - last_name
         - email
+        - password
       properties:
         first_name:
           pattern: '\w+'

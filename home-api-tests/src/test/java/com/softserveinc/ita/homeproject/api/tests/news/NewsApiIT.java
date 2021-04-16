@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
 import java.util.List;
 import javax.ws.rs.core.Response;
@@ -21,8 +23,6 @@ import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private static final int BAD_REQUEST = 400;
-    private static final int NOT_FOUND = 404;
     private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
 
     @Test
