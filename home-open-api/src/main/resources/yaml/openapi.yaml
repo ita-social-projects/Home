@@ -23,6 +23,10 @@ tags:
     description: Operations with house
   - name: address
     description: Operations with address
+  - name: apartment
+    description: Operations with apartment
+  - name: apartment invitation
+    description: Operations with apartment invatations
 paths:
   /news:
     post:
@@ -1107,6 +1111,410 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
+  /houses/{house_id}/apartments:
+    post:
+      tags:
+        - apartment
+      summary: "Create apartment"
+      description: Create new Apartment in the house
+      operationId: createApartment
+      parameters:
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Create a new Apartment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApartment'
+        required: true
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadApartment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - apartment
+      summary: "Get all apartments"
+      description: Get all apartments of the house
+      operationId: queryApartment
+      parameters:
+        - name: "house_id"
+          in: path
+          required: true
+          description: ID of the house
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - in: query
+          name: number
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 6
+            pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        - in: query
+          name: apartment_area
+          schema:
+            type: number
+          example: 73.5
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadApartment"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /houses/{house_id}/apartments/{id}:
+    get:
+      tags:
+        - apartment
+      summary: "Get apartment"
+      description: Get an apartment by an apartment id
+      operationId: getApartment
+      parameters:
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadApartment"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - apartment
+      summary: "Update apartment"
+      description: Update an apartment by apartment ID
+      operationId: updateApartment
+      parameters:
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        description: Update a new Apartment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApartment'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadApartment'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - apartment
+      summary: "Delete apartment"
+      description: Delete an apartment by an apartment ID
+      operationId: deleteApartment
+      parameters:
+        - name: "house_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Successful operation
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /apartments/{apartment_id}/invitations:
+    post:
+      tags:
+        - apartment invitation
+      summary: "Create invitation"
+      description: Create an invitation for an apartment owner
+      operationId: createInvitation
+      parameters:
+        - name: "apartment_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Create a new Invitation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApartmentInvitation'
+        required: true
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadApartmentInvitation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - apartment invitation
+      summary: "Get all invitations"
+      description: Get all invitations for apartment owners
+      operationId: queryInvitation
+      parameters:
+        - name: "apartment_id"
+          in: path
+          required: true
+          description: ID of the apartment
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - in: query
+          name: email
+          schema:
+            type: string
+          example: example@gmail.com
+        - in: query
+          name: ownership_part
+          schema:
+            type: number
+            minimum: 0.0001
+            maximum: 1.0
+            multipleOf: 1e-4
+          example: 0.6588
+        - in: query
+          name: status
+          schema:
+            type: string
+          example: 1
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadApartmentInvitation"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /apartments/{apartment_id}/invitations/{id}:
+    patch:
+      tags:
+        - apartment invitation
+      summary: "Update invitation"
+      description: Update an invitation for an apartment owner by ID
+      operationId: updateInvitation
+      parameters:
+        - name: "apartment_id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "id"
+          in: "path"
+          description: "Use 1 for testing."
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: Add an owner of the apartment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApartmentInvitation'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadApartmentInvitation"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
 security:
   - basicAuth: []
 components:
@@ -1627,3 +2035,244 @@ components:
           example: 12
         address:
           $ref: '#/components/schemas/Address'
+
+    InvitationStatus:
+      description: Indicates the status of an Invitation
+      type: string
+      enum: &invitation_status_values
+        - pending
+        - processing
+        - accepted
+        - declined
+
+    InvitationType:
+      description: Indicates a type of an Invitation
+      type: string
+      enum: &invitation_type_values
+        - cooperation
+        - apartment
+      example: apartment
+
+    ReadInvitation:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          base: '#/components/schemas/ReadCooperationInvitation'
+          apartment: '#/components/schemas/ReadApartmentInvitation'
+      properties:
+        type:
+          $ref: '#/components/schemas/InvitationType'
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: other1@gmail.com
+        status:
+          $ref: '#/components/schemas/InvitationStatus'
+    ReadCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/ReadInvitation'
+    ReadApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/ReadInvitation'
+      type: object
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    CreateInvitation:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          base: '#/components/schemas/CreateCooperationInvitation'
+          apartment: '#/components/schemas/CreateApartmentInvitation'
+      required:
+        - email
+        - type
+      properties:
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: other1@gmail.com
+        type:
+          $ref: '#/components/schemas/InvitationType'
+    CreateCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/CreateInvitation'
+    CreateApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/CreateInvitation'
+      type: object
+      required:
+        - ownership_part
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    UpdateInvitation:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InvitationStatus'
+    UpdateCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/UpdateInvitation'
+    UpdateApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/UpdateInvitation'
+      type: object
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    OwnershipStatus:
+      description: Indicates the status of an Ownership
+      type: string
+      enum: &ownership_status_values
+        - active
+        - inactive
+    ReadOwnership:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/ReadUser'
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+        status:
+          $ref: '#/components/schemas/OwnershipStatus'
+
+    CreateApartment:
+      required:
+        - number
+        - area
+      type: object
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateApartmentInvitation'
+          example:
+            - email: other1@gmail.com
+              ownership_area: 30.0
+            - email: other2@gmail.com
+              ownership_area: 42.3
+    UpdateApartment:
+      required:
+        - number
+        - area
+      type: object
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+    ReadApartment:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+        ownerships:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadOwnership'
+          example:
+            - id: 1
+              user:
+                id: 1
+                first_name: Petro
+                last_name: Petrov
+                contacts:
+                  - id: 1
+                    type: email
+                    main: true
+                  - id: 2
+                    type: phone
+                    main: false
+              ownership_part: 0.72
+              status: active
+            - id: 2
+              user:
+                id: 2
+                first_name: Ivan
+                last_name: Ivanov
+                contacts:
+                  - id: 3
+                    type: email
+                    main: true
+                  - id: 4
+                    type: phone
+                    main: false
+              ownership_part: 0.38
+              status: active
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadApartmentInvitation'
+          example:
+            - id: 1
+              type: apartment
+              email: other1@gmail.com
+              status: accepted
+              ownership_area: 30.0
+            - id: 2
+              type: apartment
+              email: other2@gmail.com
+              status: pending
+              ownership_area: 42.3
