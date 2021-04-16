@@ -22,8 +22,7 @@ public class EntitySpecificationService<T> {
     private static String toRSQLString(Map<String, String> filter) {
         return filter.entrySet().stream()
             .filter(entry -> entry.getValue() != null)
-            .map(entry ->
-            entry.getKey() + RSQL_EQUAL_OR + "(" + entry.getValue() + "," + entry.getValue().toUpperCase() + ")")
+            .map(entry -> entry.getKey() + RSQL_EQUAL + entry.getValue())
             .collect(Collectors.joining(RSQL_AND));
     }
 

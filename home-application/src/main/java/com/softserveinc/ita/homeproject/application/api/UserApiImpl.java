@@ -101,6 +101,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String type) {
         Map<String, String> filterMap = new HashMap<>();
 
+        type = (type == "email" || type == "phone") ? type.toUpperCase() : type;
+
         filterMap.put("user_id", userId.toString());
         filterMap.put("id", id);
         filterMap.put("phone", phone);
