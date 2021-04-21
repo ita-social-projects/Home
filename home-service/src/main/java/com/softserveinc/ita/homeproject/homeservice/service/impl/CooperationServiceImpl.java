@@ -2,13 +2,19 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Contact;
+import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
@@ -31,6 +37,8 @@ public class CooperationServiceImpl implements CooperationService {
 
     private final HouseRepository houseRepository;
 
+    private final ContactRepository contactRepository;
+
     @Transactional
     @Override
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
@@ -41,6 +49,10 @@ public class CooperationServiceImpl implements CooperationService {
             element.setCooperation(cooperation);
             element.setCreateDate(LocalDateTime.now());
             element.setEnabled(true);
+        });
+        cooperation.getContacts().forEach(contact -> {
+            contact.setCooperation(cooperation);
+            contact.setEnabled(true);
         });
         cooperationRepository.save(cooperation);
         return mapper.convert(cooperation, CooperationDto.class);
@@ -86,6 +98,10 @@ public class CooperationServiceImpl implements CooperationService {
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
+        List<Contact> contactList = new ArrayList<>();
+        contactList.addAll(contactRepository.findAllByUserIdAndType(toGet.getId(), ContactType.EMAIL));
+        contactList.addAll(contactRepository.findAllByUserIdAndType(toGet.getId(), ContactType.PHONE));
+        toGet.setContacts(contactList);
         return mapper.convert(toGet, CooperationDto.class);
     }
 

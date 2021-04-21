@@ -1107,6 +1107,252 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/contacts:
+    post:
+      tags:
+        - cooperation contact
+      summary: Create new Contact for the Cooperation
+      description: The endpoint creates Contacts for the specified Cooperation ID
+      operationId: createContactsOnCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: A payload for creating a cooperation contacts
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateContact'
+        required: true
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadContact'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - cooperation contact
+      summary: Get all Contacts by Cooperation ID
+      description: The endpoint retrieves the list of contacts associated with the specified cooperation ID
+      operationId: queryContactsOnCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+          description: Arraning items in specific order
+        - in: query
+          name: filter
+          schema:
+            type: string
+          description: Filter items by fields
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: The ID of the Contact
+        - in: query
+          name: phone
+          schema:
+            type: string
+          description: Phone of the Contact
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: Email of the Contact
+        - in: query
+          name: main
+          schema:
+            type: string
+          description: Specifies if its a main Contact of the Cooperation
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: Type of the Contact
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/contacts/{contact_id}:
+    get:
+      tags:
+        - cooperation contact
+      summary: Get Contact by ID
+      description: The endpoint retrieves an existing contact
+        associated with the specified Cooperation by Cooperation and Contact IDs
+      operationId: getContactOnCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contact_id"
+          in: "path"
+          description: The ID of the Contact
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - cooperation contact
+      summary: Update Contact
+      description: The endpoint updates information on a contact that exists
+          in the system by the specified Cooperation and Contact IDs
+      operationId: updateContactOnCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contact_id"
+          in: "path"
+          description: The ID of the Contact
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: A payload for updating an existing Contact
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContact"
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadContact"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - cooperation contact
+      summary: Delete Contact
+      description: The endpoint deletes an existing Contact on a Cooperation associated with the
+        specified Cooperation and Contact IDs
+      operationId: deleteContactOnCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "contact_id"
+          in: "path"
+          description: The ID of the Contact
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Success
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 security:
   - basicAuth: []
 components:
@@ -1485,6 +1731,14 @@ components:
           example: List of houses
           items:
             $ref: "#/components/schemas/CreateHouse"
+        contacts:
+          type: array
+          example:
+            - type: "email"
+            - main: false
+            - email: "createUserEmail@example.com"
+          items:
+            $ref: "#/components/schemas/CreateContact"
     ReadCooperation:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -1512,6 +1766,14 @@ components:
           example: List of houses
           items:
             $ref: "#/components/schemas/ReadHouse"
+        contact:
+          type: array
+          example:
+            - type: "email"
+            - main: false
+            - email: "createUserEmail@example.com"
+          items:
+            $ref: "#/components/schemas/ReadContact"
     UpdateCooperation:
       required:
         - name

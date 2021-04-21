@@ -1,15 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.util.List;
-import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.EmailContact;
 import com.softserveinc.ita.homeproject.homedata.entity.PhoneContact;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
@@ -25,50 +24,51 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
-public class ContactServiceImpl implements ContactService {
+public class CooperationContactServiceImpl implements ContactService {
+
+    private final CooperationRepository cooperationRepository;
 
     private final ContactRepository contactRepository;
 
-    private final UserRepository userRepository;
-
     private final ServiceMapper mapper;
 
-    @Transactional
+
     @Override
     public ContactDto createContact(Long id, ContactDto createContactDto) {
-        User user = getUserById(id);
+        Cooperation cooperation = getCooperationById(id);
         if (Boolean.TRUE.equals(createContactDto.getMain())) {
-            List<Contact> allByUserIdAndType = contactRepository
+            List<Contact> getAllContactByCoopId = contactRepository
                 .findAllByUserIdAndType(id, mapper.convert(createContactDto.getType(), ContactType.class));
-            allByUserIdAndType
+            getAllContactByCoopId
                 .stream()
                 .filter(Contact::getMain)
                 .findAny()
                 .ifPresent(contact -> {
-                    throw new AlreadyExistHomeException("User with id "
+                    throw new AlreadyExistHomeException("Cooperation with id "
                         + id + " already has main " + createContactDto.getType() + " contact");
                 });
         }
 
         Contact contact = mapper.convert(createContactDto, Contact.class);
-        contact.setUser(user);
+        contact.setCooperation(cooperation);
         contact.setEnabled(true);
         contactRepository.save(contact);
         return mapper.convert(contact, ContactDto.class);
     }
 
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("User with id " + id + " wasn't found"));
+    private Cooperation getCooperationById(Long cooperationId) {
+        return cooperationRepository.findById(cooperationId)
+            .orElseThrow(() -> new NotFoundHomeException("Cooperation with id " + cooperationId + " wasn't found"));
     }
 
     @Override
     public ContactDto updateContact(Long id, ContactDto updateContactDto) {
         Contact contact = contactRepository.findById(id)
             .filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException("Cooperation with id:" + id + " is not found"));
 
         ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
         if (existingContactType == updateContactDto.getType()) {
@@ -101,8 +101,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
-                                    Specification<Contact> specification) {
+    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
@@ -123,5 +122,4 @@ public class ContactServiceImpl implements ContactService {
         contact.setEnabled(false);
         contactRepository.save(contact);
     }
-
 }

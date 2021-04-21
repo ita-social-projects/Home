@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface ContactService extends QueryableService<Contact, ContactDto> {
 
-    ContactDto createContact(Long userId, ContactDto createContactDto);
+    ContactDto createContact(Long id, ContactDto createContactDto);
 
     ContactDto updateContact(Long id, ContactDto updateContactDto);
 

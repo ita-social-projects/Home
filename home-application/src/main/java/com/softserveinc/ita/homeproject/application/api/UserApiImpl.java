@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
@@ -17,6 +18,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.homeservice.service.impl.ContactServiceImpl;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -24,9 +26,11 @@ import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+
 
 /**
  * UserApiServiceImpl class is the inter layer between generated
@@ -38,12 +42,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserApiImpl extends CommonApi implements UsersApi {
 
+    @Qualifier("contactServiceImpl")
     @Autowired
     private ContactService contactService;
 
     @Autowired
     private UserService userService;
 
+    //@PreAuthorize(CREATE_CONTACT_PERMISSION)
     @Override
     public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);

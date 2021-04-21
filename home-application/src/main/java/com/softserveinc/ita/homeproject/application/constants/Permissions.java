@@ -14,6 +14,10 @@ public final class Permissions {
 
     public static final String CREATE_USER_PERMISSION = "hasAuthority('CREATE_USER_PERMISSION')";
 
+    public static final String CREATE_CONTACT_PERMISSION = "hasAuthority('CREATE_CONTACT_PERMISSION')";
+
+    public static final String CREATE_COOP_CONTACT_PERMISSION = "hasAuthority('CREATE_COOP_CONTACT_PERMISSION')";
+
     public static final String UPDATE_USER_PERMISSION = "hasAuthority('UPDATE_USER_PERMISSION')";
 
     public static final String GET_ALL_USERS_PERMISSION = "hasAuthority('GET_USERS_PERMISSION')";
@@ -36,13 +40,21 @@ public final class Permissions {
 
     public static final String GET_COOPERATION_PERMISSION = "hasAuthority('GET_COOPERATION_PERMISSION')";
 
+    public static final String GET_COOP_CONTACT_PERMISSION = "hasAuthority('GET_COOPERATION_CONTACT_PERMISSION')";
+
     public static final String GET_ALL_COOPERATION_PERMISSION = "hasAuthority('GET_COOPERATIONS_PERMISSION')";
 
+    public static final String GET_ALL_COOP_CONTACT_PERMISSION = "hasAuthority('GET_ALL_COOP_CONTACT_PERMISSION')";
+
     public static final String DEACTIVATE_COOPERATION_PERMISSION = "hasAuthority('DELETE_COOPERATION_PERMISSION')";
+
+    public static final String DEACTIVATE_COOP_CONTACT_PERMISSION ="hasAuthority('DEACTIVATE_COOP_CONTACT_PERMISSION')";
 
     public static final String CREATE_HOUSE_PERMISSION = "hasAuthority('CREATE_HOUSE_PERMISSION')";
 
     public static final String UPDATE_HOUSE_PERMISSION = "hasAuthority('UPDATE_HOUSE_PERMISSION')";
+
+    public static final String UPDATE_COOP_CONTACT_PERMISSION = "hasAuthority('UPDATE_COOP_CONTACT_PERMISSION')";
 
     public static final String GET_HOUSE_PERMISSION = "hasAuthority('GET_HOUSE_PERMISSION')";
 
