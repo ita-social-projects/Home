@@ -527,7 +527,7 @@ paths:
         - in: query
           name: type
           schema:
-            type: string
+            $ref: '#/components/schemas/ContactType'
           description: Type of the Contact
       responses:
         '200':
@@ -897,7 +897,7 @@ components:
     ContactType:
       description: Indicates the type of contact
       type: string
-      enum: &contact_type_values
+      enum:
         - email
         - phone
     ReadContact:

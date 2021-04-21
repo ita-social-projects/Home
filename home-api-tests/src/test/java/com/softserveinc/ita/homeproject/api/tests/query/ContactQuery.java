@@ -5,6 +5,7 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 
@@ -20,7 +21,7 @@ public class ContactQuery extends BaseQuery{
 
     private String main;
 
-    private String type;
+    private ContactType type;
 
     private ContactApi contactApi;
 
@@ -36,7 +37,7 @@ public class ContactQuery extends BaseQuery{
         this.contactId = contactId;
     }
 
-    public void setType(String type) {
+    public void setType(ContactType type) {
         this.type = type;
     }
 
@@ -110,7 +111,7 @@ public class ContactQuery extends BaseQuery{
         }
 
         public Builder type(String type) {
-            queryClass.setType(type);
+            queryClass.setType(ContactType.fromValue(type));
             return this;
         }
 

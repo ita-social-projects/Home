@@ -1,20 +1,19 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import com.google.common.base.Strings;
+
 import org.modelmapper.spi.ErrorMessage;
 
 @SuppressWarnings("unchecked")
 @Provider
 public class EnumConverterProvider implements ParamConverterProvider {
-
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
@@ -28,7 +27,7 @@ public class EnumConverterProvider implements ParamConverterProvider {
         return new ParamConverter<T>() {
             @Override
             public T fromString(String value) {
-                if (Strings.isNullOrEmpty(value)) {
+                if (value == null || value.isEmpty()) {
                     return null;
                 }
 

@@ -19,6 +19,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -98,7 +99,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String phone,
                                         String email,
                                         String main,
-                                        String type) {
+                                        ContactType type) {
         Map<String, String> filterMap = new HashMap<>();
 
         filterMap.put("user_id", userId.toString());
@@ -106,7 +107,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         filterMap.put("phone", phone);
         filterMap.put("email", email);
         filterMap.put("main", main);
-        filterMap.put("type", type);
+        filterMap.put("type", type == null ? null : type.name());
 
         Page<ContactDto> contacts = contactService.getAllContacts(
             pageNumber,
