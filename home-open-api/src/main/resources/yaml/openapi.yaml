@@ -26,9 +26,9 @@ tags:
   - name: apartment
     description: Apartment management operations
   - name: apartment ownership
-    description: Aapartment ownership management operations
+    description: Apartment ownership management operations
   - name: apartment invitation
-    description: Aapartment invitation management operations
+    description: Apartment invitation management operations
 paths:
   /news:
     post:
