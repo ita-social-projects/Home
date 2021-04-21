@@ -17,6 +17,12 @@ tags:
     description: User management operations
   - name: contact
     description: Contact management operations
+  - name: cooperation
+    description: Cooperation management
+  - name: house
+    description: Operations with house
+  - name: address
+    description: Operations with address
 paths:
   /news:
     post:
@@ -68,7 +74,7 @@ paths:
           name: page_size
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 10
             default: 5
           required: false
@@ -262,7 +268,7 @@ paths:
           name: page_size
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 10
             default: 5
           required: false
@@ -399,7 +405,7 @@ paths:
       tags:
         - user
       summary: Delete user by ID
-      description: The ednpoint deletes User by ID
+      description: The endpoint deletes User by ID
       operationId: deleteUser
       parameters:
         - name: "user_id"
@@ -488,7 +494,7 @@ paths:
           name: page_size
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 10
             default: 5
           required: false
@@ -557,7 +563,7 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          description: The ID of the Contact
+          description: The ID of the User
           required: true
           schema:
             type: integer
@@ -669,6 +675,438 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+  /cooperation:
+    post:
+      tags:
+        - cooperation
+      summary: Create Cooperation
+      description: The endpoint creates a new Cooperation
+      operationId: createCooperation
+      requestBody:
+        description: A payload for creating a Cooperation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCooperation'
+        required: true
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ReadCooperation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - cooperation
+      summary: Get All Cooperations
+      description: Get all cooperation
+      operationId: queryCooperation
+      parameters:
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
+          name: name
+          schema:
+            type: string
+            example: "Dobro"
+        - in: query
+          name: iban
+          schema:
+            type: string
+            example:  "77778"
+        - in: query
+          name: usreo
+          schema:
+            type: string
+            example:  "A9856738"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadCooperation"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}:
+    get:
+      tags:
+        - cooperation
+      summary: Get Cooperation by ID
+      description: The endpoint gets Cooperation by ID
+      operationId: getCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadCooperation"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - cooperation
+      summary: Update current Cooperation
+      description: The endpoint updates current Cooperation by ID
+      operationId: updateCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: A payload for updating current Cooperation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCooperation'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadCooperation"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - cooperation
+      summary: Delete cooperation by ID
+      description: The endpoint deletes Cooperation by ID
+      operationId: deleteCooperation
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Success
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/houses:
+    post:
+      tags:
+        - house
+      summary: Create new House for the Cooperation
+      description: The endpoint creates a new House for the specified Cooperation ID
+      operationId: createHouse
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: A payload for creating a house
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateHouse'
+        required: true
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/ReadHouse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - house
+      summary: Get all Houses by Cooperation
+      description: The endpoint retrieves the list of houses associated with the specified cooperation ID
+      operationId: queryHouse
+      parameters:
+        - name: "cooperation_id"
+          in: path
+          required: true
+          description: The ID of the Cooperation
+          schema:
+            type : integer
+            format: int64
+            minimum: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - in: query
+          name: quantity_flat
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: adjoining_area
+          schema:
+            type: integer
+            example: 40
+        - in: query
+          name: house_area
+          schema:
+            type: number
+            example: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{cooperation_id}/houses/{house_id}:
+    get:
+      tags:
+        - house
+      summary: Get House by ID
+      description: The endpoint retrieves an existing house
+        associated with the specified Cooperation by Cooperation and House IDs
+      operationId: getHouse
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "house_id"
+          in: "path"
+          description: The ID of the House
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - house
+      summary: Update current House
+      description: The endpoint updates information on a house that exists
+        in the system by the specified Cooperation and House IDs
+      operationId: updateHouse
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "house_id"
+          in: "path"
+          description: The ID of the House
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        description: A payload for updating an existing House
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateHouse'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadHouse"
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - house
+      summary: Delete house by ID
+      description: The endpoint deletes an existing House on a Cooperation associated with the
+        specified Coopeartion and House IDs
+      operationId: deleteHouse
+      parameters:
+        - name: "cooperation_id"
+          in: "path"
+          description: The ID of the Cooperation
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: "house_id"
+          in: "path"
+          description: The ID of the House
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "204":
+          description: Success
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "403":
+          $ref: '#/components/responses/Forbidden'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 security:
   - basicAuth: []
 components:
@@ -757,7 +1195,7 @@ components:
           maxLength: 70
         photo_url:
           type: string
-          example: url
+          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
         description:
           type: string
           minLength: 1
@@ -769,14 +1207,19 @@ components:
         text:
           type: string
           minLength: 1
+          maxLength: 150
           example: example
     UpdateNews:
       type: object
+      required:
+        - title
+        - description
+        - text
       properties:
         title:
           type: string
           minLength: 1
-          maxLength: 50
+          maxLength: 70
           example: example
         photo_url:
           type: string
@@ -784,7 +1227,7 @@ components:
         description:
           type: string
           minLength: 1
-          maxLength: 50
+          maxLength: 150
           example: example
         source:
           type: string
@@ -824,7 +1267,7 @@ components:
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
           example: "p.t.z@gmail.com"
           minLength: 5
@@ -868,7 +1311,14 @@ components:
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
       type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
       properties:
         first_name:
           pattern: '\w+'
@@ -883,11 +1333,11 @@ components:
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
-          type: string
-          example: "p.t.z@gmail.com"
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           minLength: 5
-          maxLength: 254
+          maxLength: 320
+          type: string
+          example: example@gmail.com
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
@@ -931,6 +1381,9 @@ components:
       type: object
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
           type: string
           example: "+380506617305"
     CreateContact:
@@ -959,7 +1412,7 @@ components:
         email:
           minLength: 5
           maxLength: 320
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
           example: home@gmail.com
     CreatePhoneContact:
@@ -970,6 +1423,7 @@ components:
         - phone
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
           minLength: 9
           maxLength: 13
           type: string
@@ -993,16 +1447,197 @@ components:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
+      required:
+        - email
       properties:
         email:
-          pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          minLength: 9
+          maxLength: 320
           type: string
           example: other@gmail.com
     UpdatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
       type: object
+      required:
+        - phone
       properties:
         phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
           type: string
           example: "+380966617305"
+    CreateCooperation:
+      required:
+        - name
+        - usreo
+        - iban
+        - address
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 34
+        address:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          example: List of houses
+          items:
+            $ref: "#/components/schemas/CreateHouse"
+    ReadCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 50
+        address:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          example: List of houses
+          items:
+            $ref: "#/components/schemas/ReadHouse"
+    UpdateCooperation:
+      required:
+        - name
+        - usreo
+        - iban
+        - address
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 50
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        region:
+          type: string
+          example: "Dnipropetrovsk region"
+          minLength: 1
+          maxLength: 50
+        city:
+          type: string
+          example: "Dnipro"
+          minLength: 1
+          maxLength: 50
+        district:
+          type: string
+          example: "Zavodskoy"
+          minLength: 1
+          maxLength: 50
+        street:
+          type: string
+          example: "Kirova"
+          minLength: 1
+          maxLength: 25
+        house_block:
+          type: string
+          example: "2/B"
+          minLength: 1
+          maxLength: 10
+        house_number:
+          type: string
+          example: "23-B"
+          minLength: 1
+          maxLength: 10
+        zip_code:
+          type: string
+          example: 52956
+    CreateHouse:
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'
+    ReadHouse:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'
+    UpdateHouse:
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'

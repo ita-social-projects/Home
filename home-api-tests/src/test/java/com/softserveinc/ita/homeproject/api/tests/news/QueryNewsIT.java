@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils.createExceptionMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -153,25 +152,20 @@ class QueryNewsIT {
 
     @Test
     void emptyArgumentTest() {
-        ApiException exception =
-            new ApiException(400, "The query argument for search is empty");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new NewsQuery
                 .Builder(newsApi)
                 .pageNumber(1)
                 .pageSize(10)
-                .text(" ")
+                .text("")
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("The query argument for search is empty");
     }
 
     @Test
     void wrongFilterPredicateExceptionTest() {
-        ApiException exception =
-            new ApiException(400, "Unknown operator: =ilik=");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new NewsQuery
                 .Builder(newsApi)
@@ -180,14 +174,12 @@ class QueryNewsIT {
                 .filter("source=ilik='Si'")
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Unknown operator: =ilik=");
     }
 
     @Test
     void wrongFilterFieldExceptionTest() {
-        ApiException exception =
-            new ApiException(400, "Unknown property: sourc from entity");
-
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new NewsQuery
                 .Builder(newsApi)
@@ -196,7 +188,8 @@ class QueryNewsIT {
                 .filter("sourc=ilike='Si'")
                 .build()
                 .perfom())
-            .withMessage(createExceptionMessage(exception));
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("Unknown property: sourc from entity");
     }
 
     private List<CreateNews> createNewsList() {
