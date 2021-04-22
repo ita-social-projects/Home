@@ -75,7 +75,8 @@ public class CooperationServiceImpl implements CooperationService {
                                         Specification<Cooperation> specification) {
         Specification<Cooperation> cooperationSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        Page<CooperationDto> page = cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<CooperationDto> page = cooperationRepository
+            .findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
         if (page.getTotalElements() > 0) {
             return page;

@@ -105,7 +105,8 @@ public class ContactServiceImpl implements ContactService {
                                     Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        Page<ContactDto> page = contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<ContactDto> page = contactRepository
+            .findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(contact -> mapper.convert(contact, ContactDto.class));
         if (page.getTotalElements() > 0) {
             return page;
