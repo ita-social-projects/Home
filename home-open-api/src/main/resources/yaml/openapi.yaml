@@ -329,7 +329,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{user_id}:
+  /users/{id}:
     get:
       tags:
         - user
@@ -337,7 +337,7 @@ paths:
       description: The endpoint gets User by ID
       operationId: getUser
       parameters:
-        - name: "user_id"
+        - name: "id"
           in: "path"
           description: The ID of the User
           required: true
@@ -367,7 +367,7 @@ paths:
       description: The endpoint updates current User by ID
       operationId: updateUser
       parameters:
-        - name: "user_id"
+        - name: "id"
           in: "path"
           description: The ID of the User
           required: true
@@ -408,7 +408,7 @@ paths:
       description: The endpoint deletes User by ID
       operationId: deleteUser
       parameters:
-        - name: "user_id"
+        - name: "id"
           in: "path"
           description: The ID of the User
           required: true
@@ -552,7 +552,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /users/{user_id}/contacts/{contact_id}:
+  /users/{user_id}/contacts/{id}:
     get:
       tags:
         - contact
@@ -569,7 +569,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "contact_id"
+        - name: "id"
           in: "path"
           description: The ID of the Contact
           required: true
@@ -608,7 +608,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "contact_id"
+        - name: "id"
           in: "path"
           description: The ID of the Contact
           required: true
@@ -656,7 +656,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "contact_id"
+        - name: "id"
           in: "path"
           description: The ID of the Contact
           required: true
@@ -773,7 +773,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /cooperation/{cooperation_id}:
+  /cooperation/{id}:
     get:
       tags:
         - cooperation
@@ -781,7 +781,7 @@ paths:
       description: The endpoint gets Cooperation by ID
       operationId: getCooperation
       parameters:
-        - name: "cooperation_id"
+        - name: "id"
           in: "path"
           description: The ID of the Cooperation
           required: true
@@ -811,7 +811,7 @@ paths:
       description: The endpoint updates current Cooperation by ID
       operationId: updateCooperation
       parameters:
-        - name: "cooperation_id"
+        - name: "id"
           in: "path"
           description: The ID of the Cooperation
           required: true
@@ -850,7 +850,7 @@ paths:
       description: The endpoint deletes Cooperation by ID
       operationId: deleteCooperation
       parameters:
-        - name: "cooperation_id"
+        - name: "id"
           in: "path"
           description: The ID of the Cooperation
           required: true
@@ -984,7 +984,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /cooperation/{cooperation_id}/houses/{house_id}:
+  /cooperation/{cooperation_id}/houses/{id}:
     get:
       tags:
         - house
@@ -1001,7 +1001,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "house_id"
+        - name: "id"
           in: "path"
           description: The ID of the House
           required: true
@@ -1040,7 +1040,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "house_id"
+        - name: "id"
           in: "path"
           description: The ID of the House
           required: true
@@ -1088,7 +1088,7 @@ paths:
             type: integer
             format: int64
             example: 1
-        - name: "house_id"
+        - name: "id"
           in: "path"
           description: The ID of the House
           required: true
