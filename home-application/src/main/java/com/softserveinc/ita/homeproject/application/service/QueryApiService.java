@@ -124,7 +124,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
             throw new NotFoundHomeException("Entity with id: " + getParameterValue("id", uriInfo)
                     .orElse("'not defined'") + " is not found");
         } else {
-            throw new IllegalStateException("Result of the request that required to return one element, "
+            throw new IllegalStateException("Result of the request that require to return one element, "
                     + "contains more than one element");
         }
     }
