@@ -29,12 +29,9 @@ public abstract class CommonApi {
     protected HomeMapper mapper;
 
     @Autowired
-    protected EntitySpecificationService entitySpecificationService;
-
-    @Autowired
     protected QueryApiService queryApiService;
 
-    <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
+    protected <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();
