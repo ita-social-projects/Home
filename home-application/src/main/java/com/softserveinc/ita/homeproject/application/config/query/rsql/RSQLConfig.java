@@ -5,9 +5,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import com.softserveinc.ita.homeproject.application.config.StringToEnumConverter;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
+import io.github.perplexhub.rsql.RSQLJPASupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,8 @@ public class RSQLConfig {
             for (Map.Entry<? extends QueryParamEnum, String> entry : config.getMappings().entrySet()) {
                 RSQLCommonSupport.addMapping(entityClass, entry.getValue(), entry.getKey().getParameter());
             }
+
+            RSQLJPASupport.addConverter(new StringToEnumConverter());
 
             RSQLCommonSupport.addPropertyWhitelist(
                 entityClass,
