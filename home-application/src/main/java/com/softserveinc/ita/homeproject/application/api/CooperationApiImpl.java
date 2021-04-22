@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
+import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
@@ -67,7 +68,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_COOPERATION_PERMISSION)
     @Override
     public Response getCooperation(Long cooperationId) {
-        CooperationDto readCoopDto = cooperationService.getCooperationById(cooperationId);
+        CooperationDto readCoopDto = (CooperationDto) queryApiService.getOne(uriInfo, cooperationService);
         ReadCooperation readCoop = mapper.convert(readCoopDto, ReadCooperation.class);
 
         return Response.status(Response.Status.OK).entity(readCoop).build();
@@ -77,7 +78,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
     public Response getHouse(Long cooperationId, Long houseId) {
-        HouseDto toGet = houseService.getHouseById(cooperationId, houseId);
+        HouseDto toGet = (HouseDto) queryApiService.getOne(uriInfo, houseService);
         ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
