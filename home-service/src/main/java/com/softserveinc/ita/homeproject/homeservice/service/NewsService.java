@@ -12,7 +12,5 @@ public interface NewsService extends QueryableService<News, NewsDto> {
 
     Page<NewsDto> findAll(Integer pageNumber, Integer pageSize, Specification<News> specification);
 
-    NewsDto getById(Long id);
-
     void deactivateNews(Long id);
 }

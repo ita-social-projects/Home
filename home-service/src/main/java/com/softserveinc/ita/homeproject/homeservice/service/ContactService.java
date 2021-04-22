@@ -13,7 +13,5 @@ public interface ContactService extends QueryableService<Contact, ContactDto> {
 
     Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification);
 
-    ContactDto getContactById(Long id);
-
     void deactivateContact(Long id);
 }

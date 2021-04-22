@@ -13,7 +13,5 @@ public interface UserService extends QueryableService<User, UserDto> {
 
     Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification);
 
-    UserDto getUserById(Long id);
-
     void deactivateUser(Long id);
 }

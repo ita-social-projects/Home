@@ -13,8 +13,6 @@ public interface HouseService extends QueryableService<House, HouseDto> {
 
     Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification);
 
-    HouseDto getHouseById(Long coopId, Long id);
-
     void deactivateById(Long coopId, Long id);
 
 }
