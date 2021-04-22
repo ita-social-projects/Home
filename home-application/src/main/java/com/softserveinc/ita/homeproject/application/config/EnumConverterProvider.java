@@ -32,18 +32,13 @@ public class EnumConverterProvider implements ParamConverterProvider {
                 }
 
                 for (Enum<?> constant : constants) {
-                    if (constant.name().equalsIgnoreCase(value)) {
+                    if (constant.toString().equals(value)) {
                         return (T) constant;
                     }
                 }
 
-                for (Enum<?> constant : constants) {
-                    if (constant.toString().equalsIgnoreCase(value)) {
-                        return (T) constant;
-                    }
-                }
-
-                throw new BadRequestException(getErrorResponse(String.format("Parameter is invalid")));
+                throw new BadRequestException(getErrorResponse(String
+                    .format("Parameter type must be one of enum constants")));
             }
 
             @Override

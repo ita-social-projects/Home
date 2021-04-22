@@ -28,7 +28,7 @@ public class RSQLConfig {
                 RSQLCommonSupport.addMapping(entityClass, entry.getValue(), entry.getKey().getParameter());
             }
 
-            RSQLJPASupport.addConverter(new StringToEnumConverter());
+            RSQLCommonSupport.addConverter(new StringToEnumConverter());
 
             RSQLCommonSupport.addPropertyWhitelist(
                 entityClass,
