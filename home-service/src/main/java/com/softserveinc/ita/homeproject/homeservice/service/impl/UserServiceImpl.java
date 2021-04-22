@@ -88,20 +88,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
         Specification<User> userSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<UserDto> page = userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(user -> mapper.convert(user, UserDto.class));
-    }
-
-    @Override
-    @Transactional
-    public UserDto getUserById(Long id) {
-        User toGet = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
-        return mapper.convert(toGet, UserDto.class);
+        if (page.getTotalElements() > 0) {
+            return page;
+        } else {
+            throw new NotFoundHomeException("No Users found by defined query");
+        }
     }
 
     @Override

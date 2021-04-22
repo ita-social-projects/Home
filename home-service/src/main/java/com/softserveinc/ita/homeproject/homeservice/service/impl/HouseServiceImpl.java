@@ -68,25 +68,18 @@ public class HouseServiceImpl implements HouseService {
         return mapper.convert(fromDb, HouseDto.class);
     }
 
-    @Transactional
     @Override
     public Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification) {
         Specification<House> houseSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return houseRepository.findAll(houseSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<HouseDto> page = houseRepository.findAll(houseSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(house -> mapper.convert(house, HouseDto.class));
-    }
-
-    @Override
-    public HouseDto getHouseById(Long coopId, Long id) {
-        House toGet = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
-        if (!toGet.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
+        if (page.getTotalElements() > 0) {
+            return page;
+        } else {
+            throw new NotFoundHomeException("No Houses found by defined query");
         }
-        return mapper.convert(toGet, HouseDto.class);
     }
-
 
     @Override
     public void deactivateById(Long coopId, Long id) {

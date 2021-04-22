@@ -70,23 +70,18 @@ public class CooperationServiceImpl implements CooperationService {
         return mapper.convert(fromDb, CooperationDto.class);
     }
 
-    @Transactional
     @Override
     public Page<CooperationDto> findAll(Integer pageNumber, Integer pageSize,
                                         Specification<Cooperation> specification) {
         Specification<Cooperation> cooperationSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<CooperationDto> page = cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
-    }
-
-    @Override
-    public CooperationDto getCooperationById(Long id) {
-        Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
-        List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
-        toGet.setHouses(houseList);
-        return mapper.convert(toGet, CooperationDto.class);
+        if (page.getTotalElements() > 0) {
+            return page;
+        } else {
+            throw new NotFoundHomeException("No Cooperations found by defined query");
+        }
     }
 
     @Override

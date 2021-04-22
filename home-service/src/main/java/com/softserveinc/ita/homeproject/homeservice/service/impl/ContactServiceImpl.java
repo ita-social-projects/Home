@@ -105,15 +105,13 @@ public class ContactServiceImpl implements ContactService {
                                     Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        Page<ContactDto> page = contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(contact -> mapper.convert(contact, ContactDto.class));
-    }
-
-    @Override
-    public ContactDto getContactById(Long id) {
-        Contact contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
-        return mapper.convert(contactResponse, ContactDto.class);
+        if (page.getTotalElements() > 0) {
+            return page;
+        } else {
+            throw new NotFoundHomeException("No Contacts found by defined query");
+        }
     }
 
     @Override
