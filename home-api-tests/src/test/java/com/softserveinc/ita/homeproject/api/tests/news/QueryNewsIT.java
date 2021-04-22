@@ -157,7 +157,7 @@ class QueryNewsIT {
                 .Builder(newsApi)
                 .pageNumber(1)
                 .pageSize(10)
-                .text(" ")
+                .text("")
                 .build()
                 .perfom())
             .matches(exception -> exception.getCode() == 400)

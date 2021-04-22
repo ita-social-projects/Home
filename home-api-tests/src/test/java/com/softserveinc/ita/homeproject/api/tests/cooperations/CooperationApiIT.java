@@ -3,6 +3,9 @@ package com.softserveinc.ita.homeproject.api.tests.cooperations;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -70,7 +73,7 @@ class CooperationApiIT {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.getCooperation(readCoop.getId()))
-            .matches((actual) -> actual.getCode() == 404);
+            .matches((actual) -> actual.getCode() == NOT_FOUND);
     }
 
     @Test
@@ -84,7 +87,7 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidName))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `name` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -99,7 +102,7 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidUsreo))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `usreo` is invalid - size must be between 1 and 12 signs.");
     }
 
@@ -114,7 +117,7 @@ class CooperationApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidIban))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `iban` is invalid - size must be between 1 and 34 signs.");
     }
 

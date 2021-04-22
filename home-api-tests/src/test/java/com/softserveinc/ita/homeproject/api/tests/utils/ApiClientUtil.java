@@ -9,7 +9,12 @@ import com.softserveinc.ita.homeproject.ApiClient;
 import com.softserveinc.ita.homeproject.ServerConfiguration;
 import org.glassfish.jersey.logging.LoggingFeature;
 
+import javax.ws.rs.core.Response;
+
 public final class ApiClientUtil {
+
+    public static final int BAD_REQUEST = Response.Status.BAD_REQUEST.getStatusCode();
+    public static final int NOT_FOUND = Response.Status.NOT_FOUND.getStatusCode();
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
     private static final String APPLICATION_ADMIN_USER_NAME = System.getProperty("home.application.admin.username");
     private static final String APPLICATION_ADMIN_PASSWORD = System.getProperty("home.application.admin.password");

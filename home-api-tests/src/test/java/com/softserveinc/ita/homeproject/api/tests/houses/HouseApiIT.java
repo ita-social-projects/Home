@@ -3,6 +3,9 @@ package com.softserveinc.ita.homeproject.api.tests.houses;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -92,11 +95,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyRegionHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `region` is invalid - size must be between 1 and 50 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longRegionHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `region` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -109,11 +112,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyCityHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `city` is invalid - size must be between 1 and 50 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longCityHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `city` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -126,11 +129,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyDistrictHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `district` is invalid - size must be between 1 and 50 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longDistrictHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `district` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -145,11 +148,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyStreetHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `street` is invalid - size must be between 1 and 25 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longStreetHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `street` is invalid - size must be between 1 and 25 signs.");
     }
 
@@ -164,11 +167,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyHouseBlockHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `houseBlock` is invalid - size must be between 1 and 10 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longHouseBlockHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `houseBlock` is invalid - size must be between 1 and 10 signs.");
     }
 
@@ -183,11 +186,11 @@ class HouseApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), emptyHouseNumberHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `houseNumber` is invalid - size must be between 1 and 10 signs.");
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.createHouse(readCooperation.getId(), longHouseNumberHouse))
-            .matches((actual) -> actual.getCode() == 400)
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `houseNumber` is invalid - size must be between 1 and 10 signs.");
     }
 
