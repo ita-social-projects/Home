@@ -100,20 +100,13 @@ public class ContactServiceImpl implements ContactService {
         return mapper.convert(email, EmailContactDto.class);
     }
 
-    @Transactional
     @Override
     public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
                                     Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        Page<ContactDto> page = contactRepository
-            .findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(contact -> mapper.convert(contact, ContactDto.class));
-        if (page.getTotalElements() > 0) {
-            return page;
-        } else {
-            throw new NotFoundHomeException("No Contacts found by defined query");
-        }
     }
 
     @Override

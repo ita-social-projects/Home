@@ -92,13 +92,8 @@ public class UserServiceImpl implements UserService {
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
         Specification<User> userSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        Page<UserDto> page = userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(user -> mapper.convert(user, UserDto.class));
-        if (page.getTotalElements() > 0) {
-            return page;
-        } else {
-            throw new NotFoundHomeException("No Users found by defined query");
-        }
     }
 
     @Override

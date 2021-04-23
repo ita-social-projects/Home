@@ -72,17 +72,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    @Transactional
     public Page<NewsDto> findAll(Integer pageNumber, Integer pageSize, Specification<News> specification) {
         Specification<News> newsSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        Page<NewsDto> page = newsRepository.findAll(newsSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        return newsRepository.findAll(newsSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(news -> mapper.convert(news, NewsDto.class));
-        if (page.getTotalElements() > 0) {
-            return page;
-        } else {
-            throw new NotFoundHomeException("No News found by defined query");
-        }
     }
 
     @Override
