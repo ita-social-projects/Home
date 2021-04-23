@@ -100,12 +100,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
                 .orElse(DefaultQueryParams.PAGE_NUMBER.getValue()));
         int pageSize = Integer.parseInt(getParameterValue(DefaultQueryParams.PAGE_SIZE.getParameter(), uriInfo)
                 .orElse(DefaultQueryParams.PAGE_SIZE.getValue()));
-        Page<D> page = service.findAll(pageNumber, pageSize, getSpecification(uriInfo));
-        if (page.getTotalElements() > 0) {
-            return page;
-        } else {
-            throw new NotFoundHomeException("No entities found by defined query");
-        }
+        return service.findAll(pageNumber, pageSize, getSpecification(uriInfo));
     }
 
     /**
@@ -117,15 +112,12 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
      * @throws IllegalStateException if number of Page elements more than 1
      */
     default D getOne(UriInfo uriInfo, QueryableService<T, D> service) {
-        Page<D> page;
-        try {
-            page = getPageFromQuery(uriInfo, service);
-        } catch (NotFoundHomeException e) {
-            throw new NotFoundHomeException("Entity with id: " + getParameterValue("id", uriInfo)
-                .orElse("'not defined'") + " is not found");
-        }
+        Page<D> page = getPageFromQuery(uriInfo, service);
         if (page.getTotalElements() == 1) {
             return page.getContent().get(0);
+        } else if (page.getTotalElements() == 0) {
+            throw new NotFoundHomeException("Entity with id: " + getParameterValue("id", uriInfo)
+                .orElse("'not defined'") + " is not found");
         } else {
             throw new IllegalStateException("Result of the request that require to return one element, "
                 + "contains more than one element");
