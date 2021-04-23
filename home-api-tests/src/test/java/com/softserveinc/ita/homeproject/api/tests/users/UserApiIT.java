@@ -218,14 +218,14 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("User with id: " + userId + " is not found");
+            .withMessageContaining("Users with id: " + userId + " is not found");
     }
 
     @Test
     void passNullWhenReceivingTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.getUserWithHttpInfo(null))
-            .withMessageContaining("Missing the required parameter 'userId' when calling getUser");
+            .withMessageContaining("Missing the required parameter 'id' when calling getUser");
     }
 
     @Test
@@ -346,7 +346,7 @@ class UserApiIT {
     void passNullWhenDeleteUserTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.deleteUserWithHttpInfo(null))
-            .withMessageContaining("Missing the required parameter 'userId' when calling deleteUser");
+            .withMessageContaining("Missing the required parameter 'id' when calling deleteUser");
     }
 
     private List<CreateContact> createContactList() {
