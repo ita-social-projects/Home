@@ -9,7 +9,6 @@ import com.softserveinc.ita.homeproject.application.config.StringToEnumConverter
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
-import io.github.perplexhub.rsql.RSQLJPASupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

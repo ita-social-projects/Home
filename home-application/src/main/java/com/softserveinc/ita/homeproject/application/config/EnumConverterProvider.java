@@ -37,8 +37,8 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new BadRequestException(getErrorResponse(String
-                    .format("Parameter type must be one of enum constants")));
+                throw new BadRequestException(
+                    getErrorResponse("Parameter type must be one of enum constants"));
             }
 
             @Override
