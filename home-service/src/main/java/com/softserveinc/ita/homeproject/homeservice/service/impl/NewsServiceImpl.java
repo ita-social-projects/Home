@@ -72,6 +72,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    @Transactional
     public Page<NewsDto> findAll(Integer pageNumber, Integer pageSize, Specification<News> specification) {
         Specification<News> newsSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));

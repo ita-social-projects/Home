@@ -70,6 +70,7 @@ public class CooperationServiceImpl implements CooperationService {
         return mapper.convert(fromDb, CooperationDto.class);
     }
 
+    @Transactional
     @Override
     public Page<CooperationDto> findAll(Integer pageNumber, Integer pageSize,
                                         Specification<Cooperation> specification) {

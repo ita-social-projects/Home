@@ -69,6 +69,7 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
+    @Transactional
     public Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification) {
         Specification<House> houseSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));

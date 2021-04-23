@@ -100,6 +100,7 @@ public class ContactServiceImpl implements ContactService {
         return mapper.convert(email, EmailContactDto.class);
     }
 
+    @Transactional
     @Override
     public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
                                     Specification<Contact> specification) {
