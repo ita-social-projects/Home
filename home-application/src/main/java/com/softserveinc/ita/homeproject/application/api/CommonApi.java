@@ -7,7 +7,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
-import com.softserveinc.ita.homeproject.application.service.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.application.service.QueryApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
