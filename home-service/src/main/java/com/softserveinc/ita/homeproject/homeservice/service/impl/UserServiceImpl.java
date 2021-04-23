@@ -5,12 +5,9 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -31,8 +28,6 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
 
     private final UserRepository userRepository;
-
-    private final ContactServiceImpl contactService;
 
     private final RoleRepository roleRepository;
 
@@ -61,11 +56,6 @@ public class UserServiceImpl implements UserService {
 
             return mapper.convert(toCreate, UserDto.class);
         }
-    }
-
-    private void saveContact(Long id, Contact contact) {
-        ContactDto contactDto = mapper.convert(contact, ContactDto.class);
-        contactService.createContact(id, contactDto);
     }
 
     @Override
