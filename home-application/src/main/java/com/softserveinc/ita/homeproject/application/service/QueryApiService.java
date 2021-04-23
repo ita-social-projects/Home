@@ -108,6 +108,12 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
         }
     }
 
+    private static String getMessage(NotFoundHomeException e, UriInfo uriInfo) {
+        String entityName = e.getMessage().split(" ")[1];
+        return entityName + " with id: " + getParameterValue("id", uriInfo)
+            .orElse("'not defined'") + " is not found";
+    }
+
     /**
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
@@ -121,8 +127,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
         try {
             page = getPageFromQuery(uriInfo, service);
         } catch (NotFoundHomeException e) {
-            throw new NotFoundHomeException("Entity with id: " + getParameterValue("id", uriInfo)
-                .orElse("'not defined'") + " is not found");
+            throw new NotFoundHomeException(getMessage(e, uriInfo));
         }
         if (page.getTotalElements() == 1) {
             return page.getContent().get(0);
