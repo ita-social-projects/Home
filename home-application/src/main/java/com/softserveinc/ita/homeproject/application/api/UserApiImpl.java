@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
@@ -18,7 +18,6 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.homeservice.service.impl.ContactServiceImpl;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -49,7 +48,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @Autowired
     private UserService userService;
 
-    //@PreAuthorize(CREATE_CONTACT_PERMISSION)
+    @PreAuthorize(CREATE_CONTACT_PERMISSION)
     @Override
     public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
@@ -157,7 +156,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param id is id of the user that has to be deactivated
      * @return Response to generated controller
      */
-    @PreAuthorize(DEACTIVATE_USER_PERMISSION)
+    @PreAuthorize(DELETE_USER_PERMISSION)
     @Override
     public Response deleteUser(Long id) {
         userService.deactivateUser(id);

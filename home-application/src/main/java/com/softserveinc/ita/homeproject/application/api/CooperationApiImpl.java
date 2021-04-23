@@ -3,9 +3,9 @@ package com.softserveinc.ita.homeproject.application.api;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_COOPERATION_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_COOP_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DEACTIVATE_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_COOPERATION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_COOP_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_HOUSE_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_COOPERATION_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_COOP_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_COOPERATION_PERMISSION;
@@ -165,21 +165,21 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readContact, ReadContact.class);
     }
 
-    @PreAuthorize(DEACTIVATE_COOPERATION_PERMISSION)
+    @PreAuthorize(DELETE_COOPERATION_PERMISSION)
     @Override
     public Response deleteCooperation(Long cooperationId) {
         cooperationService.deactivateCooperation(cooperationId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DEACTIVATE_HOUSE_PERMISSION)
+    @PreAuthorize(DELETE_HOUSE_PERMISSION)
     @Override
     public Response deleteHouse(Long cooperationId, Long houseId) {
         houseService.deactivateById(cooperationId, houseId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DEACTIVATE_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(DELETE_COOP_CONTACT_PERMISSION)
     @Override
     public Response deleteContactOnCooperation(Long cooperationId, Long contactId) {
         contactService.deactivateContact(contactId);
