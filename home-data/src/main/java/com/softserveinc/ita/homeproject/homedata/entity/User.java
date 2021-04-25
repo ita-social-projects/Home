@@ -63,4 +63,7 @@ public class User extends BaseEntity {
     )
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    Set <Ownership> ownerships;
+
 }
