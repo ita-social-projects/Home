@@ -187,7 +187,8 @@ class ContactApiIT {
             .isThrownBy(() -> contactApi
                 .getContactOnUserWithHttpInfo(expectedUser.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Entity with id: " + wrongId + " is not found");
+            .withMessageContaining(
+                "Entity with 'user_id: " + expectedUser.getId() + " and id: " + wrongId + "' is not found");
     }
 
     @Test
