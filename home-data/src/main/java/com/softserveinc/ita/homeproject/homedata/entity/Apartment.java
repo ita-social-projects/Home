@@ -36,6 +36,4 @@ public class Apartment extends BaseEntity{
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private Set<Ownership> ownerships;
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.PERSIST)
-    private List<OwnerInvitation> invitations;
 }

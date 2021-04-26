@@ -13,9 +13,12 @@ import javax.persistence.*;
 @SequenceGenerator(name = "sequence", sequenceName = "ownerships_sequence")
 public class Ownership extends BaseEntity {
 
-//    @Convert(converter = OwnershipStatusAttributeConverter.class)
+    @Convert(converter = OwnershipStatusAttributeConverter.class)
     @Column(name = "status", insertable = false, updatable = false)
     private OwnershipStatus status;
+
+    @Column(name = "ownership_area")
+    private double ownershipArea;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -25,7 +28,7 @@ public class Ownership extends BaseEntity {
     @JoinColumn(name = "apartment_id")
     private Apartment apartment;
 
-    @Column(name = "ownership_area")
-    private double ownershipArea;
+    @Column(name = "enabled")
+    private Boolean enabled;
 
 }
