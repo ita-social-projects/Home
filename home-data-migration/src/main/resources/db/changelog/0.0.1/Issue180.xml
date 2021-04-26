@@ -20,10 +20,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="UPDATE_DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STATUS" type="VARCHAR(20)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="ENABLED" type="BOOLEAN">
                 <constraints nullable="false"/>
