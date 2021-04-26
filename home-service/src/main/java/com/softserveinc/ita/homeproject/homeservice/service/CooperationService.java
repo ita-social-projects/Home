@@ -11,7 +11,5 @@ public interface CooperationService extends QueryableService<Cooperation, Cooper
 
     CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto);
 
-    Page<CooperationDto> findAll(Integer pageNumber, Integer pageSize, Specification<Cooperation> specification);
-
     void deactivateCooperation(Long id);
 }

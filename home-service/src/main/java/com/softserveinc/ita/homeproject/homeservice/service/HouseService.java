@@ -11,8 +11,6 @@ public interface HouseService extends QueryableService<House, HouseDto> {
 
     HouseDto updateHouse(Long id, HouseDto updateHouseDto);
 
-    Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification);
-
     void deactivateById(Long coopId, Long id);
 
 }

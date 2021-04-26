@@ -11,7 +11,5 @@ public interface UserService extends QueryableService<User, UserDto> {
 
     UserDto updateUser(Long id, UserDto updateUserDto);
 
-    Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification);
-
     void deactivateUser(Long id);
 }
