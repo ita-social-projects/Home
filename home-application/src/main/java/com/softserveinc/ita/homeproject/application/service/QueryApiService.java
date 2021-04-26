@@ -103,6 +103,15 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
         return service.findAll(pageNumber, pageSize, getSpecification(uriInfo));
     }
 
+    private static String getMessage(UriInfo uriInfo) {
+        String message = "Entity with '%s' is not found";
+        MultivaluedMap<String, String> pathParams = uriInfo.getPathParameters();
+        String ids = pathParams.entrySet().stream()
+            .map(entry -> entry.getKey() + ": " + entry.getValue().get(0))
+            .collect(Collectors.joining(" and "));
+        return String.format(message, ids);
+    }
+
     /**
      * @param uriInfo - object that implements UriInfo interface
      *                  that provides access to application and request URI information
@@ -116,8 +125,7 @@ public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
         if (page.getTotalElements() == 1) {
             return page.getContent().get(0);
         } else if (page.getTotalElements() == 0) {
-            throw new NotFoundHomeException("Entity with id: " + getParameterValue("id", uriInfo)
-                .orElse("'not defined'") + " is not found");
+            throw new NotFoundHomeException(getMessage(uriInfo));
         } else {
             throw new IllegalStateException("Result of the request that require to return one element, "
                 + "contains more than one element");
