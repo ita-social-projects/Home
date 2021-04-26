@@ -2,8 +2,6 @@ package com.softserveinc.ita.homeproject.homeservice.service;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 
 public interface UserService extends QueryableService<User, UserDto> {
 
