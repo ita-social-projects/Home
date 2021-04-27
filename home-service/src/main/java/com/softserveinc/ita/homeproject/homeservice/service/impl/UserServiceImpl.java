@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User checkingUniqueEmailParameterForUpdate(Long id, UserDto userDto) {
-        User userFindById = userRepository.findById(id).filter(User::getEnabled)
+        var userFindById = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
         Optional<User> userFindByEmail = userRepository.findByEmail(userDto.getEmail());
         if (userFindByEmail.isPresent() && !userFindById.getId().equals(userFindByEmail.get().getId())) {

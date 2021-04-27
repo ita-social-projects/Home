@@ -28,7 +28,7 @@ public class CooperationContactServiceImpl extends BaseContactService implements
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        Cooperation cooperation = getCooperationById(parentEntityId);
+        var cooperation = getCooperationById(parentEntityId);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> getAllContactByCoopId = contactRepository
                 .findAllByCooperationIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));

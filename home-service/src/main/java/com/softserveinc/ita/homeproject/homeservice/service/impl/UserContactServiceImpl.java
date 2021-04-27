@@ -27,7 +27,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        User user = getUserById(parentEntityId);
+        var user = getUserById(parentEntityId);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));

@@ -33,7 +33,7 @@ public abstract class BaseContactService implements ContactService {
     @Transactional
     @Override
     public ContactDto createContact(Long parentEntityId, ContactDto createContactDto) {
-        Contact contact = mapper.convert(createContactDto, Contact.class);
+        var contact = mapper.convert(createContactDto, Contact.class);
         checkAndFillParentEntity(createContactDto, contact, parentEntityId);
         contact.setEnabled(true);
         contactRepository.save(contact);
@@ -44,7 +44,7 @@ public abstract class BaseContactService implements ContactService {
 
     @Override
     public ContactDto updateContact(Long parentEntityId, Long contactId, ContactDto updateContactDto) {
-        Contact contact = findingAndCheckingContactParentEntity(contactId, parentEntityId);
+        var contact = findingAndCheckingContactParentEntity(contactId, parentEntityId);
 
         ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
         if (existingContactType == updateContactDto.getType()) {

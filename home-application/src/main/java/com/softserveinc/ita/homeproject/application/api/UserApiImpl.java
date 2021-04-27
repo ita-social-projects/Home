@@ -16,7 +16,6 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import com.softserveinc.ita.homeproject.model.CreateContact;
@@ -26,7 +25,6 @@ import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -166,8 +164,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
-        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        ContactDto readContactDto = contactService.updateContact(userId, contactId, updateContactDto);
+        var updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        var readContactDto = contactService.updateContact(userId, contactId, updateContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

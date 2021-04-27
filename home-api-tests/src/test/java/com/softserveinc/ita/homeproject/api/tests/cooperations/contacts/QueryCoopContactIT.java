@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class QueryCoopContact {
+class QueryCoopContactIT {
 
     private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
 
