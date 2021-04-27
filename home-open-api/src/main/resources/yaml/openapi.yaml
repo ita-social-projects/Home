@@ -1780,7 +1780,7 @@ components:
           example: List of houses
           items:
             $ref: "#/components/schemas/ReadHouse"
-        contact:
+        contacts:
           type: array
           example:
             - type: "email"

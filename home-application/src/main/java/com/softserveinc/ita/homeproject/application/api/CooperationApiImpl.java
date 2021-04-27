@@ -28,6 +28,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
+import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.model.CreateContact;
@@ -56,9 +57,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Autowired
     private HouseService houseService;
 
-    @Qualifier("cooperationContactServiceImpl")
     @Autowired
-    private ContactService contactService;
+    private CooperationContactService contactService;
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override
@@ -84,9 +84,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Override
     public Response createContactsOnCooperation(Long cooperationId,
                                                 @Valid CreateContact createCooperationContact) {
-        ContactDto createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
-        ContactDto readContactDto = contactService.createContact(cooperationId, createContactDto);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+        var createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
+        var readContactDto = contactService.createContact(cooperationId, createContactDto);
+        var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
@@ -113,8 +113,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long contactId) {
-        ContactDto readContactDto = contactService.getContactById(contactId);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+        var readContactDto = contactService.getContactById(contactId);
+        var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
@@ -161,7 +161,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                String email,
                                                String main,
                                                String type) {
-        Page<ContactDto> readContact = queryApiService.getPageFromQuery(uriInfo, cooperationService);
+        Page<ContactDto> readContact = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(readContact, ReadContact.class);
     }
 
@@ -209,9 +209,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(UPDATE_COOP_CONTACT_PERMISSION)
     @Override
     public Response updateContactOnCooperation(Long cooperationId, Long contactId, @Valid UpdateContact updateContact) {
-        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        ContactDto updatedContactDto = contactService.updateContact(contactId, updateContactDto);
-        ReadContact readContact = mapper.convert(updatedContactDto, ReadContact.class);
+        var updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        var updatedContactDto = contactService.updateContact(cooperationId, contactId, updateContactDto);
+        var readContact = mapper.convert(updatedContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }

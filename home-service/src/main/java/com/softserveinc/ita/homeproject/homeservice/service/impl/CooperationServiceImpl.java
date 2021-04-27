@@ -97,8 +97,8 @@ public class CooperationServiceImpl implements CooperationService {
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
         List<Contact> contactList = new ArrayList<>();
-        contactList.addAll(contactRepository.findAllByUserIdAndType(toGet.getId(), ContactType.EMAIL));
-        contactList.addAll(contactRepository.findAllByUserIdAndType(toGet.getId(), ContactType.PHONE));
+        contactList.addAll(contactRepository.findAllByCooperationIdAndType(toGet.getId(), ContactType.EMAIL));
+        contactList.addAll(contactRepository.findAllByCooperationIdAndType(toGet.getId(), ContactType.PHONE));
         toGet.setContacts(contactList);
         return mapper.convert(toGet, CooperationDto.class);
     }

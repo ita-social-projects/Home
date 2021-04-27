@@ -1,15 +1,12 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-
-import java.util.List;
 
 public class CooperationContactQuery extends BaseQuery{
 
@@ -86,42 +83,42 @@ public class CooperationContactQuery extends BaseQuery{
             queryClass.setContactApi(contactApi);
         }
 
-        public CooperationContactQuery.Builder cooperationId(Long userId) {
+        public Builder cooperationId(Long userId) {
             queryClass.setCooperationId(userId);
             return this;
         }
 
-        public CooperationContactQuery.Builder contactId(String contactId) {
+        public Builder contactId(String contactId) {
             queryClass.setContactId(contactId);
             return this;
         }
 
-        public CooperationContactQuery.Builder phone(String phone) {
+        public Builder phone(String phone) {
             queryClass.setPhone(phone);
             return this;
         }
 
-        public CooperationContactQuery.Builder email(String email) {
+        public Builder email(String email) {
             queryClass.setEmail(email);
             return this;
         }
 
-        public CooperationContactQuery.Builder main(String main) {
+        public Builder main(String main) {
             queryClass.setMain(main);
             return this;
         }
 
-        public CooperationContactQuery.Builder type(String type) {
+        public Builder type(String type) {
             queryClass.setType(type);
             return this;
         }
 
-        public CooperationContactQuery.Builder readCooperation(ReadCooperation readCooperation) {
+        public Builder readCooperation(ReadCooperation readCooperation) {
             queryClass.setReadCooperation(readCooperation);
             return this;
         }
 
-        public CooperationContactQuery.Builder cooperationApi(CooperationApi cooperationApi) {
+        public Builder cooperationApi(CooperationApi cooperationApi) {
             queryClass.setCooperationApi(cooperationApi);
             return this;
         }

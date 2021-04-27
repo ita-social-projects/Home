@@ -83,7 +83,6 @@ public class ContactQuery extends BaseQuery{
             queryClass.setContactApi(contactApi);
         }
 
-
         public Builder userId(Long userId) {
             queryClass.setUserId(userId);
             return this;
