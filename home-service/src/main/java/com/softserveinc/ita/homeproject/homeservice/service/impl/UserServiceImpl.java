@@ -61,37 +61,38 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
-            User fromDB = checkingUniqueEmailParameterForUpdate(id, updateUserDto);
+        User fromDB = checkingUniqueEmailParameterForUpdate(id, updateUserDto);
 
-            if (updateUserDto.getFirstName() != null) {
-                fromDB.setFirstName(updateUserDto.getFirstName());
-            }
+        if (updateUserDto.getFirstName() != null) {
+            fromDB.setFirstName(updateUserDto.getFirstName());
+        }
 
-            if (updateUserDto.getLastName() != null) {
-                fromDB.setLastName(updateUserDto.getLastName());
-            }
+        if (updateUserDto.getLastName() != null) {
+            fromDB.setLastName(updateUserDto.getLastName());
+        }
 
-            if (updateUserDto.getEmail() != null) {
-                fromDB.setEmail(updateUserDto.getEmail());
-            }
+        if (updateUserDto.getEmail() != null) {
+            fromDB.setEmail(updateUserDto.getEmail());
+        }
 
-            if (updateUserDto.getPassword() != null) {
-                fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
-            }
+        if (updateUserDto.getPassword() != null) {
+            fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
+        }
 
-            fromDB.setUpdateDate(LocalDateTime.now());
-            userRepository.save(fromDB);
-            return mapper.convert(fromDB, UserDto.class);
+        fromDB.setUpdateDate(LocalDateTime.now());
+        userRepository.save(fromDB);
+        return mapper.convert(fromDB, UserDto.class);
     }
 
-    private User checkingUniqueEmailParameterForUpdate(Long id, UserDto userDto){
+    private User checkingUniqueEmailParameterForUpdate(Long id, UserDto userDto) {
         User userFindById = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
         Optional<User> userFindByEmail = userRepository.findByEmail(userDto.getEmail());
         if (userFindByEmail.isPresent() && !userFindById.getId().equals(userFindByEmail.get().getId())) {
             throw new AlreadyExistHomeException("User with email" + userDto.getEmail() + " is already exists");
-        } else
+        } else {
             return userFindById;
+        }
     }
 
     @Override
