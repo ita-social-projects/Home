@@ -2,14 +2,10 @@ package com.softserveinc.ita.homeproject.application.config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
-
-import org.modelmapper.spi.ErrorMessage;
 
 @SuppressWarnings("unchecked")
 @Provider
@@ -37,21 +33,12 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new BadRequestException(
-                    getErrorResponse("Parameter type must be one of enum constants"));
+                throw new NotFoundException("The parameter type must be one of the enumeration constants");
             }
 
             @Override
             public String toString(T value) {
                 return value.toString();
-            }
-
-            protected Response getErrorResponse(String message) {
-                return Response
-                    .status(400)
-                    .entity(new ErrorMessage(message))
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .build();
             }
         };
     }

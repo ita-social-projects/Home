@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getInvalidDataApiExeptionParser;
+import static com.softserveinc.ita.homeproject.application.exception.mapper.ExceptionMapperUtils.getInvalidDataApiExceptionParser;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -17,6 +17,6 @@ public class InvalidDataAccessApiExceptionMapper extends BaseExceptionMapper<Inv
     @Override
     protected String extractMessage(InvalidDataAccessApiUsageException exception) {
 
-        return getInvalidDataApiExeptionParser(exception);
+        return getInvalidDataApiExceptionParser(exception);
     }
 }
