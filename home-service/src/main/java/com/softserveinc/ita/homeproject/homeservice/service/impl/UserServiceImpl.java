@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -38,9 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-        if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
-        } else {
+        if (Boolean.FALSE.equals(userRepository.findByEmail(createUserDto.getEmail()).isPresent())) {
             User toCreate = mapper.convert(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
@@ -56,35 +55,43 @@ public class UserServiceImpl implements UserService {
 
             return mapper.convert(toCreate, UserDto.class);
         }
+        throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
     }
 
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
+            User fromDB = checkingUniqueEmailParameterForUpdate(id, updateUserDto);
 
-        User fromDB = userRepository.findById(id)
-            .filter(User::getEnabled)
+            if (updateUserDto.getFirstName() != null) {
+                fromDB.setFirstName(updateUserDto.getFirstName());
+            }
+
+            if (updateUserDto.getLastName() != null) {
+                fromDB.setLastName(updateUserDto.getLastName());
+            }
+
+            if (updateUserDto.getEmail() != null) {
+                fromDB.setEmail(updateUserDto.getEmail());
+            }
+
+            if (updateUserDto.getPassword() != null) {
+                fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
+            }
+
+            fromDB.setUpdateDate(LocalDateTime.now());
+            userRepository.save(fromDB);
+            return mapper.convert(fromDB, UserDto.class);
+    }
+
+    private User checkingUniqueEmailParameterForUpdate(Long id, UserDto userDto){
+        User userFindById = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
-
-        if (updateUserDto.getFirstName() != null) {
-            fromDB.setFirstName(updateUserDto.getFirstName());
-        }
-
-        if (updateUserDto.getLastName() != null) {
-            fromDB.setLastName(updateUserDto.getLastName());
-        }
-
-        if (updateUserDto.getEmail() != null) {
-            fromDB.setEmail(updateUserDto.getEmail());
-        }
-
-        if (updateUserDto.getPassword() != null) {
-            fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
-        }
-
-        fromDB.setUpdateDate(LocalDateTime.now());
-        userRepository.save(fromDB);
-        return mapper.convert(fromDB, UserDto.class);
+        Optional<User> userFindByEmail = userRepository.findByEmail(userDto.getEmail());
+        if (userFindByEmail.isPresent() && !userFindById.getId().equals(userFindByEmail.get().getId())) {
+            throw new AlreadyExistHomeException("User with email" + userDto.getEmail() + " is already exists");
+        } else
+            return userFindById;
     }
 
     @Override

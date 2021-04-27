@@ -90,4 +90,11 @@
         </insert>
     </changeSet>
 
+    <changeSet id="Issue156.004" author="likeRewca-Yura">
+        <addUniqueConstraint schemaName="public"
+                             tableName="users"
+                             constraintName="user_email_key"
+                             columnNames="email"/>
+    </changeSet>
+
 </databaseChangeLog>

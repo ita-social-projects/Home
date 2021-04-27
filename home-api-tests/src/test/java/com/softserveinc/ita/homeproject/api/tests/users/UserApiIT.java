@@ -61,7 +61,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName")
-            .email("example1@gmail.com")
+            .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .password("somePassword");
 
         ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);

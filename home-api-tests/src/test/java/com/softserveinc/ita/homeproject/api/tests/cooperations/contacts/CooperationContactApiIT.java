@@ -44,10 +44,6 @@ class CooperationContactApiIT {
         CreateContact createPhoneContact = createPhoneContact();
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
-        List<ReadContact> contacts = cooperationApi.getCooperation(cooperation.getId()).getContacts();
-
-        System.out.println(contacts);
-
         ApiResponse<ReadContact> createEmailResponse = cooperationContactApi
             .createContactsOnCooperationWithHttpInfo(cooperation.getId(), createEmailContact);
         ApiResponse<ReadContact> createPhoneResponse = cooperationContactApi
