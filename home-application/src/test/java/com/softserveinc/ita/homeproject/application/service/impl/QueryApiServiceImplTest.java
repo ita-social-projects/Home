@@ -46,7 +46,7 @@ class QueryApiServiceImplTest {
     private QueryApiServiceImpl queryApiService;
 
     @Test
-    public void getFilterMapTestWhenQueryOrPathParamsHaveTwoValues() {
+    void getFilterMapTestWhenQueryOrPathParamsHaveTwoValues() {
         when(uriInfo.getPathParameters()).thenReturn(new MultivaluedHashMap<>() {{
             put("cooperation_id", Arrays.asList("11", "11"));
             put("user_id", Arrays.asList("11", "11"));
@@ -59,7 +59,7 @@ class QueryApiServiceImplTest {
     }
 
     @Test
-    public void getFilterMapTestWhenPathAndQueryParamsHaveTheSameName() {
+    void getFilterMapTestWhenPathAndQueryParamsHaveTheSameName() {
         when(uriInfo.getPathParameters()).thenReturn(new MultivaluedHashMap<>() {{
             put("id", Collections.singletonList("1"));
         }});
@@ -70,7 +70,7 @@ class QueryApiServiceImplTest {
     }
 
     @Test
-    public void getParameterValueTest() {
+    void getParameterValueTest() {
         when(uriInfo.getPathParameters()).thenReturn(new MultivaluedHashMap<>() {{
             put("id", Collections.singletonList("1"));
             put("key2", Collections.singletonList("22"));
@@ -84,7 +84,7 @@ class QueryApiServiceImplTest {
     }
 
     @Test
-    public void getOneTestWhenPageHaveMoreThanOneElement() {
+    void getOneTestWhenPageHaveMoreThanOneElement() {
         when(uriInfo.getQueryParameters()).thenReturn(new MultivaluedHashMap<>() {{
             put("page_number", Collections.singletonList("1"));
             put("page_size", Collections.singletonList("10"));
