@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import javax.ws.rs.NotFoundException;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
@@ -33,7 +33,7 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new NotFoundException("The parameter type must be one of the enumeration constants");
+                throw new BadRequestException("The parameter type must be one of the enumeration constants");
             }
 
             @Override

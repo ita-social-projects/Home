@@ -165,6 +165,21 @@ class QueryContactIT {
     }
 
     @Test
+    void getAllContactsByTypePhone() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        List<ReadContact> queryContactsResponse = new ContactQuery
+            .Builder(contactApi)
+            .userId(expectedUser.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .type("phone")
+            .build().perform();
+
+        queryContactsResponse.forEach(contact -> assertThat(contact.getType()).isEqualTo(ContactType.PHONE));
+    }
+
+    @Test
     void getAllContactsByInvalidType() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
 

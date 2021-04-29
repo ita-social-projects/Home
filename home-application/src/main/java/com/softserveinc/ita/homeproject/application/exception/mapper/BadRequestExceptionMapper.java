@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 
 /**
  * BadRequestHomeExceptionMapper class is used to return exception
@@ -13,9 +13,14 @@ import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeExce
  * @see javax.ws.rs.ext.ExceptionMapper
  */
 @Provider
-public class BadRequestHomeExceptionMapper extends BaseHomeExceptionMapper<BadRequestHomeException> {
+public class BadRequestExceptionMapper extends BaseExceptionMapper<BadRequestException> {
     @Override
     protected Response.Status getStatus() {
         return Response.Status.BAD_REQUEST;
+    }
+
+    @Override
+    protected String extractMessage(BadRequestException exception) {
+        return exception.getMessage();
     }
 }
