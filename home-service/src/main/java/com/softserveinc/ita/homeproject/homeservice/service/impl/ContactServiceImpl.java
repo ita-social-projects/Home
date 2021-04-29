@@ -29,6 +29,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService {
 
+    private static final String NOT_FOUND_CONTACT_FORMAT = "Can't find contact with given ID:%d";
+
     private final ContactRepository contactRepository;
 
     private final UserRepository userRepository;
@@ -112,14 +114,14 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactDto getContactById(Long id) {
         Contact contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT, id)));
         return mapper.convert(contactResponse, ContactDto.class);
     }
 
     @Override
     public void deactivateContact(Long id) {
         Contact contact = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT, id)));
         contact.setEnabled(false);
         contactRepository.save(contact);
     }
