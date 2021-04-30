@@ -126,31 +126,31 @@
                  schemaName="public"
                  tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="26"/>
-        </insert>
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="27"/>
-        </insert>
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="28"/>
-        </insert>
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="29"/>
-        </insert>
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
             <column name="permission_id" value="30"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="31"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="32"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="33"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="34"/>
         </insert>
     </changeSet>
 
