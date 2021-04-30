@@ -63,9 +63,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        var createUserDto = mapper.convert(createUser, UserDto.class);
-        var readUserDto = userService.createUser(createUserDto);
-        var readUser = mapper.convert(readUserDto, ReadUser.class);
+        UserDto createUserDto = mapper.convert(createUser, UserDto.class);
+        UserDto readUserDto = userService.createUser(createUserDto);
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -80,7 +80,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        var readUserDto = userService.getUserById(id);
+        UserDto readUserDto = userService.getUserById(id);
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
@@ -97,7 +97,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String phone,
                                         String email,
                                         String main,
-                                        ContactType type) {
+                                        String type) {
 
         Page<ContactDto> contacts = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(contacts, ReadContact.class);
