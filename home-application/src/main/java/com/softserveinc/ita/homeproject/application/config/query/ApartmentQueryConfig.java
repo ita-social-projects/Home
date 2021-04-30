@@ -1,11 +1,10 @@
 package com.softserveinc.ita.homeproject.application.config.query;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
-import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ApartmentQueryConfig implements QueryConfig<Apartment> {

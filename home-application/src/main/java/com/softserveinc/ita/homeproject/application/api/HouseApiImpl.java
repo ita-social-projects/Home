@@ -1,5 +1,19 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_APARTMENT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENTS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENT_PERMISSION;
+
+import java.math.BigDecimal;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.HousesApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
@@ -11,16 +25,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.math.BigDecimal;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.*;
+
+
 
 @Provider
 @Component
@@ -61,7 +68,8 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    String sort,
                                    String filter,
                                    Long id,
-                                   @Pattern(regexp = "^(?!(0))\\d{1,4}(\\-[a-zа-я])?$") @Size(min = 1, max = 6) String apartmentNumber,
+                                   @Pattern(regexp = "^(?!(0))\\d{1,4}(\\-[a-zа-я])?$") @Size(min = 1, max = 6)
+                                               String apartmentNumber,
                                    BigDecimal apartmentArea) {
         Page<ApartmentDto> readApartment = queryApiService.getPageFromQuery(uriInfo, apartmentService);
         return buildQueryResponse(readApartment, ReadApartment.class);

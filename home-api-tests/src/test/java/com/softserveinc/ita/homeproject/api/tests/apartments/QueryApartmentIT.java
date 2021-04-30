@@ -5,7 +5,6 @@ import com.softserveinc.ita.homeproject.api.ApartmentApi;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
-import com.softserveinc.ita.homeproject.api.tests.query.HouseQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
