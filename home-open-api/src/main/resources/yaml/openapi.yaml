@@ -1164,7 +1164,7 @@ paths:
             format: int64
           example: 1
         - in: query
-          name: number
+          name: apartment_number
           schema:
             type: string
             minLength: 1
@@ -1172,7 +1172,7 @@ paths:
             pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
           example: 15
         - in: query
-          name: area
+          name: apartment_area
           schema:
             type: number
           example: 73.5
@@ -2329,6 +2329,7 @@ components:
         - processing
         - accepted
         - declined
+        - overdue
         - error
 
     InvitationType:
@@ -2487,9 +2488,11 @@ components:
             $ref: '#/components/schemas/CreateApartmentInvitation'
           example:
             - email: other1@gmail.com
-              ownership_area: 30.0
+              type: apartment
+              ownership_part: 0.3
             - email: other2@gmail.com
-              ownership_area: 42.3
+              type: apartment
+              ownership_part: 0.7
     UpdateApartment:
       required:
         - number
@@ -2513,13 +2516,13 @@ components:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
-        number:
+        apartment_number:
           type: string
           minLength: 1
           maxLength: 6
           pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
           example: 15
-        area:
+        apartment_area:
           type: number
           minimum: 10
           maximum: 1000
