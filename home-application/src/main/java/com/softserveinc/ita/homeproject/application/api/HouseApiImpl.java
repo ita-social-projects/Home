@@ -63,8 +63,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    String sort,
                                    String filter,
                                    Long id,
-                                   @Pattern(regexp = "^(?!(0))\\d{1,4}(\\-[a-zа-я])?$") @Size(min = 1, max = 6)
-                                               String apartmentNumber,
+                                   String apartmentNumber,
                                    BigDecimal apartmentArea) {
         Page<ApartmentDto> readApartment = queryApiService.getPageFromQuery(uriInfo, apartmentService);
         return buildQueryResponse(readApartment, ReadApartment.class);

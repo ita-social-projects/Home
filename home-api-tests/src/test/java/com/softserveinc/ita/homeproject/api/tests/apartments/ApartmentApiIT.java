@@ -31,7 +31,7 @@ class ApartmentApiIT {
 
 
     @Test
-    void CreateApartmentTest() throws ApiException {
+    void createApartmentTest() throws ApiException {
         CreateApartment createApartment = createApartment();
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
