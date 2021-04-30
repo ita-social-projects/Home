@@ -50,24 +50,24 @@ public class ApartmentQuery extends BaseQuery {
                         apartmentArea);
     }
 
-    public static class Builder extends BaseBuilder<ApartmentQuery, ApartmentQuery.Builder>{
+    public static class Builder extends BaseBuilder<ApartmentQuery, ApartmentQuery.Builder> {
 
-        public Builder(ApartmentApi apartmentApi){
+        public Builder(ApartmentApi apartmentApi) {
             queryClass.setApartmentApi(apartmentApi);
         }
 
 
-        public ApartmentQuery.Builder houseId(Long houseId){
+        public ApartmentQuery.Builder houseId(Long houseId) {
             queryClass.setHouseId(houseId);
             return this;
         }
 
-        public ApartmentQuery.Builder apartmentNumber(String number){
+        public ApartmentQuery.Builder apartmentNumber(String number) {
             queryClass.setApartmentNumber(number);
             return this;
         }
 
-        public ApartmentQuery.Builder apartmentArea(BigDecimal area){
+        public ApartmentQuery.Builder apartmentArea(BigDecimal area) {
             queryClass.setApartmentArea(area);
             return this;
         }

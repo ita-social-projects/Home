@@ -30,10 +30,10 @@ class QueryApartmentIT {
     @Test
     void getAllApartmentsAscSort() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(),createApartment());
-        apartmentApi.createApartment(readHouse.getId(),createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment());
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -49,10 +49,10 @@ class QueryApartmentIT {
     @Test
     void getAllApartmentsDescSort() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(),createApartment());
-        apartmentApi.createApartment(readHouse.getId(),createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment());
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -68,10 +68,10 @@ class QueryApartmentIT {
     @Test
     void getAllApartmentsFilteredByArea() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(),createApartment());
-        apartmentApi.createApartment(readHouse.getId(),createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment());
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -84,16 +84,16 @@ class QueryApartmentIT {
 
 
         queryResponse
-                .forEach(element -> assertTrue(Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 && element.getApartmentArea().compareTo(BigDecimal.valueOf(100))<0));
+                .forEach(element -> assertTrue(Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 && element.getApartmentArea().compareTo(BigDecimal.valueOf(100)) < 0));
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
     }
 
     @Test
     void getAllApartmentsByApartmentId() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(),createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
 
         Long apartmentId = Objects.requireNonNull(readApartment.getId());
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -109,9 +109,9 @@ class QueryApartmentIT {
     @Test
     void getAllApartmentByApartmentArea() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(),createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
 
         BigDecimal apartmentArea = readApartment.getApartmentArea();
         List<ReadApartment> queryResponse = new ApartmentQuery
@@ -130,9 +130,9 @@ class QueryApartmentIT {
     @Test
     void getAllApartmentsByApartmentNumber() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(),createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
 
         String apartmentNumber = readApartment.getApartmentNumber();
 

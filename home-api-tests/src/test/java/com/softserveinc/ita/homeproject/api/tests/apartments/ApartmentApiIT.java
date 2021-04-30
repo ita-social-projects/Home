@@ -108,9 +108,9 @@ class ApartmentApiIT {
     }
 
     @Test
-    void createApartmentWithInvalidAreaOwner() throws ApiException{
+    void createApartmentWithInvalidAreaOwner() throws ApiException {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         CreateApartment createApartment = createApartment().invitations(createInvalidApartmentInvitation());
 
         assertThatExceptionOfType(ApiException.class)
@@ -122,7 +122,7 @@ class ApartmentApiIT {
     @Test
     void createApartmentInvalidApartmentNumber() throws ApiException {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(),createHouse());
+        ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         CreateApartment emptyNumber = createApartment().number("");
         CreateApartment longNumber = createApartment().number("1000000000-a");
 
