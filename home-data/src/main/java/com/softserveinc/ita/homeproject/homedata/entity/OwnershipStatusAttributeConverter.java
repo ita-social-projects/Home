@@ -18,6 +18,7 @@ public class OwnershipStatusAttributeConverter  implements AttributeConverter<Ow
                 throw new IllegalArgumentException(attribute + " not supported.");
         }
     }
+
     @Override
     public OwnershipStatus convertToEntityAttribute(String dbData) {
         if (dbData == null) {

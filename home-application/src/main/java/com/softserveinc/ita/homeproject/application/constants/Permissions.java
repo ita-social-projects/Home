@@ -50,4 +50,14 @@ public final class Permissions {
 
     public static final String DEACTIVATE_HOUSE_PERMISSION = "hasAuthority('DELETE_HOUSE_PERMISSION')";
 
+    public static final String CREATE_APARTMENT_PERMISSION = "hasAuthority('CREATE_APARTMENT_PERMISSION')";
+
+    public static final String GET_APARTMENT_PERMISSION = "hasAuthority('GET_APARTMENT_PERMISSION')";
+
+    public static final String GET_APARTMENTS_PERMISSION = "hasAuthority('GET_APARTMENTS_PERMISSION')";
+
+    public static final String UPDATE_APARTMENT_PERMISSION = "hasAuthority('UPDATE_APARTMENT_PERMISSION')";
+
+    public static final String DELETE_APARTMENT_PERMISSION = "hasAuthority('DELETE_APARTMENT_PERMISSION')";
+
 }
