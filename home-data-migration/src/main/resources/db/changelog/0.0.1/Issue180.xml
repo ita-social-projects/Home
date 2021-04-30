@@ -41,9 +41,6 @@
             <column name="OWNERSHIP_PART" type="DECIMAL">
                 <constraints nullable="false"/>
             </column>
-            <column name="STATUS" type="VARCHAR(21)">
-                <constraints nullable="false"/>
-            </column>
             <column name="ENABLED" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>

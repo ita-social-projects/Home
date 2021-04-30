@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,10 +17,6 @@ import lombok.Setter;
 @Table(name = "ownerships")
 @SequenceGenerator(name = "sequence", sequenceName = "ownerships_sequence")
 public class Ownership extends BaseEntity {
-
-    @Convert(converter = OwnershipStatusAttributeConverter.class)
-    @Column(name = "status", insertable = false, updatable = false)
-    private OwnershipStatus status;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
