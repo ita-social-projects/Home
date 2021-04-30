@@ -2,9 +2,13 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USER_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
 import javax.validation.Valid;
@@ -89,6 +93,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
+    @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
     @Override
     @SuppressWarnings("unchecked")
     public Response queryContactsOnUser(Long userId,
@@ -106,6 +111,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return buildQueryResponse(contacts, ReadContact.class);
     }
 
+    @PreAuthorize(DELETE_USER_CONTACT_PERMISSION)
     @Override
     public Response deleteContactOnUser(Long userId, Long contactId) {
         contactService.deactivateContact(contactId);
@@ -139,6 +145,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return buildQueryResponse(users, ReadUser.class);
     }
 
+    @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
     public Response getContactOnUser(Long userId, Long contactId) {
         ContactDto readContactDto = contactService.getContactById(contactId);
@@ -162,6 +169,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @PreAuthorize(UPDATE_USER_CONTACT_PERMISSION)
     @Override
     public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);

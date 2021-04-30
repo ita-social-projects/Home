@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.application.constants;
 
 /**
- * Permissions interface is used to store
+ * Permissions final class is used to store
  * permissions that need to be used in Authorization.
  *
  * @author Mykyta Morar
@@ -36,11 +36,15 @@ public final class Permissions {
 
     public static final String GET_ALL_COOP_CONTACT_PERMISSION = "hasAuthority('GET_ALL_COOP_CONTACT_PERMISSION')";
 
+    public static final String GET_ALL_USER_CONTACT_PERMISSION = "hasAuthority('GET_ALL_USER_CONTACT_PERMISSION')";
+
     public static final String GET_COOP_CONTACT_PERMISSION = "hasAuthority('GET_COOP_CONTACT_PERMISSION')";
 
     public static final String GET_HOUSE_PERMISSION = "hasAuthority('GET_HOUSE_PERMISSION')";
 
     public static final String GET_HOUSES_PERMISSION = "hasAuthority('GET_HOUSES_PERMISSION')";
+
+    public static final String GET_USER_CONTACT_PERMISSION = "hasAuthority('GET_USER_CONTACT_PERMISSION')";
 
     public static final String UPDATE_NEWS_PERMISSION = "hasAuthority('UPDATE_NEWS_PERMISSION')";
 
@@ -52,9 +56,13 @@ public final class Permissions {
 
     public static final String UPDATE_COOP_CONTACT_PERMISSION = "hasAuthority('UPDATE_COOP_CONTACT_PERMISSION')";
 
+    public static final String UPDATE_USER_CONTACT_PERMISSION = "hasAuthority('UPDATE_USER_CONTACT_PERMISSION')";
+
     public static final String DELETE_NEWS_PERMISSION = "hasAuthority('DELETE_NEWS_PERMISSION')";
 
     public static final String DELETE_USER_PERMISSION = "hasAuthority('DELETE_USER_PERMISSION')";
+
+    public static final String DELETE_USER_CONTACT_PERMISSION = "hasAuthority('DELETE_USER_CONTACT_PERMISSION')";
 
     public static final String DELETE_COOPERATION_PERMISSION = "hasAuthority('DELETE_COOPERATION_PERMISSION')";
 

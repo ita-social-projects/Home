@@ -17,6 +17,8 @@ public interface ContactRepository extends PagingAndSortingRepository<Contact, L
 
     List<Contact> findAllByCooperationIdAndType(Long cooperationId, ContactType type);
 
+    List<Contact> findAllByCooperationId(Long cooperationId);
+
     Optional<Contact> findByIdAndCooperationId(Long id, Long cooperationId);
 
     Optional<Contact> findByIdAndUserId(Long id, Long userId);

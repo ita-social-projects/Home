@@ -6,7 +6,6 @@ import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -18,17 +17,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class CooperationContactServiceImpl extends BaseContactService implements CooperationContactService {
 
-    private final CooperationRepository cooperationRepository;
+    private final CooperationServiceImpl cooperationService;
 
     public CooperationContactServiceImpl(ContactRepository contactRepository,
-                                         ServiceMapper mapper, CooperationRepository cooperationRepository) {
+                                         ServiceMapper mapper,
+                                         CooperationServiceImpl cooperationService) {
         super(contactRepository, mapper);
-        this.cooperationRepository = cooperationRepository;
+        this.cooperationService = cooperationService;
     }
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        var cooperation = getCooperationById(parentEntityId);
+        var cooperation = mapper
+            .convert(cooperationService.getCooperationById(parentEntityId), Cooperation.class);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> getAllContactByCoopId = contactRepository
                 .findAllByCooperationIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));
@@ -45,17 +46,10 @@ public class CooperationContactServiceImpl extends BaseContactService implements
         createContact.setCooperation(cooperation);
     }
 
-    private Cooperation getCooperationById(Long cooperationId) {
-        return cooperationRepository.findById(cooperationId)
-            .orElseThrow(() -> new NotFoundHomeException("Cooperation with id " + cooperationId + " wasn't found"));
-    }
-
     @Override
-    protected Contact findingAndCheckingContactParentEntity(Long contactId, Long parentEntityId) {
+    protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
         return contactRepository.findByIdAndCooperationId(contactId, parentEntityId)
             .filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + contactId + " is not found"));
     }
-
-
 }

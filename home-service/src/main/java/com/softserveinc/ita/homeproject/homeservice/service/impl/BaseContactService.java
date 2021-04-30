@@ -44,7 +44,7 @@ public abstract class BaseContactService implements ContactService {
 
     @Override
     public ContactDto updateContact(Long parentEntityId, Long contactId, ContactDto updateContactDto) {
-        var contact = findingAndCheckingContactParentEntity(contactId, parentEntityId);
+        var contact = checkAndGetContactByParentId(contactId, parentEntityId);
 
         ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
         if (existingContactType == updateContactDto.getType()) {
@@ -76,7 +76,7 @@ public abstract class BaseContactService implements ContactService {
         return mapper.convert(email, EmailContactDto.class);
     }
 
-    protected abstract Contact findingAndCheckingContactParentEntity(Long contactId, Long parentEntityId);
+    protected abstract Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId);
 
     @Override
     public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification) {

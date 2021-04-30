@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
@@ -96,9 +95,7 @@ public class CooperationServiceImpl implements CooperationService {
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
         List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
         toGet.setHouses(houseList);
-        List<Contact> contactList = new ArrayList<>();
-        contactList.addAll(contactRepository.findAllByCooperationIdAndType(toGet.getId(), ContactType.EMAIL));
-        contactList.addAll(contactRepository.findAllByCooperationIdAndType(toGet.getId(), ContactType.PHONE));
+        List<Contact> contactList = new ArrayList<>(contactRepository.findAllByCooperationId(toGet.getId()));
         toGet.setContacts(contactList);
         return mapper.convert(toGet, CooperationDto.class);
     }

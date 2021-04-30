@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-        if (Boolean.FALSE.equals(userRepository.findByEmail(createUserDto.getEmail()).isPresent())) {
+        if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
             User toCreate = mapper.convert(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
             return mapper.convert(toCreate, UserDto.class);
         }
-        throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
+        throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
     @Override
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
         Optional<User> userFindByEmail = userRepository.findByEmail(userDto.getEmail());
         if (userFindByEmail.isPresent() && !userFindById.getId().equals(userFindByEmail.get().getId())) {
-            throw new AlreadyExistHomeException("User with email" + userDto.getEmail() + " is already exists");
+            throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
         } else {
             return userFindById;
         }

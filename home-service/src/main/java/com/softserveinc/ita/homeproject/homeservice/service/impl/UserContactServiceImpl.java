@@ -6,7 +6,6 @@ import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -17,17 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserContactServiceImpl extends BaseContactService implements UserContactService {
 
-    private final UserRepository userRepository;
+    private final UserServiceImpl userService;
 
     public UserContactServiceImpl(ContactRepository contactRepository,
-                                  ServiceMapper mapper, UserRepository userRepository) {
+                                  ServiceMapper mapper, UserServiceImpl userService) {
         super(contactRepository, mapper);
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        var user = getUserById(parentEntityId);
+        var user = mapper.convert(userService.getUserById(parentEntityId), User.class);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));
@@ -43,13 +42,8 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
         createContact.setUser(user);
     }
 
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("User with id " + id + " wasn't found"));
-    }
-
     @Override
-    protected Contact findingAndCheckingContactParentEntity(Long contactId, Long parentEntityId) {
+    protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
         return contactRepository.findByIdAndUserId(contactId, parentEntityId)
             .filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + contactId + " is not found"));
