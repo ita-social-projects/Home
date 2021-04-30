@@ -1,7 +1,9 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
 public enum OwnershipStatus {
+
     ACTIVE("active"),
+
     INACTIVE("inactive");
 
     private String value;
@@ -14,4 +16,5 @@ public enum OwnershipStatus {
     public String toString() {
         return String.valueOf(value);
     }
+
 }

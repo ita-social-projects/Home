@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_APARTMENT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENTS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENT_PERMISSION;
@@ -24,10 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-
-
-
 
 @Provider
 @Component
