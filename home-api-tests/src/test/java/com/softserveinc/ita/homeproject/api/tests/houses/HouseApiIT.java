@@ -14,7 +14,12 @@ import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.model.Address;
+import com.softserveinc.ita.homeproject.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.model.CreateHouse;
+import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.model.UpdateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
