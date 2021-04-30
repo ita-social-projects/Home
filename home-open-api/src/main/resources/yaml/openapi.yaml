@@ -539,7 +539,7 @@ paths:
         - in: query
           name: type
           schema:
-            $ref: '#/components/schemas/ContactType'
+            type: string
           description: Type of the Contact
       responses:
         '200':
