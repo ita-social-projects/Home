@@ -17,12 +17,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateContact;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,9 +41,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
-        ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
-        ContactDto readContactDto = contactService.createContact(userId, createContactDto);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+        var createContactDto = mapper.convert(createContact, ContactDto.class);
+        var readContactDto = contactService.createContact(userId, createContactDto);
+        var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
@@ -63,9 +58,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(CREATE_USER_PERMISSION)
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = mapper.convert(createUser, UserDto.class);
-        UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
+        var createUserDto = mapper.convert(createUser, UserDto.class);
+        var readUserDto = userService.createUser(createUserDto);
+        var readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
@@ -80,8 +75,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        UserDto readUserDto = userService.getUserById(id);
-        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
+        var readUserDto = userService.getUserById(id);
+        var readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
@@ -97,7 +92,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String phone,
                                         String email,
                                         String main,
-                                        String type) {
+                                        ContactType type) {
 
         Page<ContactDto> contacts = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(contacts, ReadContact.class);
@@ -138,8 +133,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response getContactOnUser(Long userId, Long contactId) {
-        ContactDto readContactDto = contactService.getContactById(contactId);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+        var readContactDto = contactService.getContactById(contactId);
+        var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
@@ -161,9 +156,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
-        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        ContactDto readContactDto = contactService.updateContact(contactId, updateContactDto);
-        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
+        var updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        var readContactDto = contactService.updateContact(contactId, updateContactDto);
+        var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
@@ -179,9 +174,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(UPDATE_USER_PERMISSION)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
-        UserDto updateUserDto = mapper.convert(updateUser, UserDto.class);
-        UserDto readUserDto = userService.updateUser(id, updateUserDto);
-        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
+        var updateUserDto = mapper.convert(updateUser, UserDto.class);
+        var readUserDto = userService.updateUser(id, updateUserDto);
+        var readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
