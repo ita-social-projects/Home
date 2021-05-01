@@ -6,10 +6,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 import java.math.BigDecimal;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
