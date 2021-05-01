@@ -57,14 +57,15 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @PreAuthorize(GET_APARTMENTS_PERMISSION)
     @Override
-    public Response queryApartment(@Min(1L) Long houseId,
-                                   @Min(1) Integer pageNumber,
-                                   @Min(1) @Max(10) Integer pageSize,
+    public Response queryApartment(Long houseId,
+                                   Integer pageNumber,
+                                   Integer pageSize,
                                    String sort,
                                    String filter,
                                    Long id,
                                    String apartmentNumber,
                                    BigDecimal apartmentArea) {
+
         Page<ApartmentDto> readApartment = queryApiService.getPageFromQuery(uriInfo, apartmentService);
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
