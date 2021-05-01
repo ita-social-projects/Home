@@ -1162,7 +1162,6 @@ paths:
           schema:
             type: integer
             format: int64
-          example: 1
         - in: query
           name: apartment_number
           schema:
@@ -1170,12 +1169,10 @@ paths:
             minLength: 1
             maxLength: 6
             pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
-          example: 15
         - in: query
           name: apartment_area
           schema:
             type: number
-          example: 73.5
       responses:
         '200':
           description: Success
