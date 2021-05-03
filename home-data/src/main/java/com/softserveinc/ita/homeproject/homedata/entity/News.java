@@ -1,21 +1,22 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Column;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@SequenceGenerator(name = "sequence", sequenceName = "news_sequence")
 public class News extends BaseEntity {
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
-    
+
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
@@ -34,4 +35,6 @@ public class News extends BaseEntity {
     @Column(name = "source")
     private String source;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
 }

@@ -12,23 +12,12 @@ It includes next modules:
 - Volunteer module to help people with disabilities 
 - Parking module
 
-
-**Badges will go here**
-
-- heroku deploy
-- coverage
-- issues (waffle.io maybe)
-- devDependencies
-- license
-- etc.
-
-[![Heroku Deploy](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)](http://heroku-badge.herokuapp.com/?app=home-project-academy&style=flat&svg=1&root=api/0/apidocs/index.html)
-[![Coverage Status](https://img.shields.io/gitlab/coverage/ita-social-projects/Home/master?style=flat-square)](https://coveralls.io)
+[![Heroku Deploy](https://img.shields.io/website?down_color=red&down_message=heroku%20down&up_color=green&up_message=heroku%20up&url=https%3A%2F%2Fhome-project-academy.herokuapp.com%2Fapi%2F0%2Fapidocs%2Findex.html)](https://home-project-academy.herokuapp.com/api/0/apidocs/index.html)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ita-social-projects-home&metric=alert_status)](https://sonarcloud.io/dashboard?id=ita-social-projects-home)
+[![Coverage Status](https://img.shields.io/sonar/coverage/ita-social-projects-home?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/component_measures?id=ita-social-projects-home&metric=coverage&view=treemap)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/pulls)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-
-- For more on these wonderful  badges, refer to <a href="https://shields.io/" target="_blank">shields.io</a>.
 
 ---
 
@@ -84,7 +73,7 @@ About it you can read in `hom-dev` package.
 ---
 
 ## Documentation
-- You can find OpenApi specification for the project [here](https://home-project-academy.herokuapp.com/api/0/apidoc.html)
+- You can find OpenApi specification for the project [here](https://home-project-academy.herokuapp.com/api/0/apidocs/index.html)
 
 ---
 
@@ -92,7 +81,7 @@ About it you can read in `hom-dev` package.
 
 Our images on Docker Hub
 
-    `https://hub.docker.com/u/homeacademy`
+    https://hub.docker.com/u/homeacademy
 
 ### Git flow
 > To get started...

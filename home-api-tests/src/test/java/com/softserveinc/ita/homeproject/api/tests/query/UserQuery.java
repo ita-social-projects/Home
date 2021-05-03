@@ -1,16 +1,22 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 
-import java.util.List;
-
 public class UserQuery extends BaseQuery {
     private String email;
+
     private String firstName;
+
     private String lastName;
-    private String contact;
+
+    private String contactEmail;
+
+    private String contactPhone;
+
     private UserApi userApi;
 
     public void setEmail(String email) {
@@ -25,8 +31,12 @@ public class UserQuery extends BaseQuery {
         this.lastName = lastName;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     public void setUserApi(UserApi userApi) {
@@ -35,21 +45,22 @@ public class UserQuery extends BaseQuery {
 
     public List<ReadUser> perfom() throws ApiException {
         return userApi
-                .getAllUsers(this.getPageNumber(),
-                        this.getPageSize(),
-                        this.getSort(),
-                        this.getFilter(),
-                        this.getId(),
-                        email,
-                        firstName,
-                        lastName,
-                        contact);
+            .getAllUsers(this.getPageNumber(),
+                this.getPageSize(),
+                this.getSort(),
+                this.getFilter(),
+                this.getId(),
+                email,
+                firstName,
+                lastName,
+                contactPhone,
+                contactEmail);
     }
 
     public static class Builder extends BaseBuilder<UserQuery, Builder> {
 
         public Builder(UserApi userApi) {
-           queryClass.setUserApi(userApi);
+            queryClass.setUserApi(userApi);
         }
 
         public Builder email(String email) {
@@ -67,8 +78,13 @@ public class UserQuery extends BaseQuery {
             return this;
         }
 
-        public Builder contact(String contact) {
-            queryClass.setContact(contact);
+        public Builder contactEmail(String contactEmail) {
+            queryClass.setContactEmail(contactEmail);
+            return this;
+        }
+
+        public Builder contactPhone(String contactPhone) {
+            queryClass.setContactPhone(contactPhone);
             return this;
         }
 

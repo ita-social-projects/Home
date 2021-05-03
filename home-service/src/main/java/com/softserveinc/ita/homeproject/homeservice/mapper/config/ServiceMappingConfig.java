@@ -8,7 +8,7 @@ public interface ServiceMappingConfig<S, D> {
 
     @SuppressWarnings("unchecked cast")
     default Class<S> getSourceType() {
-        return (Class<S>) getResolvedClasses() [0];
+        return (Class<S>) getResolvedClasses()[0];
     }
 
     @SuppressWarnings("unchecked cast")
@@ -17,7 +17,8 @@ public interface ServiceMappingConfig<S, D> {
     }
 
     private Class<?>[] getResolvedClasses() {
-        Class<?>[] typeArguments = GenericTypeResolver.resolveTypeArguments(this.getClass(), ServiceMappingConfig.class);
+        Class<?>[] typeArguments =
+            GenericTypeResolver.resolveTypeArguments(this.getClass(), ServiceMappingConfig.class);
         final var expectedTypeArgumentsSize = 2;
         if (typeArguments == null || typeArguments.length != expectedTypeArgumentsSize) {
             throw new IllegalStateException("Something went wrong with resolving types. Try to provide it explicitly.");

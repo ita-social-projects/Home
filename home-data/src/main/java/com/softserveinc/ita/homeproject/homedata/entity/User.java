@@ -1,23 +1,27 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import lombok.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+@SequenceGenerator(name = "sequence", sequenceName = "users_sequence")
+public class User extends BaseEntity {
 
     @Column(name = "first_name")
     private String firstName;
@@ -49,13 +53,13 @@ public class User extends BaseEntity{
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    @Column(name = "contacts")
-    private String contacts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Contact> contacts;
 
     @ManyToMany
     @JoinTable(name = "user_cooperation",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 

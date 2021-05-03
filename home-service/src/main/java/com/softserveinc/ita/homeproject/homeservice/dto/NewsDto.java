@@ -1,11 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class NewsDto extends BaseDto {
 
     private String title;

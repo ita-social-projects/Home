@@ -1,13 +1,17 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import cz.jirutka.rsql.parser.RSQLParserException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 public final class ExceptionMapperUtils {
+
+    private ExceptionMapperUtils() {
+
+    }
 
     public static String getBadRequestExceptionMessageParser(RSQLParserException exception) {
         String message = null;
