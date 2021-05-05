@@ -2,12 +2,9 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -29,8 +26,6 @@ public class CooperationServiceImpl implements CooperationService {
 
     private final ServiceMapper mapper;
 
-    private final HouseRepository houseRepository;
-
     @Transactional
     @Override
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
@@ -50,8 +45,8 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
         Cooperation fromDb = cooperationRepository.findById(id)
-                .filter(Cooperation::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
+            .filter(Cooperation::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
 
         if (updateCooperationDto.getName() != null) {
             fromDb.setName(updateCooperationDto.getName());
@@ -78,15 +73,6 @@ public class CooperationServiceImpl implements CooperationService {
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
-    }
-
-    @Override
-    public CooperationDto getCooperationById(Long id) {
-        Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
-        List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
-        toGet.setHouses(houseList);
-        return mapper.convert(toGet, CooperationDto.class);
     }
 
     @Override

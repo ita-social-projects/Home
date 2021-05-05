@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.service.impl;
 
 import javax.ws.rs.core.UriInfo;
 
+import com.softserveinc.ita.homeproject.application.service.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.application.service.QueryApiService;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class QueryApiServiceImpl<T extends BaseEntity, D extends BaseDto> implements QueryApiService<T, D> {
-    private final EntitySpecificationServiceImpl<T> specificationService;
+    private final EntitySpecificationService<T> specificationService;
 
     @Override
     public Specification<T> getSpecification(UriInfo uriInfo) {

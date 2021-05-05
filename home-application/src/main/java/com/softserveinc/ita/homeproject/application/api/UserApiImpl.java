@@ -80,7 +80,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        UserDto readUserDto = userService.getUserById(id);
+        UserDto readUserDto = (UserDto) queryApiService.getOne(uriInfo, userService);
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
@@ -138,7 +138,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @Override
     public Response getContactOnUser(Long userId, Long contactId) {
-        ContactDto readContactDto = contactService.getContactById(contactId);
+        ContactDto readContactDto = (ContactDto) queryApiService.getOne(uriInfo, contactService);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

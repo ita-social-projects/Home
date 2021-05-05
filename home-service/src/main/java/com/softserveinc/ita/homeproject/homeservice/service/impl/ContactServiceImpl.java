@@ -110,13 +110,6 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public ContactDto getContactById(Long id) {
-        Contact contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
-        return mapper.convert(contactResponse, ContactDto.class);
-    }
-
-    @Override
     public void deactivateContact(Long id) {
         Contact contact = contactRepository.findById(id).filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
