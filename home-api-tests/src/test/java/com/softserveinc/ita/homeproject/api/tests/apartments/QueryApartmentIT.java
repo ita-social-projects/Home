@@ -73,7 +73,6 @@ class QueryApartmentIT {
         apartmentApi.createApartment(readHouse.getId(), createApartment());
         apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
 
-
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
                 .houseId(readHouse.getId())
                 .pageNumber(1)
@@ -81,7 +80,6 @@ class QueryApartmentIT {
                 .sort("id,asc")
                 .filter("apartmentArea=bt=(60,100)")
                 .build().perform();
-
 
         queryResponse
                 .forEach(element -> assertTrue(Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 && element.getApartmentArea().compareTo(BigDecimal.valueOf(100)) < 0));
@@ -192,25 +190,7 @@ class QueryApartmentIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .address(createAddress())
-                .houses(createHouseList());
-    }
-
-    private List<CreateHouse> createHouseList() {
-        List<CreateHouse> createHouses = new ArrayList<>();
-        createHouses.add(new CreateHouse()
-                .quantityFlat(96)
-                .houseArea(BigDecimal.valueOf(4348.8))
-                .adjoiningArea(400)
-                .address(createAddress()));
-
-        createHouses.add(new CreateHouse()
-                .quantityFlat(150)
-                .houseArea(BigDecimal.valueOf(7260))
-                .adjoiningArea(600)
-                .address(createAddress()));
-
-        return createHouses;
+                .address(createAddress());
     }
 
     private Address createAddress() {

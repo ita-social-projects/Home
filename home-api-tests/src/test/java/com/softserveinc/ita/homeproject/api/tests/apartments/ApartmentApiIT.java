@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -44,6 +46,19 @@ class ApartmentApiIT {
     }
 
     @Test
+    void createApartmentWithNonExistentHouse() throws ApiException{
+        CreateApartment createApartment = createApartment();
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .createApartmentWithHttpInfo(wrongId, createApartment))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Can't find house with given ID: " + wrongId);
+    }
+
+    @Test
     void getApartmentTest() throws ApiException {
         CreateApartment createApartment = createApartment();
 
@@ -57,55 +72,35 @@ class ApartmentApiIT {
         assertApartment(createApartment, response.getData());
     }
 
-    private void assertApartment(CreateApartment expected, ReadApartment actual) {
-        assertNotNull(expected);
-        assertNotNull(actual);
-        assertEquals(expected.getArea(), actual.getApartmentArea());
-        assertEquals(expected.getNumber(), actual.getApartmentNumber());
+    @Test
+    void getNonExistentApartment() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        Long wrongId = 10000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .getApartmentWithHttpInfo(expectedHouse.getId(), wrongId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Can't find apartment with given ID: " + wrongId);
     }
 
-    private CreateHouse createHouse() {
-        return new CreateHouse()
-                .adjoiningArea(500)
-                .houseArea(BigDecimal.valueOf(500.0))
-                .quantityFlat(50)
-                .address(createAddress());
-    }
+    @Test
+    void getApartmentWithNonExistentHouse() throws ApiException {
+        CreateApartment createApartment = createApartment();
 
-    private CreateCooperation createCooperation() {
-        return new CreateCooperation()
-                .name("newCooperationTest")
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
-                .address(createAddress())
-                .houses(createHouseList());
-    }
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment expectedApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-    private List<CreateHouse> createHouseList() {
-        List<CreateHouse> createHouses = new ArrayList<>();
-        createHouses.add(new CreateHouse()
-                .quantityFlat(96)
-                .houseArea(BigDecimal.valueOf(4348.8))
-                .adjoiningArea(400)
-                .address(createAddress()));
+        Long wrongId = 10000000L;
 
-        createHouses.add(new CreateHouse()
-                .quantityFlat(150)
-                .houseArea(BigDecimal.valueOf(7260))
-                .adjoiningArea(600)
-                .address(createAddress()));
-
-        return createHouses;
-    }
-
-    private Address createAddress() {
-        return new Address().city("Dnepr")
-                .district("District")
-                .houseBlock("block")
-                .houseNumber("number")
-                .region("Dnipro")
-                .street("street")
-                .zipCode("zipCode");
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .getApartmentWithHttpInfo(wrongId, expectedApartment.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Can't find house with given ID: " + wrongId);
     }
 
     @Test
@@ -137,6 +132,32 @@ class ApartmentApiIT {
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `number` is invalid - must meet the rule.")
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
+    }
+
+    private CreateCooperation createCooperation() {
+        return new CreateCooperation()
+                .name("newCooperationTest")
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .address(createAddress());
+    }
+
+    private CreateHouse createHouse() {
+        return new CreateHouse()
+                .adjoiningArea(500)
+                .houseArea(BigDecimal.valueOf(500.0))
+                .quantityFlat(50)
+                .address(createAddress());
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
     }
 
     private CreateApartment createApartment() {
@@ -174,5 +195,12 @@ class ApartmentApiIT {
                 .type(InvitationType.APARTMENT));
 
         return createInvitations;
+    }
+
+    private void assertApartment(CreateApartment expected, ReadApartment actual) {
+        assertNotNull(expected);
+        assertNotNull(actual);
+        assertEquals(expected.getArea(), actual.getApartmentArea());
+        assertEquals(expected.getNumber(), actual.getApartmentNumber());
     }
 }

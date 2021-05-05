@@ -73,7 +73,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .orElseThrow(() ->
                         new NotFoundHomeException(String.format("Can't find apartment with given ID: %d", id)));
         if (!toGet.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format("Can't find apartment in house with given houseID: %d",
+            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
                     houseId));
         }
         return mapper.convert(toGet, ApartmentDto.class);
