@@ -61,7 +61,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName")
-            .email("example1@gmail.com")
+            .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .password("somePassword");
 
         ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
@@ -97,6 +97,13 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser))
             .matches(exception -> exception.getCode() == Response.Status.UNAUTHORIZED.getStatusCode());
+    }
+
+    @Test
+    void createUserWithAlreadyExistEmail() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(this::createUserWithExistEmail)
+            .withMessageContaining("User with email ").withMessageContaining(" is already exists");
     }
 
     @Test
@@ -226,6 +233,13 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> userApi.getUserWithHttpInfo(null))
             .withMessageContaining("Missing the required parameter 'id' when calling getUser");
+    }
+
+    @Test
+    void updateUserWithAlreadyExistEmail() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(this::updateUserWithExistEmail)
+            .withMessageContaining("User with email ").withMessageContaining(" is already exists");
     }
 
     @Test
@@ -396,6 +410,52 @@ class UserApiIT {
             .password("password")
             .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .contacts(createContactList());
+    }
+
+    private ApiResponse<ReadUser> createUserWithExistEmail() throws ApiException {
+        String email = RandomStringUtils.randomAlphabetic(5).concat("@example.com");
+
+        userApi.createUser(new CreateUser()
+            .firstName("firstName")
+            .lastName("lastName")
+            .password("password")
+            .email(email)
+            .contacts(createContactList()));
+
+        CreateUser userWithExistEmail = new CreateUser()
+            .firstName("firstName")
+            .lastName("lastName")
+            .password("password")
+            .email(email)
+            .contacts(createContactList());
+
+        return userApi.createUserWithHttpInfo(userWithExistEmail);
+    }
+
+    private ApiResponse<ReadUser> updateUserWithExistEmail() throws ApiException {
+        String email = RandomStringUtils.randomAlphabetic(5).concat("@example.com");
+
+        ReadUser savedUser = userApi.createUser(new CreateUser()
+            .firstName("firstName")
+            .lastName("lastName")
+            .password("password")
+            .email((RandomStringUtils.randomAlphabetic(5).concat("@example.com")))
+            .contacts(createContactList()));
+
+        userApi.createUser(new CreateUser()
+            .firstName("firstName")
+            .lastName("lastName")
+            .password("password")
+            .email(email)
+            .contacts(createContactList()));
+
+        UpdateUser updateUser = new UpdateUser()
+            .firstName("updatedFirstName")
+            .lastName("updatedLastName")
+            .email(email)
+            .password("somePassword");
+
+        return userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

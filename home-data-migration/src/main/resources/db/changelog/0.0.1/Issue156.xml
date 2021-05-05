@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue156.001" author="likeRewca-Yura">
+        <modifyDataType
+                tableName="permissions"
+                columnName="name"
+                newDataType="VARCHAR(40)"/>
+    </changeSet>
+
+    <changeSet id="Issue156.002" author="likeRewca-Yura">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="20"/>
+            <column name="name" value="CREATE_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="21"/>
+            <column name="name" value="CREATE_COOP_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="22"/>
+            <column name="name" value="GET_COOP_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="23"/>
+            <column name="name" value="GET_ALL_COOP_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="24"/>
+            <column name="name" value="DELETE_COOP_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="25"/>
+            <column name="name" value="UPDATE_COOP_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="26"/>
+            <column name="name" value="GET_ALL_USER_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="27"/>
+            <column name="name" value="GET_USER_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="28"/>
+            <column name="name" value="UPDATE_USER_CONTACT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="29"/>
+            <column name="name" value="DELETE_USER_CONTACT_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue156.003" author="likeRewca-Yura">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="20"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="21"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="22"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="23"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="24"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="25"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="26"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="27"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="28"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="29"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue156.004" author="likeRewca-Yura">
+        <addUniqueConstraint schemaName="public"
+                             tableName="users"
+                             constraintName="user_email_key"
+                             columnNames="email"/>
+    </changeSet>
+
+</databaseChangeLog>

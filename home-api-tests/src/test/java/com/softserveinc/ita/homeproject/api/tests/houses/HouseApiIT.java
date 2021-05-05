@@ -15,12 +15,7 @@ import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -231,7 +226,8 @@ class HouseApiIT {
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
             .address(createAddress())
-            .houses(createHouseList());
+            .houses(createHouseList())
+            .contacts(createContactList());
     }
 
     private List<CreateHouse> createHouseList() {
@@ -249,6 +245,20 @@ class HouseApiIT {
             .address(createAddress()));
 
         return createHouses;
+    }
+
+    private List<CreateContact> createContactList() {
+        List<CreateContact> createContact = new ArrayList<>();
+        createContact.add(new CreateEmailContact()
+            .email("primaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(true));
+
+        createContact.add(new CreateEmailContact()
+            .email("secondaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(false));
+        return createContact;
     }
 
     private Address createAddress() {

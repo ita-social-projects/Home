@@ -5,9 +5,9 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 
 public interface ContactService extends QueryableService<Contact, ContactDto> {
 
-    ContactDto createContact(Long userId, ContactDto createContactDto);
+    ContactDto createContact(Long parentEntityId, ContactDto createContactDto);
 
-    ContactDto updateContact(Long id, ContactDto updateContactDto);
+    ContactDto updateContact(Long parentEntityId, Long contactId, ContactDto updateContactDto);
 
     void deactivateContact(Long id);
 }
