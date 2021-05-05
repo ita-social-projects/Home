@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
 import java.time.LocalDateTime;
+
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.Role;
 
 import lombok.*;
@@ -17,6 +19,5 @@ public class InvitationDto extends BaseDto {
     private boolean status;
     private LocalDateTime sentDateTime;
     private Role role;
-    //TODO: To complete when Cooperation entity is done
-//    private Cooperation cooperation;
+    private Cooperation cooperation;
 }
