@@ -158,7 +158,7 @@ class QueryContactIT {
             .userId(expectedUser.getId())
             .pageNumber(1)
             .pageSize(10)
-            .type("email")
+            .type("EMAIL")
             .build().perform();
 
         queryContactsResponse.forEach(contact -> assertThat(contact.getType()).isEqualTo(ContactType.EMAIL));

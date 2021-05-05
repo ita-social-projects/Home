@@ -237,7 +237,7 @@ class NewsApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.getNewsWithHttpInfo(wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find news with given ID: " + wrongId);
+            .withMessageContaining("Entity with 'id: " + wrongId + "' is not found");
     }
 
     @Test
