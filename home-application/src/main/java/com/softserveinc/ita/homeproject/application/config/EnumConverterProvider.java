@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.config;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
@@ -33,7 +34,8 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new BadRequestException("The parameter type must be one of the enumeration constants");
+                throw new BadRequestException(String.format("The parameter type must be one of the values: %s",
+                    Arrays.toString(Arrays.stream(constants).toArray())));
             }
 
             @Override
