@@ -16,6 +16,8 @@ public class CooperationDto extends BaseDto {
 
     private List<HouseDto> houses;
 
+    private List<ContactDto> contacts;
+
     private String usreo;
 
     private String iban;

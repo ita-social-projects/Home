@@ -78,17 +78,6 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public HouseDto getHouseById(Long coopId, Long id) {
-        House toGet = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
-        if (!toGet.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
-        }
-        return mapper.convert(toGet, HouseDto.class);
-    }
-
-
-    @Override
     public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));

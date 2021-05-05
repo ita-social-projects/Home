@@ -38,9 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-        if (userRepository.findByEmail(createUserDto.getEmail()).isPresent()) {
-            throw new AlreadyExistHomeException("User with email" + createUserDto.getEmail() + " is already exists");
-        } else {
+        if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
             User toCreate = mapper.convert(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
@@ -56,15 +54,16 @@ public class UserServiceImpl implements UserService {
 
             return mapper.convert(toCreate, UserDto.class);
         }
+        throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
-
-        User fromDB = userRepository.findById(id)
-            .filter(User::getEnabled)
+        User fromDB = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+
+        validateEmailUniques(fromDB, updateUserDto);
 
         if (updateUserDto.getFirstName() != null) {
             fromDB.setFirstName(updateUserDto.getFirstName());
@@ -87,6 +86,22 @@ public class UserServiceImpl implements UserService {
         return mapper.convert(fromDB, UserDto.class);
     }
 
+    private void validateEmailUniques(User user, UserDto userDto) {
+        userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
+            .ifPresent(userByEmail -> {
+                if (!user.getId().equals(userByEmail.getId())) {
+                    throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
+                }
+            });
+    }
+
+    @Transactional
+    public UserDto getUserById(Long id) {
+        User toGet = userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+        return mapper.convert(toGet, UserDto.class);
+    }
+
     @Override
     @Transactional
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
@@ -94,14 +109,6 @@ public class UserServiceImpl implements UserService {
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return userRepository.findAll(userSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(user -> mapper.convert(user, UserDto.class));
-    }
-
-    @Override
-    @Transactional
-    public UserDto getUserById(Long id) {
-        User toGet = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
-        return mapper.convert(toGet, UserDto.class);
     }
 
     @Override

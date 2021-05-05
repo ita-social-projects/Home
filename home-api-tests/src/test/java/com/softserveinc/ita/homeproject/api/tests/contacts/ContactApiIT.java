@@ -187,7 +187,8 @@ class ContactApiIT {
             .isThrownBy(() -> contactApi
                 .getContactOnUserWithHttpInfo(expectedUser.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID:" + wrongId);
+            .withMessageContaining(
+                "Entity with 'user_id: " + expectedUser.getId() + " and id: " + wrongId + "' is not found");
     }
 
     @Test
@@ -198,7 +199,7 @@ class ContactApiIT {
             .isThrownBy(() -> contactApi
                 .getContactOnUserWithHttpInfo(expectedUser.getId(), null))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining("Missing the required parameter 'contactId' when calling getContactOnUser");
+            .withMessageContaining("Missing the required parameter 'id' when calling getContactOnUser");
     }
 
     @Test
@@ -414,7 +415,7 @@ class ContactApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> contactApi
                 .deleteContactOnUserWithHttpInfo(expectedUser.getId(), null))
-            .withMessageContaining("Missing the required parameter 'contactId' when calling deleteContactOnUser");
+            .withMessageContaining("Missing the required parameter 'id' when calling deleteContactOnUser");
     }
 
     @Test

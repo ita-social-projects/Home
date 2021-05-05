@@ -128,7 +128,7 @@ class QueryCooperationIT {
             .pageNumber(1)
             .pageSize(10)
             .sort("id,asc")
-            .usreo(expected.getIban())
+            .iban(expected.getIban())
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getIban(), expected.getIban()));

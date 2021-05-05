@@ -80,14 +80,6 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsDto getById(Long id) {
-        News newsResponse = newsRepository.findById(id).filter(News::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
-
-        return mapper.convert(newsResponse, NewsDto.class);
-    }
-
-    @Override
     public void deactivateNews(Long id) {
         News toDelete = newsRepository.findById(id).filter(News::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
