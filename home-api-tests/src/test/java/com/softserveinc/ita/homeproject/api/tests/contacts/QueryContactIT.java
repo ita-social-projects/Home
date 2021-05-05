@@ -210,6 +210,21 @@ class QueryContactIT {
             .withMessageContaining("The query argument for search is empty");
     }
 
+    @Test
+    void getAllContactsByNullType() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(java.lang.IllegalArgumentException.class)
+            .isThrownBy(() -> new ContactQuery
+                .Builder(contactApi)
+                .userId(expectedUser.getId())
+                .pageNumber(1)
+                .pageSize(10)
+                .type(null)
+                .build().perform())
+            .withMessageContaining("Unexpected value 'null'");
+    }
+
     private CreateContact createEmailContact() {
         return new CreateEmailContact()
             .email("newEmailContact@example.com")

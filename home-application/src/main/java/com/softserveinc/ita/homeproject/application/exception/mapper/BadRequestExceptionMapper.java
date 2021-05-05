@@ -6,12 +6,10 @@ import javax.ws.rs.ext.Provider;
 
 
 /**
- * BadRequestHomeExceptionMapper class is used to return exception
+ * BadRequestExceptionMapper class is used to return exception
  * response with HTTP status code, when a request not match API requirements.
- *
- * @author Oleksii Zinkevych
- * @see javax.ws.rs.ext.ExceptionMapper
  */
+
 @Provider
 public class BadRequestExceptionMapper extends BaseExceptionMapper<BadRequestException> {
     @Override
