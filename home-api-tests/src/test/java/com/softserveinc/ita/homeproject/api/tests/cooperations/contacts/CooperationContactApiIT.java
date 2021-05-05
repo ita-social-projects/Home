@@ -45,9 +45,9 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ApiResponse<ReadContact> createEmailResponse = cooperationContactApi
-            .createContactsOnCooperationWithHttpInfo(cooperation.getId(), createEmailContact);
+            .createContactOnCooperationWithHttpInfo(cooperation.getId(), createEmailContact);
         ApiResponse<ReadContact> createPhoneResponse = cooperationContactApi
-            .createContactsOnCooperationWithHttpInfo(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperationWithHttpInfo(cooperation.getId(), createPhoneContact);
 
         assertEquals(Response.Status.CREATED.getStatusCode(), createEmailResponse.getStatusCode());
         assertEquals(Response.Status.CREATED.getStatusCode(), createPhoneResponse.getStatusCode());
@@ -60,7 +60,7 @@ class CooperationContactApiIT {
         CreateContact createEmailContact = createEmailContact();
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact);
+            .createContactOnCooperation(cooperation.getId(), createEmailContact);
 
         ApiResponse<ReadContact> getEmailResponse = cooperationContactApi
             .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedEmailContact.getId());
@@ -74,7 +74,7 @@ class CooperationContactApiIT {
         CreateContact createPhoneContact = createPhoneContact();
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact);
 
         ApiResponse<ReadContact> getEmailResponse = cooperationContactApi
             .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedEmailContact.getId());
@@ -120,7 +120,7 @@ class CooperationContactApiIT {
         CreateContact createEmailContact = createEmailContact();
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact);
+            .createContactOnCooperation(cooperation.getId(), createEmailContact);
 
         UpdateContact updateEmailContact = new UpdateEmailContact()
             .email("updatedEmailContact@example.com")
@@ -139,7 +139,7 @@ class CooperationContactApiIT {
         CreateContact createPhoneContact = createPhoneContact();
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact);
 
         UpdateContact updatePhoneContact = new UpdatePhoneContact()
             .phone("+380567456595")
@@ -159,7 +159,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact);
+            .createContactOnCooperation(cooperation.getId(), createEmailContact);
 
         UpdateContact updateEmailContact = new UpdateEmailContact()
             .email(null)
@@ -179,7 +179,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedPhoneContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact);
 
         UpdateContact updatePhoneContact = new UpdatePhoneContact()
             .phone(null)
@@ -198,7 +198,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact);
+            .createContactOnCooperation(cooperation.getId(), createEmailContact);
 
         UpdateContact updateEmailContact = new UpdateEmailContact()
             .email("")
@@ -218,7 +218,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedPhoneContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact);
 
         UpdateContact updatePhoneContact = new UpdatePhoneContact()
             .phone("")
@@ -238,7 +238,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact);
+            .createContactOnCooperation(cooperation.getId(), createEmailContact);
 
         UpdateContact updateEmailContact = new UpdateEmailContact()
             .email("this.email.is.not.valid.for.this.example.write." +
@@ -259,7 +259,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedPhoneContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact);
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact);
 
         UpdateContact updatePhoneContact = new UpdatePhoneContact()
             .phone("+380632121212133")
@@ -279,7 +279,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedEmailContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createEmailContact());
+            .createContactOnCooperation(cooperation.getId(), createEmailContact());
 
         ApiResponse<Void> removeEmailResponse = cooperationContactApi
             .deleteContactOnCooperationWithHttpInfo(cooperation.getId(), savedEmailContact.getId());
@@ -296,7 +296,7 @@ class CooperationContactApiIT {
         ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
 
         ReadContact savedPhoneContact = cooperationContactApi
-            .createContactsOnCooperation(cooperation.getId(), createPhoneContact());
+            .createContactOnCooperation(cooperation.getId(), createPhoneContact());
 
         ApiResponse<Void> removeEmailResponse = cooperationContactApi
             .deleteContactOnCooperationWithHttpInfo(cooperation.getId(), savedPhoneContact.getId());

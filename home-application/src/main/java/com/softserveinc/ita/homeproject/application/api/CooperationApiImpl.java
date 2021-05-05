@@ -80,7 +80,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(CREATE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response createContactsOnCooperation(Long cooperationId,
+    public Response createContactOnCooperation(Long cooperationId,
                                                 @Valid CreateContact createCooperationContact) {
         var createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
         var readContactDto = contactService.createContact(cooperationId, createContactDto);

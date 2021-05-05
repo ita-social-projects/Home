@@ -1113,7 +1113,7 @@ paths:
         - cooperation contact
       summary: Create new Contact for the Cooperation
       description: The endpoint creates Contacts for the specified Cooperation ID
-      operationId: createContactsOnCooperation
+      operationId: createContactOnCooperation
       parameters:
         - name: "cooperation_id"
           in: "path"

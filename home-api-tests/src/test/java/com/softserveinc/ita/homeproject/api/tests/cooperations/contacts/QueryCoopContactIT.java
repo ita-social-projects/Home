@@ -78,7 +78,7 @@ class QueryCoopContactIT {
     void getAllContactsById() throws ApiException {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
         ReadContact savedContact = cooperationContactApi
-            .createContactsOnCooperation(expectedCooperation.getId(), createEmailContact());
+            .createContactOnCooperation(expectedCooperation.getId(), createEmailContact());
 
         List<ReadContact> queryContactsResponse = new CooperationContactQuery
             .Builder(cooperationContactApi)
@@ -96,7 +96,7 @@ class QueryCoopContactIT {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPhoneContact savedContact =
             (ReadPhoneContact) cooperationContactApi
-                .createContactsOnCooperation(expectedCooperation.getId(), createPhoneContact());
+                .createContactOnCooperation(expectedCooperation.getId(), createPhoneContact());
 
         List<ReadContact> queryContactsResponse = new CooperationContactQuery
             .Builder(cooperationContactApi)
@@ -114,7 +114,7 @@ class QueryCoopContactIT {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
         ReadEmailContact savedContact =
             (ReadEmailContact) cooperationContactApi
-                .createContactsOnCooperation(expectedCooperation.getId(), createEmailContact());
+                .createContactOnCooperation(expectedCooperation.getId(), createEmailContact());
 
         List<ReadContact> queryContactsResponse = new CooperationContactQuery
             .Builder(cooperationContactApi)

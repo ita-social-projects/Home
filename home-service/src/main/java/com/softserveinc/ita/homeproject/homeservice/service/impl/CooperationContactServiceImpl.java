@@ -48,8 +48,14 @@ public class CooperationContactServiceImpl extends BaseContactService implements
 
     @Override
     protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
-        return contactRepository.findByIdAndCooperationId(contactId, parentEntityId)
-            .filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + contactId + " is not found"));
+        var cooperation = mapper
+            .convert(cooperationService.getCooperationById(parentEntityId), Cooperation.class);
+        if(cooperation.getEnabled()) {
+            return contactRepository.findByIdAndCooperationId(contactId, parentEntityId)
+                .filter(Contact::getEnabled)
+                .orElseThrow(() -> new NotFoundHomeException("Cooperation with id:" + contactId + " is not found"));
+        } else {
+            throw new NotFoundHomeException("The cooperation " + cooperation.getName() + " not enabled.");
+        }
     }
 }
