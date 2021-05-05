@@ -89,7 +89,6 @@ public class CooperationServiceImpl implements CooperationService {
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
     }
 
-    @Override
     public CooperationDto getCooperationById(Long id) {
         Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));

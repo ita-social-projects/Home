@@ -95,6 +95,13 @@ public class UserServiceImpl implements UserService {
             });
     }
 
+    @Transactional
+    public UserDto getUserById(Long id) {
+        User toGet = userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+        return mapper.convert(toGet, UserDto.class);
+    }
+
     @Override
     @Transactional
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
