@@ -96,7 +96,7 @@ class CooperationContactApiIT {
     }
 
     @Test
-    void passNullCooperationIdWhenGetContactTest() throws ApiException {
+    void passNullCooperationIdWhenGetContactTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperation(null, 1155L))

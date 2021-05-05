@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -18,10 +20,15 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     private final UserServiceImpl userService;
 
+    private final UserRepository userRepository;
+
     public UserContactServiceImpl(ContactRepository contactRepository,
-                                  ServiceMapper mapper, UserServiceImpl userService) {
+                                  ServiceMapper mapper,
+                                  UserServiceImpl userService,
+                                  UserRepository userRepository) {
         super(contactRepository, mapper);
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -44,8 +51,10 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
-        return contactRepository.findByIdAndUserId(contactId, parentEntityId)
-            .filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + contactId + " is not found"));
+        User user = userRepository.findById(parentEntityId).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException("User with id:" + parentEntityId + " is not found"));
+        return user.getContacts().stream()
+            .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(contactId)).findFirst()
+            .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + contactId + " is not found"));
     }
 }

@@ -61,7 +61,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
-        User fromDB = checkingUniqueEmailParameterForUpdate(id, updateUserDto);
+        User fromDB = userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+
+        validateEmailUniques(fromDB, updateUserDto);
 
         if (updateUserDto.getFirstName() != null) {
             fromDB.setFirstName(updateUserDto.getFirstName());
@@ -84,15 +87,13 @@ public class UserServiceImpl implements UserService {
         return mapper.convert(fromDB, UserDto.class);
     }
 
-    private User checkingUniqueEmailParameterForUpdate(Long id, UserDto userDto) {
-        var userFindById = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
-        Optional<User> userFindByEmail = userRepository.findByEmail(userDto.getEmail());
-        if (userFindByEmail.isPresent() && !userFindById.getId().equals(userFindByEmail.get().getId())) {
-            throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
-        } else {
-            return userFindById;
-        }
+    private void validateEmailUniques(User user, UserDto userDto) {
+        userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
+            .ifPresent((userByEmail) -> {
+                if (!user.getId().equals(userByEmail.getId())) {
+                    throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
+                }
+            });
     }
 
     @Override

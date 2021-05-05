@@ -43,6 +43,7 @@ public abstract class BaseContactService implements ContactService {
     protected abstract void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId);
 
     @Override
+    @Transactional
     public ContactDto updateContact(Long parentEntityId, Long contactId, ContactDto updateContactDto) {
         var contact = checkAndGetContactByParentId(contactId, parentEntityId);
 
