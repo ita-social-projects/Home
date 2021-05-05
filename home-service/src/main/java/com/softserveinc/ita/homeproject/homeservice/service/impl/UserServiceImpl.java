@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     private void validateEmailUniques(User user, UserDto userDto) {
         userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
-            .ifPresent((userByEmail) -> {
+            .ifPresent(userByEmail -> {
                 if (!user.getId().equals(userByEmail.getId())) {
                     throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
                 }

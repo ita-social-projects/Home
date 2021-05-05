@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
@@ -51,7 +50,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
-        User user = userRepository.findById(parentEntityId).filter(User::getEnabled)
+        var user = userRepository.findById(parentEntityId).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + parentEntityId + " is not found"));
         return user.getContacts().stream()
             .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(contactId)).findFirst()
