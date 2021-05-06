@@ -12,7 +12,7 @@ public class CooperationContactQuery extends BaseQuery{
 
     private Long cooperationId;
 
-    private String contactId;
+    private Long contactId;
 
     private String phone;
 
@@ -32,7 +32,7 @@ public class CooperationContactQuery extends BaseQuery{
         this.cooperationId = cooperationId;
     }
 
-    public void setContactId(String contactId) {
+    public void setContactId(Long contactId) {
         this.contactId = contactId;
     }
 
@@ -88,7 +88,7 @@ public class CooperationContactQuery extends BaseQuery{
             return this;
         }
 
-        public Builder contactId(String contactId) {
+        public Builder contactId(Long contactId) {
             queryClass.setContactId(contactId);
             return this;
         }

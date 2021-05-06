@@ -93,7 +93,7 @@ class QueryContactIT {
             .userId(expectedUser.getId())
             .pageNumber(1)
             .pageSize(10)
-            .id(savedContact.getId().toString())
+            .id(savedContact.getId())
             .build().perform();
 
         assertTrue(queryContactsResponse.contains(savedContact));

@@ -155,7 +155,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                @Min(1) @Max(10) Integer pageSize,
                                                String sort,
                                                String filter,
-                                               String id, String phone,
+                                               Long id, String phone,
                                                String email,
                                                String main,
                                                String type) {
