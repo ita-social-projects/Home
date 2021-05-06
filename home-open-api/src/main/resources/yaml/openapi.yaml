@@ -32,19 +32,10 @@ paths:
       description: The endpoint adds a News to the home page
       operationId: createNews
       requestBody:
-        description: A payload for creating a new News
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateNews'
-        required: true
+        $ref: '#/components/requestBodies/CreateNewsBody'
       responses:
         "201":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadNews'
+          $ref: '#/components/responses/NewsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -112,13 +103,7 @@ paths:
           description: The source of the News
       responses:
         "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ReadNews'
+          $ref: '#/components/responses/NewsListResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -142,11 +127,7 @@ paths:
             format: int64
       responses:
         "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadNews'
+          $ref: '#/components/responses/NewsResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "404":
@@ -168,19 +149,10 @@ paths:
             type: integer
             format: int64
       requestBody:
-        description: A payload for updating an existing News
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateNews'
-        required: true
+        $ref: '#/components/requestBodies/UpdateNewsBody'
       responses:
         "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadNews'
+          $ref: '#/components/responses/NewsResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -209,7 +181,7 @@ paths:
             format: int64
       responses:
         "204":
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -226,19 +198,10 @@ paths:
       description: The endpoint creates a new User
       operationId: createUser
       requestBody:
-        description: A payload for creating a User
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUser'
-        required: true
+        $ref: '#/components/requestBodies/CreateUserBody'
       responses:
         '201':
-          description: Successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadUser'
+          $ref: '#/components/responses/UserResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -316,13 +279,7 @@ paths:
           description: Contact email of the User
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadUser"
+          $ref: '#/components/responses/UsersResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -347,11 +304,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadUser"
+          $ref: '#/components/responses/UserResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -376,19 +329,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for updating current User
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUser'
-        required: true
+        $ref: '#/components/requestBodies/UpdateUserBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadUser"
+          $ref: '#/components/responses/UserResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -418,7 +362,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -437,26 +381,16 @@ paths:
       parameters:
         - name: "user_id"
           in: "path"
-          description: The ID of the User
           required: true
           schema:
             type: integer
             format: int64
             example: 1
       requestBody:
-        description: A payload for creating a contact
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateContact'
-        required: true
+        $ref: '#/components/requestBodies/CreateContactBody'
       responses:
         '201':
-          description: Successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadContact'
+          $ref: '#/components/responses/ContactResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -537,13 +471,7 @@ paths:
           description: Type of the Contact
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -579,11 +507,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -617,19 +541,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for updating an existing Contact
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateContact"
-        required: true
+        $ref: '#/components/requestBodies/UpdateContactBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -666,7 +581,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -683,19 +598,10 @@ paths:
       description: The endpoint creates a new Cooperation
       operationId: createCooperation
       requestBody:
-        description: A payload for creating a Cooperation
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateCooperation'
-        required: true
+        $ref: '#/components/requestBodies/CreateCooperationBody'
       responses:
         '201':
-          description: Successfully created
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/ReadCooperation'
+          $ref: '#/components/responses/CooperationResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -760,13 +666,7 @@ paths:
             example:  "A9856738"
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadCooperation"
+          $ref: '#/components/responses/CooperationsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -791,11 +691,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadCooperation"
+          $ref: '#/components/responses/CooperationResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -820,19 +716,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for updating current Cooperation
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateCooperation'
-        required: true
+        $ref: '#/components/requestBodies/UpdateCooperationBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadCooperation"
+          $ref: '#/components/responses/CooperationResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -862,7 +749,7 @@ paths:
         "204":
           description: Success
         "401":
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/NoContentResponse'
         "403":
           $ref: '#/components/responses/Forbidden'
         "404":
@@ -886,19 +773,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for creating a house
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateHouse'
-        required: true
+        $ref: '#/components/requestBodies/CreateHouseBody'
       responses:
         '201':
-          description: Successfully created
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/ReadHouse'
+          $ref: '#/components/responses/HouseResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -971,13 +849,7 @@ paths:
             example: 20
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadHouse"
+          $ref: '#/components/responses/HousesResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1011,11 +883,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadHouse"
+          $ref: '#/components/responses/HouseResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1049,19 +917,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for updating an existing House
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateHouse'
-        required: true
+        $ref: '#/components/requestBodies/UpdateHouseBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadHouse"
+          $ref: '#/components/responses/HouseResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1098,7 +957,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1124,19 +983,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for creating a cooperation contacts
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateContact'
-        required: true
+        $ref: '#/components/requestBodies/CreateContactBody'
       responses:
         '201':
-          description: Successfully created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadContact'
+          $ref: '#/components/responses/ContactResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1215,13 +1065,7 @@ paths:
           description: Type of the Contact
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1257,11 +1101,7 @@ paths:
             example: 1
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1295,19 +1135,10 @@ paths:
             format: int64
             example: 1
       requestBody:
-        description: A payload for updating an existing Contact
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateContact"
-        required: true
+        $ref: '#/components/requestBodies/UpdateContactBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadContact"
+          $ref: '#/components/responses/ContactResponse'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -1344,7 +1175,7 @@ paths:
             example: 1
       responses:
         "204":
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         "401":
           $ref: '#/components/responses/Unauthorized'
         "403":
@@ -1360,43 +1191,124 @@ components:
     basicAuth:
       type: http
       scheme: basic
+  headers:
+    X-Total-Count:
+      description: The total results for the particular query.
+      schema:
+        type: number
+        format: int64
   responses:
+    NoContentResponse:
+      description: The request was succesfully processed.
     BadRequest:
-      description: Validation Exception
+      description: Validation Exception.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
     Unauthorized:
-      description: Unauthorized
+      description: Unauthorized.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
     Forbidden:
-      description: You do not have permission to perform this action
+      description: You do not have permission to perform this action.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
     NotFound:
-      description: The specified resource was not found
+      description: The specified resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
     Conflict:
-      description: Conflict with current state of the resource
+      description: Conflict with current state of the resource.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
     InternalServerError:
-      description: Something went wrong
+      description: Something went wrong.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
+    NewsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadNews'
+    NewsListResponse:
+      description: OK
+      headers:
+        X-Total-Count:
+          $ref: '#/components/headers/X-Total-Count'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadNews'
+    UserResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadUser'
+    UsersResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadUser"
+    ContactResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadContact'
+    ContactsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadContact'
+    CooperationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadCooperation'
+    CooperationsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadCooperation'
+    HouseResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadHouse'
+    HousseResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadHouse'
   schemas:
     BaseReadView:
       type: object
@@ -1903,3 +1815,75 @@ components:
           example: 12
         address:
           $ref: '#/components/schemas/Address'
+
+  requestBodies:
+    CreateNewsBody:
+      description: A payload for creating a new News
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateNews'
+      required: true
+    UpdateNewsBody:
+      description: A payload for updating an existing News
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateNews'
+      required: true
+    CreateUserBody:
+      description: A payload for creating a User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateUser'
+      required: true
+    UpdateUserBody:
+      description: A payload for updating current User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUser'
+      required: true
+    CreateContactBody:
+      description: A payload for creating a contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateContact'
+      required: true
+    UpdateContactBody:
+      description: A payload for updating an existing Contact
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UpdateContact"
+      required: true
+    CreateCooperationBody:
+      description: A payload for creating a Cooperation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCooperation'
+      required: true
+    UpdateCooperationBody:
+      description: A payload for updating current Cooperation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCooperation'
+      required: true
+    CreateHouseBody:
+      description: A payload for creating a house
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateHouse'
+      required: true
+    UpdateHouseBody:
+      description: A payload for updating an existing House
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateHouse'
+      required: true
