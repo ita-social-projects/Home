@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   title: HomePage - OpenAPI 3.0
   description: "This is a Home Page sample of Home Project based on the OpenAPI 3.0 specification."
@@ -8,8 +9,10 @@ info:
   contact:
     url: https://github.com/ita-social-projects/Home
   version: 1.0.0
+
 servers:
   - url: /api/0
+
 tags:
   - name: news
     description: News management operations
@@ -23,6 +26,7 @@ tags:
     description: Operations with house
   - name: address
     description: Operations with address
+
 paths:
   /news:
     post:
@@ -70,6 +74,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /news/{id}:
     get:
       tags:
@@ -132,6 +137,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /users:
     post:
       tags:
@@ -180,6 +186,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /users/{id}:
     get:
       tags:
@@ -244,6 +251,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /users/{user_id}/contacts:
     post:
       tags:
@@ -297,6 +305,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /users/{user_id}/contacts/{id}:
     get:
       tags:
@@ -365,6 +374,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation:
     post:
       tags:
@@ -409,6 +419,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation/{id}:
     get:
       tags:
@@ -478,6 +489,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation/{cooperation_id}/houses:
     post:
       tags:
@@ -525,6 +537,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation/{cooperation_id}/houses/{id}:
     get:
       tags:
@@ -593,6 +606,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation/{cooperation_id}/contacts:
     post:
       tags:
@@ -626,7 +640,7 @@ paths:
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/filte'
+        - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/phone'
         - $ref: '#/components/parameters/email'
@@ -643,6 +657,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
   /cooperation/{cooperation_id}/contacts/{contact_id}:
     get:
       tags:
@@ -711,10 +726,11 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
 security:
   - basicAuth: []
-components:
 
+components:
   securitySchemes:
     basicAuth:
       type: http
