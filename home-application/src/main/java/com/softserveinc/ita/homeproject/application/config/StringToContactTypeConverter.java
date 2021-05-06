@@ -13,16 +13,18 @@ public class StringToContactTypeConverter implements Converter<String, ContactTy
     @Override
     public ContactType convert(final String source) {
 
+        ContactType res = null;
+
         if (source == null || source.isEmpty()) {
             return null;
         }
 
         for (ContactType constant : ContactType.values()) {
             if (constant.toString().equals(source)) {
-                return constant;
+                res = constant;
             }
         }
 
-        return null;
+        return res;
     }
 }
