@@ -34,17 +34,17 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateNewsBody'
       responses:
-        "201":
+        201:
           $ref: '#/components/responses/NewsResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "409":
+        409:
           $ref: '#/components/responses/Conflict'
-        "default":
+        default:
           $ref: '#/components/responses/InternalServerError'
     get:
       tags:
@@ -53,62 +53,22 @@ paths:
       description: This endpoint delivers all News to the Home Page
       operationId: getAllNews
       parameters:
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-          description: Arranging items in specific order
-        - in: query
-          name: filter
-          schema:
-            type: string
-          description: Filter items by fields
-        - in: query
-          name: id
-          schema:
-            type: string
-          description: The ID of the News
-        - in: query
-          name: title
-          schema:
-            type: string
-          description: The title of the News
-        - in: query
-          name: text
-          schema:
-            type: string
-          description: The content of the News
-        - in: query
-          name: source
-          schema:
-            type: string
-          description: The source of the News
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/title'
+        - $ref: '#/components/parameters/text'
+        - $ref: '#/components/parameters/source'
       responses:
-        "200":
+        200:
           $ref: '#/components/responses/NewsListResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
-        "default":
+        default:
           $ref: '#/components/responses/InternalServerError'
   /news/{id}:
     get:
@@ -118,21 +78,15 @@ paths:
       description: View an existing news by its ID
       operationId: getNews
       parameters:
-        - name: id
-          in: path
-          description: ID value that need to be considered for filter
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "200":
+        200:
           $ref: '#/components/responses/NewsResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
-        "default":
+        default:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
@@ -141,29 +95,23 @@ paths:
       description: Update an existing News by its ID
       operationId: updateNews
       parameters:
-        - name: id
-          in: path
-          description: ID value that need to be considered for filter
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateNewsBody'
       responses:
-        "200":
+        200:
           $ref: '#/components/responses/NewsResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
-        "409":
+        409:
           $ref: '#/components/responses/Conflict'
-        "default":
+        default:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
@@ -172,23 +120,17 @@ paths:
       description: Delete news by ID
       operationId: deleteNews
       parameters:
-        - name: id
-          in: path
-          description: ID value that need to be considered for filter
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "204":
+        204:
           $ref: '#/components/responses/NoContentResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
-        "default":
+        default:
           $ref: '#/components/responses/InternalServerError'
   /users:
     post:
@@ -200,15 +142,15 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateUserBody'
       responses:
-        '201':
+        201:
           $ref: '#/components/responses/UserResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "409":
+        409:
           $ref: '#/components/responses/Conflict'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -219,70 +161,22 @@ paths:
       description: The endpoint gets all Users
       operationId: getAllUsers
       parameters:
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-          description: Arranging items in the specific order
-        - in: query
-          name: filter
-          schema:
-            type: string
-          description: Filter items by fields
-        - in: query
-          name: id
-          schema:
-            type: string
-          description: The ID of the User
-        - in: query
-          name: email
-          schema:
-            type: string
-          description: The email of the User
-        - in: query
-          name: first_name
-          schema:
-            type: string
-          description: The First Name of the User
-        - in: query
-          name: last_name
-          schema:
-            type: string
-          description: The Last name of the User
-        - in: query
-          name: contact_phone
-          schema:
-            type: string
-          description: Contact phone of the User
-        - in: query
-          name: contact_email
-          schema:
-            type: string
-          description: Contact email of the User
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/email'
+        - $ref: '#/components/parameters/first_name'
+        - $ref: '#/components/parameters/last_name'
+        - $ref: '#/components/parameters/contact_phone'
+        - $ref: '#/components/parameters/contact_email'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/UsersResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -294,22 +188,15 @@ paths:
       description: The endpoint gets User by ID
       operationId: getUser
       parameters:
-        - name: "id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_id'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/UserResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -320,28 +207,21 @@ paths:
       description: The endpoint updates current User by ID
       operationId: updateUser
       parameters:
-        - name: "id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateUserBody'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/UserResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
-        "409":
+        409:
           $ref: '#/components/responses/Conflict'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -352,22 +232,15 @@ paths:
       description: The endpoint deletes User by ID
       operationId: deleteUser
       parameters:
-        - name: "id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "204":
+        204:
           $ref: '#/components/responses/NoContentResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -379,25 +252,19 @@ paths:
       description: The endpoint creates a new Contact for the specified user ID
       operationId: createContactOnUser
       parameters:
-        - name: "user_id"
-          in: "path"
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_user_id'
       requestBody:
         $ref: '#/components/requestBodies/CreateContactBody'
       responses:
-        '201':
+        201:
           $ref: '#/components/responses/ContactResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "409":
+        409:
           $ref: '#/components/responses/Conflict'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -408,75 +275,25 @@ paths:
       description: The endpoint retrieves the list of contacts associated with the specified user ID
       operationId: queryContactsOnUser
       parameters:
-        - name: "user_id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-          description: Arraning items in specific order
-        - in: query
-          name: filter
-          schema:
-            type: string
-          description: Filter items by fields
-        - in: query
-          name: id
-          schema:
-            type: string
-          description: The ID of the Contact
-        - in: query
-          name: phone
-          schema:
-            type: string
-          description: Phone of the Contact
-        - in: query
-          name: email
-          schema:
-            type: string
-          description: Email of the Contact
-        - in: query
-          name: main
-          schema:
-            type: string
-          description: Specifies if its a main Contact of the User
-        - in: query
-          name: type
-          schema:
-            type: string
-          description: Type of the Contact
+        - $ref: '#/components/parameters/p_user_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/email'
+        - $ref: '#/components/parameters/main'
+        - $ref: '#/components/parameters/type'
+
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactsResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -489,30 +306,16 @@ paths:
                    associated with the specified User by User and Contact IDs
       operationId: getContactOnUser
       parameters:
-        - name: "user_id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_user_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -524,34 +327,20 @@ paths:
                   in the system by the specified User and Contact IDs
       operationId: updateContactOnUser
       parameters:
-        - name: "user_id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_user_id'
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateContactBody'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -563,30 +352,16 @@ paths:
                    specified User and Contact IDs
       operationId: deleteContactOnUser
       parameters:
-        - name: "user_id"
-          in: "path"
-          description: The ID of the User
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_user_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "204":
+        204:
           $ref: '#/components/responses/NoContentResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -600,13 +375,13 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateCooperationBody'
       responses:
-        '201':
+        201:
           $ref: '#/components/responses/CooperationResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -617,59 +392,20 @@ paths:
       description: Get all cooperation
       operationId: queryCooperation
       parameters:
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - in: query
-          name: name
-          schema:
-            type: string
-            example: "Dobro"
-        - in: query
-          name: iban
-          schema:
-            type: string
-            example:  "77778"
-        - in: query
-          name: usreo
-          schema:
-            type: string
-            example:  "A9856738"
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/iban'
+        - $ref: '#/components/parameters/usreo'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/CooperationsResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -690,13 +426,13 @@ paths:
             format: int64
             example: 1
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/CooperationResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -707,26 +443,19 @@ paths:
       description: The endpoint updates current Cooperation by ID
       operationId: updateCooperation
       parameters:
-        - name: "id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateCooperationBody'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/CooperationResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -737,22 +466,15 @@ paths:
       description: The endpoint deletes Cooperation by ID
       operationId: deleteCooperation
       parameters:
-        - name: "id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "204":
+        204:
           description: Success
-        "401":
+        401:
           $ref: '#/components/responses/NoContentResponse'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -764,24 +486,17 @@ paths:
       description: The endpoint creates a new House for the specified Cooperation ID
       operationId: createHouse
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
       requestBody:
         $ref: '#/components/requestBodies/CreateHouseBody'
       responses:
-        '201':
+        201:
           $ref: '#/components/responses/HouseResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -792,67 +507,21 @@ paths:
       description: The endpoint retrieves the list of houses associated with the specified cooperation ID
       operationId: queryHouse
       parameters:
-        - name: "cooperation_id"
-          in: path
-          required: true
-          description: The ID of the Cooperation
-          schema:
-            type : integer
-            format: int64
-            minimum: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - in: query
-          name: quantity_flat
-          schema:
-            type: integer
-            example: 10
-        - in: query
-          name: adjoining_area
-          schema:
-            type: integer
-            example: 40
-        - in: query
-          name: house_area
-          schema:
-            type: number
-            example: 20
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/quantity_flat'
+        - $ref: '#/components/parameters/adjoining_area'
+        - $ref: '#/components/parameters/house_area'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/HousesResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -865,30 +534,16 @@ paths:
         associated with the specified Cooperation by Cooperation and House IDs
       operationId: getHouse
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the House
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/HouseResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -900,34 +555,20 @@ paths:
         in the system by the specified Cooperation and House IDs
       operationId: updateHouse
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the House
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateHouseBody'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/HouseResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -939,30 +580,16 @@ paths:
         specified Coopeartion and House IDs
       operationId: deleteHouse
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "id"
-          in: "path"
-          description: The ID of the House
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
-        "204":
+        204:
           $ref: '#/components/responses/NoContentResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -974,24 +601,17 @@ paths:
       description: The endpoint creates Contacts for the specified Cooperation ID
       operationId: createContactOnCooperation
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
       requestBody:
         $ref: '#/components/requestBodies/CreateContactBody'
       responses:
-        '201':
+        201:
           $ref: '#/components/responses/ContactResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1002,75 +622,24 @@ paths:
       description: The endpoint retrieves the list of contacts associated with the specified cooperation ID
       operationId: queryContactsOnCooperation
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-          description: Arraning items in specific order
-        - in: query
-          name: filter
-          schema:
-            type: string
-          description: Filter items by fields
-        - in: query
-          name: id
-          schema:
-            type: string
-          description: The ID of the Contact
-        - in: query
-          name: phone
-          schema:
-            type: string
-          description: Phone of the Contact
-        - in: query
-          name: email
-          schema:
-            type: string
-          description: Email of the Contact
-        - in: query
-          name: main
-          schema:
-            type: string
-          description: Specifies if its a main Contact of the Cooperation
-        - in: query
-          name: type
-          schema:
-            type: string
-          description: Type of the Contact
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filte'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/phone'
+        - $ref: '#/components/parameters/email'
+        - $ref: '#/components/parameters/main'
+        - $ref: '#/components/parameters/type'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactsResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1083,30 +652,16 @@ paths:
         associated with the specified Cooperation by Cooperation and Contact IDs
       operationId: getContactOnCooperation
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "contact_id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_contact_id'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        '404':
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1118,34 +673,20 @@ paths:
           in the system by the specified Cooperation and Contact IDs
       operationId: updateContactOnCooperation
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "contact_id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_contact_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateContactBody'
       responses:
-        '200':
+        200:
           $ref: '#/components/responses/ContactResponse'
-        "400":
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1157,158 +698,28 @@ paths:
         specified Cooperation and Contact IDs
       operationId: deleteContactOnCooperation
       parameters:
-        - name: "cooperation_id"
-          in: "path"
-          description: The ID of the Cooperation
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - name: "contact_id"
-          in: "path"
-          description: The ID of the Contact
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 1
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_contact_id'
       responses:
-        "204":
+        204:
           $ref: '#/components/responses/NoContentResponse'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        403:
           $ref: '#/components/responses/Forbidden'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
 security:
   - basicAuth: []
 components:
+
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
-  headers:
-    X-Total-Count:
-      description: The total results for the particular query.
-      schema:
-        type: number
-        format: int64
-  responses:
-    NoContentResponse:
-      description: The request was succesfully processed.
-    BadRequest:
-      description: Validation Exception.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Unauthorized:
-      description: Unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Forbidden:
-      description: You do not have permission to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    NotFound:
-      description: The specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Conflict:
-      description: Conflict with current state of the resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    InternalServerError:
-      description: Something went wrong.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    NewsResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadNews'
-    NewsListResponse:
-      description: OK
-      headers:
-        X-Total-Count:
-          $ref: '#/components/headers/X-Total-Count'
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/ReadNews'
-    UserResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadUser'
-    UsersResponse:
-      description: Success
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/ReadUser"
-    ContactResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadContact'
-    ContactsResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/ReadContact'
-    CooperationResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadCooperation'
-    CooperationsResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/ReadCooperation'
-    HouseResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadHouse'
-    HousseResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/ReadHouse'
+
   schemas:
     BaseReadView:
       type: object
@@ -1816,6 +1227,116 @@ components:
         address:
           $ref: '#/components/schemas/Address'
 
+  responses:
+    NoContentResponse:
+      description: The request was succesfully processed.
+    BadRequest:
+      description: Validation Exception.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Unauthorized:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Forbidden:
+      description: You do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Conflict:
+      description: Conflict with current state of the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    InternalServerError:
+      description: Something went wrong.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NewsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadNews'
+    NewsListResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadNews'
+    UserResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadUser'
+    UsersResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadUser"
+    ContactResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadContact'
+    ContactsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadContact'
+    CooperationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadCooperation'
+    CooperationsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadCooperation'
+    HouseResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadHouse'
+    HousseResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadHouse'
+
   requestBodies:
     CreateNewsBody:
       description: A payload for creating a new News
@@ -1887,3 +1408,178 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateHouse'
       required: true
+
+  parameters:
+    p_id:
+      in: path
+      name: id
+      schema:
+        type: number
+        format: int64
+      required: true
+      example: 1
+    p_user_id:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 1
+    p_cooperation_id:
+      name: cooperation_id
+      in: path
+      description: The ID of the Cooperation
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 1
+    p_contact_id:
+      name: contact_id
+      in: path
+      description: The ID of the Contact
+      required: true
+      schema:
+        type: integer
+        format: int64
+        example: 1
+    page_number:
+      in: query
+      name: page_number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      required: false
+      description: The number of current page
+    page_size:
+      in: query
+      name: page_size
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 5
+      required: false
+      description: The number of items to return
+    id:
+      in: query
+      name: id
+      schema:
+        type: string
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        default: id,asc
+      description: Arranging items in specific order
+    filter:
+      in: query
+      name: filter
+      schema:
+        type: string
+      description: Filter items by fields
+    title:
+      in: query
+      name: title
+      schema:
+        type: string
+      description: The title of the News
+    text:
+      in: query
+      name: text
+      schema:
+        type: string
+      description: The content of the News
+    source:
+      in: query
+      name: source
+      schema:
+        type: string
+      description: The source of the News
+    email:
+      in: query
+      name: email
+      schema:
+        type: string
+      description: The email of the User
+    phone:
+      in: query
+      name: phone
+      schema:
+        type: string
+      description: Phone of the Contact
+    first_name:
+      in: query
+      name: first_name
+      schema:
+        type: string
+      description: The First Name of the User
+    last_name:
+      in: query
+      name: last_name
+      schema:
+        type: string
+      description: The Last name of the User
+    contact_phone:
+      in: query
+      name: contact_phone
+      schema:
+        type: string
+      description: Contact phone of the User
+    contact_email:
+      in: query
+      name: contact_email
+      schema:
+        type: string
+      description: Contact email of the User
+    main:
+      in: query
+      name: main
+      schema:
+        type: string
+      description: Specifies if its a main Contact of the User
+    type:
+      in: query
+      name: type
+      schema:
+        type: string
+      description: Type of the Contact
+    name:
+      in: query
+      name: name
+      schema:
+        type: string
+        example: "Dobro"
+    iban:
+      in: query
+      name: iban
+      schema:
+        type: string
+        example: "77778"
+    usreo:
+      in: query
+      name: usreo
+      schema:
+        type: string
+        example: "A9856738"
+    quantity_flat:
+      in: query
+      name: quantity_flat
+      schema:
+        type: integer
+        example: 10
+    adjoining_area:
+      in: query
+      name: adjoining_area
+      schema:
+        type: integer
+        example: 40
+    house_area:
+      in: query
+      name: house_area
+      schema:
+        type: number
+        example: 20
