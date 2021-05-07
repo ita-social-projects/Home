@@ -101,7 +101,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
-    public Response getHouse(Long cooperationId, Long houseId) {
+    public Response getHouse(Long cooperationId, Long id) {
         HouseDto toGet = (HouseDto) queryApiService.getOne(uriInfo, houseService);
         ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
@@ -139,7 +139,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
-                               Long houseId,
+                               Long id,
                                Integer quantityFlat,
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
@@ -172,8 +172,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(DELETE_HOUSE_PERMISSION)
     @Override
-    public Response deleteHouse(Long cooperationId, Long houseId) {
-        houseService.deactivateById(cooperationId, houseId);
+    public Response deleteHouse(Long cooperationId, Long id) {
+        houseService.deactivateById(cooperationId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -196,9 +196,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_HOUSE_PERMISSION)
     @Override
-    public Response updateHouse(Long cooperationId, Long houseId, @Valid UpdateHouse updateHouse) {
+    public Response updateHouse(Long cooperationId, Long id, @Valid UpdateHouse updateHouse) {
         HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
-        HouseDto toUpdate = houseService.updateHouse(houseId, updateHouseDto);
+        HouseDto toUpdate = houseService.updateHouse(id, updateHouseDto);
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
