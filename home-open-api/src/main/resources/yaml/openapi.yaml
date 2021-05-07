@@ -29,12 +29,14 @@ tags:
     description: Apartment ownership management operations
   - name: apartment invitation
     description: Apartment invitation management operations
+  - name: cooperation poll
+    description: Cooperation poll management operations
   - name: poll
     description: Poll management operations
   - name: polled house
     description: Polled house management operations
-  - name: poll simple question
-    description: Poll simple question management operations
+  - name: poll question
+    description: Poll question management operations
   - name: poll vote
     description: Poll vote management operations
   - name: poll result
@@ -1814,10 +1816,10 @@ paths:
   /cooperation/{cooperation_id}/polls:
     get:
       tags:
-        - poll
-      summary: Get all polls
-      description: The endpoint gets all polls of the cooperation
-      operationId: queryPoll
+        - cooperation poll
+      summary: Get all cooperation polls
+      description: The endpoint gets all cooperation polls
+      operationId: queryCooperationPoll
       parameters:
         - name: "cooperation_id"
           in: path
@@ -1879,10 +1881,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-        - poll
-      summary: Create poll
-      description: The endpoint creates a new Poll in the cooperation
-      operationId: createPoll
+        - cooperation poll
+      summary: Create cooperation poll
+      description: The endpoint creates a new cooperation poll
+      operationId: createCooperationPoll
       parameters:
         - name: "cooperation_id"
           in: "path"
@@ -1893,7 +1895,7 @@ paths:
             format: int64
           example: 1
       requestBody:
-        description: A payload for creating a new Poll
+        description: A payload for creating a new cooperation poll
         content:
           application/json:
             schema:
@@ -1918,10 +1920,10 @@ paths:
   /cooperation/{cooperation_id}/polls/{id}:
     get:
       tags:
-        - poll
-      summary: Get poll
-      description: Get a poll by a poll id
-      operationId: getPoll
+        - cooperation poll
+      summary: Get cooperation poll
+      description: Get a cooperation poll by a poll id
+      operationId: getCooperationPoll
       parameters:
         - name: "cooperation_id"
           in: "path"
@@ -1956,10 +1958,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - poll
-      summary: Update poll
-      description: Update a poll by a poll ID
-      operationId: updatePoll
+        - cooperation poll
+      summary: Update cooperation poll
+      description: Update a cooperation poll by a poll ID
+      operationId: updateCooperationPoll
       parameters:
         - name: "cooperation_id"
           in: "path"
@@ -1978,7 +1980,7 @@ paths:
             format: int64
           example: 1
       requestBody:
-        description: A payload for updating a Poll
+        description: A payload for updating a cooperation poll
         content:
           application/json:
             schema:
@@ -2003,10 +2005,10 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - poll
-      summary: Delete poll
-      description: Delete a poll by a poll ID
-      operationId: deletePoll
+        - cooperation poll
+      summary: Delete cooperation poll
+      description: Delete a cooperation poll by a poll ID
+      operationId: deleteCooperationPoll
       parameters:
         - name: "cooperation_id"
           in: "path"
@@ -2032,6 +2034,104 @@ paths:
         "403":
           $ref: '#/components/responses/Forbidden'
         "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls:
+    get:
+      tags:
+        - poll
+      summary: Get all polls
+      description: The endpoint gets all polls
+      operationId: queryPoll
+      parameters:
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: cooperation_id
+          description: ID of the polled cooperation
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          example: 1
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadPoll"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{id}:
+    get:
+      tags:
+        - poll
+      summary: Get poll
+      description: Get a poll by a poll id
+      operationId: getPoll
+      parameters:
+        - name: "id"
+          in: "path"
+          description: ID of the poll
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadPoll"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2106,7 +2206,7 @@ paths:
       tags:
         - polled house
       summary: Create polled house
-      description: The endpoint creates a polled hoouse in the poll
+      description: The endpoint creates a polled house in the poll. House can be created only if poll status is draft
       operationId: createPolledHouse
       parameters:
         - name: "poll_id"
@@ -2183,7 +2283,7 @@ paths:
       tags:
         - polled house
       summary: Delete polled house
-      description: Delete a polled house by a polled house ID
+      description: Delete a polled house by a polled house ID. House can be deleted only if poll status is draft
       operationId: deletePolledHouse
       parameters:
         - name: "poll_id"
@@ -2214,18 +2314,18 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
-  /polls/{poll_id}/simple_questions:
+  /polls/{poll_id}/questions:
     get:
       tags:
-        - poll simple question
-      summary: Get all simple questions
-      description: The endpoint gets all simple questions of the poll
-      operationId: querySimpleQuestion
+        - poll question
+      summary: Get all questions
+      description: The endpoint gets all questions of the poll
+      operationId: queryQuestion
       parameters:
         - name: "poll_id"
           in: path
           required: true
-          description: ID of the poll to which simple questions belongs
+          description: ID of the poll to which questions belongs
           schema:
             type: integer
             format: int64
@@ -2271,7 +2371,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ReadSimpleQuestion"
+                  $ref: "#/components/schemas/ReadQuestion"
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2282,25 +2382,25 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-        - poll simple question
-      summary: Create simple question
-      description: The endpoint creates a simple question in the poll
-      operationId: createSimpleQuestion
+        - poll question
+      summary: Create question
+      description: The endpoint creates a question in the poll. Question can be created only if poll status is draft
+      operationId: createQuestion
       parameters:
         - name: "poll_id"
           in: "path"
-          description: ID of the poll to which simple question belongs
+          description: ID of the poll to which question belongs
           required: true
           schema:
             type: integer
             format: int64
           example: 1
       requestBody:
-        description: A payload for creating a new simple question
+        description: A payload for creating a new question
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSimpleQuestion'
+              $ref: '#/components/schemas/CreateQuestion'
         required: true
       responses:
         '201':
@@ -2308,7 +2408,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadSimpleQuestion'
+                $ref: '#/components/schemas/ReadQuestion'
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2318,17 +2418,17 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
-  /polls/{poll_id}/simple_questions/{id}:
+  /polls/{poll_id}/questions/{id}:
     get:
       tags:
-        - poll simple question
-      summary: Get simple question
-      description: Get a simple question by a simple question id
-      operationId: getSimpleQuestion
+        - poll question
+      summary: Get question
+      description: Get a question by a question id
+      operationId: getQuestion
       parameters:
         - name: "poll_id"
           in: "path"
-          description: ID of the poll to which simple question belongs
+          description: ID of the poll to which question belongs
           required: true
           schema:
             type: integer
@@ -2336,7 +2436,7 @@ paths:
           example: 1
         - name: "id"
           in: "path"
-          description: ID of the simple question
+          description: ID of the question
           required: true
           schema:
             type: integer
@@ -2348,7 +2448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ReadSimpleQuestion"
+                $ref: "#/components/schemas/ReadQuestion"
         '400':
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2359,14 +2459,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - poll simple question
-      summary: Update simple question
-      description: Update a simple question by a simple question ID
-      operationId: updateSimpleQuestion
+        - poll question
+      summary: Update question
+      description: Update a question by a question ID. Question can be updated only if poll status is draft
+      operationId: updateQuestion
       parameters:
         - name: "poll_id"
           in: "path"
-          description: ID of the poll to which simple question belongs
+          description: ID of the poll to which question belongs
           required: true
           schema:
             type: integer
@@ -2374,18 +2474,18 @@ paths:
           example: 1
         - name: "id"
           in: "path"
-          description: ID of the simple question
+          description: ID of the question
           required: true
           schema:
             type: integer
             format: int64
           example: 1
       requestBody:
-        description: A payload for updating a Poll
+        description: A payload for updating a question
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateSimpleQuestion'
+              $ref: '#/components/schemas/UpdateQuestion'
         required: true
       responses:
         '200':
@@ -2393,7 +2493,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReadSimpleQuestion'
+                $ref: '#/components/schemas/ReadQuestion'
         "400":
           $ref: '#/components/responses/BadRequest'
         "401":
@@ -2406,14 +2506,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - poll simple question
-      summary: Delete simple question
-      description: Delete a simple question by a simple question ID
-      operationId: deleteSimpleQuestion
+        - poll question
+      summary: Delete question
+      description: Delete a question by a question ID. Question can be deleted only if poll status is draft
+      operationId: deleteQuestion
       parameters:
         - name: "poll_id"
           in: "path"
-          description: ID of the poll to which simple question belongs
+          description: ID of the poll to which question belongs
           required: true
           schema:
             type: integer
@@ -2421,7 +2521,7 @@ paths:
           example: 1
         - name: "id"
           in: "path"
-          description: ID of the simple question
+          description: ID of the question
           required: true
           schema:
             type: integer
@@ -2440,76 +2540,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /polls/{poll_id}/votes:
-    get:
-      tags:
-        - poll vote
-      summary: Get all votes
-      description: The endpoint gets all votes of the poll
-      operationId: queryVote
-      parameters:
-        - name: "poll_id"
-          in: path
-          required: true
-          description: Poll ID to which the votes belongs
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-          example: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: integer
-            format: int64
-          example: 1
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadVote"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        "401":
-          $ref: '#/components/responses/Unauthorized'
-        "404":
-          $ref: '#/components/responses/NotFound'
-        default:
-          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
         - poll vote
       summary: Create vote
-      description: Create a vote in poll
+      description: Create a vote in poll. Vote can be created only if poll status is active. Number of answers must be validated according to max_answer_count of the question
       operationId: createVote
       parameters:
         - name: "poll_id"
@@ -3346,9 +3381,9 @@ components:
       description: Indicates a type of an Question
       type: string
       enum: &question_type_values
-        - simple
+        - multiple_choice
         - advice
-      example: simple
+      example: multiple_choice
 
     QuestionLookup:
       type: object
@@ -3365,8 +3400,8 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          simple: '#/components/schemas/ReadSimpleQuestion'
-          multianswer: '#/components/schemas/ReadAdviceQuestion'
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestion'
+          advice: '#/components/schemas/ReadAdviceQuestion'
       properties:
         type:
           $ref: '#/components/schemas/QuestionType'
@@ -3375,7 +3410,7 @@ components:
           minLength: 1
           maxLength: 255
           example: What color should we paint the door?
-    ReadSimpleQuestion:
+    ReadMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/ReadQuestion'
       type: object
@@ -3405,8 +3440,8 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          simple: '#/components/schemas/CreateSimpleQuestion'
-          multianswer: '#/components/schemas/CreateAdviceQuestion'
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestion'
+          advice: '#/components/schemas/CreateAdviceQuestion'
       required:
         - type
         - question
@@ -3418,7 +3453,7 @@ components:
           minLength: 1
           maxLength: 255
           example: What color should we paint the door?
-    CreateSimpleQuestion:
+    CreateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/CreateQuestion'
       type: object
@@ -3449,8 +3484,8 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          base: '#/components/schemas/UpdateSimpleQuestion'
-          apartment: '#/components/schemas/UpdateAdviceQuestion'
+          multiple_choice: '#/components/schemas/UpdateMultipleChoiceQuestion'
+          advice: '#/components/schemas/UpdateAdviceQuestion'
       required:
         - question
       properties:
@@ -3459,7 +3494,7 @@ components:
           minLength: 1
           maxLength: 255
           example: What color should we paint the door?
-    UpdateSimpleQuestion:
+    UpdateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/UpdateQuestion'
       type: object
@@ -3513,63 +3548,14 @@ components:
           maxLength: 255
           example: Green
 
-    ReadVote:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/ReadUser'
-        question:
-          $ref: '#/components/schemas/ReadQuestion'
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReadAnswerVariant'
-          example: {}
-    CreateVote:
-      type: object
-      required:
-        - user
-        - question
-        - answers
-      properties:
-        user:
-          $ref: '#/components/schemas/UserLookup'
-        question:
-          $ref: '#/components/schemas/QuestionLookup'
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnswerVariantLookup'
-          example:
-            - id: 1
-            - id: 2
-            - id: 3
-
-    HouseLookup:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-
-    UserLookup:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-
     PollStatus:
       description: Indicates the status of a Poll
       type: string
       enum: &poll_status_values
-        - inactive
-        - active
         - draft
+        - active
+        - completed
+        - suspended
       example: active
 
     PollType:
@@ -3591,7 +3577,7 @@ components:
           type: string
           format: date-time
           example: 2021-05-30T08:30:03Z
-        expiration_date:
+        completion_date:
           type: string
           format: date-time
           example: 2021-06-20T06:00:00Z
@@ -3610,14 +3596,14 @@ components:
       type: object
       required:
         - header
-        - expiration_date
+        - completion_date
         - houses
         - poll_type
       properties:
         header:
           type: string
           example: New poll for our houses
-        expiration_date:
+        completion_date:
           type: string
           format: date-time
           example: 2021-06-20T06:00:00Z
@@ -3632,18 +3618,137 @@ components:
       type: object
       required:
         - header
-        - expiration_date
+        - completion_date
         - status
       properties:
         header:
           type: string
           example: New poll for our houses
-        expiration_date:
+        completion_date:
           type: string
           format: date-time
           example: 2021-06-20T06:00:00Z
         status:
           $ref: '#/components/schemas/PollStatus'
+
+    ReadVote:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/ReadUser'
+        question_votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadQuestionVote'
+          example: {}
+    CreateVote:
+      type: object
+      required:
+        - user
+        - question_votes
+      properties:
+        user:
+          $ref: '#/components/schemas/UserLookup'
+        question_votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateMultipleChoiceQuestionVote'
+          example: {}
+
+    ReadQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestionVote'
+          advice: '#/components/schemas/ReadAdviceQuestionVote'
+      properties:
+        question:
+          $ref: '#/components/schemas/ReadQuestion'
+    ReadMultipleChoiceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answers
+      properties:
+        answers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ReadAnswerVariant'
+          example:
+            - id: 1
+              answer: Green
+            - id: 2
+              answer: Blue
+    ReadAdviceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          $ref: '#/components/schemas/ReadAnswerVariant'
+
+    CreateQuestionVote:
+      type: object
+      required:
+        - question
+        - type
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestionVote'
+          advice: '#/components/schemas/CreateAdviceQuestionVote'
+      properties:
+        question:
+          $ref: '#/components/schemas/QuestionLookup'
+    CreateMultipleChoiceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answers
+      properties:
+        answers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AnswerVariantLookup'
+          example:
+            - id: 1
+            - id: 2
+    CreateAdviceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          $ref: '#/components/schemas/CreateUpdateAnswerVariant'
+
+    HouseLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    UserLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
 
     ReadPollResult:
       allOf:
@@ -3664,25 +3769,43 @@ components:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
-          answers_result:
-            type: array
-            items:
-              $ref: '#/components/schemas/ReadAnswerVariantResult'
-            example: {}
-          votes_number:
-            type: number
-            example: 20.0
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        answers_result:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadAnswerVariantResult'
+          example: {}
+        votes_number:
+          type: number
+          example: 20.0
 
     ReadAnswerVariantResult:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestionAnswerVariantResult'
+          advice: '#/components/schemas/ReadAdviceQuestionAnswerVariantResult'
       properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
         answer_variant:
           $ref: '#/components/schemas/ReadAnswerVariant'
+    ReadMultipleChoiceQuestionAnswerVariantResult:
+      allOf:
+        - $ref: '#/components/schemas/ReadAnswerVariantResult'
+      type: object
+      properties:
         votes_number:
           type: number
           example: 10.0
+    ReadAdviceQuestionAnswerVariantResult:
+      allOf:
+        - $ref: '#/components/schemas/ReadAnswerVariantResult'
+      type: object
 
   examples:
     HouseExample1:

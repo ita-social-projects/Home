@@ -66,11 +66,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.CREATED).entity(readHouse).build();
     }
 
-    @Override
-    public Response createPoll(Long cooperationId, @Valid CreatePoll createPoll) {
-        return null;
-    }
-
     @PreAuthorize(GET_COOPERATION_PERMISSION)
     @Override
     public Response getCooperation(Long cooperationId) {
@@ -121,12 +116,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
 
-    @Override
-    public Response queryPoll(@Min(1L) Long cooperationId, @Min(1) Integer pageNumber,
-                              @Min(1) @Max(10) Integer pageSize, String sort, String filter, Long id) {
-        return null;
-    }
-
     @PreAuthorize(DEACTIVATE_COOPERATION_PERMISSION)
     @Override
     public Response deleteCooperation(Long cooperationId) {
@@ -139,21 +128,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     public Response deleteHouse(Long cooperationId, Long houseId) {
         houseService.deactivateById(cooperationId, houseId);
         return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
-    @Override
-    public Response deletePoll(Long cooperationId, Long id) {
-        return null;
-    }
-
-    @Override
-    public Response getPoll(Long cooperationId, Long id) {
-        return null;
-    }
-
-    @Override
-    public Response updatePoll(Long cooperationId, Long id, @Valid UpdatePoll updatePoll) {
-        return null;
     }
 
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
@@ -174,5 +148,31 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
+    }
+
+    @Override
+    public Response createCooperationPoll(Long cooperationId, @Valid CreatePoll createPoll) {
+        return null;
+    }
+
+    @Override
+    public Response deleteCooperationPoll(Long cooperationId, Long id) {
+        return null;
+    }
+
+    @Override
+    public Response getCooperationPoll(Long cooperationId, Long id) {
+        return null;
+    }
+
+    @Override
+    public Response queryCooperationPoll(@Min(1L) Long cooperationId, @Min(1) Integer pageNumber,
+                                         @Min(1) @Max(10) Integer pageSize, String sort, String filter, Long id) {
+        return null;
+    }
+
+    @Override
+    public Response updateCooperationPoll(Long cooperationId, Long id, @Valid UpdatePoll updatePoll) {
+        return null;
     }
 }
