@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,10 +40,10 @@ public class Apartment extends BaseEntity{
     @JoinColumn(name = "house_id")
     private House house;
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
-    private Set<Ownership> ownerships;
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.PERSIST)
+    private List<Ownership> ownerships;
 
-    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.PERSIST)
     private List<Invitation> invitations;
 
 }

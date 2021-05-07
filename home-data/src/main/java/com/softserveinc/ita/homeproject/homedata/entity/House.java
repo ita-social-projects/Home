@@ -48,6 +48,6 @@ public class House extends BaseEntity {
     @JoinColumn(name = "cooperation_id")
     private Cooperation cooperation;
 
-    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "house", cascade = CascadeType.PERSIST)
     private List<Apartment> apartments;
 }
