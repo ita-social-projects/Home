@@ -35,7 +35,7 @@ public class EnumConverterProvider implements ParamConverterProvider {
                 }
 
                 throw new BadRequestException(String.format("The parameter type must be one of the values: %s",
-                    Arrays.toString(Arrays.stream(constants).toArray())));
+                    Arrays.toString(constants)));
             }
 
             @Override
