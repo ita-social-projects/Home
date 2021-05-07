@@ -134,7 +134,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
-    public Response queryHouse(@Min(1) Long cooperationId,
+    public Response queryHouse( Long cooperationId,
                                @Min(1) Integer pageNumber,
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
