@@ -512,70 +512,16 @@ paths:
       description: The endpoint retrieves the list of houses associated with the specified cooperation ID
       operationId: queryHouse
       parameters:
-#        - $ref: '#/components/parameters/p_cooperation_id'
-#        - $ref: '#/components/parameters/page_number'
-#        - $ref: '#/components/parameters/page_size'
-#        - $ref: '#/components/parameters/sort'
-#        - $ref: '#/components/parameters/filter'
-#        - $ref: '#/components/parameters/id'
-#        - $ref: '#/components/parameters/quantity_flat'
-#        - $ref: '#/components/parameters/adjoining_area'
-#        - $ref: '#/components/parameters/house_area'
-        - name: "cooperation_id"
-          in: path
-          required: true
-          description: The ID of the Cooperation
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: integer
-            format: int64
-            example: 1
-        - in: query
-          name: quantity_flat
-          schema:
-            type: integer
-            example: 10
-        - in: query
-          name: adjoining_area
-          schema:
-            type: integer
-            example: 40
-        - in: query
-          name: house_area
-          schema:
-            type: number
-            example: 20
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/quantity_flat'
+        - $ref: '#/components/parameters/adjoining_area'
+        - $ref: '#/components/parameters/house_area'
+
       responses:
         200:
           $ref: '#/components/responses/HousesResponse'
@@ -1492,14 +1438,14 @@ components:
         format: int64
         example: 1
     p_cooperation_id:
-      name: cooperation_id
+      name: "cooperation_id"
       in: path
-      description: The ID of the Cooperation
       required: true
+      description: The ID of the Cooperation
       schema:
         type: integer
         format: int64
-        example: 1
+        minimum: 1
     p_contact_id:
       name: contact_id
       in: path
@@ -1517,7 +1463,7 @@ components:
         minimum: 1
         default: 1
       required: false
-      description: The number of current page
+      description: The number of current page.
     page_size:
       in: query
       name: page_size
@@ -1527,7 +1473,7 @@ components:
         maximum: 10
         default: 5
       required: false
-      description: The number of items to return
+      description: The number of items to return.
     id:
       in: query
       name: id
@@ -1541,13 +1487,11 @@ components:
       schema:
         type: string
         default: id,asc
-      description: Arranging items in specific order
     filter:
       in: query
       name: filter
       schema:
         type: string
-      description: Filter items by fields
     title:
       in: query
       name: title
