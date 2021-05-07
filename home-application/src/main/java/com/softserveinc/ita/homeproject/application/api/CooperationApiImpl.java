@@ -91,7 +91,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_COOPERATION_PERMISSION)
     @Override
-    public Response getCooperation(Long cooperationId) {
+    public Response getCooperation(Long id) {
         CooperationDto readCoopDto = (CooperationDto) queryApiService.getOne(uriInfo, cooperationService);
         ReadCooperation readCoop = mapper.convert(readCoopDto, ReadCooperation.class);
 
@@ -134,7 +134,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
-    public Response queryHouse(@Min(1) Long cooperationId,
+    public Response queryHouse( Long cooperationId,
                                @Min(1) Integer pageNumber,
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
@@ -165,8 +165,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(DELETE_COOPERATION_PERMISSION)
     @Override
-    public Response deleteCooperation(Long cooperationId) {
-        cooperationService.deactivateCooperation(cooperationId);
+    public Response deleteCooperation(Long id) {
+        cooperationService.deactivateCooperation(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -186,9 +186,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
     @Override
-    public Response updateCooperation(Long cooperationId, @Valid UpdateCooperation updateCooperation) {
+    public Response updateCooperation(Long id, @Valid UpdateCooperation updateCooperation) {
         CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
-        CooperationDto toUpdate = cooperationService.updateCooperation(cooperationId, updateCoopDto);
+        CooperationDto toUpdate = cooperationService.updateCooperation(id, updateCoopDto);
         ReadCooperation readCooperation = mapper.convert(toUpdate, ReadCooperation.class);
 
         return Response.status(Response.Status.OK).entity(readCooperation).build();

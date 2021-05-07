@@ -1445,7 +1445,7 @@ components:
       schema:
         type: integer
         format: int64
-        minimum: 1
+        example: 1
     p_contact_id:
       name: contact_id
       in: path
