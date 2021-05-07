@@ -3654,7 +3654,7 @@ components:
         question_votes:
           type: array
           items:
-            $ref: '#/components/schemas/CreateMultipleChoiceQuestionVote'
+            $ref: '#/components/schemas/CreateQuestionVote'
           example: {}
 
     ReadQuestionVote:
