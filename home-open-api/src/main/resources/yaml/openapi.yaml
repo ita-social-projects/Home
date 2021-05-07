@@ -3636,8 +3636,6 @@ components:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
-        user:
-          $ref: '#/components/schemas/ReadUser'
         question_votes:
           type: array
           items:
@@ -3646,11 +3644,8 @@ components:
     CreateVote:
       type: object
       required:
-        - user
         - question_votes
       properties:
-        user:
-          $ref: '#/components/schemas/UserLookup'
         question_votes:
           type: array
           items:
