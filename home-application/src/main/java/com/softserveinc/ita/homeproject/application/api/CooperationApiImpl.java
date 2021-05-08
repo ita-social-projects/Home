@@ -110,8 +110,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
-    public Response getContactOnCooperation(Long cooperationId, Long contactId) {
-        var readContactDto = contactService.getContactById(contactId);
+    public Response getContactOnCooperation(Long cooperationId, Long id) {
+        var readContactDto = contactService.getContactById(id);
         var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
@@ -179,8 +179,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(DELETE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response deleteContactOnCooperation(Long cooperationId, Long contactId) {
-        contactService.deactivateContact(contactId);
+    public Response deleteContactOnCooperation(Long cooperationId, Long id) {
+        contactService.deactivateContact(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -206,9 +206,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnCooperation(Long cooperationId, Long contactId, @Valid UpdateContact updateContact) {
+    public Response updateContactOnCooperation(Long cooperationId, Long id, @Valid UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        var updatedContactDto = contactService.updateContact(cooperationId, contactId, updateContactDto);
+        var updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
         var readContact = mapper.convert(updatedContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

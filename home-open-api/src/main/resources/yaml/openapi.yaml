@@ -652,7 +652,7 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
-  /cooperation/{cooperation_id}/contacts/{contact_id}:
+  /cooperation/{cooperation_id}/contacts/{id}:
     get:
       tags:
         - cooperation contact
@@ -662,7 +662,7 @@ paths:
       operationId: getContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
-        - $ref: '#/components/parameters/p_contact_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
         200:
           $ref: '#/components/responses/ContactResponse'
@@ -683,7 +683,7 @@ paths:
       operationId: updateContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
-        - $ref: '#/components/parameters/p_contact_id'
+        - $ref: '#/components/parameters/p_id'
       requestBody:
         $ref: '#/components/requestBodies/UpdateContactBody'
       responses:
@@ -708,7 +708,7 @@ paths:
       operationId: deleteContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
-        - $ref: '#/components/parameters/p_contact_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
         204:
           $ref: '#/components/responses/NoContentResponse'
@@ -1421,8 +1421,8 @@ components:
 
   parameters:
     p_id:
-      name: "id"
-      in: "path"
+      name: id
+      in: path
       description: The ID
       required: true
       schema:
@@ -1438,19 +1438,10 @@ components:
         format: int64
         example: 1
     p_cooperation_id:
-      name: "cooperation_id"
+      name: cooperation_id
       in: path
       required: true
       description: The ID of the Cooperation
-      schema:
-        type: integer
-        format: int64
-        example: 1
-    p_contact_id:
-      name: contact_id
-      in: path
-      description: The ID of the Contact
-      required: true
       schema:
         type: integer
         format: int64
