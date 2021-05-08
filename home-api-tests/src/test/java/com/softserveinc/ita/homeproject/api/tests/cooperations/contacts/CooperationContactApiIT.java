@@ -98,7 +98,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperation(expectedCooperation.getId(), null))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining("Missing the required parameter 'Id' when calling getContactOnCooperation");
+            .withMessageContaining("Missing the required parameter 'id' when calling getContactOnCooperation");
     }
 
     @Test
@@ -314,7 +314,7 @@ class CooperationContactApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationContactApi
                 .deleteContactOnCooperation(expectedUser.getId(), null))
-            .withMessageContaining("Missing the required parameter 'Id'" +
+            .withMessageContaining("Missing the required parameter 'id'" +
                 " when calling deleteContactOnCooperation");
     }
 
