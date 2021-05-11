@@ -12,5 +12,4 @@ public class OwnershipDto extends BaseDto {
     private UserDto user;
 
     private BigDecimal ownershipPart;
-
 }

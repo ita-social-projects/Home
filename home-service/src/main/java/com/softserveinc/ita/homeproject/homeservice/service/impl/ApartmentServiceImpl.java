@@ -46,12 +46,12 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException("Area = " + invitationSummaryOwnerPart + ". Area cannot be more than 1");
+            throw new BadRequestHomeException("The sum of the entered area of the apartment = " + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
         apartment.getInvitations().forEach(element -> {
             element.setApartment(apartment);
-            // change after invitation implementation will be added
+            // TODO change after invitation implementation will be added
             element.setSentDatetime(LocalDateTime.now());
             element.setStatus(InvitationStatus.PENDING);
             element.setName("apartment invite");
@@ -78,7 +78,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         return mapper.convert(toGet, ApartmentDto.class);
     }
-
 
     @Override
     @Transactional

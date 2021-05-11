@@ -39,7 +39,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @Override
     public Response deleteApartment(Long houseId, Long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @PreAuthorize(GET_APARTMENT_PERMISSION)
@@ -69,6 +69,6 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @Override
     public Response updateApartment(Long houseId, Long id, @Valid UpdateApartment updateApartment) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

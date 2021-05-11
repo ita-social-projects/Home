@@ -112,7 +112,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), createApartment))
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("Area = 1.5. Area cannot be more than 1");
+                .withMessageContaining("The sum of the entered area of the apartment = 1.5. Area cannot be greater than 1");
     }
 
     @Test

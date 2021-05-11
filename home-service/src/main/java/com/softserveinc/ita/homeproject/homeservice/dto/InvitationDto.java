@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InvitationDto {
+public class InvitationDto extends BaseDto {
 
     private String email;
 
