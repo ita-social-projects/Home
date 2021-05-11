@@ -46,7 +46,9 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException("The sum of the entered area of the apartment = " + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
+            throw new BadRequestHomeException
+                    ("The sum of the entered area of the apartment = "
+                            + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
         apartment.getInvitations().forEach(element -> {
