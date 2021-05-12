@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class CommonApi {
 
-    public static final String PAGING_COUNT = "Paging-count";
+    private static final String PAGING_COUNT = "Paging-count";
 
-    public static final String PAGING_TOTAL_PAGES = "Paging-total-pages";
+    private static final String PAGING_TOTAL_PAGES = "Paging-total-pages";
 
-    public static final String PAGING_TOTAL_COUNT = "Paging-total-count";
+    private static final String PAGING_TOTAL_COUNT = "Paging-total-count";
 
     @Context
     private UriInfo uriInfo;
@@ -46,5 +47,9 @@ public abstract class CommonApi {
             .header(PAGING_TOTAL_PAGES, totalPages)
             .header(PAGING_TOTAL_COUNT, totalElements)
             .build();
+    }
+
+    protected <T> Specification<T> getSpecification() {
+        return queryApiService.getSpecification(uriInfo);
     }
 }
