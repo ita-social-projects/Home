@@ -10,7 +10,7 @@ public class HouseQuery extends BaseQuery {
 
     private Long cooperationId;
 
-    private Long houseId;
+    private Long id;
 
     private Integer quantityFlat;
 
@@ -26,8 +26,8 @@ public class HouseQuery extends BaseQuery {
         this.cooperationId = cooperationId;
     }
 
-    public void setHouseId(Long houseId) {
-        this.houseId = houseId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setQuantityFlat(Integer quantityFlat) {
@@ -56,7 +56,7 @@ public class HouseQuery extends BaseQuery {
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
-                houseId,
+                id,
                 quantityFlat,
                 adjoiningArea,
                 houseArea);
@@ -74,8 +74,8 @@ public class HouseQuery extends BaseQuery {
             return this;
         }
 
-        public Builder houseId(Long houseId){
-            queryClass.setHouseId(houseId);
+        public Builder id(Long id){
+            queryClass.setId(id);
             return this;
         }
 

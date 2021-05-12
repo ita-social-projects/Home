@@ -3,14 +3,14 @@ package com.softserveinc.ita.homeproject.api.tests.query;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.ContactApi;
-import com.softserveinc.ita.homeproject.api.UserApi;
+import com.softserveinc.ita.homeproject.api.CooperationApi;
+import com.softserveinc.ita.homeproject.api.CooperationContactApi;
 import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.model.ReadCooperation;
 
-public class ContactQuery extends BaseQuery{
+public class CooperationContactQuery extends BaseQuery{
 
-    private Long userId;
+    private Long cooperationId;
 
     private Long id;
 
@@ -22,22 +22,18 @@ public class ContactQuery extends BaseQuery{
 
     private String type;
 
-    private ContactApi contactApi;
+    private CooperationContactApi contactApi;
 
-    private UserApi userApi;
+    private CooperationApi cooperationApi;
 
-    private ReadUser readUser;
+    private ReadCooperation readCooperation;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setCooperationId(Long cooperationId) {
+        this.cooperationId = cooperationId;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public void setPhone(String phone) {
@@ -52,21 +48,25 @@ public class ContactQuery extends BaseQuery{
         this.main = main;
     }
 
-    public void setContactApi(ContactApi contactApi) {
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setContactApi(CooperationContactApi contactApi) {
         this.contactApi = contactApi;
     }
 
-    public void setUserApi(UserApi userApi) {
-        this.userApi = userApi;
+    public void setCooperationApi(CooperationApi cooperationApi) {
+        this.cooperationApi = cooperationApi;
     }
 
-    public void setReadUser(ReadUser readUser) {
-        this.readUser = readUser;
+    public void setReadCooperation(ReadCooperation readCooperation) {
+        this.readCooperation = readCooperation;
     }
 
     public List<ReadContact> perform() throws ApiException {
         return contactApi
-            .queryContactsOnUser(this.userId, this.getPageNumber(),
+            .queryContactsOnCooperation(this.cooperationId, this.getPageNumber(),
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
@@ -77,14 +77,14 @@ public class ContactQuery extends BaseQuery{
                 type);
     }
 
-    public static class Builder extends BaseBuilder<ContactQuery, ContactQuery.Builder> {
+    public static class Builder extends BaseBuilder<CooperationContactQuery, CooperationContactQuery.Builder> {
 
-        public Builder(ContactApi contactApi) {
+        public Builder(CooperationContactApi contactApi) {
             queryClass.setContactApi(contactApi);
         }
 
-        public Builder userId(Long userId) {
-            queryClass.setUserId(userId);
+        public Builder cooperationId(Long userId) {
+            queryClass.setCooperationId(userId);
             return this;
         }
 
@@ -113,23 +113,23 @@ public class ContactQuery extends BaseQuery{
             return this;
         }
 
-        public Builder readUser(ReadUser readUser) {
-            queryClass.setReadUser(readUser);
+        public Builder readCooperation(ReadCooperation readCooperation) {
+            queryClass.setReadCooperation(readCooperation);
             return this;
         }
 
-        public Builder userApi(UserApi userApi) {
-            queryClass.setUserApi(userApi);
+        public Builder cooperationApi(CooperationApi cooperationApi) {
+            queryClass.setCooperationApi(cooperationApi);
             return this;
         }
 
         @Override
-        protected ContactQuery getActual() {
-            return new ContactQuery();
+        protected CooperationContactQuery getActual() {
+            return new CooperationContactQuery();
         }
 
         @Override
-        protected ContactQuery.Builder getActualBuilder() {
+        protected CooperationContactQuery.Builder getActualBuilder() {
             return this;
         }
     }

@@ -1,20 +1,16 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import java.util.List;
 import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import com.softserveinc.ita.homeproject.homedata.entity.EmailContact;
 import com.softserveinc.ita.homeproject.homedata.entity.PhoneContact;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.TypeOfTheContactDoesntMatchHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -25,50 +21,31 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
-public class ContactServiceImpl implements ContactService {
+public abstract class BaseContactService implements ContactService {
 
-    private final ContactRepository contactRepository;
+    protected final ContactRepository contactRepository;
 
-    private final UserRepository userRepository;
-
-    private final ServiceMapper mapper;
+    protected final ServiceMapper mapper;
 
     @Transactional
     @Override
-    public ContactDto createContact(Long userId, ContactDto createContactDto) {
-        User user = getUserById(userId);
-        if (Boolean.TRUE.equals(createContactDto.getMain())) {
-            List<Contact> allByUserIdAndType = contactRepository
-                .findAllByUserIdAndType(userId, mapper.convert(createContactDto.getType(), ContactType.class));
-            allByUserIdAndType
-                .stream()
-                .filter(Contact::getMain)
-                .findAny()
-                .ifPresent(contact -> {
-                    throw new AlreadyExistHomeException("User with id "
-                        + userId + " already has main " + createContactDto.getType() + " contact");
-                });
-        }
-
-        Contact contact = mapper.convert(createContactDto, Contact.class);
-        contact.setUser(user);
+    public ContactDto createContact(Long parentEntityId, ContactDto createContactDto) {
+        var contact = mapper.convert(createContactDto, Contact.class);
+        checkAndFillParentEntity(createContactDto, contact, parentEntityId);
         contact.setEnabled(true);
         contactRepository.save(contact);
         return mapper.convert(contact, ContactDto.class);
     }
 
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundHomeException("User with id " + id + " wasn't found"));
-    }
+    protected abstract void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId);
 
     @Override
-    public ContactDto updateContact(Long id, ContactDto updateContactDto) {
-        Contact contact = contactRepository.findById(id)
-            .filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + id + " is not found"));
+    @Transactional
+    public ContactDto updateContact(Long parentEntityId, Long id, ContactDto updateContactDto) {
+        var contact = checkAndGetContactByParentId(id, parentEntityId);
 
         ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
         if (existingContactType == updateContactDto.getType()) {
@@ -100,25 +77,26 @@ public class ContactServiceImpl implements ContactService {
         return mapper.convert(email, EmailContactDto.class);
     }
 
+    protected abstract Contact checkAndGetContactByParentId(Long id, Long parentEntityId);
+
     @Override
-    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize,
-                                    Specification<Contact> specification) {
+    public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification) {
         Specification<Contact> contactSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(contact -> mapper.convert(contact, ContactDto.class));
     }
 
-    @Override
+
     public ContactDto getContactById(Long id) {
-        Contact contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
+        var contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
         return mapper.convert(contactResponse, ContactDto.class);
     }
 
     @Override
     public void deactivateContact(Long id) {
-        Contact contact = contactRepository.findById(id).filter(Contact::getEnabled)
+        var contact = contactRepository.findById(id).filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
         contact.setEnabled(false);
         contactRepository.save(contact);

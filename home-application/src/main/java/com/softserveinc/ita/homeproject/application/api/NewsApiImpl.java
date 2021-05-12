@@ -81,7 +81,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
-                               String id,
+                               Long id,
                                String title,
                                String text,
                                String source) {
@@ -100,7 +100,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
     public Response getNews(Long id) {
-        NewsDto readNewsDto = newsService.getById(id);
+        NewsDto readNewsDto = (NewsDto) queryApiService.getOne(uriInfo, newsService);
         ReadNews newsApiResponse = mapper.convert(readNewsDto, ReadNews.class);
 
         return Response.ok().entity(newsApiResponse).build();

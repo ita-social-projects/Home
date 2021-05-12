@@ -13,12 +13,7 @@ import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.HouseQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -77,17 +72,17 @@ class QueryHouseIT {
     }
 
     @Test
-    void getAllHousesByHouseId() throws ApiException {
+    void getAllHousesById() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
 
-        Long houseId = Objects.requireNonNull(readCoop.getHouses()).get(0).getId();
+        Long id = Objects.requireNonNull(readCoop.getHouses()).get(0).getId();
         List<ReadHouse> queryResponse = new HouseQuery
             .Builder(houseApi)
             .cooperationId(readCoop.getId())
             .pageNumber(1)
             .pageSize(10)
             .sort("id,asc")
-            .houseId(houseId)
+            .id(id)
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getId(), readCoop.getHouses().get(0).getId()));
@@ -155,7 +150,8 @@ class QueryHouseIT {
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
             .address(createAddress())
-            .houses(createHouseList());
+            .houses(createHouseList())
+            .contacts(createContactList());
     }
 
     private List<CreateHouse> createHouseList() {
@@ -173,6 +169,20 @@ class QueryHouseIT {
             .address(createAddress()));
 
         return createHouses;
+    }
+
+    private List<CreateContact> createContactList() {
+        List<CreateContact> createContact = new ArrayList<>();
+        createContact.add(new CreateEmailContact()
+            .email("primaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(true));
+
+        createContact.add(new CreateEmailContact()
+            .email("secondaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(false));
+        return createContact;
     }
 
     private Address createAddress() {
