@@ -311,7 +311,7 @@ class CooperationContactApiIT {
     }
 
     @Test
-    void passNullIdWhenDeleteAnyContactTest() throws ApiException {
+    void deletingNonExistentAnyContactTest() throws ApiException {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
         Long wrongId = 10000L;
 
@@ -323,7 +323,7 @@ class CooperationContactApiIT {
     }
 
     @Test
-    void passNullContactIdWhenDeleteAnyContactTest() throws ApiException {
+    void passNullIdWhenDeleteAnyContactTest() throws ApiException {
         ReadCooperation expectedUser = cooperationApi.createCooperation(createCooperation());
 
         assertThatExceptionOfType(ApiException.class)
