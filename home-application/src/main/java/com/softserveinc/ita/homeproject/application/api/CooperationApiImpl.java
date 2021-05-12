@@ -91,7 +91,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_COOPERATION_PERMISSION)
     @Override
-    public Response getCooperation(Long cooperationId) {
+    public Response getCooperation(Long id) {
         CooperationDto readCoopDto = (CooperationDto) queryApiService.getOne(uriInfo, cooperationService);
         ReadCooperation readCoop = mapper.convert(readCoopDto, ReadCooperation.class);
 
@@ -101,7 +101,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
-    public Response getHouse(Long cooperationId, Long houseId) {
+    public Response getHouse(Long cooperationId, Long id) {
         HouseDto toGet = (HouseDto) queryApiService.getOne(uriInfo, houseService);
         ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
@@ -110,8 +110,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
-    public Response getContactOnCooperation(Long cooperationId, Long contactId) {
-        var readContactDto = contactService.getContactById(contactId);
+    public Response getContactOnCooperation(Long cooperationId, Long id) {
+        var readContactDto = contactService.getContactById(id);
         var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
@@ -134,12 +134,12 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
-    public Response queryHouse(@Min(1) Long cooperationId,
+    public Response queryHouse(Long cooperationId,
                                @Min(1) Integer pageNumber,
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
-                               Long houseId,
+                               Long id,
                                Integer quantityFlat,
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
@@ -155,7 +155,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                @Min(1) @Max(10) Integer pageSize,
                                                String sort,
                                                String filter,
-                                               String id, String phone,
+                                               Long id, String phone,
                                                String email,
                                                String main,
                                                String type) {
@@ -165,30 +165,30 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(DELETE_COOPERATION_PERMISSION)
     @Override
-    public Response deleteCooperation(Long cooperationId) {
-        cooperationService.deactivateCooperation(cooperationId);
+    public Response deleteCooperation(Long id) {
+        cooperationService.deactivateCooperation(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DELETE_HOUSE_PERMISSION)
     @Override
-    public Response deleteHouse(Long cooperationId, Long houseId) {
-        houseService.deactivateById(cooperationId, houseId);
+    public Response deleteHouse(Long cooperationId, Long id) {
+        houseService.deactivateById(cooperationId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DELETE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response deleteContactOnCooperation(Long cooperationId, Long contactId) {
-        contactService.deactivateContact(contactId);
+    public Response deleteContactOnCooperation(Long cooperationId, Long id) {
+        contactService.deactivateContact(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
     @Override
-    public Response updateCooperation(Long cooperationId, @Valid UpdateCooperation updateCooperation) {
+    public Response updateCooperation(Long id, @Valid UpdateCooperation updateCooperation) {
         CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
-        CooperationDto toUpdate = cooperationService.updateCooperation(cooperationId, updateCoopDto);
+        CooperationDto toUpdate = cooperationService.updateCooperation(id, updateCoopDto);
         ReadCooperation readCooperation = mapper.convert(toUpdate, ReadCooperation.class);
 
         return Response.status(Response.Status.OK).entity(readCooperation).build();
@@ -196,9 +196,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_HOUSE_PERMISSION)
     @Override
-    public Response updateHouse(Long cooperationId, Long houseId, @Valid UpdateHouse updateHouse) {
+    public Response updateHouse(Long cooperationId, Long id, @Valid UpdateHouse updateHouse) {
         HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
-        HouseDto toUpdate = houseService.updateHouse(houseId, updateHouseDto);
+        HouseDto toUpdate = houseService.updateHouse(id, updateHouseDto);
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
@@ -206,9 +206,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnCooperation(Long cooperationId, Long contactId, @Valid UpdateContact updateContact) {
+    public Response updateContactOnCooperation(Long cooperationId, Long id, @Valid UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        var updatedContactDto = contactService.updateContact(cooperationId, contactId, updateContactDto);
+        var updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
         var readContact = mapper.convert(updatedContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
