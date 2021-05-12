@@ -95,7 +95,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
     @Override
-    @SuppressWarnings("unchecked")
     public Response queryContactsOnUser(Long userId,
                                         @Min(1) Integer pageNumber,
                                         @Min(1) @Max(10) Integer pageSize,
