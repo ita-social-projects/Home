@@ -99,7 +99,7 @@ class QueryApartmentIT {
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,desc")
-                .id(String.valueOf(apartmentId))
+                .id(apartmentId)
                 .build().perform();
         queryResponse.forEach(element -> assertEquals(element.getId(), readApartment.getId()));
     }
