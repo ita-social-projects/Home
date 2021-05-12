@@ -5,26 +5,21 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
 import org.springframework.core.convert.converter.Converter;
 
-
-
-
 @Provider
 public class StringToContactTypeConverter implements Converter<String, ContactType> {
     @Override
     public ContactType convert(final String source) {
 
-        ContactType res = null;
+        ContactType result = null;
 
-        if (source == null || source.isEmpty()) {
-            return null;
-        }
-
-        for (ContactType constant : ContactType.values()) {
-            if (constant.toString().equals(source)) {
-                res = constant;
+        if (source != null && !source.isEmpty()) {
+            for (ContactType constant : ContactType.values()) {
+                if (constant.toString().equals(source)) {
+                    result = constant;
+                }
             }
         }
 
-        return res;
+        return result;
     }
 }
