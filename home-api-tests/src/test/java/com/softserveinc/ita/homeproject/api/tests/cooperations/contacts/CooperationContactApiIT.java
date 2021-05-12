@@ -91,7 +91,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperation(expectedCooperation.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID:" + wrongId);
+            .withMessageContaining("Contact with 'id: " + wrongId + "' is not found");
     }
 
     @Test
@@ -287,7 +287,7 @@ class CooperationContactApiIT {
         assertThatExceptionOfType(ApiException.class).isThrownBy(() -> cooperationContactApi
             .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedEmailContact.getId()))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID");
+            .withMessageContaining("Contact with 'id: " + savedEmailContact.getId() + "' is not found");
     }
 
     @Test

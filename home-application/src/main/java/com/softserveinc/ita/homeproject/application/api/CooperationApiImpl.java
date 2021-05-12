@@ -134,12 +134,12 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
-    public Response queryHouse(@Min(1) Long cooperationId,
+    public Response queryHouse(Long cooperationId,
                                @Min(1) Integer pageNumber,
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
-                               Long houseId,
+                               Long id,
                                Integer quantityFlat,
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
@@ -153,12 +153,13 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     public Response queryContactsOnCooperation(Long cooperationId,
                                                @Min(1) Integer pageNumber,
                                                @Min(1) @Max(10) Integer pageSize,
-                                               String sort,
-                                               String filter,
-                                               String id, String phone,
+                                               String sort, String filter,
+                                               Long id,
+                                               String phone,
                                                String email,
                                                String main,
                                                String type) {
+
         Page<ContactDto> readContact = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readContact, ReadContact.class);
     }
