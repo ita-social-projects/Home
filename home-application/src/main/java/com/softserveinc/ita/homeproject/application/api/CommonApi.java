@@ -12,6 +12,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 public abstract class CommonApi {
 
@@ -22,15 +23,15 @@ public abstract class CommonApi {
     public static final String PAGING_TOTAL_COUNT = "Paging-total-count";
 
     @Context
-    protected UriInfo uriInfo;
+    private UriInfo uriInfo;
 
     @Autowired
     protected HomeMapper mapper;
 
     @Autowired
-    protected QueryApiService queryApiService;
+    private QueryApiService queryApiService;
 
-    protected <T extends BaseDto> Response buildQueryResponse(Page<T> page, Class<? extends BaseReadView> clazz) {
+    protected <D extends BaseDto> Response buildQueryResponse(Page<D> page, Class<? extends BaseReadView> clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();
