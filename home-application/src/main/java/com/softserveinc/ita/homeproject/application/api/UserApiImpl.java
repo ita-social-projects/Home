@@ -168,9 +168,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(UPDATE_USER_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
+    public Response updateContactOnUser(Long userId, Long id, @Valid UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        var readContactDto = contactService.updateContact(userId, contactId, updateContactDto);
+        var readContactDto = contactService.updateContact(userId, id, updateContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

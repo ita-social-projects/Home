@@ -110,8 +110,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
-    public Response getContactOnCooperation(Long cooperationId, Long contactId) {
-        ContactDto readContactDto = contactService.getOne(contactId);
+    public Response getContactOnCooperation(Long cooperationId, Long id) {
+        var readContactDto = contactService.getOne(id);
         var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
