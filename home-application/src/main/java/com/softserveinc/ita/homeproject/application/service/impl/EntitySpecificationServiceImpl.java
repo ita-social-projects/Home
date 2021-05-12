@@ -27,14 +27,12 @@ public class EntitySpecificationServiceImpl<T> implements EntitySpecificationSer
 
     @Override
     public Specification<T> getSpecification(MultivaluedMap<String, String> filter, String search, String sort) {
-
         Specification<T> filterSpecification = RSQLJPASupport.toSpecification(toRSQLString(filter));
         Specification<T> searchSpecification = RSQLJPASupport.toSpecification(search);
         Specification<T> sortSpecification = RSQLJPASupport.toSort(sort);
 
-        return Optional.ofNullable(sortSpecification)
+        return Optional.of(sortSpecification)
                 .map(spec -> spec.and(filterSpecification))
                 .map(spec -> spec.and(searchSpecification)).orElseThrow();
     }
-
 }
