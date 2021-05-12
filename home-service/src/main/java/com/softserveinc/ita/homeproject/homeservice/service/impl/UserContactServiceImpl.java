@@ -32,7 +32,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        var user = mapper.convert(userService.getUserById(parentEntityId), User.class);
+        var user = mapper.convert(getOne(parentEntityId), User.class);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));

@@ -2,15 +2,9 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -79,7 +73,6 @@ public class CooperationServiceImpl implements CooperationService {
         return mapper.convert(fromDb, CooperationDto.class);
     }
 
-    @Transactional
     @Override
     public Page<CooperationDto> findAll(Integer pageNumber, Integer pageSize,
                                         Specification<Cooperation> specification) {

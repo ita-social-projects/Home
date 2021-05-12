@@ -87,13 +87,6 @@ public abstract class BaseContactService implements ContactService {
             .map(contact -> mapper.convert(contact, ContactDto.class));
     }
 
-
-    public ContactDto getContactById(Long id) {
-        var contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("Can't find contact with given ID:" + id));
-        return mapper.convert(contactResponse, ContactDto.class);
-    }
-
     @Override
     public void deactivateContact(Long id) {
         var contact = contactRepository.findById(id).filter(Contact::getEnabled)

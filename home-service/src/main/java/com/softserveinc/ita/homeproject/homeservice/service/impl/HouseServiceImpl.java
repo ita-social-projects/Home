@@ -68,7 +68,6 @@ public class HouseServiceImpl implements HouseService {
         return mapper.convert(fromDb, HouseDto.class);
     }
 
-    @Transactional
     @Override
     public Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification) {
         Specification<House> houseSpecification = specification
