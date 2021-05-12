@@ -31,7 +31,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private final ServiceMapper mapper;
 
-
     @Transactional
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
@@ -67,7 +66,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         return mapper.convert(apartment, ApartmentDto.class);
     }
 
-
     @Transactional
     @Override
     public ApartmentDto getApartmentById(Long houseId, Long id) {
@@ -80,6 +78,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         return mapper.convert(toGet, ApartmentDto.class);
     }
+
     @Override
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
