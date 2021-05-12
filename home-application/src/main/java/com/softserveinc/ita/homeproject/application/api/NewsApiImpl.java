@@ -79,7 +79,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
                                String filter,
-                               String id,
+                               Long id,
                                String title,
                                String text,
                                String source) {

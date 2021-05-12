@@ -7,7 +7,7 @@ public interface ContactService extends QueryableService<Contact, ContactDto> {
 
     ContactDto createContact(Long parentEntityId, ContactDto createContactDto);
 
-    ContactDto updateContact(Long parentEntityId, Long contactId, ContactDto updateContactDto);
+    ContactDto updateContact(Long parentEntityId, Long id, ContactDto updateContactDto);
 
     void deactivateContact(Long id);
 }

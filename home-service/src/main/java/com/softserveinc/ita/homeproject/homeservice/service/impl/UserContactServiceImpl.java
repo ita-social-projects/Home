@@ -49,11 +49,11 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
     }
 
     @Override
-    protected Contact checkAndGetContactByParentId(Long contactId, Long parentEntityId) {
+    protected Contact checkAndGetContactByParentId(Long id, Long parentEntityId) {
         var user = userRepository.findById(parentEntityId).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException("User with id:" + parentEntityId + " is not found"));
         return user.getContacts().stream()
-            .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(contactId)).findFirst()
-            .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + contactId + " is not found"));
+            .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(id)).findFirst()
+            .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + id + " is not found"));
     }
 }

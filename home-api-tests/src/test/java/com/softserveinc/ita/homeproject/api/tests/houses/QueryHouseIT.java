@@ -72,17 +72,17 @@ class QueryHouseIT {
     }
 
     @Test
-    void getAllHousesByHouseId() throws ApiException {
+    void getAllHousesById() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
 
-        Long houseId = Objects.requireNonNull(readCoop.getHouses()).get(0).getId();
+        Long id = Objects.requireNonNull(readCoop.getHouses()).get(0).getId();
         List<ReadHouse> queryResponse = new HouseQuery
             .Builder(houseApi)
             .cooperationId(readCoop.getId())
             .pageNumber(1)
             .pageSize(10)
             .sort("id,asc")
-            .houseId(houseId)
+            .id(id)
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getId(), readCoop.getHouses().get(0).getId()));
