@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class QueryApiServiceImpl<T extends BaseEntity, D extends BaseDto> implements QueryApiService<T, D> {
+public class QueryApiServiceImpl<T extends BaseEntity> implements QueryApiService<T> {
     private final EntitySpecificationService<T> specificationService;
 
     @Override
