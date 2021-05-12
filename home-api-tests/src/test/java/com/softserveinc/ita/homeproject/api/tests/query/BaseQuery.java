@@ -9,7 +9,7 @@ public abstract class BaseQuery {
 
     private String filter;
 
-    private String id;
+    private Long id;
 
     public Integer getPageNumber() {
         return pageNumber;
@@ -43,11 +43,11 @@ public abstract class BaseQuery {
         this.filter = filter;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -85,7 +85,7 @@ public abstract class BaseQuery {
             return queryBuilder;
         }
 
-        public B id(String id) {
+        public B id(Long id) {
             queryClass.setId(id);
             return queryBuilder;
         }

@@ -1,22 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations.contacts;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
-
-import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.api.tests.query.CooperationContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
@@ -30,8 +18,19 @@ import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.model.CreateContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+
+import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CooperationContactApiIT {
 
@@ -112,7 +111,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperation(expectedCooperation.getId(), null))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining("Missing the required parameter 'contactId' when calling getContactOnCooperation");
+            .withMessageContaining("Missing the required parameter 'id' when calling getContactOnCooperation");
     }
 
     @Test
@@ -306,7 +305,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedPhoneContact.getId()))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID");;
+            .withMessageContaining("Can't find contact with given ID");
     }
 
     @Test
@@ -322,13 +321,13 @@ class CooperationContactApiIT {
     }
 
     @Test
-    void passNullContactIdWhenDeleteAnyContactTest() throws ApiException {
+    void passNullIdWhenDeleteAnyContactTest() throws ApiException {
         ReadCooperation expectedUser = cooperationApi.createCooperation(createCooperation());
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationContactApi
                 .deleteContactOnCooperation(expectedUser.getId(), null))
-            .withMessageContaining("Missing the required parameter 'contactId'" +
+            .withMessageContaining("Missing the required parameter 'id'" +
                 " when calling deleteContactOnCooperation");
     }
 

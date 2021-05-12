@@ -101,7 +101,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         @Min(1) @Max(10) Integer pageSize,
                                         String sort,
                                         String filter,
-                                        String id,
+                                        Long id,
                                         String phone,
                                         String email,
                                         String main,
@@ -113,8 +113,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(DELETE_USER_CONTACT_PERMISSION)
     @Override
-    public Response deleteContactOnUser(Long userId, Long contactId) {
-        contactService.deactivateContact(contactId);
+    public Response deleteContactOnUser(Long userId, Long id) {
+        contactService.deactivateContact(id);
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -134,7 +134,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 @Min(1) @Max(10) Integer pageSize,
                                 String sort,
                                 String filter,
-                                String id,
+                                Long id,
                                 String email,
                                 String firstName,
                                 String lastName,
@@ -147,7 +147,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
-    public Response getContactOnUser(Long userId, Long contactId) {
+    public Response getContactOnUser(Long userId, Long id) {
         ContactDto readContactDto = (ContactDto) queryApiService.getOne(uriInfo, contactService);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
@@ -171,9 +171,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(UPDATE_USER_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnUser(Long userId, Long contactId, @Valid UpdateContact updateContact) {
+    public Response updateContactOnUser(Long userId, Long id, @Valid UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        var readContactDto = contactService.updateContact(userId, contactId, updateContactDto);
+        var readContactDto = contactService.updateContact(userId, id, updateContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
