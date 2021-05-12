@@ -118,8 +118,13 @@ public class UserServiceImpl implements UserService {
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
-        toDelete.getRoles().forEach(role -> {if(role.equals(roleRepository.findByName(ADMIN_ROLE))){
-                    throw new BadRequestHomeException("User cannot be deleted."); }});
+
+        toDelete.getRoles().forEach(
+                role -> {
+                    if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
+                    throw new BadRequestHomeException("User cannot be deleted.");
+                    }});
+
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
