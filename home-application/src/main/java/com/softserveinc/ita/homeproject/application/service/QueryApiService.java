@@ -84,50 +84,6 @@ public interface QueryApiService<T extends BaseEntity> {
     }
 
     /**
-     * @param uriInfo - object that implements UriInfo interface
-     *                  that provides access to application and request URI information
-     * @param service - implementation of QueryableService interface
-     * @return Spring Data Page of DTOs according to request query
-     * @throws NotFoundHomeException if number of Page elements less than 1
-     */
-    default Page<D> getPageFromQuery(UriInfo uriInfo, QueryableService<T, D> service) {
-        int pageNumber = Integer.parseInt(getParameterValue(DefaultQueryParams.PAGE_NUMBER.getParameter(), uriInfo)
-                .orElse(DefaultQueryParams.PAGE_NUMBER.getValue()));
-        int pageSize = Integer.parseInt(getParameterValue(DefaultQueryParams.PAGE_SIZE.getParameter(), uriInfo)
-                .orElse(DefaultQueryParams.PAGE_SIZE.getValue()));
-        return service.findAll(pageNumber, pageSize, getSpecification(uriInfo));
-    }
-
-    private static String getMessage(UriInfo uriInfo) {
-        String message = "Entity with '%s' is not found";
-        MultivaluedMap<String, String> pathParams = uriInfo.getPathParameters();
-        String ids = pathParams.entrySet().stream()
-            .map(entry -> entry.getKey() + ": " + entry.getValue().get(0))
-            .collect(Collectors.joining(" and "));
-        return String.format(message, ids);
-    }
-
-    /**
-     * @param uriInfo - object that implements UriInfo interface
-     *                  that provides access to application and request URI information
-     * @param service - implementation of QueryableService interface
-     * @return Single DTO
-     * @throws NotFoundHomeException if number of Page elements less than 1
-     * @throws IllegalStateException if number of Page elements more than 1
-     */
-    default D getOne(UriInfo uriInfo, QueryableService<T, D> service) {
-        Page<D> page = getPageFromQuery(uriInfo, service);
-        if (page.getTotalElements() == 1) {
-            return page.getContent().get(0);
-        } else if (page.getTotalElements() == 0) {
-            throw new NotFoundHomeException(getMessage(uriInfo));
-        } else {
-            throw new IllegalStateException("Result of the request that require to return one element, "
-                + "contains more than one element");
-        }
-    }
-
-    /**
      * Enum of default query parameters that have to be excluded from filter map
      */
     enum DefaultQueryParams {
