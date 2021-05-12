@@ -59,21 +59,4 @@ class QueryApiServiceImplTest {
         assertEquals("1", QueryApiService.getParameterValue("id", uriInfo).orElseThrow());
         assertEquals("4", QueryApiService.getParameterValue("user_id", uriInfo).orElseThrow());
     }
-
-    @Test
-    void getOneTestWhenPageHaveMoreThanOneElement() {
-        when(uriInfo.getQueryParameters()).thenReturn(new MultivaluedHashMap<>() {{
-            put("page_number", Collections.singletonList("1"));
-            put("page_size", Collections.singletonList("10"));
-            put("filter", Collections.singletonList("filter"));
-        }});
-        when(uriInfo.getPathParameters()).thenReturn(new MultivaluedHashMap<>() {{
-            put("id", Collections.singletonList("1"));
-        }});
-        Page page = new PageImpl(Arrays.asList("1", "2", "3"));
-        when(entitySpecificationService.getSpecification(any(MultivaluedMap.class), anyString(), anyString()))
-            .thenReturn(specification);
-        when(queryableService.findAll(anyInt(), anyInt(), any(Specification.class))).thenReturn(page);
-        assertThrows(IllegalStateException.class, () -> queryApiService.getOne(uriInfo, queryableService));
-    }
 }
