@@ -26,10 +26,6 @@ public class CooperationServiceImpl implements CooperationService {
 
     private final ServiceMapper mapper;
 
-    private final HouseRepository houseRepository;
-
-    private final ContactRepository contactRepository;
-
     @Transactional
     @Override
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
@@ -80,16 +76,6 @@ public class CooperationServiceImpl implements CooperationService {
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
-    }
-
-    public CooperationDto getCooperationById(Long id) {
-        Cooperation toGet = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
-        List<House> houseList = houseRepository.findHousesByCooperationId(toGet.getId());
-        toGet.setHouses(houseList);
-        List<Contact> contactList = new ArrayList<>(contactRepository.findAllByCooperationId(toGet.getId()));
-        toGet.setContacts(contactList);
-        return mapper.convert(toGet, CooperationDto.class);
     }
 
     @Override
