@@ -123,7 +123,8 @@ public class UserServiceImpl implements UserService {
                 role -> {
                     if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
                         throw new BadRequestHomeException("User cannot be deleted.");
-                    }}
+                    }
+                }
         );
 
         toDelete.setEnabled(false);
