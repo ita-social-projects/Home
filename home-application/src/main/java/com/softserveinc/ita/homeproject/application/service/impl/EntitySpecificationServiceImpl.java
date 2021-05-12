@@ -35,7 +35,6 @@ public class EntitySpecificationServiceImpl<T> implements EntitySpecificationSer
         return Optional.ofNullable(sortSpecification)
                 .map(spec -> spec.and(filterSpecification))
                 .map(spec -> spec.and(searchSpecification)).orElseThrow();
-
     }
 
 }
