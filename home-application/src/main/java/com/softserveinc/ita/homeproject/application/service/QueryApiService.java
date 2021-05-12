@@ -13,21 +13,16 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
-import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 
 /**
  * QueryApiService - service that provides Spring Data Page by request query
  * @author Oleksii Zinkevych
  * @param <T> - entity type
- * @param <D> - DTO type
  * @see javax.ws.rs.core.UriInfo
  */
-public interface QueryApiService<T extends BaseEntity, D extends BaseDto> {
+public interface QueryApiService<T extends BaseEntity> {
     Map<String, String> EXCLUDED_PARAMETERS = Arrays.stream(DefaultQueryParams.values())
             .collect(Collectors.toMap(DefaultQueryParams::getParameter, DefaultQueryParams::getValue));
 
