@@ -87,7 +87,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        UserDto readUserDto = (UserDto) queryApiService.getOne(uriInfo, userService);
+        UserDto readUserDto = userService.getOne(id);
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
@@ -107,7 +107,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String main,
                                         String type) {
 
-        Page<ContactDto> contacts = queryApiService.getPageFromQuery(uriInfo, contactService);
+        Page<ContactDto> contacts = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(contacts, ReadContact.class);
     }
 
@@ -129,7 +129,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    @SuppressWarnings("unchecked")
     public Response getAllUsers(@Min(1) Integer pageNumber,
                                 @Min(1) @Max(10) Integer pageSize,
                                 String sort,
@@ -141,14 +140,14 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 String contactPhone,
                                 String contactEmail) {
 
-        Page<UserDto> users = queryApiService.getPageFromQuery(uriInfo, userService);
+        Page<UserDto> users = userService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(users, ReadUser.class);
     }
 
     @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
     public Response getContactOnUser(Long userId, Long contactId) {
-        ContactDto readContactDto = (ContactDto) queryApiService.getOne(uriInfo, contactService);
+        ContactDto readContactDto = contactService.getOne(contactId);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
