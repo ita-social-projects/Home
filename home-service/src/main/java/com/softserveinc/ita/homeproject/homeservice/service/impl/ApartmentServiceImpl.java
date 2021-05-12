@@ -46,8 +46,8 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException
-                    ("The sum of the entered area of the apartment = "
+            throw new BadRequestHomeException(
+                    "The sum of the entered area of the apartment = "
                             + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
@@ -80,7 +80,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         return mapper.convert(toGet, ApartmentDto.class);
     }
-
     @Override
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
