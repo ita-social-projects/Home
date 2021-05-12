@@ -17,16 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserContactServiceImpl extends BaseContactService implements UserContactService {
 
-    private final UserServiceImpl userService;
-
     private final UserRepository userRepository;
 
     public UserContactServiceImpl(ContactRepository contactRepository,
                                   ServiceMapper mapper,
-                                  UserServiceImpl userService,
                                   UserRepository userRepository) {
         super(contactRepository, mapper);
-        this.userService = userService;
         this.userRepository = userRepository;
     }
 
