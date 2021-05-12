@@ -2,48 +2,25 @@ package com.softserveinc.ita.homeproject.application.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collections;
 import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
-import com.softserveinc.ita.homeproject.application.service.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.application.service.QueryApiService;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
-import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@SuppressWarnings({"rawtypes", "unchecked"})
 class QueryApiServiceImplTest {
 
     @Mock
-    private static EntitySpecificationService entitySpecificationService;
-
-    @Mock
     private static UriInfo uriInfo;
-
-    @Mock
-    private static QueryableService queryableService;
-
-    @Mock
-    private static Specification specification;
-
-    @InjectMocks
-    private QueryApiServiceImpl queryApiService;
 
     @Test
     void getFilterMapTestWhenQueryOrPathParamsHaveTwoValues() {
