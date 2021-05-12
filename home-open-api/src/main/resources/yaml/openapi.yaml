@@ -759,7 +759,7 @@ components:
     ReadInvitation:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
-        type: object
+      type: object
       properties:
         email:
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
@@ -1401,6 +1401,12 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ReadHouse'
+    InvitationResponse:
+      description: OK
+      content:
+        applocation/json:
+          schema:
+            $ref: '#/components/schemas/ReadInvitation'
 
   requestBodies:
     CreateNewsBody:
@@ -1473,7 +1479,13 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateHouse'
       required: true
-
+    CreateInvitationBody:
+      description: A payload for creating a invitation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateInvitation'
+      required: true
 
   parameters:
     p_id:

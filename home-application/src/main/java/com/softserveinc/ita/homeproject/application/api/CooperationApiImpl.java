@@ -30,15 +30,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.UpdateContact;
-import com.softserveinc.ita.homeproject.model.UpdateCooperation;
-import com.softserveinc.ita.homeproject.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -146,6 +138,11 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
         Page<HouseDto> readHouse = queryApiService.getPageFromQuery(uriInfo, houseService);
         return buildQueryResponse(readHouse, ReadHouse.class);
+    }
+
+    @Override
+    public Response sendInvitation(Long cooperationId, CreateInvitation createInvitation) {
+        return null;
     }
 
     @PreAuthorize(GET_ALL_COOP_CONTACT_PERMISSION)
