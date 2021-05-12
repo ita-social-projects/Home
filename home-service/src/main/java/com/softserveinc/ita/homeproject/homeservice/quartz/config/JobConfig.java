@@ -33,8 +33,10 @@ public class JobConfig extends BaseJobConfig {
         return factoryBean;
     }
 
-    public static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs, String triggerName) {
-        log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})", jobDetail.toString(), pollFrequencyMs, triggerName);
+    public static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail,
+                                                         long pollFrequencyMs, String triggerName) {
+        log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})",
+            jobDetail.toString(), pollFrequencyMs, triggerName);
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(0L);

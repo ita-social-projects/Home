@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
@@ -10,14 +13,11 @@ import org.quartz.JobExecutionContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Component
 @Slf4j
 public class SendEmailJob extends QuartzJobBean {
-
     private final MailService mailService;
+
     private final InvitationService invitationService;
 
     public SendEmailJob(MailService mailService, InvitationService invitationService) {
