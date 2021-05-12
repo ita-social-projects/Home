@@ -111,8 +111,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(DELETE_USER_CONTACT_PERMISSION)
     @Override
-    public Response deleteContactOnUser(Long userId, Long contactId) {
-        contactService.deactivateContact(contactId);
+    public Response deleteContactOnUser(Long userId, Long id) {
+        contactService.deactivateContact(id);
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -144,8 +144,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
-    public Response getContactOnUser(Long userId, Long contactId) {
-        ContactDto readContactDto = contactService.getOne(contactId);
+    public Response getContactOnUser(Long userId, Long id) {
+        ContactDto readContactDto = contactService.getOne(id);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
