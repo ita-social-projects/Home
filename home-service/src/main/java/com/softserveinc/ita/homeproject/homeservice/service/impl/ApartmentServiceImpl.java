@@ -55,7 +55,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             // TODO change after invitation implementation will be added
             element.setSentDatetime(LocalDateTime.now());
             element.setStatus(InvitationStatus.PENDING);
-            element.setName("apartment invite");
         });
 
         apartment.setHouse(house);
