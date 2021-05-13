@@ -3,10 +3,11 @@ package com.softserveinc.ita.homeproject.application.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
+
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 
 @SuppressWarnings("unchecked")
 @Provider
@@ -34,7 +35,7 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new BadRequestException(String.format("The parameter type must be one of the values: %s",
+                throw new BadRequestHomeException(String.format("The parameter type must be one of the values: %s",
                     Arrays.toString(constants)));
             }
 
