@@ -6,6 +6,7 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 import java.math.BigDecimal;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -66,9 +67,10 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
 
-
     @Override
-    public Response updateApartment(Long houseId, Long id, @Valid UpdateApartment updateApartment) {
+    public Response updateApartment(@Min(1L) Long houseId, Long id, @Valid UpdateApartment updateApartment) {
         throw new UnsupportedOperationException();
     }
+
+
 }
