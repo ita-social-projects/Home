@@ -30,7 +30,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @PreAuthorize(CREATE_APARTMENT_PERMISSION)
     @Override
-    public Response createApartment(Long houseId, @Valid CreateApartment createApartment) {
+    public Response createApartment(@Min(1L) Long houseId, @Valid CreateApartment createApartment) {
         var createApartmentDto = mapper.convert(createApartment, ApartmentDto.class);
         var readApartmentDto = apartmentService.createApartment(houseId, createApartmentDto);
         var readApartment = mapper.convert(readApartmentDto, ReadApartment.class);
@@ -71,6 +71,5 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     public Response updateApartment(@Min(1L) Long houseId, Long id, @Valid UpdateApartment updateApartment) {
         throw new UnsupportedOperationException();
     }
-
 
 }

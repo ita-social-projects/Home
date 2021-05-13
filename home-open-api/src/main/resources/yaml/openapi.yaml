@@ -746,11 +746,11 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/ApartmentsResponse'
-        '400':
+        400:
           $ref: '#/components/responses/BadRequest'
-        "401":
+        401:
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
