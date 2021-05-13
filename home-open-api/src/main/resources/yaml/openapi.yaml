@@ -1960,7 +1960,7 @@ paths:
       tags:
         - cooperation poll
       summary: Update cooperation poll
-      description: Update a cooperation poll by a poll ID
+      description: Update a cooperation poll by a poll ID. Poll can be updated only if its status is draft
       operationId: updateCooperationPoll
       parameters:
         - name: "cooperation_id"
@@ -2007,7 +2007,7 @@ paths:
       tags:
         - cooperation poll
       summary: Delete cooperation poll
-      description: Delete a cooperation poll by a poll ID
+      description: Delete a cooperation poll by a poll ID. Poll can be deleted only if its status is draft
       operationId: deleteCooperationPoll
       parameters:
         - name: "cooperation_id"
@@ -2074,6 +2074,7 @@ paths:
             type: string
         - in: query
           name: cooperation_id
+          required: true
           description: ID of the polled cooperation
           schema:
             type: integer
@@ -2593,8 +2594,8 @@ paths:
       tags:
         - poll result
       summary: Get poll result
-      description: Get a result of the poll
-      operationId: getPollresult
+      description: Get a result of the poll. Result of the poll can be getted only if poll status is completed
+      operationId: getPollResult
       parameters:
         - name: "poll_id"
           in: "path"
