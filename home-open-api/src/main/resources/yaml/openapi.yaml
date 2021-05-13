@@ -851,15 +851,7 @@ paths:
       description: The endpoint gets all ownerships for the apartment
       operationId: queryOwnership
       parameters:
-        - name: "apartment_id"
-          in: path
-          required: true
-          description: Apartment ID to which the ownership belongs
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-          example: 1
+        - $ref: '#/components/parameters/p_apartment_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
