@@ -13,7 +13,7 @@ public class ContactQuery extends BaseQuery{
 
     private Long userId;
 
-    private String contactId;
+    private Long id;
 
     private String phone;
 
@@ -33,8 +33,8 @@ public class ContactQuery extends BaseQuery{
         this.userId = userId;
     }
 
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setType(ContactType type) {
@@ -71,7 +71,7 @@ public class ContactQuery extends BaseQuery{
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
-                contactId,
+                id,
                 phone,
                 email,
                 main,
@@ -89,8 +89,8 @@ public class ContactQuery extends BaseQuery{
             return this;
         }
 
-        public Builder contactId(String contactId) {
-            queryClass.setContactId(contactId);
+        public Builder id(Long id) {
+            queryClass.setId(id);
             return this;
         }
 

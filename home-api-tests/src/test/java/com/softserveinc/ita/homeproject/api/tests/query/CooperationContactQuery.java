@@ -5,6 +5,7 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationContactApi;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 
@@ -12,7 +13,7 @@ public class CooperationContactQuery extends BaseQuery{
 
     private Long cooperationId;
 
-    private String contactId;
+    private Long id;
 
     private String phone;
 
@@ -20,7 +21,7 @@ public class CooperationContactQuery extends BaseQuery{
 
     private String main;
 
-    private String type;
+    private ContactType type;
 
     private CooperationContactApi contactApi;
 
@@ -32,8 +33,8 @@ public class CooperationContactQuery extends BaseQuery{
         this.cooperationId = cooperationId;
     }
 
-    public void setContactId(String contactId) {
-        this.contactId = contactId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setPhone(String phone) {
@@ -48,7 +49,7 @@ public class CooperationContactQuery extends BaseQuery{
         this.main = main;
     }
 
-    public void setType(String type) {
+    public void setType(ContactType type) {
         this.type = type;
     }
 
@@ -70,7 +71,7 @@ public class CooperationContactQuery extends BaseQuery{
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
-                contactId,
+                id,
                 phone,
                 email,
                 main,
@@ -88,8 +89,8 @@ public class CooperationContactQuery extends BaseQuery{
             return this;
         }
 
-        public Builder contactId(String contactId) {
-            queryClass.setContactId(contactId);
+        public Builder id(Long id) {
+            queryClass.setId(id);
             return this;
         }
 
@@ -108,7 +109,7 @@ public class CooperationContactQuery extends BaseQuery{
             return this;
         }
 
-        public Builder type(String type) {
+        public Builder type(ContactType type) {
             queryClass.setType(type);
             return this;
         }

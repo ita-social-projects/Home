@@ -85,7 +85,7 @@ class QueryCoopContactIT {
             .cooperationId(expectedCooperation.getId())
             .pageNumber(1)
             .pageSize(10)
-            .id(savedContact.getId().toString())
+            .id(savedContact.getId())
             .build().perform();
 
         assertTrue(queryContactsResponse.contains(savedContact));
@@ -151,7 +151,7 @@ class QueryCoopContactIT {
             .cooperationId(expectedCooperation.getId())
             .pageNumber(1)
             .pageSize(10)
-            .type("email")
+            .type(ContactType.EMAIL)
             .build().perform();
 
         queryContactsResponse.forEach(contact -> assertThat(contact.getType()).isEqualTo(ContactType.EMAIL));
