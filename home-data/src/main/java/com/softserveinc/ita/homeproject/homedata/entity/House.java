@@ -1,11 +1,13 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -45,4 +47,7 @@ public class House extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "cooperation_id")
     private Cooperation cooperation;
+
+    @OneToMany(mappedBy = "house", cascade = CascadeType.PERSIST)
+    private List<Apartment> apartments;
 }
