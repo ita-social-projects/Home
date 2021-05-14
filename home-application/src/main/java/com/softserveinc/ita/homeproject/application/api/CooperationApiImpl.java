@@ -30,6 +30,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateHouse;
@@ -158,7 +159,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                Long id, String phone,
                                                String email,
                                                String main,
-                                               String type) {
+                                               ContactType type) {
         Page<ContactDto> readContact = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(readContact, ReadContact.class);
     }

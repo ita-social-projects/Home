@@ -22,6 +22,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -87,7 +88,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_BY_ID_PERMISSION)
     @Override
     public Response getUser(Long id) {
-        UserDto readUserDto = (UserDto) queryApiService.getOne(uriInfo, userService);
+        var readUserDto = (UserDto) queryApiService.getOne(uriInfo, userService);
         ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
 
         return Response.status(Response.Status.OK).entity(readUser).build();
@@ -105,7 +106,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String phone,
                                         String email,
                                         String main,
-                                        String type) {
+                                        ContactType type) {
 
         Page<ContactDto> contacts = queryApiService.getPageFromQuery(uriInfo, contactService);
         return buildQueryResponse(contacts, ReadContact.class);
@@ -148,7 +149,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
     public Response getContactOnUser(Long userId, Long id) {
-        ContactDto readContactDto = (ContactDto) queryApiService.getOne(uriInfo, contactService);
+        var readContactDto = (ContactDto) queryApiService.getOne(uriInfo, contactService);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

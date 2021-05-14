@@ -1,9 +1,12 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Providers;
 
+import com.softserveinc.ita.homeproject.homeservice.exception.BaseHomeException;
 import com.softserveinc.ita.homeproject.model.ApiError;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,10 +19,20 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class BaseExceptionMapper<T extends Throwable> implements ExceptionMapper<T> {
+    @Context
+    private Providers providers;
 
     @Override
     public Response toResponse(T exception) {
         log.info("Mapped error.", exception);
+        var throwable = exception.getCause();
+
+        if(throwable instanceof BaseHomeException) {
+            ExceptionMapper mapper = providers.getExceptionMapper(throwable.getClass());
+            if (mapper != null) {
+                return mapper.toResponse(throwable);
+            }
+        }
         Response.Status status = getStatus();
         return Response.status(status)
             .type(MediaType.APPLICATION_JSON_TYPE)
