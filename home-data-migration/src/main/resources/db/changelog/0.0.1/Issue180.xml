@@ -66,6 +66,9 @@
             <column name="EMAIL" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
             <column name="OWNERSHIP_PART" type="DECIMAL">
                 <constraints nullable="false"/>
             </column>
