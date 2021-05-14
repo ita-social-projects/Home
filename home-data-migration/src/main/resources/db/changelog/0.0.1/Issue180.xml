@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue180.001" author="Ilya-Ross">
+        <createTable tableName="apartments">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="APARTMENT_NUMBER" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="APARTMENT_AREA" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATE_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HOUSE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="house_fk"
+                             references="houses(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue180.002" author="Ilya-Ross">
+        <createTable tableName="ownerships">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="OWNERSHIP_PART" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+            <column name="APARTMENT_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="apartment_fk"
+                             references="apartments(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="180.003" author="Ilya-Ross">
+        <createTable tableName="invitations">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="OWNERSHIP_PART" type="DECIMAL">
+                <constraints nullable="true"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SENT_DATETIME" type="TIMESTAMP">
+            </column>
+            <column name="APARTMENT_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="apartment_fk"
+                             references="apartments(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue180.004" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="30"/>
+            <column name="name" value="CREATE_APARTMENT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="31"/>
+            <column name="name" value="UPDATE_APARTMENT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="32"/>
+            <column name="name" value="GET_APARTMENT_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="33"/>
+            <column name="name" value="GET_APARTMENTS_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="34"/>
+            <column name="name" value="DELETE_APARTMENT_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue180.005" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="30"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="31"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="32"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="33"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="34"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue180.006" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="apartments_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue180.007" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="ownerships_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue180.008" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="invitations_sequence"/>
+    </changeSet>
+
+</databaseChangeLog>
