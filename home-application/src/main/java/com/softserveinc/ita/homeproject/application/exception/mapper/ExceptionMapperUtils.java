@@ -27,7 +27,7 @@ public final class ExceptionMapperUtils {
         return message;
     }
 
-    public static String getInvalidDataApiExeptionParser(InvalidDataAccessApiUsageException exception) {
+    public static String getInvalidDataApiExceptionParser(InvalidDataAccessApiUsageException exception) {
         String message = null;
         String exceptionMessage = exception.getMessage();
         if (!StringUtils.isBlank(exceptionMessage)) {

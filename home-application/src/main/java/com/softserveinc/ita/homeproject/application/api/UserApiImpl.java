@@ -22,6 +22,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;
 import com.softserveinc.ita.homeproject.model.ReadContact;
@@ -95,7 +96,9 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
     @Override
-    public Response queryContactsOnUser(Long userId, @Min(1) Integer pageNumber,
+    @SuppressWarnings("unchecked")
+    public Response queryContactsOnUser(Long userId,
+                                        @Min(1) Integer pageNumber,
                                         @Min(1) @Max(10) Integer pageSize,
                                         String sort,
                                         String filter,
@@ -103,7 +106,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String phone,
                                         String email,
                                         String main,
-                                        String type) {
+                                        ContactType type) {
 
         Page<ContactDto> contacts = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(contacts, ReadContact.class);
@@ -127,6 +130,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
+    @SuppressWarnings("unchecked")
     public Response getAllUsers(@Min(1) Integer pageNumber,
                                 @Min(1) @Max(10) Integer pageSize,
                                 String sort,

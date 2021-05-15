@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
@@ -108,6 +110,15 @@ public class UserServiceImpl implements UserService {
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+
+        toDelete.getRoles().forEach(
+                role -> {
+                    if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
+                        throw new BadRequestHomeException("User cannot be deleted.");
+                    }
+                }
+        );
+
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);

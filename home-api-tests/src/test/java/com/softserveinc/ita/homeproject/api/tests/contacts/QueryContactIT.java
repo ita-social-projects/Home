@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.contacts;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -157,10 +158,71 @@ class QueryContactIT {
             .userId(expectedUser.getId())
             .pageNumber(1)
             .pageSize(10)
-            .type("EMAIL")
+            .type("email")
             .build().perform();
 
         queryContactsResponse.forEach(contact -> assertThat(contact.getType()).isEqualTo(ContactType.EMAIL));
+    }
+
+    @Test
+    void getAllContactsByTypePhone() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        List<ReadContact> queryContactsResponse = new ContactQuery
+            .Builder(contactApi)
+            .userId(expectedUser.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .type("phone")
+            .build().perform();
+
+        queryContactsResponse.forEach(contact -> assertThat(contact.getType()).isEqualTo(ContactType.PHONE));
+    }
+
+    @Test
+    void getAllContactsByInvalidType() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(java.lang.IllegalArgumentException.class)
+            .isThrownBy(() -> new ContactQuery
+                .Builder(contactApi)
+                .userId(expectedUser.getId())
+                .pageNumber(1)
+                .pageSize(10)
+                .type("EMAIL")
+                .build().perform())
+            .withMessageContaining("Unexpected value 'EMAIL'");
+    }
+
+    @Test
+    void getAllContactsByEmptyType() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> new ContactQuery
+                .Builder(contactApi)
+                .userId(expectedUser.getId())
+                .pageNumber(1)
+                .pageSize(10)
+                .filter("type==")
+                .build().perform())
+            .matches(exception -> exception.getCode() == 400)
+            .withMessageContaining("The query argument for search is empty");
+    }
+
+    @Test
+    void getAllContactsByNullType() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        assertThatExceptionOfType(java.lang.IllegalArgumentException.class)
+            .isThrownBy(() -> new ContactQuery
+                .Builder(contactApi)
+                .userId(expectedUser.getId())
+                .pageNumber(1)
+                .pageSize(10)
+                .type(null)
+                .build().perform())
+            .withMessageContaining("Unexpected value 'null'");
     }
 
     private CreateContact createEmailContact() {
