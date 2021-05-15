@@ -63,7 +63,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    String apartmentNumber,
                                    BigDecimal apartmentArea) {
 
-        Page<ApartmentDto> readApartment = queryApiService.getPageFromQuery(uriInfo, apartmentService);
+        Page<ApartmentDto> readApartment = apartmentService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
 
