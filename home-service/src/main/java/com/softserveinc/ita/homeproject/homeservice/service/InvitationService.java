@@ -13,4 +13,6 @@ public interface InvitationService {
 
     List<CooperationInvitationDto> getAllActiveInvitations();
 
+    void updateSentDateTime(Long id, LocalDateTime dateTime);
+
 }

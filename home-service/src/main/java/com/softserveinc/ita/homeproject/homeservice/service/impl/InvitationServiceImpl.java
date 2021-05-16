@@ -32,6 +32,13 @@ public class InvitationServiceImpl implements InvitationService {
     }
 
     @Override
+    public void updateSentDateTime(Long id, LocalDateTime dateTime) {
+        CooperationInvitation invitation = findInvitationById(id);
+        invitation.setSentDatetime(dateTime);
+        invitationRepository.save(invitation);
+    }
+
+    @Override
     public CooperationInvitationDto getInvitation(Long id) {
         CooperationInvitation invitation = findInvitationById(id);
         return mapper.convert(invitation, CooperationInvitationDto.class);
