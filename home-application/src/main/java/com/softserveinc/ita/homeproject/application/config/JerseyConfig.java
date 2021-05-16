@@ -44,6 +44,7 @@ public class JerseyConfig extends ResourceConfig {
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.exception.mapper", scanner);
         // register jackson for json
         register(JacksonJsonProvider.class);
+        register(EnumConverterProvider.class);
     }
 
     private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {

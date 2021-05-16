@@ -2237,7 +2237,7 @@ components:
       in: query
       name: type
       schema:
-        type: string
+        $ref: '#/components/schemas/ContactType'
       description: Type of the Contact
     name:
       in: query

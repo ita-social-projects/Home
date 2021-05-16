@@ -12,6 +12,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeExce
  * @author Oleksii Zinkevych
  * @see javax.ws.rs.ext.ExceptionMapper
  */
+
 @Provider
 public class BadRequestHomeExceptionMapper extends BaseHomeExceptionMapper<BadRequestHomeException> {
     @Override

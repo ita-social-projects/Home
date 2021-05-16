@@ -66,8 +66,11 @@
             <column name="EMAIL" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="OWNERSHIP_PART" type="DECIMAL">
+            <column name="TYPE" type="VARCHAR(31)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="OWNERSHIP_PART" type="DECIMAL">
+                <constraints nullable="true"/>
             </column>
             <column name="STATUS" type="VARCHAR(20)">
                 <constraints nullable="false"/>
@@ -75,7 +78,7 @@
             <column name="SENT_DATETIME" type="TIMESTAMP">
             </column>
             <column name="APARTMENT_ID" type="BIGINT">
-                <constraints nullable="false"
+                <constraints nullable="true"
                              foreignKeyName="apartment_fk"
                              references="apartments(ID)"/>
             </column>

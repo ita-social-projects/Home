@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import com.softserveinc.ita.homeproject.application.config.StringToContactTypeConverter;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
@@ -25,6 +26,8 @@ public class RSQLConfig {
             for (Map.Entry<? extends QueryParamEnum, String> entry : config.getMappings().entrySet()) {
                 RSQLCommonSupport.addMapping(entityClass, entry.getValue(), entry.getKey().getParameter());
             }
+
+            RSQLCommonSupport.addConverter(new StringToContactTypeConverter());
 
             RSQLCommonSupport.addPropertyWhitelist(
                 entityClass,
