@@ -1417,6 +1417,9 @@ components:
             - email: "createUserEmail@example.com"
           items:
             $ref: "#/components/schemas/CreateContact"
+        invitation:
+          $ref: '#/components/schemas/CreateCooperationInvitation'
+
     ReadCooperation:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -1644,6 +1647,14 @@ components:
     CreateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          example: admin
+
     CreateApartmentInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
