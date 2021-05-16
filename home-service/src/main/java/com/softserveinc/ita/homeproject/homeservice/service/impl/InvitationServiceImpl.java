@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationOnCooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
@@ -22,34 +22,26 @@ public class InvitationServiceImpl implements InvitationService {
     private final ServiceMapper mapper;
 
     @Override
-    public InvitationOnCooperationDto createInvitation(InvitationOnCooperationDto invitationDto) {
+    public CooperationInvitationDto createInvitation(CooperationInvitationDto invitationDto) {
         CooperationInvitation invitation = mapper.convert(invitationDto, CooperationInvitation.class);
-
-        //TODO set end time(make method)
+        invitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));
         invitation.setSentDatetime(LocalDateTime.now());
         invitation.setStatus(InvitationStatus.PENDING);
         invitationRepository.save(invitation);
-        return mapper.convert(invitation, InvitationOnCooperationDto.class);
+        return mapper.convert(invitation, CooperationInvitationDto.class);
     }
 
     @Override
-    public void updateSentDateTime(Long id, LocalDateTime dateTime) {
+    public CooperationInvitationDto getInvitation(Long id) {
         CooperationInvitation invitation = findInvitationById(id);
-        invitation.setSentDatetime(dateTime);
-        invitationRepository.save(invitation);
+        return mapper.convert(invitation, CooperationInvitationDto.class);
     }
 
     @Override
-    public InvitationOnCooperationDto getInvitation(Long id) {
-        CooperationInvitation invitation = findInvitationById(id);
-        return mapper.convert(invitation, InvitationOnCooperationDto.class);
-    }
-
-    @Override
-    public List<InvitationOnCooperationDto> getAllActiveInvitations() {
+    public List<CooperationInvitationDto> getAllActiveInvitations() {
         List<CooperationInvitation> allNotSentInvitations = invitationRepository.findAllBySentDateTimeIsNull();
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, InvitationOnCooperationDto.class))
+                .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());
     }
 

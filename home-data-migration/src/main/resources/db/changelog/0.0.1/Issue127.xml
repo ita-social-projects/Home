@@ -5,32 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="Issue127.001" author="pLytvynenko">
-        <createTable tableName="invitations">
-            <column name="ID" type="BIGINT">
-                <constraints nullable="false"
-                             primaryKey="true"/>
-            </column>
-            <column name="EMAIL" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STATUS" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SENT_DATETIME" type="TIMESTAMP">
-            </column>
+    <changeSet id="Issue127.001" author="likeRewca">
+        <addColumn tableName="invitations">
             <column name="END_TIME" type="TIMESTAMP">
-            </column>
-            <column name="COOPERATION_ID" type="BIGINT">
-                <constraints nullable="false"
-                             foreignKeyName="cooperation_fk"
-                             references="cooperation(ID)"/>
+                <constraints nullable="false"/>
             </column>
             <column name="ROLE_ID" type="BIGINT">
-                <constraints nullable="false"
+                <constraints nullable="true"
                              foreignKeyName="roles_fk"
                              references="roles(id)"/>
             </column>
-        </createTable>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

@@ -24,6 +24,8 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.mail.username}")
     private String sender;
 
+    private String headline = "Welcome to the club body!";
+
     @Autowired
     public MailServiceImpl(JavaMailSender mailSender, TemplateServiceImpl templateService) {
         this.mailSender = mailSender;
@@ -32,12 +34,12 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
-        log.debug("Message with invitation type {} is being created", mailDto.getName());
+        log.debug("Message with invitation type {} is being created", headline);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(sender);
         helper.setTo(mailDto.getEmail());
-        helper.setSubject(mailDto.getName());
+        helper.setSubject(headline);
         helper.setText(templateService.createMessageTextFromTemplate(mailDto), true);
 
         mailSender.send(message);

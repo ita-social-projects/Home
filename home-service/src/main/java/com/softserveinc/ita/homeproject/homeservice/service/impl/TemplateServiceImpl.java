@@ -20,10 +20,12 @@ public class TemplateServiceImpl implements TemplateService {
     public static final Path COOPERATION_TEMPLATE_PATH =
         Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
 
+    private final String HEADLINE = "Welcome to the club body!";
+
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         String text = "";
-        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto.getName())))) {
+        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(HEADLINE)))) {
             text = Mustache.compiler()
                 .compile(reader)
                 .execute(mailDto);

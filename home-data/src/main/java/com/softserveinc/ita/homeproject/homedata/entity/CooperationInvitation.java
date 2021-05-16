@@ -1,9 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +10,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@MappedSuperclass
+@Entity
+@DiscriminatorValue("cooperation")
 public class CooperationInvitation extends Invitation{
 
     @Column(name = "end_time")

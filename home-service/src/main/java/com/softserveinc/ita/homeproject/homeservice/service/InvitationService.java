@@ -2,19 +2,15 @@ package com.softserveinc.ita.homeproject.homeservice.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationOnCooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 
 public interface InvitationService {
 
-    InvitationOnCooperationDto createInvitation(InvitationOnCooperationDto invitation);
+    CooperationInvitationDto createInvitation(CooperationInvitationDto invitation);
 
-    InvitationOnCooperationDto getInvitation(Long id);
+    CooperationInvitationDto getInvitation(Long id);
 
-    List<InvitationOnCooperationDto> getAllActiveInvitations();
-
-    void updateSentDateTime(Long id, LocalDateTime dateTime);
+    List<CooperationInvitationDto> getAllActiveInvitations();
 
 }
