@@ -11,16 +11,15 @@
                 <constraints nullable="false"
                              primaryKey="true"/>
             </column>
-            <column name="NAME" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
             <column name="EMAIL" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="STATUS" type="BOOLEAN" defaultValueBoolean="false">
+            <column name="STATUS" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="sent_datetime" type="TIMESTAMP">
+            <column name="SENT_DATETIME" type="TIMESTAMP">
+            </column>
+            <column name="END_TIME" type="TIMESTAMP">
             </column>
             <column name="COOPERATION_ID" type="BIGINT">
                 <constraints nullable="false"

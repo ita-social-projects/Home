@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationOnCooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
@@ -28,21 +29,20 @@ public class SendEmailJob extends QuartzJobBean {
     @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        List<InvitationDto> invitations = invitationService.getAllActiveInvitations();
+        List<InvitationOnCooperationDto> invitations = invitationService.getAllActiveInvitations();
 
-        for (InvitationDto invite : invitations) {
+        for (InvitationOnCooperationDto invite : invitations) {
             log.info("send email by invitation id: {}", invite.getId());
             mailService.sendTextMessage(createMailDto(invite));
             invitationService.updateSentDateTime(invite.getId(), LocalDateTime.now());
         }
     }
 
-    private MailDto createMailDto(InvitationDto invitationDto) {
+    private MailDto createMailDto(InvitationOnCooperationDto invitationDto) {
         MailDto mailDto = new MailDto();
         mailDto.setId(invitationDto.getId());
         mailDto.setEmail(invitationDto.getEmail());
-        mailDto.setName(invitationDto.getName());
-        mailDto.setRoleName(invitationDto.getRole().getName());
+        mailDto.setRoleName(invitationDto.getRole().getNameRole());
         //TODO: generate token link
         mailDto.setLink("");
         //TODO: finish when cooperation implementation will be done

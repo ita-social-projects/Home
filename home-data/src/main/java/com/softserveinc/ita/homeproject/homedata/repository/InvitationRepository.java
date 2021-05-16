@@ -2,12 +2,12 @@ package com.softserveinc.ita.homeproject.homedata.repository;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
+import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InvitationRepository extends CrudRepository<Invitation, Long> {
+public interface InvitationRepository extends CrudRepository<CooperationInvitation, Long> {
 
-    List<Invitation> findAllBySentDateTimeIsNull();
+    List<CooperationInvitation> findAllBySentDateTimeIsNull();
 }

@@ -10,9 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailDto extends BaseDto {
-
-    private String name;
-
     private String email;
 
     private String roleName;

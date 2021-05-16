@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationOnCooperationDto;
 
 public interface InvitationService {
 
-    InvitationDto createInvitation(InvitationDto invitation);
+    InvitationOnCooperationDto createInvitation(InvitationOnCooperationDto invitation);
 
-    void changeInvitationStatus(Long id);
+    InvitationOnCooperationDto getInvitation(Long id);
 
-    InvitationDto getInvitation(Long id);
-
-    List<InvitationDto> getAllActiveInvitations();
+    List<InvitationOnCooperationDto> getAllActiveInvitations();
 
     void updateSentDateTime(Long id, LocalDateTime dateTime);
 
