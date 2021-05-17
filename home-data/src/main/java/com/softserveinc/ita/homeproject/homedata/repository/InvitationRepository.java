@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvitationRepository extends CrudRepository<CooperationInvitation, Long> {
 
-    List<CooperationInvitation> findAllBySentDateTimeIsNull();
+    List<CooperationInvitation> findAllBySentDatetimeIsNull();
 }

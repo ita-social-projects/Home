@@ -46,7 +46,7 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
-        List<CooperationInvitation> allNotSentInvitations = invitationRepository.findAllBySentDateTimeIsNull();
+        List<CooperationInvitation> allNotSentInvitations = invitationRepository.findAllBySentDatetimeIsNull();
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());
