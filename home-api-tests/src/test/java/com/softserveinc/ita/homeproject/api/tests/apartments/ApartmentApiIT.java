@@ -46,7 +46,7 @@ class ApartmentApiIT {
     }
 
     @Test
-    void createApartmentWithNonExistentHouse() throws ApiException{
+    void createApartmentWithNonExistentHouse() {
         CreateApartment createApartment = createApartment();
 
         Long wrongId = 1000000L;
@@ -83,7 +83,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .getApartmentWithHttpInfo(expectedHouse.getId(), wrongId))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Can't find apartment with given ID: " + wrongId);
+            .withMessageContaining("Apartment with 'id: " + wrongId + "' is not found");
     }
 
     @Test
@@ -100,7 +100,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .getApartmentWithHttpInfo(wrongId, expectedApartment.getId()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Can't find house with given ID: " + wrongId);
+            .withMessageContaining("Apartment with 'id: " + expectedApartment.getId() + "' is not found");
     }
 
     @Test
