@@ -1630,7 +1630,7 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          base: '#/components/schemas/CreateCooperationInvitation'
+          cooperation: '#/components/schemas/CreateCooperationInvitation'
           apartment: '#/components/schemas/CreateApartmentInvitation'
       required:
         - type
