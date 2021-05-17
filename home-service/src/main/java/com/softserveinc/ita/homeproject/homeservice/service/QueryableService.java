@@ -46,6 +46,22 @@ public interface QueryableService<T extends BaseEntity, D extends BaseDto> {
     default D getOne(Long id) {
         Specification<T> specification =
             (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
+        return getOneDto(id, specification);
+    }
+
+    /**
+     * @param id - long value of id of the element
+     * @param specification - Spring Data Specification
+     * @return Single DTO
+     * @throws NotFoundHomeException if number of Page elements less than 1
+     * @throws IllegalStateException if number of Page elements more than 1
+     */
+    @Transactional
+    default D getOne(Long id, Specification<T> specification) {
+        return getOneDto(id, specification);
+    }
+
+    private D getOneDto(Long id, Specification<T> specification) {
         Page<D> page = findAll(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, specification);
         if (page.getTotalElements() == 1) {
             return page.getContent().get(0);
