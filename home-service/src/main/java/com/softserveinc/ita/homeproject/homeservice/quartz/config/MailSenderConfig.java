@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.quartz.config;
 
 import java.util.Properties;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 @Configuration
+@EnableAutoConfiguration
 public class MailSenderConfig {
     @Bean
     public JavaMailSender getJavaMailSender() {
