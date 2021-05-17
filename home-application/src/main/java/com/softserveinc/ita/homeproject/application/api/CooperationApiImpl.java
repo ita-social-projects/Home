@@ -103,7 +103,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
     public Response getHouse(Long cooperationId, Long id) {
-        HouseDto toGet = houseService.getOne(id);
+        HouseDto toGet = houseService.getOne(id, getSpecification());
         ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
@@ -112,7 +112,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long id) {
-        var readContactDto = contactService.getOne(id);
+        var readContactDto = contactService.getOne(id, getSpecification());
         var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();

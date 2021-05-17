@@ -96,7 +96,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
     @Override
-    @SuppressWarnings("unchecked")
     public Response queryContactsOnUser(Long userId,
                                         @Min(1) Integer pageNumber,
                                         @Min(1) @Max(10) Integer pageSize,
@@ -130,7 +129,6 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    @SuppressWarnings("unchecked")
     public Response getAllUsers(@Min(1) Integer pageNumber,
                                 @Min(1) @Max(10) Integer pageSize,
                                 String sort,
@@ -149,7 +147,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_USER_CONTACT_PERMISSION)
     @Override
     public Response getContactOnUser(Long userId, Long id) {
-        ContactDto readContactDto = contactService.getOne(id);
+        ContactDto readContactDto = contactService.getOne(id, getSpecification());
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
