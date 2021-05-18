@@ -38,7 +38,7 @@ public class SendEmailJob extends QuartzJobBean {
     }
 
     private MailDto createMailDto(CooperationInvitationDto invitationDto) {
-        MailDto mailDto = new MailDto();
+        var mailDto = new MailDto();
         mailDto.setId(invitationDto.getId());
         mailDto.setEmail(invitationDto.getEmail());
         mailDto.setRoleName(invitationDto.getRole().getNameRole());

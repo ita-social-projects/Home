@@ -35,8 +35,8 @@ public class MailServiceImpl implements MailService {
     @Override
     public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
         log.debug("Message with invitation type {} is being created", headline);
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        var message = mailSender.createMimeMessage();
+        var helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(sender);
         helper.setTo(mailDto.getEmail());
         helper.setSubject(headline);

@@ -12,13 +12,15 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 @Slf4j
 @Configuration
-public class JobConfig extends BaseJobConfig {
+public class JobConfig implements BaseJobConfig {
 
+    @Override
     @Bean
     public JobDetailFactoryBean jobsDetails() {
         return JobConfig.createJobDetail(SendEmailJob.class, "Send Email job");
     }
 
+    @Override
     @Bean
     public SimpleTriggerFactoryBean trigger(JobDetail jobDetail) {
         return JobConfig.createTrigger(jobDetail, 5000, "Send Email trigger");
@@ -26,7 +28,7 @@ public class JobConfig extends BaseJobConfig {
 
     public static JobDetailFactoryBean createJobDetail(Class jobClass, String jobName) {
         log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
-        JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
+        var factoryBean = new JobDetailFactoryBean();
         factoryBean.setName(jobName);
         factoryBean.setJobClass(jobClass);
         factoryBean.setDurability(true);
@@ -37,7 +39,7 @@ public class JobConfig extends BaseJobConfig {
                                                          long pollFrequencyMs, String triggerName) {
         log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})",
             jobDetail.toString(), pollFrequencyMs, triggerName);
-        SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
+        var factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(0L);
         factoryBean.setRepeatInterval(pollFrequencyMs);
