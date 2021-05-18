@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import com.samskivert.mustache.Mustache;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
@@ -30,7 +31,7 @@ public class TemplateServiceImpl implements TemplateService {
                 .compile(reader)
                 .execute(mailDto);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new InvitationException(Arrays.toString(e.getStackTrace()));
         }
         return text;
     }
