@@ -8,7 +8,6 @@
     <changeSet id="Issue127.001" author="likeRewca">
         <addColumn tableName="invitations">
             <column name="END_TIME" type="TIMESTAMP">
-                <constraints nullable="false"/>
             </column>
             <column name="ROLE_ID" type="BIGINT">
                 <constraints nullable="true"
