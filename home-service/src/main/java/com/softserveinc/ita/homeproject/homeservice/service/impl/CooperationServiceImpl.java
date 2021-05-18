@@ -15,7 +15,9 @@ import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
+import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CooperationServiceImpl implements CooperationService {
+
+    @Autowired
+    private InvitationService invitationService;
 
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
@@ -39,6 +44,8 @@ public class CooperationServiceImpl implements CooperationService {
     @Transactional
     @Override
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
+        createCooperationDto.getInvitation().setCooperationName(createCooperationDto.getName());
+        invitationService.createInvitation(createCooperationDto.getInvitation());
         Cooperation cooperation = mapper.convert(createCooperationDto, Cooperation.class);
         cooperation.setEnabled(true);
         cooperation.setRegisterDate(LocalDate.now());
@@ -51,7 +58,9 @@ public class CooperationServiceImpl implements CooperationService {
             contact.setCooperation(cooperation);
             contact.setEnabled(true);
         });
+
         cooperationRepository.save(cooperation);
+
         return mapper.convert(cooperation, CooperationDto.class);
     }
 

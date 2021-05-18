@@ -22,4 +22,7 @@ public class CooperationInvitation extends Invitation{
     @OneToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @Column(name = "cooperation_name")
+    private String cooperationName;
 }

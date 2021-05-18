@@ -10,9 +10,10 @@
             <column name="END_TIME" type="TIMESTAMP">
             </column>
             <column name="ROLE_ID" type="BIGINT">
-                <constraints nullable="true"
-                             foreignKeyName="roles_fk"
+                <constraints foreignKeyName="roles_fk"
                              references="roles(id)"/>
+            </column>
+            <column name="COOPERATION_NAME" type="VARCHAR(70)">
             </column>
         </addColumn>
     </changeSet>

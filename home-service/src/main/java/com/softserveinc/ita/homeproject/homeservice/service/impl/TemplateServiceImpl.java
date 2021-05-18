@@ -21,7 +21,7 @@ public class TemplateServiceImpl implements TemplateService {
     public static final Path COOPERATION_TEMPLATE_PATH =
         Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
 
-    private final String headline = "Welcome to the club body!";
+    private final String headline = "invitation-to-registration";
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {

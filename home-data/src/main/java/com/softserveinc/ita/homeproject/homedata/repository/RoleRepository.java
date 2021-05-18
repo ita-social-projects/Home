@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
+import java.util.Optional;
+
 import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -19,5 +21,5 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
      * @param name is the name of the role
      * @return an instance of Role class
      */
-    Role findByName(String name);
+    Optional<Role> findByName(String name);
 }

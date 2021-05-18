@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class CooperationInvitationDto extends InvitationDto{
 
-    private RoleDto role;
+    private String role;
+
+    private String cooperationName;
 
 }

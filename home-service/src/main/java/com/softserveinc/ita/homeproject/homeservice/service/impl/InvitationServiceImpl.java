@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +24,15 @@ public class InvitationServiceImpl implements InvitationService {
 
     private final ServiceMapper mapper;
 
+    private final RoleRepository roleRepository;
+
     @Override
     public CooperationInvitationDto createInvitation(CooperationInvitationDto invitationDto) {
         CooperationInvitation invitation = mapper.convert(invitationDto, CooperationInvitation.class);
+        String role = invitationDto.getRole();
+        invitation.setRole(roleRepository.findByName(role.toUpperCase())
+                .orElseThrow(() -> new NotFoundHomeException("Role " + role + " not found.")));
         invitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));
-        invitation.setSentDatetime(LocalDateTime.now());
         invitation.setStatus(InvitationStatus.PENDING);
         invitationRepository.save(invitation);
         return mapper.convert(invitation, CooperationInvitationDto.class);

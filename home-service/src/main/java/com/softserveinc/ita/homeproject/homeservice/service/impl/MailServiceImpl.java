@@ -17,14 +17,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class MailServiceImpl implements MailService {
+
     private JavaMailSender mailSender;
 
     private TemplateService templateService;
 
     @Value("${spring.mail.username}")
     private String sender;
-
-    private String headline = "Welcome to the club body!";
 
     @Autowired
     public MailServiceImpl(JavaMailSender mailSender, TemplateServiceImpl templateService) {
@@ -34,6 +33,7 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
+        String headline = "invitation-to-cooperation";
         log.debug("Message with invitation type {} is being created", headline);
         var message = mailSender.createMimeMessage();
         var helper = new MimeMessageHelper(message, true, "UTF-8");

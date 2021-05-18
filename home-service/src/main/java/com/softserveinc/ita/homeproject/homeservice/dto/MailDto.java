@@ -12,7 +12,7 @@ import lombok.Setter;
 public class MailDto extends BaseDto {
     private String email;
 
-    private String roleName;
+    private String role;
 
     private String cooperationName;
 

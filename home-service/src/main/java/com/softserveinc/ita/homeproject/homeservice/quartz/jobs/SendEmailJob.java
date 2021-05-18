@@ -41,11 +41,10 @@ public class SendEmailJob extends QuartzJobBean {
         var mailDto = new MailDto();
         mailDto.setId(invitationDto.getId());
         mailDto.setEmail(invitationDto.getEmail());
-        mailDto.setRoleName(invitationDto.getRole().getNameRole());
+        mailDto.setRole(invitationDto.getRole());
         //TODO: generate token link
-        mailDto.setLink("");
-        //TODO: finish when cooperation implementation will be done
-        mailDto.setCooperationName("cooperation");
+        mailDto.setLink("Some link");
+        mailDto.setCooperationName(invitationDto.getCooperationName());
         return mailDto;
     }
 }
