@@ -1862,6 +1862,18 @@ paths:
             type: integer
             format: int64
           example: 1
+        - in: query
+          name: creation_date
+          schema:
+            type: string
+            format: date-time
+          example: 2021-05-30T08:30:03Z
+        - in: query
+          name: completion_date
+          schema:
+            type: string
+            format: date-time
+          example: 2021-06-20T06:00:00Z
       responses:
         '200':
           description: Success
@@ -2087,6 +2099,18 @@ paths:
             type: integer
             format: int64
           example: 1
+        - in: query
+          name: creation_date
+          schema:
+            type: string
+            format: date-time
+          example: 2021-05-30T08:30:03Z
+        - in: query
+          name: completion_date
+          schema:
+            type: string
+            format: date-time
+          example: 2021-06-20T06:00:00Z
       responses:
         '200':
           description: Success
