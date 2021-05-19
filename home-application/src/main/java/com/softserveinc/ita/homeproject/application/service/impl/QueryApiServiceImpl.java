@@ -24,9 +24,10 @@ public class QueryApiServiceImpl<T extends BaseEntity> implements QueryApiServic
     @Override
     public Specification<T> getSpecification(UriInfo uriInfo) {
         String filter = QueryApiService.getParameterValue(DefaultQueryParams.FILTER.getParameter(), uriInfo)
-                .orElse(null);
+            .orElse(null);
         String sort = QueryApiService.getParameterValue(DefaultQueryParams.SORT.getParameter(), uriInfo)
-                .orElse(DefaultQueryParams.SORT.getValue());
-        return specificationService.getSpecification(QueryApiService.getFilterMap(uriInfo), filter, sort);
+            .orElse(DefaultQueryParams.SORT.getValue());
+        return specificationService.getSpecification(QueryApiService.getFilterMap(uriInfo), filter, sort)
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
     }
 }
