@@ -25,12 +25,10 @@ import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.CreatePoll;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.model.UpdateHouse;
-import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -148,31 +146,5 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
-    }
-
-    @Override
-    public Response createCooperationPoll(Long cooperationId, @Valid CreatePoll createPoll) {
-        return null;
-    }
-
-    @Override
-    public Response deleteCooperationPoll(Long cooperationId, Long id) {
-        return null;
-    }
-
-    @Override
-    public Response getCooperationPoll(Long cooperationId, Long id) {
-        return null;
-    }
-
-    @Override
-    public Response queryCooperationPoll(@Min(1L) Long cooperationId, @Min(1) Integer pageNumber,
-                                         @Min(1) @Max(10) Integer pageSize, String sort, String filter, Long id) {
-        return null;
-    }
-
-    @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id, @Valid UpdatePoll updatePoll) {
-        return null;
     }
 }
