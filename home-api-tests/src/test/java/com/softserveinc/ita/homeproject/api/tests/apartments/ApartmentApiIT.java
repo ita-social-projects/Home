@@ -134,6 +134,40 @@ class ApartmentApiIT {
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
     }
 
+    @Test
+    void updateApartmentTest() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        ApiResponse<ReadApartment> response = apartmentApi.updateApartmentWithHttpInfo(createdHouse.getId(),createdApartment.getId(), updateApartment);
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertApartment(createdApartment, updateApartment, response.getData());
+
+    }
+
+    @Test
+    void deleteApartmentTest() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        ApiResponse<Void> response = apartmentApi.deleteApartmentWithHttpInfo(createdHouse.getId(), createdApartment.getId());
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi.getApartment(createdHouse.getId(), createdApartment.getId()));
+    }
+
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name("newCooperationTest")
@@ -202,5 +236,13 @@ class ApartmentApiIT {
         assertNotNull(actual);
         assertEquals(expected.getArea(), actual.getApartmentArea());
         assertEquals(expected.getNumber(), actual.getApartmentNumber());
+    }
+
+    private void assertApartment(ReadApartment saved, UpdateApartment update, ReadApartment updated) {
+        assertNotNull(saved);
+        assertNotNull(update);
+        assertNotNull(updated);
+        assertEquals(update.getNumber(), updated.getApartmentNumber());
+        assertEquals(update.getArea(), updated.getApartmentArea());
     }
 }

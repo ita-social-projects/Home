@@ -78,12 +78,50 @@ public class ApartmentServiceImpl implements ApartmentService {
         return mapper.convert(toGet, ApartmentDto.class);
     }
 
+    @Transactional
+    @Override
+    public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
+        Apartment apartment = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format("Can't find apartment with given ID: %d", apartmentId)));
+        if (!apartment.getHouse().getId().equals(houseId)) {
+            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+                    houseId));
+        }
+
+        if (updateApartmentDto.getApartmentNumber() != null) {
+            apartment.setApartmentNumber(updateApartmentDto.getApartmentNumber());
+        }
+        if (updateApartmentDto.getApartmentArea() != null) {
+            apartment.setApartmentArea(updateApartmentDto.getApartmentArea());
+        }
+
+        apartment.setUpdateDate(LocalDateTime.now());
+        apartmentRepository.save(apartment);
+        return mapper.convert(apartment, ApartmentDto.class);
+    }
+
+    @Override
+    public void deactivateApartment(Long houseId, Long apartmentId) {
+        Apartment toDelete = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format("Can't find apartment with given ID: %d", apartmentId)));
+        if (!toDelete.getHouse().getId().equals(houseId)) {
+            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+                    houseId));
+        }
+        toDelete.setEnabled(false);
+        apartmentRepository.save(toDelete);
+    }
+
     @Override
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
         specification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("house").get("enabled"), true));
+                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                        .equal(root.get("house").get("enabled"), true));
         return apartmentRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
     }
