@@ -72,9 +72,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public Page<CooperationDto> findAll(Integer pageNumber, Integer pageSize,
                                         Specification<Cooperation> specification) {
-        Specification<Cooperation> cooperationSpecification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return cooperationRepository.findAll(cooperationSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        return cooperationRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
             .map(cooperation -> mapper.convert(cooperation, CooperationDto.class));
     }
 
