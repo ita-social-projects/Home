@@ -93,7 +93,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_COOPERATION_PERMISSION)
     @Override
     public Response getCooperation(Long id) {
-        CooperationDto readCoopDto = (CooperationDto) queryApiService.getOne(uriInfo, cooperationService);
+        CooperationDto readCoopDto = cooperationService.getOne(id);
         ReadCooperation readCoop = mapper.convert(readCoopDto, ReadCooperation.class);
 
         return Response.status(Response.Status.OK).entity(readCoop).build();
@@ -103,7 +103,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
     public Response getHouse(Long cooperationId, Long id) {
-        HouseDto toGet = (HouseDto) queryApiService.getOne(uriInfo, houseService);
+        HouseDto toGet = houseService.getOne(id, getSpecification());
         ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
@@ -112,7 +112,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long id) {
-        var readContactDto = contactService.getContactById(id);
+        var readContactDto = contactService.getOne(id, getSpecification());
         var readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
@@ -129,7 +129,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                      String iban,
                                      String usreo) {
 
-        Page<CooperationDto> readCooperation = queryApiService.getPageFromQuery(uriInfo, cooperationService);
+        Page<CooperationDto> readCooperation = cooperationService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readCooperation, ReadCooperation.class);
     }
 
@@ -145,7 +145,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
 
-        Page<HouseDto> readHouse = queryApiService.getPageFromQuery(uriInfo, houseService);
+        Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
 
@@ -160,7 +160,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                String email,
                                                String main,
                                                ContactType type) {
-        Page<ContactDto> readContact = queryApiService.getPageFromQuery(uriInfo, contactService);
+        Page<ContactDto> readContact = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readContact, ReadContact.class);
     }
 

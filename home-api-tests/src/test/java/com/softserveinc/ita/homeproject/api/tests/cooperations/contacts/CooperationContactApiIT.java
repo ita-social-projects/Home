@@ -1,5 +1,17 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations.contacts;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
@@ -7,30 +19,20 @@ import com.softserveinc.ita.homeproject.api.CooperationContactApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.model.CreateHouse;
+import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.model.ReadContact;
+import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.model.ReadEmailContact;
 import com.softserveinc.ita.homeproject.model.ReadPhoneContact;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.CreateContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-
-import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CooperationContactApiIT {
 
@@ -91,7 +93,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperation(expectedCooperation.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID:" + wrongId);
+            .withMessageContaining("Contact with 'id: " + wrongId + "' is not found");
     }
 
     @Test
@@ -287,7 +289,7 @@ class CooperationContactApiIT {
         assertThatExceptionOfType(ApiException.class).isThrownBy(() -> cooperationContactApi
             .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedEmailContact.getId()))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID");
+            .withMessageContaining("Contact with 'id: " + savedEmailContact.getId() + "' is not found");
     }
 
     @Test
@@ -305,7 +307,7 @@ class CooperationContactApiIT {
             .isThrownBy(() -> cooperationContactApi
                 .getContactOnCooperationWithHttpInfo(cooperation.getId(), savedPhoneContact.getId()))
             .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("Can't find contact with given ID");
+            .withMessageContaining("Contact with 'id: " + savedPhoneContact.getId() + "' is not found");
     }
 
     @Test

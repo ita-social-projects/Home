@@ -81,19 +81,13 @@ public abstract class BaseContactService implements ContactService {
 
     protected abstract Contact checkAndGetContactByParentId(Long id, Long parentEntityId);
 
+    protected abstract <T extends Contact> Specification<T> updateSpecification(Specification<T> specification);
+
     @Override
     public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification) {
-        Specification<Contact> contactSpecification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return contactRepository.findAll(contactSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        specification = updateSpecification(specification);
+        return contactRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
             .map(contact -> mapper.convert(contact, ContactDto.class));
-    }
-
-
-    public ContactDto getContactById(Long id) {
-        var contactResponse = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT, id)));
-        return mapper.convert(contactResponse, ContactDto.class);
     }
 
     @Override
