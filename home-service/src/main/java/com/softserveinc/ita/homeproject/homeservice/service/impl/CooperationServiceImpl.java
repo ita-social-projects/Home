@@ -14,6 +14,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CooperationServiceImpl implements CooperationService {
 
-    @Autowired
-    private InvitationService invitationService;
-
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
+
+    private final CooperationInvitationService invitationService;
 
     private final CooperationRepository cooperationRepository;
 

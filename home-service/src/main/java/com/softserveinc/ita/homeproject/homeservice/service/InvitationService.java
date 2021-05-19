@@ -4,15 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 
 public interface InvitationService {
 
-    CooperationInvitationDto createInvitation(CooperationInvitationDto invitation);
+    InvitationDto createInvitation(InvitationDto invitation);
 
-    CooperationInvitationDto getInvitation(Long id);
-
-    List<CooperationInvitationDto> getAllActiveInvitations();
+    InvitationDto getInvitation(Long id);
 
     void updateSentDateTime(Long id, LocalDateTime dateTime);
-
 }

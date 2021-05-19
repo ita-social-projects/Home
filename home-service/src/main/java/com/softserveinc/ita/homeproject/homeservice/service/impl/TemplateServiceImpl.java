@@ -8,25 +8,32 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import com.samskivert.mustache.Mustache;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class TemplateServiceImpl implements TemplateService {
+
+    private final UserRepository userRepository;
+
     public static final Path REGISTRATION_TEMPLATE_PATH =
         Path.of("home-data/src/main/resources/template/invitation-to-registration.mustache");
 
     public static final Path COOPERATION_TEMPLATE_PATH =
         Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
 
-    private final String headline = "invitation-to-registration";
+    private static final Path APARTMENT_TEMPLATE_PATH =
+            Path.of("home-data/src/main/resources/template/invitation-to-apartment.mustache");
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         String text = "";
-        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(headline)))) {
+        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto)))) {
             text = Mustache.compiler()
                 .compile(reader)
                 .execute(mailDto);
@@ -36,17 +43,20 @@ public class TemplateServiceImpl implements TemplateService {
         return text;
     }
 
-    private Path getInvitationTemplate(String invitationName) {
+    private Path getInvitationTemplate(MailDto mailDto) {
         Path path;
-        switch (invitationName) {
-            case "invitation-to-registration":
-                path = REGISTRATION_TEMPLATE_PATH;
-                break;
-            case "invitation-to-cooperation":
+        if(userRepository.findByEmail(mailDto.getEmail()).isEmpty()) {
+            return REGISTRATION_TEMPLATE_PATH;
+        }
+        switch (mailDto.getType().toString()) {
+            case "cooperation":
                 path = COOPERATION_TEMPLATE_PATH;
                 break;
+            case "apartment":
+                path = APARTMENT_TEMPLATE_PATH;
+                break;
             default:
-                throw new InvitationException("Wrong invitation name");
+                throw new InvitationException("Wrong invitation type.");
         }
         return path;
     }

@@ -14,6 +14,8 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 @Configuration
 public class JobConfig implements BaseJobConfig {
 
+    private static final int QUARTZ_TIME = 5000;
+
     @Override
     @Bean
     public JobDetailFactoryBean jobsDetails() {
@@ -23,10 +25,10 @@ public class JobConfig implements BaseJobConfig {
     @Override
     @Bean
     public SimpleTriggerFactoryBean trigger(JobDetail jobDetail) {
-        return JobConfig.createTrigger(jobDetail, 5000, "Send Email trigger");
+        return JobConfig.createTrigger(jobDetail, QUARTZ_TIME, "Send Email trigger");
     }
 
-    public static JobDetailFactoryBean createJobDetail(Class jobClass, String jobName) {
+    public static JobDetailFactoryBean createJobDetail(Class<? extends SendEmailJob> jobClass, String jobName) {
         log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
         var factoryBean = new JobDetailFactoryBean();
         factoryBean.setName(jobName);
@@ -35,7 +37,7 @@ public class JobConfig implements BaseJobConfig {
         return factoryBean;
     }
 
-    public static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail,
+    private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail,
                                                          long pollFrequencyMs, String triggerName) {
         log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})",
             jobDetail.toString(), pollFrequencyMs, triggerName);
