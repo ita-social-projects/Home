@@ -81,9 +81,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
-        Specification<Apartment> apartmentSpecification = specification
-                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        return apartmentRepository.findAll(apartmentSpecification, PageRequest.of(pageNumber - 1, pageSize))
+        specification = specification
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                .equal(root.get("house").get("enabled"), true));
+        return apartmentRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
     }
 }
