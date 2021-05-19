@@ -31,6 +31,11 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private final ServiceMapper mapper;
 
+    private static final String HOUSE_WITH_ID_NOT_FOUND = "Can't find house with given ID: %d";
+
+    private static final String APARTMENT_WITH_ID_NOT_FOUND = "Can't find apartment with given ID: %d";
+
+
     @Transactional
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
@@ -38,7 +43,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         var house = houseRepository.findById(houseId)
                 .filter(House::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(
-                        String.format("Can't find house with given ID: %d", houseId)));
+                        String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
 
         BigDecimal invitationSummaryOwnerPart = createApartmentDto.getInvitations().stream()
                 .map(InvitationDto::getOwnershipPart)
@@ -70,9 +75,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     public ApartmentDto getApartmentById(Long houseId, Long id) {
         Apartment toGet = apartmentRepository.findById(id).filter(Apartment::getEnabled)
                 .orElseThrow(() ->
-                        new NotFoundHomeException(String.format("Can't find apartment with given ID: %d", id)));
+                        new NotFoundHomeException(String.format(APARTMENT_WITH_ID_NOT_FOUND, id)));
         if (!toGet.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
                     houseId));
         }
         return mapper.convert(toGet, ApartmentDto.class);
@@ -81,12 +86,12 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
-        Apartment apartment = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
+        var apartment = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format("Can't find apartment with given ID: %d", apartmentId)));
+                                String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
         if (!apartment.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
                     houseId));
         }
 
@@ -107,9 +112,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         Apartment toDelete = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format("Can't find apartment with given ID: %d", apartmentId)));
+                                String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
         if (!toDelete.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
                     houseId));
         }
         toDelete.setEnabled(false);
