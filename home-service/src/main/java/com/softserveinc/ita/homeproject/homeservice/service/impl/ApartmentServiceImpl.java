@@ -31,9 +31,9 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private final ServiceMapper mapper;
 
-    private static final String HOUSE_WITH_ID_NOT_FOUND = "Can't find house with given ID: %d";
+    private static final String HOUSE_WITH_ID_NOT_FOUND = "House with 'id: %d' is not found";
 
-    private static final String APARTMENT_WITH_ID_NOT_FOUND = "Can't find apartment with given ID: %d";
+    private static final String APARTMENT_WITH_ID_NOT_FOUND = "Apartment with 'id: %d' is not found";
 
 
     @Transactional
@@ -70,18 +70,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         return mapper.convert(apartment, ApartmentDto.class);
     }
 
-    @Transactional
-    @Override
-    public ApartmentDto getApartmentById(Long houseId, Long id) {
-        Apartment toGet = apartmentRepository.findById(id).filter(Apartment::getEnabled)
-                .orElseThrow(() ->
-                        new NotFoundHomeException(String.format(APARTMENT_WITH_ID_NOT_FOUND, id)));
-        if (!toGet.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
-                    houseId));
-        }
-        return mapper.convert(toGet, ApartmentDto.class);
-    }
 
     @Transactional
     @Override

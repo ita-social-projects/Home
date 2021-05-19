@@ -55,7 +55,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .createApartmentWithHttpInfo(wrongId, createApartment))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Can't find house with given ID: " + wrongId);
+                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
     }
 
     @Test
@@ -150,7 +150,45 @@ class ApartmentApiIT {
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertApartment(createdApartment, updateApartment, response.getData());
+    }
 
+    @Test
+    void updateNonExistentApartment() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .updateApartmentWithHttpInfo(createdHouse.getId(), wrongId, updateApartment))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
+    }
+
+    @Test
+    void updateApartmentWithNonExistentHouse() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .updateApartmentWithHttpInfo(wrongId, createdApartment.getId(), updateApartment))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
     }
 
     @Test
@@ -166,6 +204,37 @@ class ApartmentApiIT {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.getApartment(createdHouse.getId(), createdApartment.getId()));
+    }
+
+    @Test
+    void deleteApartmentWithNonExistentHouse() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .deleteApartmentWithHttpInfo(wrongId, createdApartment.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
+    }
+
+    @Test
+    void deleteNonExistentApartment() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .deleteApartmentWithHttpInfo(createdHouse.getId(), wrongId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
     }
 
     private CreateCooperation createCooperation() {
