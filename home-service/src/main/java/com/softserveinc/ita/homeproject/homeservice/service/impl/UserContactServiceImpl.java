@@ -12,10 +12,13 @@ import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeEx
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserContactServiceImpl extends BaseContactService implements UserContactService {
+
+    private static final String NOT_FOUND_MESSAGE = "User with 'id: %s' is not found";
 
     private final UserRepository userRepository;
 
@@ -28,7 +31,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        var user = mapper.convert(getOne(parentEntityId), User.class);
+        var user = getUserById(parentEntityId);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));
@@ -46,10 +49,20 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected Contact checkAndGetContactByParentId(Long id, Long parentEntityId) {
-        var user = userRepository.findById(parentEntityId).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException("User with id:" + parentEntityId + " is not found"));
+        var user = getUserById(parentEntityId);
         return user.getContacts().stream()
             .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(id)).findFirst()
             .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + id + " is not found"));
+    }
+
+    @Override
+    protected <T extends Contact> Specification<T> updateSpecification(Specification<T> specification) {
+        return specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+            .equal(root.get("user").get("enabled"), true));
+    }
+
+    private User getUserById(Long id) {
+        return userRepository.findById(id).filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, id)));
     }
 }
