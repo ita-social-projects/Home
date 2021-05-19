@@ -6,14 +6,14 @@ public enum RoleDto {
     USER("user"),
     OWNER("owner");
 
-    private final String nameRole;
+    private final String name;
 
-    RoleDto(String nameRole) {
-        this.nameRole = nameRole;
+    RoleDto(String name) {
+        this.name = name;
     }
 
-    public String getNameRole() {
-        return nameRole;
+    public String getName() {
+        return name;
     }
 
 

@@ -32,10 +32,10 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
-        return mapper.convert(fillFieldsByTheType(invitationDto), InvitationDto.class);
+        return fillFieldsByTheType(invitationDto);
     }
 
-    protected abstract Invitation fillFieldsByTheType(InvitationDto invitationDto);
+    protected abstract InvitationDto fillFieldsByTheType(InvitationDto invitationDto);
 
     @Override
     public void updateSentDateTime(Long id, LocalDateTime dateTime) {

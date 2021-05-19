@@ -42,7 +42,7 @@ public class SendCooperationEmailJob extends SendEmailJob {
         mailDto.setType(invitation.getType());
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
-        mailDto.setRole(invitation.getRole());
+        mailDto.setRole(invitation.getRole().getName());
         //TODO: generate token link
         mailDto.setLink("Some link");
         mailDto.setCooperationName(invitation.getCooperationName());

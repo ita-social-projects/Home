@@ -46,6 +46,7 @@ public class CooperationServiceImpl implements CooperationService {
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
         createCooperationDto.getInvitation().setCooperationName(createCooperationDto.getName());
         invitationService.createInvitation(createCooperationDto.getInvitation());
+
         Cooperation cooperation = mapper.convert(createCooperationDto, Cooperation.class);
         cooperation.setEnabled(true);
         cooperation.setRegisterDate(LocalDate.now());

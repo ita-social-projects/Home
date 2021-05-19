@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.config;
 
+import com.softserveinc.ita.homeproject.homeservice.quartz.jobs.SendCooperationEmailJob;
 import com.softserveinc.ita.homeproject.homeservice.quartz.jobs.SendEmailJob;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDetail;
@@ -19,7 +20,7 @@ public class JobConfig implements BaseJobConfig {
     @Override
     @Bean
     public JobDetailFactoryBean jobsDetails() {
-        return JobConfig.createJobDetail(SendEmailJob.class, "Send Email job");
+        return JobConfig.createJobDetail(SendCooperationEmailJob.class, "Send Email job");
     }
 
     @Override
