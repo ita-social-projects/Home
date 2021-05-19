@@ -28,7 +28,7 @@ public class JobConfig implements BaseJobConfig {
         return JobConfig.createTrigger(jobDetail, QUARTZ_TIME, "Send Email trigger");
     }
 
-    public static JobDetailFactoryBean createJobDetail(Class<? extends SendEmailJob> jobClass, String jobName) {
+    public static JobDetailFactoryBean createJobDetail(Class jobClass, String jobName) {
         log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
         var factoryBean = new JobDetailFactoryBean();
         factoryBean.setName(jobName);
