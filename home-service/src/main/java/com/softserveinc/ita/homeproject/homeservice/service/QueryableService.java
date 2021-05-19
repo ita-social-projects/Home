@@ -46,6 +46,8 @@ public interface QueryableService<T extends BaseEntity, D extends BaseDto> {
     default D getOne(Long id) {
         Specification<T> specification =
             (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
+        specification = specification
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return getOneDto(id, specification);
     }
 
