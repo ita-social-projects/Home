@@ -1885,9 +1885,9 @@ paths:
                   $ref: "#/components/schemas/ReadPoll"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1922,9 +1922,9 @@ paths:
                 $ref: '#/components/schemas/ReadPoll'
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -1962,7 +1962,7 @@ paths:
                 $ref: "#/components/schemas/ReadPoll"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -2005,13 +2005,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadPoll'
-        "400":
+        '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2039,13 +2039,13 @@ paths:
             format: int64
           example: 1
       responses:
-        "204":
+        '204':
           description: Success
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2122,9 +2122,9 @@ paths:
                   $ref: "#/components/schemas/ReadPoll"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2154,7 +2154,7 @@ paths:
                 $ref: "#/components/schemas/ReadPoll"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -2236,9 +2236,9 @@ paths:
                   $ref: "#/components/schemas/ReadHouse"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2273,9 +2273,9 @@ paths:
                 $ref: '#/components/schemas/ReadHouse'
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2313,7 +2313,7 @@ paths:
                 $ref: "#/components/schemas/ReadHouse"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -2343,13 +2343,13 @@ paths:
             format: int64
           example: 1
       responses:
-        "204":
+        '204':
           description: Success
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2414,9 +2414,9 @@ paths:
                   $ref: "#/components/schemas/ReadQuestion"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2451,9 +2451,9 @@ paths:
                 $ref: '#/components/schemas/ReadQuestion'
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2491,7 +2491,7 @@ paths:
                 $ref: "#/components/schemas/ReadQuestion"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -2534,13 +2534,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadQuestion'
-        "400":
+        '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2568,13 +2568,13 @@ paths:
             format: int64
           example: 1
       responses:
-        "204":
+        '204':
           description: Success
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2617,13 +2617,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReadVote'
-        "400":
+        '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
-        "403":
+        '403':
           $ref: '#/components/responses/Forbidden'
-        "404":
+        '404':
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
@@ -2653,7 +2653,7 @@ paths:
                 $ref: "#/components/schemas/ReadPollResult"
         '400':
           $ref: '#/components/responses/BadRequest'
-        "401":
+        '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -3690,7 +3690,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateQuestionVote'
-          example: {}
+          example: List of question votes
 
     ReadQuestionVote:
       allOf:
@@ -3794,7 +3794,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadQuestionResult'
-          example: {}
+          example: List of question results
         votes_number:
           type: number
           example: 150.0
@@ -3810,7 +3810,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadAnswerVariantResult'
-          example: {}
+          example: List of answer results
         votes_number:
           type: number
           example: 20.0
