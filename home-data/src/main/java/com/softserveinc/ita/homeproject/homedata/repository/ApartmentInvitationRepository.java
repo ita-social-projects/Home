@@ -10,5 +10,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface ApartmentInvitationRepository extends PagingAndSortingRepository<ApartmentInvitation, Long>,
         JpaSpecificationExecutor<Apartment> {
-   List<ApartmentInvitation> findAllByApartmentIdAndStatus(Long apartmentId, InvitationStatus status);
+    List<ApartmentInvitation> findAllByApartmentIdAndStatus(Long apartmentId, InvitationStatus status);
 }

@@ -2,16 +2,11 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.math.BigDecimal;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -29,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnershipServiceImpl implements OwnershipService {
 
     private final OwnershipRepository ownershipRepository;
-
-    private final ApartmentRepository apartmentRepository;
-
-    private final UserRepository userRepository;
 
     private final ApartmentInvitationRepository invitationRepository;
 
