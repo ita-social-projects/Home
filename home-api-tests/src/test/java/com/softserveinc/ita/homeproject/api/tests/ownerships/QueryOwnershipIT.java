@@ -21,7 +21,7 @@ class QueryOwnershipIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
 
-    private static final long testOwnershipId = 10000000L;
+    private static final long testOwnershipId = 10000001L;
 
     private static final long testApartmentId = 100000000L;
 
@@ -58,12 +58,12 @@ class QueryOwnershipIT {
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
-                .filter("ownershipPart=bt=(0.4,0.7)")
+                .filter("ownershipPart=bt=(0.2,0.6)")
                 .build().perform();
 
         queryResponse
                 .forEach(element -> assertTrue(Objects.requireNonNull(element.getOwnershipPart())
-                        .compareTo(BigDecimal.valueOf(0.4)) > 0 && element.getOwnershipPart().compareTo(BigDecimal.valueOf(0.7)) < 0));
+                        .compareTo(BigDecimal.valueOf(0.2)) > 0 && element.getOwnershipPart().compareTo(BigDecimal.valueOf(0.6)) < 0));
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
     }
 
