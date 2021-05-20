@@ -35,20 +35,6 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     @Transactional
     @Override
-    public OwnershipDto getOwnershipById(Long apartmentId, Long id) {
-        Ownership toGet = ownershipRepository.findById(id).filter(Ownership::getEnabled)
-                .orElseThrow(() ->
-                        new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
-        if (!toGet.getApartment().getId().equals(apartmentId)) {
-            throw new NotFoundHomeException(String.format(APARTMENT_WITH_ID_NOT_FOUND,
-                    apartmentId));
-        }
-
-        return mapper.convert(toGet, OwnershipDto.class);
-    }
-
-    @Transactional
-    @Override
     public OwnershipDto updateOwnership(Long apartmentId, Long id, OwnershipDto updateOwnershipDto) {
         Ownership toUpdate = ownershipRepository.findById(id).filter(Ownership::getEnabled)
                 .orElseThrow(() ->
