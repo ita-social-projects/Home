@@ -23,8 +23,6 @@ class OwnershipApiIT {
 
     private static final long testOwnershipId = 10000001L;
 
-    private static final long testValidateOwnershipId = 10000002L;
-
     private static final Long testDeleteOwnershipId = 10000003L;
 
     private static final long testApartmentId = 100000000L;
