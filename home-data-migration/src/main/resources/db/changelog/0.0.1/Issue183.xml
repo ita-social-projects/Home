@@ -89,4 +89,56 @@
             <column name="user_id" value="2"/>
         </insert>
     </changeSet>
+    <changeSet id="Issue180.007" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="35"/>
+            <column name="name" value="UPDATE_OWNERSHIP_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="36"/>
+            <column name="name" value="DELETE_OWNERSHIP_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="37"/>
+            <column name="name" value="GET_OWNERSHIP_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="38"/>
+            <column name="name" value="GET_OWNERSHIPS_PERMISSION"/>
+        </insert>
+    </changeSet>
+        <changeSet id="Issue180.008" author="Ilya-Ross">
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="35"/>
+            </insert>
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="36"/>
+            </insert>
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="37"/>
+            </insert>
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="38"/>
+            </insert>
+        </changeSet>
 </databaseChangeLog>

@@ -1,5 +1,10 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIPS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIP_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
+
 import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
@@ -18,6 +23,7 @@ import com.softserveinc.ita.homeproject.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.UpdateOwnership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 @Provider
@@ -37,6 +43,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return null;
     }
 
+    @PreAuthorize(DELETE_OWNERSHIP_PERMISSION)
     @Override
     public Response deleteOwnership(Long apartmentId, Long id) {
         ownershipService.deactivateOwnershipById(apartmentId, id);
@@ -48,6 +55,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return null;
     }
 
+    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
     @Override
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
@@ -69,6 +77,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return null;
     }
 
+    @PreAuthorize(GET_OWNERSHIPS_PERMISSION)
     @Override
     public Response queryOwnership(Long apartmentId,
                                    @Min(1) Integer pageNumber,
@@ -90,6 +99,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return null;
     }
 
+    @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
     @Override
     public Response updateOwnership(Long apartmentId, Long id, @Valid UpdateOwnership updateOwnership) {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
