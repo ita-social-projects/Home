@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
             toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)
-                    .orElseThrow(() -> new NotFoundHomeException("Role not found."))));
+                    .orElseThrow(() -> new NotFoundHomeException("RoleDto not found."))));
             toCreate.setCreateDate(LocalDateTime.now());
             toCreate.getContacts().forEach(contact -> {
                 contact.setUser(toCreate);

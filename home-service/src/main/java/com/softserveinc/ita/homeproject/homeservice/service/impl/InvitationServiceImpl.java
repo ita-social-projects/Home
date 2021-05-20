@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
+import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
@@ -34,8 +35,9 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected abstract InvitationDto fillFieldsByTheType(InvitationDto invitationDto);
 
     @Override
-    public void updateSentDateTime(Long id, LocalDateTime dateTime) {
+    public void updateSentDateTimeAndStatus(Long id, LocalDateTime dateTime) {
         Invitation invitation = findInvitationById(id);
+        invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setSentDatetime(dateTime);
         invitationRepository.save(invitation);
     }

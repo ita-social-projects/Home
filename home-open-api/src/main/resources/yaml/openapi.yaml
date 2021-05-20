@@ -1624,7 +1624,12 @@ components:
           maximum: 1.0
           multipleOf: 1e-4
           example: 0.6588
-
+    Role:
+      description: User role
+      type: string
+      enum:
+        - admin
+        - user
     CreateInvitation:
       type: object
       discriminator:
@@ -1652,9 +1657,7 @@ components:
         - role
       properties:
         role:
-          type: string
-          example: admin
-
+          $ref: '#/components/schemas/Role'
     CreateApartmentInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
