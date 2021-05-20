@@ -81,15 +81,50 @@
     <changeSet id="Issue183.006" author="Ilya-Ross">
         <insert  dbms="postgresql"
                  schemaName="public"
+                 tableName="apartments">
+            <column name="id" value="100000001"/>
+            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="apartment_number"  value="22"/>
+            <column name="apartment_area" value="67"/>
+            <column name="enabled" value="true"/>
+            <column name="house_id" value="10000000"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.007" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
                  tableName="ownerships">
-            <column name="id" value="10000000"/>
-            <column name="ownership_part"  value="0.5"/>
+            <column name="id" value="10000001"/>
+            <column name="ownership_part"  value="0.3"/>
             <column name="enabled" value="true"/>
             <column name="apartment_id" value="100000000"/>
             <column name="user_id" value="10000000"/>
         </insert>
     </changeSet>
-    <changeSet id="Issue180.007" author="Ilya-Ross">
+    <changeSet id="Issue183.008" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="ownerships">
+            <column name="id" value="10000002"/>
+            <column name="ownership_part"  value="0.4"/>
+            <column name="enabled" value="true"/>
+            <column name="apartment_id" value="100000000"/>
+            <column name="user_id" value="10000000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.009" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="ownerships">
+            <column name="id" value="10000003"/>
+            <column name="ownership_part"  value="0.5"/>
+            <column name="enabled" value="true"/>
+            <column name="apartment_id" value="100000001"/>
+            <column name="user_id" value="10000000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue180.010" author="Ilya-Ross">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
@@ -115,7 +150,7 @@
             <column name="name" value="GET_OWNERSHIPS_PERMISSION"/>
         </insert>
     </changeSet>
-        <changeSet id="Issue180.008" author="Ilya-Ross">
+        <changeSet id="Issue180.011" author="Ilya-Ross">
             <insert  dbms="postgresql"
                      schemaName="public"
                      tableName="role_permissions">

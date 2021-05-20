@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,11 @@ class OwnershipApiIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
 
-    private static final long testOwnershipId = 10000000L;
+    private static final long testOwnershipId = 10000001L;
+
+    private static final long testValidateOwnershipId = 10000002L;
+
+    private static final Long testDeleteOwnershipId = 10000003L;
 
     private static final long testApartmentId = 100000000L;
 
@@ -73,6 +78,19 @@ class OwnershipApiIT {
     }
 
     @Test
+    void updateOwnershipWithInvalidOwnershipPart() throws ApiException {
+        UpdateOwnership updateOwnership = new UpdateOwnership()
+                .ownershipPart(BigDecimal.valueOf(0.8));
+
+        ReadOwnership expectedOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> ownershipApi.updateOwnership(testApartmentId,expectedOwnership.getId(), updateOwnership))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining("Entered sum of area = 1.2 The sum of the entered area cannot be greater than 1");
+    }
+
+    @Test
     void updateNonExistentOwnershipTest() {
         UpdateOwnership updateOwnership = new UpdateOwnership()
                 .ownershipPart(BigDecimal.valueOf(0.5));
@@ -98,6 +116,29 @@ class OwnershipApiIT {
                         .updateOwnershipWithHttpInfo(wrongId, testOwnershipId, updateOwnership))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining("Apartment with 'id: " + wrongId + "' is not found");
+    }
+
+    @Test
+    void deleteApartmentTest() throws ApiException {
+
+        ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(testApartmentId, testDeleteOwnershipId);
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> ownershipApi.getOwnership(testApartmentId, testDeleteOwnershipId));
+
+    }
+
+    @Test
+    void deleteOwnershipWithNonExistentApartment() throws ApiException {
+
+        Long wrongId = 2000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> ownershipApi
+                        .deleteOwnershipWithHttpInfo(wrongId, testOwnershipId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
     }
 
     private void assertApartment(ReadOwnership expected, ReadOwnership actual) {
