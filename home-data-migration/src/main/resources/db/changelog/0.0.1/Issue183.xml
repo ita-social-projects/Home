@@ -9,12 +9,12 @@
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="users">
-            <column name="id" valueSequenceNext="hibernate_sequence"/>
+            <column name="id" value="10000000"/>
             <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
-            <column name="email"  value="owner@example.com"/>
+            <column name="email"  value="ownertest@example.com"/>
             <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuwwyeiB1OFYjeuYbRaqbC"/>
-            <column name="first_name" value="User"/>
-            <column name="last_name" value="User"/>
+            <column name="first_name" value="test"/>
+            <column name="last_name" value="test"/>
             <column name="expired" value="false"/>
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
@@ -86,7 +86,7 @@
             <column name="ownership_part"  value="0.5"/>
             <column name="enabled" value="true"/>
             <column name="apartment_id" value="100000000"/>
-            <column name="user_id" value="2"/>
+            <column name="user_id" value="10000000"/>
         </insert>
     </changeSet>
     <changeSet id="Issue180.007" author="Ilya-Ross">

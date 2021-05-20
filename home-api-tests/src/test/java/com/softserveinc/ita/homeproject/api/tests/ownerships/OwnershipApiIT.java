@@ -92,6 +92,7 @@ class OwnershipApiIT {
                 .ownershipPart(BigDecimal.valueOf(0.5));
 
         Long wrongId = 2000000L;
+
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
                         .updateOwnershipWithHttpInfo(wrongId, testOwnershipId, updateOwnership))
