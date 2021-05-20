@@ -27,6 +27,8 @@ class OwnershipApiIT {
 
     private static final long testApartmentId = 100000000L;
 
+    private static final long testDeleteOwnershipApartmentId = 100000001L;
+
     @Test
     void getApartmentTest() throws ApiException {
 
@@ -119,16 +121,16 @@ class OwnershipApiIT {
     @Test
     void deleteApartmentTest() throws ApiException {
 
-        ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(testApartmentId, testDeleteOwnershipId);
+        ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(testDeleteOwnershipApartmentId, testDeleteOwnershipId);
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> ownershipApi.getOwnership(testApartmentId, testDeleteOwnershipId));
+                .isThrownBy(() -> ownershipApi.getOwnership(testDeleteOwnershipApartmentId, testDeleteOwnershipId));
 
     }
 
     @Test
-    void deleteOwnershipWithNonExistentApartment() throws ApiException {
+    void deleteOwnershipWithNonExistentApartment() {
 
         Long wrongId = 2000000L;
 
