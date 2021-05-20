@@ -12,10 +12,12 @@ import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
 
     protected final InvitationRepository invitationRepository;
@@ -23,12 +25,6 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected final ServiceMapper mapper;
 
     protected final RoleRepository roleRepository;
-
-    public InvitationServiceImpl(InvitationRepository invitationRepository, ServiceMapper mapper, RoleRepository roleRepository) {
-        this.invitationRepository = invitationRepository;
-        this.mapper = mapper;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
