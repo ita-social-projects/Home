@@ -45,6 +45,7 @@ public class JerseyConfig extends ResourceConfig {
         // register jackson for json
         register(JacksonJsonProvider.class);
         register(EnumConverterProvider.class);
+        register(LocalDateTimeProvider.class);
     }
 
     private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
