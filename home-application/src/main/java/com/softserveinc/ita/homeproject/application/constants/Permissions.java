@@ -80,4 +80,12 @@ public final class Permissions {
 
     public static final String DELETE_APARTMENT_PERMISSION = "hasAuthority('DELETE_APARTMENT_PERMISSION')";
 
+    public static final String CREATE_POLL_PERMISSION = "hasAuthority('CREATE_POLL_PERMISSION')";
+
+    public static final String UPDATE_POLL_PERMISSION = "hasAuthority('UPDATE_POLL_PERMISSION')";
+
+    public static final String GET_POLL_PERMISSION = "hasAuthority('GET_POLL_PERMISSION')";
+
+    public static final String DELETE_POLL_PERMISSION = "hasAuthority('DELETE_POLL_PERMISSION')";
+
 }
