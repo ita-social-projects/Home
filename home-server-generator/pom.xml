@@ -75,7 +75,7 @@
                             <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
                                 <java8>true</java8>
-                                <dateLibrary>java8</dateLibrary>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>
@@ -91,9 +91,6 @@
                                 <returnResponse>true</returnResponse>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
-                            <typeMappings>
-                                <typeMapping>OffsetDateTime=java.time.LocalDateTime</typeMapping>
-                            </typeMappings>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/server</templateDirectory>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi/server</output>
