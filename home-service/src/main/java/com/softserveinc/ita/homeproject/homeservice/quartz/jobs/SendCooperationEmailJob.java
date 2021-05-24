@@ -1,25 +1,26 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Component
 public class SendCooperationEmailJob extends SendEmailJob {
 
     private final CooperationInvitationService invitationService;
 
-    public SendCooperationEmailJob(ServiceMapper mapper, MailService mailService, CooperationInvitationService invitationService) {
+    public SendCooperationEmailJob(ServiceMapper mapper,
+                                   MailService mailService,
+                                   CooperationInvitationService invitationService) {
         super(mapper, mailService);
         this.invitationService = invitationService;
     }
@@ -31,7 +32,7 @@ public class SendCooperationEmailJob extends SendEmailJob {
 
         for (InvitationDto invite : invitations) {
             mailService.sendTextMessage(createMailDto(invite));
-            invitationService.updateSentDateTime(invite.getId(), LocalDateTime.now());
+            invitationService.updateSentDateTimeAndStatus(invite.getId(), LocalDateTime.now());
         }
     }
 

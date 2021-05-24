@@ -9,9 +9,7 @@
         <addColumn tableName="invitations">
             <column name="END_TIME" type="TIMESTAMP">
             </column>
-            <column name="ROLE_ID" type="BIGINT">
-                <constraints foreignKeyName="roles_fk"
-                             references="roles(id)"/>
+            <column name="ROLE" type="VARCHAR(20)">
             </column>
             <column name="COOPERATION_NAME" type="VARCHAR(70)">
             </column>

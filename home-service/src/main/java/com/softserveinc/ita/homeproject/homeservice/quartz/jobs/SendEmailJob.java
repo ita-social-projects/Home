@@ -27,7 +27,7 @@ public abstract class SendEmailJob extends QuartzJobBean {
     @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext context) {
-       executeAllInvitationsByType();
+        executeAllInvitationsByType();
     }
 
     protected abstract void executeAllInvitationsByType();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
+import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
@@ -12,10 +13,12 @@ import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
 
     protected final InvitationRepository invitationRepository;
@@ -23,12 +26,6 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected final ServiceMapper mapper;
 
     protected final RoleRepository roleRepository;
-
-    public InvitationServiceImpl(InvitationRepository invitationRepository, ServiceMapper mapper, RoleRepository roleRepository) {
-        this.invitationRepository = invitationRepository;
-        this.mapper = mapper;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
@@ -38,8 +35,9 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected abstract InvitationDto fillFieldsByTheType(InvitationDto invitationDto);
 
     @Override
-    public void updateSentDateTime(Long id, LocalDateTime dateTime) {
+    public void updateSentDateTimeAndStatus(Long id, LocalDateTime dateTime) {
         Invitation invitation = findInvitationById(id);
+        invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setSentDatetime(dateTime);
         invitationRepository.save(invitation);
     }

@@ -2,13 +2,12 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,20 +15,15 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    private TemplateService templateService;
+    private final TemplateService templateService;
 
     @Value("${spring.mail.username}")
     private String sender;
-
-    @Autowired
-    public MailServiceImpl(JavaMailSender mailSender, TemplateServiceImpl templateService) {
-        this.mailSender = mailSender;
-        this.templateService = templateService;
-    }
 
     @Override
     public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
