@@ -121,7 +121,7 @@ public class PollServiceImpl implements PollService {
             .anyMatch(houseId -> houseId.equals(id));
 
         if (!isHousePresentInCooperation) {
-            throw new BadRequestHomeException(String.format(NOT_FOUND_MESSAGE, "House", id));
+            throw new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "House", id));
         }
     }
 
