@@ -32,7 +32,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
-        String text = "";
+        var text = "";
         try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto)))) {
             text = Mustache.compiler()
                 .compile(reader)

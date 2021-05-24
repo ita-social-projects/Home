@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
         toDelete.getRoles().forEach(
                 role -> {
-                    if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
+                    if(role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
                         throw new BadRequestHomeException("User cannot be deleted.");
                     }
                 }

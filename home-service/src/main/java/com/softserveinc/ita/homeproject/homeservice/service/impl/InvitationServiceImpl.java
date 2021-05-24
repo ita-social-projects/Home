@@ -1,8 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
@@ -36,7 +34,7 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public void updateSentDateTimeAndStatus(Long id, LocalDateTime dateTime) {
-        Invitation invitation = findInvitationById(id);
+        var invitation = findInvitationById(id);
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setSentDatetime(dateTime);
         invitationRepository.save(invitation);
@@ -44,7 +42,7 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public InvitationDto getInvitation(Long id) {
-        Invitation invitation = findInvitationById(id);
+        var invitation = findInvitationById(id);
         return mapper.convert(invitation, CooperationInvitationDto.class);
     }
 

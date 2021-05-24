@@ -19,7 +19,7 @@ public abstract class SendEmailJob extends QuartzJobBean {
 
     protected final MailService mailService;
 
-    public SendEmailJob(ServiceMapper mapper, MailService mailService) {
+    protected SendEmailJob(ServiceMapper mapper, MailService mailService) {
         this.mapper = mapper;
         this.mailService = mailService;
     }
