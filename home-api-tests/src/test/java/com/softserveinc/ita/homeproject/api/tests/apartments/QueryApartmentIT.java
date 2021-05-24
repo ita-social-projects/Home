@@ -161,14 +161,14 @@ class QueryApartmentIT {
                 .invitations(createApartmentInvitation());
     }
 
-    private List<CreateApartmentInvitation> createApartmentInvitation() {
-        List<CreateApartmentInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+    private List<CreateInvitation> createApartmentInvitation() {
+        List<CreateInvitation> createInvitations = new ArrayList<>();
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.3))
                 .email("invitation@gmail.com")
                 .type(InvitationType.APARTMENT));
 
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.7))
                 .email("invitation2@gmail.com")
                 .type(InvitationType.APARTMENT));
@@ -190,7 +190,8 @@ class QueryApartmentIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .address(createAddress());
+                .address(createAddress())
+                .adminEmail("G.Y.Andreevich@gmail.com");
     }
 
     private Address createAddress() {
