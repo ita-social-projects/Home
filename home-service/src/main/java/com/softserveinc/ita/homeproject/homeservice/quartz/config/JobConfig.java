@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.config;
 
 import com.softserveinc.ita.homeproject.homeservice.quartz.jobs.SendCooperationEmailJob;
-import com.softserveinc.ita.homeproject.homeservice.quartz.jobs.SendEmailJob;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;

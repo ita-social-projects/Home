@@ -25,8 +25,6 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     protected final ServiceMapper mapper;
 
-    protected final RoleRepository roleRepository;
-
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
         return fillFieldsByTheType(invitationDto);

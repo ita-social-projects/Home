@@ -46,14 +46,17 @@ public class TemplateServiceImpl implements TemplateService {
     private Path getInvitationTemplate(MailDto mailDto) {
         Path path;
         if(userRepository.findByEmail(mailDto.getEmail()).isEmpty()) {
+            //TODO: generate link from type for registration
             return REGISTRATION_TEMPLATE_PATH;
         }
         switch (mailDto.getType().toString()) {
             case "cooperation":
                 path = COOPERATION_TEMPLATE_PATH;
+                mailDto.setLink("invitationToCooperationLink");
                 break;
             case "apartment":
                 path = APARTMENT_TEMPLATE_PATH;
+                mailDto.setLink("invitationToApartmentLink");
                 break;
             default:
                 throw new InvitationException("Wrong invitation type.");

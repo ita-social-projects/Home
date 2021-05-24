@@ -33,4 +33,6 @@ public abstract class SendEmailJob extends QuartzJobBean {
     protected abstract void executeAllInvitationsByType();
 
     protected abstract MailDto createMailDto(InvitationDto invitationDto);
+
+    protected abstract String createLink();
 }

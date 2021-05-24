@@ -21,11 +21,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CooperationInvitationServiceImpl extends InvitationServiceImpl implements CooperationInvitationService {
 
-
     public CooperationInvitationServiceImpl(InvitationRepository invitationRepository,
-                                            ServiceMapper mapper,
-                                            RoleRepository roleRepository) {
-        super(invitationRepository, mapper, roleRepository);
+                                            ServiceMapper mapper) {
+        super(invitationRepository, mapper);
     }
 
     @Override

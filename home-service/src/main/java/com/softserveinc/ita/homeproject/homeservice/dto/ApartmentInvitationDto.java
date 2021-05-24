@@ -11,4 +11,6 @@ public class ApartmentInvitationDto extends InvitationDto {
 
     private BigDecimal ownershipPart;
 
+    private String apartmentNumber;
+
 }

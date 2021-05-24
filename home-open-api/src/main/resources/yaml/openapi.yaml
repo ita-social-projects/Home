@@ -1613,6 +1613,9 @@ components:
     ReadCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/ReadInvitation'
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
     ReadApartmentInvitation:
       allOf:
         - $ref: '#/components/schemas/ReadInvitation'
