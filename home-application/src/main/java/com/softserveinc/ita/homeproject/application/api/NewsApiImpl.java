@@ -48,7 +48,6 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
         NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
         NewsDto createdNewsDto = newsService.create(newsDto);
         ReadNews response = mapper.convert(createdNewsDto, ReadNews.class);
-
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
@@ -76,7 +75,6 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
-    @SuppressWarnings("unchecked")
     public Response getAllNews(@Min(1) Integer pageNumber,
                                @Min(1) @Max(10) Integer pageSize,
                                String sort,
@@ -86,7 +84,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
                                String text,
                                String source) {
 
-        Page<NewsDto> readNews = queryApiService.getPageFromQuery(uriInfo, newsService);
+        Page<NewsDto> readNews = newsService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readNews, ReadNews.class);
     }
 
@@ -100,9 +98,8 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
     public Response getNews(Long id) {
-        NewsDto readNewsDto = (NewsDto) queryApiService.getOne(uriInfo, newsService);
+        NewsDto readNewsDto = newsService.getOne(id);
         ReadNews newsApiResponse = mapper.convert(readNewsDto, ReadNews.class);
-
         return Response.ok().entity(newsApiResponse).build();
     }
 

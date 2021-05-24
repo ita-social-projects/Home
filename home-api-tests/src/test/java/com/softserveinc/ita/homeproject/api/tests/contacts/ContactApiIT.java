@@ -188,7 +188,7 @@ class ContactApiIT {
                 .getContactOnUserWithHttpInfo(expectedUser.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining(
-                "Entity with 'user_id: " + expectedUser.getId() + " and id: " + wrongId + "' is not found");
+                "Contact with 'id: " + wrongId + "' is not found");
     }
 
     @Test
