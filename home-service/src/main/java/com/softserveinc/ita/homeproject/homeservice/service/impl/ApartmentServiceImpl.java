@@ -13,7 +13,9 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
 
+    private final ApartmentInvitationService invitationService;
+
     private final ApartmentRepository apartmentRepository;
 
     private final HouseRepository houseRepository;
@@ -34,6 +38,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
+        createApartmentDto.getInvitations().forEach(invitation -> {
+            invitation.setApartmentNumber(createApartmentDto.getApartmentNumber());
+        });
         var apartment = mapper.convert(createApartmentDto, Apartment.class);
         var house = houseRepository.findById(houseId)
                 .filter(House::getEnabled)
@@ -50,17 +57,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                             + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
-        apartment.getInvitations().forEach(element -> {
-            element.setApartment(apartment);
-            // TODO change after invitation implementation will be added
-            element.setSentDatetime(LocalDateTime.now());
-            element.setStatus(InvitationStatus.PENDING);
-        });
-
-        apartment.setHouse(house);
-        apartment.setCreateDate(LocalDateTime.now());
-        apartment.setEnabled(true);
-        apartmentRepository.save(apartment);
+        createApartmentDto.getInvitations().forEach(invitationService::createInvitation);
 
         return mapper.convert(apartment, ApartmentDto.class);
     }

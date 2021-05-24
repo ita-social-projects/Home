@@ -5,40 +5,40 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import lombok.SneakyThrows;
 
+@Component
+@RequiredArgsConstructor
+public class SendApartmentEmailJob{
 
-public class SendApartmentEmailJob extends SendEmailJob{
+    private final ServiceMapper mapper;
 
-    private final ApartmentInvitationService invitationService;
+    private final MailService mailService;
 
-    public SendApartmentEmailJob(ServiceMapper mapper,
-                                 MailService mailService,
-                                 ApartmentInvitationService invitationService) {
-        super(mapper, mailService);
-        this.invitationService = invitationService;
-    }
+    private final ApartmentInvitationService apartmentInvitationService;
+
 
     @SneakyThrows
-    @Override
     protected void executeAllInvitationsByType() {
-        List<ApartmentInvitationDto> invitations = invitationService.getAllActiveInvitations();
+        List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
 
         for (InvitationDto invite : invitations) {
             mailService.sendTextMessage(createMailDto(invite));
-            invitationService.updateSentDateTimeAndStatus(invite.getId(), LocalDateTime.now());
+            apartmentInvitationService.updateSentDateTimeAndStatus(invite.getId());
         }
     }
 
-    @Override
     protected MailDto createMailDto(InvitationDto invitationDto) {
         var invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
         var mailDto = new MailDto();
-        mailDto.setType(invitation.getType());
+        mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
         mailDto.setLink(createLink());
@@ -47,7 +47,6 @@ public class SendApartmentEmailJob extends SendEmailJob{
         return mailDto;
     }
 
-    @Override
     protected String createLink() {
         //TODO: generate token link from type
         return "invitationToApartmentLink";

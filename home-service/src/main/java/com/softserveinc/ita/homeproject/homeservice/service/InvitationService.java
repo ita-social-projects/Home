@@ -12,5 +12,5 @@ public interface InvitationService {
 
     InvitationDto getInvitation(Long id);
 
-    void updateSentDateTimeAndStatus(Long id, LocalDateTime dateTime);
+    void updateSentDateTimeAndStatus(Long id);
 }

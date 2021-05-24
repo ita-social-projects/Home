@@ -9,34 +9,30 @@ import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class SendCooperationEmailJob extends SendEmailJob {
+@RequiredArgsConstructor
+public class SendCooperationEmailJob {
+    private final CooperationInvitationService cooperationInvitationService;
+    
+    private final ServiceMapper mapper;
 
-    private final CooperationInvitationService invitationService;
-
-    public SendCooperationEmailJob(ServiceMapper mapper,
-                                   MailService mailService,
-                                   CooperationInvitationService invitationService) {
-        super(mapper, mailService);
-        this.invitationService = invitationService;
-    }
+    private final MailService mailService;
 
     @SneakyThrows
-    @Override
     protected void executeAllInvitationsByType() {
-        List<CooperationInvitationDto> invitations = invitationService.getAllActiveInvitations();
+        List<CooperationInvitationDto> invitations = cooperationInvitationService.getAllActiveInvitations();
 
         for (InvitationDto invite : invitations) {
             mailService.sendTextMessage(createMailDto(invite));
-            invitationService.updateSentDateTimeAndStatus(invite.getId(), LocalDateTime.now());
+            cooperationInvitationService.updateSentDateTimeAndStatus(invite.getId());
         }
     }
 
-    @Override
     protected MailDto createMailDto(InvitationDto invitationDto) {
         CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
         var mailDto = new MailDto();
@@ -49,7 +45,6 @@ public class SendCooperationEmailJob extends SendEmailJob {
         return mailDto;
     }
 
-    @Override
     protected String createLink(){
         //TODO: generate token link from type
         return "invitationToCooperationLink";

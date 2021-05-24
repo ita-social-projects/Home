@@ -29,6 +29,7 @@ import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadUser;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,13 +44,12 @@ import org.springframework.stereotype.Component;
  */
 @Provider
 @Component
+@RequiredArgsConstructor
 public class UserApiImpl extends CommonApi implements UsersApi {
 
-    @Autowired
-    private UserContactService contactService;
+    private final UserContactService contactService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PreAuthorize(CREATE_CONTACT_PERMISSION)
     @Override

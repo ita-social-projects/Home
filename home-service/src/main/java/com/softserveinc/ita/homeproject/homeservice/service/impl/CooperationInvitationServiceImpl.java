@@ -7,12 +7,9 @@ import java.util.stream.Collectors;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import org.springframework.stereotype.Service;
@@ -27,7 +24,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     }
 
     @Override
-    protected InvitationDto fillFieldsByTheType(InvitationDto invitationDto) {
+    protected InvitationDto saveInvitation(InvitationDto invitationDto) {
         CooperationInvitationDto cooperationInvitationDto =
                 mapper.convert(invitationDto, CooperationInvitationDto.class);
         CooperationInvitation cooperationInvitation =

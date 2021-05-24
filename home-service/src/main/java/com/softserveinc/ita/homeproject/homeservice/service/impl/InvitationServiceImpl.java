@@ -1,13 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
@@ -27,16 +24,16 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
-        return fillFieldsByTheType(invitationDto);
+        return saveInvitation(invitationDto);
     }
 
-    protected abstract InvitationDto fillFieldsByTheType(InvitationDto invitationDto);
+    protected abstract InvitationDto saveInvitation(InvitationDto invitationDto);
 
     @Override
-    public void updateSentDateTimeAndStatus(Long id, LocalDateTime dateTime) {
+    public void updateSentDateTimeAndStatus(Long id) {
         Invitation invitation = findInvitationById(id);
         invitation.setStatus(InvitationStatus.PROCESSING);
-        invitation.setSentDatetime(dateTime);
+        invitation.setSentDatetime(LocalDateTime.now());
         invitationRepository.save(invitation);
     }
 

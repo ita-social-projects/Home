@@ -40,6 +40,7 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.model.UpdateHouse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,16 +49,14 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
+@RequiredArgsConstructor
 public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
-    @Autowired
-    private CooperationService cooperationService;
+    private final CooperationService cooperationService;
 
-    @Autowired
-    private HouseService houseService;
+    private final HouseService houseService;
 
-    @Autowired
-    private CooperationContactService contactService;
+    private final CooperationContactService contactService;
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override

@@ -6,6 +6,7 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
         toDelete.getRoles().forEach(
                 role -> {
-                    if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
+                    if(role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
                         throw new BadRequestHomeException("User cannot be deleted.");
                     }
                 }
