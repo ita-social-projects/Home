@@ -17,20 +17,20 @@ import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
-class CooperationQueryPollT {
+class QueryCooperationPollIT {
 
-    private final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    private final CooperationPollApi COOPERATION_POLL_API = CooperationPollApiIT.COOPERATION_POLL_API;
 
     @Test
     void getAllPollsAscSort() throws ApiException {
 
         COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
         COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiT.COOPERATION_ID)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
             .sort("id,asc")
             .build().perform();
 
@@ -41,12 +41,12 @@ class CooperationQueryPollT {
     void getAllPollsDescSort() throws ApiException {
 
         COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
         COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiT.COOPERATION_ID)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
             .sort("id,desc")
             .build().perform();
 
@@ -62,13 +62,13 @@ class CooperationQueryPollT {
             .minusDays(1)
             .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID,
-            CooperationPollApiT.createPoll().completionDate(completionDateOne));
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID,
-            CooperationPollApiT.createPoll().completionDate(completionDateTwo));
+        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiIT.COOPERATION_ID,
+            CooperationPollApiIT.createPoll().completionDate(completionDateOne));
+        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiIT.COOPERATION_ID,
+            CooperationPollApiIT.createPoll().completionDate(completionDateTwo));
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiT.COOPERATION_ID)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
             .sort("id,asc")
             .filter("completion_date=bt=(" + fromDateString + "," + completionDateOneString + ")")
             .build().perform();
@@ -80,12 +80,12 @@ class CooperationQueryPollT {
     @Test
     void getAllPollsByPollId() throws ApiException {
         Long id = COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll()).getId();
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll()).getId();
         COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiT.COOPERATION_ID)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
             .pageNumber(1)
             .pageSize(10)
             .sort("id,asc")

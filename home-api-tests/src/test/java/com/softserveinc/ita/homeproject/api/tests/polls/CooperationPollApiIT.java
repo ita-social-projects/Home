@@ -30,7 +30,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ConstantConditions")
-class CooperationPollApiT {
+class CooperationPollApiIT {
 
     static final Long COOPERATION_ID;
 
@@ -46,7 +46,7 @@ class CooperationPollApiT {
 
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
-    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
     static {
         ReadCooperation cooperationOne = null;
