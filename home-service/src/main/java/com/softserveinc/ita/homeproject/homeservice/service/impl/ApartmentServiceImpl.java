@@ -74,37 +74,34 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
-        var apartment = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
+        var toUpdate = apartmentRepository.findById(apartmentId)
+                .filter(Apartment::getEnabled)
+                .filter(apartment -> apartment.getHouse().getId().equals(houseId))
                 .orElseThrow(() ->
                         new NotFoundHomeException(
                                 String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
-        if (!apartment.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
-                    houseId));
-        }
 
         if (updateApartmentDto.getApartmentNumber() != null) {
-            apartment.setApartmentNumber(updateApartmentDto.getApartmentNumber());
+            toUpdate.setApartmentNumber(updateApartmentDto.getApartmentNumber());
         }
         if (updateApartmentDto.getApartmentArea() != null) {
-            apartment.setApartmentArea(updateApartmentDto.getApartmentArea());
+            toUpdate.setApartmentArea(updateApartmentDto.getApartmentArea());
         }
 
-        apartment.setUpdateDate(LocalDateTime.now());
-        apartmentRepository.save(apartment);
-        return mapper.convert(apartment, ApartmentDto.class);
+        toUpdate.setUpdateDate(LocalDateTime.now());
+        apartmentRepository.save(toUpdate);
+        return mapper.convert(toUpdate, ApartmentDto.class);
     }
 
     @Override
     public void deactivateApartment(Long houseId, Long apartmentId) {
-        Apartment toDelete = apartmentRepository.findById(apartmentId).filter(Apartment::getEnabled)
+        Apartment toDelete = apartmentRepository.findById(apartmentId)
+                .filter(Apartment::getEnabled)
+                .filter(apartment -> apartment.getHouse().getId().equals(houseId))
                 .orElseThrow(() ->
                         new NotFoundHomeException(
                                 String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
-        if (!toDelete.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND,
-                    houseId));
-        }
+
         toDelete.setEnabled(false);
         apartmentRepository.save(toDelete);
     }
