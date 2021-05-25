@@ -23,7 +23,9 @@ public class PollQueryConfig implements QueryConfig<Poll> {
         ID("id"),
         COOPERATION_ID("cooperation.id"),
         CREATION_DATE("creationDate"),
-        COMPLETION_DATE("completionDate");
+        COMPLETION_DATE("completionDate"),
+        STATUS("status"),
+        TYPE("type");
 
         private final String parameter;
 
