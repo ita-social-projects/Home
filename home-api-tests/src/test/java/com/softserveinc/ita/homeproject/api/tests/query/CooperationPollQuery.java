@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.model.PollStatus;
+import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,17 +21,24 @@ public class CooperationPollQuery extends BaseQuery {
 
     private LocalDateTime completionDate;
 
+    private PollStatus status;
+
+    private PollType type;
+
     private CooperationPollApi cooperationPollApi;
 
     public List<ReadPoll> perform() throws ApiException {
         return cooperationPollApi
-            .queryCooperationPoll(cooperationId, this.getPageNumber(),
+            .queryCooperationPoll(cooperationId,
+                this.getPageNumber(),
                 this.getPageSize(),
                 this.getSort(),
                 this.getFilter(),
                 this.getId(),
                 this.getCreationDate(),
-                this.getCompletionDate());
+                this.getCompletionDate(),
+                this.getType(),
+                this.getStatus());
     }
 
     public static class Builder extends BaseBuilder<CooperationPollQuery, CooperationPollQuery.Builder> {
@@ -51,6 +60,16 @@ public class CooperationPollQuery extends BaseQuery {
 
         public CooperationPollQuery.Builder completionDate(LocalDateTime completionDate) {
             queryClass.setCompletionDate(completionDate);
+            return this;
+        }
+
+        public CooperationPollQuery.Builder type(PollType pollType) {
+            queryClass.setType(pollType);
+            return this;
+        }
+
+        public CooperationPollQuery.Builder status(PollStatus pollStatus) {
+            queryClass.setStatus(pollStatus);
             return this;
         }
 

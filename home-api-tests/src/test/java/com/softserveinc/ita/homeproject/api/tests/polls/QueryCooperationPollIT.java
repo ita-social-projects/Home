@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.polls;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,10 @@ import com.softserveinc.ita.homeproject.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
+import com.softserveinc.ita.homeproject.model.PollStatus;
+import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.junit.jupiter.api.Test;
 
 class QueryCooperationPollIT {
@@ -94,5 +98,41 @@ class QueryCooperationPollIT {
 
         assertEquals(1, queryPoll.size());
         assertEquals(id, queryPoll.get(0).getId());
+    }
+
+    @Test
+    void getAllPollsByPollType() throws ApiException {
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
+
+        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .type(PollType.SIMPLE)
+            .build().perform();
+
+        assertTrue(queryPoll.size() > 0);
+        queryPoll.forEach(poll -> assertEquals(poll.getType(), PollType.SIMPLE));
+    }
+
+    @Test
+    void getAllPollsByPollStatus() throws ApiException {
+        ReadPoll readPoll = COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
+        UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
+        COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);
+
+        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .status(PollStatus.SUSPENDED)
+            .build().perform();
+
+        assertTrue(queryPoll.size() > 0);
+        queryPoll.forEach(poll -> assertEquals(poll.getStatus(), PollStatus.SUSPENDED));
     }
 }

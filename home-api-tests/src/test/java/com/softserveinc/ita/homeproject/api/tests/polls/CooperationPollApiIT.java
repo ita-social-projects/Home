@@ -75,7 +75,7 @@ class CooperationPollApiIT {
             .plusDays(2L);
         return new CreatePoll()
             .header("Poll for our houses")
-            .pollType(PollType.SIMPLE)
+            .type(PollType.SIMPLE)
             .completionDate(completionDate)
             .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
             .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID));
@@ -124,7 +124,7 @@ class CooperationPollApiIT {
             .addHousesItem(createHouse());
     }
 
-    private static UpdatePoll updatePoll() {
+    static UpdatePoll updatePoll() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
             .plusDays(2L);
