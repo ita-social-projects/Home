@@ -29,20 +29,16 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     private final ServiceMapper mapper;
 
-    private static final String APARTMENT_WITH_ID_NOT_FOUND = "Apartment with 'id: %d' is not found";
-
     private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
 
     @Transactional
     @Override
     public OwnershipDto updateOwnership(Long apartmentId, Long id, OwnershipDto updateOwnershipDto) {
-        Ownership toUpdate = ownershipRepository.findById(id).filter(Ownership::getEnabled)
+        Ownership toUpdate = ownershipRepository.findById(id)
+                .filter(Ownership::getEnabled)
+                .filter(ownership -> ownership.getApartment().getId().equals(apartmentId))
                 .orElseThrow(() ->
                         new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
-        if (!toUpdate.getApartment().getId().equals(apartmentId)) {
-            throw new NotFoundHomeException(String.format(APARTMENT_WITH_ID_NOT_FOUND,
-                    apartmentId));
-        }
 
         BigDecimal activeInvitationsSumOwnerPart = invitationRepository
                 .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
@@ -73,13 +69,12 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     @Override
     public void deactivateOwnershipById(Long apartmentId, Long id) {
-        Ownership toDelete = ownershipRepository.findById(id).filter(Ownership::getEnabled)
+        Ownership toDelete = ownershipRepository.findById(id)
+                .filter(Ownership::getEnabled)
+                .filter(ownership -> ownership.getApartment().getId().equals(apartmentId))
                 .orElseThrow(() ->
                         new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
-        if (!toDelete.getApartment().getId().equals(apartmentId)) {
-            throw new NotFoundHomeException(String.format(APARTMENT_WITH_ID_NOT_FOUND,
-                    apartmentId));
-        }
+
 
         toDelete.setEnabled(false);
         ownershipRepository.save(toDelete);

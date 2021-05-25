@@ -30,7 +30,7 @@ class OwnershipApiIT {
     private static final long testDeleteOwnershipApartmentId = 100000001L;
 
     @Test
-    void getApartmentTest() throws ApiException {
+    void getOwnershipTest() throws ApiException {
 
         ReadOwnership expectedOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
 
@@ -115,11 +115,11 @@ class OwnershipApiIT {
                 .isThrownBy(() -> ownershipApi
                         .updateOwnershipWithHttpInfo(wrongId, testOwnershipId, updateOwnership))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Apartment with 'id: " + wrongId + "' is not found");
+                .withMessageContaining("Ownership with 'id: " + testOwnershipId + "' is not found");
     }
 
     @Test
-    void deleteApartmentTest() throws ApiException {
+    void deleteOwnershipTest() throws ApiException {
 
         ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(testDeleteOwnershipApartmentId, testDeleteOwnershipId);
 
@@ -138,7 +138,7 @@ class OwnershipApiIT {
                 .isThrownBy(() -> ownershipApi
                         .deleteOwnershipWithHttpInfo(wrongId, testOwnershipId))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
+                .withMessageContaining("Ownership with 'id: " + testOwnershipId +"' is not found");
     }
 
     private void assertApartment(ReadOwnership expected, ReadOwnership actual) {
