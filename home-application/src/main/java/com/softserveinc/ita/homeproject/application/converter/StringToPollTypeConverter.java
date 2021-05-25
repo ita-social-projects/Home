@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.application.converter;
 
 import javax.ws.rs.ext.Provider;
 
-
 import com.softserveinc.ita.homeproject.homedata.entity.PollType;
 import org.springframework.core.convert.converter.Converter;
 
