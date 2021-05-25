@@ -43,11 +43,12 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public PollDto create(Long cooperationId, PollDto pollDto) {
-        validateCompletionDate(pollDto.getCompletionDate(), LocalDateTime.now());
         pollDto.getPolledHouses().forEach(houseDto -> validateHouse(cooperationId, houseDto));
         Poll poll = mapper.convert(pollDto, Poll.class);
         Cooperation cooperation = getCooperationById(cooperationId);
         poll.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+        validateCompletionDate(pollDto.getCompletionDate(), poll.getCreationDate());
+        poll.setCompletionDate(pollDto.getCompletionDate().truncatedTo(ChronoUnit.MINUTES));
         poll.setCooperation(cooperation);
         poll.setStatus(PollStatus.DRAFT);
         poll.setEnabled(true);
@@ -69,8 +70,9 @@ public class PollServiceImpl implements PollService {
         }
 
         if (pollDto.getCompletionDate() != null) {
-            validateCompletionDate(pollDto.getCompletionDate(), poll.getCreationDate());
-            poll.setCompletionDate(pollDto.getCompletionDate());
+            LocalDateTime completionDate = pollDto.getCompletionDate().truncatedTo(ChronoUnit.MINUTES);
+            validateCompletionDate(completionDate, poll.getCreationDate());
+            poll.setCompletionDate(completionDate);
         }
 
         if (pollDto.getStatus() != null) {
