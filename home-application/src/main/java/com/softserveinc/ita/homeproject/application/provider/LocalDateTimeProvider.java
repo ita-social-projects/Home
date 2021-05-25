@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.provider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
