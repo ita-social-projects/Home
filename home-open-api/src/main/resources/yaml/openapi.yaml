@@ -1070,6 +1070,8 @@ paths:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/creation_date'
         - $ref: '#/components/parameters/completion_date'
+        - $ref: '#/components/parameters/poll_type'
+        - $ref: '#/components/parameters/poll_status'
       responses:
         200:
           $ref: '#/components/responses/PollsResponse'
@@ -1996,7 +1998,7 @@ components:
                 zip_code: "52956"
         status:
           $ref: '#/components/schemas/PollStatus'
-        poll_type:
+        type:
           $ref: '#/components/schemas/PollType'
     CreatePoll:
       type: object
@@ -2004,7 +2006,7 @@ components:
         - header
         - completion_date
         - houses
-        - poll_type
+        - type
       properties:
         header:
           type: string
@@ -2020,7 +2022,7 @@ components:
           example:
             - id: 1
             - id: 2
-        poll_type:
+        type:
           $ref: '#/components/schemas/PollType'
     UpdatePoll:
       type: object
@@ -2576,3 +2578,17 @@ components:
         type: string
         format: date-time
       example: 2021-06-20T06:00
+    poll_type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/PollType'
+      description: Type of the Poll
+      example: simple
+    poll_status:
+      in: query
+      name: status
+      schema:
+        $ref: '#/components/schemas/PollStatus'
+      description: Status of the Poll
+      example: draft
