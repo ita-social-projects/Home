@@ -188,7 +188,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .updateApartmentWithHttpInfo(wrongId, createdApartment.getId(), updateApartment))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
+                .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
     }
 
     @Test
@@ -220,7 +220,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .deleteApartmentWithHttpInfo(wrongId, createdApartment.getId()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
+                .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
     }
 
     @Test
