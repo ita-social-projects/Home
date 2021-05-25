@@ -12,19 +12,22 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 class CooperationQueryPollT {
 
-    private final static CooperationPollApi COOPERATION_POLL_API = CooperationPollApiT.COOPERATION_POLL_API;
+    private final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
     @Test
     void getAllPollsAscSort() throws ApiException {
 
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
             .cooperationId(CooperationPollApiT.COOPERATION_ID)
@@ -37,8 +40,10 @@ class CooperationQueryPollT {
     @Test
     void getAllPollsDescSort() throws ApiException {
 
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
             .cooperationId(CooperationPollApiT.COOPERATION_ID)

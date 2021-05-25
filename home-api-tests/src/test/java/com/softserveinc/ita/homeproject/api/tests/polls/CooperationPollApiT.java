@@ -46,7 +46,7 @@ class CooperationPollApiT {
 
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
-    static final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
     static {
         ReadCooperation cooperationOne = null;
