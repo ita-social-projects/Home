@@ -44,6 +44,8 @@ import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateHouse;
 import com.softserveinc.ita.homeproject.model.CreatePoll;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
+import com.softserveinc.ita.homeproject.model.PollStatus;
+import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
@@ -211,7 +213,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                          String filter,
                                          Long id,
                                          LocalDateTime creationDate,
-                                         LocalDateTime completionDate) {
+                                         LocalDateTime completionDate,
+                                         PollType type,
+                                         PollStatus status) {
         Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
     }
