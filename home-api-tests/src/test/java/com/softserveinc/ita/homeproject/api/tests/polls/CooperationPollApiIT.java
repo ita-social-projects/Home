@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.ApiException;
@@ -24,6 +26,7 @@ import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -255,12 +258,15 @@ class CooperationPollApiIT {
     }
 
     private void assertPoll(CreatePoll expected, ReadPoll actual) {
+        List<Long> expectedHouseIdList = expected.getHouses()
+            .stream().map(HouseLookup::getId).sorted().collect(Collectors.toList());
+        List<Long> actualHouseIdList = actual.getPolledHouses()
+            .stream().map(ReadHouse::getId).sorted().collect(Collectors.toList());
         assertNotNull(expected);
         assertNotNull(actual);
         assertEquals(expected.getHeader(), actual.getHeader());
         assertEquals(expected.getCompletionDate(), actual.getCompletionDate());
-        assertEquals(expected.getHouses().get(0).getId(), actual.getPolledHouses().get(0).getId());
-        assertEquals(expected.getHouses().get(1).getId(), actual.getPolledHouses().get(1).getId());
+        assertEquals(expectedHouseIdList, actualHouseIdList);
     }
 
     private void assertUpdatedPoll(UpdatePoll expected, ReadPoll actual) {
