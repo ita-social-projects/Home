@@ -13,7 +13,7 @@ public class LocalDateTimeProvider implements ParamConverterProvider {
 
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> clazz, Type type, Annotation[] annotations) {
-        if (clazz.getName().equals(LocalDateTime.class.getName())) {
+        if (clazz.equals(LocalDateTime.class)) {
 
             return new ParamConverter<>() {
 

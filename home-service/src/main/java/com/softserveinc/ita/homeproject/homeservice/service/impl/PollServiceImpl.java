@@ -29,10 +29,10 @@ public class PollServiceImpl implements PollService {
 
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
-    private final static String COMPLETION_DATE_VALIDATION_MESSAGE =
+    private static final String COMPLETION_DATE_VALIDATION_MESSAGE =
         "Completion date of the poll has not to be less than 2 days after creation";
 
-    private final static String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
+    private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
 
     private final PollRepository pollRepository;
 
@@ -128,7 +128,7 @@ public class PollServiceImpl implements PollService {
     }
 
     private void validateHouseEnabled(House house) {
-        if (!house.getEnabled()) {
+        if (Boolean.FALSE.equals(house.getEnabled())) {
             throw new BadRequestHomeException(
                 String.format(NOT_FOUND_MESSAGE, "House", house.getId()));
         }
@@ -138,11 +138,9 @@ public class PollServiceImpl implements PollService {
         if (!poll.getStatus().equals(PollStatus.DRAFT)) {
             throw new BadRequestHomeException(
                 String.format(POLL_STATUS_VALIDATION_MESSAGE, poll.getStatus().toString()));
-        } else if (pollStatus != null) {
-            if (pollStatus.equals(PollStatusDto.COMPLETED)) {
-                throw new BadRequestHomeException(
-                    "Poll status can't be changed to 'completed'");
-            }
+        } else if (pollStatus != null && pollStatus.equals(PollStatusDto.COMPLETED)) {
+            throw new BadRequestHomeException(
+                "Poll status can't be changed to 'completed'");
         }
     }
 }

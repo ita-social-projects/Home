@@ -16,7 +16,7 @@ import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
-public class CooperationQueryPollT {
+class CooperationQueryPollT {
 
     private final static CooperationPollApi COOPERATION_POLL_API = CooperationPollApiT.COOPERATION_POLL_API;
 
