@@ -5,8 +5,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
-import com.softserveinc.ita.homeproject.application.config.StringToContactTypeConverter;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.application.provider.StringToContactTypeConverter;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;

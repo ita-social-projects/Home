@@ -74,8 +74,10 @@ public class CooperationQueryPollT {
 
     @Test
     void getAllPollsByPollId() throws ApiException {
-        Long id = COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll()).getId();
-        COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
+        Long id = COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll()).getId();
+        COOPERATION_POLL_API
+            .createCooperationPoll(CooperationPollApiT.COOPERATION_ID, CooperationPollApiT.createPoll());
 
         List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
             .cooperationId(CooperationPollApiT.COOPERATION_ID)
