@@ -25,6 +25,8 @@ public class PollRSQLEndpointConfig implements
         map.put(PollQueryConfig.PollQueryParamEnum.COOPERATION_ID, "cooperation_id");
         map.put(PollQueryConfig.PollQueryParamEnum.CREATION_DATE, "creation_date");
         map.put(PollQueryConfig.PollQueryParamEnum.COMPLETION_DATE, "completion_date");
+        map.put(PollQueryConfig.PollQueryParamEnum.STATUS, "status");
+        map.put(PollQueryConfig.PollQueryParamEnum.TYPE, "type");
 
         return map;
     }
