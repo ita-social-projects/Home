@@ -1,9 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 
 public interface InvitationService {

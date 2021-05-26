@@ -39,11 +39,9 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public InvitationDto getInvitation(Long id) {
-        Invitation invitation = findInvitationById(id);
+        var invitation = findInvitationById(id);
         return mapper.convert(invitation, CooperationInvitationDto.class);
     }
-
-
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->

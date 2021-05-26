@@ -30,7 +30,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     protected InvitationDto saveInvitation(InvitationDto invitationDto) {
         CooperationInvitationDto cooperationInvitationDto =
                 mapper.convert(invitationDto, CooperationInvitationDto.class);
-        CooperationInvitation cooperationInvitation =
+        var cooperationInvitation =
                 mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
         cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));

@@ -139,6 +139,7 @@ class ApartmentApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail("G.Y.Andreevich@gmail.com")
                 .address(createAddress());
     }
 
@@ -167,14 +168,14 @@ class ApartmentApiIT {
                 .invitations(createApartmentInvitation());
     }
 
-    private List<CreateApartmentInvitation> createApartmentInvitation() {
-        List<CreateApartmentInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+    private List<CreateInvitation> createApartmentInvitation() {
+        List<CreateInvitation> createInvitations = new ArrayList<>();
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.3))
                 .email("invitation@gmail.com")
                 .type(InvitationType.APARTMENT));
 
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.7))
                 .email("invitation2@gmail.com")
                 .type(InvitationType.APARTMENT));
@@ -182,14 +183,14 @@ class ApartmentApiIT {
         return createInvitations;
     }
 
-    private List<CreateApartmentInvitation> createInvalidApartmentInvitation() {
-        List<CreateApartmentInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+    private List<CreateInvitation> createInvalidApartmentInvitation() {
+        List<CreateInvitation> createInvitations = new ArrayList<>();
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.8))
                 .email("invitation@gmail.com")
                 .type(InvitationType.APARTMENT));
 
-        createInvitations.add((CreateApartmentInvitation) new CreateApartmentInvitation()
+        createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.7))
                 .email("invitation2@gmail.com")
                 .type(InvitationType.APARTMENT));

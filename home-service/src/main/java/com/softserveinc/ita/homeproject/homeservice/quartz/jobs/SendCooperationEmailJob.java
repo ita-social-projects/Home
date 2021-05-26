@@ -46,6 +46,4 @@ public class SendCooperationEmailJob {
         mailDto.setCooperationName(invitation.getCooperationName());
         return mailDto;
     }
-
-
 }

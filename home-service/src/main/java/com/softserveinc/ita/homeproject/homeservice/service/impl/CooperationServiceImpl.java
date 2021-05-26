@@ -6,13 +6,14 @@ import java.time.LocalDateTime;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
-import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,9 +35,6 @@ public class CooperationServiceImpl implements CooperationService {
     @Transactional
     @Override
     public CooperationDto createCooperation(CooperationDto createCooperationDto) {
-        createCooperationDto.getInvitation().setCooperationName(createCooperationDto.getName());
-        invitationService.createInvitation(createCooperationDto.getInvitation());
-
         Cooperation cooperation = mapper.convert(createCooperationDto, Cooperation.class);
         cooperation.setEnabled(true);
         cooperation.setRegisterDate(LocalDate.now());
@@ -52,7 +50,18 @@ public class CooperationServiceImpl implements CooperationService {
 
         cooperationRepository.save(cooperation);
 
+        invitationService.createInvitation(createInvitationForAdmin(createCooperationDto));
+
         return mapper.convert(cooperation, CooperationDto.class);
+    }
+
+    private CooperationInvitationDto createInvitationForAdmin(CooperationDto cooperationDto) {
+        var invitationDto = new CooperationInvitationDto();
+        invitationDto.setRole(RoleDto.ADMIN);
+        invitationDto.setCooperationName(cooperationDto.getName());
+        invitationDto.setEmail(cooperationDto.getAdminEmail());
+        invitationDto.setType(InvitationTypeDto.COOPERATION);
+        return invitationDto;
     }
 
     @Transactional
