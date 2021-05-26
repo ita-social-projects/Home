@@ -47,7 +47,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @PreAuthorize(GET_APARTMENT_PERMISSION)
     @Override
     public Response getApartment(Long houseId, Long id) {
-        ApartmentDto toGet = apartmentService.getApartmentById(houseId, id);
+        ApartmentDto toGet = apartmentService.getOne(id, getSpecification());
         var readApartment = mapper.convert(toGet, ReadApartment.class);
 
         return Response.status(Response.Status.OK).entity(readApartment).build();
@@ -64,7 +64,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    String apartmentNumber,
                                    BigDecimal apartmentArea) {
 
-        Page<ApartmentDto> readApartment = queryApiService.getPageFromQuery(uriInfo, apartmentService);
+        Page<ApartmentDto> readApartment = apartmentService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
 
