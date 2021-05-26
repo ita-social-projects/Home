@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
@@ -41,14 +40,8 @@ public class SendApartmentEmailJob{
         mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
-        mailDto.setLink(createLink());
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
         mailDto.setOwnershipPat(invitation.getOwnershipPart());
         return mailDto;
-    }
-
-    protected String createLink() {
-        //TODO: generate token link from type
-        return "invitationToApartmentLink";
     }
 }

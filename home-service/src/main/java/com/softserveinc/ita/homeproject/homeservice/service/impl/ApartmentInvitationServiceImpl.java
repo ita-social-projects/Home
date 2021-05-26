@@ -4,27 +4,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implements ApartmentInvitationService {
 
     private final ApartmentRepository apartmentRepository;
+    private final ApartmentInvitationRepository apartmentInvitationRepository;
 
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
-                                          RoleRepository roleRepository, ApartmentRepository apartmentRepository) {
+                                          ApartmentRepository apartmentRepository,
+                                          ApartmentInvitationRepository apartmentInvitationRepository) {
         super(invitationRepository, mapper);
         this.apartmentRepository = apartmentRepository;
+        this.apartmentInvitationRepository = apartmentInvitationRepository;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public List<ApartmentInvitationDto> getAllActiveInvitations() {
-        List<Invitation> allNotSentInvitations = invitationRepository.findAllBySentDatetimeIsNull();
+        List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository.findAllBySentDatetimeIsNullAndApartmentNotNullAndStatusEquals(InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
                 .collect(Collectors.toList());

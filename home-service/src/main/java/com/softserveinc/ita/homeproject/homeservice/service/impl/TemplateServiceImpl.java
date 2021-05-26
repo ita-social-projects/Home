@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import com.samskivert.mustache.Mustache;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
@@ -46,7 +47,7 @@ public class TemplateServiceImpl implements TemplateService {
     private Path getInvitationTemplate(MailDto mailDto) {
         Path path;
         if(userRepository.findByEmail(mailDto.getEmail()).isEmpty()) {
-            //TODO: generate link from type for registration
+            mailDto.setLink(createLink());
             return REGISTRATION_TEMPLATE_PATH;
         }
         switch (mailDto.getType().toString()) {
@@ -61,6 +62,11 @@ public class TemplateServiceImpl implements TemplateService {
             default:
                 throw new InvitationException("Wrong invitation type.");
         }
+        mailDto.setLink(createLink());
         return path;
+    }
+
+    protected String createLink(){
+        return "http://localhost:8080/api/0?token=";
     }
 }

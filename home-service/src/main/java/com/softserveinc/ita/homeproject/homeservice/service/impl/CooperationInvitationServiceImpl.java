@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
@@ -18,9 +18,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CooperationInvitationServiceImpl extends InvitationServiceImpl implements CooperationInvitationService {
 
+    private final CooperationInvitationRepository cooperationInvitationRepository;
+
     public CooperationInvitationServiceImpl(InvitationRepository invitationRepository,
-                                            ServiceMapper mapper) {
+                                            ServiceMapper mapper, CooperationInvitationRepository cooperationInvitationRepository) {
         super(invitationRepository, mapper);
+        this.cooperationInvitationRepository = cooperationInvitationRepository;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
-        List<Invitation> allNotSentInvitations = invitationRepository.findAllBySentDatetimeIsNull();
+        List<CooperationInvitation> allNotSentInvitations = cooperationInvitationRepository.findAllBySentDatetimeIsNullAndCooperationNameNotNullAndStatusEquals(InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());

@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
@@ -9,6 +8,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
+import com.softserveinc.ita.homeproject.homeservice.service.impl.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SendCooperationEmailJob {
+
+    protected final JwtService jwtService;
+
     private final CooperationInvitationService cooperationInvitationService;
     
     private final ServiceMapper mapper;
@@ -40,13 +43,9 @@ public class SendCooperationEmailJob {
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
         mailDto.setRole(invitation.getRole().getName());
-        mailDto.setLink(createLink());
         mailDto.setCooperationName(invitation.getCooperationName());
         return mailDto;
     }
 
-    protected String createLink(){
-        //TODO: generate token link from type
-        return "invitationToCooperationLink";
-    }
+
 }
