@@ -86,5 +86,4 @@ class PollServiceImplTest {
         when(cooperationRepository.findById(anyLong())).thenReturn(Optional.of(cooperation));
         assertThrows(NotFoundHomeException.class, () -> pollService.create(1L, pollDto));
     }
-
 }
