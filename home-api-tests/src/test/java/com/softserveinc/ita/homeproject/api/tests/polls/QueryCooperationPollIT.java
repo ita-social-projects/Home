@@ -13,7 +13,6 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
