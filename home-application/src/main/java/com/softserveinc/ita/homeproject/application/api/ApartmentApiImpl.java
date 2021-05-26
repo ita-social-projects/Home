@@ -35,12 +35,12 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response createInvitation(Long apartmentId, @Valid CreateApartmentInvitation createApartmentInvitation) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported endpoint createInvitation");
     }
 
     @Override
     public Response deleteInvitation(Long apartmentId, Long id) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported endpoint deleteInvitation");
     }
 
     @PreAuthorize(DELETE_OWNERSHIP_PERMISSION)
@@ -52,7 +52,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported endpoint getInvitation");
     }
 
     @PreAuthorize(GET_OWNERSHIP_PERMISSION)
@@ -74,7 +74,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                     String email,
                                     @DecimalMin("0.00010") @DecimalMax("1.0") BigDecimal ownershipPart,
                                     String status) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported endpoint queryInvitation");
     }
 
     @PreAuthorize(GET_OWNERSHIPS_PERMISSION)
@@ -96,7 +96,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response updateInvitation(Long apartmentId,
                                      Long id,
                                      @Valid UpdateApartmentInvitation updateApartmentInvitation) {
-        return null;
+        throw new UnsupportedOperationException("Unsupported endpoint updateInvitation");
     }
 
     @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
