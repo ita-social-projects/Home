@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PollServiceImpl implements PollService {
 
-    private final static int MIN_POLL_DURATION = 2;
+    private final static int MIN_POLL_DURATION_IN_DAYS = 2;
 
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
@@ -110,7 +110,7 @@ public class PollServiceImpl implements PollService {
 
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
-        if (days < MIN_POLL_DURATION) {
+        if (days < MIN_POLL_DURATION_IN_DAYS) {
             throw new BadRequestHomeException(COMPLETION_DATE_VALIDATION_MESSAGE);
         }
     }
