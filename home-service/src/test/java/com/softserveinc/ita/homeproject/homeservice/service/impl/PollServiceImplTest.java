@@ -17,6 +17,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +84,7 @@ class PollServiceImplTest {
         pollDto.setStatus(PollStatusDto.DRAFT);
         pollDto.setPolledHouses(Collections.singletonList(houseDto));
         when(cooperationRepository.findById(anyLong())).thenReturn(Optional.of(cooperation));
-        assertThrows(BadRequestHomeException.class, () -> pollService.create(1L, pollDto));
+        assertThrows(NotFoundHomeException.class, () -> pollService.create(1L, pollDto));
     }
 
 }
