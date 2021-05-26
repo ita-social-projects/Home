@@ -114,7 +114,7 @@ class QueryCooperationPollIT {
             .build().perform();
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(poll.getType(), PollType.SIMPLE));
+        queryPoll.forEach(poll -> assertEquals(PollType.SIMPLE, poll.getType()));
     }
 
     @Test
@@ -133,6 +133,6 @@ class QueryCooperationPollIT {
             .build().perform();
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(poll.getStatus(), PollStatus.SUSPENDED));
+        queryPoll.forEach(poll -> assertEquals(PollStatus.SUSPENDED, poll.getStatus()));
     }
 }
