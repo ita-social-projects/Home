@@ -120,19 +120,12 @@ public class PollServiceImpl implements PollService {
         Cooperation cooperation = getCooperationById(cooperationId);
         boolean isHousePresentInCooperation = cooperation.getHouses()
             .stream()
-            .peek(this::validateHouseEnabled)
+            .filter(House::getEnabled)
             .map(House::getId)
             .anyMatch(houseId -> houseId.equals(id));
 
         if (!isHousePresentInCooperation) {
             throw new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "House", id));
-        }
-    }
-
-    private void validateHouseEnabled(House house) {
-        if (Boolean.FALSE.equals(house.getEnabled())) {
-            throw new BadRequestHomeException(
-                String.format(NOT_FOUND_MESSAGE, "House", house.getId()));
         }
     }
 
