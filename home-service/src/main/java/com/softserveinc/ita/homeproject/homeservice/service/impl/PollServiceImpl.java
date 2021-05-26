@@ -32,7 +32,7 @@ public class PollServiceImpl implements PollService {
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
     private static final String COMPLETION_DATE_VALIDATION_MESSAGE =
-        "Completion date of the poll has not to be less than 2 days after creation";
+        "Completion date of the poll has not to be less than " + MIN_POLL_DURATION_IN_DAYS + " days after creation";
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
 
