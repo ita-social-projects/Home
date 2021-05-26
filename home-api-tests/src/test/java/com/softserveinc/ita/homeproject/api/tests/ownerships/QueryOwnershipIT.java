@@ -21,15 +21,15 @@ class QueryOwnershipIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
 
-    private static final long testOwnershipId = 10000001L;
+    private static final long TEST_OWNERSHIP_ID = 10000001L;
 
-    private static final long testApartmentId = 100000000L;
+    private static final long TEST_APARTMENT_ID = 100000000L;
 
     @Test
     void getAllOwnershipsAscSort() throws ApiException {
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
@@ -41,7 +41,7 @@ class QueryOwnershipIT {
     @Test
     void getAllOwnershipsDescSort() throws ApiException {
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,desc")
@@ -54,7 +54,7 @@ class QueryOwnershipIT {
     void getAllOwnershipsFilteredByOwnershipPart() throws ApiException {
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
@@ -70,23 +70,23 @@ class QueryOwnershipIT {
     @Test
     void getAllOwnershipsByOwnershipId() throws ApiException {
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,desc")
-                .id(testOwnershipId)
+                .id(TEST_OWNERSHIP_ID)
                 .build().perform();
-        queryResponse.forEach(element -> assertEquals(testOwnershipId, element.getId()));
+        queryResponse.forEach(element -> assertEquals(TEST_OWNERSHIP_ID, element.getId()));
     }
 
     @Test
     void getAllOwnershipsByOwnershipPart() throws ApiException {
-        ReadOwnership readOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+        ReadOwnership readOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         BigDecimal ownershipPart = readOwnership.getOwnershipPart();
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
@@ -99,12 +99,12 @@ class QueryOwnershipIT {
 
     @Test
     void getAllOwnershipsByUserId() throws ApiException {
-        ReadOwnership readOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+        ReadOwnership readOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         Long userId = Objects.requireNonNull(readOwnership.getUser()).getId();
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
-                .apartmentId(testApartmentId)
+                .apartmentId(TEST_APARTMENT_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
