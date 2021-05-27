@@ -39,10 +39,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
         createApartmentDto.getInvitations().forEach(invitation -> {
-            invitation.setApartmentNumber(createApartmentDto.getApartmentNumber());
+            invitation.setApartment(createApartmentDto);
         });
         var apartment = mapper.convert(createApartmentDto, Apartment.class);
-        var house = houseRepository.findById(houseId)
+        houseRepository.findById(houseId)
                 .filter(House::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(
                         String.format("Can't find house with given ID: %d", houseId)));
@@ -73,6 +73,14 @@ public class ApartmentServiceImpl implements ApartmentService {
                     houseId));
         }
         return mapper.convert(toGet, ApartmentDto.class);
+    }
+
+    @Override
+    public ApartmentDto getApartmentById(Long id) {
+        return mapper.convert(apartmentRepository.findById(id)
+                        .orElseThrow(() ->
+                                new NotFoundHomeException("Apartment with id: " + id + "not exist.")),
+                ApartmentDto.class);
     }
 
     @Override

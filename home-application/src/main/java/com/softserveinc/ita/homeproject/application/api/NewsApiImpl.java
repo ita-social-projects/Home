@@ -31,10 +31,10 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-@RequiredArgsConstructor
 public class NewsApiImpl extends CommonApi implements NewsApi {
 
-    private final NewsService newsService;
+    @Autowired
+    private NewsService newsService;
 
     /**
      * addNews method is implementation of HTTP POST

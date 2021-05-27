@@ -10,8 +10,8 @@ import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class SendApartmentEmailJob{
         mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
-        mailDto.setApartmentNumber(invitation.getApartmentNumber());
+        mailDto.setApartmentNumber(invitation.getApartment().getApartmentNumber());
         mailDto.setOwnershipPat(invitation.getOwnershipPart());
         return mailDto;
     }

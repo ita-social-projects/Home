@@ -44,12 +44,13 @@ import org.springframework.stereotype.Component;
  */
 @Provider
 @Component
-@RequiredArgsConstructor
 public class UserApiImpl extends CommonApi implements UsersApi {
 
-    private final UserContactService contactService;
+    @Autowired
+    private UserContactService contactService;
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @PreAuthorize(CREATE_CONTACT_PERMISSION)
     @Override

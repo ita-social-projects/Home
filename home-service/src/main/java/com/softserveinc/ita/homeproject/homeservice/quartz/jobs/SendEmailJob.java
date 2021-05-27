@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import com.softserveinc.ita.homeproject.homeservice.service.impl.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

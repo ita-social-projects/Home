@@ -1591,6 +1591,7 @@ components:
           - accepted
           - declined
           - overdue
+          - deactivated
           - error
 
     InvitationType:

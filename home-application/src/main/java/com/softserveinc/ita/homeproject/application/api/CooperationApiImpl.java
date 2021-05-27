@@ -49,14 +49,16 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-@RequiredArgsConstructor
 public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
-    private final CooperationService cooperationService;
+    @Autowired
+    private CooperationService cooperationService;
 
-    private final HouseService houseService;
+    @Autowired
+    private HouseService houseService;
 
-    private final CooperationContactService contactService;
+    @Autowired
+    private CooperationContactService contactService;
 
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override

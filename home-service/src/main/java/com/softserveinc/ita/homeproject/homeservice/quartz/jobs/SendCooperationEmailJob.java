@@ -8,7 +8,6 @@ import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
-import com.softserveinc.ita.homeproject.homeservice.service.impl.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SendCooperationEmailJob {
-
-    protected final JwtService jwtService;
 
     private final CooperationInvitationService cooperationInvitationService;
     

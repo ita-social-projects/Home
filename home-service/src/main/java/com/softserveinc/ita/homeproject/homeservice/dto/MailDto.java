@@ -27,5 +27,7 @@ public class MailDto extends BaseDto {
 
     private String link;
 
+    private String apartmentAddress;
+
     private InvitationTypeDto type;
 }

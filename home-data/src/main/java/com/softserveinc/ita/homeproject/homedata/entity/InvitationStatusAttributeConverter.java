@@ -18,6 +18,8 @@ public class InvitationStatusAttributeConverter implements AttributeConverter<In
                 return "accepted";
             case DECLINED:
                 return "declined";
+            case DEACTIVATED:
+                return "deactivated";
             case ERROR:
                 return "error";
             default:
@@ -40,6 +42,8 @@ public class InvitationStatusAttributeConverter implements AttributeConverter<In
                 return InvitationStatus.ACCEPTED;
             case "declined":
                 return InvitationStatus.DECLINED;
+            case "deactivated":
+                return InvitationStatus.DEACTIVATED;
             case "error":
                 return InvitationStatus.ERROR;
             default:

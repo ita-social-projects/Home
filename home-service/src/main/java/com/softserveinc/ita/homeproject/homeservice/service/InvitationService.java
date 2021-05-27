@@ -11,4 +11,5 @@ public interface InvitationService {
     InvitationDto getInvitation(Long id);
 
     void updateSentDateTimeAndStatus(Long id);
+
 }

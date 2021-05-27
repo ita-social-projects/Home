@@ -8,4 +8,6 @@ public interface ApartmentService extends QueryableService<Apartment, ApartmentD
     ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto);
 
     ApartmentDto getApartmentById(Long houseId, Long id);
+
+    ApartmentDto getApartmentById(Long id);
 }

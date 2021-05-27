@@ -24,10 +24,10 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-@RequiredArgsConstructor
 public class HouseApiImpl extends CommonApi implements HousesApi {
 
-    private final ApartmentService apartmentService;
+    @Autowired
+    private ApartmentService apartmentService;
 
     @PreAuthorize(CREATE_APARTMENT_PERMISSION)
     @Override

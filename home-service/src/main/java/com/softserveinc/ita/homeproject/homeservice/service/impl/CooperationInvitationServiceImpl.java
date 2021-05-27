@@ -21,7 +21,8 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     private final CooperationInvitationRepository cooperationInvitationRepository;
 
     public CooperationInvitationServiceImpl(InvitationRepository invitationRepository,
-                                            ServiceMapper mapper, CooperationInvitationRepository cooperationInvitationRepository) {
+                                            ServiceMapper mapper,
+                                            CooperationInvitationRepository cooperationInvitationRepository) {
         super(invitationRepository, mapper);
         this.cooperationInvitationRepository = cooperationInvitationRepository;
     }
@@ -44,7 +45,9 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
-        List<CooperationInvitation> allNotSentInvitations = cooperationInvitationRepository.findAllBySentDatetimeIsNullAndCooperationNameNotNullAndStatusEquals(InvitationStatus.PENDING);
+        List<CooperationInvitation> allNotSentInvitations = cooperationInvitationRepository
+                .findAllBySentDatetimeIsNullAndCooperationNameNotNullAndStatusEquals(
+                        InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());

@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homeservice.dto;
 
-public enum InvitationStatus {
+public enum InvitationStatusDto {
 
     PENDING("pending"),
 
@@ -17,7 +17,7 @@ public enum InvitationStatus {
 
     private final String value;
 
-    InvitationStatus(String value) {
+    InvitationStatusDto(String value) {
         this.value = value;
     }
 
