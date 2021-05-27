@@ -21,21 +21,21 @@ class OwnershipApiIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
 
-    private static final long testOwnershipId = 10000001L;
+    private static final long TEST_OWNERSHIP_ID = 10000001L;
 
-    private static final Long testDeleteOwnershipId = 10000003L;
+    private static final long TEST_DELETE_OWNERSHIP_ID = 10000003L;
 
-    private static final long testApartmentId = 100000000L;
+    private static final long TEST_APARTMENT_ID = 100000000L;
 
-    private static final long testDeleteOwnershipApartmentId = 100000001L;
+    private static final long TEST_DELETE_OWNERSHIP_APARTMENT_ID = 100000001L;
 
     @Test
     void getOwnershipTest() throws ApiException {
 
-        ReadOwnership expectedOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+        ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         ApiResponse<ReadOwnership> response
-                = ownershipApi.getOwnershipWithHttpInfo(testApartmentId, testOwnershipId);
+                = ownershipApi.getOwnershipWithHttpInfo(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertApartment(expectedOwnership, response.getData());
@@ -47,7 +47,7 @@ class OwnershipApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
-                        .getOwnershipWithHttpInfo(testApartmentId, wrongId))
+                        .getOwnershipWithHttpInfo(TEST_APARTMENT_ID, wrongId))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining("Ownership with 'id: " + wrongId + "' is not found");
     }
@@ -58,9 +58,9 @@ class OwnershipApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
-                        .getOwnershipWithHttpInfo(wrongId, testOwnershipId))
+                        .getOwnershipWithHttpInfo(wrongId, TEST_OWNERSHIP_ID))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Ownership with 'id: " + testOwnershipId + "' is not found");
+                .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID + "' is not found");
     }
 
     @Test
@@ -68,10 +68,10 @@ class OwnershipApiIT {
         UpdateOwnership updateOwnership = new UpdateOwnership()
                 .ownershipPart(BigDecimal.valueOf(0.5));
 
-        ReadOwnership expectedOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+        ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         ApiResponse<ReadOwnership> response =
-                ownershipApi.updateOwnershipWithHttpInfo(testApartmentId, testOwnershipId, updateOwnership);
+                ownershipApi.updateOwnershipWithHttpInfo(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID, updateOwnership);
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertOwnership(expectedOwnership, updateOwnership, response.getData());
@@ -82,10 +82,10 @@ class OwnershipApiIT {
         UpdateOwnership updateOwnership = new UpdateOwnership()
                 .ownershipPart(BigDecimal.valueOf(0.8));
 
-        ReadOwnership expectedOwnership = ownershipApi.getOwnership(testApartmentId, testOwnershipId);
+        ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> ownershipApi.updateOwnership(testApartmentId,expectedOwnership.getId(), updateOwnership))
+                .isThrownBy(() -> ownershipApi.updateOwnership(TEST_APARTMENT_ID,expectedOwnership.getId(), updateOwnership))
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("Entered sum of area = 1.2 The sum of the entered area cannot be greater than 1");
     }
@@ -99,7 +99,7 @@ class OwnershipApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
-                        .updateOwnershipWithHttpInfo(testApartmentId, wrongId, updateOwnership))
+                        .updateOwnershipWithHttpInfo(TEST_APARTMENT_ID, wrongId, updateOwnership))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining("Ownership with 'id: " + wrongId + "' is not found");
     }
@@ -113,19 +113,19 @@ class OwnershipApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
-                        .updateOwnershipWithHttpInfo(wrongId, testOwnershipId, updateOwnership))
+                        .updateOwnershipWithHttpInfo(wrongId, TEST_OWNERSHIP_ID, updateOwnership))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Ownership with 'id: " + testOwnershipId + "' is not found");
+                .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID + "' is not found");
     }
 
     @Test
     void deleteOwnershipTest() throws ApiException {
 
-        ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(testDeleteOwnershipApartmentId, testDeleteOwnershipId);
+        ApiResponse<Void> response = ownershipApi.deleteOwnershipWithHttpInfo(TEST_DELETE_OWNERSHIP_APARTMENT_ID, TEST_DELETE_OWNERSHIP_ID);
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> ownershipApi.getOwnership(testDeleteOwnershipApartmentId, testDeleteOwnershipId));
+                .isThrownBy(() -> ownershipApi.getOwnership(TEST_DELETE_OWNERSHIP_APARTMENT_ID, TEST_DELETE_OWNERSHIP_ID));
 
     }
 
@@ -136,9 +136,9 @@ class OwnershipApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi
-                        .deleteOwnershipWithHttpInfo(wrongId, testOwnershipId))
+                        .deleteOwnershipWithHttpInfo(wrongId, TEST_OWNERSHIP_ID))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Ownership with 'id: " + testOwnershipId +"' is not found");
+                .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID +"' is not found");
     }
 
     private void assertApartment(ReadOwnership expected, ReadOwnership actual) {

@@ -40,26 +40,7 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .orElseThrow(() ->
                         new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
 
-        BigDecimal activeInvitationsSumOwnerPart = invitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
-                .stream()
-                .map(ApartmentInvitation::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-                .stream()
-                .filter(Ownership::getEnabled)
-                .map(Ownership::getOwnershipPart)
-                .reduce(BigDecimal.ZERO,BigDecimal::add)
-                .add(activeInvitationsSumOwnerPart)
-                .subtract(toUpdate.getOwnershipPart())
-                .add(updateOwnershipDto.getOwnershipPart());
-
-        if(sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1))>0) {
-            throw new BadRequestHomeException(
-                    "Entered sum of area = "
-                            + sumOfOwnerPartsWithNewInput + " The sum of the entered area cannot be greater than 1");
-        }
+        validateSumOwnershipPart(apartmentId, toUpdate, updateOwnershipDto);
 
         toUpdate.setOwnershipPart(updateOwnershipDto.getOwnershipPart());
 
@@ -87,5 +68,28 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
         return ownershipRepository.findAll(ownershipSpecification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(ownership -> mapper.convert(ownership, OwnershipDto.class));
+    }
+
+    public void validateSumOwnershipPart(Long apartmentId, Ownership toUpdate, OwnershipDto updateOwnershipDto){
+        BigDecimal activeInvitationsSumOwnerPart = invitationRepository
+                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
+                .stream()
+                .map(ApartmentInvitation::getOwnershipPart)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
+                .stream()
+                .filter(Ownership::getEnabled)
+                .map(Ownership::getOwnershipPart)
+                .reduce(BigDecimal.ZERO,BigDecimal::add)
+                .add(activeInvitationsSumOwnerPart)
+                .subtract(toUpdate.getOwnershipPart())
+                .add(updateOwnershipDto.getOwnershipPart());
+
+        if(sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1))>0) {
+            throw new BadRequestHomeException(
+                    "Entered sum of area = "
+                            + sumOfOwnerPartsWithNewInput + " The sum of the entered area cannot be greater than 1");
+        }
     }
 }
