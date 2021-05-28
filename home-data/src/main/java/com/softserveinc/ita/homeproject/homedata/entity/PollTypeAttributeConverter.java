@@ -7,13 +7,8 @@ public class PollTypeAttributeConverter implements AttributeConverter<PollType, 
     public String convertToDatabaseColumn(PollType attribute) {
         if (attribute == null) {
             return null;
-        }
-
-        switch (attribute) {
-            case SIMPLE:
-                return "simple";
-            default:
-                throw new IllegalArgumentException(attribute + " not supported.");
+        } else {
+            return attribute.name();
         }
     }
 
@@ -21,13 +16,12 @@ public class PollTypeAttributeConverter implements AttributeConverter<PollType, 
     public PollType convertToEntityAttribute(String dbData) {
         if (dbData == null) {
             return null;
-        }
-
-        switch (dbData) {
-            case "simple":
-                return PollType.SIMPLE;
-            default:
+        } else {
+            try {
+                return PollType.valueOf(dbData);
+            } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(dbData + " not supported.");
+            }
         }
     }
 }

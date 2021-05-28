@@ -7,19 +7,8 @@ public class PollStatusAttributeConverter implements AttributeConverter<PollStat
     public String convertToDatabaseColumn(PollStatus attribute) {
         if (attribute == null) {
             return null;
-        }
-
-        switch (attribute) {
-            case DRAFT:
-                return "draft";
-            case ACTIVE:
-                return "active";
-            case COMPLETED:
-                return "completed";
-            case SUSPENDED:
-                return "suspended";
-            default:
-                throw new IllegalArgumentException(attribute + " not supported.");
+        } else {
+            return attribute.name();
         }
     }
 
@@ -27,19 +16,12 @@ public class PollStatusAttributeConverter implements AttributeConverter<PollStat
     public PollStatus convertToEntityAttribute(String dbData) {
         if (dbData == null) {
             return null;
-        }
-
-        switch (dbData) {
-            case "draft":
-                return PollStatus.DRAFT;
-            case "active":
-                return PollStatus.ACTIVE;
-            case "completed":
-                return PollStatus.COMPLETED;
-            case "suspended":
-                return PollStatus.SUSPENDED;
-            default:
+        } else {
+            try {
+                return PollStatus.valueOf(dbData);
+            } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(dbData + " not supported.");
+            }
         }
     }
 }
