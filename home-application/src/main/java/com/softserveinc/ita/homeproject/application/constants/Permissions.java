@@ -82,8 +82,6 @@ public final class Permissions {
 
     public static final String GET_OWNERSHIP_PERMISSION = "hasAuthority('GET_OWNERSHIP_PERMISSION')";
 
-    public static final String GET_OWNERSHIPS_PERMISSION = "hasAuthority('GET_OWNERSHIPS_PERMISSION')";
-
     public static final String UPDATE_OWNERSHIP_PERMISSION = "hasAuthority('UPDATE_OWNERSHIP_PERMISSION')";
 
     public static final String DELETE_OWNERSHIP_PERMISSION = "hasAuthority('DELETE_OWNERSHIP_PERMISSION')";

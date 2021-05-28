@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIPS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIP_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
 
@@ -77,7 +76,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         throw new UnsupportedOperationException("Unsupported endpoint queryInvitation");
     }
 
-    @PreAuthorize(GET_OWNERSHIPS_PERMISSION)
+    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
     @Override
     public Response queryOwnership(Long apartmentId,
                                    @Min(1) Integer pageNumber,
