@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;

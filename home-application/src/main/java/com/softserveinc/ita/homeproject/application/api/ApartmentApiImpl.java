@@ -120,7 +120,11 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response updateInvitation(Long apartmentId,
                                      Long id,
                                      @Valid UpdateApartmentInvitation updateApartmentInvitation) {
-        throw new UnsupportedOperationException("Unsupported endpoint updateInvitation");
+        var updateInvitationDto = mapper.convert(updateApartmentInvitation,
+                ApartmentInvitationDto.class);
+        var toUpdate = invitationService.updateInvitation(apartmentId, id, updateInvitationDto);
+        var readInvitation = mapper.convert(toUpdate, ReadApartmentInvitation.class);
+        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
