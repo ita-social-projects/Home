@@ -79,9 +79,9 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         return toUpdate;
     }
 
-    public void validateSumOwnershipPart(Long apartmentId,
-                                         ApartmentInvitation toUpdate,
-                                         ApartmentInvitationDto updateOwnershipDto) {
+    private void validateSumOwnershipPart(Long apartmentId,
+                                          ApartmentInvitation toUpdate,
+                                          ApartmentInvitationDto updateOwnershipDto) {
         BigDecimal activeInvitationsSumOwnerPart = apartmentInvitationRepository
                 .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
                 .stream()
@@ -104,47 +104,48 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         }
 
     }
-        @Override
-        protected InvitationDto saveInvitation (InvitationDto invitationDto){
-            ApartmentInvitationDto apartmentInvitationDto =
-                    mapper.convert(invitationDto, ApartmentInvitationDto.class);
-            ApartmentInvitation apartmentInvitation =
-                    mapper.convert(apartmentInvitationDto, ApartmentInvitation.class);
-            apartmentInvitation.setStatus(InvitationStatus.PENDING);
-            invitationRepository.save(apartmentInvitation);
-            return apartmentInvitationDto;
-        }
 
-
-        @Override
-        public List<ApartmentInvitationDto> getAllActiveInvitations () {
-            List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
-                    .findAllBySentDatetimeIsNullAndApartmentNotNullAndStatusEquals(
-                            InvitationStatus.PENDING);
-            return allNotSentInvitations.stream()
-                    .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public void deactivateInvitationById (Long apartmentId, Long id){
-            var apartmentInvitation = getInvitation(apartmentId, id);
-            apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
-            apartmentInvitationRepository.save(apartmentInvitation);
-        }
-
-        @Transactional
-        @Override
-        public Page<ApartmentInvitationDto> findAll (Integer pageNumber,
-                Integer pageSize,
-                Specification < ApartmentInvitation > specification){
-            Specification<ApartmentInvitation> apartmentInvitationSpecification = specification
-                    .and((root, criteriaQuery, criteriaBuilder) ->
-                            criteriaBuilder.equal(root.get("enabled"), true));
-            return apartmentInvitationRepository
-                    .findAll(apartmentInvitationSpecification, PageRequest
-                            .of(pageNumber - 1, pageSize))
-                    .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
-        }
+    @Override
+    public InvitationDto saveInvitation(InvitationDto invitationDto) {
+        ApartmentInvitationDto apartmentInvitationDto = mapper
+                .convert(invitationDto, ApartmentInvitationDto.class);
+        ApartmentInvitation apartmentInvitation = mapper
+                .convert(apartmentInvitationDto, ApartmentInvitation.class);
+        apartmentInvitation.setStatus(InvitationStatus.PENDING);
+        invitationRepository.save(apartmentInvitation);
+        return apartmentInvitationDto;
     }
+
+
+    @Override
+    public List<ApartmentInvitationDto> getAllActiveInvitations() {
+        List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
+                .findAllBySentDatetimeIsNullAndApartmentNotNullAndStatusEquals(
+                        InvitationStatus.PENDING);
+        return allNotSentInvitations.stream()
+                .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deactivateInvitationById(Long apartmentId, Long id) {
+        var apartmentInvitation = getInvitation(apartmentId, id);
+        apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
+        apartmentInvitationRepository.save(apartmentInvitation);
+    }
+
+    @Transactional
+    @Override
+    public Page<ApartmentInvitationDto> findAll(Integer pageNumber,
+                                                Integer pageSize,
+                                                Specification<ApartmentInvitation> specification) {
+        Specification<ApartmentInvitation> apartmentInvitationSpecification = specification
+                .and((root, criteriaQuery, criteriaBuilder) ->
+                        criteriaBuilder.equal(root.get("enabled"), true));
+        return apartmentInvitationRepository
+                .findAll(apartmentInvitationSpecification, PageRequest
+                        .of(pageNumber - 1, pageSize))
+                .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
+    }
+}
 
