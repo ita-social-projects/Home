@@ -41,7 +41,9 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @Override
     public Response deleteApartment(Long houseId, Long id) {
-        throw new UnsupportedOperationException();
+
+        apartmentService.deactivateApartment(houseId,id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(GET_APARTMENT_PERMISSION)
@@ -70,7 +72,11 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @Override
     public Response updateApartment(@Min(1L) Long houseId, Long id, @Valid UpdateApartment updateApartment) {
-        throw new UnsupportedOperationException();
+        var updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
+        var toUpdate = apartmentService.updateApartment(houseId,id,updateApartmentDto);
+        var readApartment = mapper.convert(toUpdate, ReadApartment.class);
+
+        return Response.status(Response.Status.OK).entity(readApartment).build();
     }
 
 }
