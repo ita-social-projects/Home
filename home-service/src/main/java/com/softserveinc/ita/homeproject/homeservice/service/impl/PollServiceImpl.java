@@ -35,10 +35,10 @@ public class PollServiceImpl implements PollService {
 
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
-    @Value("${min.poll.duration.in.days:2}")
-    private int MIN_POLL_DURATION_IN_DAYS;
-
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
+
+    @Value("${min.poll.duration.in.days:2}")
+    private int minPollDurationInDays;
 
     private final PollRepository pollRepository;
 
@@ -113,9 +113,9 @@ public class PollServiceImpl implements PollService {
 
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
-        if (days < MIN_POLL_DURATION_IN_DAYS) {
+        if (days < minPollDurationInDays) {
             throw new BadRequestHomeException(
-                String.format(COMPLETION_DATE_VALIDATION_MESSAGE, MIN_POLL_DURATION_IN_DAYS));
+                String.format(COMPLETION_DATE_VALIDATION_MESSAGE, minPollDurationInDays));
         }
     }
 
