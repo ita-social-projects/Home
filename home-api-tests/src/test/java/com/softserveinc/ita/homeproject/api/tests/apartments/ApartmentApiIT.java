@@ -55,7 +55,7 @@ class ApartmentApiIT {
                 .isThrownBy(() -> apartmentApi
                         .createApartmentWithHttpInfo(wrongId, createApartment))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Can't find house with given ID: " + wrongId);
+                .withMessageContaining("House with 'id: " + wrongId +"' is not found");
     }
 
     @Test
@@ -134,6 +134,109 @@ class ApartmentApiIT {
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
     }
 
+    @Test
+    void updateApartmentTest() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        ApiResponse<ReadApartment> response = apartmentApi.updateApartmentWithHttpInfo(createdHouse.getId(),createdApartment.getId(), updateApartment);
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertApartment(createdApartment, updateApartment, response.getData());
+    }
+
+    @Test
+    void updateNonExistentApartment() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .updateApartmentWithHttpInfo(createdHouse.getId(), wrongId, updateApartment))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
+    }
+
+    @Test
+    void updateApartmentWithNonExistentHouse() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        UpdateApartment updateApartment = new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .updateApartmentWithHttpInfo(wrongId, createdApartment.getId(), updateApartment))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
+    }
+
+    @Test
+    void deleteApartmentTest() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        ApiResponse<Void> response = apartmentApi.deleteApartmentWithHttpInfo(createdHouse.getId(), createdApartment.getId());
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi.getApartment(createdHouse.getId(), createdApartment.getId()));
+    }
+
+    @Test
+    void deleteApartmentWithNonExistentHouse() throws ApiException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(),createApartment);
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .deleteApartmentWithHttpInfo(wrongId, createdApartment.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
+    }
+
+    @Test
+    void deleteNonExistentApartment() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> apartmentApi
+                        .deleteApartmentWithHttpInfo(createdHouse.getId(), wrongId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
+    }
+
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name("newCooperationTest")
@@ -203,5 +306,13 @@ class ApartmentApiIT {
         assertNotNull(actual);
         assertEquals(expected.getArea(), actual.getApartmentArea());
         assertEquals(expected.getNumber(), actual.getApartmentNumber());
+    }
+
+    private void assertApartment(ReadApartment saved, UpdateApartment update, ReadApartment updated) {
+        assertNotNull(saved);
+        assertNotNull(update);
+        assertNotNull(updated);
+        assertEquals(update.getNumber(), updated.getApartmentNumber());
+        assertEquals(update.getArea(), updated.getApartmentArea());
     }
 }
