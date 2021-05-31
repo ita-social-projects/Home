@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -30,9 +29,6 @@ class MailServiceImplTest {
 
     @Mock
     private MimeMessage mimeMessage;
-
-    @Mock
-    private MimeMessageHelper mimeMessageHelper;
 
     @Mock
     private JavaMailSender mailSender;

@@ -12,20 +12,22 @@ import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@PropertySource(value = "classpath:/service.properties")
 public class TemplateServiceImpl implements TemplateService {
+    @Value("${path.invitation.registration}")
+    private static String registrationTemplatePath;
 
-    public static final Path REGISTRATION_TEMPLATE_PATH =
-        Path.of("home-data/src/main/resources/template/invitation-to-registration.mustache");
+    @Value("${path.invitation.cooperation}")
+    private static String cooperationTemplatePath;
 
-    public static final Path COOPERATION_TEMPLATE_PATH =
-        Path.of("home-data/src/main/resources/template/invitation-to-cooperation.mustache");
-
-    private static final Path APARTMENT_TEMPLATE_PATH =
-            Path.of("home-data/src/main/resources/template/invitation-to-apartment.mustache");
+    @Value("${path.invitation.apartment}")
+    private static String apartmentTemplatePath;
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
@@ -41,20 +43,16 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        Path path;
         if(!mailDto.getIsRegistered()) {
-            return REGISTRATION_TEMPLATE_PATH;
+            return Path.of(registrationTemplatePath);
         }
         switch (mailDto.getType().toString()) {
             case "cooperation":
-                path = COOPERATION_TEMPLATE_PATH;
-                break;
+                return Path.of(cooperationTemplatePath);
             case "apartment":
-                path = APARTMENT_TEMPLATE_PATH;
-                break;
+                return Path.of(apartmentTemplatePath);
             default:
                 throw new InvitationException("Wrong invitation type.");
         }
-        return path;
     }
 }

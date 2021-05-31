@@ -16,24 +16,28 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class SendCooperationEmailJob extends SendEmailJob {
+public class SendCooperationEmailJob {
 
     private final CooperationInvitationService invitationService;
 
     private final UserRepository userRepository;
 
+    private final ServiceMapper mapper;
+
+    private final MailService mailService;
+
     public SendCooperationEmailJob(ServiceMapper mapper,
                                    MailService mailService,
                                    CooperationInvitationService invitationService,
                                    UserRepository userRepository) {
-        super(mapper, mailService);
+        this.mapper = mapper;
+        this.mailService = mailService;
         this.invitationService = invitationService;
         this.userRepository = userRepository;
     }
 
     @SneakyThrows
-    @Override
-    protected void executeAllInvitationsByType() {
+    public void executeAllInvitationsByType() {
         List<CooperationInvitationDto> invitations = invitationService.getAllActiveInvitations();
 
         for (InvitationDto invite : invitations) {
@@ -63,9 +67,11 @@ public class SendCooperationEmailJob extends SendEmailJob {
             case COOPERATION:
                 mailDto.setLink("Link for joining into cooperation");
                 mailDto.setIsRegistered(true);
+                break;
             case APARTMENT:
                 mailDto.setLink("Link for joining into apartment");
                 mailDto.setIsRegistered(true);
+                break;
             default:
                 throw new InvitationException("Wrong invitation type.");
         }

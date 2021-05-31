@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;
@@ -11,23 +9,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public abstract class SendEmailJob extends QuartzJobBean {
+public class SendEmailJob extends QuartzJobBean {
 
-    protected final ServiceMapper mapper;
+    private final SendCooperationEmailJob sendCooperationEmailJob;
 
-    protected final MailService mailService;
-
-    protected SendEmailJob(ServiceMapper mapper, MailService mailService) {
-        this.mapper = mapper;
-        this.mailService = mailService;
+    public SendEmailJob(SendCooperationEmailJob sendCooperationEmailJob) {
+        this.sendCooperationEmailJob = sendCooperationEmailJob;
     }
 
     @SneakyThrows
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        executeAllInvitationsByType();
+        sendCooperationEmailJob.executeAllInvitationsByType();
     }
-
-    protected abstract void executeAllInvitationsByType();
 
 }
