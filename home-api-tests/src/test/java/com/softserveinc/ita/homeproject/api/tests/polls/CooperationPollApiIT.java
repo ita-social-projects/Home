@@ -72,7 +72,8 @@ class CooperationPollApiIT {
     static CreatePoll createPoll() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(2L);
+            .plusDays(2L)
+            .plusMinutes(1L);
         return new CreatePoll()
             .header("Poll for our houses")
             .type(PollType.SIMPLE)
@@ -127,7 +128,8 @@ class CooperationPollApiIT {
     static UpdatePoll updatePoll() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(2L);
+            .plusDays(2L)
+            .plusMinutes(1L);
         return new UpdatePoll()
             .header("Updated poll for our houses")
             .completionDate(completionDate)
