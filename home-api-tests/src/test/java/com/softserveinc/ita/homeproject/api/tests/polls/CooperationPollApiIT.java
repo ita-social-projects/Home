@@ -51,6 +51,8 @@ class CooperationPollApiIT {
 
     final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
+    private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
+
     static {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
@@ -72,7 +74,7 @@ class CooperationPollApiIT {
     static CreatePoll createPoll() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(2L)
+            .plusDays(MIN_POLL_DURATION_IN_DAYS)
             .plusMinutes(1L);
         return new CreatePoll()
             .header("Poll for our houses")
@@ -128,7 +130,7 @@ class CooperationPollApiIT {
     static UpdatePoll updatePoll() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(2L)
+            .plusDays(MIN_POLL_DURATION_IN_DAYS)
             .plusMinutes(1L);
         return new UpdatePoll()
             .header("Updated poll for our houses")
@@ -139,7 +141,7 @@ class CooperationPollApiIT {
     private static UpdatePoll updatePollWithWrongCompletionDate() {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(1L);
+            .plusDays(MIN_POLL_DURATION_IN_DAYS - 1);
         return updatePoll().completionDate(completionDate);
     }
 
