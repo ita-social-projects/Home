@@ -13,6 +13,5 @@
     <include file="Issue156.xml" relativeToChangelogFile="true"/>
     <include file="Issue180.xml" relativeToChangelogFile="true"/>
     <include file="Issue127.xml" relativeToChangelogFile="true"/>
-    <include file="Issue127-QuartzConfig.xml" relativeToChangelogFile="true"/>
     <include file="Issue183.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
