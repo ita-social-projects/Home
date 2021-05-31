@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
@@ -15,7 +14,6 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +41,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
-        createApartmentDto.getInvitations().forEach(invitation -> {
-            invitation.setApartment(createApartmentDto);
-        });
+        createApartmentDto.getInvitations().forEach(invitation ->
+                invitation.setApartment(createApartmentDto));
         var apartment = mapper.convert(createApartmentDto, Apartment.class);
         houseRepository.findById(houseId)
                 .filter(House::getEnabled)
@@ -78,6 +75,14 @@ public class ApartmentServiceImpl implements ApartmentService {
                     houseId));
         }
         return mapper.convert(toGet, ApartmentDto.class);
+    }
+
+    @Override
+    public ApartmentDto getApartmentById(Long id) {
+        return mapper.convert(apartmentRepository.findById(id)
+                        .orElseThrow(() ->
+                                new NotFoundHomeException("Apartment with id: " + id + "not exist.")),
+                ApartmentDto.class);
     }
 
     @Transactional
@@ -113,14 +118,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         toDelete.setEnabled(false);
         apartmentRepository.save(toDelete);
-    }
-
-    @Override
-    public ApartmentDto getApartmentById(Long id) {
-        return mapper.convert(apartmentRepository.findById(id)
-                        .orElseThrow(() ->
-                                new NotFoundHomeException("Apartment with id: " + id + "not exist.")),
-                ApartmentDto.class);
     }
 
     @Override
