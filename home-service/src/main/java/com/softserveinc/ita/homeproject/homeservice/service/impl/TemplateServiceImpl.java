@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import com.samskivert.mustache.Mustache;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TemplateServiceImpl implements TemplateService {
-
-    private final UserRepository userRepository;
 
     public static final Path REGISTRATION_TEMPLATE_PATH =
         Path.of("home-data/src/main/resources/template/invitation-to-registration.mustache");
@@ -45,7 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     private Path getInvitationTemplate(MailDto mailDto) {
         Path path;
-        if(userRepository.findByEmail(mailDto.getEmail()).isEmpty()) {
+        if(!mailDto.getIsRegistered()) {
             return REGISTRATION_TEMPLATE_PATH;
         }
         switch (mailDto.getType().toString()) {

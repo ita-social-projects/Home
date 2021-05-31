@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.SneakyThrows;
@@ -32,5 +30,4 @@ public abstract class SendEmailJob extends QuartzJobBean {
 
     protected abstract void executeAllInvitationsByType();
 
-    protected abstract MailDto createMailDto(InvitationDto invitationDto);
 }
