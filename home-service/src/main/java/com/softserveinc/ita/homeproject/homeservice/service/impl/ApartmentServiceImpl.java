@@ -67,6 +67,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         return mapper.convert(apartment, ApartmentDto.class);
     }
 
+    @Transactional
+    @Override
+    public ApartmentDto getApartmentById(Long houseId, Long id) {
+        Apartment toGet = apartmentRepository.findById(id).filter(Apartment::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(String.format("Can't find apartment with given ID: %d", id)));
+        if (!toGet.getHouse().getId().equals(houseId)) {
+            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
+                    houseId));
+        }
+        return mapper.convert(toGet, ApartmentDto.class);
+    }
 
     @Transactional
     @Override
@@ -115,8 +127,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
         specification = specification
-                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                        .equal(root.get("house").get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                .equal(root.get("house").get("enabled"), true));
         return apartmentRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
     }
