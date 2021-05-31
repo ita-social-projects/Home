@@ -17,6 +17,8 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,14 +27,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@PropertySource("classpath:home-service.properties")
 public class PollServiceImpl implements PollService {
 
-    private final static int MIN_POLL_DURATION_IN_DAYS = 2;
+    private static final String COMPLETION_DATE_VALIDATION_MESSAGE =
+        "Completion date of the poll has not to be less than %s days after creation";
 
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
-    private static final String COMPLETION_DATE_VALIDATION_MESSAGE =
-        "Completion date of the poll has not to be less than " + MIN_POLL_DURATION_IN_DAYS + " days after creation";
+    @Value("${min.poll.duration.in.days:2}")
+    private int MIN_POLL_DURATION_IN_DAYS;
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
 
@@ -110,7 +114,8 @@ public class PollServiceImpl implements PollService {
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
         if (days < MIN_POLL_DURATION_IN_DAYS) {
-            throw new BadRequestHomeException(COMPLETION_DATE_VALIDATION_MESSAGE);
+            throw new BadRequestHomeException(
+                String.format(COMPLETION_DATE_VALIDATION_MESSAGE, MIN_POLL_DURATION_IN_DAYS));
         }
     }
 
