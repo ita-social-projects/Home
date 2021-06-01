@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
+import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
@@ -8,13 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MailDto extends BaseDto {
+    @Email
     private String email;
 
     private String role;
@@ -26,6 +27,8 @@ public class MailDto extends BaseDto {
     private String apartmentNumber;
 
     private String link;
+
+    private Boolean isRegistered;
 
     private String apartmentAddress;
 

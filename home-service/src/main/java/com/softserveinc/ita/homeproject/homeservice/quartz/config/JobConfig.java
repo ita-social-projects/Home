@@ -5,17 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
-
 @Slf4j
 @Configuration
 public class JobConfig implements BaseJobConfig {
+    private static int quartzTime;
 
-    private static final int QUARTZ_TIME = 7_200_000;
+    private static final String TRIGGER_NAME = "Send email trigger";
 
     @Override
     @Bean
@@ -26,7 +27,7 @@ public class JobConfig implements BaseJobConfig {
     @Override
     @Bean
     public SimpleTriggerFactoryBean trigger(JobDetail jobDetail) {
-        return JobConfig.createTrigger(jobDetail, "Send Email trigger");
+        return JobConfig.createTrigger(jobDetail);
     }
 
     public static JobDetailFactoryBean createJobDetail(Class<? extends Job> jobClass, String jobName) {
@@ -38,16 +39,21 @@ public class JobConfig implements BaseJobConfig {
         return factoryBean;
     }
 
-    private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, String triggerName) {
+    private static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail) {
         log.debug("createTrigger(jobDetail={}, pollFrequencyMs={}, triggerName={})",
-            jobDetail.toString(), QUARTZ_TIME, triggerName);
+            jobDetail.toString(), quartzTime, TRIGGER_NAME);
         var factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(0L);
-        factoryBean.setRepeatInterval(QUARTZ_TIME);
-        factoryBean.setName(triggerName);
+        factoryBean.setRepeatInterval(quartzTime);
+        factoryBean.setName(TRIGGER_NAME);
         factoryBean.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
         factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
         return factoryBean;
+    }
+
+    @Value("${quartz.time.job}")
+    public void setQuartzTime(int quartzTime) {
+        JobConfig.quartzTime = quartzTime;
     }
 }
