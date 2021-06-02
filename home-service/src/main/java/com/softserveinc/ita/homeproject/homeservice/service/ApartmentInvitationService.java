@@ -11,8 +11,6 @@ public interface ApartmentInvitationService extends InvitationService,
 
     void deactivateInvitationById(Long apartmentId, Long id);
 
-    ApartmentInvitation getInvitation(Long apartmentId, Long id);
-
     ApartmentInvitation updateInvitation(Long apartmentId, Long id, ApartmentInvitationDto updateInvitationDto);
 }
 

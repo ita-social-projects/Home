@@ -48,7 +48,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response createInvitation(Long apartmentId,
                                      @Valid CreateApartmentInvitation createApartmentInvitation) {
         var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
-        invitationDto.setApartment(apartmentService.getApartmentById(apartmentId));
+        invitationDto.setApartment(apartmentService.getOne(apartmentId));
         var invitation = invitationService.createInvitation(invitationDto);
         var readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
         readInvitation.setType(InvitationType.APARTMENT);
@@ -70,11 +70,12 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
-        var readInvitation = mapper
-                .convert(invitationService
-                        .getInvitation(apartmentId, id), ReadApartmentInvitation.class);
+
+        ApartmentInvitationDto toGet = invitationService.getOne(id, getSpecification());
+        ReadApartmentInvitation readApartmentInvitation = mapper
+                .convert(toGet, ReadApartmentInvitation.class);
         return Response.status(Response.Status.OK)
-                .entity(readInvitation).build();
+                .entity(readApartmentInvitation).build();
     }
 
     @PreAuthorize(GET_OWNERSHIP_PERMISSION)

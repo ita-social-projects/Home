@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import javax.validation.constraints.Email;
 import java.math.BigDecimal;
+import javax.validation.constraints.Email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

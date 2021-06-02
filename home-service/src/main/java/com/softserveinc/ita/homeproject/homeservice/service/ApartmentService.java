@@ -5,10 +5,6 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
 
 public interface ApartmentService extends QueryableService<Apartment, ApartmentDto> {
     ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto);
-
-    ApartmentDto getApartmentById(Long houseId, Long id);
-
-    ApartmentDto getApartmentById(Long id);
   
     ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto);
 

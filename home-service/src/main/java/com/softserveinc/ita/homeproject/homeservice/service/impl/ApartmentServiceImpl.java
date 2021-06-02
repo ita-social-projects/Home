@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
@@ -41,10 +42,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
-        createApartmentDto.getInvitations().forEach(invitation ->
-                invitation.setApartment(createApartmentDto));
-        var apartment = mapper.convert(createApartmentDto, Apartment.class);
-        houseRepository.findById(houseId)
+
+        var house = houseRepository.findById(houseId)
                 .filter(House::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(
                         String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
@@ -59,30 +58,21 @@ public class ApartmentServiceImpl implements ApartmentService {
                             + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
-        createApartmentDto.getInvitations().forEach(invitationService::createInvitation);
+        Apartment apartment = mapper.convert(createApartmentDto, Apartment.class);
+        List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();
+
+        apartment.setHouse(house);
+        apartment.setInvitations(null);
+        apartment.setCreateDate(LocalDateTime.now());
+        apartment.setEnabled(true);
+
+        apartmentRepository.save(apartment);
+
+        invitations.forEach(invitation ->
+                invitation.setApartment(mapper.convert(apartment, ApartmentDto.class)));
+        invitations.forEach(invitationService::createInvitation);
 
         return mapper.convert(apartment, ApartmentDto.class);
-    }
-
-    @Transactional
-    @Override
-    public ApartmentDto getApartmentById(Long houseId, Long id) {
-        Apartment toGet = apartmentRepository.findById(id).filter(Apartment::getEnabled)
-                .orElseThrow(() ->
-                        new NotFoundHomeException(String.format("Can't find apartment with given ID: %d", id)));
-        if (!toGet.getHouse().getId().equals(houseId)) {
-            throw new NotFoundHomeException(String.format("Can't find house with given ID: %d",
-                    houseId));
-        }
-        return mapper.convert(toGet, ApartmentDto.class);
-    }
-
-    @Override
-    public ApartmentDto getApartmentById(Long id) {
-        return mapper.convert(apartmentRepository.findById(id)
-                        .orElseThrow(() ->
-                                new NotFoundHomeException("Apartment with id: " + id + "not exist.")),
-                ApartmentDto.class);
     }
 
     @Transactional
@@ -124,8 +114,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
         specification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("house").get("enabled"), true));
+                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                        .equal(root.get("house").get("enabled"), true));
         return apartmentRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
                 .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
     }

@@ -26,4 +26,8 @@ public enum InvitationStatus {
         return String.valueOf(value);
     }
 
+    public String getValue() {
+        return value;
+    }
+
 }

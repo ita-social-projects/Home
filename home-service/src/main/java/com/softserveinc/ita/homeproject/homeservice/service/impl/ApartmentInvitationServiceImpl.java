@@ -8,7 +8,6 @@ import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
@@ -27,36 +26,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implements ApartmentInvitationService {
 
-    private final ApartmentRepository apartmentRepository;
-
     private final ApartmentInvitationRepository apartmentInvitationRepository;
 
     private final OwnershipRepository ownershipRepository;
 
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
-                                          ApartmentRepository apartmentRepository,
                                           ApartmentInvitationRepository apartmentInvitationRepository,
                                           OwnershipRepository ownershipRepository) {
         super(invitationRepository, mapper);
-        this.apartmentRepository = apartmentRepository;
         this.apartmentInvitationRepository = apartmentInvitationRepository;
         this.ownershipRepository = ownershipRepository;
-    }
-
-
-    @Override
-    public ApartmentInvitation getInvitation(Long apartmentId, Long id) {
-        return apartmentRepository.findById(apartmentId)
-                .orElseThrow(() ->
-                        new NotFoundHomeException("Apartment with id: " + apartmentId + "not exist."))
-                .getInvitations()
-                .stream()
-                .filter((invitation) -> invitation.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                "Invitation with id: " + id + "for apartment with id: " + apartmentId + "not exist."));
     }
 
     @Override
@@ -64,9 +44,9 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                                 Long id,
                                                 ApartmentInvitationDto updateInvitationDto) {
         ApartmentInvitation toUpdate = apartmentInvitationRepository.findById(id)
-                .filter(invitation -> invitation.getSentDatetime() == null)
-                .filter(invitation -> invitation.getApartment().getId().equals(apartmentId))
-                .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PENDING))
+                .filter(invitation -> invitation.getSentDatetime() == null
+                        && invitation.getApartment().getId().equals(apartmentId)
+                        && invitation.getStatus().equals(InvitationStatus.PENDING))
                 .orElseThrow(() ->
                         new NotFoundHomeException("Invitation with id:" + id + "not found."));
 
@@ -107,13 +87,11 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public InvitationDto saveInvitation(InvitationDto invitationDto) {
-        ApartmentInvitationDto apartmentInvitationDto = mapper
-                .convert(invitationDto, ApartmentInvitationDto.class);
         ApartmentInvitation apartmentInvitation = mapper
-                .convert(apartmentInvitationDto, ApartmentInvitation.class);
+                .convert(invitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
         invitationRepository.save(apartmentInvitation);
-        return apartmentInvitationDto;
+        return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
     }
 
 
@@ -129,7 +107,12 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
-        var apartmentInvitation = getInvitation(apartmentId, id);
+        ApartmentInvitation apartmentInvitation = apartmentInvitationRepository.findById(id)
+                .filter(invitation -> invitation.getSentDatetime() == null
+                        && invitation.getApartment().getId().equals(apartmentId)
+                        && invitation.getStatus().equals(InvitationStatus.PENDING))
+                .orElseThrow(() ->
+                        new NotFoundHomeException("Invitation with id:" + id + "not found."));
         apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
