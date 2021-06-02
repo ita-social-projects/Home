@@ -11,11 +11,13 @@ import com.softserveinc.ita.homeproject.homeservice.exception.InvitationExceptio
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.MailService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 
 @Component
+@RequiredArgsConstructor
 public class SendCooperationEmailJob {
 
     private final CooperationInvitationService invitationService;
@@ -25,16 +27,6 @@ public class SendCooperationEmailJob {
     private final ServiceMapper mapper;
 
     private final MailService mailService;
-
-    public SendCooperationEmailJob(ServiceMapper mapper,
-                                   MailService mailService,
-                                   CooperationInvitationService invitationService,
-                                   UserRepository userRepository) {
-        this.mapper = mapper;
-        this.mailService = mailService;
-        this.invitationService = invitationService;
-        this.userRepository = userRepository;
-    }
 
     @SneakyThrows
     public void executeAllInvitationsByType() {
