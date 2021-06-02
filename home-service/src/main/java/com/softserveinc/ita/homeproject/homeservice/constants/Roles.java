@@ -19,4 +19,6 @@ public final class Roles {
     public static final String OWNER_ROLE = "OWNER";
 
     public static final String EXECUTOR_ROLE = "EXECUTOR";
+
+
 }

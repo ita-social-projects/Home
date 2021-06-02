@@ -9,7 +9,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -46,7 +46,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                         String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
 
         BigDecimal invitationSummaryOwnerPart = createApartmentDto.getInvitations().stream()
-                .map(InvitationDto::getOwnershipPart)
+                .map(ApartmentInvitationDto::getOwnershipPart)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {

@@ -45,7 +45,8 @@ public class UserServiceImpl implements UserService {
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
-            toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)));
+            toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)
+                    .orElseThrow(() -> new NotFoundHomeException("RoleDto not found."))));
             toCreate.setCreateDate(LocalDateTime.now());
             toCreate.getContacts().forEach(contact -> {
                 contact.setUser(toCreate);
@@ -111,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
         toDelete.getRoles().forEach(
                 role -> {
-                    if(role.equals(roleRepository.findByName(ADMIN_ROLE))) {
+                    if(role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
                         throw new BadRequestHomeException("User cannot be deleted.");
                     }
                 }

@@ -1504,6 +1504,7 @@ components:
         - usreo
         - iban
         - address
+        - admin_email
       type: object
       properties:
         name:
@@ -1521,6 +1522,12 @@ components:
           example: "77778"
           minLength: 1
           maxLength: 34
+        admin_email:
+          type: string
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          example: other1@gmail.com
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1536,6 +1543,7 @@ components:
             - email: "createUserEmail@example.com"
           items:
             $ref: "#/components/schemas/CreateContact"
+
     ReadCooperation:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -1556,6 +1564,12 @@ components:
           example: "77778"
           minLength: 1
           maxLength: 50
+        admin_email:
+          type: string
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          example: other1@gmail.com
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1740,16 +1754,20 @@ components:
           maximum: 1.0
           multipleOf: 1e-4
           example: 0.6588
-
+    Role:
+      description: User role
+      type: string
+      enum:
+        - admin
+        - user
     CreateInvitation:
       type: object
       discriminator:
         propertyName: type
         mapping:
-          base: '#/components/schemas/CreateCooperationInvitation'
+          cooperation: '#/components/schemas/CreateCooperationInvitation'
           apartment: '#/components/schemas/CreateApartmentInvitation'
       required:
-        - type
         - email
       properties:
         type:
@@ -1763,6 +1781,12 @@ components:
     CreateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
     CreateApartmentInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
@@ -1851,7 +1875,7 @@ components:
         invitations:
           type: array
           items:
-            $ref: '#/components/schemas/CreateApartmentInvitation'
+            $ref: '#/components/schemas/CreateInvitation'
           example:
             - email: other1@gmail.com
               type: apartment

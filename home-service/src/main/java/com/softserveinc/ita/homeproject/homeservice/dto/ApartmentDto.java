@@ -14,7 +14,7 @@ public class ApartmentDto extends BaseDto {
 
     private BigDecimal apartmentArea;
 
-    private List<InvitationDto> invitations;
+    private List<ApartmentInvitationDto> invitations;
 
     private List<OwnershipDto> ownerships;
 }

@@ -6,8 +6,12 @@ import java.time.LocalDateTime;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CooperationServiceImpl implements CooperationService {
 
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
+
+    private final CooperationInvitationService invitationService;
 
     private final CooperationRepository cooperationRepository;
 
@@ -41,8 +47,21 @@ public class CooperationServiceImpl implements CooperationService {
             contact.setCooperation(cooperation);
             contact.setEnabled(true);
         });
+
         cooperationRepository.save(cooperation);
+
+        invitationService.createInvitation(createInvitationForAdmin(createCooperationDto));
+
         return mapper.convert(cooperation, CooperationDto.class);
+    }
+
+    private CooperationInvitationDto createInvitationForAdmin(CooperationDto cooperationDto) {
+        var invitationDto = new CooperationInvitationDto();
+        invitationDto.setRole(RoleDto.ADMIN);
+        invitationDto.setCooperationName(cooperationDto.getName());
+        invitationDto.setEmail(cooperationDto.getAdminEmail());
+        invitationDto.setType(InvitationTypeDto.COOPERATION);
+        return invitationDto;
     }
 
     @Transactional

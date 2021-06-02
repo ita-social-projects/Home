@@ -176,6 +176,7 @@ class QueryCoopContactIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
+            .adminEmail("G.Y.Andreevich@gmail.com")
             .address(createAddress())
             .houses(createHouseList())
             .contacts(createContactList());

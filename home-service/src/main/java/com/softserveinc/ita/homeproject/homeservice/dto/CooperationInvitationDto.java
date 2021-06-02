@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class InvitationDto extends BaseDto{
+public class CooperationInvitationDto extends InvitationDto{
 
-    private InvitationTypeDto type;
+    private RoleDto role;
 
-    private String email;
+    private String cooperationName;
 
 }

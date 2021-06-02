@@ -21,4 +21,6 @@ public class CooperationDto extends BaseDto {
     private String usreo;
 
     private String iban;
+
+    private String adminEmail;
 }
