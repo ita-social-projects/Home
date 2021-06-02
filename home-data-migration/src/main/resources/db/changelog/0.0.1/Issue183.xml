@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue183.001" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="users">
+            <column name="id" value="10000000"/>
+            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="email"  value="ownertest@example.com"/>
+            <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuwwyeiB1OFYjeuYbRaqbC"/>
+            <column name="first_name" value="test"/>
+            <column name="last_name" value="test"/>
+            <column name="expired" value="false"/>
+            <column name="locked" value="false"/>
+            <column name="credentials_expired" value="false"/>
+            <column name="enabled" value="true"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.002" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="addresses">
+            <column name="id" value="10000000"/>
+            <column name="region" value="test"/>
+            <column name="city"  value="test"/>
+            <column name="district" value="test"/>
+            <column name="street" value="test"/>
+            <column name="house_block" value="test"/>
+            <column name="house_number" value="test"/>
+            <column name="zip_code" value="test"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.003" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="cooperations">
+            <column name="id" value="10000000"/>
+            <column name="register_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="name"  value="test"/>
+            <column name="usreo" value="test"/>
+            <column name="iban" value="test"/>
+            <column name="enabled" value="true"/>
+            <column name="address_id" value="10000000"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.004" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="houses">
+            <column name="id" value="10000000"/>
+            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="quantity_flat"  value="66"/>
+            <column name="house_area" value="111"/>
+            <column name="adjoining_area" value="66"/>
+            <column name="enabled" value="true"/>
+            <column name="cooperation_id" value="10000000"/>
+            <column name="address_id" value="10000000"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.005" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="apartments">
+            <column name="id" value="100000000"/>
+            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="apartment_number"  value="21"/>
+            <column name="apartment_area" value="66"/>
+            <column name="enabled" value="true"/>
+            <column name="house_id" value="10000000"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.006" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="apartments">
+            <column name="id" value="100000001"/>
+            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
+            <column name="apartment_number"  value="22"/>
+            <column name="apartment_area" value="67"/>
+            <column name="enabled" value="true"/>
+            <column name="house_id" value="10000000"/>
+            <column name="update_date" value="null"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.007" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="ownerships">
+            <column name="id" value="10000001"/>
+            <column name="ownership_part"  value="0.3"/>
+            <column name="enabled" value="true"/>
+            <column name="apartment_id" value="100000000"/>
+            <column name="user_id" value="10000000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.008" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="ownerships">
+            <column name="id" value="10000002"/>
+            <column name="ownership_part"  value="0.4"/>
+            <column name="enabled" value="true"/>
+            <column name="apartment_id" value="100000000"/>
+            <column name="user_id" value="10000000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue183.009" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="ownerships">
+            <column name="id" value="10000003"/>
+            <column name="ownership_part"  value="0.5"/>
+            <column name="enabled" value="true"/>
+            <column name="apartment_id" value="100000001"/>
+            <column name="user_id" value="10000000"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue180.010" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="39"/>
+            <column name="name" value="UPDATE_OWNERSHIP_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="40"/>
+            <column name="name" value="DELETE_OWNERSHIP_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="41"/>
+            <column name="name" value="GET_OWNERSHIP_PERMISSION"/>
+        </insert>
+    </changeSet>
+        <changeSet id="Issue180.011" author="Ilya-Ross">
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="39"/>
+            </insert>
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="40"/>
+            </insert>
+            <insert  dbms="postgresql"
+                     schemaName="public"
+                     tableName="role_permissions">
+                <column name="role_id" value="1"/>
+                <column name="permission_id" value="41"/>
+            </insert>
+        </changeSet>
+</databaseChangeLog>
