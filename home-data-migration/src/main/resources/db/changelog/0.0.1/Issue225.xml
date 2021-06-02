@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue225.001" author="Oleksii-Zinkevych">
+        <createTable tableName="polls">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="HEADER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATION_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COMPLETION_DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATE_DATE" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COOPERATION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperations(ID)"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue225.002" author="Oleksii-Zinkevych">
+        <createTable tableName="poll_house">
+            <column name="POLL_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="poll_house_pkey"
+                             references="polls(ID)"
+                             foreignKeyName="poll_fk"/>
+            </column>
+            <column name="HOUSE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="poll_house_pkey"
+                             references="houses(ID)"
+                             foreignKeyName="house_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue225.003" author="Oleksii-Zinkevych">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="35"/>
+            <column name="name" value="CREATE_POLL_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="36"/>
+            <column name="name" value="UPDATE_POLL_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="37"/>
+            <column name="name" value="GET_POLL_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="38"/>
+            <column name="name" value="DELETE_POLL_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue225.004" author="Oleksii-Zinkevych">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="35"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="36"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="37"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="38"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue225.005" author="Oleksii-Zinkevych">
+        <createSequence incrementBy="50" sequenceName="polls_sequence"/>
+    </changeSet>
+
+</databaseChangeLog>

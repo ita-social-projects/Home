@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.provider;
 
 import java.text.SimpleDateFormat;
 import javax.ws.rs.Produces;
@@ -30,6 +30,8 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
         ObjectMapper objectMapper = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .disable(DeserializationFeature.WRAP_EXCEPTIONS)
+            .disable(SerializationFeature.WRAP_EXCEPTIONS)
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
             .registerModule(new JavaTimeModule())
             .setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));

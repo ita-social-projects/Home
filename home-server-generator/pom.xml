@@ -75,7 +75,7 @@
                             <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
                                 <java8>true</java8>
-                                <dateLibrary>java8</dateLibrary>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-generated-server</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>

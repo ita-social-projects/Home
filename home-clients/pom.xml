@@ -73,7 +73,7 @@
                             <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <java8>true</java8>
-                                <dateLibrary>java8</dateLibrary>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
                                 <library>jersey2</library>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <artifactId>home-java-client</artifactId>
