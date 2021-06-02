@@ -43,7 +43,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        if(!mailDto.getIsRegistered()) {
+        if(mailDto.getIsRegistered()) {
             return Path.of(registrationTemplatePath);
         }
         switch (mailDto.getType().toString()) {

@@ -32,6 +32,8 @@ tags:
     description: Apartment ownership management operations
   - name: apartment invitation
     description: Apartment invitation management operations
+  - name: cooperation poll
+    description: Cooperation poll management operations
 
 paths:
   /news:
@@ -1052,6 +1054,123 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /cooperation/{cooperation_id}/polls:
+    get:
+      tags:
+        - cooperation poll
+      summary: Get all cooperation polls
+      description: The endpoint gets all cooperation polls
+      operationId: queryCooperationPoll
+      parameters:
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/creation_date'
+        - $ref: '#/components/parameters/completion_date'
+        - $ref: '#/components/parameters/poll_type'
+        - $ref: '#/components/parameters/poll_status'
+      responses:
+        200:
+          $ref: '#/components/responses/PollsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - cooperation poll
+      summary: Create cooperation poll
+      description: The endpoint creates a new cooperation poll
+      operationId: createCooperationPoll
+      parameters:
+        - $ref: '#/components/parameters/p_cooperation_id'
+      requestBody:
+          $ref: '#/components/requestBodies/CreatePollBody'
+      responses:
+        201:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /cooperation/{cooperation_id}/polls/{id}:
+    get:
+      tags:
+        - cooperation poll
+      summary: Get cooperation poll
+      description: Get a cooperation poll by a poll id
+      operationId: getCooperationPoll
+      parameters:
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - cooperation poll
+      summary: Update cooperation poll
+      description: Update a cooperation poll by a poll ID. Poll can be updated only if its status is draft
+      operationId: updateCooperationPoll
+      parameters:
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
+      requestBody:
+          $ref: '#/components/requestBodies/UpdatePollBody'
+      responses:
+        200:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - cooperation poll
+      summary: Delete cooperation poll
+      description: Delete a cooperation poll by a poll ID. Poll can be deleted only if its status is draft
+      operationId: deleteCooperationPoll
+      parameters:
+        - $ref: '#/components/parameters/p_cooperation_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        204:
+          description: Success
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
 security:
   - basicAuth: []
 
@@ -1835,6 +1954,121 @@ components:
                     main: false
               ownership_part: 0.38
 
+    HouseLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    PollStatus:
+      description: Indicates the status of a Poll
+      type: string
+      enum: &poll_status_values
+        - draft
+        - active
+        - completed
+        - suspended
+      example: active
+
+    PollType:
+      description: Indicates the type of a Poll
+      type: string
+      enum: &poll_type_values
+        - simple
+      example: simple
+
+    ReadPoll:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        header:
+          type: string
+          example: New poll for our houses
+        creation_date:
+          type: string
+          format: date-time
+          example: 2021-05-30T08:30:00Z
+        completion_date:
+          type: string
+          format: date-time
+          example: 2021-06-20T06:00:00Z
+        polled_houses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadHouse'
+          example:
+            - id: 1,
+              quantity_flat: 45,
+              house_area: 25,
+              adjoining_area: 12,
+              address:
+                region: "Dnipropetrovsk region"
+                city: "Dnipro"
+                district: "Zavodskoy"
+                street: "Kirova"
+                house_block: "2/B"
+                house_number: "23-B"
+                zip_code: "52956"
+            - id: 2,
+              quantity_flat: 60,
+              house_area: 50,
+              adjoining_area: 20,
+              address:
+                region: "Dnipropetrovsk region"
+                city: "Dnipro"
+                district: "Zavodskoy"
+                street: "Kirova"
+                house_block: "2/C"
+                house_number: "24-C"
+                zip_code: "52956"
+        status:
+          $ref: '#/components/schemas/PollStatus'
+        type:
+          $ref: '#/components/schemas/PollType'
+    CreatePoll:
+      type: object
+      required:
+        - header
+        - completion_date
+        - houses
+        - type
+      properties:
+        header:
+          type: string
+          example: New poll for our houses
+        completion_date:
+          type: string
+          format: date-time
+          example: 2021-06-20T06:00:00Z
+        houses:
+          type: array
+          items:
+            $ref: '#/components/schemas/HouseLookup'
+          example:
+            - id: 1
+            - id: 2
+        type:
+          $ref: '#/components/schemas/PollType'
+    UpdatePoll:
+      type: object
+      required:
+        - header
+        - completion_date
+        - status
+      properties:
+        header:
+          type: string
+          example: New poll for our houses
+        completion_date:
+          type: string
+          format: date-time
+          example: 2021-06-20T06:00:00Z
+        status:
+          $ref: '#/components/schemas/PollStatus'
+
   responses:
     NoContentResponse:
       description: The request was succesfully processed.
@@ -1986,6 +2220,20 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/ReadApartmentInvitation"
+    PollResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadPoll'
+    PollsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadPoll"
 
 
   requestBodies:
@@ -2093,6 +2341,19 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateApartmentInvitation'
       required: true
+    CreatePollBody:
+      description: A payload for creating a new cooperation poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreatePoll'
+    UpdatePollBody:
+      description: A payload for updating a cooperation poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdatePoll'
+      required: true
 
   parameters:
     p_id:
@@ -2103,7 +2364,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     p_user_id:
       name: user_id
       in: path
@@ -2111,7 +2372,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     p_cooperation_id:
       name: cooperation_id
       in: path
@@ -2120,7 +2381,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     p_house_id:
       name: "house_id"
       in: path
@@ -2138,7 +2399,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     p_ownership_id:
       name: "id"
       in: "path"
@@ -2147,7 +2408,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     p_invitation_id:
       name: "id"
       in: "path"
@@ -2156,7 +2417,7 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     page_number:
       in: query
       name: page_number
@@ -2182,14 +2443,14 @@ components:
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     user_id:
       in: query
       name: user_id
       schema:
         type: integer
         format: int64
-        example: 1
+      example: 1
     sort:
       in: query
       name: sort
@@ -2272,37 +2533,37 @@ components:
       name: name
       schema:
         type: string
-        example: "Dobro"
+      example: "Dobro"
     iban:
       in: query
       name: iban
       schema:
         type: string
-        example: "77778"
+      example: "77778"
     usreo:
       in: query
       name: usreo
       schema:
         type: string
-        example: "A9856738"
+      example: "A9856738"
     quantity_flat:
       in: query
       name: quantity_flat
       schema:
         type: integer
-        example: 10
+      example: 10
     adjoining_area:
       in: query
       name: adjoining_area
       schema:
         type: integer
-        example: 40
+      example: 40
     house_area:
       in: query
       name: house_area
       schema:
         type: number
-        example: 20
+      example: 20
     apartment_number:
       in: query
       name: apartment_number
@@ -2324,10 +2585,38 @@ components:
         minimum: 0.0001
         maximum: 1.0
         multipleOf: 1e-4
-        example: 0.6588
+      example: 0.6588
     status:
       in: query
       name: status
       schema:
         type: string
       example: pending
+    creation_date:
+      in: query
+      name: creation_date
+      schema:
+        type: string
+        format: date-time
+      example: 2021-05-30T08:30
+    completion_date:
+      in: query
+      name: completion_date
+      schema:
+        type: string
+        format: date-time
+      example: 2021-06-20T06:00
+    poll_type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/PollType'
+      description: Type of the Poll
+      example: simple
+    poll_status:
+      in: query
+      name: status
+      schema:
+        $ref: '#/components/schemas/PollStatus'
+      description: Status of the Poll
+      example: draft

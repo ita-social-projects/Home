@@ -29,7 +29,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     @Override
     protected InvitationDto saveInvitation(InvitationDto invitationDto) {
-        CooperationInvitationDto cooperationInvitationDto =
+        var cooperationInvitationDto =
                 mapper.convert(invitationDto, CooperationInvitationDto.class);
         var cooperationInvitation =
                 mapper.convert(cooperationInvitationDto, CooperationInvitation.class);

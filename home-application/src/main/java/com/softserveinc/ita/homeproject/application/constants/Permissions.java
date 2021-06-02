@@ -82,10 +82,16 @@ public final class Permissions {
 
     public static final String GET_OWNERSHIP_PERMISSION = "hasAuthority('GET_OWNERSHIP_PERMISSION')";
 
-    public static final String GET_OWNERSHIPS_PERMISSION = "hasAuthority('GET_OWNERSHIPS_PERMISSION')";
-
     public static final String UPDATE_OWNERSHIP_PERMISSION = "hasAuthority('UPDATE_OWNERSHIP_PERMISSION')";
 
     public static final String DELETE_OWNERSHIP_PERMISSION = "hasAuthority('DELETE_OWNERSHIP_PERMISSION')";
+
+    public static final String CREATE_POLL_PERMISSION = "hasAuthority('CREATE_POLL_PERMISSION')";
+
+    public static final String UPDATE_POLL_PERMISSION = "hasAuthority('UPDATE_POLL_PERMISSION')";
+
+    public static final String GET_POLL_PERMISSION = "hasAuthority('GET_POLL_PERMISSION')";
+
+    public static final String DELETE_POLL_PERMISSION = "hasAuthority('DELETE_POLL_PERMISSION')";
 
 }

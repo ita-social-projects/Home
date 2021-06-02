@@ -13,7 +13,6 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.OwnershipService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,16 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class OwnershipServiceImpl implements OwnershipService {
 
-    @Autowired
-    private OwnershipRepository ownershipRepository;
+    private final OwnershipRepository ownershipRepository;
 
-    @Autowired
-    private ApartmentInvitationRepository invitationRepository;
+    private final ApartmentInvitationRepository invitationRepository;
 
-    @Autowired
-    private ServiceMapper mapper;
+    private final ServiceMapper mapper;
 
     private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
 

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.converter;
 
 import javax.ws.rs.ext.Provider;
 
