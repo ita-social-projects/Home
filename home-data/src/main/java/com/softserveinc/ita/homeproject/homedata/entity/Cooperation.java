@@ -50,4 +50,6 @@ public class Cooperation extends BaseEntity {
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<Contact> contacts;
 
+    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
+    private List<Poll> polls;
 }
