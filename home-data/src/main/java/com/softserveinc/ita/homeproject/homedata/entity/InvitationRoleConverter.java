@@ -14,6 +14,6 @@ public class InvitationRoleConverter implements AttributeConverter<RoleEnum, Str
 
     @Override
     public RoleEnum convertToEntityAttribute(String dbData) {
-        return dbData == null ? null : RoleEnum.valueOf(dbData);
+        return dbData == null ? null : RoleEnum.getEnum(dbData);
     }
 }

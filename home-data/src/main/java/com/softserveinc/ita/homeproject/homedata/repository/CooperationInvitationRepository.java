@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CooperationInvitationRepository extends JpaRepository<CooperationInvitation, Long> {
 
-    List<CooperationInvitation> findAllBySentDatetimeIsNullAndCooperationNameNotNullAndStatusEquals(
+    List<CooperationInvitation> findAllBySentDatetimeIsNullAndStatusEquals(
             InvitationStatus status);
 }
 

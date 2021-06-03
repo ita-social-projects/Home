@@ -30,7 +30,5 @@ public class MailDto extends BaseDto {
 
     private Boolean isRegistered;
 
-    private String apartmentAddress;
-
     private InvitationTypeDto type;
 }

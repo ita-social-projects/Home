@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SendApartmentEmailJob{
+public class SendApartmentEmailJob extends BaseEmailJob{
 
     private final ServiceMapper mapper;
 
@@ -23,7 +23,7 @@ public class SendApartmentEmailJob{
 
     private final ApartmentInvitationService apartmentInvitationService;
 
-
+    @Override
     @SneakyThrows
     protected void executeAllInvitationsByType() {
         List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
@@ -34,14 +34,16 @@ public class SendApartmentEmailJob{
         }
     }
 
+    @Override
     protected MailDto createMailDto(InvitationDto invitationDto) {
         var invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
         var mailDto = new MailDto();
         mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
-        mailDto.setApartmentNumber(invitation.getApartment().getApartmentNumber());
+        mailDto.setApartmentNumber(invitation.getApartmentNumber());
         mailDto.setOwnershipPat(invitation.getOwnershipPart());
+        checkRegistration(invitation, mailDto);
         return mailDto;
     }
 }

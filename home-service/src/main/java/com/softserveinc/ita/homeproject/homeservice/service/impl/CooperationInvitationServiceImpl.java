@@ -45,8 +45,8 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
-        List<CooperationInvitation> allNotSentInvitations = cooperationInvitationRepository
-                .findAllBySentDatetimeIsNullAndCooperationNameNotNullAndStatusEquals(
+        var allNotSentInvitations = cooperationInvitationRepository
+                .findAllBySentDatetimeIsNullAndStatusEquals(
                         InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))

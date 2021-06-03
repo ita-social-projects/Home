@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIPS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIP_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
 
@@ -48,7 +47,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response createInvitation(Long apartmentId,
                                      @Valid CreateApartmentInvitation createApartmentInvitation) {
         var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
-        invitationDto.setApartment(apartmentService.getOne(apartmentId));
+        invitationDto.setApartmentNumber(apartmentService.getOne(apartmentId).getApartmentNumber());
         var invitation = invitationService.createInvitation(invitationDto);
         var readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
         readInvitation.setType(InvitationType.APARTMENT);
@@ -102,7 +101,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
     }
 
-    @PreAuthorize(GET_OWNERSHIPS_PERMISSION)
+    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
     @Override
     public Response queryOwnership(Long apartmentId,
                                    @Min(1) Integer pageNumber,

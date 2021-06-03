@@ -18,15 +18,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource(value = "classpath:/service.properties")
+@PropertySource(value = "classpath:/home-service.properties")
 public class TemplateServiceImpl implements TemplateService {
-    @Value("${path.invitation.registration}")
+
     private static String registrationTemplatePath;
 
-    @Value("${path.invitation.cooperation}")
     private static String cooperationTemplatePath;
 
-    @Value("${path.invitation.apartment}")
     private static String apartmentTemplatePath;
 
     @Override
@@ -43,7 +41,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        if(mailDto.getIsRegistered()) {
+        if(!mailDto.getIsRegistered()) {
             return Path.of(registrationTemplatePath);
         }
         switch (mailDto.getType().toString()) {
@@ -54,5 +52,20 @@ public class TemplateServiceImpl implements TemplateService {
             default:
                 throw new InvitationException("Wrong invitation type.");
         }
+    }
+
+    @Value("${home.service.template.invitation.path.registration}")
+    public void setRegistrationTemplatePath(String path) {
+        TemplateServiceImpl.registrationTemplatePath = path;
+    }
+
+    @Value("${home.service.template.invitation.path.cooperation}")
+    public void setCooperationTemplatePath(String path) {
+        TemplateServiceImpl.cooperationTemplatePath = path;
+    }
+
+    @Value("${home.service.template.invitation.path.apartment}")
+    public void setApartmentTemplatePath(String path) {
+        TemplateServiceImpl.apartmentTemplatePath = path;
     }
 }
