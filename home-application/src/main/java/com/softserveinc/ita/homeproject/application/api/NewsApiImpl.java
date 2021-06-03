@@ -16,7 +16,6 @@ import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;

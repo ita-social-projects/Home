@@ -58,7 +58,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                             + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
         }
 
-        Apartment apartment = mapper.convert(createApartmentDto, Apartment.class);
+        var apartment = mapper.convert(createApartmentDto, Apartment.class);
         List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();
 
         apartment.setHouse(house);

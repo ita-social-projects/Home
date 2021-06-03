@@ -6,9 +6,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -16,10 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SendApartmentEmailJob extends BaseEmailJob{
-
-    private final ServiceMapper mapper;
-
-    private final MailService mailService;
 
     private final ApartmentInvitationService apartmentInvitationService;
 

@@ -41,16 +41,17 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        if(!mailDto.getIsRegistered()) {
+        if (mailDto.getIsRegistered()) {
+            switch (mailDto.getType().toString()) {
+                case "cooperation":
+                    return Path.of(cooperationTemplatePath);
+                case "apartment":
+                    return Path.of(apartmentTemplatePath);
+                default:
+                    throw new InvitationException("Wrong invitation type.");
+            }
+        } else {
             return Path.of(registrationTemplatePath);
-        }
-        switch (mailDto.getType().toString()) {
-            case "cooperation":
-                return Path.of(cooperationTemplatePath);
-            case "apartment":
-                return Path.of(apartmentTemplatePath);
-            default:
-                throw new InvitationException("Wrong invitation type.");
         }
     }
 

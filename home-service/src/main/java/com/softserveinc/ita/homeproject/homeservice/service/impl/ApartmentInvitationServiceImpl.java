@@ -92,7 +92,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public InvitationDto saveInvitation(InvitationDto invitationDto) {
-        ApartmentInvitation apartmentInvitation = mapper
+        var apartmentInvitation = mapper
                 .convert(invitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
         var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
@@ -116,7 +116,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
-        ApartmentInvitation apartmentInvitation = apartmentInvitationRepository.findById(id)
+        var apartmentInvitation = apartmentInvitationRepository.findById(id)
                 .filter(invitation -> invitation.getSentDatetime() == null
                         && invitation.getApartment().getId().equals(apartmentId)
                         && invitation.getStatus().equals(InvitationStatus.PENDING))

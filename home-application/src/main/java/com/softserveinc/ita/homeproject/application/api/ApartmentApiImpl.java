@@ -71,8 +71,8 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
 
-        ApartmentInvitationDto toGet = invitationService.getOne(id, getSpecification());
-        ReadApartmentInvitation readApartmentInvitation = mapper
+        var toGet = invitationService.getOne(id, getSpecification());
+        var readApartmentInvitation = mapper
                 .convert(toGet, ReadApartmentInvitation.class);
         return Response.status(Response.Status.OK)
                 .entity(readApartmentInvitation).build();

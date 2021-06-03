@@ -191,7 +191,7 @@ class QueryApartmentIT {
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
                 .address(createAddress())
-                .adminEmail("G.Y.Andreevich@gmail.com");
+                .adminEmail("test.receive.messages@gmail.com");
     }
 
     private Address createAddress() {

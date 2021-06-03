@@ -51,7 +51,7 @@ public class JwtService implements TokenService {
 
     @Override
     public String getIdFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
+        var claims = Jwts.parserBuilder()
                 .setSigningKey(keyPair.getPrivate())
                 .build()
                 .parseClaimsJws(token).getBody();

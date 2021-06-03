@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -31,17 +30,12 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     @Override
     public void updateSentDateTimeAndStatus(Long id) {
-        Invitation invitation = findInvitationById(id);
+        var invitation = findInvitationById(id);
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setSentDatetime(LocalDateTime.now());
         invitationRepository.save(invitation);
     }
 
-    @Override
-    public InvitationDto getInvitation(Long id) {
-        var invitation = findInvitationById(id);
-        return mapper.convert(invitation, CooperationInvitationDto.class);
-    }
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->

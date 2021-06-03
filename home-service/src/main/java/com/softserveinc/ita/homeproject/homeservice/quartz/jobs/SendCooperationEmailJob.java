@@ -6,9 +6,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -19,10 +17,6 @@ import org.springframework.stereotype.Component;
 public class SendCooperationEmailJob extends BaseEmailJob {
 
     private final CooperationInvitationService cooperationInvitationService;
-
-    private final ServiceMapper mapper;
-
-    private final MailService mailService;
 
     @Override
     @SneakyThrows

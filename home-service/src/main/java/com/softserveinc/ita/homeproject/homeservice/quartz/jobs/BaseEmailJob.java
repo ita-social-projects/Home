@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
