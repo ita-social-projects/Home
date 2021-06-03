@@ -13,4 +13,5 @@ public class ApartmentInvitationDto extends InvitationDto {
 
     private String apartmentNumber;
 
+    private Long apartmentId;
 }

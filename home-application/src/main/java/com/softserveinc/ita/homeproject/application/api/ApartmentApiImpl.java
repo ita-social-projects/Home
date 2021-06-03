@@ -47,6 +47,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response createInvitation(Long apartmentId,
                                      @Valid CreateApartmentInvitation createApartmentInvitation) {
         var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
+        invitationDto.setApartmentId(apartmentId);
         invitationDto.setApartmentNumber(apartmentService.getOne(apartmentId).getApartmentNumber());
         var invitation = invitationService.createInvitation(invitationDto);
         var readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);

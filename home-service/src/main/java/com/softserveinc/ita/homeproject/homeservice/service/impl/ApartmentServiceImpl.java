@@ -68,8 +68,10 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         apartmentRepository.save(apartment);
 
-        invitations.forEach(invitation ->
-                invitation.setApartmentNumber(apartment.getApartmentNumber()));
+        invitations.forEach(invitation -> {
+            invitation.setApartmentNumber(apartment.getApartmentNumber());
+            invitation.setApartmentId(apartment.getId());
+        });
         invitations.forEach(invitationService::createInvitation);
 
         return mapper.convert(apartment, ApartmentDto.class);

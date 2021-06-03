@@ -8,6 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
@@ -30,13 +31,17 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private final OwnershipRepository ownershipRepository;
 
+    private final ApartmentRepository apartmentRepository;
+
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
                                           ApartmentInvitationRepository apartmentInvitationRepository,
-                                          OwnershipRepository ownershipRepository) {
+                                          OwnershipRepository ownershipRepository,
+                                          ApartmentRepository apartmentRepository) {
         super(invitationRepository, mapper);
         this.apartmentInvitationRepository = apartmentInvitationRepository;
         this.ownershipRepository = ownershipRepository;
+        this.apartmentRepository = apartmentRepository;
     }
 
     @Override
@@ -90,6 +95,10 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         ApartmentInvitation apartmentInvitation = mapper
                 .convert(invitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
+        var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
+        apartmentInvitation.setApartment(apartmentRepository
+                .findById(apartmentId)
+                .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
         invitationRepository.save(apartmentInvitation);
         return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
     }
