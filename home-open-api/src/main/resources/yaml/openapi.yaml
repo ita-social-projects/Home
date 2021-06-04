@@ -34,6 +34,8 @@ tags:
     description: Apartment invitation management operations
   - name: cooperation poll
     description: Cooperation poll management operations
+  - name: poll
+    description: Poll management operations  independently from cooperation
 
 paths:
   /news:
@@ -1171,6 +1173,53 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /polls:
+    get:
+      tags:
+        - poll
+      summary: Get all polls
+      description: The endpoint gets all polls
+      operationId: queryPoll
+      parameters:
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/cooperation_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{id}:
+    get:
+      tags:
+        - poll
+      summary: Get poll
+      description: Get a poll by a poll id
+      operationId: getPoll
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
 security:
   - basicAuth: []
 
@@ -1996,30 +2045,8 @@ components:
           items:
             $ref: '#/components/schemas/ReadHouse'
           example:
-            - id: 1,
-              quantity_flat: 45,
-              house_area: 25,
-              adjoining_area: 12,
-              address:
-                region: "Dnipropetrovsk region"
-                city: "Dnipro"
-                district: "Zavodskoy"
-                street: "Kirova"
-                house_block: "2/B"
-                house_number: "23-B"
-                zip_code: "52956"
-            - id: 2,
-              quantity_flat: 60,
-              house_area: 50,
-              adjoining_area: 20,
-              address:
-                region: "Dnipropetrovsk region"
-                city: "Dnipro"
-                district: "Zavodskoy"
-                street: "Kirova"
-                house_block: "2/C"
-                house_number: "24-C"
-                zip_code: "52956"
+            - $ref: '#/components/examples/HouseExample1'
+            - $ref: '#/components/examples/HouseExample2'
         status:
           $ref: '#/components/schemas/PollStatus'
         type:
@@ -2230,7 +2257,6 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/ReadPoll"
-
 
   requestBodies:
     CreateNewsBody:
@@ -2447,6 +2473,15 @@ components:
         type: integer
         format: int64
       example: 1
+    cooperation_id:
+      in: query
+      name: cooperation_id
+      description: ID of the polled cooperation
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      example: 1
     sort:
       in: query
       name: sort
@@ -2616,3 +2651,39 @@ components:
         $ref: '#/components/schemas/PollStatus'
       description: Status of the Poll
       example: draft
+
+  examples:
+    HouseExample1:
+      value:
+        id: 1
+        quantity_flat: 45
+        house_area: 25
+        adjoining_area: 12
+        adress:
+          $ref: '#/components/examples/AddressExample1'
+    HouseExample2:
+      value:
+        id: 2
+        quantity_flat: 60
+        house_area: 45
+        adjoining_area: 15
+        adress:
+          $ref: '#/components/examples/AddressExample2'
+    AddressExample1:
+      value:
+        region: "Dnipropetrovsk region"
+        city: "Dnipro"
+        district: "Zavodskoy"
+        street: "Kirova"
+        house_block: "2/B"
+        house_number: "23-B"
+        zip_code: "52956"
+    AddressExample2:
+      value:
+        region: "Dnipropetrovsk region"
+        city: "Dnipro"
+        district: "Zavodskoy"
+        street: "Kirova"
+        house_block: "3/B"
+        house_number: "25-B"
+        zip_code: "52956"
