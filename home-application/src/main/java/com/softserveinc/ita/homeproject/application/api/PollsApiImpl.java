@@ -1,5 +1,11 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_PERMISSION;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
@@ -8,11 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_PERMISSION;
 
 @Provider
 @Component
