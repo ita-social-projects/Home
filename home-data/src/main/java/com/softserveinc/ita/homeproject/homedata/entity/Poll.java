@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -54,4 +56,7 @@ public class Poll extends BaseEntity {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.PERSIST)
+    private List<PollQuestion> pollQuestions;
 }

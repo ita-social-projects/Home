@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="Issue228.001" author="Ilya-Ross">
+        <createTable tableName="poll_questions">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAX_ANSWER_VARIANT" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="POLL_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="poll_fk"
+                             references="polls(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue228.002" author="Ilya-Ross">
+        <createTable tableName="answer_variants">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ANSWER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="POLL_QUESTION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="poll_question_fk"
+                             references="poll_questions(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

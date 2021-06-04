@@ -1170,6 +1170,230 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+  /polls/{poll_id}/questions:
+    get:
+      tags:
+        - poll question
+      summary: Get all questions
+      description: The endpoint gets all questions of the poll
+      operationId: queryQuestion
+      parameters:
+        - name: "poll_id"
+          in: path
+          required: true
+          description: ID of the poll to which questions belongs
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          example: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadQuestion"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - poll question
+      summary: Create question
+      description: The endpoint creates a question in the poll. Question can be created only if poll status is draft
+      operationId: createQuestion
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which question belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        description: A payload for creating a new question
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuestion'
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadQuestion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{poll_id}/questions/{id}:
+    get:
+      tags:
+        - poll question
+      summary: Get question
+      description: Get a question by a question id
+      operationId: getQuestion
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which question belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: ID of the question
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadQuestion"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - poll question
+      summary: Update question
+      description: Update a question by a question ID. Question can be updated only if poll status is draft
+      operationId: updateQuestion
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which question belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: ID of the question
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        description: A payload for updating a question
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateQuestion'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadQuestion'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - poll question
+      summary: Delete question
+      description: Delete a question by a question ID. Question can be deleted only if poll status is draft
+      operationId: deleteQuestion
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which question belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: ID of the question
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
 
 security:
   - basicAuth: []
@@ -2064,6 +2288,167 @@ components:
           example: 2021-06-20T06:00:00Z
         status:
           $ref: '#/components/schemas/PollStatus'
+    QuestionType:
+      description: Indicates a type of an Question
+      type: string
+      enum: &question_type_values
+        - multiple_choice
+        - advice
+      example: multiple_choice
+
+    QuestionLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    ReadQuestion:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestion'
+          advice: '#/components/schemas/ReadAdviceQuestion'
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: What color should we paint the door?
+    ReadMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/ReadQuestion'
+      type: object
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/ReadAnswerVariant'
+          example:
+            - id: 1
+              answer: Green
+            - id: 2
+              answer: Blue
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    ReadAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/ReadQuestion'
+      type: object
+
+    CreateQuestion:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestion'
+          advice: '#/components/schemas/CreateAdviceQuestion'
+      required:
+        - type
+        - question
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: What color should we paint the door?
+    CreateMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestion'
+      type: object
+      required:
+        - answer_variants
+        - max_answer_count
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/CreateUpdateAnswerVariant'
+          example:
+            - answer: Green
+            - answer: Blue
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    CreateAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestion'
+      type: object
+
+    UpdateQuestion:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/UpdateMultipleChoiceQuestion'
+          advice: '#/components/schemas/UpdateAdviceQuestion'
+      required:
+        - question
+      properties:
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: What color should we paint the door?
+    UpdateMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/UpdateQuestion'
+      type: object
+      required:
+        - answer_variants
+        - max_answer_count
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/CreateUpdateAnswerVariant'
+          example:
+            - answer: Green
+            - answer: Blue
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    UpdateAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/UpdateQuestion'
+    ReadAnswerVariant:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Green
+    CreateUpdateAnswerVariant:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Green
 
   responses:
     NoContentResponse:
