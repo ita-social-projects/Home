@@ -107,7 +107,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     @Override
     public List<ApartmentInvitationDto> getAllActiveInvitations() {
         List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
-                .findAllBySentDatetimeIsNullAndApartmentNotNullAndStatusEquals(
+                .findAllBySentDatetimeIsNullAndStatusEquals(
                         InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))

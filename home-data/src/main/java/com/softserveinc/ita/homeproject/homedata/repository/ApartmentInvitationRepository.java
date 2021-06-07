@@ -12,7 +12,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public interface ApartmentInvitationRepository extends PagingAndSortingRepository<ApartmentInvitation, Long>,
         JpaSpecificationExecutor<ApartmentInvitation> {
 
-    List<ApartmentInvitation> findAllBySentDatetimeIsNullAndApartmentNotNullAndStatusEquals(InvitationStatus status);
+    List<ApartmentInvitation> findAllBySentDatetimeIsNullAndStatusEquals(InvitationStatus status);
 
     List<ApartmentInvitation> findAllByApartmentIdAndStatus(Long apartmentId, InvitationStatus status);
 }
