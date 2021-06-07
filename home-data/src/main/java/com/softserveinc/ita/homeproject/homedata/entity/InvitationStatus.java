@@ -1,5 +1,10 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public enum InvitationStatus {
 
     PENDING("pending"),
@@ -17,6 +22,9 @@ public enum InvitationStatus {
 
     private final String value;
 
+    private final static Map<String, InvitationStatus> STATUSES = Stream.of(InvitationStatus.values())
+            .collect(Collectors.toMap(InvitationStatus::getValue, Function.identity()));
+
     InvitationStatus(String value) {
         this.value = value;
     }
@@ -28,6 +36,10 @@ public enum InvitationStatus {
 
     public String getValue() {
         return value;
+    }
+
+    public static InvitationStatus getEnum(String value) {
+        return STATUSES.get(value);
     }
 
 }

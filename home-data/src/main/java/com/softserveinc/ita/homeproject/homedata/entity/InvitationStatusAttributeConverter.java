@@ -10,6 +10,6 @@ public class InvitationStatusAttributeConverter implements AttributeConverter<In
 
     @Override
     public InvitationStatus convertToEntityAttribute(String dbData) {
-        return dbData == null ? null : InvitationStatus.valueOf(dbData);
+        return dbData == null ? null : InvitationStatus.getEnum(dbData);
     }
 }
