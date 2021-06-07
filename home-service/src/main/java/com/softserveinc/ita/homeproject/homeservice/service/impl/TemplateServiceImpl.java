@@ -20,14 +20,27 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @PropertySource(value = "classpath:/service.properties")
 public class TemplateServiceImpl implements TemplateService {
-    @Value("${path.invitation.registration}")
+
     private static String registrationTemplatePath;
 
-    @Value("${path.invitation.cooperation}")
     private static String cooperationTemplatePath;
 
-    @Value("${path.invitation.apartment}")
     private static String apartmentTemplatePath;
+
+    @Value("${path.invitation.registration}")
+    public void setRegistrationTemplatePath(String path) {
+        TemplateServiceImpl.registrationTemplatePath = path;
+    }
+
+    @Value("home-service/src/main/resources/template/invitation-to-cooperation.mustache")
+    public void setCooperationTemplatePath(String path) {
+        TemplateServiceImpl.cooperationTemplatePath = path;
+    }
+
+    @Value("home-service/src/main/resources/template/invitation-to-apartment.mustache")
+    public void setApartmentTemplatePath(String path) {
+        TemplateServiceImpl.apartmentTemplatePath = path;
+    }
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
@@ -43,7 +56,7 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        if(mailDto.getIsRegistered()) {
+        if(!mailDto.getIsRegistered()) {
             return Path.of(registrationTemplatePath);
         }
         switch (mailDto.getType().toString()) {

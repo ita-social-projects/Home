@@ -6,6 +6,7 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -41,7 +42,7 @@ public class SendCooperationEmailJob {
     private MailDto createMailDto(InvitationDto invitationDto) {
         CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
         var mailDto = new MailDto();
-        mailDto.setType(invitation.getType());
+        mailDto.setType(InvitationTypeDto.COOPERATION);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
         mailDto.setRole(invitation.getRole().getName());
@@ -52,10 +53,11 @@ public class SendCooperationEmailJob {
 
     private void checkRegistration(CooperationInvitationDto invitationDto, MailDto mailDto) {
         if(userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
-            mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/users");
+            mailDto.setLink("Link for reg");
             mailDto.setIsRegistered(false);
+            return;
         }
-        switch (invitationDto.getType()) {
+        switch (mailDto.getType()) {
             case COOPERATION:
                 mailDto.setLink("Link for joining into cooperation");
                 mailDto.setIsRegistered(true);

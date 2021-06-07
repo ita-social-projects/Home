@@ -21,8 +21,12 @@
         <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
         <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
+        <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
+        <mailhog.internal.port>1025</mailhog.internal.port>
+        <mailhog.api.port>8025</mailhog.api.port>
+<!--        <mailhog.api.url>http://${send.email.test.host}:${mailhog.api.port}/api/v2/</mailhog.api.url>-->
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
@@ -146,6 +150,7 @@
                                         <portName>jacoco.agent.external.port</portName>
                                         <portName>liquibase.external.port</portName>
                                         <portName>postgres.external.port</portName>
+                                        <portName>mailhog.external.port</portName>
                                     </portNames>
                                 </configuration>
                             </execution>
@@ -159,6 +164,19 @@
                         <configuration>
                             <verbose>true</verbose>
                             <images>
+                                <image>
+                                    <alias>${docker.image.mailhog}</alias>
+                                    <name>${docker.image.mailhog}</name>
+                                    <run>
+                                        <ports>
+                                            <port>${mailhog.api.port}:${mailhog.api.port}</port>
+                                            <port>${mailhog.external.port}:${mailhog.internal.port}</port>
+                                        </ports>
+                                        <wait>
+                                            <time>20000</time>
+                                        </wait>
+                                    </run>
+                                </image>
                                 <image>
                                     <alias>${docker.image.postgres}</alias>
                                     <name>${docker.image.postgres}</name>
@@ -212,6 +230,7 @@
                                         </log>
                                     </run>
                                 </image>
+
                                 <image>
                                     <alias>${docker.image.application}</alias>
                                     <name>${docker.image.application}</name>
@@ -294,6 +313,8 @@
                                 <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
                                 <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
                                 <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
+                                <MAIL_HOST>${MAIL_HOST}</MAIL_HOST>
+                                <MAIL_PORT>${MAIL_PORT}</MAIL_PORT>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
