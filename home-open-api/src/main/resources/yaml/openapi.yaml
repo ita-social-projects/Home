@@ -1171,6 +1171,199 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /polls/{poll_id}/houses:
+    get:
+      tags:
+        - polled house
+      summary: Get all polled houses
+      description: The endpoint gets all polled houses of the poll
+      operationId: queryPolledHouse
+      parameters:
+        - name: "poll_id"
+          in: path
+          required: true
+          description: ID of the poll to which polled houses belongs
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+          example: 1
+        - in: query
+          name: page_number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: The number of current page.
+        - in: query
+          name: page_size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+          required: false
+          description: The number of items to return.
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id,asc
+        - in: query
+          name: filter
+          schema:
+            type: string
+        - in: query
+          name: id
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - in: query
+          name: quantity_flat
+          schema:
+            type: integer
+          example: 10
+        - in: query
+          name: adjoining_area
+          schema:
+            type: integer
+          example: 40
+        - in: query
+          name: house_area
+          schema:
+            type: number
+          example: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - polled house
+      summary: Create polled house
+      description: The endpoint creates a polled house in the poll. House can be created only if poll status is draft
+      operationId: createPolledHouse
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which polled house belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        description: A payload for creating a new Poll
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HouseLookup'
+        required: true
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadHouse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{poll_id}/houses/{id}:
+    get:
+      tags:
+        - polled house
+      summary: Get polled house
+      description: Get a polled house by a polled house id
+      operationId: getPolledHouse
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which polled house belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: ID of the polled house
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadHouse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - polled house
+      summary: Delete polled house
+      description: Delete a polled house by a polled house ID. House can be deleted only if poll status is draft
+      operationId: deletePolledHouse
+      parameters:
+        - name: "poll_id"
+          in: "path"
+          description: ID of the poll to which polled house belongs
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: "id"
+          in: "path"
+          description: ID of the polled house
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
 security:
   - basicAuth: []
 
