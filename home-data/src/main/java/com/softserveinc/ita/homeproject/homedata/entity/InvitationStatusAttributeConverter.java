@@ -5,49 +5,11 @@ import javax.persistence.AttributeConverter;
 public class InvitationStatusAttributeConverter implements AttributeConverter<InvitationStatus, String> {
     @Override
     public String convertToDatabaseColumn(InvitationStatus attribute) {
-        if (attribute == null) {
-            return null;
-        }
-
-        switch (attribute) {
-            case PENDING:
-                return "pending";
-            case PROCESSING:
-                return "processing";
-            case ACCEPTED:
-                return "accepted";
-            case DECLINED:
-                return "declined";
-            case DEACTIVATED:
-                return "deactivated";
-            case ERROR:
-                return "error";
-            default:
-                throw new IllegalArgumentException(attribute + " not supported.");
-        }
+        return attribute == null ? null : attribute.getValue();
     }
 
     @Override
     public InvitationStatus convertToEntityAttribute(String dbData) {
-        if (dbData == null) {
-            return null;
-        }
-
-        switch (dbData) {
-            case "pending":
-                return InvitationStatus.PENDING;
-            case "processing":
-                return InvitationStatus.PROCESSING;
-            case "accepted":
-                return InvitationStatus.ACCEPTED;
-            case "declined":
-                return InvitationStatus.DECLINED;
-            case "deactivated":
-                return InvitationStatus.DEACTIVATED;
-            case "error":
-                return InvitationStatus.ERROR;
-            default:
-                throw new IllegalArgumentException(dbData + " not supported.");
-        }
+        return dbData == null ? null : InvitationStatus.valueOf(dbData);
     }
 }
