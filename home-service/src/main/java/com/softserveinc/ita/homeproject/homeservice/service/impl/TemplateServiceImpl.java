@@ -20,13 +20,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @PropertySource(value = "classpath:/service.properties")
 public class TemplateServiceImpl implements TemplateService {
-    @Value("${path.invitation.registration}")
+
     private static String registrationTemplatePath;
 
-    @Value("${path.invitation.cooperation}")
     private static String cooperationTemplatePath;
 
-    @Value("${path.invitation.apartment}")
     private static String apartmentTemplatePath;
 
     @Override
@@ -54,5 +52,20 @@ public class TemplateServiceImpl implements TemplateService {
             default:
                 throw new InvitationException("Wrong invitation type.");
         }
+    }
+
+    @Value("${path.invitation.registration}")
+    public void setRegistrationTemplatePath(String path) {
+        TemplateServiceImpl.registrationTemplatePath = path;
+    }
+
+    @Value("${path.invitation.cooperation}")
+    public void setCooperationTemplatePath(String path) {
+        TemplateServiceImpl.cooperationTemplatePath = path;
+    }
+
+    @Value("${path.invitation.apartment}")
+    public void setApartmentTemplatePath(String path) {
+        TemplateServiceImpl.apartmentTemplatePath = path;
     }
 }
