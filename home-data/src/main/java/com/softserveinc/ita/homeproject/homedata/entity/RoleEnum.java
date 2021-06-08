@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,14 +11,13 @@ public enum RoleEnum {
     USER("user"),
     OWNER("owner");
 
-    private final static Map<String, RoleEnum> ROLES = Stream.of(RoleEnum.values())
+    private static final Map<String, RoleEnum> ROLES = Stream.of(RoleEnum.values())
             .collect(Collectors.toMap(RoleEnum::getName, Function.identity()));
 
     private final String name;
 
     RoleEnum(String name) {
         this.name = name;
-
     }
 
     public String getName() {

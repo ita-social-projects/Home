@@ -22,7 +22,7 @@ public enum InvitationStatus {
 
     private final String value;
 
-    private final static Map<String, InvitationStatus> STATUSES = Stream.of(InvitationStatus.values())
+    private static final Map<String, InvitationStatus> STATUSES = Stream.of(InvitationStatus.values())
             .collect(Collectors.toMap(InvitationStatus::getValue, Function.identity()));
 
     InvitationStatus(String value) {
