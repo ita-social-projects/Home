@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
@@ -30,7 +32,8 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         var text = "";
-        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto)))) {
+        try (Reader reader = new BufferedReader(
+            new InputStreamReader(this.getClass().getResourceAsStream(getInvitationTemplate(mailDto).toString())))) {
             text = Mustache.compiler()
                 .compile(reader)
                 .execute(mailDto);
