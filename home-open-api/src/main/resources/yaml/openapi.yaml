@@ -2398,8 +2398,11 @@ components:
           multiple_choice: '#/components/schemas/UpdateMultipleChoiceQuestion'
           advice: '#/components/schemas/UpdateAdviceQuestion'
       required:
+        - type
         - question
       properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
         question:
           type: string
           minLength: 1

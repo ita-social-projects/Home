@@ -11,11 +11,17 @@
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="QUESTION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="TYPE" type="VARCHAR(31)">
                 <constraints nullable="false"/>
             </column>
-            <column name="MAX_ANSWER_VARIANT" type="INTEGER">
+            <column name="MAX_ANSWER_COUNT" type="INTEGER">
                 <constraints nullable="true"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
             </column>
             <column name="POLL_ID" type="BIGINT">
                 <constraints nullable="false"
@@ -39,5 +45,13 @@
                              references="poll_questions(ID)"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="Issue228.003" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="answer_variants_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue228.004" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="poll_questions_sequence"/>
     </changeSet>
 </databaseChangeLog>

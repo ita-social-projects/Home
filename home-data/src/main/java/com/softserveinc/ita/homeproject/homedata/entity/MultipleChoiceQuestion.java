@@ -1,15 +1,14 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-
-import lombok.Getter;
-import lombok.Setter;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -20,6 +19,7 @@ public class MultipleChoiceQuestion extends PollQuestion {
     @Column(name = "max_answer_count")
     private Integer maxAnswerCount;
 
-    @OneToMany(mappedBy = "poll_question", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "multipleChoiceQuestion", cascade = CascadeType.PERSIST)
     private List<AnswerVariant> answerVariants;
+
 }
