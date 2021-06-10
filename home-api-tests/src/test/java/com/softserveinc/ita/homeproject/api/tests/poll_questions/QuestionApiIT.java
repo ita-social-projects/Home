@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
@@ -15,6 +16,7 @@ import com.softserveinc.ita.homeproject.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateAdviceQuestion;
+import com.softserveinc.ita.homeproject.model.CreateApartment;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.CreatePoll;
@@ -22,12 +24,15 @@ import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.CreateUpdateAnswerVariant;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.QuestionType;
+import com.softserveinc.ita.homeproject.model.ReadAnswerVariant;
+import com.softserveinc.ita.homeproject.model.ReadApartment;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import com.softserveinc.ita.homeproject.model.ReadQuestion;
 import com.softserveinc.ita.homeproject.model.UpdateApartment;
+import com.softserveinc.ita.homeproject.model.UpdateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -76,7 +81,7 @@ class QuestionApiIT {
     }
 
     @Test
-    void createQuestionWithNonExistentTest() throws ApiException {
+    void createQuestionWithNonExistentTest() {
         CreateQuestion createQuestion = createAdviceQuestion();
 
         Long wrongId = 1000000L;
@@ -136,6 +141,28 @@ class QuestionApiIT {
     }
 
     @Test
+    void updateMultipleChoiceQuestionTest() throws ApiException {
+        CreateMultipleChoiceQuestion createQuestion = (CreateMultipleChoiceQuestion) createMultipleChoiceQuestion();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+        ReadQuestion createdQuestion = pollQuestionApi.createQuestion(createdPoll.getId(), createQuestion);
+
+        UpdateQuestion updateQuestion = new UpdateMultipleChoiceQuestion()
+                .maxAnswerCount(2)
+                .answerVariants(updateAnswerVariants())
+                .type(QuestionType.MULTIPLE_CHOICE)
+                .question("Do you like our cooperation?");
+
+
+        ApiResponse<ReadQuestion> response = pollQuestionApi.updateQuestionWithHttpInfo(createdPoll.getId(), createdQuestion.getId(), updateQuestion);
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+
+        assertMultipleQuestion(createdQuestion,(UpdateMultipleChoiceQuestion) updateQuestion, (ReadMultipleChoiceQuestion) response.getData());
+    }
+
+    @Test
     void updateNonExistentQuestion() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
@@ -153,6 +180,34 @@ class QuestionApiIT {
                 .withMessageContaining("Question with 'id: " + wrongId +"' is not found");
     }
 
+    @Test
+    void deleteQuestionTest() throws ApiException {
+        CreateQuestion createQuestion = createMultipleChoiceQuestion();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+        ReadQuestion createdQuestion = pollQuestionApi.createQuestion(createdPoll.getId(), createQuestion);
+
+        ApiResponse<Void> response = pollQuestionApi.deleteQuestionWithHttpInfo(createdPoll.getId(), createdQuestion.getId());
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> pollQuestionApi.getQuestion(createdPoll.getId(), createdQuestion.getId()));
+    }
+
+    @Test
+    void deleteNonExistentQuestion() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+
+        Long wrongId = 1000000L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> pollQuestionApi
+                        .deleteQuestionWithHttpInfo(createdPoll.getId(), wrongId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Question with 'id: " + wrongId +"' is not found");
+    }
 
     static CreateQuestion createAdviceQuestion() {
         return new CreateAdviceQuestion()
@@ -176,6 +231,18 @@ class QuestionApiIT {
                 .answer("green"));
         answerVariants.add(new CreateUpdateAnswerVariant()
                 .answer("pink"));
+
+        return answerVariants;
+    }
+
+    static List<CreateUpdateAnswerVariant> updateAnswerVariants() {
+        List<CreateUpdateAnswerVariant> answerVariants = new ArrayList<>();
+        answerVariants.add(new CreateUpdateAnswerVariant()
+                .answer("yes"));
+        answerVariants.add(new CreateUpdateAnswerVariant()
+                .answer("no"));
+        answerVariants.add(new CreateUpdateAnswerVariant()
+                .answer("idk"));
 
         return answerVariants;
     }
@@ -230,5 +297,22 @@ class QuestionApiIT {
         assertNotNull(update);
         assertNotNull(updated);
         assertEquals(update.getQuestion(), updated.getQuestion());
+    }
+
+    private void assertMultipleQuestion(ReadQuestion saved, UpdateMultipleChoiceQuestion update, ReadMultipleChoiceQuestion updated) {
+        assertNotNull(saved);
+        assertNotNull(update);
+        assertNotNull(updated);
+        assertEquals(update.getQuestion(), updated.getQuestion());
+        assertEquals(update.getMaxAnswerCount(), updated.getMaxAnswerCount());
+        assertEquals(update.getType(), updated.getType());
+        assertAnswer(update, updated);
+
+    }
+
+    private void assertAnswer(UpdateMultipleChoiceQuestion update,ReadMultipleChoiceQuestion updated) {
+        for (int i=0; i<update.getAnswerVariants().size();i++){
+           assertEquals(update.getAnswerVariants().get(i).getAnswer(), Objects.requireNonNull(updated.getAnswerVariants()).get(i).getAnswer());
+        }
     }
 }

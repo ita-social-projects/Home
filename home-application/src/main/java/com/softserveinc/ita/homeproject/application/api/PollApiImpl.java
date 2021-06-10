@@ -35,7 +35,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Override
     public Response deleteQuestion(Long pollId, Long id) {
-        return null;
+        pollQuestionService.deactivatePollQuestion(pollId, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @Override

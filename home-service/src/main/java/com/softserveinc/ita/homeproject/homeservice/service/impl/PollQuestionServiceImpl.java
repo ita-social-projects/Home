@@ -41,6 +41,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     public PollQuestionDto createPollQuestion(Long pollId, PollQuestionDto pollQuestionDto) {
         var poll = pollRepository.findById(pollId)
                 .filter(Poll::getEnabled)
+                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
                 .orElseThrow(() -> new NotFoundHomeException(
                         String.format(POLL_WITH_ID_NOT_FOUND, pollId)));
 
@@ -129,14 +130,22 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         return mapper.convert(pollQuestionDto, AdviceChoiceQuestion.class);
     }
 
+
+    @Transactional
     @Override
     public void deactivatePollQuestion(Long pollId, Long pollQuestionId) {
-        PollQuestion toDelete = pollQuestionRepository.findById(pollQuestionId)
-                .filter(PollQuestion::getEnabled)
-                .filter(question -> question.getPoll().getId().equals(pollId))
+        var poll = pollRepository.findById(pollId)
+                .filter(Poll::getEnabled)
+                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format(POLL_WITH_ID_NOT_FOUND, pollQuestionId)));
+                                String.format(POLL_WITH_ID_NOT_FOUND, pollId)));
+
+        PollQuestion toDelete = poll.getPollQuestions().stream()
+                .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(QUESTION_WITH_ID_NOT_FOUND, pollQuestionId)));
 
         toDelete.setEnabled(false);
         pollQuestionRepository.save(toDelete);
