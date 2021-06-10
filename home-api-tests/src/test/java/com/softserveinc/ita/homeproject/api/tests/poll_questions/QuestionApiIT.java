@@ -209,13 +209,13 @@ class QuestionApiIT {
                 .withMessageContaining("Question with 'id: " + wrongId +"' is not found");
     }
 
-    static CreateQuestion createAdviceQuestion() {
+    private static CreateQuestion createAdviceQuestion() {
         return new CreateAdviceQuestion()
                 .question("Your proposal for your house?")
                 .type(QuestionType.ADVICE);
     }
 
-    static CreateQuestion createMultipleChoiceQuestion() {
+    private static CreateQuestion createMultipleChoiceQuestion() {
         return new CreateMultipleChoiceQuestion()
                 .maxAnswerCount(2)
                 .answerVariants(createAnswerVariants())
@@ -223,7 +223,7 @@ class QuestionApiIT {
                 .question("What color should we paint the door?");
     }
 
-    static List<CreateUpdateAnswerVariant> createAnswerVariants() {
+    private static List<CreateUpdateAnswerVariant> createAnswerVariants() {
         List<CreateUpdateAnswerVariant> answerVariants = new ArrayList<>();
         answerVariants.add(new CreateUpdateAnswerVariant()
                 .answer("black"));
@@ -235,7 +235,7 @@ class QuestionApiIT {
         return answerVariants;
     }
 
-    static List<CreateUpdateAnswerVariant> updateAnswerVariants() {
+    private static List<CreateUpdateAnswerVariant> updateAnswerVariants() {
         List<CreateUpdateAnswerVariant> answerVariants = new ArrayList<>();
         answerVariants.add(new CreateUpdateAnswerVariant()
                 .answer("yes"));
@@ -247,7 +247,7 @@ class QuestionApiIT {
         return answerVariants;
     }
 
-    static CreatePoll createPoll() {
+    private static CreatePoll createPoll() {
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
@@ -268,7 +268,7 @@ class QuestionApiIT {
                 .zipCode("zipCode");
     }
 
-    static CreateCooperation createCooperation() {
+    private static CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))

@@ -43,7 +43,7 @@ class QueryQuestionIT {
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
     @Test
-    void getAllApartmentsAscSort() throws ApiException {
+    void getAllQuestionsAscSort() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadPoll readPoll = cooperationPollApi.createCooperationPoll(readCoop.getId(), createPoll());
 
@@ -62,7 +62,7 @@ class QueryQuestionIT {
     }
 
     @Test
-    void getAllApartmentsDescSort() throws ApiException {
+    void getAllQuestionsDescSort() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadPoll readPoll = cooperationPollApi.createCooperationPoll(readCoop.getId(), createPoll());
 
