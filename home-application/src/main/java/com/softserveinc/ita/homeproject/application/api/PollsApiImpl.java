@@ -12,7 +12,7 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
-public class PollApiImpl extends CommonApi implements PollsApi {
+public class PollsApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
     private HousePollService housePollService;
