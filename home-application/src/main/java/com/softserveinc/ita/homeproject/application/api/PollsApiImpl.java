@@ -5,8 +5,8 @@ import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.service.HousePollService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Page;
 public class PollsApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
-    private HousePollService housePollService;
+    private PollHouseService housePollService;
 
     @Autowired
     private HouseService houseService;
@@ -31,7 +31,7 @@ public class PollsApiImpl extends CommonApi implements PollsApi {
 
     @Override
     public Response deletePolledHouse(Long pollId, Long id) {
-        housePollService.deactivate(id, pollId);
+        housePollService.remove(id, pollId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
