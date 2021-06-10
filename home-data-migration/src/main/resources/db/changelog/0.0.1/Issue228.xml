@@ -51,36 +51,30 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="41"/>
+            <column name="id" value="42"/>
             <column name="name" value="CREATE_QUESTION_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="42"/>
+            <column name="id" value="43"/>
             <column name="name" value="UPDATE_QUESTION_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="43"/>
+            <column name="id" value="44"/>
             <column name="name" value="GET_QUESTION_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="44"/>
+            <column name="id" value="45"/>
             <column name="name" value="DELETE_QUESTION_PERMISSION"/>
         </insert>
     </changeSet>
 
     <changeSet id="Issue180.005" author="Ilya-Ross">
-        <insert  dbms="postgresql"
-                 schemaName="public"
-                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="41"/>
-        </insert>
         <insert  dbms="postgresql"
                  schemaName="public"
                  tableName="role_permissions">
@@ -98,6 +92,12 @@
                  tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="44"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="45"/>
         </insert>
     </changeSet>
 
