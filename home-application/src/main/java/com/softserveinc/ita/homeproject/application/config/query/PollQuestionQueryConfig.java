@@ -22,7 +22,8 @@ public class PollQuestionQueryConfig implements QueryConfig<PollQuestion> {
     public enum PollQuestionQueryParamEnum implements QueryParamEnum {
 
         ID("id"),
-        POLL_ID("poll.id");
+        POLL_ID("poll.id"),
+        TYPE("type");
 
 
         private final String parameter;

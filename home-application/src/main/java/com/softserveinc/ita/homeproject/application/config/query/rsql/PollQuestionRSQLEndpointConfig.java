@@ -22,6 +22,7 @@ public class PollQuestionRSQLEndpointConfig implements
                 new EnumMap<>(PollQuestionQueryConfig.PollQuestionQueryParamEnum.class);
 
         map.put(PollQuestionQueryConfig.PollQuestionQueryParamEnum.POLL_ID, "poll_id");
+        map.put(PollQuestionQueryConfig.PollQuestionQueryParamEnum.TYPE, "type");
 
         return map;
     }

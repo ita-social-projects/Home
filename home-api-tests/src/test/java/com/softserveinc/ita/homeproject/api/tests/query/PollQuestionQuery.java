@@ -3,6 +3,9 @@ package com.softserveinc.ita.homeproject.api.tests.query;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ApartmentApi;
 import com.softserveinc.ita.homeproject.api.PollQuestionApi;
+import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.PollType;
+import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadApartment;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadQuestion;
@@ -16,7 +19,13 @@ public class PollQuestionQuery extends BaseQuery {
 
     private PollQuestionApi pollQuestionApi;
 
+    private QuestionType type;
+
     private Long id;
+
+    public void setType(QuestionType type){
+        this.type = type;
+    }
 
     public void setPollQuestionApi(PollQuestionApi pollQuestionApi) {
         this.pollQuestionApi = pollQuestionApi;
@@ -37,7 +46,8 @@ public class PollQuestionQuery extends BaseQuery {
                         this.getPageSize(),
                         this.getSort(),
                         this.getFilter(),
-                        id);
+                        id,
+                        type);
     }
 
     public static class Builder extends BaseQuery.BaseBuilder<PollQuestionQuery, PollQuestionQuery.Builder> {
@@ -49,6 +59,11 @@ public class PollQuestionQuery extends BaseQuery {
 
         public PollQuestionQuery.Builder pollId(Long pollId) {
             queryClass.setPollId(pollId);
+            return this;
+        }
+
+        public PollQuestionQuery.Builder type(QuestionType questionType) {
+            queryClass.setType(questionType);
             return this;
         }
 

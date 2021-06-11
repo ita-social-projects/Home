@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueryQuestionIT {
 
@@ -99,13 +100,33 @@ class QueryQuestionIT {
         queryResponse.forEach(element -> assertEquals(element.getId(), readQuestion.getId()));
     }
 
-    static CreateQuestion createAdviceQuestion() {
+    @Test
+    void getAllQuestionByQuestionType() throws ApiException {
+        ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
+        ReadPoll readPoll = cooperationPollApi.createCooperationPoll(readCoop.getId(), createPoll());
+
+        ReadQuestion readQuestion = pollQuestionApi.createQuestion(readPoll.getId(), createAdviceQuestion());
+
+
+        List<ReadQuestion> queryResponse = new PollQuestionQuery.Builder(pollQuestionApi)
+                .pollId(readPoll.getId())
+                .pageNumber(1)
+                .pageSize(10)
+                .sort("id,desc")
+                .type(QuestionType.ADVICE)
+                .build().perform();
+
+        assertTrue(queryResponse.size() > 0);
+        queryResponse.forEach(question -> assertEquals(QuestionType.ADVICE, question.getType()));
+    }
+
+    private static CreateQuestion createAdviceQuestion() {
         return new CreateAdviceQuestion()
                 .question("Your proposal for your house?")
                 .type(QuestionType.ADVICE);
     }
 
-    static CreateQuestion createMultipleChoiceQuestion() {
+    private static CreateQuestion createMultipleChoiceQuestion() {
         return new CreateMultipleChoiceQuestion()
                 .maxAnswerCount(2)
                 .answerVariants(createAnswerVariants())
@@ -113,7 +134,7 @@ class QueryQuestionIT {
                 .question("What color should we paint the door?");
     }
 
-    static List<CreateUpdateAnswerVariant> createAnswerVariants() {
+    private static List<CreateUpdateAnswerVariant> createAnswerVariants() {
         List<CreateUpdateAnswerVariant> answerVariants = new ArrayList<>();
         answerVariants.add(new CreateUpdateAnswerVariant()
                 .answer("black"));
@@ -125,7 +146,7 @@ class QueryQuestionIT {
         return answerVariants;
     }
 
-    static CreatePoll createPoll() {
+    private static CreatePoll createPoll() {
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
@@ -146,7 +167,7 @@ class QueryQuestionIT {
                 .zipCode("zipCode");
     }
 
-    static CreateCooperation createCooperation() {
+    private static CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))

@@ -15,6 +15,7 @@ import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +60,13 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @PreAuthorize(GET_QUESTION_PERMISSION)
     @Override
-    public Response queryQuestion(@Min(1L) Long pollId,
+    public Response queryQuestion(Long pollId,
                                   @Min(1) Integer pageNumber,
-                                  @Min(1) @Max(10) Integer pageSize, String sort, String filter, Long id) {
-
+                                  @Min(1) @Max(10) Integer pageSize,
+                                  String sort,
+                                  String filter,
+                                  Long id,
+                                  QuestionType type) {
         Page<PollQuestionDto> readQuestion = pollQuestionService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readQuestion, ReadMultipleChoiceQuestion.class);
     }

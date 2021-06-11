@@ -1178,56 +1178,16 @@ paths:
       description: The endpoint gets all questions of the poll
       operationId: queryQuestion
       parameters:
-        - name: "poll_id"
-          in: path
-          required: true
-          description: ID of the poll to which questions belongs
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-          example: 1
-        - in: query
-          name: page_number
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-          required: false
-          description: The number of current page.
-        - in: query
-          name: page_size
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 10
-            default: 5
-          required: false
-          description: The number of items to return.
-        - in: query
-          name: sort
-          schema:
-            type: string
-            default: id,asc
-        - in: query
-          name: filter
-          schema:
-            type: string
-        - in: query
-          name: id
-          schema:
-            type: integer
-            format: int64
-          example: 1
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/question_type'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ReadQuestion"
+          $ref: '#/components/responses/QuestionsResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1243,28 +1203,12 @@ paths:
       description: The endpoint creates a question in the poll. Question can be created only if poll status is draft
       operationId: createQuestion
       parameters:
-        - name: "poll_id"
-          in: "path"
-          description: ID of the poll to which question belongs
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
+        - $ref: '#/components/parameters/p_poll_id'
       requestBody:
-        description: A payload for creating a new question
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateQuestion'
-        required: true
+         $ref: '#/components/requestBodies/CreateQuestionBody'
       responses:
         '201':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadQuestion'
+         $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1282,29 +1226,11 @@ paths:
       description: Get a question by a question id
       operationId: getQuestion
       parameters:
-        - name: "poll_id"
-          in: "path"
-          description: ID of the poll to which question belongs
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
-        - name: "id"
-          in: "path"
-          description: ID of the question
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ReadQuestion"
+          $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1320,36 +1246,13 @@ paths:
       description: Update a question by a question ID. Question can be updated only if poll status is draft
       operationId: updateQuestion
       parameters:
-        - name: "poll_id"
-          in: "path"
-          description: ID of the poll to which question belongs
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
-        - name: "id"
-          in: "path"
-          description: ID of the question
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
       requestBody:
-        description: A payload for updating a question
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateQuestion'
-        required: true
+        $ref: '#/components/requestBodies/UpdateQuestionBody'
       responses:
         '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReadQuestion'
+          $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1367,25 +1270,11 @@ paths:
       description: Delete a question by a question ID. Question can be deleted only if poll status is draft
       operationId: deleteQuestion
       parameters:
-        - name: "poll_id"
-          in: "path"
-          description: ID of the poll to which question belongs
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
-        - name: "id"
-          in: "path"
-          description: ID of the question
-          required: true
-          schema:
-            type: integer
-            format: int64
-          example: 1
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
       responses:
         '204':
-          description: Success
+          $ref: '#/components/responses/NoContentResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -2605,7 +2494,7 @@ components:
             items:
               $ref: "#/components/schemas/ReadApartmentInvitation"
     PollResponse:
-      description: Success
+      description: OK
       content:
         application/json:
           schema:
@@ -2618,7 +2507,20 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/ReadPoll"
-
+    QuestionResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+              $ref: "#/components/schemas/ReadQuestion"
+    QuestionsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadQuestion"
 
   requestBodies:
     CreateNewsBody:
@@ -2738,7 +2640,18 @@ components:
           schema:
             $ref: '#/components/schemas/UpdatePoll'
       required: true
-
+    CreateQuestionBody:
+      description: A payload for creating a new question
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateQuestion'
+    UpdateQuestionBody:
+      description: A payload for updating a question
+      content:
+        application/json:
+         schema:
+           $ref: '#/components/schemas/UpdateQuestion'
   parameters:
     p_id:
       name: id
@@ -2751,6 +2664,14 @@ components:
       example: 1
     p_user_id:
       name: user_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_poll_id:
+      name: poll_id
       in: path
       required: true
       schema:
@@ -3004,3 +2925,10 @@ components:
         $ref: '#/components/schemas/PollStatus'
       description: Status of the Poll
       example: draft
+    question_type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/QuestionType'
+      description: Type of the Question
+      example: advice
