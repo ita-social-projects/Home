@@ -39,12 +39,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     @Transactional
     @Override
     public PollQuestionDto createPollQuestion(Long pollId, PollQuestionDto pollQuestionDto) {
-        var poll = pollRepository.findById(pollId)
-                .filter(Poll::getEnabled)
-                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
-                .orElseThrow(() -> new NotFoundHomeException(
-                        String.format(POLL_WITH_ID_NOT_FOUND, pollId)));
-
+        var poll = getPollById(pollId);
 
         PollQuestion question = fillMultipleQuestionType(pollQuestionDto);
 
@@ -58,12 +53,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     @Transactional
     @Override
     public PollQuestionDto updatePollQuestion(Long pollId, Long id, PollQuestionDto updatePollQuestionDto) {
-        var poll = pollRepository.findById(pollId)
-                .filter(Poll::getEnabled)
-                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                String.format(POLL_WITH_ID_NOT_FOUND, pollId)));
+        var poll = getPollById(pollId);
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
                 .filter(question -> question.getId().equals(id)).findFirst()
@@ -130,16 +120,19 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         return mapper.convert(pollQuestionDto, AdviceChoiceQuestion.class);
     }
 
-
-    @Transactional
-    @Override
-    public void deactivatePollQuestion(Long pollId, Long pollQuestionId) {
-        var poll = pollRepository.findById(pollId)
+    private Poll getPollById(Long id){
+        return pollRepository.findById(id)
                 .filter(Poll::getEnabled)
                 .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format(POLL_WITH_ID_NOT_FOUND, pollId)));
+                                String.format(POLL_WITH_ID_NOT_FOUND, id)));
+    }
+
+    @Transactional
+    @Override
+    public void deactivatePollQuestion(Long pollId, Long pollQuestionId) {
+        var poll = getPollById(pollId);
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
                 .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
