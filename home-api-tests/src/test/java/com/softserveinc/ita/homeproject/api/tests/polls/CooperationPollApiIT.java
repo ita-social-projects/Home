@@ -170,11 +170,11 @@ class CooperationPollApiIT {
         ReadPoll poll = COOPERATION_POLL_API
             .createCooperationPoll(COOPERATION_ID, createPoll);
 
-        ApiResponse<ReadHouse> addHouseResponse = POLLED_HOUSE_API
+        ApiResponse<ReadPoll> addHouseResponse = POLLED_HOUSE_API
             .createPolledHouseWithHttpInfo(poll.getId(), houseLookup);
 
         assertEquals(Response.Status.CREATED.getStatusCode(), addHouseResponse.getStatusCode());
-        assertEquals(HOUSE_ONE_ID, addHouseResponse.getData().getId());
+        assertEquals(COOPERATION_ID, addHouseResponse.getData().getId());
     }
 
     @Test
@@ -258,6 +258,36 @@ class CooperationPollApiIT {
 
     @Test
     void getPollFromNonRelatedCooperation() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> COOPERATION_POLL_API
+                .getCooperationPollWithHttpInfo(SECOND_COOPERATION_ID, expectedPoll.getId()))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("Poll with 'id: " + expectedPoll.getId() + "' is not found");
+    }
+
+    @Test
+    void getPolledHouseTest() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+        ApiResponse<ReadPoll> response = COOPERATION_POLL_API
+            .getCooperationPollWithHttpInfo(COOPERATION_ID, expectedPoll.getId());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertPoll(createPoll, response.getData());
+    }
+
+    @Test
+    void getNonExistingPolledHouseTest() {
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> COOPERATION_POLL_API
+                .getCooperationPollWithHttpInfo(COOPERATION_ID, NONEXISTENT_POLL_ID))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
+    }
+
+    @Test
+    void getPolledHouseFromNonRelatedCooperation() throws ApiException {
         CreatePoll createPoll = createPoll();
         ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
         assertThatExceptionOfType(ApiException.class)

@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
@@ -23,10 +24,10 @@ public class PollsApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
         var lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
-        var readPolledHouseDto = housePollService.add(lookupPolledHouseDto.getId(), pollId);
-        var readPolledHouse = mapper.convert(readPolledHouseDto, ReadHouse.class);
+        var readPollDto = housePollService.add(lookupPolledHouseDto.getId(), pollId);
+        var readPoll = mapper.convert(readPollDto, ReadPoll.class);
 
-        return Response.status(Response.Status.CREATED).entity(readPolledHouse).build();
+        return Response.status(Response.Status.CREATED).entity(readPoll).build();
     }
 
     @Override
