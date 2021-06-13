@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
@@ -11,7 +12,10 @@ import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 
+@Provider
+@Component
 public class PollsApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
@@ -24,7 +28,9 @@ public class PollsApiImpl extends CommonApi implements PollsApi {
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
         var lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
         var readPolledHouseDto = housePollService.add(lookupPolledHouseDto.getId(), pollId);
-        var readPolledHouse = mapper.convert(readPolledHouseDto, ReadHouse.class);
+        var house = readPolledHouseDto.getPolledHouses()
+            .stream().filter(h -> h.getId().equals(houseLookup.getId())).findFirst();
+        var readPolledHouse = mapper.convert(house, ReadHouse.class);
 
         return Response.status(Response.Status.CREATED).entity(readPolledHouse).build();
     }
