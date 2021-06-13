@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
@@ -12,7 +13,10 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 
+@Provider
+@Component
 public class PollsApiImpl extends CommonApi implements PollsApi {
 
     @Autowired

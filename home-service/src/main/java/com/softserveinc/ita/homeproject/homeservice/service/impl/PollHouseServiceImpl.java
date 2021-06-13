@@ -16,10 +16,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PollHouseServiceImpl implements PollHouseService {
+    private static final String WRONG_HOUSE = "Can't add or remove house, invalid poll_id or house_id";
+
     private final PollRepository pollRepository;
 
     private final HouseRepository houseRepository;
@@ -27,30 +30,34 @@ public class PollHouseServiceImpl implements PollHouseService {
     private final ServiceMapper mapper;
 
     @Override
+    @Transactional
     public PollDto add(Long houseId, Long pollId) {
-        Poll poll = getEnablePollById(pollId);
+        Poll poll = getDraftPollById(pollId);
         House house = getHouseById(houseId);
 
-        List<House> houses = poll.getPolledHouses();
-        houses.add(house);
+        if (validateHouse(poll, house)){
+            List<House> houses = poll.getPolledHouses();
+            houses.add(house);
 
-        poll.setPolledHouses(houses);
-        pollRepository.save(poll);
+            poll.setPolledHouses(houses);
+            pollRepository.save(poll);
+        }
+
         return mapper.convert(poll, PollDto.class);
     }
 
     @Override
+    @Transactional
     public void remove(Long houseId, Long pollId) {
-        Poll poll = pollRepository.findById(pollId).filter(Poll::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", pollId)));
+        Poll poll = getDraftPollById(pollId);
         House house = getHouseById(houseId);
 
-        List<House> houses = poll.getPolledHouses();
-        houses.remove(house);
-        pollRepository.save(poll);
+        if (validateHouse(poll, house)) {
+            List<House> houses = poll.getPolledHouses();
+            houses.remove(house);
+            pollRepository.save(poll);
+        }
     }
-
-    //TODO validator to understand is our house in the same cooperation
 
     @Override
     public Page<PollDto> findAll(Integer pageNumber, Integer pageSize, Specification<Poll> specification) {
@@ -60,7 +67,7 @@ public class PollHouseServiceImpl implements PollHouseService {
             .map(news -> mapper.convert(news, PollDto.class));
     }
 
-    private Poll getEnablePollById(Long id) {
+    private Poll getDraftPollById(Long id) {
         return pollRepository.findById(id).filter(Poll::getEnabled).filter(p -> p.getStatus().equals(PollStatus.DRAFT))
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
     }
@@ -68,6 +75,16 @@ public class PollHouseServiceImpl implements PollHouseService {
     private House getHouseById(Long id) {
         return houseRepository.findById(id).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "House", id)));
+    }
+
+    private Boolean validateHouse(Poll poll, House house) {
+        Long pollCooperationId = poll.getCooperation().getId();
+        Long houseCooperationId = house.getCooperation().getId();
+        if (pollCooperationId.equals(houseCooperationId)) {
+            return true;
+        } else {
+            throw new NotFoundHomeException(WRONG_HOUSE);
+        }
     }
 
 }
