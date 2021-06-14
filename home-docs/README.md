@@ -1,10 +1,10 @@
-- [modules-description.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/modules-description.md) -
-  description and functionality of project modules
-
-
 - [project-description.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/project-description.md) -
   project description, used technologies and tools
 
+
+- [modules-description.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/modules-description.md) -
+    description and functionality of project modules
+  
 
 - [docker-readme.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/docker-readme.md) -
   all information and instructions how to run application in `DOCKER` you can find here

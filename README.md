@@ -10,20 +10,6 @@ ___
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/pulls)
 [![Docker Pulls](https://img.shields.io/docker/pulls/homeacademy/home-application)](https://hub.docker.com/r/homeacademy/home-application)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-
-__Home__ - is an all-in-one social service that will cover all aspects of your communication with your home and
-neighbors.
-
-It includes next modules:
-- Communication with residents of the house, notification
-- Suggestions / wishes residents of the house
-- Bots for social chats and networks
-- Reporting system
-- Voting system
-- Communal payments
-- OSBB module
-- Volunteer module to help people with disabilities
-- Parking module
 ___
 
 ## Table of Contents
@@ -31,14 +17,12 @@ ___
 - [About the project](#About-the-project)
 - [Installation](#installation)
   - [Required to install](#Required-to-install)
-  - [Environment](#Environment)
+  - [Environment](#Environmental-variables)
   - [How to run local](#How-to-run-local)
   - [Docker images](#Docker-images)
 - [Documentation](#Documentation)
 - [Contributing](#contributing)
-  - [git flow](#git-flow)
-  - [issue flow](#git-flow)
-- [FAQ](#faq)
+- [Team](#Team) 
 - [Support](#support)
 - [Contact](#contact)
 - [License](#license)
@@ -46,19 +30,41 @@ ___
 ---
 
 ## About the project
-- You can read more about the project's technologies and modules' description
+__Home__ - is an all-in-one social service that will cover all
+aspects of your communication with your home and neighbors.
+- Internal notification and news system
+
+
+- Private messages, chat with selected residents and general OSBB
+  group with all residents or OSBB's modules separately
+
+
+- Residents independently form a budget, determine
+  contributions for the maintenance of the house,
+  the sequence of solving problems. This makes it possible
+  to quickly respond to emergencies, to decide what needs to be
+  done in the house or on the adjacent territory in the first place,
+  to ensure the protection of the personal and common property of residents
+
+
+- The ability to choose a service provider such as
+  (water, electricity, gas), and pay utility bills
+
+
+- The best offers and wishes can be implemented in the OSBB
+  by residents through internal voting system
+
+
+- Transparency of expense. The residents' funds go exclusively to the needs
+  of their home and are spent rationally. The head of the OSBB reports
+  directly to the residents, so they are always aware of what the funds were spent on
+  
+
+You more info about the project's technologies and modules' description
   in   <a href="https://github.com/ita-social-projects/Home/tree/dev/home-docs" target="_blank">home-docs</a> package.
 
 ## Installation
-
-### Required to install
-- Java 11
-- Docker
-- Maven
-- PostgreSQL
-
-### Environment
-environmental variables
+### Environmental variables
 ```properties
 spring.datasource.url=${DATASOURCE_URL}
 spring.datasource.username=${DATASOURCE_USER}
@@ -69,20 +75,40 @@ cloud.name=${CLOUD_NAME}
 api.key=${API_KEY}
 api.secret=${API_SECRET}
 ```
+### Required to install
+- Java 11
+- Docker
+- Maven
+- PostgreSQL
+- IntelliJ IDEA (optional)
 
 ### How to run local
+__Run with Docker__
+- use `docker-compose up` command `home-dev/init` 
+  in package to create  database
+- use `docker-compose up` command `home-dev/launch` in package to run 
+  application
 
-About it you can read
-in [hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
+__Run with Maven + Intellij IDEA__
+- use `mvn clean install` command in the root directory to build project
+- use `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/postgres -u=user -p=password`
+  command for connection to your local DB
+- run application with your IDEA
+
+If you did everything correctly, you should be able to access RapiDoc
+by this URL: http://localhost:8080/api/0/apidocs/index.html
+
+Detail info about local running or about other running options you can read in 
+[hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
 
 ---
 
-###Docker images
+### Docker images
 Our [images](https://hub.docker.com/u/homeacademy) on Docker Hub:
 
-- 🐳 ***data-migration*** - this image starts a data-migration for database in docker container
+- ***data-migration*** - this image starts a data-migration for database in docker container
 
-- 🐳 ***home-application*** - this image starts an application in docker container
+- ***home-application*** - this image starts an application in docker container
 
 ---
 

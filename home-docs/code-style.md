@@ -1,9 +1,12 @@
 # Code style guidelines
 
 Import [project code style file](.github/checkstyle-configyration.xml) into IntelliJ to get correct formatting and ability to
-use "optimize imports" and "reformat code" actions. To do this you will need to
-install [CheckStyle-IDEA plugin](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea). Go to File->Settings->
-Editor->Code Style. Under "Scheme":"Show Scheme Actions" import Checkstyle Configuration from your local
+use "optimize imports" and "reformat code" actions.
+To do this you will need to install [CheckStyle-IDEA plugin](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea).
+
+Go to File -> Settings -> Editor -> Code Style 
+
+Under "Scheme":"Show Scheme Actions" import Checkstyle Configuration from your local
 repository (`.github/checkstyle-configyration.xml`).
 
 Alternatively import (`.github/home-code-style.xml`) to your IDE as described above.
