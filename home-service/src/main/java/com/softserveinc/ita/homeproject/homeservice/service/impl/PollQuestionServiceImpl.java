@@ -57,6 +57,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
                 .filter(question -> question.getId().equals(id)).findFirst()
+                .filter(PollQuestion::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
                                 String.format(QUESTION_WITH_ID_NOT_FOUND, id)));
@@ -136,6 +137,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
                 .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
+                .filter(PollQuestion::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
                                 String.format(QUESTION_WITH_ID_NOT_FOUND, pollQuestionId)));
