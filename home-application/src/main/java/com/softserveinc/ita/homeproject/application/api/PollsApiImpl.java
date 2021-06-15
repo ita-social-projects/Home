@@ -35,11 +35,11 @@ public class PollsApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
     public Response queryPoll(
+            Long cooperationId,
             Integer pageNumber,
             Integer pageSize,
             String sort,
             String filter,
-            Long cooperationId,
             Long id,
             LocalDateTime creationDate,
             LocalDateTime completionDate,

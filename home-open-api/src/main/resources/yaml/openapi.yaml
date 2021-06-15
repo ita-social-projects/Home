@@ -1181,11 +1181,11 @@ paths:
       description: The endpoint gets all polls
       operationId: queryPoll
       parameters:
+        - $ref: '#/components/parameters/cooperation_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/filter'
-        - $ref: '#/components/parameters/cooperation_id'
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/creation_date'
         - $ref: '#/components/parameters/completion_date'
@@ -2502,6 +2502,7 @@ components:
     cooperation_id:
       in: query
       name: cooperation_id
+      required: true
       description: ID of the polled cooperation
       schema:
         type: integer

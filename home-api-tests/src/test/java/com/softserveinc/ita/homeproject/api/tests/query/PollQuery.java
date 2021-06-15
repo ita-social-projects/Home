@@ -30,11 +30,11 @@ public class PollQuery extends BaseQuery {
     public List<ReadPoll> perform() throws ApiException {
         return pollApi
                 .queryPoll(
+                        this.getCooperationId(),
                         this.getPageNumber(),
                         this.getPageSize(),
                         this.getSort(),
                         this.getFilter(),
-                        this.getCooperationId(),
                         this.getId(),
                         this.getCreationDate(),
                         this.getCompletionDate(),
