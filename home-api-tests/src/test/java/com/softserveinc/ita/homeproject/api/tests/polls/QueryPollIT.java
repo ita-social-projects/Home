@@ -11,9 +11,10 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class QueryPollIT implements IQueryPoll {
+class QueryPollIT implements IQueryPoll {
 
     private final PollApi POLL_API = CooperationPollApiIT.POLL_API;
 
@@ -27,6 +28,7 @@ public class QueryPollIT implements IQueryPoll {
     @Override
     public List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException {
         return new PollQuery.Builder(POLL_API)
+                .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort(sort)
@@ -36,6 +38,7 @@ public class QueryPollIT implements IQueryPoll {
     @Override
     public List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException {
         return new PollQuery.Builder(POLL_API)
+                .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .filter(filter)
                 .build().perform();
     }
@@ -51,6 +54,7 @@ public class QueryPollIT implements IQueryPoll {
     @Override
     public List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException {
         return new PollQuery.Builder(POLL_API)
+                .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .type(type)
@@ -60,6 +64,7 @@ public class QueryPollIT implements IQueryPoll {
     @Override
     public List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
         return new PollQuery.Builder(POLL_API)
+                .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
                 .pageSize(10)
                 .sort("id,asc")
@@ -70,21 +75,38 @@ public class QueryPollIT implements IQueryPoll {
     @Override
     public List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
         return new PollQuery.Builder(POLL_API)
+                .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .completionDate(completionDate)
                 .build().perform();
     }
 
-    @Test
-    void getAllPollsOnlyByPollId() throws ApiException {
-
-        Long id = createPoll().getId();
-
-        List<ReadPoll> queryPoll = new PollQuery.Builder(POLL_API)
+    public List<ReadPoll> buildQueryPollOnlyByPollId(Long id) throws ApiException {
+        return new PollQuery.Builder(POLL_API)
                 .id(id)
                 .build()
                 .perform();
+    }
 
-        assertEquals(1, queryPoll.size());
-        assertEquals(id, queryPoll.get(0).getId());
+    @Test
+    @Override
+    public void getAllPollsFromNotExistingCooperation() throws ApiException {
+
+        createPoll();
+        Long wrongCooperationId = 99999999999L;
+
+        List<ReadPoll> queryPoll = buildQueryPollWithCooperationId(wrongCooperationId);
+
+        assertEquals(0, queryPoll.size());
+    }
+
+    @Test
+    public void getAllPollsOnlyByPollId() throws ApiException {
+
+        Long id = createPoll().getId();
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> buildQueryPollOnlyByPollId(id))
+                .matches(exception -> exception.getCode() == 400)
+                .withMessageContaining("Parameter `cooperation_id` is invalid - must not be null.");
     }
 }

@@ -2,12 +2,17 @@ package com.softserveinc.ita.homeproject.api.tests.polls;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
+import com.softserveinc.ita.homeproject.api.tests.query.PollQuery;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 public class QueryCooperationPollIT implements IQueryPoll {
 
@@ -70,5 +75,18 @@ public class QueryCooperationPollIT implements IQueryPoll {
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .completionDate(completionDate)
                 .build().perform();
+    }
+
+    @Test
+    @Override
+    public void getAllPollsFromNotExistingCooperation() throws ApiException {
+
+        createPoll();
+        Long wrongCooperationId = 99999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> buildQueryPollWithCooperationId(wrongCooperationId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
     }
 }

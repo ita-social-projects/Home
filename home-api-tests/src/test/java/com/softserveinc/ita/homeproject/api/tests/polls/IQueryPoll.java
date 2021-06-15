@@ -180,13 +180,5 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsFromNotExistingCooperation() throws ApiException {
-
-        createPoll();
-        Long cooperationId = 99999999999L;
-
-        List<ReadPoll> queryPoll = buildQueryPollWithCooperationId(cooperationId);
-
-        assertEquals(0, queryPoll.size());
-    }
+    void getAllPollsFromNotExistingCooperation() throws ApiException;
 }
