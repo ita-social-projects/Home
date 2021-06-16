@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public abstract class InvitationDto extends BaseDto{
 
+    private InvitationStatusDto status;
+
     private InvitationTypeDto type;
 
     private String email;

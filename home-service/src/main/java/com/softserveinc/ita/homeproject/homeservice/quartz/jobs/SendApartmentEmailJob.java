@@ -2,42 +2,41 @@ package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
-public class SendCooperationEmailJob extends BaseEmailJob {
+public class SendApartmentEmailJob extends BaseEmailJob{
 
-    private final CooperationInvitationService cooperationInvitationService;
+    private final ApartmentInvitationService apartmentInvitationService;
 
     @Override
     @SneakyThrows
-    public void executeAllInvitationsByType() {
-        List<CooperationInvitationDto> invitations = cooperationInvitationService.getAllActiveInvitations();
+    protected void executeAllInvitationsByType() {
+        List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
 
         for (InvitationDto invite : invitations) {
             mailService.sendTextMessage(createMailDto(invite));
-            cooperationInvitationService.updateSentDateTimeAndStatus(invite.getId());
+            apartmentInvitationService.updateSentDateTimeAndStatus(invite.getId());
         }
     }
 
     @Override
     protected MailDto createMailDto(InvitationDto invitationDto) {
-        CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
+        var invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
         var mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.COOPERATION);
+        mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
-        mailDto.setRole(invitation.getRole().getName());
-        mailDto.setCooperationName(invitation.getCooperationName());
+        mailDto.setApartmentNumber(invitation.getApartmentNumber());
+        mailDto.setOwnershipPat(invitation.getOwnershipPart());
         checkRegistration(invitation, mailDto);
         return mailDto;
     }

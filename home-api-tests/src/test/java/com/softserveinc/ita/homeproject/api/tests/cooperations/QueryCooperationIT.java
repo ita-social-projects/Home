@@ -195,7 +195,7 @@ class QueryCooperationIT {
             .name(RandomStringUtils.randomAlphabetic(10))
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("G.Y.Andreevich@gmail.com")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(new Address()
                 .city("Dnepr")
                 .district("District")

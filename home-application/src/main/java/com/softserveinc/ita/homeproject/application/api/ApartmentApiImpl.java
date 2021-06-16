@@ -14,9 +14,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.ApartmentsApi;
+import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
+import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.OwnershipService;
 import com.softserveinc.ita.homeproject.model.CreateApartmentInvitation;
+import com.softserveinc.ita.homeproject.model.InvitationType;
+import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.ReadOwnership;
 import com.softserveinc.ita.homeproject.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.UpdateOwnership;
@@ -32,14 +37,28 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Autowired
     private OwnershipService ownershipService;
 
+    @Autowired
+    private ApartmentInvitationService invitationService;
+
+    @Autowired
+    private ApartmentService apartmentService;
+
     @Override
-    public Response createInvitation(Long apartmentId, @Valid CreateApartmentInvitation createApartmentInvitation) {
-        throw new UnsupportedOperationException("Unsupported endpoint createInvitation");
+    public Response createInvitation(Long apartmentId,
+                                     @Valid CreateApartmentInvitation createApartmentInvitation) {
+        var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
+        invitationDto.setApartmentId(apartmentId);
+        invitationDto.setApartmentNumber(apartmentService.getOne(apartmentId).getApartmentNumber());
+        var invitation = invitationService.createInvitation(invitationDto);
+        var readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
+        readInvitation.setType(InvitationType.APARTMENT);
+        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @Override
     public Response deleteInvitation(Long apartmentId, Long id) {
-        throw new UnsupportedOperationException("Unsupported endpoint deleteInvitation");
+        invitationService.deactivateInvitationById(apartmentId, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DELETE_OWNERSHIP_PERMISSION)
@@ -51,7 +70,12 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
-        throw new UnsupportedOperationException("Unsupported endpoint getInvitation");
+
+        var toGet = invitationService.getOne(id, getSpecification());
+        var readApartmentInvitation = mapper
+                .convert(toGet, ReadApartmentInvitation.class);
+        return Response.status(Response.Status.OK)
+                .entity(readApartmentInvitation).build();
     }
 
     @PreAuthorize(GET_OWNERSHIP_PERMISSION)
@@ -73,7 +97,9 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                     String email,
                                     @DecimalMin("0.00010") @DecimalMax("1.0") BigDecimal ownershipPart,
                                     String status) {
-        throw new UnsupportedOperationException("Unsupported endpoint queryInvitation");
+        Page<ApartmentInvitationDto> readApartmentInvitation = invitationService
+                .findAll(pageNumber, pageSize, getSpecification());
+        return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
     }
 
     @PreAuthorize(GET_OWNERSHIP_PERMISSION)
@@ -95,7 +121,11 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response updateInvitation(Long apartmentId,
                                      Long id,
                                      @Valid UpdateApartmentInvitation updateApartmentInvitation) {
-        throw new UnsupportedOperationException("Unsupported endpoint updateInvitation");
+        var updateInvitationDto = mapper.convert(updateApartmentInvitation,
+                ApartmentInvitationDto.class);
+        var toUpdate = invitationService.updateInvitation(apartmentId, id, updateInvitationDto);
+        var readInvitation = mapper.convert(toUpdate, ReadApartmentInvitation.class);
+        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
