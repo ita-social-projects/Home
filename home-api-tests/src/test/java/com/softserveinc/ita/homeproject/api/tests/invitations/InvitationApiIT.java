@@ -8,15 +8,12 @@ import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.Response
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InvitationApiIT {
@@ -31,11 +28,11 @@ class InvitationApiIT {
         TimeUnit.MILLISECONDS.sleep(60000);
 
         ResponseDto response = ApiMailHogUtil.getMessages();
-        System.out.println(response.getItems().get(0).getContent().getHeaders().getDate());
-        assertTrue(ApiMailHogUtil.getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
-        assertTrue(response.getCount()>0);
-        assertTrue(ApiMailHogUtil.getLastMessageSubject(response).contains("invitation-to-cooperation"));
 
+
+        assertTrue(ApiMailHogUtil.getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
+        assertTrue(response.getCount() > 0);
+        assertTrue(ApiMailHogUtil.getLastMessageSubject(response).contains("invitation-to-cooperation"));
     }
 
     private CreateCooperation createCooperation() {

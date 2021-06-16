@@ -22,13 +22,14 @@
         <docker.image.application>home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
+        <docker.image.psql>governmentpaas/psql</docker.image.psql>
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
         <mailhog.internal.port>1025</mailhog.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
-<!--        <mailhog.api.url>http://${send.email.test.host}:${mailhog.api.port}/api/v2/</mailhog.api.url>-->
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
+        <psql.script.cmd.command>psql postgresql://${postgres.user}:${postgres.password}@${docker.image.postgres}:${postgres.internal.port}/${postgres.db} -f /sql/test_script.sql</psql.script.cmd.command>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
@@ -169,11 +170,11 @@
                                     <name>${docker.image.mailhog}</name>
                                     <run>
                                         <ports>
-                                            <port>${mailhog.api.port}:${mailhog.api.port}</port>
-                                            <port>${mailhog.external.port}:${mailhog.internal.port}</port>
+                                            <port>${mailhog.external.port}:${mailhog.api.port}</port>
+                                            <port>1024:${mailhog.internal.port}</port>
                                         </ports>
                                         <wait>
-                                            <time>20000</time>
+                                            <time>5000</time>
                                         </wait>
                                     </run>
                                 </image>
@@ -222,7 +223,9 @@
                                         </links>
                                         <wait>
                                             <log>Successfully released change log lock</log>
-                                            <time>15000</time>
+                                            <log>exit code 0</log>
+                                            <time>60000</time>
+                                            <exit>0</exit>
                                         </wait>
                                         <log>
                                             <enabled>${api.tests.verbose.logging}</enabled>
@@ -230,7 +233,33 @@
                                         </log>
                                     </run>
                                 </image>
-
+                                <image>
+                                    <alias>${docker.image.psql}</alias>
+                                    <name>${docker.image.psql}</name>
+                                    <run>
+                                        <volumes>
+                                            <bind>
+                                                <volume>${project.build.testOutputDirectory}:/sql</volume>
+                                            </bind>
+                                        </volumes>
+                                        <cmd>
+                                            <exec>
+                                                <arg>/bin/sh</arg>
+                                                <arg>-c</arg>
+                                                <arg>${psql.script.cmd.command}</arg>
+                                            </exec>
+                                        </cmd>
+                                        <links>
+                                            <link>${docker.image.postgres}</link>
+                                        </links>
+                                        <dependsOn>
+                                            <container>${docker.image.data.migration}</container>
+                                        </dependsOn>
+                                        <wait>
+                                            <time>5000</time>
+                                        </wait>
+                                    </run>
+                                </image>
                                 <image>
                                     <alias>${docker.image.application}</alias>
                                     <name>${docker.image.application}</name>
@@ -244,7 +273,11 @@
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
                                             <LIQUIBASE_MIGRATION>true</LIQUIBASE_MIGRATION>
                                             <JACOCO_VERSION>${jacoco.version}</JACOCO_VERSION>
-                                            <JAVA_TOOL_OPTIONS>-javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=* </JAVA_TOOL_OPTIONS>
+                                            <JAVA_TOOL_OPTIONS>
+                                                -javaagent:/jacoco/${jacoco-agent-name}=port=${jacoco.agent.internal.port},append=true,output=tcpserver,address=*
+                                            </JAVA_TOOL_OPTIONS>
+                                            <MAIL_HOST>${mail.host}</MAIL_HOST>
+                                            <MAIL_PORT>${mail.port}</MAIL_PORT>
                                         </env>
                                         <volumes>
                                             <bind>
@@ -252,11 +285,13 @@
                                             </bind>
                                         </volumes>
                                         <ports>
-                                            <port>${home.application.external.port}:${home.application.internal.port}</port>
+                                            <port>${home.application.external.port}:${home.application.internal.port}
+                                            </port>
                                             <port>${jacoco.agent.external.port}:${jacoco.agent.internal.port}</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
+                                            <link>${docker.image.mailhog}</link>
                                         </links>
                                         <wait>
                                             <log>Started HomeApplication</log>
@@ -310,11 +345,12 @@
                                 </home.application.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
-                                <home.application.admin.username>${home.application.admin.username}</home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}</home.application.admin.password>
+                                <mailhog.external.port>${mailhog.external.port}</mailhog.external.port>
+                                <home.application.admin.username>${home.application.admin.username}
+                                </home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}
+                                </home.application.admin.password>
                                 <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
-                                <MAIL_HOST>${MAIL_HOST}</MAIL_HOST>
-                                <MAIL_PORT>${MAIL_PORT}</MAIL_PORT>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

@@ -1,13 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyName;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.ItemDto;
 import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.ResponseDto;
 
 import java.io.IOException;
@@ -17,8 +10,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Map;
 
 public final class ApiMailHogUtil {
 
@@ -28,7 +19,6 @@ public final class ApiMailHogUtil {
         return "http://"+"localhost"+":"+MAIL_HOG_API_PORT+"/api/v2/";
     }
 
-    // receive messages
     public static ResponseDto getMessages() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(getApiURI()+"messages"))
