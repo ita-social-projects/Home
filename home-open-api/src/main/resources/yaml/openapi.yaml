@@ -2814,6 +2814,16 @@ components:
         type: integer
         format: int64
       example: 1
+    cooperation_id:
+      in: query
+      name: cooperation_id
+      required: true
+      description: ID of the polled cooperation
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      example: 1
     sort:
       in: query
       name: sort
