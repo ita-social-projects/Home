@@ -1,6 +1,4 @@
-<h2 align="center">Home</h2>
-
-[![Home](https://www.chalets-usa.co.uk/res/Ascent%20Beaver%20Creek%20Colorado%20USA%20self-catered%20apartments.jpg)](https://github.com/ita-social-projects/Home)
+[![Home](https://i.postimg.cc/dtdVKck6/photo-2021-06-16-16-06-28.jpg)](https://github.com/ita-social-projects/Home)
 ___
 
 [![Heroku Deploy](https://img.shields.io/website?down_color=red&down_message=heroku%20down&up_color=green&up_message=heroku%20up&url=https%3A%2F%2Fhome-project-academy.herokuapp.com%2Fapi%2F0%2Fapidocs%2Findex.html)](https://home-project-academy.herokuapp.com/api/0/apidocs/index.html)
@@ -98,7 +96,7 @@ __Run with Maven + Intellij IDEA__
 If you did everything correctly, you should be able to access RapiDoc
 by this URL: http://localhost:8080/api/0/apidocs/index.html
 
-Detail info about local running or about other running options you can read in 
+Detail info about local running, or about other running options, you can read in 
 [hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
 
 ---
@@ -152,36 +150,9 @@ Open a Pull Request with description of changes
 - Mentor of SoftServe ITA - `@DzigMS`
 
 Developers that have worked on a project during:
-
-- `@mykytam`
-- `@reeztl`
-- `@Prosperro-de`
-- `@alexorlenko`
-- `@omelchenkotimur`
-- `@Arthurpanda`
-- `@Dandria1802`
-- `@Romanov-Niko`
-- `@PoLytvy`
-- `@OlTym`
-- `@Abhai2016`
-- `@tex1988`
-- `@denis-litvinov`
-- `@VadymSokorenko`
-- `@annaprok`
-- `@dd994`
-- `@likeRewca`
-- `@Ilya-Ross`
-- `@mitianin`
-- `@BenAvleck`
-- `@Vladyslav-Frolov`
-- `@AriannaLiss`
-- `@kizimov`
-- `@IhorSamoshost`
-- `@Eternal107`
-
-We are also fortunate to have an
-amazing [community of developers](https://github.com/ita-social-projects/Home/graphs/contributors) who help us greatly.
-
+<a href="https://github.com/ita-social-projects/Home/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=ita-social-projects/Home" />
+</a>
 ## Support
 
 
