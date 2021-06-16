@@ -1484,7 +1484,7 @@ components:
           minLength: 9
           maxLength: 320
           type: string
-          example: other@gmail.com
+          example: test.receive.messages@gmail.com
     UpdatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
@@ -1527,7 +1527,7 @@ components:
           minLength: 5
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: other1@gmail.com
+          example: test.receive.messages@gmail.com
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1569,7 +1569,7 @@ components:
           minLength: 5
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: other1@gmail.com
+          example: test.receive.messages@gmail.com
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1738,7 +1738,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: other1@gmail.com
+          example: test.receive.messages@gmail.com
         status:
           $ref: '#/components/schemas/InvitationStatus'
     ReadCooperationInvitation:
@@ -1781,7 +1781,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: other1@gmail.com
+          example: test.receive.messages@gmail.com
     CreateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
@@ -1815,7 +1815,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: other1@gmail.com
+          example: test.receive.messages@gmail.com
     UpdateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/UpdateInvitation'
@@ -1881,10 +1881,10 @@ components:
           items:
             $ref: '#/components/schemas/CreateInvitation'
           example:
-            - email: other1@gmail.com
+            - email: test.receive.messages@gmail.com
               type: apartment
               ownership_part: 0.3
-            - email: other2@gmail.com
+            - email: test.receive.messages@gmail.com
               type: apartment
               ownership_part: 0.7
     UpdateApartment:
