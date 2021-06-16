@@ -32,10 +32,6 @@ public class PollQuestionServiceImpl implements PollQuestionService {
 
     private final ServiceMapper mapper;
 
-    private static final String POLL_WITH_ID_NOT_FOUND = "Poll with 'id: %d' is not found";
-
-    private static final String QUESTION_WITH_ID_NOT_FOUND = "Question with 'id: %d' is not found";
-
     @Transactional
     @Override
     public PollQuestionDto createPollQuestion(Long pollId, PollQuestionDto pollQuestionDto) {
@@ -60,7 +56,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                 .filter(PollQuestion::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format(QUESTION_WITH_ID_NOT_FOUND, id)));
+                                String.format(NOT_FOUND_MESSAGE,"Question", id)));
 
 
         if (updatePollQuestionDto.getQuestion() != null) {
@@ -127,7 +123,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                 .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format(POLL_WITH_ID_NOT_FOUND, id)));
+                                String.format(NOT_FOUND_MESSAGE,"Poll", id)));
     }
 
     @Transactional
@@ -140,7 +136,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                 .filter(PollQuestion::getEnabled)
                 .orElseThrow(() ->
                         new NotFoundHomeException(
-                                String.format(QUESTION_WITH_ID_NOT_FOUND, pollQuestionId)));
+                                String.format(NOT_FOUND_MESSAGE,"Question", pollQuestionId)));
 
         toDelete.setEnabled(false);
         pollQuestionRepository.save(toDelete);
