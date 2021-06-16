@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.application.converter.StringToContactTypeConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollStatusConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollTypeConverter;
+import com.softserveinc.ita.homeproject.application.converter.StringToQuestionTypeConverter;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class RSQLConfig {
             RSQLCommonSupport.addConverter(new StringToContactTypeConverter());
             RSQLCommonSupport.addConverter(new StringToPollTypeConverter());
             RSQLCommonSupport.addConverter(new StringToPollStatusConverter());
+            RSQLCommonSupport.addConverter(new StringToQuestionTypeConverter());
 
             RSQLCommonSupport.addPropertyWhitelist(
                 entityClass,
