@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.ItemDto;
 import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.ResponseDto;
 
 import java.io.IOException;
@@ -21,36 +22,39 @@ import java.util.Map;
 
 public final class ApiMailHogUtil {
 
-    private static final String MAIL_HOG_HOST = System.getProperty("MAIL_HOST");
-    private static final String MAIL_HOG_HOST2 = System.getProperty("send.email.test.host");
+    private static final String MAIL_HOG_API_PORT = System.getProperty("mailhog.external.port");
 
-    private static final Integer MAIL_HOG_PORT = 8025;
-
-    private static String getApiAddress(){
-        return "http://"+MAIL_HOG_HOST+":"+MAIL_HOG_PORT+"/api/v2/";
+    private static String getApiURI(){
+        return "http://"+"localhost"+":"+MAIL_HOG_API_PORT+"/api/v2/";
     }
 
     // receive messages
     public static ResponseDto getMessages() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(getApiAddress()+"messages"))
+                .uri(URI.create(getApiURI()+"messages"))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
-        System.out.println(getApiAddress());
+
         HttpResponse <String> response = HttpClient
                 .newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
-        Reader reader = new StringReader(response.body());
-        ObjectMapper objectMapper = new ObjectMapper();
+        return convert(response.body());
+    }
 
+    private static ResponseDto convert(String body) throws IOException {
+        Reader reader = new StringReader(body);
+        ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(reader,ResponseDto.class);
     }
 
+    public static String getLastMessageEmailTo(ResponseDto responseDto){
+        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getTo());
+    }
 
-
-
-
+    public static String getLastMessageSubject(ResponseDto responseDto){
+        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getSubject());
+    }
 
 }
 
