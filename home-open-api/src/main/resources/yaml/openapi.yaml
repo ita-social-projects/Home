@@ -2183,7 +2183,7 @@ components:
       enum: &question_type_values
         - multiple_choice
         - advice
-      example: multiple_choice
+      example: advice
 
     QuestionLookup:
       type: object
