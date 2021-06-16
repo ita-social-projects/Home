@@ -176,10 +176,10 @@ class CooperationPollApiIT {
         ReadPoll poll = COOPERATION_POLL_API
             .createCooperationPoll(COOPERATION_ID, createPoll);
 
-        ApiResponse<ReadPoll> addHouseResponse = POLLED_HOUSE_API
+        ApiResponse<Void> addHouseResponse = POLLED_HOUSE_API
             .createPolledHouseWithHttpInfo(poll.getId(), houseLookup);
 
-        assertEquals(Response.Status.CREATED.getStatusCode(), addHouseResponse.getStatusCode());
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), addHouseResponse.getStatusCode());
     }
 
     @Test

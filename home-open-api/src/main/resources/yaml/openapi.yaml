@@ -1210,8 +1210,8 @@ paths:
       requestBody:
           $ref: '#/components/requestBodies/LookupHouseBody'
       responses:
-        201:
-          $ref: '#/components/responses/PollHouseResponse'
+        204:
+          description: Success
         400:
           $ref: '#/components/responses/BadRequest'
         401:

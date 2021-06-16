@@ -28,10 +28,9 @@ public class PollsApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
         var lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
-        var readPollDto = housePollService.add(lookupPolledHouseDto.getId(), pollId);
-        var readPoll = mapper.convert(readPollDto, ReadPoll.class);
+        housePollService.add(lookupPolledHouseDto.getId(), pollId);
 
-        return Response.status(Response.Status.CREATED).entity(readPoll).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @Override
