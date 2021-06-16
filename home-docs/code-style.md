@@ -1,6 +1,6 @@
 # Code style guidelines
 
-Import [project code style file](.github/checkstyle-configyration.xml) into IntelliJ to get correct formatting and ability to
+Import [project code style file](https://github.com/ita-social-projects/Home/blob/Issue%23237-Update-README/.github/checkstyle-configuration.xml) into IntelliJ to get correct formatting and ability to
 use "optimize imports" and "reformat code" actions.
 To do this you will need to install [CheckStyle-IDEA plugin](https://plugins.jetbrains.com/plugin/1065-checkstyle-idea).
 

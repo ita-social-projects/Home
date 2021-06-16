@@ -159,7 +159,6 @@ Developers that have worked on a project during:
 - `@alexorlenko`
 - `@omelchenkotimur`
 - `@Arthurpanda`
-- `@alexorlenko`
 - `@Dandria1802`
 - `@Romanov-Niko`
 - `@PoLytvy`
