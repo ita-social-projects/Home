@@ -14,17 +14,17 @@ import java.util.List;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class QueryCooperationPollIT implements IQueryPoll {
+public class QueryCooperationPollIT extends QueryPoll {
 
     @Override
-    public List<ReadPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {
+    List<ReadPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(cooperationId)
                 .build().perform();
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException {
+    List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .sort(sort)
@@ -32,7 +32,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException {
+    List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .filter(filter)
@@ -40,7 +40,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long pollId, Long cooperationId) throws ApiException {
+    List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long pollId, Long cooperationId) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(cooperationId)
                 .id(pollId)
@@ -48,7 +48,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException {
+    List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
@@ -59,7 +59,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
+    List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
@@ -70,7 +70,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     }
 
     @Override
-    public List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
+    List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .completionDate(completionDate)
@@ -80,7 +80,7 @@ public class QueryCooperationPollIT implements IQueryPoll {
     @Disabled("Should sent exception. Is not ready yet. Created task#251.")
     @Test
     @Override
-    public void getAllPollsFromNotExistingCooperation() throws ApiException {
+    void getAllPollsFromNotExistingCooperation() throws ApiException {
 
         createPoll();
         Long wrongCooperationId = 99999999999L;

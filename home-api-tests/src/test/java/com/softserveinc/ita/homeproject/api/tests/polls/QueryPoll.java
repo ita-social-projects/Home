@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.polls;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -16,19 +17,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-interface IQueryPoll {
+abstract class QueryPoll {
 
-    CooperationPollApi COOPERATION_POLL_API = CooperationPollApiIT.COOPERATION_POLL_API;
+    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
-    List<ReadPoll> buildQueryPollWithCooperationId(Long id) throws ApiException;
-    List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException;
-    List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException;
-    List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long id, Long cooperationId) throws ApiException;
-    List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException;
-    List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException;
-    List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithCooperationId(Long id) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long id, Long cooperationId) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException;
+    abstract List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException;
 
-    default ReadPoll createPoll() throws ApiException {
+    ReadPoll createPoll() throws ApiException {
         return COOPERATION_POLL_API
                 .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
     }
@@ -55,7 +56,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsAscSort() throws ApiException {
+    void getAllPollsAscSort() throws ApiException {
 
         createPoll();
         createPoll();
@@ -66,7 +67,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsDescSort() throws ApiException {
+    void getAllPollsDescSort() throws ApiException {
 
         createPoll();
         createPoll();
@@ -77,7 +78,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsFilteredByCompletionDate() throws ApiException {
+    void getAllPollsFilteredByCompletionDate() throws ApiException {
 
         LocalDateTime completionDateOne = LocalDateTime.now().plusDays(10).truncatedTo(ChronoUnit.MINUTES);
         LocalDateTime completionDateTwo = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
@@ -94,7 +95,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsFilteredByCreationDate() throws ApiException {
+    void getAllPollsFilteredByCreationDate() throws ApiException {
 
         createPoll();
         LocalDateTime toDate = LocalDateTime.now();
@@ -109,7 +110,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsByCompletionDate() throws ApiException {
+    void getAllPollsByCompletionDate() throws ApiException {
 
         LocalDateTime completionDateOne = LocalDateTime.now().plusDays(5).truncatedTo(ChronoUnit.MINUTES);
         LocalDateTime completionDateTwo = LocalDateTime.now().plusDays(7).truncatedTo(ChronoUnit.MINUTES);
@@ -124,7 +125,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsByPollType() throws ApiException {
+    void getAllPollsByPollType() throws ApiException {
 
         createPoll();
 
@@ -135,7 +136,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsByPollStatus() throws ApiException {
+    void getAllPollsByPollStatus() throws ApiException {
 
         ReadPoll readPoll = createPoll();
         UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
@@ -148,7 +149,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsByPollIdAndCooperationId() throws ApiException {
+    void getAllPollsByPollIdAndCooperationId() throws ApiException {
 
         Long id = createPoll().getId();
 
@@ -159,7 +160,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsByPollIdWithNonRelatedCooperation() throws ApiException {
+    void getAllPollsByPollIdWithNonRelatedCooperation() throws ApiException {
 
         Long pollId = createPoll().getId();
         Long cooperationId = CooperationPollApiIT.SECOND_COOPERATION_ID;
@@ -170,7 +171,7 @@ interface IQueryPoll {
     }
 
     @Test
-    default void getAllPollsFromNonRelatedCooperation() throws ApiException{
+    void getAllPollsFromNonRelatedCooperation() throws ApiException{
 
         createPoll();
 
@@ -179,6 +180,5 @@ interface IQueryPoll {
         assertEquals(0, queryPoll.size());
     }
 
-    @Test
-    void getAllPollsFromNotExistingCooperation() throws ApiException;
+    abstract void getAllPollsFromNotExistingCooperation() throws ApiException;
 }
