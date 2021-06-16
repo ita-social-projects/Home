@@ -37,7 +37,7 @@ public class PollServiceImpl implements PollService {
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't update or delete poll with status: '%s'";
 
-    @Value("${min.poll.duration.in.days:2}")
+    @Value("${home.service.min.poll.duration.in.days:2}")
     private int minPollDurationInDays;
 
     private final PollRepository pollRepository;
