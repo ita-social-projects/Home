@@ -37,14 +37,5 @@ public final class ApiMailHogUtil {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(reader,ResponseDto.class);
     }
-
-    public static String getLastMessageEmailTo(ResponseDto responseDto){
-        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getTo());
-    }
-
-    public static String getLastMessageSubject(ResponseDto responseDto){
-        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getSubject());
-    }
-
 }
 

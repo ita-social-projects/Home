@@ -25,7 +25,6 @@
         <docker.image.psql>governmentpaas/psql</docker.image.psql>
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
-        <mailhog.internal.port>1025</mailhog.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
@@ -171,7 +170,7 @@
                                     <run>
                                         <ports>
                                             <port>${mailhog.external.port}:${mailhog.api.port}</port>
-                                            <port>1024:${mailhog.internal.port}</port>
+                                            <port>${mail.port}</port>
                                         </ports>
                                         <wait>
                                             <time>5000</time>

@@ -21,7 +21,7 @@ class InvitationApiIT {
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
     @Test
-    void isEmailSent() throws Exception {
+    void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
         ApiResponse<ReadCooperation> cooperationWithHttpInfo = cooperationApi.createCooperationWithHttpInfo(createCoop);
 
@@ -29,10 +29,17 @@ class InvitationApiIT {
 
         ResponseDto response = ApiMailHogUtil.getMessages();
 
-
-        assertTrue(ApiMailHogUtil.getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
+        assertTrue(getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
         assertTrue(response.getCount() > 0);
-        assertTrue(ApiMailHogUtil.getLastMessageSubject(response).contains("invitation-to-cooperation"));
+        assertTrue(getLastMessageSubject(response).contains("invitation-to-cooperation"));
+    }
+
+    private String getLastMessageEmailTo(ResponseDto responseDto){
+        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getTo());
+    }
+
+    private String getLastMessageSubject(ResponseDto responseDto){
+        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getSubject());
     }
 
     private CreateCooperation createCooperation() {
