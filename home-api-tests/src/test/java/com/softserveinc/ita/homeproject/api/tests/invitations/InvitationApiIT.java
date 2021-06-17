@@ -31,7 +31,7 @@ class InvitationApiIT {
 
         assertTrue(getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
         assertTrue(response.getCount() > 0);
-        assertTrue(getLastMessageSubject(response).contains("invitation-to-cooperation"));
+        assertTrue(getLastMessageSubject(response).contains("invitation to cooperation"));
     }
 
     private String getLastMessageEmailTo(ResponseDto responseDto){
