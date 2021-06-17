@@ -20,8 +20,7 @@ ___
   - [Docker images](#Docker-images)
 - [Documentation](#Documentation)
 - [Contributing](#contributing)
-- [Team](#Team) 
-- [Support](#support)
+- [Team](#Team)
 - [Contact](#contact)
 - [License](#license)
 
@@ -137,7 +136,7 @@ Create your Feature Branch
 `git checkout -b name_for_new_branch`
 
 #### Step 3
-Make changes and test
+Make changes and [test](https://github.com/ita-social-projects/Home/blob/dev/home-docs/home-api-tests.md)
 
 #### Step 4
 Open a Pull Request with description of changes
@@ -153,11 +152,10 @@ Developers that have worked on a project during:
 <a href="https://github.com/ita-social-projects/Home/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=ita-social-projects/Home" />
 </a>
-## Support
-
 
 ---
 ## Contact
+####`test.ita.emails@gmail.com`
 ___
 
 ## License
