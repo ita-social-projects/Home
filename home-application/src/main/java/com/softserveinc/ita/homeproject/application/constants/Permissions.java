@@ -94,4 +94,12 @@ public final class Permissions {
 
     public static final String DELETE_POLL_PERMISSION = "hasAuthority('DELETE_POLL_PERMISSION')";
 
+    public static final String CREATE_QUESTION_PERMISSION = "hasAuthority('CREATE_QUESTION_PERMISSION')";
+
+    public static final String UPDATE_QUESTION_PERMISSION = "hasAuthority('UPDATE_QUESTION_PERMISSION')";
+
+    public static final String GET_QUESTION_PERMISSION = "hasAuthority('GET_QUESTION_PERMISSION')";
+
+    public static final String DELETE_QUESTION_PERMISSION = "hasAuthority('DELETE_QUESTION_PERMISSION')";
+
 }

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -19,15 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CooperationInvitationServiceImpl extends InvitationServiceImpl implements CooperationInvitationService {
 
+    private final CooperationInvitationRepository cooperationInvitationRepository;
 
     public CooperationInvitationServiceImpl(InvitationRepository invitationRepository,
                                             ServiceMapper mapper,
-                                            RoleRepository roleRepository) {
-        super(invitationRepository, mapper, roleRepository);
+                                            CooperationInvitationRepository cooperationInvitationRepository) {
+        super(invitationRepository, mapper);
+        this.cooperationInvitationRepository = cooperationInvitationRepository;
     }
 
     @Override
-    protected InvitationDto fillFieldsByTheType(InvitationDto invitationDto) {
+    protected InvitationDto saveInvitation(InvitationDto invitationDto) {
         var cooperationInvitationDto =
                 mapper.convert(invitationDto, CooperationInvitationDto.class);
         var cooperationInvitation =
@@ -44,7 +45,9 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
-        List<Invitation> allNotSentInvitations = invitationRepository.findAllBySentDatetimeIsNull();
+        var allNotSentInvitations = cooperationInvitationRepository
+                .findAllBySentDatetimeIsNullAndStatusEquals(
+                        InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());

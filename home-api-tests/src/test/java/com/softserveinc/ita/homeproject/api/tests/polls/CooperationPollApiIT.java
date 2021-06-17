@@ -17,6 +17,7 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.api.PollApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
@@ -50,6 +51,8 @@ class CooperationPollApiIT {
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
     final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
@@ -122,7 +125,7 @@ class CooperationPollApiIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("G.Y.Andreevich@gmail.com")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .addHousesItem(createHouse())
             .addHousesItem(createHouse());
@@ -190,7 +193,7 @@ class CooperationPollApiIT {
     }
 
     @Test
-    void getPollTest() throws ApiException {
+    void getCooperationPollTest() throws ApiException {
         CreatePoll createPoll = createPoll();
         ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
         ApiResponse<ReadPoll> response = COOPERATION_POLL_API
@@ -200,7 +203,7 @@ class CooperationPollApiIT {
     }
 
     @Test
-    void getNonExistingPollTest() {
+    void getNonExistingCooperationPollTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .getCooperationPollWithHttpInfo(COOPERATION_ID, NONEXISTENT_POLL_ID))
@@ -260,6 +263,24 @@ class CooperationPollApiIT {
                 .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Poll status can't be changed to 'completed'");
+    }
+
+    @Test
+    void getPollTest() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+        ApiResponse<ReadPoll> response = POLL_API.getPollWithHttpInfo(expectedPoll.getId());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertPoll(createPoll, response.getData());
+    }
+
+    @Test
+    void getNonExistingPollTest() {
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> POLL_API
+                        .getPollWithHttpInfo(NONEXISTENT_POLL_ID))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
     }
 
     private void assertPoll(CreatePoll expected, ReadPoll actual) {

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+    <changeSet id="Issue228.001" author="Ilya-Ross">
+        <createTable tableName="poll_questions">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="QUESTION" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MAX_ANSWER_COUNT" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="POLL_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="poll_fk"
+                             references="polls(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue228.002" author="Ilya-Ross">
+        <createTable tableName="answer_variants">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ANSWER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="POLL_QUESTION_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="poll_question_fk"
+                             references="poll_questions(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue180.003" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="42"/>
+            <column name="name" value="CREATE_QUESTION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="43"/>
+            <column name="name" value="UPDATE_QUESTION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="44"/>
+            <column name="name" value="GET_QUESTION_PERMISSION"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="45"/>
+            <column name="name" value="DELETE_QUESTION_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue180.005" author="Ilya-Ross">
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="42"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="43"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="44"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="45"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue228.003" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="answer_variants_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue228.004" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="poll_questions_sequence"/>
+    </changeSet>
+</databaseChangeLog>

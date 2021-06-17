@@ -41,7 +41,7 @@ class MailServiceImplTest {
         mailDto = new MailDto();
         mailDto.setType(InvitationTypeDto.COOPERATION);
         mailDto.setId(111L);
-        mailDto.setEmail("G.Y.Andreevich@gmail.com");
+        mailDto.setEmail("test.receive.messages@gmail.com");
         mailDto.setRole("admin");
         mailDto.setCooperationName("Main cooperation");
         mailDto.setIsRegistered(true);

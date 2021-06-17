@@ -225,7 +225,7 @@ class HouseApiIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("G.Y.Andreevich@gmail.com")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList())
             .contacts(createContactList());

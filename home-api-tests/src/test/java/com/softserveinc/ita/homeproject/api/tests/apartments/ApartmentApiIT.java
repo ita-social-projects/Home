@@ -242,7 +242,7 @@ class ApartmentApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .adminEmail("G.Y.Andreevich@gmail.com")
+                .adminEmail("test.receive.messages@gmail.com")
                 .address(createAddress());
     }
 
@@ -275,12 +275,12 @@ class ApartmentApiIT {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.3))
-                .email("invitation@gmail.com")
+                .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.7))
-                .email("invitation2@gmail.com")
+                .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         return createInvitations;
@@ -290,12 +290,12 @@ class ApartmentApiIT {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.8))
-                .email("invitation@gmail.com")
+                .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.7))
-                .email("invitation2@gmail.com")
+                .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         return createInvitations;

@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource(value = "classpath:/service.properties")
+@PropertySource(value = "classpath:/home-service.properties")
 public class TemplateServiceImpl implements TemplateService {
 
     private static String registrationTemplatePath;
@@ -27,25 +29,11 @@ public class TemplateServiceImpl implements TemplateService {
 
     private static String apartmentTemplatePath;
 
-    @Value("${path.invitation.registration}")
-    public void setRegistrationTemplatePath(String path) {
-        TemplateServiceImpl.registrationTemplatePath = path;
-    }
-
-    @Value("home-service/src/main/resources/template/invitation-to-cooperation.mustache")
-    public void setCooperationTemplatePath(String path) {
-        TemplateServiceImpl.cooperationTemplatePath = path;
-    }
-
-    @Value("home-service/src/main/resources/template/invitation-to-apartment.mustache")
-    public void setApartmentTemplatePath(String path) {
-        TemplateServiceImpl.apartmentTemplatePath = path;
-    }
-
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         var text = "";
-        try (Reader reader = new StringReader(Files.readString(getInvitationTemplate(mailDto)))) {
+        try (Reader reader = new BufferedReader(
+            new InputStreamReader(this.getClass().getResourceAsStream(getInvitationTemplate(mailDto).toString())))) {
             text = Mustache.compiler()
                 .compile(reader)
                 .execute(mailDto);
@@ -56,16 +44,32 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     private Path getInvitationTemplate(MailDto mailDto) {
-        if(!mailDto.getIsRegistered()) {
+        if (mailDto.getIsRegistered()) {
+            switch (mailDto.getType().toString()) {
+                case "cooperation":
+                    return Path.of(cooperationTemplatePath);
+                case "apartment":
+                    return Path.of(apartmentTemplatePath);
+                default:
+                    throw new InvitationException("Wrong invitation type.");
+            }
+        } else {
             return Path.of(registrationTemplatePath);
         }
-        switch (mailDto.getType().toString()) {
-            case "cooperation":
-                return Path.of(cooperationTemplatePath);
-            case "apartment":
-                return Path.of(apartmentTemplatePath);
-            default:
-                throw new InvitationException("Wrong invitation type.");
-        }
+    }
+
+    @Value("${home.service.template.invitation.path.registration}")
+    public void setRegistrationTemplatePath(String path) {
+        TemplateServiceImpl.registrationTemplatePath = path;
+    }
+
+    @Value("${home.service.template.invitation.path.cooperation}")
+    public void setCooperationTemplatePath(String path) {
+        TemplateServiceImpl.cooperationTemplatePath = path;
+    }
+
+    @Value("${home.service.template.invitation.path.apartment}")
+    public void setApartmentTemplatePath(String path) {
+        TemplateServiceImpl.apartmentTemplatePath = path;
     }
 }
