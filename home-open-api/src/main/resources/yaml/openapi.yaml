@@ -11,7 +11,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: /api/0
+  - url: http://localhost:8080/api/0
 
 tags:
   - name: news
@@ -737,7 +737,7 @@ paths:
       description: The endpoint gets all apartments of the house
       operationId: queryApartment
       parameters:
-        - $ref: 'p_house_id'
+        - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'

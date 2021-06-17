@@ -5,9 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_QUESTION_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_QUESTION_PERMISSION;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -34,7 +31,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @PreAuthorize(CREATE_QUESTION_PERMISSION)
     @Override
-    public Response createQuestion(Long pollId, @Valid CreateQuestion createQuestion) {
+    public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
         var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
         var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
@@ -61,8 +58,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(GET_QUESTION_PERMISSION)
     @Override
     public Response queryQuestion(Long pollId,
-                                  @Min(1) Integer pageNumber,
-                                  @Min(1) @Max(10) Integer pageSize,
+                                  Integer pageNumber,
+                                  Integer pageSize,
                                   String sort,
                                   String filter,
                                   Long id,
@@ -73,7 +70,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @PreAuthorize(UPDATE_QUESTION_PERMISSION)
     @Override
-    public Response updateQuestion(Long pollId, Long id, @Valid UpdateQuestion updateQuestion) {
+    public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
         var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
         var toUpdate = pollQuestionService.updatePollQuestion(pollId, id, updateQuestionDto);
         var readQuestion = mapper.convert(toUpdate, ReadMultipleChoiceQuestion.class);

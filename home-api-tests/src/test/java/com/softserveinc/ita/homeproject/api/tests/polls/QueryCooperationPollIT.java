@@ -37,7 +37,7 @@ class QueryCooperationPollIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId));
     }
 
     @Test
@@ -53,7 +53,7 @@ class QueryCooperationPollIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId).reversed());
     }
 
     @Test

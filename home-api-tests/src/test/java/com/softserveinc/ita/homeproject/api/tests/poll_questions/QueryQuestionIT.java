@@ -59,7 +59,7 @@ class QueryQuestionIT {
                 .sort("id,asc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId));
     }
 
     @Test
@@ -78,7 +78,7 @@ class QueryQuestionIT {
                 .sort("id,desc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId).reversed());
     }
 
     @Test
