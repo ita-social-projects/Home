@@ -34,6 +34,8 @@ tags:
     description: Apartment invitation management operations
   - name: cooperation poll
     description: Cooperation poll management operations
+  - name: poll
+    description: Poll management operations  independently from cooperation
 
 paths:
   /news:
@@ -1170,6 +1172,58 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
+
+  /polls:
+    get:
+      tags:
+        - poll
+      summary: Get all polls
+      description: The endpoint gets all polls
+      operationId: queryPoll
+      parameters:
+        - $ref: '#/components/parameters/cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/creation_date'
+        - $ref: '#/components/parameters/completion_date'
+        - $ref: '#/components/parameters/poll_type'
+        - $ref: '#/components/parameters/poll_status'
+      responses:
+        200:
+          $ref: '#/components/responses/PollsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{id}:
+    get:
+      tags:
+        - poll
+      summary: Get poll
+      description: Get a poll by a poll id
+      operationId: getPoll
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
   /polls/{poll_id}/questions:
     get:
       tags:
@@ -2759,6 +2813,16 @@ components:
       schema:
         type: integer
         format: int64
+      example: 1
+    cooperation_id:
+      in: query
+      name: cooperation_id
+      required: true
+      description: ID of the polled cooperation
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
       example: 1
     sort:
       in: query
