@@ -155,7 +155,7 @@ Developers that have worked on a project during:
 
 ---
 ## Contact
-####`test.ita.emails@gmail.com`
+`test.ita.emails@gmail.com`
 ___
 
 ## License
