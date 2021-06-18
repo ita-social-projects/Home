@@ -1,5 +1,10 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_POLLED_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_POLL_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_POLL_HOUSES_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_HOUSE_PERMISSION;
+
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -12,6 +17,7 @@ import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 @Provider
@@ -24,6 +30,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Autowired
     private HouseService houseService;
 
+    @PreAuthorize(CREATE_POLLED_HOUSE_PERMISSION)
     @Override
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
         var lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
@@ -32,12 +39,14 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @PreAuthorize(DELETE_POLL_HOUSE_PERMISSION)
     @Override
     public Response deletePolledHouse(Long pollId, Long id) {
         housePollService.remove(id, pollId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @PreAuthorize(GET_POLL_HOUSE_PERMISSION)
     @Override
     public Response getPolledHouse(Long pollId, Long id) {
         var toGet = houseService.getOne(id, getSpecification());
@@ -46,6 +55,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
+    @PreAuthorize(GET_ALL_POLL_HOUSES_PERMISSION)
     @Override
     public Response queryPolledHouse(Long pollId,
                                      Integer pageNumber,

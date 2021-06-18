@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Poll;
 import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -35,7 +36,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         var poll = getDraftPollById(pollId);
         var house = getHouseById(houseId);
 
-        if (validateHouse(poll, house)){
+        if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();
             houses.add(house);
 
@@ -60,11 +61,9 @@ public class PollHouseServiceImpl implements PollHouseService {
     }
 
     @Override
-    public Page<PollDto> findAll(Integer pageNumber, Integer pageSize, Specification<Poll> specification) {
-        specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-            .equal(root.get("polledHouses").get("enabled"), true));
-        return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(news -> mapper.convert(news, PollDto.class));
+    public Page<HouseDto> findAll(Integer pageNumber, Integer pageSize, Specification<House> specification) {
+        return houseRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
+            .map(news -> mapper.convert(news, HouseDto.class));
     }
 
     private Poll getDraftPollById(Long id) {

@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -50,4 +51,7 @@ public class House extends BaseEntity {
 
     @OneToMany(mappedBy = "house", cascade = CascadeType.PERSIST)
     private List<Apartment> apartments;
+
+    @ManyToMany(mappedBy = "polledHouses")
+    private List<Poll> polls;
 }

@@ -273,6 +273,17 @@ class CooperationPollApiIT {
     }
 
     @Test
+    void getPolledHouseTest() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+
+        ApiResponse<ReadHouse> response = POLLED_HOUSE_API
+            .getPolledHouseWithHttpInfo(expectedPoll.getId(), HOUSE_ONE_ID);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertEquals(expectedPoll.getPolledHouses().get(0), response.getData());
+    }
+
+    @Test
     void deletePollTest() throws ApiException {
         ReadPoll deletedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll());
         ApiResponse<Void> response = COOPERATION_POLL_API

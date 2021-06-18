@@ -31,4 +31,31 @@
             <column name="name" value="DELETE_POLL_HOUSE_PERMISSION"/>
         </insert>
     </changeSet>
+
+    <changeSet id="Issue227.002" author="likeRewca-Yura">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="42"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="43"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="44"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="45"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

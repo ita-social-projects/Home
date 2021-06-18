@@ -2263,7 +2263,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ReadPoll'
+            $ref: '#/components/schemas/ReadHouse'
     HousesResponse:
       description: OK
       content:
