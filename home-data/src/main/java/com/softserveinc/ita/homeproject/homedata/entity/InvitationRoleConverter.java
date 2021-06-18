@@ -9,37 +9,19 @@ public class InvitationRoleConverter implements AttributeConverter<RoleEnum, Str
 
     @Override
     public String convertToDatabaseColumn(RoleEnum attribute) {
-        if (attribute == null) {
-            return null;
-        }
-
-        switch (attribute) {
-            case ADMIN:
-                return "admin";
-            case USER:
-                return "user";
-            case OWNER:
-                return "owner";
-            default:
-                throw new IllegalArgumentException(attribute + " not supported.");
-        }
+        return attribute == null ? null : attribute.getName();
     }
 
     @Override
     public RoleEnum convertToEntityAttribute(String dbData) {
         if (dbData == null) {
             return null;
-        }
-
-        switch (dbData) {
-            case "admin":
-                return RoleEnum.ADMIN;
-            case "user":
-                return RoleEnum.USER;
-            case "owner":
-                return RoleEnum.OWNER;
-            default:
+        } else {
+            try {
+                return RoleEnum.getEnum(dbData);
+            } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(dbData + " not supported.");
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.PolledHouseApi;
+import com.softserveinc.ita.homeproject.api.PollApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
@@ -44,19 +45,17 @@ class CooperationPollApiIT {
 
     static final Long HOUSE_TWO_ID;
 
-    static final Long NOT_ADDED_HOUSE_ON_POLL_ID;
-
     static final Long HOUSE_ID_FROM_NON_RELATED_COOPERATION;
 
     static final Long NONEXISTENT_HOUSE_ID = 10000003L;
 
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
-    static final String WRONG_DATA_MESSAGE = "Can't add or remove house, invalid poll_id or house_id";
-
     final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
     private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
@@ -75,7 +74,6 @@ class CooperationPollApiIT {
         SECOND_COOPERATION_ID = cooperationTwo.getId();
         HOUSE_ONE_ID = cooperationOne.getHouses().get(0).getId();
         HOUSE_TWO_ID = cooperationOne.getHouses().get(1).getId();
-        NOT_ADDED_HOUSE_ON_POLL_ID = cooperationOne.getHouses().get(2).getId();
         HOUSE_ID_FROM_NON_RELATED_COOPERATION = cooperationTwo.getHouses().get(0).getId();
     }
 
@@ -133,7 +131,6 @@ class CooperationPollApiIT {
             .adminEmail("G.Y.Andreevich@gmail.com")
             .address(createAddress())
             .addHousesItem(createHouse())
-            .addHousesItem(createHouse())
             .addHousesItem(createHouse());
     }
 
@@ -169,40 +166,11 @@ class CooperationPollApiIT {
     }
 
     @Test
-    void addPolledHouseTest() throws ApiException {
-        HouseLookup houseLookup = new HouseLookup().id(NOT_ADDED_HOUSE_ON_POLL_ID);
-        CreatePoll createPoll = createPoll();
-
-        ReadPoll poll = COOPERATION_POLL_API
-            .createCooperationPoll(COOPERATION_ID, createPoll);
-
-        ApiResponse<Void> addHouseResponse = POLLED_HOUSE_API
-            .createPolledHouseWithHttpInfo(poll.getId(), houseLookup);
-
-        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), addHouseResponse.getStatusCode());
-    }
-
-    @Test
     void createCooperationPollWithNonExistingHouseTest() {
         CreatePoll createPoll = createPollWithNonExistingHouse();
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining("House with 'id: " + NONEXISTENT_HOUSE_ID + "' is not found");
-    }
-
-    @Test
-    void addNonExistingPolledHouseTest() throws ApiException {
-        HouseLookup houseLookup = new HouseLookup().id(NONEXISTENT_HOUSE_ID);
-        CreatePoll createPoll = createPoll();
-
-        ReadPoll poll = COOPERATION_POLL_API
-            .createCooperationPoll(COOPERATION_ID, createPoll);
-
-        assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> POLLED_HOUSE_API
-                .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("House with 'id: " + NONEXISTENT_HOUSE_ID + "' is not found");
     }
@@ -215,21 +183,6 @@ class CooperationPollApiIT {
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("House with 'id: " + HOUSE_ID_FROM_NON_RELATED_COOPERATION + "' is not found");
-    }
-
-    @Test
-    void addExistingPolledHouseFromNonRelatedCooperationTest() throws ApiException {
-        HouseLookup houseLookup = new HouseLookup().id(HOUSE_ID_FROM_NON_RELATED_COOPERATION);
-        CreatePoll createPoll = createPoll();
-
-        ReadPoll poll = COOPERATION_POLL_API
-            .createCooperationPoll(COOPERATION_ID, createPoll);
-
-        assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> POLLED_HOUSE_API
-                .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
-            .withMessageContaining(WRONG_DATA_MESSAGE);
     }
 
     @Test
@@ -270,17 +223,6 @@ class CooperationPollApiIT {
                 .getCooperationPollWithHttpInfo(SECOND_COOPERATION_ID, expectedPoll.getId()))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("Poll with 'id: " + expectedPoll.getId() + "' is not found");
-    }
-
-    @Test
-    void getPolledHouseTest() throws ApiException {
-        CreatePoll createPoll = createPoll();
-        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
-
-        ApiResponse<ReadHouse> response = POLLED_HOUSE_API
-            .getPolledHouseWithHttpInfo(expectedPoll.getId(), HOUSE_ONE_ID);
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
-        assertEquals(expectedPoll.getPolledHouses().get(0), response.getData());
     }
 
     @Test
@@ -369,6 +311,24 @@ class CooperationPollApiIT {
                 .deletePolledHouseWithHttpInfo(poll.getId(), HOUSE_ID_FROM_NON_RELATED_COOPERATION))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining(WRONG_DATA_MESSAGE);
+    }
+
+    @Test
+    void getPollTest() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+        ApiResponse<ReadPoll> response = POLL_API.getPollWithHttpInfo(expectedPoll.getId());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertPoll(createPoll, response.getData());
+    }
+
+    @Test
+    void getNonExistingPollTest() {
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> POLL_API
+                        .getPollWithHttpInfo(NONEXISTENT_POLL_ID))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
     }
 
     private void assertPoll(CreatePoll expected, ReadPoll actual) {

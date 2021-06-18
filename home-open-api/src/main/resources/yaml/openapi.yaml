@@ -34,6 +34,8 @@ tags:
     description: Apartment invitation management operations
   - name: cooperation poll
     description: Cooperation poll management operations
+  - name: poll
+    description: Poll management operations  independently from cooperation
 
 paths:
   /news:
@@ -1171,6 +1173,171 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /polls:
+    get:
+      tags:
+        - poll
+      summary: Get all polls
+      description: The endpoint gets all polls
+      operationId: queryPoll
+      parameters:
+        - $ref: '#/components/parameters/cooperation_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/creation_date'
+        - $ref: '#/components/parameters/completion_date'
+        - $ref: '#/components/parameters/poll_type'
+        - $ref: '#/components/parameters/poll_status'
+      responses:
+        200:
+          $ref: '#/components/responses/PollsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{id}:
+    get:
+      tags:
+        - poll
+      summary: Get poll
+      description: Get a poll by a poll id
+      operationId: getPoll
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{poll_id}/questions:
+    get:
+      tags:
+        - poll question
+      summary: Get all questions
+      description: The endpoint gets all questions of the poll
+      operationId: queryQuestion
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/question_type'
+      responses:
+        '200':
+          $ref: '#/components/responses/QuestionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - poll question
+      summary: Create question
+      description: The endpoint creates a question in the poll. Question can be created only if poll status is draft
+      operationId: createQuestion
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+      requestBody:
+         $ref: '#/components/requestBodies/CreateQuestionBody'
+      responses:
+        '201':
+         $ref: '#/components/responses/QuestionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{poll_id}/questions/{id}:
+    get:
+      tags:
+        - poll question
+      summary: Get question
+      description: Get a question by a question id
+      operationId: getQuestion
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/QuestionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - poll question
+      summary: Update question
+      description: Update a question by a question ID. Question can be updated only if poll status is draft
+      operationId: updateQuestion
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateQuestionBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/QuestionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - poll question
+      summary: Delete question
+      description: Delete a question by a question ID. Question can be deleted only if poll status is draft
+      operationId: deleteQuestion
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContentResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
   /polls/{poll_id}/houses:
     get:
       tags:
@@ -2258,12 +2425,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ReadHouse'
-    PollHouseResponse:
-      description: Success
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ReadHouse'
     HousesResponse:
       description: OK
       content:
@@ -2401,13 +2562,6 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateHouse'
       required: true
-    LookupHouseBody:
-      description: A payload for creating a new Poll
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HouseLookup'
-      required: true
     CreateApartmentBody:
       description: A payload for creating a new Apartment
       content:
@@ -2518,16 +2672,6 @@ components:
       schema:
         type: integer
         format: int64
-      example: 1
-    p_poll_id:
-      name: "poll_id"
-      in: "path"
-      description: ID of the poll to which polled houses belongs
-      required: true
-      schema:
-        type: integer
-        format: int64
-        minimum: 1
       example: 1
     page_number:
       in: query
