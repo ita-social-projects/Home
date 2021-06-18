@@ -9,25 +9,25 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="42"/>
+            <column name="id" value="46"/>
             <column name="name" value="CREATE_POLLED_HOUSE_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="43"/>
+            <column name="id" value="47"/>
             <column name="name" value="GET_ALL_POLL_HOUSES_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="44"/>
+            <column name="id" value="48"/>
             <column name="name" value="GET_POLL_HOUSE_PERMISSION"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="45"/>
+            <column name="id" value="49"/>
             <column name="name" value="DELETE_POLL_HOUSE_PERMISSION"/>
         </insert>
     </changeSet>
@@ -37,25 +37,25 @@
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="42"/>
+            <column name="permission_id" value="46"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="43"/>
+            <column name="permission_id" value="47"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="44"/>
+            <column name="permission_id" value="48"/>
         </insert>
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="45"/>
+            <column name="permission_id" value="49"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

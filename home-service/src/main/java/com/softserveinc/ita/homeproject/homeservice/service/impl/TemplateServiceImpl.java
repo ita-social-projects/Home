@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -69,21 +67,6 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Value("${home.service.template.invitation.path.apartment}")
-    public void setApartmentTemplatePath(String path) {
-        TemplateServiceImpl.apartmentTemplatePath = path;
-    }
-
-    @Value("${path.invitation.registration}")
-    public void setRegistrationTemplatePath(String path) {
-        TemplateServiceImpl.registrationTemplatePath = path;
-    }
-
-    @Value("${path.invitation.cooperation}")
-    public void setCooperationTemplatePath(String path) {
-        TemplateServiceImpl.cooperationTemplatePath = path;
-    }
-
-    @Value("${path.invitation.apartment}")
     public void setApartmentTemplatePath(String path) {
         TemplateServiceImpl.apartmentTemplatePath = path;
     }

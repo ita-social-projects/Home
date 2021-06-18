@@ -59,6 +59,8 @@ class CooperationPollApiIT {
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
+    static final String WRONG_DATA_MESSAGE = "Can't add or remove house, invalid poll_id or house_id";
+
     static {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
@@ -196,7 +198,7 @@ class CooperationPollApiIT {
     }
 
     @Test
-    void getPollTest() throws ApiException {
+    void getPollFromCooperationTest() throws ApiException {
         CreatePoll createPoll = createPoll();
         ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
         ApiResponse<ReadPoll> response = COOPERATION_POLL_API
@@ -206,7 +208,18 @@ class CooperationPollApiIT {
     }
 
     @Test
-    void getNonExistingPollTest() {
+    void getPolledHouseTest() throws ApiException {
+        CreatePoll createPoll = createPoll();
+        ReadPoll expectedPoll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll);
+
+        ApiResponse<ReadHouse> response = POLLED_HOUSE_API
+            .getPolledHouseWithHttpInfo(expectedPoll.getId(), HOUSE_ONE_ID);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+        assertEquals(expectedPoll.getPolledHouses().get(0), response.getData());
+    }
+
+    @Test
+    void getNonExistingPollFromCooperationTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .getCooperationPollWithHttpInfo(COOPERATION_ID, NONEXISTENT_POLL_ID))
