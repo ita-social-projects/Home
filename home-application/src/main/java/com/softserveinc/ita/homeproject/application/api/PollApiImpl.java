@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-public class PollsApiImpl extends CommonApi implements PollsApi {
+public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
     private PollHouseService housePollService;
