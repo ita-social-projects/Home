@@ -36,7 +36,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         var poll = getDraftPollById(pollId);
         var house = getHouseById(houseId);
 
-        if (validateHouse(poll, house)) {
+        if (Boolean.TRUE.equals(validateHouse(poll, house))) {
             List<House> houses = poll.getPolledHouses();
             houses.add(house);
 
@@ -53,7 +53,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         var poll = getDraftPollById(pollId);
         var house = getHouseById(houseId);
 
-        if (validateHouse(poll, house)) {
+        if (Boolean.TRUE.equals(validateHouse(poll, house))) {
             List<House> houses = poll.getPolledHouses();
             houses.remove(house);
             pollRepository.save(poll);

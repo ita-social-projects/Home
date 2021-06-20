@@ -12,9 +12,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
