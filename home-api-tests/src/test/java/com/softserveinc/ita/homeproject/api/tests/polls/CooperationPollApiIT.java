@@ -292,9 +292,10 @@ class CooperationPollApiIT {
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> COOPERATION_POLL_API
-                .getCooperationPollWithHttpInfo(COOPERATION_ID, HOUSE_TWO_ID))
-            .matches((actual) -> actual.getCode() == NOT_FOUND);
+            .isThrownBy(() -> POLLED_HOUSE_API
+                .getPolledHouseWithHttpInfo(poll.getId(), HOUSE_TWO_ID))
+            .matches((actual) -> actual.getCode() == NOT_FOUND)
+            .withMessageContaining("House with 'id: " + HOUSE_TWO_ID + "' is not found");
     }
 
     @Test
