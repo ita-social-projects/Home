@@ -294,8 +294,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .getCooperationPollWithHttpInfo(COOPERATION_ID, HOUSE_TWO_ID))
-            .matches((actual) -> actual.getCode() == NOT_FOUND)
-            .withMessageContaining("Poll with 'id: " + HOUSE_TWO_ID + "' is not found");
+            .matches((actual) -> actual.getCode() == NOT_FOUND);
     }
 
     @Test
