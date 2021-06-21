@@ -17,6 +17,7 @@ ___
   - [Required to install](#Required-to-install)
   - [Environment](#Environmental-variables)
   - [How to run local](#How-to-run-local)
+    -  [Git flow](#Git-flow)
   - [Docker images](#Docker-images)
 - [Documentation](#Documentation)
 - [Contributing](#contributing)
@@ -57,9 +58,6 @@ aspects of your communication with your home and neighbors.
   directly to the residents, so they are always aware of what the funds were spent on
   
 
-You more info about the project's technologies and modules' description
-  in   <a href="https://github.com/ita-social-projects/Home/tree/dev/home-docs" target="_blank">home-docs</a> package.
-
 ## Installation
 ### Environmental variables
 ```properties
@@ -68,9 +66,6 @@ spring.datasource.username=${DATASOURCE_USER}
 spring.datasource.password=${DATASOURCE_PASSWORD}
 spring.mail.username=${EMAIL_ADDRESS}
 spring.mail.password=${EMAIL_PASSWORD}
-cloud.name=${CLOUD_NAME}
-api.key=${API_KEY}
-api.secret=${API_SECRET}
 ```
 ### Required to install
 - Java 11
@@ -95,7 +90,7 @@ __Run with Maven + Intellij IDEA__
 If you did everything correctly, you should be able to access RapiDoc
 by this URL: http://localhost:8080/api/0/apidocs/index.html
 
-Detail info about local running, or about other running options, you can read in 
+Detail info about other running options/running tests, you can read in 
 [hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
 
 ---
@@ -112,13 +107,15 @@ Our [images](https://hub.docker.com/u/homeacademy) on Docker Hub:
 ## Documentation
 
 - You can find OpenApi specification for the
-  project [here](https://home-project-academy.herokuapp.com/api/0/apidocs/index.html).
+  project [here](https://home-project-academy.herokuapp.com/api/0/apidocs/index.html)
+- More [information](https://github.com/ita-social-projects/Home/tree/dev/home-docs) about the project's 
+  technologies and modules' description
 
 ---
 
 ## Contributing
 ### Git flow
-> To get started...
+> TODO
 #### Step 1
 
 - **Option 1**
@@ -145,17 +142,17 @@ Open a Pull Request with description of changes
 
 ## Team
 
-- Technical Expert of the project - `@kh0ma`
-- Mentor of SoftServe ITA - `@DzigMS`
+- Technical Expert of the project - [@kh0ma](https://github.com/kh0ma)
+- Mentor of SoftServe ITA - [@DzigMS](https://github.com/DzigMS)
 
-Developers that have worked on a project during:
+Contributors that have worked on this project:
 <a href="https://github.com/ita-social-projects/Home/graphs/contributors">
 <img src="https://contrib.rocks/image?repo=ita-social-projects/Home" />
 </a>
 
 ---
 ## Contact
-`test.ita.emails@gmail.com`
+####<a href="mailto:test.ita.emails@gmail.com">test.ita.emails@gmail.com</a>
 ___
 
 ## License
@@ -163,4 +160,4 @@ ___
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 - **[MIT license](http://opensource.org/licenses/mit-license.php)**
-- Copyright 2020 © <a href="https://softserve.academy/" target="_blank"> SoftServe IT Academy</a>.
+- Copyright 2021 © <a href="https://softserve.academy/" target="_blank"> SoftServe IT Academy</a>.
