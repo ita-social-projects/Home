@@ -36,6 +36,8 @@ tags:
     description: Cooperation poll management operations
   - name: poll
     description: Poll management operations  independently from cooperation
+  - name: poll vote
+    description: Poll vote management operations
 
 paths:
   /news:
@@ -322,7 +324,7 @@ paths:
         - contact
       summary: Get Contact by ID
       description: The endpoint retrieves an existing contact
-                   associated with the specified User by User and Contact IDs
+        associated with the specified User by User and Contact IDs
       operationId: getContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -343,7 +345,7 @@ paths:
         - contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-                  in the system by the specified User and Contact IDs
+        in the system by the specified User and Contact IDs
       operationId: updateContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -368,7 +370,7 @@ paths:
         - contact
       summary: Delete Contact
       description: The endpoint deletes an existing Contact on a User associated with the
-                   specified User and Contact IDs
+        specified User and Contact IDs
       operationId: deleteContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -689,7 +691,7 @@ paths:
         - cooperation contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-          in the system by the specified Cooperation and Contact IDs
+        in the system by the specified Cooperation and Contact IDs
       operationId: updateContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
@@ -812,7 +814,7 @@ paths:
         - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-         $ref: '#/components/requestBodies/UpdateApartmentBody'
+        $ref: '#/components/requestBodies/UpdateApartmentBody'
       responses:
         200:
           $ref: '#/components/responses/ApartmentResponse'
@@ -1094,7 +1096,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
       requestBody:
-          $ref: '#/components/requestBodies/CreatePollBody'
+        $ref: '#/components/requestBodies/CreatePollBody'
       responses:
         201:
           $ref: '#/components/responses/PollResponse'
@@ -1138,7 +1140,7 @@ paths:
         - $ref: '#/components/parameters/p_cooperation_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-          $ref: '#/components/requestBodies/UpdatePollBody'
+        $ref: '#/components/requestBodies/UpdatePollBody'
       responses:
         200:
           $ref: '#/components/responses/PollResponse'
@@ -1259,10 +1261,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_poll_id'
       requestBody:
-         $ref: '#/components/requestBodies/CreateQuestionBody'
+        $ref: '#/components/requestBodies/CreateQuestionBody'
       responses:
         '201':
-         $ref: '#/components/responses/QuestionResponse'
+          $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1338,8 +1340,32 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /polls/{poll_id}/votes:
+    post:
+      tags:
+        - poll vote
+      summary: Create vote
+      description: Create a vote in poll. Vote can be created only if poll status is active.
+        Number of answers must be validated according to max_answer_count of the question
+      operationId: createVote
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateVoteBody'
+      responses:
+        '201':
+          $ref: '#/components/responses/VoteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
 security:
-  - basicAuth: []
+  - basicAuth: [ ]
 
 components:
   securitySchemes:
@@ -1869,16 +1895,16 @@ components:
           $ref: '#/components/schemas/Address'
 
     InvitationStatus:
-       description: Indicates the status of an Invitation
-       type: string
-       enum:
-          - pending
-          - processing
-          - accepted
-          - declined
-          - overdue
-          - deactivated
-          - error
+      description: Indicates the status of an Invitation
+      type: string
+      enum:
+        - pending
+        - processing
+        - accepted
+        - declined
+        - overdue
+        - deactivated
+        - error
 
     InvitationType:
       description: Indicates a type of an Invitation
@@ -2400,6 +2426,173 @@ components:
           maxLength: 255
           example: Green
 
+    AdviceChoiceAnswerVariant:
+      description: Represents a variant of a vote answer for AdviceChoiceQuestion of poll
+      type: string
+      enum: &advice_choice_answer_variant_values
+        - for
+        - against
+        - abstained
+        - free_answer
+      example: abstained
+
+    AnswerVariantLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    CreateVote:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceVote'
+          advice: '#/components/schemas/CreateAdviceChoiceVote'
+      required:
+        - voter_id
+        - question_id
+      properties:
+        voter_id:
+          type: integer
+          format: int64
+          example: 1
+        question_id:
+          type: integer
+          format: int64
+          example: 1
+        type:
+          $ref: '#/components/schemas/QuestionType'
+
+    CreateAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateVote'
+      type: object
+      discriminator:
+        propertyName: answer
+        mapping:
+          for: '#/components/schemas/CreateSimpleAdviceChoiceVote'
+          against: '#/components/schemas/CreateSimpleAdviceChoiceVote'
+          abstained: '#/components/schemas/CreateSimpleAdviceChoiceVote'
+          free_answer: '#/components/schemas/CreateFreeAnswerAdviceChoiceVote'
+      required:
+        - answer
+      properties:
+        answer:
+          $ref: '#/components/schemas/AdviceChoiceAnswerVariant'
+
+    CreateSimpleAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateAdviceChoiceVote'
+      type: object
+
+    CreateFreeAnswerAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateAdviceChoiceVote'
+      type: object
+      required:
+        - free_answer
+      properties:
+        free_answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: I propose to spend this money on repairing the door
+
+    CreateMultipleChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateVote'
+      type: object
+      required:
+        - answers
+      properties:
+        answers:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/AnswerVariantLookup'
+          example:
+            - id: 1
+            - id: 2
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+
+    ReadVote:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceVote'
+          advice: '#/components/schemas/ReadAdviceChoiceVote'
+      properties:
+        voter_id:
+          type: integer
+          format: int64
+          example: 1
+        question_id:
+          type: integer
+          format: int64
+          example: 1
+        type:
+          $ref: '#/components/schemas/QuestionType'
+
+    ReadAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/ReadVote'
+      type: object
+      discriminator:
+        propertyName: answer
+        mapping:
+          for: '#/components/schemas/ReadSimpleAdviceChoiceVote'
+          against: '#/components/schemas/ReadSimpleAdviceChoiceVote'
+          abstained: '#/components/schemas/ReadSimpleAdviceChoiceVote'
+          free_answer: '#/components/schemas/ReadFreeAnswerAdviceChoiceVote'
+      properties:
+        answer:
+          $ref: '#/components/schemas/AdviceChoiceAnswerVariant'
+
+    ReadSimpleAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/ReadAdviceChoiceVote'
+      type: object
+
+    ReadFreeAnswerAdviceChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/ReadAdviceChoiceVote'
+      type: object
+      properties:
+        free_answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: I propose to spend this money on repairing the door
+
+    ReadMultipleChoiceVote:
+      allOf:
+        - $ref: '#/components/schemas/ReadVote'
+      type: object
+      properties:
+        answers:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/AnswerVariantLookup'
+          example:
+            - id: 1
+            - id: 2
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+
   responses:
     NoContentResponse:
       description: The request was succesfully processed.
@@ -2570,7 +2763,7 @@ components:
       content:
         application/json:
           schema:
-              $ref: "#/components/schemas/ReadQuestion"
+            $ref: "#/components/schemas/ReadQuestion"
     QuestionsResponse:
       description: OK
       content:
@@ -2579,6 +2772,12 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/ReadQuestion"
+    VoteResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReadVote"
 
   requestBodies:
     CreateNewsBody:
@@ -2708,8 +2907,15 @@ components:
       description: A payload for updating a question
       content:
         application/json:
-         schema:
-           $ref: '#/components/schemas/UpdateQuestion'
+          schema:
+            $ref: '#/components/schemas/UpdateQuestion'
+    CreateVoteBody:
+      description: A payload for creating a new vote
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateVote'
+
   parameters:
     p_id:
       name: id

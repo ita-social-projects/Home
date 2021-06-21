@@ -19,6 +19,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.model.CreateVote;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.QuestionType;
@@ -74,6 +75,11 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
+    }
+
+    @Override
+    public Response createVote(Long pollId, CreateVote createVote) {
+        return null;
     }
 
     @PreAuthorize(DELETE_QUESTION_PERMISSION)
