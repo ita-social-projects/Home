@@ -152,7 +152,7 @@ Contributors that have worked on this project:
 
 ---
 ## Contact
-####<a href="mailto:test.ita.emails@gmail.com">test.ita.emails@gmail.com</a>
+<a href="mailto:test.ita.emails@gmail.com">test.ita.emails@gmail.com</a>
 ___
 
 ## License
