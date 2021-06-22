@@ -13,9 +13,20 @@
 
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
+        <yaml.name>openapi.yaml</yaml.name>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-open-api</artifactId>
+            <version>${revision}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jersey</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -59,16 +70,7 @@
             <artifactId>home-service</artifactId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-server-generator</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-generated-server</artifactId>
-            <version>${revision}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -78,13 +80,30 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
+                        <id>resource-dependencies</id>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>repackage</goal>
+                            <goal>unpack</goal>
                         </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                                    <artifactId>home-open-api</artifactId>
+                                    <version>${revision}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>*/${yaml.name}</includes>
+                            <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -95,7 +114,7 @@
                 <executions>
                     <execution>
                         <id>resource-dependencies</id>
-                        <phase>prepare-package</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
@@ -124,11 +143,45 @@
                             </artifactItems>
                             <includes>*/openapi.yaml,*/openapi.json,**/dist/*</includes>
                             <excludes>**/dist/index.html</excludes>
-                            <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>4.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.outputDirectory}/static/api/0/apidocs/${yaml.name}</inputSpec>
+                            <generatorName>jaxrs-spec</generatorName>
+                            <configOptions>
+                                <java8>true</java8>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <sourceFolder>/</sourceFolder>
+                                <modelPackage>com.softserveinc.ita.homeproject.model</modelPackage>
+                                <apiPackage>com.softserveinc.ita.homeproject.api</apiPackage>
+                                <invokerPackage>com.softserveinc.ita.homeproject</invokerPackage>
+                                <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
+                                <parentGroupId>${project.parent.groupId}</parentGroupId>
+                                <parentVersion>${project.parent.version}</parentVersion>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
