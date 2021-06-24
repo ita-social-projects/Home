@@ -26,6 +26,8 @@
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <postgres.internal.port>5432</postgres.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
+        <mail.host>mailhog</mail.host>
+        <mail.port>1025</mail.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <psql.script.cmd.command>psql postgresql://${postgres.user}:${postgres.password}@${docker.image.postgres}:${postgres.internal.port}/${postgres.db} -f /sql/test_script.sql</psql.script.cmd.command>

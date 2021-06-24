@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto;
+package com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -8,9 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
-public class FromDto {
+public class EmailParams {
+
     String relays;
+
     String mailbox;
+
     String domain;
+
     String params;
 }

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto;
+package com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,16 +13,16 @@ import java.util.List;
 @Setter
 @JsonIgnoreProperties(value = { "MIME","Body","Raw"})
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
-public class ItemDto {
+public class ResponseEmailItem {
 
     @JsonProperty("ID")
     String id;
 
-    FromDto from;
+    EmailParams from;
 
-    List<FromDto> to;
+    List<EmailParams> to;
 
-    ContentDto content;
+    EmailContent content;
 
     String created;
 }

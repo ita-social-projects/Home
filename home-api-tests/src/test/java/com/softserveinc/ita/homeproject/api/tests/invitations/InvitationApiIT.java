@@ -3,8 +3,9 @@ package com.softserveinc.ita.homeproject.api.tests.invitations;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto.ResponseDto;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -27,19 +28,20 @@ class InvitationApiIT {
 
         TimeUnit.MILLISECONDS.sleep(60000);
 
-        ResponseDto response = ApiMailHogUtil.getMessages();
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         assertTrue(getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
         assertTrue(response.getCount() > 0);
         assertTrue(getLastMessageSubject(response).contains("invitation to cooperation"));
     }
 
-    private String getLastMessageEmailTo(ResponseDto responseDto){
-        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getTo());
+    private String getLastMessageEmailTo(MailHogApiResponse response){
+        return String.valueOf(response.getItems().get(0).getContent().getHeaders().getTo());
     }
 
-    private String getLastMessageSubject(ResponseDto responseDto){
-        return String.valueOf(responseDto.getItems().get(0).getContent().getHeaders().getSubject());
+    private String getLastMessageSubject(MailHogApiResponse response){
+        return String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
     }
 
     private CreateCooperation createCooperation() {

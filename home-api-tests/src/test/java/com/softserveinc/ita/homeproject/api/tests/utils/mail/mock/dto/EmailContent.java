@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.api.tests.utils.MailHogUtil.Dto;
+package com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -9,10 +9,14 @@ import lombok.Setter;
 @Setter
 @Getter
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
-public class ContentDto {
-    HeadersDto headers;
+public class EmailContent {
+
+    EmailHeader headers;
+
     String body;
+
     String size;
+
     @JsonProperty("MIME")
     String mime;
 }
