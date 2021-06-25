@@ -10,115 +10,71 @@
             <column name="ID" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="VOTER_ID" type="BIGINT">
+            <column name="POLL_ID" type="BIGINT">
                 <constraints nullable="false"
-                             foreignKeyName="voter_fk"
-                             references="users(ID)"/>
-            </column>
-            <column name="QUESTION_ID" type="BIGINT">
-                <constraints nullable="false"
-                             unique="true"
-                             foreignKeyName="question_fk"
-                             references="poll_questions(ID)"/>
-            </column>
-            <column name="QUESTION_TYPE" type="VARCHAR(31)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ANSWER" type="VARCHAR(31)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="FREE_ANSWER" type="VARCHAR(255)">
-                <constraints nullable="true"/>
+                             foreignKeyName="poll_fk"
+                             references="polls(ID)"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="Issue229.002" author="IhorSamoshost">
-        <createTable tableName="vote_answer">
+        <createTable tableName="question_votes">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="VOTE_ID" type="BIGINT">
                 <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="vote_answer_pkey"
-                             references="votes(ID)"
-                             foreignKeyName="vote_fk"/>
+                             foreignKeyName="vote_fk"
+                             references="votes(ID)"/>
             </column>
-            <column name="ANSWER_ID" type="BIGINT">
+            <column name="QUESTION_ID" type="BIGINT">
                 <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="vote_answer_pkey"
-                             references="answer_variants(ID)"
-                             foreignKeyName="answer_fk"/>
+                             foreignKeyName="question_fk"
+                             references="poll_questions(ID)"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="Issue229.003" author="IhorSamoshost">
+        <createTable tableName="quest_vote_answer_var">
+            <column name="QUESTION_VOTE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="quest_vote_answer_var_pkey"
+                             references="question_votes(ID)"
+                             foreignKeyName="question_vote_fk"/>
+            </column>
+            <column name="ANSWER_VARIANT_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="quest_vote_answer_var_pkey"
+                             references="answer_variants(ID)"
+                             foreignKeyName="answer_variant_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.004" author="IhorSamoshost">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
             <column name="id" value="46"/>
             <column name="name" value="CREATE_VOTE_PERMISSION"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="permissions">
-            <column name="id" value="47"/>
-            <column name="name" value="UPDATE_VOTE_PERMISSION"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="permissions">
-            <column name="id" value="48"/>
-            <column name="name" value="GET_VOTE_PERMISSION"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="permissions">
-            <column name="id" value="49"/>
-            <column name="name" value="GET_VOTES_PERMISSION"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="permissions">
-            <column name="id" value="50"/>
-            <column name="name" value="DELETE_VOTE_PERMISSION"/>
-        </insert>
     </changeSet>
 
-    <changeSet id="Issue229.004" author="IhorSamoshost">
+    <changeSet id="Issue229.005" author="IhorSamoshost">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
             <column name="permission_id" value="46"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="47"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="48"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="49"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="50"/>
-        </insert>
     </changeSet>
 
-    <changeSet id="Issue229.005" author="IhorSamoshost">
+    <changeSet id="Issue229.006" author="IhorSamoshost">
         <createSequence incrementBy="50" sequenceName="votes_sequence"/>
+        <createSequence incrementBy="50" sequenceName="question_votes_sequence"/>
     </changeSet>
 </databaseChangeLog>

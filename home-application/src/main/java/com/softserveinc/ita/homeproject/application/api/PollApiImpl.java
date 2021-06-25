@@ -1,12 +1,14 @@
 package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_QUESTION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_VOTE_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_QUESTION_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_QUESTION_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_QUESTION_PERMISSION;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -14,10 +16,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
+import com.softserveinc.ita.homeproject.homeservice.dto.AdviceQuestionVoteDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.QuestionVoteDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
+import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
+import com.softserveinc.ita.homeproject.model.CreateAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.CreateVote;
 import com.softserveinc.ita.homeproject.model.PollStatus;
@@ -25,6 +33,7 @@ import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.model.ReadVote;
 import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +50,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Autowired
     private PollService pollService;
 
+    @Autowired
+    private VoteService voteService;
+
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
     public Response getPoll(Long id) {
@@ -52,16 +64,16 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
     public Response queryPoll(
-            Long cooperationId,
-            Integer pageNumber,
-            Integer pageSize,
-            String sort,
-            String filter,
-            Long id,
-            LocalDateTime creationDate,
-            LocalDateTime completionDate,
-            PollType type,
-            PollStatus status
+        Long cooperationId,
+        Integer pageNumber,
+        Integer pageSize,
+        String sort,
+        String filter,
+        Long id,
+        LocalDateTime creationDate,
+        LocalDateTime completionDate,
+        PollType type,
+        PollStatus status
     ) {
         Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
@@ -77,9 +89,22 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
 
+    @PreAuthorize(CREATE_VOTE_PERMISSION)
     @Override
-    public Response createVote(Long pollId, CreateVote createVote) {
-        return null;
+    public Response createVote(Long pollId, @Valid CreateVote createVote) {
+        var createVoteDto = mapper.convert(createVote, VoteDto.class);
+
+        var questionVoteDtos = createVote.getQuestionVotes().stream()
+            .map(cqv -> mapper.convert(cqv, QuestionVoteDto.class)).collect(Collectors.toList());
+//                cqv.getClass() ==
+//                    CreateAdviceQuestionVote.class
+
+//                ? mapper.convert(cqv, AdviceQuestionVoteDto.class) : mapper.convert(cqv,
+//                MultipleChoiceQuestionVoteDto.class)).collect(Collectors.toList());
+        createVoteDto.setQuestionVoteDtos(questionVoteDtos);
+        var readVoteDto = voteService.createVote(pollId, createVoteDto);
+        var readVote = mapper.convert(readVoteDto, ReadVote.class);
+        return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
 
     @PreAuthorize(DELETE_QUESTION_PERMISSION)

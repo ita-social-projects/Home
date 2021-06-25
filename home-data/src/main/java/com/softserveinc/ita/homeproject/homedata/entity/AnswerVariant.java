@@ -22,5 +22,5 @@ public class AnswerVariant extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "poll_question_id")
-    private MultipleChoiceQuestion multipleChoiceQuestion;
+    private PollQuestion question;
 }

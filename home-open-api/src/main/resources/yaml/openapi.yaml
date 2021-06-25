@@ -14,6 +14,7 @@ servers:
   - url: /api/0
 
 tags:
+
   - name: news
     description: News management operations
   - name: user
@@ -36,6 +37,8 @@ tags:
     description: Cooperation poll management operations
   - name: poll
     description: Poll management operations  independently from cooperation
+  - name: poll question
+    description: Poll question management operations
   - name: poll vote
     description: Poll vote management operations
 
@@ -2426,15 +2429,56 @@ components:
           maxLength: 255
           example: Green
 
-    AdviceChoiceAnswerVariant:
-      description: Represents a variant of a vote answer for AdviceChoiceQuestion of poll
-      type: string
-      enum: &advice_choice_answer_variant_values
-        - for
-        - against
-        - abstained
-        - free_answer
-      example: abstained
+    CreateVote:
+      type: object
+      required:
+        - question_votes
+      properties:
+        question_votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateQuestionVote'
+          example: List of question votes
+
+    CreateQuestionVote:
+      type: object
+      required:
+        - question
+        - type
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestionVote'
+          advice: '#/components/schemas/CreateAdviceQuestionVote'
+      properties:
+        question:
+          $ref: '#/components/schemas/QuestionLookup'
+
+    CreateMultipleChoiceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answers
+      properties:
+        answers:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/AnswerVariantLookup'
+          example:
+            - id: 1
+            - id: 2
+
+    CreateAdviceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestionVote'
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          $ref: '#/components/schemas/CreateUpdateAnswerVariant'
 
     AnswerVariantLookup:
       type: object
@@ -2444,154 +2488,57 @@ components:
           format: int64
           example: 1
 
-    CreateVote:
-      type: object
-      discriminator:
-        propertyName: type
-        mapping:
-          multiple_choice: '#/components/schemas/CreateMultipleChoiceVote'
-          advice: '#/components/schemas/CreateAdviceChoiceVote'
-      required:
-        - voter_id
-        - question_id
-      properties:
-        voter_id:
-          type: integer
-          format: int64
-          example: 1
-        question_id:
-          type: integer
-          format: int64
-          example: 1
-        type:
-          $ref: '#/components/schemas/QuestionType'
-
-    CreateAdviceChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/CreateVote'
-      type: object
-      discriminator:
-        propertyName: answer
-        mapping:
-          for: '#/components/schemas/CreateSimpleAdviceChoiceVote'
-          against: '#/components/schemas/CreateSimpleAdviceChoiceVote'
-          abstained: '#/components/schemas/CreateSimpleAdviceChoiceVote'
-          free_answer: '#/components/schemas/CreateFreeAnswerAdviceChoiceVote'
-      required:
-        - answer
-      properties:
-        answer:
-          $ref: '#/components/schemas/AdviceChoiceAnswerVariant'
-
-    CreateSimpleAdviceChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/CreateAdviceChoiceVote'
-      type: object
-
-    CreateFreeAnswerAdviceChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/CreateAdviceChoiceVote'
-      type: object
-      required:
-        - free_answer
-      properties:
-        free_answer:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: I propose to spend this money on repairing the door
-
-    CreateMultipleChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/CreateVote'
-      type: object
-      required:
-        - answers
-      properties:
-        answers:
-          type: array
-          minItems: 2
-          items:
-            $ref: '#/components/schemas/AnswerVariantLookup'
-          example:
-            - id: 1
-            - id: 2
-        max_answer_count:
-          type: integer
-          minimum: 1
-          maximum: 100
-          example: 5
-
     ReadVote:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        question_votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadQuestionVote'
+          example: { }
+
+    ReadQuestionVote:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
         mapping:
-          multiple_choice: '#/components/schemas/ReadMultipleChoiceVote'
-          advice: '#/components/schemas/ReadAdviceChoiceVote'
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestionVote'
+          advice: '#/components/schemas/ReadAdviceQuestionVote'
       properties:
-        voter_id:
-          type: integer
-          format: int64
-          example: 1
-        question_id:
-          type: integer
-          format: int64
-          example: 1
-        type:
-          $ref: '#/components/schemas/QuestionType'
+        question:
+          $ref: '#/components/schemas/ReadQuestion'
 
-    ReadAdviceChoiceVote:
+    ReadMultipleChoiceQuestionVote:
       allOf:
-        - $ref: '#/components/schemas/ReadVote'
+        - $ref: '#/components/schemas/ReadQuestionVote'
       type: object
-      discriminator:
-        propertyName: answer
-        mapping:
-          for: '#/components/schemas/ReadSimpleAdviceChoiceVote'
-          against: '#/components/schemas/ReadSimpleAdviceChoiceVote'
-          abstained: '#/components/schemas/ReadSimpleAdviceChoiceVote'
-          free_answer: '#/components/schemas/ReadFreeAnswerAdviceChoiceVote'
-      properties:
-        answer:
-          $ref: '#/components/schemas/AdviceChoiceAnswerVariant'
-
-    ReadSimpleAdviceChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/ReadAdviceChoiceVote'
-      type: object
-
-    ReadFreeAnswerAdviceChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/ReadAdviceChoiceVote'
-      type: object
-      properties:
-        free_answer:
-          type: string
-          minLength: 1
-          maxLength: 255
-          example: I propose to spend this money on repairing the door
-
-    ReadMultipleChoiceVote:
-      allOf:
-        - $ref: '#/components/schemas/ReadVote'
-      type: object
+      required:
+        - answers
       properties:
         answers:
           type: array
-          minItems: 2
+          minItems: 1
           items:
-            $ref: '#/components/schemas/AnswerVariantLookup'
+            $ref: '#/components/schemas/ReadAnswerVariant'
           example:
             - id: 1
+              answer: Green
             - id: 2
-        max_answer_count:
-          type: integer
-          minimum: 1
-          maximum: 100
-          example: 5
+              answer: Blue
+
+    ReadAdviceQuestionVote:
+      allOf:
+        - $ref: '#/components/schemas/ReadQuestionVote'
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          $ref: '#/components/schemas/ReadAnswerVariant'
 
   responses:
     NoContentResponse:
@@ -2915,6 +2862,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateVote'
+      required: true
 
   parameters:
     p_id:

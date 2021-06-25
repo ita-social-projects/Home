@@ -102,4 +102,5 @@ public final class Permissions {
 
     public static final String DELETE_QUESTION_PERMISSION = "hasAuthority('DELETE_QUESTION_PERMISSION')";
 
+    public static final String CREATE_VOTE_PERMISSION = "hasAuthority('CREATE_VOTE_PERMISSION')";
 }
