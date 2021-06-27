@@ -8,7 +8,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_QUESTION_PERMISSION;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -16,16 +15,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.AdviceQuestionVoteDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.QuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
-import com.softserveinc.ita.homeproject.model.CreateAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.CreateVote;
 import com.softserveinc.ita.homeproject.model.PollStatus;
@@ -93,15 +88,6 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createVote(Long pollId, @Valid CreateVote createVote) {
         var createVoteDto = mapper.convert(createVote, VoteDto.class);
-
-        var questionVoteDtos = createVote.getQuestionVotes().stream()
-            .map(cqv -> mapper.convert(cqv, QuestionVoteDto.class)).collect(Collectors.toList());
-//                cqv.getClass() ==
-//                    CreateAdviceQuestionVote.class
-
-//                ? mapper.convert(cqv, AdviceQuestionVoteDto.class) : mapper.convert(cqv,
-//                MultipleChoiceQuestionVoteDto.class)).collect(Collectors.toList());
-        createVoteDto.setQuestionVoteDtos(questionVoteDtos);
         var readVoteDto = voteService.createVote(pollId, createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
         return Response.status(Response.Status.CREATED).entity(readVote).build();
