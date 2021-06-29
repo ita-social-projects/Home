@@ -1478,7 +1478,6 @@ components:
           type: array
           example:
             - type: "email"
-              #              id: 1
               main: false
               email: "createUserEmail@example.com"
           items:
