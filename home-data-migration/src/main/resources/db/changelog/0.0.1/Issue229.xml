@@ -11,9 +11,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="POLL_ID" type="BIGINT">
-                <constraints nullable="false"
-                             foreignKeyName="poll_fk"
-                             references="polls(ID)"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -24,14 +22,12 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="VOTE_ID" type="BIGINT">
-                <constraints nullable="false"
+                <constraints nullable="true"
                              foreignKeyName="vote_fk"
                              references="votes(ID)"/>
             </column>
             <column name="QUESTION_ID" type="BIGINT">
-                <constraints nullable="false"
-                             foreignKeyName="question_fk"
-                             references="poll_questions(ID)"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>

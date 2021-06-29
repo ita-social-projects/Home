@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -23,9 +24,8 @@ public class QuestionVote extends BaseEntity {
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
-    @ManyToOne
-    @JoinColumn(name = "question_id")
-    private PollQuestion question;
+    @Column(name = "question_id")
+    private Long questionId;
 
     @ManyToMany
     @JoinTable(name = "quest_vote_answer_var",

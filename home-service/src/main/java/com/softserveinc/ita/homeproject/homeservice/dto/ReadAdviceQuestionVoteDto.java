@@ -5,9 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class QuestionVoteDto extends BaseDto {
-
-    private Long voteId;
-
-    private Long questionId;
+public class ReadAdviceQuestionVoteDto extends ReadQuestionVoteDto {
+    private ReadAnswerVariantDto answer;
 }

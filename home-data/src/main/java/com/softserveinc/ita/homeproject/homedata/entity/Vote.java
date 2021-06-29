@@ -2,9 +2,8 @@ package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -19,9 +18,8 @@ import lombok.Setter;
 @SequenceGenerator(name = "sequence", sequenceName = "votes_sequence")
 public class Vote extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "poll_id")
-    private Poll poll;
+    @Column(name = "poll_id")
+    private Long pollId;
 
     @OneToMany(mappedBy = "vote", cascade = CascadeType.PERSIST)
     private List<QuestionVote> questionVotes;

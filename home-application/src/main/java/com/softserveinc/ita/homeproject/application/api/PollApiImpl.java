@@ -17,7 +17,7 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
@@ -87,7 +87,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(CREATE_VOTE_PERMISSION)
     @Override
     public Response createVote(Long pollId, @Valid CreateVote createVote) {
-        var createVoteDto = mapper.convert(createVote, VoteDto.class);
+        var createVoteDto = mapper.convert(createVote, CreateVoteDto.class);
         var readVoteDto = voteService.createVote(pollId, createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
         return Response.status(Response.Status.CREATED).entity(readVote).build();
