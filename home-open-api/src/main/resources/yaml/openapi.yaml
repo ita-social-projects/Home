@@ -739,7 +739,7 @@ paths:
       description: The endpoint gets all apartments of the house
       operationId: queryApartment
       parameters:
-        - $ref: 'p_house_id'
+        - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
@@ -1373,10 +1373,10 @@ components:
           example: Gas turn off
         source:
           type: string
-          example: Example
+          example: "https://example.com"
         text:
           type: string
-          example: example
+          example: "example of text"
     CreateNews:
       required:
         - title
@@ -1399,12 +1399,12 @@ components:
           example: example
         source:
           type: string
-          example: example
+          example: "https://example.com"
         text:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example of text"
     UpdateNews:
       type: object
       required:
@@ -1427,12 +1427,12 @@ components:
           example: example
         source:
           type: string
-          example: example
+          example: "https://example.com"
         text:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example of text"
     ApiError:
       type: object
       properties:
@@ -1478,9 +1478,9 @@ components:
           type: array
           example:
             - type: "email"
-            - id: 1
-            - main: false
-            - email: "createUserEmail@example.com"
+#              id: 1
+              main: false
+              email: "createUserEmail@example.com"
           items:
             $ref: '#/components/schemas/CreateContact'
     ReadUser:
@@ -1501,14 +1501,14 @@ components:
           type: array
           example:
             - type: "email"
-            - id: 1
-            - main: false
-            - email: "readUserEmail@example.com"
+              id: 1
+              main: false
+              email: "readUserEmail@example.com"
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
+#      allOf:
+#        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
@@ -1519,21 +1519,21 @@ components:
         first_name:
           pattern: '\w+'
           type: string
-          example: Petro
+          example: "Petro"
           minLength: 1
           maxLength: 50
         last_name:
           pattern: '\w+'
           type: string
-          example: Petrov
+          example: "Petrov"
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           minLength: 5
           maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: example@gmail.com
+          example: "test.put.messages@gmail.com"
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
@@ -1610,7 +1610,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: home@gmail.com
+          example: "home@gmail.com"
     CreatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
@@ -1651,7 +1651,7 @@ components:
           minLength: 9
           maxLength: 320
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     UpdatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
@@ -1694,7 +1694,7 @@ components:
           minLength: 5
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1706,8 +1706,11 @@ components:
           type: array
           example:
             - type: "email"
-            - main: false
-            - email: "createUserEmail@example.com"
+              email: "createUserEmail@example.com"
+              main: false
+            - type: "phone"
+              phone: "+380506617305"
+              main: false
           items:
             $ref: "#/components/schemas/CreateContact"
 
@@ -1736,7 +1739,7 @@ components:
           minLength: 5
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
         address:
           $ref: '#/components/schemas/Address'
         houses:
@@ -1905,7 +1908,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
         status:
           $ref: '#/components/schemas/InvitationStatus'
     ReadCooperationInvitation:
@@ -1948,7 +1951,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     CreateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
@@ -1982,7 +1985,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     UpdateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/UpdateInvitation'
