@@ -36,7 +36,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         var poll = getDraftPollById(pollId);
         var house = getHouseById(houseId);
 
-        if (Boolean.TRUE.equals(validateHouse(poll, house))) {
+        if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();
             houses.add(house);
 
@@ -53,7 +53,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         var poll = getDraftPollById(pollId);
         var house = getHouseById(houseId);
 
-        if (Boolean.TRUE.equals(validateHouse(poll, house))) {
+        if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();
             houses.remove(house);
             pollRepository.save(poll);
@@ -76,7 +76,7 @@ public class PollHouseServiceImpl implements PollHouseService {
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "House", id)));
     }
 
-    private Boolean validateHouse(Poll poll, House house) {
+    private boolean validateHouse(Poll poll, House house) {
         Long pollCooperationId = poll.getCooperation().getId();
         Long houseCooperationId = house.getCooperation().getId();
         if (pollCooperationId.equals(houseCooperationId)) {
