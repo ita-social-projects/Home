@@ -322,7 +322,7 @@ paths:
         - contact
       summary: Get Contact by ID
       description: The endpoint retrieves an existing contact
-                   associated with the specified User by User and Contact IDs
+        associated with the specified User by User and Contact IDs
       operationId: getContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -343,7 +343,7 @@ paths:
         - contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-                  in the system by the specified User and Contact IDs
+        in the system by the specified User and Contact IDs
       operationId: updateContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -368,7 +368,7 @@ paths:
         - contact
       summary: Delete Contact
       description: The endpoint deletes an existing Contact on a User associated with the
-                   specified User and Contact IDs
+        specified User and Contact IDs
       operationId: deleteContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -689,7 +689,7 @@ paths:
         - cooperation contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-          in the system by the specified Cooperation and Contact IDs
+        in the system by the specified Cooperation and Contact IDs
       operationId: updateContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
@@ -812,7 +812,7 @@ paths:
         - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-         $ref: '#/components/requestBodies/UpdateApartmentBody'
+        $ref: '#/components/requestBodies/UpdateApartmentBody'
       responses:
         200:
           $ref: '#/components/responses/ApartmentResponse'
@@ -1094,7 +1094,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
       requestBody:
-          $ref: '#/components/requestBodies/CreatePollBody'
+        $ref: '#/components/requestBodies/CreatePollBody'
       responses:
         201:
           $ref: '#/components/responses/PollResponse'
@@ -1138,7 +1138,7 @@ paths:
         - $ref: '#/components/parameters/p_cooperation_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-          $ref: '#/components/requestBodies/UpdatePollBody'
+        $ref: '#/components/requestBodies/UpdatePollBody'
       responses:
         200:
           $ref: '#/components/responses/PollResponse'
@@ -1259,10 +1259,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_poll_id'
       requestBody:
-         $ref: '#/components/requestBodies/CreateQuestionBody'
+        $ref: '#/components/requestBodies/CreateQuestionBody'
       responses:
         '201':
-         $ref: '#/components/responses/QuestionResponse'
+          $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1339,7 +1339,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
 security:
-  - basicAuth: []
+  - basicAuth: [ ]
 
 components:
   securitySchemes:
@@ -1478,7 +1478,7 @@ components:
           type: array
           example:
             - type: "email"
-#              id: 1
+              #              id: 1
               main: false
               email: "createUserEmail@example.com"
           items:
@@ -1507,8 +1507,8 @@ components:
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-#      allOf:
-#        - $ref: '#/components/schemas/BaseReadView'
+      #      allOf:
+      #        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
@@ -1570,7 +1570,7 @@ components:
       properties:
         email:
           type: string
-          example: home@gmail.com
+          example: "home@gmail.com"
     ReadPhoneContact:
       allOf:
         - $ref: '#/components/schemas/ReadContact'
@@ -1699,7 +1699,18 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: List of houses
+          example:
+            - quantity_flat: 96
+              house_area: 4348.8
+              adjoining_area: 400
+              address:
+                region: "Dnipro"
+                city: "Dnepr"
+                district: District
+                street: street
+                house_block: block
+                house_number: number
+                zip_code: zipCode
           items:
             $ref: "#/components/schemas/CreateHouse"
         contacts:
@@ -1744,15 +1755,26 @@ components:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: List of houses
+          example:
+            - quantity_flat: 96
+              house_area: 4348.8
+              adjoining_area: 400
+              address:
+                region: "Dnipro"
+                city: "Dnepr"
+                district: District
+                street: street
+                house_block: block
+                house_number: number
+                zip_code: zipCode
           items:
             $ref: "#/components/schemas/ReadHouse"
         contacts:
           type: array
           example:
             - type: "email"
-            - main: false
-            - email: "createUserEmail@example.com"
+              main: false
+              email: "createUserEmail@example.com"
           items:
             $ref: "#/components/schemas/ReadContact"
     UpdateCooperation:
@@ -1872,16 +1894,16 @@ components:
           $ref: '#/components/schemas/Address'
 
     InvitationStatus:
-       description: Indicates the status of an Invitation
-       type: string
-       enum:
-          - pending
-          - processing
-          - accepted
-          - declined
-          - overdue
-          - deactivated
-          - error
+      description: Indicates the status of an Invitation
+      type: string
+      enum:
+        - pending
+        - processing
+        - accepted
+        - declined
+        - overdue
+        - deactivated
+        - error
 
     InvitationType:
       description: Indicates a type of an Invitation
@@ -2573,7 +2595,7 @@ components:
       content:
         application/json:
           schema:
-              $ref: "#/components/schemas/ReadQuestion"
+            $ref: "#/components/schemas/ReadQuestion"
     QuestionsResponse:
       description: OK
       content:
@@ -2711,8 +2733,8 @@ components:
       description: A payload for updating a question
       content:
         application/json:
-         schema:
-           $ref: '#/components/schemas/UpdateQuestion'
+          schema:
+            $ref: '#/components/schemas/UpdateQuestion'
   parameters:
     p_id:
       name: id
