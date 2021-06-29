@@ -71,6 +71,7 @@ You can run it with Maven using command:
 You can run it with `install` lifecycle of the data-migration module in maven tab in IDEA with turned on `liquibase-migration` profile.
 
 ### How to run tests
+Information, how to run test, you can find [here](https://github.com/ita-social-projects/Home/blob/dev/home-docs/home-api-tests.md)
 
 
 ### Issues that you may face
