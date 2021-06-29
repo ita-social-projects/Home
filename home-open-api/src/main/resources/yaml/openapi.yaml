@@ -1362,15 +1362,15 @@ components:
       properties:
         title:
           type: string
-          example: News In The Local Area
+          example: "News In The Local Area"
           maximum: 70
         photo_url:
           type: string
           format: url
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
-          example: Gas turn off
+          example: "Gas turn off"
         source:
           type: string
           example: "https://example.com"
@@ -1386,17 +1386,17 @@ components:
       properties:
         title:
           type: string
-          example: News in the Some Area
+          example: "News in the Some Area"
           minLength: 1
           maxLength: 70
         photo_url:
           type: string
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example"
         source:
           type: string
           example: "https://example.com"
@@ -1416,15 +1416,15 @@ components:
           type: string
           minLength: 1
           maxLength: 70
-          example: example
+          example: "example"
         photo_url:
           type: string
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example"
         source:
           type: string
           example: "https://example.com"
@@ -1441,7 +1441,7 @@ components:
           example: 404
         error_message:
           type: string
-          example: example
+          example: "example"
     CreateUser:
       required:
         - first_name
@@ -1489,13 +1489,13 @@ components:
       properties:
         first_name:
           type: string
-          example: Petro
+          example: "Petro"
         last_name:
           type: string
-          example: Petrov
+          example: "Petrov"
         email:
           type: string
-          example: home@gmail.com
+          example: "home@gmail.com"
         contacts:
           type: array
           example:
@@ -1772,6 +1772,9 @@ components:
             - type: "email"
               main: false
               email: "createUserEmail@example.com"
+            - type: "phone"
+              phone: "+380506617305"
+              main: false
           items:
             $ref: "#/components/schemas/ReadContact"
     UpdateCooperation:
@@ -1834,7 +1837,7 @@ components:
           maxLength: 10
         zip_code:
           type: string
-          example: 52956
+          example: "52956"
     CreateHouse:
       required:
         - quantity_flat
@@ -1908,7 +1911,6 @@ components:
       enum:
         - cooperation
         - apartment
-      example: apartment
 
     ReadInvitation:
       allOf:
@@ -2159,14 +2161,14 @@ components:
         - active
         - completed
         - suspended
-      example: active
+      example: "active"
 
     PollType:
       description: Indicates the type of a Poll
       type: string
       enum: &poll_type_values
         - simple
-      example: simple
+      example: "simple"
 
     ReadPoll:
       allOf:
@@ -2175,15 +2177,15 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         creation_date:
           type: string
           format: date-time
-          example: 2021-05-30T08:30:00Z
+          example: "2021-05-30T08:30:00Z"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         polled_houses:
           type: array
           items:
@@ -2227,11 +2229,11 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         houses:
           type: array
           items:
@@ -2250,11 +2252,11 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         status:
           $ref: '#/components/schemas/PollStatus'
     QuestionType:
@@ -2263,7 +2265,6 @@ components:
       enum: &question_type_values
         - multiple_choice
         - advice
-      example: advice
 
     QuestionLookup:
       type: object
@@ -2289,7 +2290,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     ReadMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/ReadQuestion'
@@ -2332,7 +2333,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     CreateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/CreateQuestion'
@@ -2376,7 +2377,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     UpdateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/UpdateQuestion'
@@ -2410,7 +2411,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: Green
+          example: "Green"
     CreateUpdateAnswerVariant:
       type: object
       required:
@@ -2420,7 +2421,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: Green
+          example: "Green"
 
   responses:
     NoContentResponse:
@@ -2986,21 +2987,21 @@ components:
       name: status
       schema:
         type: string
-      example: pending
+      example: "pending"
     creation_date:
       in: query
       name: creation_date
       schema:
         type: string
         format: date-time
-      example: 2021-05-30T08:30
+      example: "2021-05-30T08:30"
     completion_date:
       in: query
       name: completion_date
       schema:
         type: string
         format: date-time
-      example: 2021-06-20T06:00
+      example: "2021-06-20T06:00"
     poll_type:
       in: query
       name: type
@@ -3014,11 +3015,11 @@ components:
       schema:
         $ref: '#/components/schemas/PollStatus'
       description: Status of the Poll
-      example: draft
+      example: "draft"
     question_type:
       in: query
       name: type
       schema:
         $ref: '#/components/schemas/QuestionType'
       description: Type of the Question
-      example: advice
+      example: "advice"
