@@ -1506,8 +1506,6 @@ components:
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      #      allOf:
-      #        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
