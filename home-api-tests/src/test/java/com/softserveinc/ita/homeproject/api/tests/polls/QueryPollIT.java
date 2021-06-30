@@ -1,7 +1,9 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
 import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
+import com.softserveinc.ita.homeproject.api.PollApi;
+import com.softserveinc.ita.homeproject.api.tests.query.PollQuery;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
@@ -11,54 +13,33 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class QueryCooperationPollIT extends QueryPoll {
+class QueryPollIT extends QueryPoll {
+
+    private final PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
 
     @Override
     List<ReadPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(cooperationId)
                 .build().perform();
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-
-        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
-            .sort("id,asc")
-            .build().perform();
-
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId));
     }
 
     @Override
     List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
+                .pageNumber(1)
+                .pageSize(10)
                 .sort(sort)
                 .build().perform();
-    @Test
-    void getAllPollsDescSort() throws ApiException {
-
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-
-        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
-            .sort("id,desc")
-            .build().perform();
-
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId).reversed());
     }
 
     @Override
     List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .filter(filter)
                 .build().perform();
@@ -66,7 +47,7 @@ public class QueryCooperationPollIT extends QueryPoll {
 
     @Override
     List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long pollId, Long cooperationId) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(cooperationId)
                 .id(pollId)
                 .build().perform();
@@ -74,18 +55,17 @@ public class QueryCooperationPollIT extends QueryPoll {
 
     @Override
     List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
                 .pageSize(10)
-                .sort("id,asc")
                 .type(type)
                 .build().perform();
     }
 
     @Override
     List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
                 .pageSize(10)
@@ -96,13 +76,19 @@ public class QueryCooperationPollIT extends QueryPoll {
 
     @Override
     List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
-        return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
+        return new PollQuery.Builder(POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .completionDate(completionDate)
                 .build().perform();
     }
 
-    @Disabled("Should sent exception. Is not ready yet. Created task#251.")
+    List<ReadPoll> buildQueryPollOnlyByPollId(Long id) throws ApiException {
+        return new PollQuery.Builder(POLL_API)
+                .id(id)
+                .build()
+                .perform();
+    }
+
     @Test
     @Override
     void getAllPollsFromNotExistingCooperation() throws ApiException {
@@ -110,9 +96,20 @@ public class QueryCooperationPollIT extends QueryPoll {
         createPoll();
         Long wrongCooperationId = 99999999999L;
 
+        List<ReadPoll> queryPoll = buildQueryPollWithCooperationId(wrongCooperationId);
+
+        assertEquals(0, queryPoll.size());
+    }
+
+    @Disabled("Correct exception message is not ready yet. Created task#250.")
+    @Test
+    void getAllPollsOnlyByPollId() throws ApiException {
+
+        Long id = createPoll().getId();
+
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> buildQueryPollWithCooperationId(wrongCooperationId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
+                .isThrownBy(() -> buildQueryPollOnlyByPollId(id))
+                .matches(exception -> exception.getCode() == 400)
+                .withMessageContaining("Parameter `cooperation_id` is invalid - must not be null.");
     }
 }

@@ -24,6 +24,8 @@ public final class Permissions {
 
     public static final String CREATE_HOUSE_PERMISSION = "hasAuthority('CREATE_HOUSE_PERMISSION')";
 
+    public static final String CREATE_POLLED_HOUSE_PERMISSION = "hasAuthority('CREATE_POLLED_HOUSE_PERMISSION')";
+
     public static final String GET_NEWS_PERMISSION = "hasAuthority('GET_NEWS_PERMISSION')";
 
     public static final String GET_ALL_USERS_PERMISSION = "hasAuthority('GET_USERS_PERMISSION')";
@@ -45,6 +47,10 @@ public final class Permissions {
     public static final String GET_HOUSES_PERMISSION = "hasAuthority('GET_HOUSES_PERMISSION')";
 
     public static final String GET_USER_CONTACT_PERMISSION = "hasAuthority('GET_USER_CONTACT_PERMISSION')";
+
+    public static final String GET_ALL_POLL_HOUSES_PERMISSION = "hasAuthority('GET_ALL_POLL_HOUSES_PERMISSION')";
+
+    public static final String GET_POLL_HOUSE_PERMISSION = "hasAuthority('GET_POLL_HOUSE_PERMISSION')";
 
     public static final String UPDATE_NEWS_PERMISSION = "hasAuthority('UPDATE_NEWS_PERMISSION')";
 
@@ -69,6 +75,8 @@ public final class Permissions {
     public static final String DELETE_COOP_CONTACT_PERMISSION ="hasAuthority('DELETE_COOP_CONTACT_PERMISSION')";
 
     public static final String DELETE_HOUSE_PERMISSION = "hasAuthority('DELETE_HOUSE_PERMISSION')";
+
+    public static final String DELETE_POLL_HOUSE_PERMISSION = "hasAuthority('DELETE_POLL_HOUSE_PERMISSION')";
 
     public static final String CREATE_APARTMENT_PERMISSION = "hasAuthority('CREATE_APARTMENT_PERMISSION')";
 
