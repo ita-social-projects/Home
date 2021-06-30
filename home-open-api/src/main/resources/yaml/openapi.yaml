@@ -11,7 +11,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8080/api/0
+  - url: /api/0
 
 tags:
   - name: news
@@ -1295,17 +1295,20 @@ components:
 
   schemas:
     BaseReadView:
-      type: object
       properties:
         id:
           type: integer
           format: int64
           example: 1
+    base_id:
+      type: integer
+      format: int64
+      example: 1
     ReadNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         title:
           type: string
           example: News In The Local Area
