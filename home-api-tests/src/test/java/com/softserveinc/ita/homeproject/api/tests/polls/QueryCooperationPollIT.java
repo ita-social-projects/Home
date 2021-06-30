@@ -21,17 +21,6 @@ public class QueryCooperationPollIT extends QueryPoll {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(cooperationId)
                 .build().perform();
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-
-        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
-            .sort("id,asc")
-            .build().perform();
-
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId));
     }
 
     @Override
@@ -40,20 +29,6 @@ public class QueryCooperationPollIT extends QueryPoll {
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .sort(sort)
                 .build().perform();
-    @Test
-    void getAllPollsDescSort() throws ApiException {
-
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-        COOPERATION_POLL_API
-            .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
-
-        List<ReadPoll> queryPoll = new CooperationPollQuery.Builder(COOPERATION_POLL_API)
-            .cooperationId(CooperationPollApiIT.COOPERATION_ID)
-            .sort("id,desc")
-            .build().perform();
-
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId).reversed());
     }
 
     @Override

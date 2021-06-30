@@ -145,8 +145,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(GET_QUESTION_PERMISSION)
     @Override
     public Response queryQuestion(Long pollId,
-                                  @Min(1) Integer pageNumber,
-                                  @Min(1) @Max(10) Integer pageSize,
+                                  Integer pageNumber,
+                                  Integer pageSize,
                                   String sort,
                                   String filter,
                                   Long id,

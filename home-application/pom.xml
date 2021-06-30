@@ -122,7 +122,30 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>4.3.1</version>
+                <version>5.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.swagger.parser.v3</groupId>
+                        <artifactId>swagger-parser-v3</artifactId>
+                        <version>2.0.26</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                        <version>2.12.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-core</artifactId>
+                        <version>2.12.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-annotations</artifactId>
+                        <version>2.12.3</version>
+                    </dependency>
+
+                </dependencies>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>

@@ -32,7 +32,7 @@ class QueryHousePollIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryHouse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryHouse).isSortedAccordingTo(Comparator.comparing(ReadHouse::getId));
     }
 
     @Test
@@ -45,7 +45,7 @@ class QueryHousePollIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryHouse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryHouse).isSortedAccordingTo(Comparator.comparing(ReadHouse::getId).reversed());
     }
 
     @Test
