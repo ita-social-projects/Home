@@ -5,11 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
 
 import java.math.BigDecimal;
-import javax.validation.Valid;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -45,7 +40,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response createInvitation(Long apartmentId,
-                                     @Valid CreateApartmentInvitation createApartmentInvitation) {
+                                     CreateApartmentInvitation createApartmentInvitation) {
         var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
         invitationDto.setApartmentId(apartmentId);
         invitationDto.setApartmentNumber(apartmentService.getOne(apartmentId).getApartmentNumber());
@@ -89,13 +84,13 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @Override
     public Response queryInvitation(Long apartmentId,
-                                    @Min(1) Integer pageNumber,
-                                    @Min(1) @Max(10) Integer pageSize,
+                                    Integer pageNumber,
+                                    Integer pageSize,
                                     String sort,
                                     String filter,
                                     Long id,
                                     String email,
-                                    @DecimalMin("0.00010") @DecimalMax("1.0") BigDecimal ownershipPart,
+                                    BigDecimal ownershipPart,
                                     String status) {
         Page<ApartmentInvitationDto> readApartmentInvitation = invitationService
                 .findAll(pageNumber, pageSize, getSpecification());
@@ -120,7 +115,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Override
     public Response updateInvitation(Long apartmentId,
                                      Long id,
-                                     @Valid UpdateApartmentInvitation updateApartmentInvitation) {
+                                     UpdateApartmentInvitation updateApartmentInvitation) {
         var updateInvitationDto = mapper.convert(updateApartmentInvitation,
                 ApartmentInvitationDto.class);
         var toUpdate = invitationService.updateInvitation(apartmentId, id, updateInvitationDto);
