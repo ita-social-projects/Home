@@ -105,13 +105,13 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @PreAuthorize(GET_OWNERSHIP_PERMISSION)
     @Override
     public Response queryOwnership(Long apartmentId,
-                                   @Min(1) Integer pageNumber,
-                                   @Min(1) @Max(10) Integer pageSize,
+                                   Integer pageNumber,
+                                   Integer pageSize,
                                    String sort,
                                    String filter,
                                    Long id,
                                    Long userId,
-                                   @DecimalMin("0.00010") @DecimalMax("1.0") BigDecimal ownershipPart) {
+                                   BigDecimal ownershipPart) {
 
         Page<OwnershipDto> readOwnership = ownershipService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readOwnership, ReadOwnership.class);
@@ -130,7 +130,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
 
     @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
     @Override
-    public Response updateOwnership(Long apartmentId, Long id, @Valid UpdateOwnership updateOwnership) {
+    public Response updateOwnership(Long apartmentId, Long id, UpdateOwnership updateOwnership) {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
         var toUpdate = ownershipService.updateOwnership(apartmentId, id, updateOwnershipDto);
         var readOwnership = mapper.convert(toUpdate, ReadOwnership.class);
