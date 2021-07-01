@@ -14,7 +14,6 @@ import com.softserveinc.ita.homeproject.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.api.tests.query.PollQuestionQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateMultipleChoiceQuestion;

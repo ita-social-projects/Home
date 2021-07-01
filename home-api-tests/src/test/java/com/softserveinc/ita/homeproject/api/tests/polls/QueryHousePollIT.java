@@ -12,7 +12,6 @@ import com.softserveinc.ita.homeproject.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.HousePollQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.junit.jupiter.api.Test;

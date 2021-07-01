@@ -13,7 +13,6 @@ import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;

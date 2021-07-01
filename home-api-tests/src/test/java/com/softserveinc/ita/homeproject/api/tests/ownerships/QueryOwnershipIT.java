@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ApartmentOwnershipApi;
 import com.softserveinc.ita.homeproject.api.tests.query.OwnershipQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadOwnership;
 import org.junit.jupiter.api.Test;
 
