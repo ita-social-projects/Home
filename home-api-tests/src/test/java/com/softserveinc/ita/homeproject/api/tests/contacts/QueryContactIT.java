@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateEmailContact;
@@ -45,8 +45,8 @@ class QueryContactIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
-        assertEquals(expectedUser.getContacts().size(), queryContactsResponse.size());
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId));
+        assertEquals(Objects.requireNonNull(expectedUser.getContacts()).size(), queryContactsResponse.size());
     }
 
     @Test
@@ -61,8 +61,8 @@ class QueryContactIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
-        assertEquals(expectedUser.getContacts().size(), queryContactsResponse.size());
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId).reversed());
+        assertEquals(Objects.requireNonNull(expectedUser.getContacts()).size(), queryContactsResponse.size());
     }
 
     @Test
@@ -79,9 +79,9 @@ class QueryContactIT {
             .filter("phone=like=+38067")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId));
         queryContactsResponse
-            .forEach(contact -> assertTrue(((ReadPhoneContact)contact).getPhone().contains("+38067")));
+            .forEach(contact -> assertTrue(Objects.requireNonNull(((ReadPhoneContact) contact).getPhone()).contains("+38067")));
     }
 
     @Test

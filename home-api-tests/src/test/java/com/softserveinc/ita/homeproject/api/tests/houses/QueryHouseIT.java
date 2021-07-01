@@ -35,7 +35,7 @@ class QueryHouseIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadHouse::getId));
     }
 
     @Test
@@ -50,7 +50,7 @@ class QueryHouseIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadHouse::getId).reversed());
     }
 
     @Test
@@ -68,7 +68,7 @@ class QueryHouseIT {
 
         queryResponse
             .forEach(element -> assertTrue(element.getQuantityFlat() >= 1 && element.getQuantityFlat() <= 200));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadHouse::getId));
     }
 
     @Test

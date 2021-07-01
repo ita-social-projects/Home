@@ -9,7 +9,6 @@ import javax.ws.rs.core.UriInfo;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.service.QueryApiService;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,7 +31,7 @@ public abstract class CommonApi {
     @Autowired
     private QueryApiService queryApiService;
 
-    protected <D extends BaseDto> Response buildQueryResponse(Page<D> page, Class<? extends BaseReadView> clazz) {
+    protected <D extends BaseDto> Response buildQueryResponse(Page<D> page, Class clazz) {
         long totalElements = page.getTotalElements();
         int totalPages = page.getTotalPages();
         int numberOfElements = page.getNumberOfElements();

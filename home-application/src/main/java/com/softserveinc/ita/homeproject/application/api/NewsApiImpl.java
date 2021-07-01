@@ -5,8 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_NEWS_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_NEWS_PERMISSION;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -75,8 +73,8 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      */
     @PreAuthorize(GET_NEWS_PERMISSION)
     @Override
-    public Response getAllNews(@Min(1) Integer pageNumber,
-                               @Min(1) @Max(10) Integer pageSize,
+    public Response getAllNews(Integer pageNumber,
+                               Integer pageSize,
                                String sort,
                                String filter,
                                Long id,

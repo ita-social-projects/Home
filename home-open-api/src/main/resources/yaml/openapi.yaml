@@ -739,7 +739,7 @@ paths:
       description: The endpoint gets all apartments of the house
       operationId: queryApartment
       parameters:
-        - $ref: 'p_house_id'
+        - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
@@ -1442,18 +1442,15 @@ components:
       scheme: basic
 
   schemas:
-    BaseReadView:
+    base_id:
+      type: integer
+      format: int64
+      example: 1
+    ReadNews:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 1
-    ReadNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
-      type: object
-      properties:
+          $ref: '#/components/schemas/base_id'
         title:
           type: string
           example: News In The Local Area
@@ -1578,10 +1575,10 @@ components:
           items:
             $ref: '#/components/schemas/CreateContact'
     ReadUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         first_name:
           type: string
           example: Petro
@@ -1601,8 +1598,6 @@ components:
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
@@ -1641,8 +1636,6 @@ components:
         - email
         - phone
     ReadContact:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -1652,6 +1645,8 @@ components:
       required:
         - type
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/ContactType'
         main:
@@ -1806,10 +1801,10 @@ components:
             $ref: "#/components/schemas/CreateContact"
 
     ReadCooperation:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         name:
           type: string
           example: "Home Association"
@@ -1927,10 +1922,10 @@ components:
         address:
           $ref: '#/components/schemas/Address'
     ReadHouse:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         quantity_flat:
           type: integer
           example: 45
@@ -1983,8 +1978,6 @@ components:
       example: apartment
 
     ReadInvitation:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -1992,6 +1985,8 @@ components:
           base: '#/components/schemas/ReadCooperationInvitation'
           apartment: '#/components/schemas/ReadApartmentInvitation'
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/InvitationType'
         email:
@@ -2095,10 +2090,10 @@ components:
           example: 0.6588
 
     ReadOwnership:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         user:
           $ref: '#/components/schemas/ReadUser'
         ownership_part:
@@ -2167,10 +2162,10 @@ components:
           multipleOf: 1e-2
           example: 75.28
     ReadApartment:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         apartment_number:
           type: string
           minLength: 1
@@ -2241,10 +2236,10 @@ components:
       example: simple
 
     ReadPoll:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         header:
           type: string
           example: New poll for our houses
@@ -2346,8 +2341,6 @@ components:
           example: 1
 
     ReadQuestion:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -2355,6 +2348,8 @@ components:
           multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestion'
           advice: '#/components/schemas/ReadAdviceQuestion'
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/QuestionType'
         question:
@@ -2474,10 +2469,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/UpdateQuestion'
     ReadAnswerVariant:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         answer:
           type: string
           minLength: 1

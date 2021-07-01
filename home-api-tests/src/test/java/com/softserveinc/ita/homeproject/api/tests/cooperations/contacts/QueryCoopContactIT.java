@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,8 +37,8 @@ class QueryCoopContactIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
-        assertEquals(expectedCooperation.getContacts().size(), queryContactsResponse.size());
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId));
+        assertEquals(Objects.requireNonNull(expectedCooperation.getContacts()).size(), queryContactsResponse.size());
     }
 
     @Test
@@ -52,8 +53,8 @@ class QueryCoopContactIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
-        assertEquals(expectedCooperation.getContacts().size(), queryContactsResponse.size());
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId).reversed());
+        assertEquals(Objects.requireNonNull(expectedCooperation.getContacts()).size(), queryContactsResponse.size());
     }
 
     @Test
@@ -69,9 +70,9 @@ class QueryCoopContactIT {
             .filter("phone=like=+38067")
             .build().perform();
 
-        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId));
         queryContactsResponse
-            .forEach(contact -> assertTrue(((ReadPhoneContact)contact).getPhone().contains("+38067")));
+            .forEach(contact -> assertTrue(Objects.requireNonNull(((ReadPhoneContact) contact).getPhone()).contains("+38067")));
     }
 
     @Test

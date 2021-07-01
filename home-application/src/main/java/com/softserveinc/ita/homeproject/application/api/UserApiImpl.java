@@ -11,9 +11,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_CONTACT_PERMISSION;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -53,7 +50,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(CREATE_CONTACT_PERMISSION)
     @Override
-    public Response createContactOnUser(Long userId, @Valid CreateContact createContact) {
+    public Response createContactOnUser(Long userId, CreateContact createContact) {
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
         ContactDto readContactDto = contactService.createContact(userId, createContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
@@ -97,8 +94,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
     @Override
     public Response queryContactsOnUser(Long userId,
-                                        @Min(1) Integer pageNumber,
-                                        @Min(1) @Max(10) Integer pageSize,
+                                        Integer pageNumber,
+                                        Integer pageSize,
                                         String sort,
                                         String filter,
                                         Long id,
@@ -129,8 +126,8 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      */
     @PreAuthorize(GET_ALL_USERS_PERMISSION)
     @Override
-    public Response getAllUsers(@Min(1) Integer pageNumber,
-                                @Min(1) @Max(10) Integer pageSize,
+    public Response getAllUsers(Integer pageNumber,
+                                Integer pageSize,
                                 String sort,
                                 String filter,
                                 Long id,
@@ -170,7 +167,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
 
     @PreAuthorize(UPDATE_USER_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnUser(Long userId, Long id, @Valid UpdateContact updateContact) {
+    public Response updateContactOnUser(Long userId, Long id, UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
         var readContactDto = contactService.updateContact(userId, id, updateContactDto);
         ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);

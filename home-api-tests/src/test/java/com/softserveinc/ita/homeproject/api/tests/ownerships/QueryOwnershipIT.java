@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ApartmentOwnershipApi;
 import com.softserveinc.ita.homeproject.api.tests.query.OwnershipQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.ReadOwnership;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +34,7 @@ class QueryOwnershipIT {
                 .sort("id,asc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadOwnership::getId));
     }
 
     @Test
@@ -47,7 +46,7 @@ class QueryOwnershipIT {
                 .sort("id,desc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadOwnership::getId).reversed());
     }
 
     @Test
@@ -64,7 +63,7 @@ class QueryOwnershipIT {
         queryResponse
                 .forEach(element -> assertTrue(Objects.requireNonNull(element.getOwnershipPart())
                         .compareTo(BigDecimal.valueOf(0.2)) > 0 && element.getOwnershipPart().compareTo(BigDecimal.valueOf(0.6)) < 0));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadOwnership::getId));
     }
 
     @Test

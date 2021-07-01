@@ -13,7 +13,6 @@ import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -35,7 +34,7 @@ class QueryCooperationIT {
             .sort("id,asc")
             .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
@@ -49,7 +48,7 @@ class QueryCooperationIT {
             .sort("id,desc")
             .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId).reversed());
     }
 
     @Test
@@ -68,7 +67,7 @@ class QueryCooperationIT {
 
         queryResponse
             .forEach(element -> assertTrue(Objects.requireNonNull(element.getName()).contains("testedByFilters")));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
@@ -84,7 +83,7 @@ class QueryCooperationIT {
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getName(), expected.getName()));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
@@ -100,7 +99,7 @@ class QueryCooperationIT {
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getName(), expected.getName()));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
@@ -116,7 +115,7 @@ class QueryCooperationIT {
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getUsreo(), expected.getUsreo()));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
@@ -132,7 +131,7 @@ class QueryCooperationIT {
             .build().perform();
 
         queryResponse.forEach(element -> assertEquals(element.getIban(), expected.getIban()));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadCooperation::getId));
     }
 
     @Test
