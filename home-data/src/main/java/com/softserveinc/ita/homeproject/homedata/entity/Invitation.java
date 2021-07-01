@@ -31,4 +31,7 @@ public abstract class Invitation extends BaseEntity {
 
     @Column(name = "sent_datetime")
     private LocalDateTime sentDatetime;
+
+    @Column(name = "registration_token")
+    private String registrationToken;
 }
