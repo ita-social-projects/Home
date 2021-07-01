@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -25,11 +26,23 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     private final OwnershipRepository ownershipRepository;
 
+    private final UserRepository userRepository;
+
     private final ApartmentInvitationRepository invitationRepository;
 
     private final ServiceMapper mapper;
 
     private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
+
+    @Override
+    public void createOwnership(ApartmentInvitation apartmentInvitation) {
+        var ownership = new Ownership();
+        ownership.setOwnershipPart(apartmentInvitation.getOwnershipPart());
+        ownership.setApartment(apartmentInvitation.getApartment());
+        ownership.setUser(userRepository.findByEmail(apartmentInvitation.getEmail()).get());
+
+        ownershipRepository.save(ownership);
+    }
 
     @Transactional
     @Override

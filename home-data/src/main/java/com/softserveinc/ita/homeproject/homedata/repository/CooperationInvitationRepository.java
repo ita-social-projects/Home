@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
@@ -10,5 +11,7 @@ public interface CooperationInvitationRepository extends JpaRepository<Cooperati
 
     List<CooperationInvitation> findAllBySentDatetimeIsNullAndStatusEquals(
             InvitationStatus status);
+
+    CooperationInvitation findByRegistrationToken(String token);
 }
 

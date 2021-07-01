@@ -2,8 +2,10 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.fasterxml.uuid.Generators;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
@@ -37,6 +39,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));
         cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
         cooperationInvitation.setStatus(InvitationStatus.PENDING);
+        cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
         invitationRepository.save(cooperationInvitation);
         cooperationInvitationDto.setId(cooperationInvitation.getId());
         return cooperationInvitationDto;

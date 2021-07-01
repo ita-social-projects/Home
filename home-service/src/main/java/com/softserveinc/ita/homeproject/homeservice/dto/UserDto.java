@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class UserDto extends BaseDto {
 
+    private String registrationToken;
+
     private String firstName;
 
     private String lastName;
