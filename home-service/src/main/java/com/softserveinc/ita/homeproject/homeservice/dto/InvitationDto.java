@@ -13,4 +13,6 @@ public abstract class InvitationDto extends BaseDto{
 
     private String email;
 
+    private String registrationToken;
+
 }

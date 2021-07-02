@@ -37,6 +37,7 @@ public class SendApartmentEmailJob extends BaseEmailJob{
         mailDto.setEmail(invitation.getEmail());
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
         mailDto.setOwnershipPat(invitation.getOwnershipPart());
+        mailDto.setRegistrationToken(invitation.getRegistrationToken());
         checkRegistration(invitation, mailDto);
         return mailDto;
     }

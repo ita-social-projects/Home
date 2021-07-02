@@ -28,6 +28,8 @@ public class MailDto extends BaseDto {
 
     private String link;
 
+    private String registrationToken;
+
     private Boolean isRegistered;
 
     private InvitationTypeDto type;

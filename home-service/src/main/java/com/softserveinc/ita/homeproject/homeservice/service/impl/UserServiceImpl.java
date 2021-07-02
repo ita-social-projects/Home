@@ -4,11 +4,9 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
@@ -37,8 +35,10 @@ public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
 
-    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s" +
+    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s " +
             "does not match provided: %s";
+
+    private static final String TOKENS_NOT_MATCH = "Tokens do not match ";
 
     private final UserRepository userRepository;
 
@@ -57,10 +57,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-
-
-
-
+        ApartmentInvitation invitation = apartmentInvitationRepository
+                .findApartmentInvitationByRegistrationToken(createUserDto.getRegistrationToken());
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
             User toCreate = mapper.convert(createUserDto, User.class);
@@ -76,26 +74,19 @@ public class UserServiceImpl implements UserService {
             });
 
             userRepository.save(toCreate);
-
             return mapper.convert(toCreate, UserDto.class);
         }
+        fillInvitationByType(invitation,createUserDto);
         throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
     private void fillInvitationByType(Invitation invite, UserDto userDto) {
-
-        if (validateEmailsMatching(invite.getEmail(), userDto.getEmail())) {
+        if (validateEmailsMatching(invite.getEmail(), userDto.getEmail())
+                && validateRegistrationToken(invite.getRegistrationToken(), userDto.getRegistrationToken())) {
 
             if (invite.getType().equals(InvitationType.APARTMENT)) {
-                ApartmentInvitation invitation = apartmentInvitationRepository
-                        .findApartmentInvitationByRegistrationToken(userDto.getRegistrationToken());
-
-                ownershipService.createOwnership(invitation);
+                ownershipService.createOwnership((ApartmentInvitation) invite);
             }
-
-            CooperationInvitation invitation = cooperationInvitationRepository
-                    .findByRegistrationToken(userDto.getRegistrationToken());
-
 
         }
     }
@@ -103,6 +94,13 @@ public class UserServiceImpl implements UserService {
     private boolean validateEmailsMatching(String invitationEmail, String email) {
         if (!invitationEmail.equals(email)) {
             throw new BadRequestHomeException(String.format(EMAILS_NOT_MATCH, invitationEmail, email));
+        }
+        return true;
+    }
+
+    private boolean validateRegistrationToken(String invitationToken, String inputToken) {
+        if (!invitationToken.equals(inputToken)) {
+            throw new BadRequestHomeException(TOKENS_NOT_MATCH);
         }
         return true;
     }

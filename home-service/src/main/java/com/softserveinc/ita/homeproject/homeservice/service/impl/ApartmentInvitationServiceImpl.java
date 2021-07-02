@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.uuid.Generators;
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
@@ -95,6 +96,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         var apartmentInvitation = mapper
                 .convert(invitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
+        apartmentInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
         var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
                 .findById(apartmentId)
