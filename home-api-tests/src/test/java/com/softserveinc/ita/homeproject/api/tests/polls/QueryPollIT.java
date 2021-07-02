@@ -101,6 +101,7 @@ class QueryPollIT extends QueryPoll {
         assertEquals(0, queryPoll.size());
     }
 
+    @Disabled("Correct exception message is not ready yet. Created task#250.")
     @Test
     void getAllPollsOnlyByPollId() throws ApiException {
 
