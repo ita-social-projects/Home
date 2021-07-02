@@ -36,6 +36,16 @@ tags:
     description: Cooperation poll management operations
   - name: poll
     description: Poll management operations  independently from cooperation
+  - name: cooperation contact
+    description: Cooperation contact management operations
+  - name: poll question
+    description: Poll question management operations
+  - name: polled house
+    description: Polled house management operations
+
+
+
+
 
 paths:
   /news:
