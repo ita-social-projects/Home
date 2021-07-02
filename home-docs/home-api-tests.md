@@ -13,7 +13,8 @@ Terminal command should look like this:
   -Dpostgres.user={your main postgres superuser}
   -Dpostgres.password={your postgres superuser password}
   -Dhome.application.admin.username={your application admin username}
-  -Dhome.application.admin.password={your application admin password}`
+  -Dhome.application.admin.password={your application admin password}
+  -Dapi.tests.verbose.logging=false`
 
   
 - Run home-application, add mentioned above variables to your Junit template VM options,
