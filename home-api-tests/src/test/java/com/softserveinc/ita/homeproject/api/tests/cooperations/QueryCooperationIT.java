@@ -145,7 +145,7 @@ class QueryCooperationIT {
                 .build()
                 .perform())
             .matches((actual) -> actual.getCode() == 400)
-            .withMessageContaining("Parameter `arg1` is invalid - must be greater than or equal to 1.");
+            .withMessageContaining("Parameter `page_size` is invalid - must be greater than or equal to 1.");
     }
 
     @Test
