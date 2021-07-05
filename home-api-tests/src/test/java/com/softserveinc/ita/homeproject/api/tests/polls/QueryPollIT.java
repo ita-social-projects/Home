@@ -101,14 +101,11 @@ class QueryPollIT extends QueryPoll {
         assertEquals(0, queryPoll.size());
     }
 
-    @Disabled("Correct exception message is not ready yet. Created task#250.")
+    //@Disabled("Correct exception message is not ready yet. Created task#250.")
     @Test
     void getAllPollsOnlyByPollId() throws ApiException {
-
-        Long id = createPoll().getId();
-
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> buildQueryPollOnlyByPollId(id))
+                .isThrownBy(() -> buildQueryPollOnlyByPollId(null))
                 .matches(exception -> exception.getCode() == 400)
                 .withMessageContaining("Parameter `cooperation_id` is invalid - must not be null.");
     }
