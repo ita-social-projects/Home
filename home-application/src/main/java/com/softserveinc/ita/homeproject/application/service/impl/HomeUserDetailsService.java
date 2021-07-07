@@ -1,13 +1,12 @@
 package com.softserveinc.ita.homeproject.application.service.impl;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
-import com.softserveinc.ita.homeproject.homedata.entity.Role;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
+import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +24,11 @@ public class HomeUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public HomeUserDetailsService(UserRepository userRepository) {
+    private final UserCooperationRepository userCooperationRepository;
+
+    public HomeUserDetailsService(UserRepository userRepository, UserCooperationRepository userCooperationRepository) {
         this.userRepository = userRepository;
+        this.userCooperationRepository = userCooperationRepository;
     }
 
     /**
@@ -41,11 +43,12 @@ public class HomeUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
-        Set<Permission> perms = user.getRoles().stream()
-            .map(Role::getPermissions)
-            .flatMap(Collection::stream)
-            .collect(Collectors.toSet());
 
-        return new HomeUserWrapperDetails(user, perms);
+        UserCooperation userCooperation = userCooperationRepository.findUserCooperationByUser(user);
+
+        List<Permission> permissions = userCooperation.getRole().getPermissions();
+
+
+        return new HomeUserWrapperDetails(user, permissions);
     }
 }

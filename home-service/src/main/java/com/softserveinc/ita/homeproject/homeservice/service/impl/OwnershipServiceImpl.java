@@ -1,12 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
@@ -37,17 +35,19 @@ public class OwnershipServiceImpl implements OwnershipService {
     private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
 
     @Override
-    public void createOwnership(ApartmentInvitation apartmentInvitation) {
+    public Ownership createOwnership(ApartmentInvitation apartmentInvitation) {
         var ownership = new Ownership();
         ownership.setOwnershipPart(apartmentInvitation.getOwnershipPart());
         ownership.setApartment(apartmentInvitation.getApartment());
+        ownership.setCooperation( apartmentInvitation.getApartment().getHouse().getCooperation());
 
-        Optional<User> optional = userRepository.findByEmail(apartmentInvitation.getEmail());
+        userRepository.findByEmail(apartmentInvitation.getEmail())
+                .ifPresent(ownership::setUser);
+
         ownership.setEnabled(true);
-        optional.ifPresent(user -> ownership.setUser(optional.get()));
-
-
         ownershipRepository.save(ownership);
+
+        return ownership;
     }
 
     @Transactional

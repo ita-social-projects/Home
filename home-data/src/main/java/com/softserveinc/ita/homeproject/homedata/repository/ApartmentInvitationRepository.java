@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,7 +16,7 @@ public interface ApartmentInvitationRepository extends PagingAndSortingRepositor
 
     List<ApartmentInvitation> findAllByApartmentIdAndStatus(Long apartmentId, InvitationStatus status);
 
-    ApartmentInvitation findApartmentInvitationByRegistrationToken(String token);
+    List <ApartmentInvitation> findApartmentInvitationsByEmail(String email);
 
 }
 

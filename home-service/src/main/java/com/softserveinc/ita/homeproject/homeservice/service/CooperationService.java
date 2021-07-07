@@ -10,4 +10,6 @@ public interface CooperationService extends QueryableService<Cooperation, Cooper
     CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto);
 
     void deactivateCooperation(Long id);
+
+    Cooperation getCooperationByName(String name);
 }

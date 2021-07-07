@@ -102,4 +102,9 @@ public class CooperationServiceImpl implements CooperationService {
         toDelete.setEnabled(false);
         cooperationRepository.save(toDelete);
     }
+
+    public Cooperation getCooperationByName(String name){
+        return cooperationRepository.findCooperationByName(name)
+                .orElseThrow(()->new NotFoundHomeException("Cannot find cooperation with given name"));
+    }
 }

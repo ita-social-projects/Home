@@ -1,25 +1,18 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.USER_ROLE;
-
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
+import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.OwnershipService;
+import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,17 +31,13 @@ public class UserServiceImpl implements UserService {
     private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s " +
             "does not match provided: %s";
 
-    private static final String TOKENS_NOT_MATCH = "Tokens do not match ";
-
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    private final InvitationRepository invitationRepository;
 
-    private final OwnershipService ownershipService;
+    private final ApartmentInvitationServiceImpl apartmentInvitationService;
 
-    private final ApartmentInvitationRepository apartmentInvitationRepository;
-
-    private final CooperationInvitationRepository cooperationInvitationRepository;
+    private final CooperationInvitationService cooperationInvitationService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -57,16 +46,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-        ApartmentInvitation invitation = apartmentInvitationRepository
-                .findApartmentInvitationByRegistrationToken(createUserDto.getRegistrationToken());
+
+        User toCreate = mapper.convert(createUserDto, User.class);
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
-            User toCreate = mapper.convert(createUserDto, User.class);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
-            toCreate.setRoles(Set.of(roleRepository.findByName(USER_ROLE)
-                    .orElseThrow(() -> new NotFoundHomeException("RoleDto not found."))));
             toCreate.setCreateDate(LocalDateTime.now());
             toCreate.getContacts().forEach(contact -> {
                 contact.setUser(toCreate);
@@ -74,36 +60,34 @@ public class UserServiceImpl implements UserService {
             });
 
             userRepository.save(toCreate);
+            checkAndSaveUserByInvitation(createUserDto);
             return mapper.convert(toCreate, UserDto.class);
         }
-        fillInvitationByType(invitation,createUserDto);
         throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
-    private void fillInvitationByType(Invitation invite, UserDto userDto) {
-        if (validateEmailsMatching(invite.getEmail(), userDto.getEmail())
-                && validateRegistrationToken(invite.getRegistrationToken(), userDto.getRegistrationToken())) {
 
-            if (invite.getType().equals(InvitationType.APARTMENT)) {
-                ownershipService.createOwnership((ApartmentInvitation) invite);
-            }
+    private void checkAndSaveUserByInvitation(UserDto userDto) {
 
+        var invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
+                .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING))
+                .orElseThrow(() -> new NotFoundHomeException("Invitation with provided token not found"));
+
+        validateEmailsMatching(invitation.getEmail(), userDto.getEmail());
+
+        if (invitation.getType().equals(InvitationType.APARTMENT)) {
+            apartmentInvitationService.acceptUserInvitation(invitation);
+        }
+        else {
+            cooperationInvitationService.acceptUserInvitation(invitation);
         }
     }
 
-    private boolean validateEmailsMatching(String invitationEmail, String email) {
-        if (!invitationEmail.equals(email)) {
+    private void validateEmailsMatching(String invitationEmail, String email) {
+        if (!invitationEmail.equals(email))
             throw new BadRequestHomeException(String.format(EMAILS_NOT_MATCH, invitationEmail, email));
-        }
-        return true;
     }
 
-    private boolean validateRegistrationToken(String invitationToken, String inputToken) {
-        if (!invitationToken.equals(inputToken)) {
-            throw new BadRequestHomeException(TOKENS_NOT_MATCH);
-        }
-        return true;
-    }
 
     @Override
     @Transactional
@@ -155,17 +139,23 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
-        toDelete.getRoles().forEach(
-                role -> {
-                    if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
-                        throw new BadRequestHomeException("User cannot be deleted.");
-                    }
-                }
-        );
+//        toDelete.getRoles().forEach(
+//                role -> {
+//                    if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
+//                        throw new BadRequestHomeException("User cannot be deleted.");
+//                    }
+//                }
+//        );
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundHomeException("User with email not found"));
     }
 
 }

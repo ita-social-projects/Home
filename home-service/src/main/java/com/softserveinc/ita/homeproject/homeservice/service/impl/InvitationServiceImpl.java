@@ -21,6 +21,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
 
     protected final ServiceMapper mapper;
 
+    private static final String TOKENS_NOT_MATCH = "Tokens do not match ";
+
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
         return saveInvitation(invitationDto);
@@ -36,10 +38,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
         invitationRepository.save(invitation);
     }
 
-
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
                 new InvitationException("Invitation with id " + id + " was not found"));
     }
-
 }

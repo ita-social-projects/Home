@@ -37,6 +37,7 @@ public class SendCooperationEmailJob extends BaseEmailJob {
         mailDto.setId(invitation.getId());
         mailDto.setEmail(invitation.getEmail());
         mailDto.setRole(invitation.getRole().getName());
+        mailDto.setRegistrationToken(invitation.getRegistrationToken());
         mailDto.setCooperationName(invitation.getCooperationName());
         checkRegistration(invitation, mailDto);
         return mailDto;

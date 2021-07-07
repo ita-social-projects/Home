@@ -10,4 +10,6 @@ public interface UserService extends QueryableService<User, UserDto> {
     UserDto updateUser(Long id, UserDto updateUserDto);
 
     void deactivateUser(Long id);
+
+    User getUserByEmail(String email);
 }

@@ -12,4 +12,5 @@ public interface OwnershipRepository  extends PagingAndSortingRepository<Ownersh
         JpaSpecificationExecutor<Ownership> {
 
     List<Ownership> findAllByApartmentId(Long apartmentId);
+
 }

@@ -12,6 +12,7 @@ public interface CooperationInvitationRepository extends JpaRepository<Cooperati
     List<CooperationInvitation> findAllBySentDatetimeIsNullAndStatusEquals(
             InvitationStatus status);
 
-    CooperationInvitation findByRegistrationToken(String token);
+    Optional<CooperationInvitation> findInvitationByEmail(String token);
+
 }
 

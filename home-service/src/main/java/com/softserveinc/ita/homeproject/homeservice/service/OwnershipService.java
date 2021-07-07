@@ -7,7 +7,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
 
 public interface OwnershipService extends QueryableService<Ownership, OwnershipDto> {
 
-    void createOwnership(ApartmentInvitation apartmentInvitation);
+    Ownership createOwnership(ApartmentInvitation apartmentInvitation);
 
     OwnershipDto updateOwnership(Long apartmentId, Long id, OwnershipDto updateOwnershipDto);
 
