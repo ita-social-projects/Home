@@ -9,10 +9,9 @@ import com.softserveinc.ita.homeproject.homedata.entity.Vote;
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateMultipleChoiceQuestionVoteDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundAnswerVariantException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
@@ -28,8 +27,8 @@ public class CreateMultipleChoiceQuestionVoteDtoServiceMappingConfig
 
     @Override
     public void addMappings(TypeMap<CreateMultipleChoiceQuestionVoteDto, QuestionVote> typeMap) {
-        typeMap.addMappings(mapper -> mapper.when(Conditions.isNotNull())
-                .map(CreateMultipleChoiceQuestionVoteDto::getId, QuestionVote::setId))
+        typeMap.addMappings(mapper -> mapper.skip(QuestionVote::setId))
+            .addMappings(mapper -> mapper.skip(QuestionVote::setVote))
             .addMappings(mapper -> mapper
                 .map(CreateMultipleChoiceQuestionVoteDto::getQuestionId, QuestionVote::setQuestionId))
             .setPostConverter(fieldsConverter());
@@ -39,13 +38,17 @@ public class CreateMultipleChoiceQuestionVoteDtoServiceMappingConfig
         return context -> {
             CreateMultipleChoiceQuestionVoteDto source = context.getSource();
             QuestionVote destination = context.getDestination();
+            Long questionVoteId = source.getId();
+            if (questionVoteId != null) {
+                destination.setId(questionVoteId);
+            }
             Long voteId = source.getVoteId();
             if (voteId != null) {
                 Vote vote = voteRepository.findById(voteId).orElse(null);
                 destination.setVote(vote);
             }
             List<AnswerVariant> answers = source.getAnswerVariantIds().stream().map(
-                id -> answerVariantRepository.findById(id).orElseThrow(() -> new NotFoundAnswerVariantException(
+                id -> answerVariantRepository.findById(id).orElseThrow(() -> new NotFoundHomeException(
                     String.format("Answer variant with 'id: %d' is not found", id)))).collect(Collectors.toList());
             destination.setAnswerVariants(answers);
             return context.getDestination();

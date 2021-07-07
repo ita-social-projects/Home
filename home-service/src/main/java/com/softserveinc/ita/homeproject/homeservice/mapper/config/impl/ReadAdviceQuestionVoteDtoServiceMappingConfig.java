@@ -7,7 +7,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionReposito
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadAdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadAnswerVariantDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundPollQuestionException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class ReadAdviceQuestionVoteDtoServiceMappingConfig implements
             ReadAdviceQuestionVoteDto destination = context.getDestination();
             Long questionId = source.getQuestionId();
             AdviceChoiceQuestion question = (AdviceChoiceQuestion) questionRepository.findById(questionId)
-                .orElseThrow(() -> new NotFoundPollQuestionException(
+                .orElseThrow(() -> new NotFoundHomeException(
                     String.format("Poll question with 'id: %d' is not found", questionId)));
             destination.setQuestion(serviceMapper.convert(question, PollQuestionDto.class));
             AnswerVariant answerVariant = source.getAnswerVariants().get(0);

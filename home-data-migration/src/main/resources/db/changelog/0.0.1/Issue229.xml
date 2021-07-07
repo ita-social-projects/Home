@@ -13,6 +13,11 @@
             <column name="POLL_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
         </createTable>
     </changeSet>
 

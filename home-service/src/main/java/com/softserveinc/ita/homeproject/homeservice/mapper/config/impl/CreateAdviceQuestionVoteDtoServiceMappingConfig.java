@@ -11,10 +11,9 @@ import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantReposit
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateAdviceQuestionVoteDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundVoteException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
@@ -32,8 +31,8 @@ public class CreateAdviceQuestionVoteDtoServiceMappingConfig
 
     @Override
     public void addMappings(TypeMap<CreateAdviceQuestionVoteDto, QuestionVote> typeMap) {
-        typeMap.addMappings(mapper -> mapper.when(Conditions.isNotNull())
-                .map(CreateAdviceQuestionVoteDto::getId, QuestionVote::setId))
+        typeMap.addMappings(mapper -> mapper.skip(QuestionVote::setId))
+            .addMappings(mapper -> mapper.skip(QuestionVote::setVote))
             .addMappings(mapper -> mapper
                 .map(CreateAdviceQuestionVoteDto::getQuestionId, QuestionVote::setQuestionId))
             .setPostConverter(fieldsConverter());
@@ -43,6 +42,10 @@ public class CreateAdviceQuestionVoteDtoServiceMappingConfig
         return context -> {
             CreateAdviceQuestionVoteDto source = context.getSource();
             QuestionVote destination = context.getDestination();
+            Long questionVoteId = source.getId();
+            if (questionVoteId != null) {
+                destination.setId(questionVoteId);
+            }
             Long voteId = source.getVoteId();
             if (voteId != null) {
                 Vote vote = voteRepository.findById(voteId).orElse(null);
@@ -56,7 +59,7 @@ public class CreateAdviceQuestionVoteDtoServiceMappingConfig
     private void mapAnswerVariants(CreateAdviceQuestionVoteDto source, QuestionVote destination) {
         Long questionId = source.getQuestionId();
         AdviceChoiceQuestion question = (AdviceChoiceQuestion) questionRepository.findById(questionId).orElseThrow(
-            () -> new NotFoundVoteException(String.format("Vote with 'id: %d' is not found", questionId)));
+            () -> new NotFoundHomeException(String.format("Poll question with 'id: %d' is not found", questionId)));
         String answer = source.getAnswer();
         List<AnswerVariant> answers = new ArrayList<>();
         AnswerVariant repeatedAnswer = answerVariantRepository.findByQuestionAndAnswer(question, answer);

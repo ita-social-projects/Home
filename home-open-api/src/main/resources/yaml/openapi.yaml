@@ -2451,6 +2451,8 @@ components:
           multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestionVote'
           advice: '#/components/schemas/CreateAdviceQuestionVote'
       properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
         question:
           $ref: '#/components/schemas/QuestionLookup'
 

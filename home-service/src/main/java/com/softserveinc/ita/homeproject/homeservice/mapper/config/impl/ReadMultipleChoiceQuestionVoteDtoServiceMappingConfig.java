@@ -5,7 +5,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.QuestionVote;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadMultipleChoiceQuestionVoteDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundPollQuestionException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class ReadMultipleChoiceQuestionVoteDtoServiceMappingConfig implements
             ReadMultipleChoiceQuestionVoteDto destination = context.getDestination();
             Long questionId = source.getQuestionId();
             MultipleChoiceQuestion question = (MultipleChoiceQuestion) questionRepository.findById(questionId)
-                .orElseThrow(() -> new NotFoundPollQuestionException(
+                .orElseThrow(() -> new NotFoundHomeException(
                     String.format("Poll question with 'id: %d' is not found", questionId)));
             destination.setQuestion(serviceMapper.convert(question, PollQuestionDto.class));
             return context.getDestination();

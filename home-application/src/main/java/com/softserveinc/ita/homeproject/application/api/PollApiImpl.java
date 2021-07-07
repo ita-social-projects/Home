@@ -15,9 +15,14 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
+import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
+import com.softserveinc.ita.homeproject.application.service.impl.HomeUserDetailsService;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
@@ -28,16 +33,20 @@ import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.model.ReadQuestion;
 import com.softserveinc.ita.homeproject.model.ReadVote;
 import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Provider
 @Component
 public class PollApiImpl extends CommonApi implements PollsApi {
+
+    private static final String USER_NOT_FOUND_FORMAT = "User with login: %s is not found";
 
     @Autowired
     private PollQuestionService pollQuestionService;
@@ -47,6 +56,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
     private VoteService voteService;
+
+    @Autowired
+    private HomeUserDetailsService userDetailsService;
 
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
@@ -79,7 +91,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     public Response createQuestion(Long pollId, @Valid CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
         var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
-        var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
+        var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
@@ -87,8 +99,10 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(CREATE_VOTE_PERMISSION)
     @Override
     public Response createVote(Long pollId, @Valid CreateVote createVote) {
+        User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
         var createVoteDto = mapper.convert(createVote, CreateVoteDto.class);
-        var readVoteDto = voteService.createVote(pollId, createVoteDto);
+        var readVoteDto = voteService.createVote(pollId, currentUser, createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
         return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
