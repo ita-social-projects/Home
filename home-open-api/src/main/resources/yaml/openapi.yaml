@@ -43,10 +43,6 @@ tags:
   - name: polled house
     description: Polled house management operations
 
-
-
-
-
 paths:
   /news:
     post:
