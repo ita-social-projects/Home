@@ -8,7 +8,7 @@ info:
     url: https://opensource.org/licenses/mit-license.php
   contact:
     url: https://github.com/ita-social-projects/Home
-  version: 1.0.0
+  version: 1.0.1
 
 servers:
   - url: /api/0
@@ -1749,6 +1749,12 @@ components:
         main:
           type: boolean
           example: false
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "home.example@gmail.com"
     UpdateEmailContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
@@ -2234,9 +2240,11 @@ components:
                   - id: 1
                     type: email
                     main: true
+                    email: "get.example@mail.com"
                   - id: 2
                     type: phone
                     main: false
+                    phone: "+380506617305"
               ownership_part: 0.72
             - id: 2
               user:
@@ -2247,9 +2255,11 @@ components:
                   - id: 3
                     type: email
                     main: true
+                    email: "get2.example@mail.com"
                   - id: 4
                     type: phone
                     main: false
+                    phone: "+380506617306"
               ownership_part: 0.38
 
     HouseLookup:
