@@ -70,7 +70,7 @@
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="47"/>
+            <column name="permission_id" value="50"/>
         </insert>
     </changeSet>
 
