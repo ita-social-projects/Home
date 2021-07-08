@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -67,6 +68,8 @@ public class PollVoteApiIT {
 
     private static final String ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE =
         "The answer variant with 'id: %d' cannot be chosen when voting on the question with 'id: %d'";
+
+    private static final String QUESTION_NOT_FOUND_MESSAGE = "Poll question with 'id: %d' is not found";
 
     private static final PollStatus[] pollStatusesWithoutActive =
         {PollStatus.DRAFT, PollStatus.SUSPENDED};
@@ -200,7 +203,7 @@ public class PollVoteApiIT {
     }
 
     @Test
-    void votingWithExceedingAnswersNumberForMultipleChoiceQuestionThrowsExceptionTest() throws ApiException {
+    void votingOnMultipleChoiceQuestionWithExceedingAnswersNumberThrowsExceptionTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
         CreateMultipleChoiceQuestion createdMultipleQuestion = createMultipleChoiceQuestion();
@@ -222,7 +225,7 @@ public class PollVoteApiIT {
     }
 
     @Test
-    void votingWithNotMatchingAnswersForMultipleChoiceQuestionThrowsExceptionTest() throws ApiException {
+    void votingOnMultipleChoiceQuestionWithNotMatchingAnswersThrowsExceptionTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPoll ourPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
         CreateMultipleChoiceQuestion createdMultipleQuestion = createMultipleChoiceQuestion();
@@ -245,6 +248,24 @@ public class PollVoteApiIT {
             .withMessageContaining(String.format(ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE,
                 ((CreateMultipleChoiceQuestionVote) createdVote.getQuestionVotes().get(0)).getAnswers().get(0).getId(),
                 ourMultipleChoiceQuestion.getId()));
+    }
+
+    @Test
+    void votingOnMissingQuestionThrowsExceptionTest() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+        CreateAdviceQuestion createdAdviceQuestion = createAdviceQuestion();
+        pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
+        createdPoll.setStatus(PollStatus.ACTIVE);
+        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
+            updatePoll(createdPoll));
+        ReadAdviceQuestion missingQuestion = createMissingAdviceQuestion();
+        CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(missingQuestion));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining(String.format(QUESTION_NOT_FOUND_MESSAGE, missingQuestion.getId()));
     }
 
     private void assertVote(Long pollId, CreateVote expected, ReadVote actual) throws ApiException {
@@ -354,8 +375,7 @@ public class PollVoteApiIT {
     }
 
     private CreateUpdateAnswerVariant createAnswerVariant() {
-        return new CreateUpdateAnswerVariant().answer(
-            String.format("AnswerVariant for advice question #%d for vote test", adviceQuestionNumber));
+        return new CreateUpdateAnswerVariant().answer("AnswerVariant for advice question for vote test");
     }
 
     private CreateMultipleChoiceQuestionVote createMultipleChoiceQuestionVote(ReadMultipleChoiceQuestion question) {
@@ -441,5 +461,12 @@ public class PollVoteApiIT {
             questionVoteAnswerList.add(generalSourceAnswerList.get(0));
         }
         return questionVote.answers(questionVoteAnswerList);
+    }
+
+    private ReadAdviceQuestion createMissingAdviceQuestion() {
+        ReadAdviceQuestion missingQuestion = new ReadAdviceQuestion();
+        missingQuestion.setId(-100L);
+        missingQuestion.setType(QuestionType.ADVICE);
+        return missingQuestion;
     }
 }

@@ -1343,6 +1343,100 @@ paths:
         default:
           $ref: '#/components/responses/InternalServerError'
 
+  /polls/{poll_id}/houses:
+    get:
+      tags:
+        - polled house
+      summary: Get all polled houses
+      description: The endpoint gets all polled houses of the poll
+      operationId: queryPolledHouse
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/quantity_flat'
+        - $ref: '#/components/parameters/adjoining_area'
+        - $ref: '#/components/parameters/house_area'
+      responses:
+        200:
+          $ref: '#/components/responses/HousesResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - polled house
+      summary: Create polled house
+      description: The endpoint creates a polled house in the poll. House can be created only if poll status is draft
+      operationId: createPolledHouse
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+      requestBody:
+        $ref: '#/components/requestBodies/LookupHouseBody'
+      responses:
+        204:
+          description: Success
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+  /polls/{poll_id}/houses/{id}:
+    get:
+      tags:
+        - polled house
+      summary: Get polled house
+      description: Get a polled house by a polled house id
+      operationId: getPolledHouse
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        200:
+          $ref: '#/components/responses/PollHouseResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - polled house
+      summary: Delete polled house
+      description: Delete a polled house by a polled house ID. House can be deleted only if poll status is draft
+      operationId: deletePolledHouse
+      parameters:
+        - $ref: '#/components/parameters/p_poll_id'
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        204:
+          description: Success
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
   /polls/{poll_id}/votes:
     post:
       tags:
@@ -2643,6 +2737,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ReadHouse'
+    PollHouseResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadHouse'
     HousesResponse:
       description: OK
       content:
@@ -2799,6 +2899,13 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateHouse'
       required: true
+    LookupHouseBody:
+      description: A payload for creating a new Poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HouseLookup'
+      required: true
     CreateApartmentBody:
       description: A payload for creating a new Apartment
       content:
@@ -2884,14 +2991,6 @@ components:
         type: integer
         format: int64
       example: 1
-    p_poll_id:
-      name: poll_id
-      in: path
-      required: true
-      schema:
-        type: integer
-        format: int64
-      example: 1
     p_cooperation_id:
       name: cooperation_id
       in: path
@@ -2937,6 +3036,15 @@ components:
         type: integer
         format: int64
       example: 1
+    p_poll_id:
+      name: "poll_id"
+      in: "path"
+      description: ID of the poll to which polled houses belongs
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
     page_number:
       in: query
       name: page_number
