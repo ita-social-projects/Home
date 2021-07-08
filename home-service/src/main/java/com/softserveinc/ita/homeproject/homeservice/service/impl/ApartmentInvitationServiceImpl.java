@@ -44,8 +44,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private final UserCooperationService userCooperationService;
 
-    private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of area = %.3f " +
-            "The sum of the entered area cannot be greater than 1";
+    private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of area = %.3f "
+            + "The sum of the entered area cannot be greater than 1";
 
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
@@ -117,9 +117,9 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private BigDecimal getAllActiveInvitationsByApartmentId(Long apartmentId) {
         return Stream.concat(apartmentInvitationRepository
-                        .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING).stream()
-                , apartmentInvitationRepository
-                        .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING).stream())
+                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
+                .stream(), apartmentInvitationRepository
+                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING).stream())
                 .map(ApartmentInvitation::getOwnershipPart)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

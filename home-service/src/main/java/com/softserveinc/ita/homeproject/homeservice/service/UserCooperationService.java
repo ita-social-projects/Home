@@ -5,7 +5,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
 import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserCooperationDto;
 
-public interface UserCooperationService extends QueryableService <UserCooperation, UserCooperationDto> {
+public interface UserCooperationService extends QueryableService<UserCooperation, UserCooperationDto> {
 
     void createUserCooperationViaInvitation(CooperationInvitation invitation);
 

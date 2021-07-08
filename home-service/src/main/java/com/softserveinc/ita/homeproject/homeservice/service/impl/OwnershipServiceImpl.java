@@ -39,7 +39,7 @@ public class OwnershipServiceImpl implements OwnershipService {
         var ownership = new Ownership();
         ownership.setOwnershipPart(apartmentInvitation.getOwnershipPart());
         ownership.setApartment(apartmentInvitation.getApartment());
-        ownership.setCooperation( apartmentInvitation.getApartment().getHouse().getCooperation());
+        ownership.setCooperation(apartmentInvitation.getApartment().getHouse().getCooperation());
 
         userRepository.findByEmail(apartmentInvitation.getEmail())
                 .ifPresent(ownership::setUser);

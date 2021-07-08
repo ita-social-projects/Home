@@ -16,7 +16,7 @@ public interface ApartmentInvitationRepository extends PagingAndSortingRepositor
 
     List<ApartmentInvitation> findAllByApartmentIdAndStatus(Long apartmentId, InvitationStatus status);
 
-    List <ApartmentInvitation> findApartmentInvitationsByEmail(String email);
+    List<ApartmentInvitation> findApartmentInvitationsByEmail(String email);
 
 }
 

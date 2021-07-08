@@ -26,8 +26,6 @@ public class UserCooperationImpl implements UserCooperationService {
 
     private final CooperationRepository cooperationRepository;
 
-//    private final CooperationService cooperationService; form a cycle
-
     private final UserRepository userRepository;
 
     @Override
@@ -59,7 +57,9 @@ public class UserCooperationImpl implements UserCooperationService {
     }
 
     @Override
-    public Page<UserCooperationDto> findAll(Integer pageNumber, Integer pageSize, Specification<UserCooperation> specification) {
+    public Page<UserCooperationDto> findAll(Integer pageNumber,
+                                            Integer pageSize,
+                                            Specification<UserCooperation> specification) {
         return null;
     }
 }

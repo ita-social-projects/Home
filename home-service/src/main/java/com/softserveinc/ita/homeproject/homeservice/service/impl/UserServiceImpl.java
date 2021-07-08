@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
 
-    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s " +
-            "does not match provided: %s";
+    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s "
+            + "does not match provided: %s";
 
     private final UserRepository userRepository;
 
@@ -77,15 +77,15 @@ public class UserServiceImpl implements UserService {
 
         if (invitation.getType().equals(InvitationType.APARTMENT)) {
             apartmentInvitationService.acceptUserInvitation(invitation);
-        }
-        else {
+        } else {
             cooperationInvitationService.acceptUserInvitation(invitation);
         }
     }
 
     private void validateEmailsMatching(String invitationEmail, String email) {
-        if (!invitationEmail.equals(email))
+        if (!invitationEmail.equals(email)) {
             throw new BadRequestHomeException(String.format(EMAILS_NOT_MATCH, invitationEmail, email));
+        }
     }
 
 
@@ -122,7 +122,8 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
                 .ifPresent(userByEmail -> {
                     if (!user.getId().equals(userByEmail.getId())) {
-                        throw new AlreadyExistHomeException("User with email " + userDto.getEmail() + " is already exists");
+                        throw new AlreadyExistHomeException("User with email "
+                                + userDto.getEmail() + " is already exists");
                     }
                 });
     }
@@ -139,13 +140,7 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
-//        toDelete.getRoles().forEach(
-//                role -> {
-//                    if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
-//                        throw new BadRequestHomeException("User cannot be deleted.");
-//                    }
-//                }
-//        );
+
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
