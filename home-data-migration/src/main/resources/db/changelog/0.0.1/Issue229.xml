@@ -60,7 +60,7 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="46"/>
+            <column name="id" value="47"/>
             <column name="name" value="CREATE_VOTE_PERMISSION"/>
         </insert>
     </changeSet>
@@ -70,7 +70,7 @@
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="1"/>
-            <column name="permission_id" value="46"/>
+            <column name="permission_id" value="47"/>
         </insert>
     </changeSet>
 
