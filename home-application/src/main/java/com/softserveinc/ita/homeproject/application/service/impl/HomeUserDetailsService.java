@@ -1,11 +1,10 @@
 package com.softserveinc.ita.homeproject.application.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,12 +40,13 @@ public class HomeUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        var user = userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
 
-        UserCooperation userCooperation = userCooperationRepository.findUserCooperationByUser(user);
+        var userCooperation = userCooperationRepository.findUserCooperationByUser(user);
 
-        List<Permission> permissions = userCooperation.getRole().getPermissions();
+        List<String> permissions = userCooperation.getRole().getPermissions()
+                .stream().map(Permission::getName).collect(Collectors.toList());
 
 
         return new HomeUserWrapperDetails(user, permissions);
