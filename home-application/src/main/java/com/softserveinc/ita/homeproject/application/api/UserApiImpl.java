@@ -106,7 +106,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                         String email,
                                         String main,
                                         ContactType type) {
-
+        verifyExistence(userId, userService);
         Page<ContactDto> contacts = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(contacts, ReadContact.class);
     }
