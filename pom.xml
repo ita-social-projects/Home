@@ -95,6 +95,16 @@
         </repository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Illia-Shchur Apache Maven Packages</name>
+            <url>https://Illia-Shchur:${Dapi.application.dependency.quartz-actuator}@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>

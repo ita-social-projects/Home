@@ -48,6 +48,7 @@ jobs:
           -Ddockerhub.username=${{secrets.DOCKER_USERNAME}}
           -Ddockerhub.password=${{secrets.DOCKER_PASSWORD}}
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
+          -Dapi.application.dependency.quartz-actuator = ${{secrets.SECRET_QUARTZ_ACTUATOR_LIBRARY}}
 
   deploy:
     needs: package
