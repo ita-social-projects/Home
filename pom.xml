@@ -42,6 +42,7 @@
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml</checkstyle.configLocation>
         <jacoco.version>0.8.6</jacoco.version>
+        <github.quartz-actuator.secret>${Dapi.application.dependency.quartz-actuator}</github.quartz-actuator.secret>
     </properties>
 
     <profiles>
@@ -99,7 +100,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Illia-Shchur Apache Maven Packages</name>
-            <url>https://Illia-Shchur:${Dapi.application.dependency.quartz-actuator}@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
+            <url>https://Illia-Shchur:${github.quartz-actuator.secret}@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
             <releases><enabled>true</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
