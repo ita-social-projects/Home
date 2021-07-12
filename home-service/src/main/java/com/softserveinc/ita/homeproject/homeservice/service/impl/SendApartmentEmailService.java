@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
+package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SendApartmentEmailJob extends BaseEmailJob{
+public class SendApartmentEmailService extends BaseEmailService {
 
     private final ApartmentInvitationService apartmentInvitationService;
 
     @Override
     @SneakyThrows
-    protected void executeAllInvitationsByType() {
+    public void executeAllInvitationsByType() {
         List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
 
         for (InvitationDto invite : invitations) {

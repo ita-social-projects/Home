@@ -87,14 +87,6 @@
         </dependency>
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub ita-social-projects Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/ita-social-projects/Home</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <plugins>
             <plugin>
@@ -102,6 +94,9 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                     <target>${java.version}</target>
                     <source>${java.version}</source>
                     <annotationProcessorPaths>
@@ -170,4 +165,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Illia-Shchur Apache Maven Packages</name>
+            <url>https://Illia-Shchur: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@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+
 </project>

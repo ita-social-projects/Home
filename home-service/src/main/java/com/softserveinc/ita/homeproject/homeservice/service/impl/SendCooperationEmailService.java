@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
+package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SendCooperationEmailJob extends BaseEmailJob {
+public class SendCooperationEmailService extends BaseEmailService {
 
     private final CooperationInvitationService cooperationInvitationService;
 

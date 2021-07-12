@@ -73,6 +73,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.quartz-actuator</groupId>
+            <artifactId>quartz-actuator-application</artifactId>
+            <version>1.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
