@@ -175,7 +175,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Illia-Shchur Apache Maven Packages</name>
-            <url>https://Illia-Shchur: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@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
+            <url>https://Illia-Shchur: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@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
             <releases><enabled>true</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>
