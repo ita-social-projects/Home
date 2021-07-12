@@ -1660,9 +1660,11 @@ components:
         main:
           type: boolean
           example: false
-        email:
-          type: string
-          example: "test.put.messages@gmail.com"
+      example:
+        id: 1
+        type: email
+        main: false
+        email: test.put.messages@gmail.com
     ReadEmailContact:
       allOf:
         - $ref: '#/components/schemas/ReadContact'
@@ -1698,12 +1700,10 @@ components:
           default: false
           type: boolean
           example: false
-        email:
-          minLength: 5
-          maxLength: 320
-          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          type: string
-          example: "test.put.messages@gmail.com"
+      example:
+        type: email
+        main: false
+        email: test.put.messages@gmail.com
     CreateEmailContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
@@ -1745,12 +1745,10 @@ components:
         main:
           type: boolean
           example: false
-        email:
-          minLength: 5
-          maxLength: 320
-          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          type: string
-          example: "home.example@gmail.com"
+      example:
+        type: email,
+        main: false,
+        email: test.put.messages@gmail.com
     UpdateEmailContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
