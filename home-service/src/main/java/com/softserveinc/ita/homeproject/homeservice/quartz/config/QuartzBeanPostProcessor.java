@@ -29,10 +29,10 @@ public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor {
                 QuartzJobBeanAutoConfiguration quartzConfig =
                         clazz.getDeclaredAnnotation(QuartzJobBeanAutoConfiguration.class);
 
-                String jobName = quartzConfig.jobName().isEmpty() ?
-                        name + "JobDetail" : quartzConfig.jobName();
-                String triggerName = quartzConfig.triggerName().isEmpty() ?
-                        name + "Trigger" : quartzConfig.triggerName();
+                String jobName = quartzConfig.jobName().isEmpty()
+                        ? name + "JobDetail" : quartzConfig.jobName();
+                String triggerName = quartzConfig.triggerName().isEmpty()
+                        ? name + "Trigger" : quartzConfig.triggerName();
 
                 JobDetail jobDetail = createJobDetail(clazz, jobName,quartzConfig.group());
                 Trigger trigger = createCronTrigger(jobDetail, quartzConfig.cron(), triggerName,quartzConfig.group());

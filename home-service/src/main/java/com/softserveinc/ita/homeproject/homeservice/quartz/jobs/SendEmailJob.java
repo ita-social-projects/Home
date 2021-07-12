@@ -24,7 +24,6 @@ public class SendEmailJob extends QuartzJobBean {
     @SneakyThrows
     @Override
     public void executeInternal(JobExecutionContext context) {
-        log.info("Send email JOBA");
         sendApartmentEmailJob.executeAllInvitationsByType();
         sendCooperationEmailJob.executeAllInvitationsByType();
     }
