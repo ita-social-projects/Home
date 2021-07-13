@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.invitations;
 
-import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
@@ -10,10 +9,15 @@ import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -24,9 +28,9 @@ class InvitationApiIT {
     @Test
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
-        ApiResponse<ReadCooperation> cooperationWithHttpInfo = cooperationApi.createCooperationWithHttpInfo(createCoop);
+        cooperationApi.createCooperationWithHttpInfo(createCoop);
 
-        TimeUnit.MILLISECONDS.sleep(60000);
+        TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
@@ -36,11 +40,11 @@ class InvitationApiIT {
         assertTrue(getLastMessageSubject(response).contains("invitation to cooperation"));
     }
 
-    private String getLastMessageEmailTo(MailHogApiResponse response){
+    private String getLastMessageEmailTo(MailHogApiResponse response) {
         return String.valueOf(response.getItems().get(0).getContent().getHeaders().getTo());
     }
 
-    private String getLastMessageSubject(MailHogApiResponse response){
+    private String getLastMessageSubject(MailHogApiResponse response) {
         return String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
     }
 
@@ -49,7 +53,7 @@ class InvitationApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .adminEmail("test.receive.messages@gmail.com")
+                .adminEmail("test.receive.342@gmail.com")
                 .address(createAddress())
                 .houses(createHouseList())
                 .contacts(createContactList());

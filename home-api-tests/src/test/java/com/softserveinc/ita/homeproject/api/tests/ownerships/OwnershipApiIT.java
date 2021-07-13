@@ -2,14 +2,26 @@ package com.softserveinc.ita.homeproject.api.tests.ownerships;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.ApartmentOwnershipApi;
+import com.softserveinc.ita.homeproject.api.*;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ReadOwnership;
-import com.softserveinc.ita.homeproject.model.UpdateOwnership;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.model.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
@@ -21,6 +33,14 @@ class OwnershipApiIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
 
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+
+    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+
     private static final long TEST_OWNERSHIP_ID = 10000001L;
 
     private static final long TEST_DELETE_OWNERSHIP_ID = 10000003L;
@@ -28,6 +48,33 @@ class OwnershipApiIT {
     private static final long TEST_APARTMENT_ID = 100000000L;
 
     private static final long TEST_DELETE_OWNERSHIP_APARTMENT_ID = 100000001L;
+
+    @Test
+    void createUserAndOwnershipViaApartmentTest() throws ApiException, InterruptedException, IOException {
+        CreateApartment createApartment = createApartment();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        apartmentApi.createApartment(createdHouse.getId(), createApartment);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+        CreateUser expectedUser = createBaseUser();
+        expectedUser.setRegistrationToken(getToken(getDecodedApartmentMessage(mailResponse)));
+
+        expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
+
+        System.out.println(createApartment.getInvitations().get(0).getEmail());
+
+        System.out.println(expectedUser.getEmail());
+
+        ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(),
+                response.getStatusCode());
+        assertUser(expectedUser, response.getData());
+    }
 
     @Test
     void getOwnershipTest() throws ApiException {
@@ -141,6 +188,75 @@ class OwnershipApiIT {
                 .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID +"' is not found");
     }
 
+    private CreateUser createBaseUser() {
+        return new CreateUser()
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
+    }
+
+    private CreateCooperation createCooperation() {
+        return new CreateCooperation()
+                .name("newCooperationTest")
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail("test.receive.messages@gmail.com")
+                .address(createAddress());
+    }
+
+    private CreateHouse createHouse() {
+        return new CreateHouse()
+                .adjoiningArea(500)
+                .houseArea(BigDecimal.valueOf(500.0))
+                .quantityFlat(50)
+                .address(createAddress());
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
+    }
+
+    private CreateApartment createApartment() {
+        return new CreateApartment()
+                .area(BigDecimal.valueOf(72.5))
+                .number("15")
+                .invitations(createApartmentInvitation());
+    }
+
+    private List<CreateInvitation> createApartmentInvitation() {
+        List<CreateInvitation> createInvitations = new ArrayList<>();
+        createInvitations.add(new CreateApartmentInvitation()
+                .ownershipPart(BigDecimal.valueOf(0.3))
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT));
+
+        return createInvitations;
+    }
+
+    private String getDecodedApartmentMessage(MailHogApiResponse response) {
+        String body = response.getItems().get(1).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    }
+
+    private String getToken(String str) {
+        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
+        Matcher matcher = pattern.matcher(str);
+
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group();
+        }
+
+        return result.trim();
+    }
+
     private void assertApartment(ReadOwnership expected, ReadOwnership actual) {
         assertNotNull(expected);
         assertNotNull(actual);
@@ -152,5 +268,12 @@ class OwnershipApiIT {
         assertNotNull(update);
         assertNotNull(updated);
         assertEquals(update.getOwnershipPart(), updated.getOwnershipPart());
+    }
+
+    private void assertUser(CreateUser expected, ReadUser actual) {
+        assertNotNull(expected);
+        assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getLastName(), actual.getLastName());
+        assertEquals(expected.getEmail(), actual.getEmail());
     }
 }
