@@ -34,16 +34,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <artifactId>home-server-generator</artifactId>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <artifactId>home-generated-server</artifactId>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
@@ -54,6 +44,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
         </dependency>
     </dependencies>
 

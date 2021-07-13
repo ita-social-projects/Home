@@ -63,7 +63,7 @@ abstract class QueryPoll {
 
         List<ReadPoll> queryPoll = buildQueryPollWithSort("id,asc");
 
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId));
     }
 
     @Test
@@ -74,7 +74,7 @@ abstract class QueryPoll {
 
         List<ReadPoll> queryPoll = buildQueryPollWithSort("id,desc");
 
-        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId).reversed());
     }
 
     @Test
