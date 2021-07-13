@@ -322,7 +322,7 @@ paths:
         - contact
       summary: Get Contact by ID
       description: The endpoint retrieves an existing contact
-                   associated with the specified User by User and Contact IDs
+        associated with the specified User by User and Contact IDs
       operationId: getContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -343,7 +343,7 @@ paths:
         - contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-                  in the system by the specified User and Contact IDs
+        in the system by the specified User and Contact IDs
       operationId: updateContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -368,7 +368,7 @@ paths:
         - contact
       summary: Delete Contact
       description: The endpoint deletes an existing Contact on a User associated with the
-                   specified User and Contact IDs
+        specified User and Contact IDs
       operationId: deleteContactOnUser
       parameters:
         - $ref: '#/components/parameters/p_user_id'
@@ -689,7 +689,7 @@ paths:
         - cooperation contact
       summary: Update Contact
       description: The endpoint updates information on a contact that exists
-          in the system by the specified Cooperation and Contact IDs
+        in the system by the specified Cooperation and Contact IDs
       operationId: updateContactOnCooperation
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
@@ -812,7 +812,7 @@ paths:
         - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-         $ref: '#/components/requestBodies/UpdateApartmentBody'
+        $ref: '#/components/requestBodies/UpdateApartmentBody'
       responses:
         200:
           $ref: '#/components/responses/ApartmentResponse'
@@ -1094,7 +1094,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_cooperation_id'
       requestBody:
-          $ref: '#/components/requestBodies/CreatePollBody'
+        $ref: '#/components/requestBodies/CreatePollBody'
       responses:
         201:
           $ref: '#/components/responses/PollResponse'
@@ -1138,7 +1138,7 @@ paths:
         - $ref: '#/components/parameters/p_cooperation_id'
         - $ref: '#/components/parameters/p_id'
       requestBody:
-          $ref: '#/components/requestBodies/UpdatePollBody'
+        $ref: '#/components/requestBodies/UpdatePollBody'
       responses:
         200:
           $ref: '#/components/responses/PollResponse'
@@ -1259,10 +1259,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_poll_id'
       requestBody:
-         $ref: '#/components/requestBodies/CreateQuestionBody'
+        $ref: '#/components/requestBodies/CreateQuestionBody'
       responses:
         '201':
-         $ref: '#/components/responses/QuestionResponse'
+          $ref: '#/components/responses/QuestionResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1376,7 +1376,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_poll_id'
       requestBody:
-          $ref: '#/components/requestBodies/LookupHouseBody'
+        $ref: '#/components/requestBodies/LookupHouseBody'
       responses:
         204:
           description: Success
@@ -1442,18 +1442,15 @@ components:
       scheme: basic
 
   schemas:
-    BaseReadView:
+    base_id:
+      type: integer
+      format: int64
+      example: 1
+    ReadNews:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
-          example: 1
-    ReadNews:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
-      type: object
-      properties:
+          $ref: '#/components/schemas/base_id'
         title:
           type: string
           example: News In The Local Area
@@ -1538,12 +1535,17 @@ components:
           example: example
     CreateUser:
       required:
+        - registration_token
         - first_name
         - last_name
         - email
         - password
       type: object
       properties:
+        registration_token:
+          type: string
+          example: f8e20775-da55-11eb-a58d-775374b8f3a1
+          minLength: 36
         first_name:
           pattern: '\w+'
           type: string
@@ -1578,10 +1580,10 @@ components:
           items:
             $ref: '#/components/schemas/CreateContact'
     ReadUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         first_name:
           type: string
           example: Petro
@@ -1639,8 +1641,6 @@ components:
         - email
         - phone
     ReadContact:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -1650,6 +1650,8 @@ components:
       required:
         - type
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/ContactType'
         main:
@@ -1804,10 +1806,10 @@ components:
             $ref: "#/components/schemas/CreateContact"
 
     ReadCooperation:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         name:
           type: string
           example: "Home Association"
@@ -1925,10 +1927,10 @@ components:
         address:
           $ref: '#/components/schemas/Address'
     ReadHouse:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         quantity_flat:
           type: integer
           example: 45
@@ -1961,16 +1963,16 @@ components:
           $ref: '#/components/schemas/Address'
 
     InvitationStatus:
-       description: Indicates the status of an Invitation
-       type: string
-       enum:
-          - pending
-          - processing
-          - accepted
-          - declined
-          - overdue
-          - deactivated
-          - error
+      description: Indicates the status of an Invitation
+      type: string
+      enum:
+        - pending
+        - processing
+        - accepted
+        - declined
+        - overdue
+        - deactivated
+        - error
 
     InvitationType:
       description: Indicates a type of an Invitation
@@ -1981,8 +1983,6 @@ components:
       example: apartment
 
     ReadInvitation:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -1990,6 +1990,8 @@ components:
           base: '#/components/schemas/ReadCooperationInvitation'
           apartment: '#/components/schemas/ReadApartmentInvitation'
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/InvitationType'
         email:
@@ -2093,10 +2095,10 @@ components:
           example: 0.6588
 
     ReadOwnership:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         user:
           $ref: '#/components/schemas/ReadUser'
         ownership_part:
@@ -2165,10 +2167,10 @@ components:
           multipleOf: 1e-2
           example: 75.28
     ReadApartment:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         apartment_number:
           type: string
           minLength: 1
@@ -2239,10 +2241,10 @@ components:
       example: simple
 
     ReadPoll:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         header:
           type: string
           example: New poll for our houses
@@ -2344,8 +2346,6 @@ components:
           example: 1
 
     ReadQuestion:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       discriminator:
         propertyName: type
@@ -2353,6 +2353,8 @@ components:
           multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestion'
           advice: '#/components/schemas/ReadAdviceQuestion'
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         type:
           $ref: '#/components/schemas/QuestionType'
         question:
@@ -2472,10 +2474,10 @@ components:
       allOf:
         - $ref: '#/components/schemas/UpdateQuestion'
     ReadAnswerVariant:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       properties:
+        id:
+          $ref: '#/components/schemas/base_id'
         answer:
           type: string
           minLength: 1
@@ -2668,7 +2670,7 @@ components:
       content:
         application/json:
           schema:
-              $ref: "#/components/schemas/ReadQuestion"
+            $ref: "#/components/schemas/ReadQuestion"
     QuestionsResponse:
       description: OK
       content:
@@ -2813,8 +2815,8 @@ components:
       description: A payload for updating a question
       content:
         application/json:
-         schema:
-           $ref: '#/components/schemas/UpdateQuestion'
+          schema:
+            $ref: '#/components/schemas/UpdateQuestion'
   parameters:
     p_id:
       name: id
