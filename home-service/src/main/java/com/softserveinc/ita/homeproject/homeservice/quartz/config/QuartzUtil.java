@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.config;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.CronTrigger;
