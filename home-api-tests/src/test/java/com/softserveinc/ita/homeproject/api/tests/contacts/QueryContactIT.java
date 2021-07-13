@@ -5,25 +5,23 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.ContactApi;
+import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadEmailContact;
-import com.softserveinc.ita.homeproject.model.ReadPhoneContact;
-import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.model.*;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -33,9 +31,11 @@ class QueryContactIT {
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+
     @Test
     void getAllContactsAscSort() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -51,7 +51,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsDescSort() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -67,8 +67,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsFilteredBy() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
-
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -86,7 +85,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsById() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
         ReadContact savedContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
 
         List<ReadContact> queryContactsResponse = new ContactQuery
@@ -102,7 +101,8 @@ class QueryContactIT {
 
     @Test
     void getAllContactsByPhone() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
+
         ReadPhoneContact savedContact =
             (ReadPhoneContact) contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact());
 
@@ -119,7 +119,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsByEmail() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
         ReadEmailContact savedContact =
             (ReadEmailContact) contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
 
@@ -136,7 +136,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsByMain() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -151,7 +151,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsByTypeEmail() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -166,7 +166,7 @@ class QueryContactIT {
 
     @Test
     void getAllContactsByTypePhone() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         List<ReadContact> queryContactsResponse = new ContactQuery
             .Builder(contactApi)
@@ -180,8 +180,8 @@ class QueryContactIT {
     }
 
     @Test
-    void getAllContactsByInvalidType() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+    void getAllContactsByInvalidType() {
+        ReadUser expectedUser = createBaseUserForTests();
 
         assertThatExceptionOfType(java.lang.IllegalArgumentException.class)
             .isThrownBy(() -> new ContactQuery
@@ -195,8 +195,8 @@ class QueryContactIT {
     }
 
     @Test
-    void getAllContactsByEmptyType() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+    void getAllContactsByEmptyType() {
+        ReadUser expectedUser = createBaseUserForTests();
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> new ContactQuery
@@ -211,8 +211,8 @@ class QueryContactIT {
     }
 
     @Test
-    void getAllContactsByNullType() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
+    void getAllContactsByNullType() {
+        ReadUser expectedUser = createBaseUserForTests();
 
         assertThatExceptionOfType(java.lang.IllegalArgumentException.class)
             .isThrownBy(() -> new ContactQuery
@@ -287,5 +287,67 @@ class QueryContactIT {
             .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
             .contacts(createContactList());
     }
+
+    private CreateCooperation createBaseCooperation() {
+        return new CreateCooperation()
+                .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .address(createAddress());
+    }
+
+    private CreateUser createBaseUser() {
+        return new CreateUser()
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .email("test.receive.apartment@gmail.com")
+                .contacts(createContactList());
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
+    }
+
+    private String getDecodedLastMessage(MailHogApiResponse response) {
+        String body = response.getItems().get(0).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    }
+
+    private String getToken(String str) {
+        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
+        Matcher matcher = pattern.matcher(str);
+
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group();
+        }
+
+        return result.trim();
+    }
+
+    @SneakyThrows
+    private ReadUser createBaseUserForTests() {
+        CreateCooperation createCoop = createBaseCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+
+        CreateUser expectedUser = createBaseUser();
+        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
+        expectedUser.setEmail(createCoop.getAdminEmail());
+        return userApi.createUser(expectedUser);
+    }
+
 
 }

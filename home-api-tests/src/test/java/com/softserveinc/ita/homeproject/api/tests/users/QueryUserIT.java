@@ -5,22 +5,33 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.model.*;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.junit.jupiter.api.Test;
 
 class QueryUserIT {
+
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
     private final CreateUser expectedUser = new CreateUser()
         .firstName("Bill")
@@ -44,32 +55,31 @@ class QueryUserIT {
 
     @Test
     void getAllUsersByEmailTest() throws ApiException {
-        expectedUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
-        userApi.createUser(expectedUser);
+        ReadUser user = createBaseUserForTests();
 
         List<ReadUser> actualListUsers = new UserQuery
             .Builder(userApi)
             .pageNumber(1)
             .pageSize(10)
-            .email(expectedUser.getEmail())
+            .email(user.getEmail())
             .build().perfom();
 
-        actualListUsers.forEach(readUser -> assertThat(readUser.getEmail()).isEqualTo(expectedUser.getEmail()));
+        actualListUsers.forEach(readUser -> assertThat(readUser.getEmail()).isEqualTo(user.getEmail()));
     }
 
     @Test
     void getAllUsersByFirstNameTest() throws ApiException {
-        expectedUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
-        userApi.createUser(expectedUser);
+
+        ReadUser user = createBaseUserForTests();
 
         List<ReadUser> actualListUsers = new UserQuery
             .Builder(userApi)
             .pageNumber(1)
             .pageSize(10)
-            .firstName("Bill")
+            .firstName(user.getFirstName())
             .build().perfom();
 
-        actualListUsers.forEach(readUser -> assertThat(readUser.getFirstName()).isEqualTo("Bill"));
+        actualListUsers.forEach(readUser -> assertThat(readUser.getFirstName()).isEqualTo(user.getFirstName()));
     }
 
     @Test
@@ -105,17 +115,17 @@ class QueryUserIT {
 
     @Test
     void getAllUsersByLastNameTest() throws ApiException {
-        expectedUser.setEmail(RandomStringUtils.randomAlphabetic(5).concat("@example.com"));
-        userApi.createUser(expectedUser);
+        ReadUser user = createBaseUserForTests();
+
 
         List<ReadUser> actualListUsers = new UserQuery
             .Builder(userApi)
             .pageNumber(1)
             .pageSize(10)
-            .lastName("White")
+            .lastName(user.getLastName())
             .build().perfom();
 
-        actualListUsers.forEach(readUser -> assertThat(readUser.getLastName()).isEqualTo("White"));
+        actualListUsers.forEach(readUser -> assertThat(readUser.getLastName()).isEqualTo(user.getLastName()));
     }
 
 
@@ -133,7 +143,7 @@ class QueryUserIT {
             .perfom();
 
         actualListUsers
-            .forEach(readUser -> assertThat(readUser.getFirstName().toLowerCase()).contains("AL".toLowerCase()));
+            .forEach(readUser -> assertThat(Objects.requireNonNull(readUser.getFirstName()).toLowerCase()).contains("AL".toLowerCase()));
     }
 
     @Test
@@ -175,11 +185,11 @@ class QueryUserIT {
             .withMessageContaining("Unknown operator: =lik=");
     }
 
-    private List<ReadUser> saveListUser() throws ApiException {
+    private List<ReadUser> saveListUser() {
         List<CreateUser> list = createUsersList();
         List<ReadUser> userList = new ArrayList<>();
         for (CreateUser cu : list) {
-            userList.add(userApi.createUser(cu));
+            userList.add(createBaseUserForTests());
         }
         return userList;
     }
@@ -218,6 +228,66 @@ class QueryUserIT {
         );
         return list;
     }
+    private CreateCooperation createBaseCooperation() {
+        return new CreateCooperation()
+                .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .address(createAddress());
+    }
+
+    private CreateUser createBaseUser() {
+        return new CreateUser()
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .email("test.receive.apartment@gmail.com");
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
+    }
+
+    private String getDecodedLastMessage(MailHogApiResponse response) {
+        String body = response.getItems().get(0).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    }
+
+    private String getToken(String str) {
+        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
+        Matcher matcher = pattern.matcher(str);
+
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group();
+        }
+
+        return result.trim();
+    }
+
+    @SneakyThrows
+    private ReadUser createBaseUserForTests() {
+        CreateCooperation createCoop = createBaseCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+
+        CreateUser expectedUser = createBaseUser();
+        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
+        expectedUser.setEmail(createCoop.getAdminEmail());
+        return userApi.createUser(expectedUser);
+    }
+
 
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);

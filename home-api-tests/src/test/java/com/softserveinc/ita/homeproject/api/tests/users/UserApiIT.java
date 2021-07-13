@@ -8,56 +8,50 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
+import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.model.*;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+
     private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
 
     @Test
-    void createUserTest() throws ApiException {
-        CreateUser expectedUser = createTestUser();
-
-        ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
-
-        assertEquals(Response.Status.CREATED.getStatusCode(),
-            response.getStatusCode());
-        assertUser(expectedUser, response.getData());
-    }
-
-    @Test
     void getUserTest() throws ApiException {
-        CreateUser expectedUser = createTestUser();
+        ReadUser readUser = createBaseUserForTests();
 
-        ApiResponse<ReadUser> response = userApi.getUserWithHttpInfo(userApi.createUser(expectedUser).getId());
+        ApiResponse<ReadUser> response = userApi.getUserWithHttpInfo(readUser.getId());
 
         assertEquals(Response.Status.OK.getStatusCode(),
             response.getStatusCode());
-        assertUser(expectedUser, response.getData());
+        assertUser(readUser, response.getData());
     }
 
     @Test
     void updateUserTest() throws ApiException {
-        ReadUser savedUser = userApi
-            .createUser(createTestUser());
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName")
@@ -73,9 +67,7 @@ class UserApiIT {
 
     @Test
     void deleteUserTest() throws ApiException {
-        ReadUser expectedUser = userApi.createUser(createTestUser());
-        userApi.createUser(createTestUser());
-        userApi.createUser(createTestUser());
+        ReadUser expectedUser = createBaseUserForTests();
 
         ApiResponse<Void> removeResponse = userApi.deleteUserWithHttpInfo(expectedUser.getId());
 
@@ -104,6 +96,35 @@ class UserApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(this::createUserWithExistEmail)
             .withMessageContaining("User with email ").withMessageContaining(" is already exists");
+    }
+
+    @Test
+    void createUserWithNonExistRegistrationToken() {
+        CreateUser createUser = new CreateUser()
+                .firstName("FirstName")
+                .registrationToken(RandomStringUtils.randomAlphabetic(36))
+                .lastName("LastNmae")
+                .password("somePassword")
+                .email("walker@email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUser(createUser))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Invitation with provided token not found");
+    }
+
+    @Test
+    void createUserWithRegistrationTokenNull() {
+        CreateUser createUser = new CreateUser()
+                .firstName("FirstName")
+                .lastName("LastNmae")
+                .password("somePassword")
+                .email("walker@email.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUser(createUser))
+                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .withMessageContaining("Parameter `registrationToken` is invalid - must not be null.");
     }
 
     @Test
@@ -243,8 +264,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithEmptyFirstNameAndLastNameTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithEmptyFirstNameAndLastNameTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("")
             .lastName("")
@@ -258,8 +279,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithInvalidFirstNameAndLastNameTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithInvalidFirstNameAndLastNameTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
             .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
@@ -273,8 +294,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithEmptyEmailTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithEmptyEmailTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("John")
             .lastName("Smith")
@@ -287,8 +308,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithInvalidEmailTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithInvalidEmailTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("John")
             .lastName("Smith")
@@ -301,8 +322,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithEmptyPasswordTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithEmptyPasswordTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("John")
             .lastName("Smith")
@@ -316,8 +337,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithInvalidPasswordTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithInvalidPasswordTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName("John")
             .lastName("Smith")
@@ -331,8 +352,8 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithNullParametersTest() throws ApiException {
-        ReadUser savedUser = userApi.createUser(createTestUser());
+    void updateUserWithNullParametersTest() {
+        ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
             .firstName(null)
             .lastName(null)
@@ -405,6 +426,7 @@ class UserApiIT {
 
     private CreateUser createTestUser() {
         return new CreateUser()
+            .registrationToken(RandomStringUtils.randomAlphabetic(36))
             .firstName("firstName")
             .lastName("lastName")
             .password("password")
@@ -412,53 +434,95 @@ class UserApiIT {
             .contacts(createContactList());
     }
 
-    private ApiResponse<ReadUser> createUserWithExistEmail() throws ApiException {
-        String email = RandomStringUtils.randomAlphabetic(5).concat("@example.com");
+    private CreateCooperation createBaseCooperation() {
+        return new CreateCooperation()
+                .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .address(createAddress())
+                .contacts(createContactList());
+    }
 
-        userApi.createUser(new CreateUser()
-            .firstName("firstName")
-            .lastName("lastName")
-            .password("password")
-            .email(email)
-            .contacts(createContactList()));
+    private CreateUser createBaseUser() {
+        return new CreateUser()
+                .firstName("firstName")
+                .lastName("lastName")
+                .password("password")
+                .email("test.receive.apartment@gmail.com");
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
+    }
+
+    private String getDecodedLastMessage(MailHogApiResponse response) {
+        String body = response.getItems().get(0).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    }
+
+    private String getToken(String str) {
+        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
+        Matcher matcher = pattern.matcher(str);
+
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group();
+        }
+
+        return result.trim();
+    }
+
+    private ApiResponse<ReadUser> createUserWithExistEmail() throws ApiException {
+        ReadUser user = createBaseUserForTests();
 
         CreateUser userWithExistEmail = new CreateUser()
             .firstName("firstName")
             .lastName("lastName")
             .password("password")
-            .email(email)
+            .email(user.getEmail())
+                .registrationToken(RandomStringUtils.randomAlphabetic(36))
             .contacts(createContactList());
 
         return userApi.createUserWithHttpInfo(userWithExistEmail);
     }
 
     private ApiResponse<ReadUser> updateUserWithExistEmail() throws ApiException {
-        String email = RandomStringUtils.randomAlphabetic(5).concat("@example.com");
 
-        ReadUser savedUser = userApi.createUser(new CreateUser()
-            .firstName("firstName")
-            .lastName("lastName")
-            .password("password")
-            .email((RandomStringUtils.randomAlphabetic(5).concat("@example.com")))
-            .contacts(createContactList()));
-
-        userApi.createUser(new CreateUser()
-            .firstName("firstName")
-            .lastName("lastName")
-            .password("password")
-            .email(email)
-            .contacts(createContactList()));
+        ReadUser savedUser = createBaseUserForTests();
 
         UpdateUser updateUser = new UpdateUser()
             .firstName("updatedFirstName")
             .lastName("updatedLastName")
-            .email(email)
+            .email(createBaseUserForTests().getEmail())
             .password("somePassword");
 
         return userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
     }
 
-    private void assertUser(CreateUser expected, ReadUser actual) {
+    @SneakyThrows
+    private ReadUser createBaseUserForTests() {
+        CreateCooperation createCoop = createBaseCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+
+        CreateUser expectedUser = createBaseUser();
+        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
+        expectedUser.setEmail(createCoop.getAdminEmail());
+        return userApi.createUser(expectedUser);
+    }
+
+    private void assertUser(ReadUser expected, ReadUser actual) {
         assertNotNull(expected);
         assertEquals(expected.getFirstName(), actual.getFirstName());
         assertEquals(expected.getLastName(), actual.getLastName());
