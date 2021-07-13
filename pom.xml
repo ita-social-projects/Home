@@ -77,7 +77,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Home-Project-Engineering Apache Maven Packages</name>
-            <url>https://${github.packages.read.username}:${github.packages.read.token}@maven.pkg.github.com/orgs/Home-Project-Engineering/*</url>
+            <url>https://${github.packages.read.username}:${github.packages.read.token}@maven.pkg.github.com/Home-Project-Engineering/*</url>
         </repository>
     </repositories>
 
