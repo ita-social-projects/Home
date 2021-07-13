@@ -74,9 +74,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.quartz-actuator</groupId>
-            <artifactId>quartz-actuator-application</artifactId>
-            <version>1.2.2</version>
+            <groupId>tech.home-project-engineering</groupId>
+            <artifactId>quartz-actuator</artifactId>
+            <version>${quartz-actuator.version}</version>
         </dependency>
     </dependencies>
 

@@ -43,7 +43,7 @@
         <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml
         </checkstyle.configLocation>
         <jacoco.version>0.8.6</jacoco.version>
-        <github.quartz-actuator.secret>${Dapi.application.dependency.quartz-actuator}</github.quartz-actuator.secret>
+        <quartz-actuator.version>1.1.2</quartz-actuator.version>
     </properties>
 
     <profiles>
@@ -97,16 +97,6 @@
             <url>https://maven.pkg.github.com/ita-social-projects/Home</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>github</id>
-            <name>GitHub Illia-Shchur Apache Maven Packages</name>
-            <url>https://Illia-Shchur:${github.quartz-actuator.secret}@maven.pkg.github.com/Illia-Shchur/quartz-actuator</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
-        </repository>
-    </repositories>
 
     <build>
         <pluginManagement>

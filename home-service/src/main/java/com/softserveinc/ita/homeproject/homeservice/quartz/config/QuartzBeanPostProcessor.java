@@ -12,7 +12,6 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Configuration;
 
 
-
 @Configuration
 public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor {
 
@@ -41,5 +40,4 @@ public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor {
             }
         }
     }
-
 }

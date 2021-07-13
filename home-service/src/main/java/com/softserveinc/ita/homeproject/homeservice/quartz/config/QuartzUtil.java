@@ -11,7 +11,7 @@ import org.quartz.JobDetail;
 import org.quartz.TriggerBuilder;
 
 @Slf4j
-public class QuartzUtil {
+public final class QuartzUtil {
 
     private QuartzUtil() {
     }
