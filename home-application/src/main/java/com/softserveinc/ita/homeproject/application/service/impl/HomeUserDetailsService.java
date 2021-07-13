@@ -45,8 +45,14 @@ public class HomeUserDetailsService implements UserDetailsService {
 
         var userCooperation = userCooperationRepository.findUserCooperationByUser(user);
 
-        List<String> permissions = userCooperation.getRole().getPermissions()
-                .stream().map(Permission::getName).collect(Collectors.toList());
+
+        List<String> permissions = userCooperation.stream()
+                .map(userCooperation1 -> userCooperation1.getRole().getPermissions())
+                .flatMap(List::stream)
+                .collect(Collectors.toList())
+                .stream()
+                .map(Permission::getName)
+                .collect(Collectors.toList());
 
 
         return new HomeUserWrapperDetails(user, permissions);

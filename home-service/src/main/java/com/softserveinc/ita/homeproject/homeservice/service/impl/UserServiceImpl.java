@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
@@ -146,11 +147,15 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
-        var userCooperation= userCooperationRepository.findUserCooperationByUser(toDelete);
+        var userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
-        if(userCooperation.getRole().equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())){
-            throw new BadRequestHomeException("User cannot be deleted");
-        }
+        userCooperation.stream()
+                .map(UserCooperation::getRole).forEach(role -> {
+                    if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
+                        throw new BadRequestHomeException("User cannot be deleted");
+                    }
+                }
+        );
 
 
         toDelete.setEnabled(false);
