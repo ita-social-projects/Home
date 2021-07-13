@@ -40,10 +40,12 @@ public class JerseyConfig extends ResourceConfig {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
         // register endpoints
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.api", scanner);
-        //  register exception mappers
+        // register exception mappers
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.exception.mapper", scanner);
         // register providers
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.provider", scanner);
+        // register resolvers
+        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.resolver", scanner);
     }
 
     private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
