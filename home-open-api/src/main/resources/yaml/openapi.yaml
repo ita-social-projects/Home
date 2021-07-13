@@ -1758,7 +1758,7 @@ components:
       properties:
         email:
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          minLength: 9
+          minLength: 5
           maxLength: 320
           type: string
           example: "test.receive.messages@gmail.com"
