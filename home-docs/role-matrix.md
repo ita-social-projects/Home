@@ -1,4 +1,5 @@
 ## Role Matrix
+
 We have the following roles defined in the application:
 
 - __ADMIN__ - The most powerful role which includes possibility to manage application, create cooperation, add houses, create new cooperation_admin.
@@ -6,78 +7,74 @@ We have the following roles defined in the application:
 - __OWNER__ - An owner of apartment could be in several cooperations.
 - __ANY__ - Any possible user of the application including unregistered ones.
 
-A - All rights
-C - Only current cooperation
-S - Only for current user
-I - Only by invitation
-
 | Action                                 | ADMIN | COOPERATION_ADMIN | OWNER | ANY |
 |:---------------------------------------|:-----:|:-----------------:|:-----:|:---:|
 | *__News__*                             |       |                   |       |     |
-| Get all News to the home page          | A     | C                 | C     |     |
-| Add a News to the home page            | A     | C                 |       |     |
-| Get an existing news by its ID         | A     | C                 | C     |     |
-| Update an existing News                | A     | C                 |       |     |
-| Delete the chosen news                 | A     | C                 |       |     |
+| Get all News to the home page          | V     | V                 | V     |     |
+| Add a News to the home page            | V     | V                 |       |     |
+| Get an existing news by its ID         | V     | V                 | V     |     |
+| Update an existing News                | V     | V                 |       |     |
+| Delete the chosen news                 | V     | V                 |       |     |
 | *__User__*                             |       |                   |       |     |
-| Get all Users                          | A     | C                 |       |     |
-| Create user                            | A     |                   |       | I   |
-| Get User by ID                         | A     | C                 | S     |     |
-| Update current User                    | A     | S                 | S     |     |
-| Delete user by ID                      | A     | S                 | S     |     |
-| *__Contact__*                          |       |                   |       |     |
-| Get all Contacts by User               | A     | C                 | S     |     |
-| Create new Contact for the User        | A     | S                 | S     |     |
-| Get Contact by ID                      | A     | C                 | S     |     |
-| Update Contact                         | A     | S                 | S     |     |
-| Delete Contact                         | A     | S                 | S     |     |
+| Get all Users                          | V     | V                 | V     |     |
+| Create user                            |       |                   |       | V   |
+| Get User by ID                         | V     | V                 | V     |     |
+| Update current User                    | V     | V                 | V     |     |
+| *__User contact__*                     |       |                   |       |     |
+| Get all Contacts by User               | V     | V                 | V     |     |
+| Create new Contact for the User        | V     | V                 | V     |     |
+| Get Contact by ID                      | V     | V                 | V     |     |
+| Update Contact                         | V     | V                 | V     |     |
+| Delete Contact                         | V     | V                 | V     |     |
 | *__Cooperation__*                      |       |                   |       |     |
-| Get All Cooperations                   | A     |                   |       |     |
-| Create Cooperation                     | A     |                   |       |     |
-| Get Cooperation by ID                  | A     | C                 |       |     |
-| Update current Cooperation             | A     | C                 |       |     |
-| Delete cooperation by ID               | A     |                   |       |     |
+| Get All Cooperations                   | V     | V                 | V     |     |
+| Create Cooperation                     | V     |                   |       |     |
+| Get Cooperation by ID                  | V     | V                 | V     |     |
+| Update current Cooperation             | V     | V                 |       |     |
+| Delete cooperation by ID               | V     |                   |       |     |
 | *__House__*                            |       |                   |       |     |
-| Get all Houses by Cooperation          | A     | C                 |       |     |
-| Create new House for the Cooperation   | A     | C                 |       |     |
-| Get House by ID                        | A     | C                 |       |     |
-| Update current House                   | A     | C                 |       |     |
-| Delete house by ID                     | A     | C                 |       |     |
+| Get all Houses by Cooperation          | V     | V                 | V     |     |
+| Create new House for the Cooperation   | V     | V                 |       |     |
+| Get House by ID                        | V     | V                 | V     |     |
+| Update current House                   | V     | V                 |       |     |
+| Delete house by ID                     | V     | V                 |       |     |
 | *__Apartment__*                        |       |                   |       |     |
-| Get all apartments                     | A     | C                 |       |     |
-| Create new Apartment for the House     | A     | C                 |       |     |
-| Get apartment by ID                    | A     | C                 |       |     |
-| Update apartment                       | A     | C                 |       |     |
-| Delete apartment                       | A     | C                 |       |     |
+| Get all apartments                     |       | V                 | V     |     |
+| Create new Apartment for the House     |       | V                 |       |     |
+| Get apartment by ID                    |       | V                 | V     |     |
+| Update apartment                       |       | V                 |       |     |
+| Delete apartment                       |       | V                 |       |     |
 | *__Apartment Ownership__*              |       |                   |       |     |
-| Get all ownerships                     | A     | C                 |       |     |
-| Get ownership by ID                    | A     | C                 |       |     |
-| Update ownership                       | A     | C                 |       |     |
-| Delete ownership                       | A     | C                 |       |     |
+| Get all ownerships                     |       | V                 | V     |     |
+| Get ownership by ID                    |       | V                 | V     |     |
+| Update ownership                       |       | V                 |       |     |
+| Delete ownership                       |       | V                 |       |     |
 | *__Apartment Invitation__*             |       |                   |       |     |
-| Get all invitations                    | A     | C                 |       |     |
-| Create invitation                      | A     | C                 |       |     |
-| Get invitation by ID                   | A     | C                 |       |     |
-| Update invitation                      | A     | C                 |       |     |
-| Delete invitation                      | A     | C                 |       |     |
+| Get all invitations                    |       | V                 |       |     |
+| Create invitation                      |       | V                 |       |     |
+| Get invitation by ID                   |       | V                 |       |     |
+| Update invitation                      |       | V                 |       |     |
+| Delete invitation                      |       | V                 |       |     |
 | *__Cooperation Poll__*                 |       |                   |       |     |
-| Get all cooperation polls              | A     | C                 | C     |     |
-| Create cooperation poll                | A     | C                 |       |     |
-| Get cooperation poll                   | A     | C                 | C     |     |
-| Update cooperation poll                | A     | C                 |       |     |
-| Delete cooperation poll                | A     | C                 |       |     |
+| Get all cooperation polls              |       | V                 | V     |     |
+| Create cooperation poll                |       | V                 |       |     |
+| Get cooperation poll                   |       | V                 | V     |     |
+| Update cooperation poll                |       | V                 |       |     |
+| Delete cooperation poll                |       | V                 |       |     |
 | *__Poll__*                             |       |                   |       |     |
-| Get all polls                          | A     | C                 | C     |     |
-| Get poll                               | A     | C                 | C     |     |
+| Get all polls                          |       | V                 | V     |     |
+| Get poll                               |       | V                 | v     |     |
 | *__Cooperation Contact__*              |       |                   |       |     |
-| Get all Contacts by Cooperation ID     | A     | C                 | C     |     |
-| Create new Contact for the Cooperation | A     | C                 |       |     |
-| Get Contact by ID                      | A     | C                 | C     |     |
-| Update Contact                         | A     | C                 |       |     |
-| Delete Contact                         | A     | C                 |       |     |
+| Get all Contacts by Cooperation ID     | V     | V                 | V     |     |
+| Create new Contact for the Cooperation | V     | V                 |       |     |
+| Get Contact by ID                      | V     | V                 | V     |     |
+| Update Contact                         | V     | V                 |       |     |
+| Delete Contact                         | V     | V                 |       |     |
 | *__Poll Question__*                    |       |                   |       |     |
-| Get all questions                      | A     | C                 | C     |     |
-| Create question                        | A     | C                 |       |     |
-| Get question                           | A     | C                 | C     |     |
-| Update question                        | A     | C                 |       |     |
-| Delete question                        | A     | C                 |       |     |
+| Get all questions                      |       | V                 | V     |     |
+| Create question                        |       | V                 |       |     |
+| Get question                           |       | V                 | V     |     |
+| Update question                        |       | V                 |       |     |
+| Delete question                        |       | V                 |       |     |
+
+See more info in [google docs](https://docs.google.com/spreadsheets/d/1kKI9s_mpG3x30oWkVwgl34n7tnQsx3QgsDiI61fYJvo/edit?usp=sharing).
