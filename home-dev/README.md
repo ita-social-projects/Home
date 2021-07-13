@@ -44,7 +44,7 @@ To close the application just type `docker-compose down` in `home-dev/launch` pa
 
 **How to build**
 
-Create settings.xml in your .m2 folder and add repository
+Create settings.xml in your .m2 folder and add repository.
 ```xml
 <settings>
     <profiles>
