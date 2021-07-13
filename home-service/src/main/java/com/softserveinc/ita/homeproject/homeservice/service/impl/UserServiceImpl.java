@@ -6,6 +6,8 @@ import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
@@ -22,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -32,6 +36,10 @@ public class UserServiceImpl implements UserService {
             + "does not match provided: %s";
 
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
+
+    private final UserCooperationRepository userCooperationRepository;
 
     private final InvitationRepository invitationRepository;
 
@@ -66,7 +74,6 @@ public class UserServiceImpl implements UserService {
         throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
-
     private void checkAndSaveUserByInvitation(UserDto userDto) {
 
         var invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
@@ -87,7 +94,6 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestHomeException(String.format(EMAILS_NOT_MATCH, invitationEmail, email));
         }
     }
-
 
     @Override
     @Transactional
@@ -140,6 +146,11 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
+        var userCooperation= userCooperationRepository.findUserCooperationByUser(toDelete);
+
+        if(userCooperation.getRole().equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())){
+            throw new BadRequestHomeException("User cannot be deleted");
+        }
 
 
         toDelete.setEnabled(false);

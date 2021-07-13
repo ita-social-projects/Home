@@ -1,7 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
+import com.softserveinc.ita.homeproject.homedata.entity.QUserCooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.Role;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
@@ -16,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Service
 @RequiredArgsConstructor
 public class UserCooperationImpl implements UserCooperationService {
@@ -23,6 +31,9 @@ public class UserCooperationImpl implements UserCooperationService {
     private final RoleRepository roleRepository;
 
     private final UserCooperationRepository userCooperationRepository;
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     private final CooperationRepository cooperationRepository;
 
@@ -44,16 +55,27 @@ public class UserCooperationImpl implements UserCooperationService {
         userCooperationRepository.save(userCooperation);
     }
 
-    public void createUserCooperationForOwnership(Ownership ownership){
-
+    public void createUserCooperationForOwnership(Ownership ownership) {
+        var role = roleRepository.findByName(Roles.OWNER_ROLE)
+                .orElseThrow(() -> new NotFoundHomeException("Role not found."));
         var userCooperation = new UserCooperation();
+        if (isUserCooperationNonExists(ownership.getUser(), role, ownership.getCooperation())) {
+            userCooperation.setUser(ownership.getUser());
+            userCooperation.setCooperation(ownership.getCooperation());
+            userCooperation.setRole(role);
+            userCooperationRepository.save(userCooperation);
+        }
+    }
 
-        userCooperation.setUser(ownership.getUser());
-        userCooperation.setCooperation(ownership.getCooperation());
-        userCooperation.setRole(roleRepository.findByName(Roles.OWNER_ROLE)
-                .orElseThrow(() -> new NotFoundHomeException("Role not found.")));
+    private boolean isUserCooperationNonExists(User user, Role role, Cooperation cooperation) {
+        var qUserCooperation = QUserCooperation.userCooperation;
 
-        userCooperationRepository.save(userCooperation);
+        JPAQuery<?> query = new JPAQuery<>(entityManager);
+
+        return query.select(qUserCooperation).from(qUserCooperation)
+                .where(qUserCooperation.role.eq(role),
+                        qUserCooperation.user.eq(user),
+                        qUserCooperation.cooperation.eq(cooperation)).fetchCount() <= 0;
     }
 
     @Override
