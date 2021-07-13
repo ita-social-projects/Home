@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue229.001" author="IhorSamoshost">
+        <createTable tableName="votes">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="POLL_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.002" author="IhorSamoshost">
+        <createTable tableName="question_votes">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VOTE_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="vote_fk"
+                             references="votes(ID)"/>
+            </column>
+            <column name="QUESTION_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.003" author="IhorSamoshost">
+        <createTable tableName="quest_vote_answer_var">
+            <column name="QUESTION_VOTE_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="quest_vote_answer_var_pkey"
+                             references="question_votes(ID)"
+                             foreignKeyName="question_vote_fk"/>
+            </column>
+            <column name="ANSWER_VARIANT_ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="quest_vote_answer_var_pkey"
+                             references="answer_variants(ID)"
+                             foreignKeyName="answer_variant_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.004" author="IhorSamoshost">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="50"/>
+            <column name="name" value="CREATE_VOTE_PERMISSION"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.005" author="IhorSamoshost">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="1"/>
+            <column name="permission_id" value="50"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.006" author="IhorSamoshost">
+        <createSequence incrementBy="50" sequenceName="votes_sequence"/>
+        <createSequence incrementBy="50" sequenceName="question_votes_sequence"/>
+    </changeSet>
+</databaseChangeLog>

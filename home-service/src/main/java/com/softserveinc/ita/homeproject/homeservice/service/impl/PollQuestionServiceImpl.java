@@ -111,7 +111,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         if (pollQuestionDto.getType().equals(PollQuestionTypeDto.MULTIPLE_CHOICE)) {
             var multipleChoiceQuestion = mapper.convert(pollQuestionDto, MultipleChoiceQuestion.class);
             multipleChoiceQuestion.getAnswerVariants().forEach(element ->
-                    element.setMultipleChoiceQuestion(multipleChoiceQuestion));
+                    element.setQuestion(multipleChoiceQuestion));
             return multipleChoiceQuestion;
         }
         return mapper.convert(pollQuestionDto, AdviceChoiceQuestion.class);

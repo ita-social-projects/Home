@@ -19,7 +19,7 @@ public class MultipleChoiceQuestion extends PollQuestion {
     @Column(name = "max_answer_count")
     private Integer maxAnswerCount;
 
-    @OneToMany(mappedBy = "multipleChoiceQuestion", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<AnswerVariant> answerVariants;
 
 }
