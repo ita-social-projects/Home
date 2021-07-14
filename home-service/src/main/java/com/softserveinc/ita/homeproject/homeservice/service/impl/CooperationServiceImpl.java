@@ -57,7 +57,7 @@ public class CooperationServiceImpl implements CooperationService {
 
     private CooperationInvitationDto createInvitationForAdmin(CooperationDto cooperationDto) {
         var invitationDto = new CooperationInvitationDto();
-        invitationDto.setRole(RoleDto.ADMIN);
+        invitationDto.setRole(RoleDto.COOPERATION_ADMIN);
         invitationDto.setCooperationName(cooperationDto.getName());
         invitationDto.setEmail(cooperationDto.getAdminEmail());
         invitationDto.setType(InvitationTypeDto.COOPERATION);

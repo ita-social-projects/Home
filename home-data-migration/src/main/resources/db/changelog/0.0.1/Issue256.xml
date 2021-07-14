@@ -28,6 +28,12 @@
             <column name="id" value="3"/>
             <column name="name" value="OWNER"/>
         </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="roles">
+            <column name="id" value="4"/>
+            <column name="name" value="COOPERATION_ADMIN"/>
+        </insert>
     </changeSet>
     <changeSet id="Issue256.005" author="Ilya-Ross">
         <addColumn tableName="ownerships">

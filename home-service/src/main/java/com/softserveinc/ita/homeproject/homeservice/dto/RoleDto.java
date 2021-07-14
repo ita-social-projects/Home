@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.dto;
 public enum RoleDto {
 
     ADMIN("admin"),
+    COOPERATION_ADMIN("cooperation_admin"),
     USER("user"),
     OWNER("owner");
 
