@@ -43,6 +43,9 @@
         <checkstyle.configLocation>${maven.multiModuleProjectDirectory}/.github/checkstyle-configuration.xml
         </checkstyle.configLocation>
         <jacoco.version>0.8.6</jacoco.version>
+        <quartz-actuator.version>1.1.2</quartz-actuator.version>
+        <github.packages.read.token>${Dgithub.packages.read.token}</github.packages.read.token>
+        <github.packages.read.username>${Dgithub.packages.read.username}</github.packages.read.username>
     </properties>
 
     <profiles>
@@ -70,6 +73,13 @@
         </dependencies>
     </dependencyManagement>
 
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Home-Project-Engineering Apache Maven Packages</name>
+            <url>https://${github.packages.read.username}:${github.packages.read.token}@maven.pkg.github.com/Home-Project-Engineering/*</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
