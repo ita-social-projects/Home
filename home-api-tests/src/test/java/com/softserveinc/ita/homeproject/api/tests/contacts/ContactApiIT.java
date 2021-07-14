@@ -6,7 +6,18 @@ import com.softserveinc.ita.homeproject.api.ContactApi;
 import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.CreateContact;
+import com.softserveinc.ita.homeproject.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.model.CreateUser;
+import com.softserveinc.ita.homeproject.model.ReadContact;
+import com.softserveinc.ita.homeproject.model.ReadEmailContact;
+import com.softserveinc.ita.homeproject.model.ReadPhoneContact;
+import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.model.UpdateContact;
+import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
+import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +28,10 @@ import java.util.List;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContactApiIT {
 

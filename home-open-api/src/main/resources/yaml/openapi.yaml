@@ -8,7 +8,7 @@ info:
     url: https://opensource.org/licenses/mit-license.php
   contact:
     url: https://github.com/ita-social-projects/Home
-  version: 1.0.1
+  version: 1.0.0
 
 servers:
   - url: /api/0
