@@ -43,7 +43,7 @@ class QueryApartmentIT {
                 .sort("id,asc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId));
     }
 
     @Test
@@ -62,7 +62,7 @@ class QueryApartmentIT {
                 .sort("id,desc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId).reversed());
     }
 
     @Test
@@ -83,7 +83,7 @@ class QueryApartmentIT {
 
         queryResponse
                 .forEach(element -> assertTrue(Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 && element.getApartmentArea().compareTo(BigDecimal.valueOf(100)) < 0));
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId));
     }
 
     @Test
