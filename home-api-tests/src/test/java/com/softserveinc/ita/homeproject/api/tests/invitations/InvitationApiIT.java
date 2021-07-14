@@ -23,7 +23,6 @@ class InvitationApiIT {
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
     @Test
-    @Disabled("Disabled for further refactor")
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
         ApiResponse<ReadCooperation> cooperationWithHttpInfo = cooperationApi.createCooperationWithHttpInfo(createCoop);
