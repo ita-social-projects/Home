@@ -36,10 +36,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
         invitationRepository.save(invitation);
     }
 
-
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
                 new InvitationException("Invitation with id " + id + " was not found"));
     }
-
 }

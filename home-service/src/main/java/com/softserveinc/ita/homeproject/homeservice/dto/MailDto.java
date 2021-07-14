@@ -31,4 +31,6 @@ public class MailDto extends BaseDto {
     private Boolean isRegistered;
 
     private InvitationTypeDto type;
+
+    private String registrationToken;
 }

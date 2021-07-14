@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,9 +19,9 @@ public class HomeUserWrapperDetails implements UserDetails {
 
     private final User user;
 
-    private final Collection<Permission> userPermissions;
+    private final Collection<String> userPermissions;
 
-    public HomeUserWrapperDetails(User user, Collection<Permission> userPermissions) {
+    public HomeUserWrapperDetails(User user, Collection<String> userPermissions) {
         this.user = user;
         this.userPermissions = userPermissions;
     }
@@ -31,8 +30,8 @@ public class HomeUserWrapperDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities;
         authorities = userPermissions.stream()
-            .map(permission -> new SimpleGrantedAuthority(permission.getName()))
-            .collect(Collectors.toSet());
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
 
         return authorities;
     }

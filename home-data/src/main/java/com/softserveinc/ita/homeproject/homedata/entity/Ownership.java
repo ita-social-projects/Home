@@ -1,10 +1,12 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.math.BigDecimal;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -31,5 +33,9 @@ public class Ownership extends BaseEntity {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cooperation_id", referencedColumnName = "id")
+    private Cooperation cooperation;
 
 }

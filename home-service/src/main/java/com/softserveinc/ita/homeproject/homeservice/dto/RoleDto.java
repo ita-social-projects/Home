@@ -4,7 +4,8 @@ public enum RoleDto {
 
     ADMIN("admin"),
     USER("user"),
-    OWNER("owner");
+    OWNER("owner"),
+    COOPERATION_ADMIN("cooperation_admin");
 
     private final String name;
 

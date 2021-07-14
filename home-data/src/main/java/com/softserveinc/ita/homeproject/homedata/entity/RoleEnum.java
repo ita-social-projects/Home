@@ -9,7 +9,9 @@ public enum RoleEnum {
 
     ADMIN("admin"),
     USER("user"),
-    OWNER("owner");
+    OWNER("owner"),
+    COOPERATION_ADMIN("cooperation_admin");
+
 
     private static final Map<String, RoleEnum> ROLES = Stream.of(RoleEnum.values())
             .collect(Collectors.toMap(RoleEnum::getName, Function.identity()));
