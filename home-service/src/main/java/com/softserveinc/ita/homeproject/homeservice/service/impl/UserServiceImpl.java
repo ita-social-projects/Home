@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
+
 import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
@@ -24,8 +26,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
 
 @Service
 @RequiredArgsConstructor
@@ -154,8 +154,7 @@ public class UserServiceImpl implements UserService {
                     if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
                         throw new BadRequestHomeException("User cannot be deleted");
                     }
-                }
-        );
+                });
 
 
         toDelete.setEnabled(false);

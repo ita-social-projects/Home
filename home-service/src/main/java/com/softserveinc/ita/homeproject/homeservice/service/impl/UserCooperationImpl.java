@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import com.querydsl.jpa.impl.JPAQuery;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
@@ -20,9 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class UserCooperationImpl implements UserCooperationService {
         userRepository.findByEmail(invitation.getEmail())
                 .ifPresent(userCooperation::setUser);
 
-            cooperationRepository.findCooperationByName(invitation.getCooperationName())
+        cooperationRepository.findCooperationByName(invitation.getCooperationName())
                 .ifPresent(userCooperation::setCooperation);
 
         userCooperation.setRole(roleRepository.findByName(invitation.getRole().getName().toUpperCase())
