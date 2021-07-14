@@ -1,17 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.contacts;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.ws.rs.core.Response;
-
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.ApiResponse;
 import com.softserveinc.ita.homeproject.api.ContactApi;
@@ -32,6 +20,18 @@ import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContactApiIT {
 
@@ -274,7 +274,7 @@ class ContactApiIT {
                 savedEmailContact.getId(), updateEmailContact))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `email` is invalid - must meet the rule.")
-            .withMessageContaining("Parameter `email` is invalid - size must be between 9 and 320 signs.");
+            .withMessageContaining("Parameter `email` is invalid - size must be between 5 and 320 signs.");
     }
 
     @Test
