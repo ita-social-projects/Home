@@ -11,5 +11,4 @@ public interface UserService extends QueryableService<User, UserDto> {
 
     void deactivateUser(Long id);
 
-    User getUserByEmail(String email);
 }

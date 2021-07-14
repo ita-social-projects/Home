@@ -16,12 +16,9 @@ import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.constants.Roles;
-import com.softserveinc.ita.homeproject.homeservice.dto.UserCooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.UserCooperationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -76,12 +73,5 @@ public class UserCooperationImpl implements UserCooperationService {
                 .where(qUserCooperation.role.eq(role),
                         qUserCooperation.user.eq(user),
                         qUserCooperation.cooperation.eq(cooperation)).fetchCount() <= 0;
-    }
-
-    @Override
-    public Page<UserCooperationDto> findAll(Integer pageNumber,
-                                            Integer pageSize,
-                                            Specification<UserCooperation> specification) {
-        return null;
     }
 }

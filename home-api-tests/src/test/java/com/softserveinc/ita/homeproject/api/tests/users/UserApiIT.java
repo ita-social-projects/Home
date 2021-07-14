@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -63,6 +64,16 @@ class UserApiIT {
         assertEquals(Response.Status.OK.getStatusCode(),
                 response.getStatusCode());
         assertUser(savedUser, updateUser, response.getData());
+    }
+
+    @Test
+    void createUserWithNotMatchingEmail() {
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(this::createNotMatchingUser)
+                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .withMessageContaining("The e-mail to which the token was sent")
+                .withMessageContaining("does not match provided");
     }
 
     @Test
@@ -519,6 +530,20 @@ class UserApiIT {
         CreateUser expectedUser = createBaseUser();
         expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
         expectedUser.setEmail(createCoop.getAdminEmail());
+        return userApi.createUser(expectedUser);
+    }
+
+    private ReadUser createNotMatchingUser() throws ApiException, InterruptedException, IOException {
+        CreateCooperation createCoop = createBaseCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+
+        CreateUser expectedUser = createBaseUser();
+        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
         return userApi.createUser(expectedUser);
     }
 

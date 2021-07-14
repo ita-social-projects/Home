@@ -65,10 +65,6 @@ class OwnershipApiIT {
 
         expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
 
-        System.out.println(createApartment.getInvitations().get(0).getEmail());
-
-        System.out.println(expectedUser.getEmail());
-
         ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
 
         assertEquals(Response.Status.CREATED.getStatusCode(),

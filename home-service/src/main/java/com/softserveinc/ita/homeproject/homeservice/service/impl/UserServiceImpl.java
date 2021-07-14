@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
 
-    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent: %s "
-            + "does not match provided: %s";
+    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent "
+            + "does not match provided";
 
     private final UserRepository userRepository;
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
     private void validateEmailsMatching(String invitationEmail, String email) {
         if (!invitationEmail.equals(email)) {
-            throw new BadRequestHomeException(String.format(EMAILS_NOT_MATCH, invitationEmail, email));
+            throw new BadRequestHomeException(EMAILS_NOT_MATCH);
         }
     }
 
@@ -161,11 +161,4 @@ public class UserServiceImpl implements UserService {
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userRepository.save(toDelete);
     }
-
-    @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundHomeException("User with email not found"));
-    }
-
 }
