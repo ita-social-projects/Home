@@ -31,6 +31,18 @@ import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class ContactApiIT {
 
     private final ContactApi contactApi = new ContactApi(ApiClientUtil.getClient());
@@ -55,6 +67,177 @@ class ContactApiIT {
         return userApi.createUser(expectedUser);
     }
 
+    @Test
+    void updateEmailTest() throws ApiException {
+        CreateContact createEmailContact = createEmailContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
+
+        UpdateContact updateEmailContact = new UpdateEmailContact()
+            .email("updatedEmailContact@example.com")
+            .main(false)
+            .type(ContactType.EMAIL);
+
+        ApiResponse<ReadContact> updateEmailResponse = contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+            savedEmailContact.getId(), updateEmailContact);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            updateEmailResponse.getStatusCode());
+        assertEmailContact(savedEmailContact, updateEmailContact, updateEmailResponse.getData());
+    }
+
+    @Test
+    void updatePhoneTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
+        UpdateContact updatePhoneContact = new UpdatePhoneContact()
+            .phone("+380567456595")
+            .main(false)
+            .type(ContactType.PHONE);
+
+        ApiResponse<ReadContact> updatePhoneResponse = contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+            savedPhoneContact.getId(), updatePhoneContact);
+
+        assertEquals(Response.Status.OK.getStatusCode(),
+            updatePhoneResponse.getStatusCode());
+        assertPhoneContact(savedPhoneContact, updatePhoneContact, updatePhoneResponse.getData());
+    }
+
+    @Test
+    void updateContactEmailWithNullParameterTest() throws ApiException {
+        CreateContact createEmailContact = createEmailContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
+
+        UpdateContact updateEmailContact = new UpdateEmailContact()
+            .email(null)
+            .main(false)
+            .type(ContactType.EMAIL);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedEmailContact.getId(), updateEmailContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must not be null.");
+    }
+
+    @Test
+    void updateContactEmailWithEmptyParameterTest() throws ApiException {
+        CreateContact createEmailContact = createEmailContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
+
+        UpdateContact updateEmailContact = new UpdateEmailContact()
+            .email("")
+            .main(false)
+            .type(ContactType.EMAIL);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedEmailContact.getId(), updateEmailContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.")
+            .withMessageContaining("Parameter `email` is invalid - size must be between 5 and 320 signs.");
+    }
+
+    @Test
+    void updateContactEmailWithInvalidParameterTest() throws ApiException {
+        CreateContact createEmailContact = createEmailContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact);
+
+        UpdateContact updateEmailContact = new UpdateEmailContact()
+            .email("this.email.is.not.valid.for.this.example.write." +
+                "now.that.is.why.we.have.bad.request.answer@gmail.com")
+            .main(false)
+            .type(ContactType.EMAIL);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedEmailContact.getId(), updateEmailContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateContactPhoneWithNullParameterTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
+        UpdateContact updatePhoneContact = new UpdatePhoneContact()
+            .phone(null)
+            .main(false)
+            .type(ContactType.PHONE);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedPhoneContact.getId(), updatePhoneContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `phone` is invalid - must not be null.");
+    }
+
+    @Test
+    void updateContactPhoneWithEmptyParameterTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
+        UpdateContact updatePhoneContact = new UpdatePhoneContact()
+            .phone("")
+            .main(false)
+            .type(ContactType.PHONE);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedPhoneContact.getId(), updatePhoneContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `phone` is invalid - size must be between 9 and 13 signs.")
+            .withMessageContaining("Parameter `phone` is invalid - must meet the rule.");
+    }
+
+    @Test
+    void updateContactPhoneWithInvalidParameterTest() throws ApiException {
+        CreateContact createPhoneContact = createPhoneContact();
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+        ReadContact savedPhoneContact = contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact);
+
+        UpdateContact updatePhoneContact = new UpdatePhoneContact()
+            .phone("+380632121212133")
+            .main(false)
+            .type(ContactType.PHONE);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.updateContactOnUserWithHttpInfo(expectedUser.getId(),
+                savedPhoneContact.getId(), updatePhoneContact))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `phone` is invalid - must meet the rule.")
+            .withMessageContaining("Parameter `phone` is invalid - size must be between 9 and 13 signs.");
+    }
+
+    @Test
+    void deletingEmailContactTest() throws ApiException {
+        ReadUser expectedUser = userApi.createUser(createTestUser());
+
+        ReadContact savedEmailContact = contactApi.createContactOnUser(expectedUser.getId(), createEmailContact());
+
+        ApiResponse<Void> removeEmailResponse = contactApi
+            .deleteContactOnUserWithHttpInfo(expectedUser.getId(),savedEmailContact.getId());
+
+        List<ReadContact> queryContactsResponse = new ContactQuery
+            .Builder(contactApi)
+            .userId(expectedUser.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .build().perform();
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), removeEmailResponse.getStatusCode());
+        assertFalse(queryContactsResponse.contains(savedEmailContact));
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> contactApi.getContactOnUser(expectedUser.getId(), savedEmailContact.getId()));
+    }
 
     @Test
     void deletingPhoneContactTest() throws ApiException {
