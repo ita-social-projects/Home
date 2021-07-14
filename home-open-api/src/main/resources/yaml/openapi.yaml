@@ -739,7 +739,7 @@ paths:
       description: The endpoint gets all apartments of the house
       operationId: queryApartment
       parameters:
-        - $ref: 'p_house_id'
+        - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
@@ -1601,8 +1601,6 @@ components:
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
