@@ -61,7 +61,8 @@ class OwnershipApiIT {
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedApartmentMessage(mailResponse)));
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
+                Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail())));
 
         expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
 
@@ -128,7 +129,7 @@ class OwnershipApiIT {
         ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> ownershipApi.updateOwnership(TEST_APARTMENT_ID,expectedOwnership.getId(), updateOwnership))
+                .isThrownBy(() -> ownershipApi.updateOwnership(TEST_APARTMENT_ID, expectedOwnership.getId(), updateOwnership))
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("Entered sum of area = 1.2 The sum of the entered area cannot be greater than 1");
     }
@@ -181,7 +182,7 @@ class OwnershipApiIT {
                 .isThrownBy(() -> ownershipApi
                         .deleteOwnershipWithHttpInfo(wrongId, TEST_OWNERSHIP_ID))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID +"' is not found");
+                .withMessageContaining("Ownership with 'id: " + TEST_OWNERSHIP_ID + "' is not found");
     }
 
     private CreateUser createBaseUser() {
@@ -236,9 +237,14 @@ class OwnershipApiIT {
         return createInvitations;
     }
 
-    private String getDecodedApartmentMessage(MailHogApiResponse response) {
-        String body = response.getItems().get(1).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
+        String message = "";
+        for (int i = 0; i < response.getItems().size(); i++) {
+            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
+                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+            }
+        }
+        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
     }
 
     private String getToken(String str) {

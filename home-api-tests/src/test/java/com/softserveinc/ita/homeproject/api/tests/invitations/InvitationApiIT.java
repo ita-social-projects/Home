@@ -35,17 +35,19 @@ class InvitationApiIT {
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
-        assertTrue(getLastMessageEmailTo(response).contains(createCoop.getAdminEmail()));
         assertTrue(response.getCount() > 0);
-        assertTrue(getLastMessageSubject(response).contains("invitation to cooperation"));
+        assertTrue(getSubjectByEmail(response,createCoop.getAdminEmail()).contains("invitation to cooperation"));
     }
 
-    private String getLastMessageEmailTo(MailHogApiResponse response) {
-        return String.valueOf(response.getItems().get(0).getContent().getHeaders().getTo());
-    }
-
-    private String getLastMessageSubject(MailHogApiResponse response) {
-        return String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
+    private String getSubjectByEmail(MailHogApiResponse response, String email) {
+        String message="";
+        for (int i=0; i<response.getItems().size(); i++){
+            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
+                message = String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
+                break;
+            }
+        }
+        return message;
     }
 
     private CreateCooperation createCooperation() {

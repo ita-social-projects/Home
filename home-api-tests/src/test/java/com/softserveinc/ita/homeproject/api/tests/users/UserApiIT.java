@@ -473,9 +473,14 @@ class UserApiIT {
                 .zipCode("zipCode");
     }
 
-    private String getDecodedLastMessage(MailHogApiResponse response) {
-        String body = response.getItems().get(0).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-        return new String(Base64.getMimeDecoder().decode(body), StandardCharsets.UTF_8);
+    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
+        String message="";
+        for (int i=0; i<response.getItems().size(); i++){
+            if(response.getItems().get(i).getContent().getHeaders().getTo().contains(email)){
+                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+            }
+        }
+        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
     }
 
     private String getToken(String str) {
@@ -528,7 +533,7 @@ class UserApiIT {
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
         expectedUser.setEmail(createCoop.getAdminEmail());
         return userApi.createUser(expectedUser);
     }
@@ -543,7 +548,7 @@ class UserApiIT {
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedLastMessage(mailResponse)));
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
         return userApi.createUser(expectedUser);
     }
 
