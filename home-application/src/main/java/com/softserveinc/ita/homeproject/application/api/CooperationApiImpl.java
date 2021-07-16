@@ -165,7 +165,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                      String name,
                                      String iban,
                                      String usreo) {
-
         Page<CooperationDto> readCooperation = cooperationService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readCooperation, ReadCooperation.class);
     }
@@ -197,6 +196,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                String email,
                                                String main,
                                                ContactType type) {
+        verifyExistence(cooperationId, cooperationService);
         Page<ContactDto> readContact = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readContact, ReadContact.class);
     }

@@ -19,10 +19,7 @@ import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollService;
+import com.softserveinc.ita.homeproject.homeservice.service.*;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.PollStatus;
@@ -40,6 +37,10 @@ import org.springframework.stereotype.Component;
 @Provider
 @Component
 public class PollApiImpl extends CommonApi implements PollsApi {
+
+    @Autowired
+    private CooperationService cooperationService;
+
     @Autowired
     private PollService pollService;
 
@@ -123,6 +124,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
                               LocalDateTime completionDate,
                               PollType type,
                               PollStatus status) {
+        verifyExistence(cooperationId, cooperationService);
         Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
     }
