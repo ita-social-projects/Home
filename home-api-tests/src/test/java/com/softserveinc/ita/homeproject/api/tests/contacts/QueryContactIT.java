@@ -321,6 +321,7 @@ class QueryContactIT {
         for (int i=0; i<response.getItems().size(); i++){
             if(response.getItems().get(i).getContent().getHeaders().getTo().contains(email)){
                 message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+                break;
             }
         }
         return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
