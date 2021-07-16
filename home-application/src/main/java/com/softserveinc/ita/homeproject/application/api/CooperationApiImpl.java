@@ -23,9 +23,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -88,7 +85,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(CREATE_HOUSE_PERMISSION)
     @Override
-    public Response createHouse(Long cooperationId, @Valid CreateHouse createHouse) {
+    public Response createHouse(Long cooperationId, CreateHouse createHouse) {
         HouseDto createHouseDto = mapper.convert(createHouse, HouseDto.class);
         HouseDto readHouseDto = houseService.createHouse(cooperationId, createHouseDto);
         ReadHouse readHouse = mapper.convert(readHouseDto, ReadHouse.class);
@@ -99,7 +96,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(CREATE_COOP_CONTACT_PERMISSION)
     @Override
     public Response createContactOnCooperation(Long cooperationId,
-                                                @Valid CreateContact createCooperationContact) {
+                                               CreateContact createCooperationContact) {
         var createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
         var readContactDto = contactService.createContact(cooperationId, createContactDto);
         var readContact = mapper.convert(readContactDto, ReadContact.class);
@@ -160,8 +157,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(GET_ALL_COOPERATION_PERMISSION)
     @Override
-    public Response queryCooperation(@Min(1) Integer pageNumber,
-                                     @Min(1) @Max(10) Integer pageSize,
+    public Response queryCooperation(Integer pageNumber,
+                                     Integer pageSize,
                                      String sort,
                                      String filter,
                                      Long id,
@@ -176,8 +173,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSES_PERMISSION)
     @Override
     public Response queryHouse(Long cooperationId,
-                               @Min(1) Integer pageNumber,
-                               @Min(1) @Max(10) Integer pageSize,
+                               Integer pageNumber,
+                               Integer pageSize,
                                String sort,
                                String filter,
                                Long id,
@@ -192,8 +189,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_ALL_COOP_CONTACT_PERMISSION)
     @Override
     public Response queryContactsOnCooperation(Long cooperationId,
-                                               @Min(1) Integer pageNumber,
-                                               @Min(1) @Max(10) Integer pageSize,
+                                               Integer pageNumber,
+                                               Integer pageSize,
                                                String sort,
                                                String filter,
                                                Long id, String phone,
@@ -251,7 +248,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
     @Override
-    public Response updateCooperation(Long id, @Valid UpdateCooperation updateCooperation) {
+    public Response updateCooperation(Long id, UpdateCooperation updateCooperation) {
         CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
         CooperationDto toUpdate = cooperationService.updateCooperation(id, updateCoopDto);
         ReadCooperation readCooperation = mapper.convert(toUpdate, ReadCooperation.class);
@@ -261,7 +258,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_HOUSE_PERMISSION)
     @Override
-    public Response updateHouse(Long cooperationId, Long id, @Valid UpdateHouse updateHouse) {
+    public Response updateHouse(Long cooperationId, Long id, UpdateHouse updateHouse) {
         HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
         HouseDto toUpdate = houseService.updateHouse(id, updateHouseDto);
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);
@@ -271,7 +268,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
 
     @PreAuthorize(UPDATE_COOP_CONTACT_PERMISSION)
     @Override
-    public Response updateContactOnCooperation(Long cooperationId, Long id, @Valid UpdateContact updateContact) {
+    public Response updateContactOnCooperation(Long cooperationId, Long id, UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
         var updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
         var readContact = mapper.convert(updatedContactDto, ReadContact.class);

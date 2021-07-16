@@ -5,8 +5,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENT_PERMISSION;
 
 import java.math.BigDecimal;
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -34,7 +32,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @PreAuthorize(CREATE_APARTMENT_PERMISSION)
     @Override
-    public Response createApartment(@Min(1L) Long houseId, @Valid CreateApartment createApartment) {
+    public Response createApartment(Long houseId, CreateApartment createApartment) {
         var createApartmentDto = mapper.convert(createApartment, ApartmentDto.class);
         var readApartmentDto = apartmentService.createApartment(houseId, createApartmentDto);
         var readApartment = mapper.convert(readApartmentDto, ReadApartment.class);
@@ -74,7 +72,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     }
 
     @Override
-    public Response updateApartment(@Min(1L) Long houseId, Long id, @Valid UpdateApartment updateApartment) {
+    public Response updateApartment(Long houseId, Long id, UpdateApartment updateApartment) {
         var updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
         var toUpdate = apartmentService.updateApartment(houseId,id,updateApartmentDto);
         var readApartment = mapper.convert(toUpdate, ReadApartment.class);
