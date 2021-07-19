@@ -8,6 +8,7 @@ import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

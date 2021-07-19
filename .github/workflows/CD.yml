@@ -48,6 +48,8 @@ jobs:
           -Ddockerhub.username=${{secrets.DOCKER_USERNAME}}
           -Ddockerhub.password=${{secrets.DOCKER_PASSWORD}}
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
+          -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
+          -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
 
   deploy:
     needs: package
