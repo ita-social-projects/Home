@@ -31,7 +31,7 @@ public class JobConfig implements BaseJobConfig {
     }
 
     public static JobDetailFactoryBean createJobDetail(Class<? extends Job> jobClass, String jobName) {
-        log.debug("createJobDe tail(jobClass={}, jobName={})", jobClass.getName(), jobName);
+        log.debug("createJobDetail(jobClass={}, jobName={})", jobClass.getName(), jobName);
         var factoryBean = new JobDetailFactoryBean();
         factoryBean.setName(jobName);
         factoryBean.setJobClass(jobClass);
