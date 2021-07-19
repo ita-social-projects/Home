@@ -16,9 +16,6 @@ import lombok.Setter;
 @DiscriminatorValue("cooperation")
 public class CooperationInvitation extends Invitation{
 
-    @Column(name = "end_time")
-    private LocalDateTime requestEndTime;
-
     @Column(name = "role")
     @Convert(converter = InvitationRoleConverter.class)
     private RoleEnum role;
