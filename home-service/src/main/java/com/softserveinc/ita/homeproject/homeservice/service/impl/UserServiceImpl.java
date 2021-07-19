@@ -5,7 +5,6 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN
 import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
@@ -83,10 +82,15 @@ public class UserServiceImpl implements UserService {
 
         validateEmailsMatching(invitation.getEmail(), userDto.getEmail());
 
-        if (invitation.getType().equals(InvitationType.APARTMENT)) {
-            apartmentInvitationService.acceptUserInvitation(invitation);
-        } else {
-            cooperationInvitationService.acceptUserInvitation(invitation);
+        switch(invitation.getType()){
+            case APARTMENT:
+                apartmentInvitationService.acceptUserInvitation(invitation);
+                break;
+            case COOPERATION:
+                cooperationInvitationService.acceptUserInvitation(invitation);
+                break;
+            default:
+                throw new UnsupportedOperationException("Provided type not supported");
         }
     }
 
