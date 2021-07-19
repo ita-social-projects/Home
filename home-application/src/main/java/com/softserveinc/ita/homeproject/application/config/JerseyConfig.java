@@ -5,7 +5,6 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.application.resolver.ValidationConfigurationContextResolver;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;

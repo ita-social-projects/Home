@@ -14,6 +14,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
+import org.hibernate.validator.internal.engine.DefaultParameterNameProvider;
 import org.hibernate.validator.parameternameprovider.ReflectionParameterNameProvider;
 
 // Copy from https://github.com/zxqhoho/dropwizard/blob/26930f772f3e821d33382969d773825b326d49d5/dropwizard-jersey/src/main/java/io/dropwizard/jersey/validation/JerseyParameterNameProvider.java
@@ -21,11 +22,11 @@ import org.hibernate.validator.parameternameprovider.ReflectionParameterNameProv
 /**
  * Adds jersey support to parameter name discovery in hibernate validator.
  * <p>
- * <p>This provider will behave like the hibernate-provided {@link ReflectionParameterNameProvider} except when a
+ * <p>This provider will behave like the hibernate-provided {@link DefaultParameterNameProvider} except when a
  * method parameter is annotated with a jersey parameter annotation, like {@link QueryParam}. If a jersey parameter
  * annotation is present the value of the annotation is used as the parameter name.</p>
  */
-public class JerseyParameterNameProvider extends ReflectionParameterNameProvider {
+public class JerseyParameterNameProvider extends DefaultParameterNameProvider {
 
     @Override
     public List<String> getParameterNames(Method method) {
