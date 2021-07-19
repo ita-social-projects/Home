@@ -39,7 +39,6 @@ public class JerseyConfig extends ResourceConfig {
         property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, ".*/apidocs/.*");
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
-        register(ValidationConfigurationContextResolver.class);
         // register endpoints
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.api", scanner);
         // register exception mappers

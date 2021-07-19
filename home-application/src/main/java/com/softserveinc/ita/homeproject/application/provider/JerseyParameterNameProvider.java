@@ -47,19 +47,19 @@ public class JerseyParameterNameProvider extends ReflectionParameterNameProvider
 
         for (Annotation a : memberAnnotations) {
             if (a instanceof QueryParam) {
-                return Optional.of("query param " + ((QueryParam) a).value());
+                return Optional.of(((QueryParam) a).value());
             } else if (a instanceof PathParam) {
-                return Optional.of("path param " + ((PathParam) a).value());
+                return Optional.of(((PathParam) a).value());
             } else if (a instanceof HeaderParam) {
-                return Optional.of("header " + ((HeaderParam) a).value());
+                return Optional.of(((HeaderParam) a).value());
             } else if (a instanceof CookieParam) {
-                return Optional.of("cookie " + ((CookieParam) a).value());
+                return Optional.of(((CookieParam) a).value());
             } else if (a instanceof FormParam) {
-                return Optional.of("form field " + ((FormParam) a).value());
+                return Optional.of(((FormParam) a).value());
             } else if (a instanceof Context) {
                 return Optional.of("context");
             } else if (a instanceof MatrixParam) {
-                return Optional.of("matrix param " + ((MatrixParam) a).value());
+                return Optional.of(((MatrixParam) a).value());
             }
         }
 
