@@ -1,25 +1,25 @@
 package com.softserveinc.ita.homeproject.api.tests.invitations;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.model.Address;
+import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.CreateContact;
+import com.softserveinc.ita.homeproject.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.model.CreateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
-
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InvitationApiIT {
 
