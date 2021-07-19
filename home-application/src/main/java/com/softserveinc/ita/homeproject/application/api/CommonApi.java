@@ -56,4 +56,31 @@ public abstract class CommonApi {
     public void verifyExistence(Long parentId, QueryableService service){
         service.getOne(parentId);
     }
+
+    /**
+     * Verify existing of parent dto, when parentId is send by path param.
+     * Example: /cooperation/{cooperation_id}/houses/{id}
+     * here cooperation_id - is parentId and if it doesn't exist exception 404 (not found) is thrown.
+     * @param parentId
+     * @param childId
+     * @param parentService
+     * @param childService
+     * @return
+     */
+    public BaseDto getChildDto(Long parentId,
+                               Long childId,
+                               QueryableService parentService,
+                               QueryableService childService) {
+        verifyExistence(parentId, parentService);
+        return childService.getOne(childId, getSpecification());
+    }
+
+    public Page<? extends BaseDto> getAllChildDtos(Long parentId,
+                                                   Integer pageNumber,
+                                                   Integer pageSize,
+                                                   QueryableService parentService,
+                                                   QueryableService childService){
+        verifyExistence(parentId, parentService);
+        return childService.findAll(pageNumber, pageSize, getSpecification());
+    }
 }
