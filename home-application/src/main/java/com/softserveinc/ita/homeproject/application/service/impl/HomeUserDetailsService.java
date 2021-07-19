@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
+import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +42,7 @@ public class HomeUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var user = userRepository.findByEmail(email)
+                .filter(User::getEnabled)
                 .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
 
         var userCooperation = userCooperationRepository.findUserCooperationByUser(user);
