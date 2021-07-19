@@ -77,13 +77,12 @@ public class QueryCooperationPollIT extends QueryPoll {
                 .build().perform();
     }
 
-    @Disabled("Should sent exception. Is not ready yet. Created task#251.")
     @Test
     @Override
     void getAllPollsFromNotExistingCooperation() throws ApiException {
 
         createPoll();
-        Long wrongCooperationId = 99999999999L;
+        Long wrongCooperationId = 999999999L;
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> buildQueryPollWithCooperationId(wrongCooperationId))
