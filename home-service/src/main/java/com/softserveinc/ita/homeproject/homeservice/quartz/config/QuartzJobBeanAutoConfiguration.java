@@ -5,31 +5,32 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.quartz.Job;
+import org.quartz.JobDetail;
 import org.quartz.Trigger;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
 /**
- * QuartzJobBeanAutoConfiguration annotation for @see org.quartz.Job
+ * QuartzJobBeanAutoConfiguration annotation for {@link Job}
  * For Job annotated with QuartzJobBeanAutoConfiguration will be generated
- * {@link Trigger} and {@link org.quartz.JobDetail} beans
+ * {@link Trigger} and {@link JobDetail} beans
  * Trigger Example:
  *         return TriggerBuilder.newTrigger()
  *                 .forJob(jobDetail)
- *                 .withIdentity(triggerName)
- *                 .withSchedule(simpleSchedule()
- *                         .repeatForever()
- *                         .withIntervalInMilliseconds({@link QuartzJobBeanAutoConfiguration#cron()})
- *                         .withMisfireHandlingInstructionNextWithRemainingCount())
+ *                 .withIdentity({@link QuartzJobBeanAutoConfiguration#triggerName()},
+ *                               {@link QuartzJobBeanAutoConfiguration#group()})
+ *                 .withSchedule(cronSchedule({@link QuartzJobBeanAutoConfiguration#cron()}))
  *                 .build();
  *
  * JobDetail Example:
  *         return JobBuilder.newJob()
  *                         .ofType(jobClass)
  *                         .storeDurably(true)
- *                         .withIdentity(jobName)
+ *                         .withIdentity({@link QuartzJobBeanAutoConfiguration#jobName()},
+ *                                       {@link QuartzJobBeanAutoConfiguration#group()})
  *                         .build();
  */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface QuartzJobBeanAutoConfiguration {
     String cron();
     String group() default "AutoConfigured";
