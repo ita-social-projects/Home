@@ -5,6 +5,7 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.Provider;
 
+import com.softserveinc.ita.homeproject.application.resolver.ValidationConfigurationContextResolver;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -38,6 +39,7 @@ public class JerseyConfig extends ResourceConfig {
         property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, ".*/apidocs/.*");
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
+        register(ValidationConfigurationContextResolver.class);
         // register endpoints
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.api", scanner);
         // register exception mappers
