@@ -20,7 +20,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
     image: home-data-migration:0.0.1-SNAPSHOT
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
