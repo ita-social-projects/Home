@@ -1,43 +1,25 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import java.util.List;
-
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.quartz.config.QuartzJobBeanAutoConfiguration;
+import com.softserveinc.ita.homeproject.homeservice.service.impl.SendApartmentEmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.quartz.JobExecutionContext;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
-public class SendApartmentEmailJob extends BaseEmailJob{
+@QuartzJobBeanAutoConfiguration(cron = "0/5 * * * * ?")
+public class SendApartmentEmailJob extends QuartzJobBean {
 
-    private final ApartmentInvitationService apartmentInvitationService;
+    private final SendApartmentEmailService sendApartmentEmailJob;
 
-    @Override
     @SneakyThrows
-    protected void executeAllInvitationsByType() {
-        List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
-
-        for (InvitationDto invite : invitations) {
-            mailService.sendTextMessage(createMailDto(invite));
-            apartmentInvitationService.updateSentDateTimeAndStatus(invite.getId());
-        }
-    }
-
     @Override
-    protected MailDto createMailDto(InvitationDto invitationDto) {
-        var invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
-        var mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.APARTMENT);
-        mailDto.setId(invitation.getId());
-        mailDto.setEmail(invitation.getEmail());
-        mailDto.setApartmentNumber(invitation.getApartmentNumber());
-        mailDto.setOwnershipPat(invitation.getOwnershipPart());
-        checkRegistration(invitation, mailDto);
-        return mailDto;
+    public void executeInternal(JobExecutionContext context) {
+        sendApartmentEmailJob.executeAllInvitationsByType();
     }
 }
