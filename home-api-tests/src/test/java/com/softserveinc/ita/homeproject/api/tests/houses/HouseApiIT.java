@@ -119,6 +119,42 @@ class HouseApiIT {
     }
 
     @Test
+    void deleteHouseFromNotExistingCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.deleteHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
+    }
+
+    @Test
+    void deleteHouseFromNotRelatedCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadCooperation wrongCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.deleteHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
+    }
+
+    @Test
+    void deleteNotExistingHouse() throws ApiException {
+        Long wrongHouseId = 9999999L;
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.deleteHouseWithHttpInfo(expectedCoop.getId(), wrongHouseId))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, wrongHouseId));
+    }
+
+    @Test
     void deleteHouseTest() throws ApiException {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
