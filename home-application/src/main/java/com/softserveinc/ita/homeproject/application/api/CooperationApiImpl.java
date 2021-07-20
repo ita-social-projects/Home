@@ -73,18 +73,6 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Autowired
     private PollService pollService;
 
-    private HouseDto getHouseDto(Long cooperationId, Long houseId) {
-        return (HouseDto)getChildDto(cooperationId, houseId, cooperationService, houseService);
-    }
-
-    private ContactDto getContactDto(Long cooperationId, Long contactId) {
-        return (ContactDto)getChildDto(cooperationId, contactId, cooperationService, contactService);
-    }
-
-    private PollDto getPollDto(Long cooperationId, Long contactId) {
-        return (PollDto)getChildDto(cooperationId, contactId, cooperationService, pollService);
-    }
-
     @PreAuthorize(CREATE_COOPERATION_PERMISSION)
     @Override
     public Response createCooperation(CreateCooperation createCooperation) {
@@ -137,21 +125,24 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(GET_HOUSE_PERMISSION)
     @Override
     public Response getHouse(Long cooperationId, Long id) {
-        ReadHouse readHouse = mapper.convert(getHouseDto(cooperationId,id), ReadHouse.class);
+        var houseDto = houseService.getOne(id, getSpecification());
+        ReadHouse readHouse = mapper.convert(houseDto, ReadHouse.class);
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
     @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long id) {
-        var readContact = mapper.convert(getContactDto(cooperationId,id), ReadContact.class);
+        var contactDto = contactService.getOne(id, getSpecification());
+        var readContact = mapper.convert(contactDto, ReadContact.class);
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
     public Response getCooperationPoll(Long cooperationId, Long id) {
-        ReadPoll readPoll = mapper.convert(getPollDto(cooperationId,id), ReadPoll.class);
+        var pollDto = pollService.getOne(id, getSpecification());
+        ReadPoll readPoll = mapper.convert(pollDto, ReadPoll.class);
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 
@@ -213,13 +204,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                          LocalDateTime completionDate,
                                          PollType type,
                                          PollStatus status) {
-        //        verifyExistence(cooperationId, cooperationService);
-        Page<PollDto> readPoll = (Page<PollDto>) getAllChildDtos(cooperationId,
-                pageNumber,
-                pageSize,
-                cooperationService,
-                pollService);
-        //        pollService.findAll(pageNumber, pageSize, getSpecification());
+        verifyExistence(cooperationId, cooperationService);
+        Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
     }
 
@@ -234,7 +220,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(DELETE_HOUSE_PERMISSION)
     @Override
     public Response deleteHouse(Long cooperationId, Long id) {
-        houseService.deactivate(getHouseDto(cooperationId,id));
+        houseService.deactivate(houseService.getOne(id,getSpecification()));
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -267,7 +253,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(UPDATE_HOUSE_PERMISSION)
     @Override
     public Response updateHouse(Long cooperationId, Long id, UpdateHouse updateHouse) {
-        HouseDto oldHouseDto = getHouseDto(cooperationId, id);
+        var oldHouseDto = houseService.getOne(id, getSpecification());
         HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
         HouseDto toUpdate = houseService.updateHouse(oldHouseDto, updateHouseDto);
         ReadHouse readHouse = mapper.convert(toUpdate, ReadHouse.class);

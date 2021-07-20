@@ -27,6 +27,8 @@ class HouseApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
+    private static final String HOUSE_NOT_FOUND = "House with 'id: %d' is not found";
+
     @Test
     void createHouseTest() throws ApiException {
         CreateHouse createHouse = createHouse();
@@ -59,7 +61,7 @@ class HouseApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> houseApi.getHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
     }
 
     @Test
@@ -72,7 +74,7 @@ class HouseApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> houseApi.getHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("House with 'id: " + expectedHouse.getId() + "' is not found");
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
     }
 
     @Test
@@ -100,7 +102,7 @@ class HouseApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId(), getUpdatedHouse()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
     }
 
     @Test
@@ -113,7 +115,7 @@ class HouseApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId(), getUpdatedHouse()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("House with 'id: " + expectedHouse.getId() + "' is not found");
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
     }
 
     @Test
