@@ -86,7 +86,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Override
     public Response createHouse(Long cooperationId, CreateHouse createHouse) {
         HouseDto createHouseDto = mapper.convert(createHouse, HouseDto.class);
-        HouseDto readHouseDto = houseService.createHouse(cooperationId, createHouseDto);
+        var cooperationDto = cooperationService.getOne(cooperationId);
+        HouseDto readHouseDto = houseService.createHouse(cooperationDto, createHouseDto);
         ReadHouse readHouse = mapper.convert(readHouseDto, ReadHouse.class);
         return Response.status(Response.Status.CREATED).entity(readHouse).build();
     }

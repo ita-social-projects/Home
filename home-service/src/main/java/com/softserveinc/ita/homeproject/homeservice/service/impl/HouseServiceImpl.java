@@ -6,6 +6,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -31,8 +32,9 @@ public class HouseServiceImpl implements HouseService {
 
     @Transactional
     @Override
-    public HouseDto createHouse(Long cooperationId, HouseDto createHouseDto) {
+    public HouseDto createHouse(CooperationDto cooperationDto, HouseDto createHouseDto) {
         House house = mapper.convert(createHouseDto, House.class);
+        Long cooperationId = cooperationDto.getId();
         Cooperation cooperation = cooperationRepository.findById(cooperationId)
             .filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(

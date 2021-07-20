@@ -121,6 +121,7 @@ class CooperationApiIT {
             .withMessageContaining("Parameter `iban` is invalid - size must be between 1 and 34 signs.");
     }
 
+
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
             .name("newCooperationTest")

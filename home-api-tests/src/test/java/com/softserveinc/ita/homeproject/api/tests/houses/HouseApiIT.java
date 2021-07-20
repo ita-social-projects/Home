@@ -29,6 +29,8 @@ class HouseApiIT {
 
     private static final String HOUSE_NOT_FOUND = "House with 'id: %d' is not found";
 
+    private static final String COOPERATION_NOT_FOUND = "Cooperation with 'id: %d' is not found";
+
     @Test
     void createHouseTest() throws ApiException {
         CreateHouse createHouse = createHouse();
@@ -152,6 +154,16 @@ class HouseApiIT {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> houseApi.getHouse(readCooperation.getId(), readHouse.getId()));
+    }
+
+    @Test
+    void createHouseInNotExistedCooperationTest() {
+        CreateHouse createHouse = createHouse();
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.createHouseWithHttpInfo(wrongCooperationId, createHouse))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(COOPERATION_NOT_FOUND, wrongCooperationId));
     }
 
     @Test
@@ -354,6 +366,5 @@ class HouseApiIT {
             .street("street")
             .zipCode("zipCode");
     }
-
 
 }
