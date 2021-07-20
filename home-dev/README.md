@@ -22,18 +22,11 @@ How to do it with IDEA and Maven, check the [Maven](#Maven).
 
 ## Docker
 
-
-**How to create database**
-
-For that purpose just use `docker-compose up` command in your terminal in `home-dev/init` package. 
-After that you will have your container with database.
-
-
 **How to launch**
 
-After successful building and creating database you can launch the project in Docker. 
 For that purpose just type `docker-compose up` command in `home-dev/launch` package.
-After that you will have data-migration container for filling database and running application container.
+After that you will have your container with database.
+After that you will have data-migration container for filling database and running application container and MailHog container.
 
 
 **How to close**

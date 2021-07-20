@@ -1,7 +1,21 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5433:5432
+    networks:
+      - home_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+
   home-data-migration:
+    depends_on:
+      - postgres
     image: home-data-migration:0.0.1-SNAPSHOT
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
@@ -18,6 +32,12 @@ services:
       - 8080:8080
     networks:
       - home_network
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
 
 networks:
   home_network:
