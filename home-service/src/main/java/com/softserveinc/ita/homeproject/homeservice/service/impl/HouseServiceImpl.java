@@ -46,26 +46,27 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public HouseDto updateHouse(Long id, HouseDto updateHouseDto) {
-        House fromDb = houseRepository.findById(id)
-            .filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
+    public HouseDto updateHouse(HouseDto oldHouseDto, HouseDto updateHouseDto) {
+        Long id = oldHouseDto.getId();
+        House oldHouse = houseRepository.findById(id)
+                .filter(House::getEnabled)
+                .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
 
         if (updateHouseDto.getQuantityFlat() != null) {
-            fromDb.setQuantityFlat(updateHouseDto.getQuantityFlat());
+            oldHouse.setQuantityFlat(updateHouseDto.getQuantityFlat());
         }
         if (updateHouseDto.getAdjoiningArea() != null) {
-            fromDb.setAdjoiningArea(updateHouseDto.getAdjoiningArea());
+            oldHouse.setAdjoiningArea(updateHouseDto.getAdjoiningArea());
         }
         if (updateHouseDto.getHouseArea() != null) {
-            fromDb.setHouseArea(updateHouseDto.getHouseArea());
+            oldHouse.setHouseArea(updateHouseDto.getHouseArea());
         }
         if (updateHouseDto.getAddress() != null) {
-            fromDb.setAddress(updateHouseDto.getAddress());
+            oldHouse.setAddress(updateHouseDto.getAddress());
         }
-        fromDb.setUpdateDate(LocalDateTime.now());
-        houseRepository.save(fromDb);
-        return mapper.convert(fromDb, HouseDto.class);
+        oldHouse.setUpdateDate(LocalDateTime.now());
+        houseRepository.save(oldHouse);
+        return mapper.convert(oldHouse, HouseDto.class);
     }
 
     @Override
@@ -75,12 +76,11 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
-    public void deactivateById(Long coopId, Long id) {
-        House toDelete = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
-        if (!toDelete.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
-        }
+    public void deactivate(HouseDto houseDto) {
+        Long id = houseDto.getId();
+        House toDelete = houseRepository.findById(id)
+                .filter(House::getEnabled)
+                .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
         toDelete.setEnabled(false);
         houseRepository.save(toDelete);
     }

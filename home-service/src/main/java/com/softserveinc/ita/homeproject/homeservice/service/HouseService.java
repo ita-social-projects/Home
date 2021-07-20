@@ -7,8 +7,8 @@ public interface HouseService extends QueryableService<House, HouseDto> {
 
     HouseDto createHouse(Long cooperationId, HouseDto createHouseDto);
 
-    HouseDto updateHouse(Long id, HouseDto updateHouseDto);
+    HouseDto updateHouse(HouseDto oldHouse, HouseDto updateHouseDto);
 
-    void deactivateById(Long coopId, Long id);
+    void deactivate(HouseDto houseDto);
 
 }
