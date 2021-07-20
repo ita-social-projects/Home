@@ -1,45 +1,25 @@
 package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 
-import java.util.List;
-
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.quartz.config.QuartzJobBeanAutoConfiguration;
+import com.softserveinc.ita.homeproject.homeservice.service.impl.SendCooperationEmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.quartz.JobExecutionContext;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
-
 @Component
+@Slf4j
 @RequiredArgsConstructor
-public class SendCooperationEmailJob extends BaseEmailJob {
+@QuartzJobBeanAutoConfiguration(cron = "0/5 * * * * ?")
+public class SendCooperationEmailJob extends QuartzJobBean {
 
-    private final CooperationInvitationService cooperationInvitationService;
+    private final SendCooperationEmailService sendCooperationEmailJob;
 
-    @Override
     @SneakyThrows
-    public void executeAllInvitationsByType() {
-        List<CooperationInvitationDto> invitations = cooperationInvitationService.getAllActiveInvitations();
-
-        for (InvitationDto invite : invitations) {
-            mailService.sendTextMessage(createMailDto(invite));
-            cooperationInvitationService.updateSentDateTimeAndStatus(invite.getId());
-        }
-    }
-
     @Override
-    protected MailDto createMailDto(InvitationDto invitationDto) {
-        CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
-        var mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.COOPERATION);
-        mailDto.setId(invitation.getId());
-        mailDto.setEmail(invitation.getEmail());
-        mailDto.setRegistrationToken(invitation.getRegistrationToken());
-        mailDto.setRole(invitation.getRole().getName());
-        mailDto.setCooperationName(invitation.getCooperationName());
-        checkRegistration(invitation, mailDto);
-        return mailDto;
+    public void executeInternal(JobExecutionContext context) {
+        sendCooperationEmailJob.executeAllInvitationsByType();
     }
 }

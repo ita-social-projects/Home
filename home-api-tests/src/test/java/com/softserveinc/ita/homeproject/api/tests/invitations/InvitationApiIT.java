@@ -19,6 +19,7 @@ import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.model.CreateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
