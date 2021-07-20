@@ -141,5 +141,13 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                         .of(pageNumber - 1, pageSize))
                 .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
-}
 
+    public void deactivateApartmentInvitations() {
+        for (ApartmentInvitation apartmentInvitation : apartmentInvitationRepository
+                .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
+                        getInvitationForDeactivating(root, criteriaBuilder))) {
+            apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
+            apartmentInvitationRepository.save(apartmentInvitation);
+        }
+    }
+}

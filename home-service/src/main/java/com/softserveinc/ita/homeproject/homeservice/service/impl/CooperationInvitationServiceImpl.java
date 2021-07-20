@@ -12,6 +12,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -42,7 +43,6 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         return cooperationInvitationDto;
     }
 
-
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
         var allNotSentInvitations = cooperationInvitationRepository
@@ -51,5 +51,14 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         return allNotSentInvitations.stream()
                 .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public void deactivateCooperationInvitations() {
+        for (CooperationInvitation cooperationInvitation : cooperationInvitationRepository
+                .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
+                        getInvitationForDeactivating(root, criteriaBuilder))) {
+            cooperationInvitation.setStatus(InvitationStatus.DEACTIVATED);
+            cooperationInvitationRepository.save(cooperationInvitation);
+        }
     }
 }

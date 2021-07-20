@@ -1,6 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
@@ -11,7 +14,6 @@ import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,13 @@ public abstract class InvitationServiceImpl implements InvitationService {
         invitationRepository.save(invitation);
     }
 
+    protected Predicate getInvitationForDeactivating(Root<? extends Invitation> root, CriteriaBuilder criteriaBuilder) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return criteriaBuilder
+                .and((criteriaBuilder.notEqual(root.get("status"), InvitationStatus.DEACTIVATED)),
+                        (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.ACCEPTED)),
+                        (criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime.minusDays(7))));
+    }
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
