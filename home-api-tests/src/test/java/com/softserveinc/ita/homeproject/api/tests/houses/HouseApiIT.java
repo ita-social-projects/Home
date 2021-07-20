@@ -21,6 +21,8 @@ import org.junit.jupiter.api.Test;
 
 class HouseApiIT {
 
+    private final Long wrongCooperationId = 999999999L;
+
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
@@ -49,29 +51,69 @@ class HouseApiIT {
     }
 
     @Test
+    void getHouseFromNotExistingCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.getHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
+    }
+
+    @Test
+    void getHouseFromNotRelatedCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadCooperation wrongCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.getHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("House with 'id: " + expectedHouse.getId() + "' is not found");
+    }
+
+    @Test
     void updateHouseTest() throws ApiException {
         CreateHouse createHouse = createHouse();
         ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
 
-        UpdateHouse updateHouse = new UpdateHouse()
-            .adjoiningArea(2000)
-            .houseArea(BigDecimal.valueOf(2000.0))
-            .quantityFlat(200)
-            .address(new Address()
-                .region("upd")
-                .city("upd")
-                .district("upd")
-                .street("upd")
-                .houseBlock("upd")
-                .houseNumber("upd")
-                .zipCode("upd"));
+        UpdateHouse updateHouse = getUpdatedHouse();
 
         ApiResponse<ReadHouse> response =
             houseApi.updateHouseWithHttpInfo(expectedCoop.getId(), expectedHouse.getId(), updateHouse);
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertHouse(expectedHouse, updateHouse, response.getData());
+    }
+
+
+    @Test
+    void updateHouseFromNotExistingCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId(), getUpdatedHouse()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
+    }
+
+    @Test
+    void updateHouseFromNotRelatedCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadCooperation wrongCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId(), getUpdatedHouse()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("House with 'id: " + expectedHouse.getId() + "' is not found");
     }
 
     @Test
@@ -229,6 +271,21 @@ class HouseApiIT {
             .address(createAddress())
             .houses(createHouseList())
             .contacts(createContactList());
+    }
+
+    private UpdateHouse getUpdatedHouse(){
+        return new UpdateHouse()
+                .adjoiningArea(2000)
+                .houseArea(BigDecimal.valueOf(2000.0))
+                .quantityFlat(200)
+                .address(new Address()
+                        .region("upd")
+                        .city("upd")
+                        .district("upd")
+                        .street("upd")
+                        .houseBlock("upd")
+                        .houseNumber("upd")
+                        .zipCode("upd"));
     }
 
     private List<CreateHouse> createHouseList() {
