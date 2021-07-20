@@ -92,7 +92,6 @@ class HouseApiIT {
         assertHouse(expectedHouse, updateHouse, response.getData());
     }
 
-
     @Test
     void updateHouseFromNotExistingCooperationTest() throws ApiException {
         CreateHouse createHouse = createHouse();
@@ -141,17 +140,6 @@ class HouseApiIT {
                 .isThrownBy(() -> houseApi.deleteHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId()))
                 .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId()));
-    }
-
-    @Test
-    void deleteNotExistingHouse() throws ApiException {
-        Long wrongHouseId = 9999999L;
-        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> houseApi.deleteHouseWithHttpInfo(expectedCoop.getId(), wrongHouseId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining(String.format(HOUSE_NOT_FOUND, wrongHouseId));
     }
 
     @Test

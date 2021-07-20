@@ -212,15 +212,14 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(DELETE_COOPERATION_PERMISSION)
     @Override
     public Response deleteCooperation(Long id) {
-        //todo dto
-        cooperationService.deactivateCooperation(id);
+        cooperationService.deactivateCooperation(cooperationService.getOne(id));
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PreAuthorize(DELETE_HOUSE_PERMISSION)
     @Override
     public Response deleteHouse(Long cooperationId, Long id) {
-        houseService.deactivate(houseService.getOne(id,getSpecification()));
+        houseService.deactivate(houseService.getOne(id, getSpecification()));
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -243,9 +242,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
     @Override
     public Response updateCooperation(Long id, UpdateCooperation updateCooperation) {
+        CooperationDto oldCoopDto = cooperationService.getOne(id, getSpecification());
         CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
-        //todo dto
-        CooperationDto toUpdate = cooperationService.updateCooperation(id, updateCoopDto);
+        CooperationDto toUpdate = cooperationService.updateCooperation(oldCoopDto, updateCoopDto);
         ReadCooperation readCooperation = mapper.convert(toUpdate, ReadCooperation.class);
         return Response.status(Response.Status.OK).entity(readCooperation).build();
     }

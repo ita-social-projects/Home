@@ -66,7 +66,8 @@ public class CooperationServiceImpl implements CooperationService {
 
     @Transactional
     @Override
-    public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
+    public CooperationDto updateCooperation(CooperationDto oldCooperationDto, CooperationDto updateCooperationDto) {
+        Long id = oldCooperationDto.getId();
         Cooperation fromDb = cooperationRepository.findById(id)
                 .filter(Cooperation::getEnabled)
                 .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
@@ -96,7 +97,8 @@ public class CooperationServiceImpl implements CooperationService {
     }
 
     @Override
-    public void deactivateCooperation(Long id) {
+    public void deactivateCooperation(CooperationDto cooperationDto) {
+        Long id = cooperationDto.getId();
         Cooperation toDelete = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
         toDelete.setEnabled(false);

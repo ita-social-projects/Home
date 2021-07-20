@@ -7,7 +7,7 @@ public interface CooperationService extends QueryableService<Cooperation, Cooper
 
     CooperationDto createCooperation(CooperationDto createCooperationDto);
 
-    CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto);
+    CooperationDto updateCooperation(CooperationDto oldCooperationDto, CooperationDto updateCooperationDto);
 
-    void deactivateCooperation(Long id);
+    void deactivateCooperation(CooperationDto cooperationDto);
 }
