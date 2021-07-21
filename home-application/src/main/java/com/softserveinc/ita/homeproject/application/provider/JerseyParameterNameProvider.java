@@ -15,7 +15,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
 import org.hibernate.validator.internal.engine.DefaultParameterNameProvider;
-import org.hibernate.validator.parameternameprovider.ReflectionParameterNameProvider;
 
 // Copy from https://github.com/zxqhoho/dropwizard/blob/26930f772f3e821d33382969d773825b326d49d5/dropwizard-jersey/src/main/java/io/dropwizard/jersey/validation/JerseyParameterNameProvider.java
 
@@ -48,19 +47,19 @@ public class JerseyParameterNameProvider extends DefaultParameterNameProvider {
 
         for (Annotation a : memberAnnotations) {
             if (a instanceof QueryParam) {
-                return Optional.of(((QueryParam) a).value());
+                return Optional.of("query param " + ((QueryParam) a).value());
             } else if (a instanceof PathParam) {
-                return Optional.of(((PathParam) a).value());
+                return Optional.of("path param " + ((PathParam) a).value());
             } else if (a instanceof HeaderParam) {
-                return Optional.of(((HeaderParam) a).value());
+                return Optional.of("header param " + ((HeaderParam) a).value());
             } else if (a instanceof CookieParam) {
-                return Optional.of(((CookieParam) a).value());
+                return Optional.of("cookie param " + ((CookieParam) a).value());
             } else if (a instanceof FormParam) {
-                return Optional.of(((FormParam) a).value());
+                return Optional.of("form param " + ((FormParam) a).value());
             } else if (a instanceof Context) {
                 return Optional.of("context");
             } else if (a instanceof MatrixParam) {
-                return Optional.of(((MatrixParam) a).value());
+                return Optional.of("matrix param " + ((MatrixParam) a).value());
             }
         }
 

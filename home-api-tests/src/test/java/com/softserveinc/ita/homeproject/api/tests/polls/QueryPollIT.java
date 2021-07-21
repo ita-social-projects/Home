@@ -108,6 +108,6 @@ class QueryPollIT extends QueryPoll {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> buildQueryPollOnlyByPollId(id))
             .matches(exception -> exception.getCode() == 400)
-            .withMessageContaining("Parameter `cooperation_id` is invalid - must not be null.");
+            .withMessageContaining("Parameter `query param cooperation_id` is invalid - must not be null.");
     }
 }
