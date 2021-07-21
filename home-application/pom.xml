@@ -23,6 +23,12 @@
             <artifactId>home-open-api</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mailapi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,6 +79,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>tech.home-project-engineering</groupId>
+            <artifactId>quartz-actuator</artifactId>
+            <version>${quartz-actuator.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>

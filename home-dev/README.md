@@ -44,6 +44,27 @@ To close the application just type `docker-compose down` in `home-dev/launch` pa
 
 **How to build**
 
+Create settings.xml in your .m2 folder and add repository.
+```xml
+<settings>
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Home-Project-Engineering Apache Maven Packages</name>
+                    <url>https://Home-Project-Engineering:{your_github_read_packages_key}@maven.pkg.github.com/Home-Project-Engineering/quartz-actuator</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    
+    <activeProfiles>
+        <activeProfile>github</activeProfile>
+    </activeProfiles>
+</settings>
+```
 Type in the terminal `mvn clean install` command in the root directory of the project or choose `install` lifecycle of the root module in Maven tab in IDEA.
 
 **How to launch**
