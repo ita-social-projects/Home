@@ -14,7 +14,6 @@ servers:
   - url: /api/0
 
 tags:
-
   - name: news
     description: News management operations
   - name: user
@@ -37,8 +36,12 @@ tags:
     description: Cooperation poll management operations
   - name: poll
     description: Poll management operations  independently from cooperation
+  - name: cooperation contact
+    description: Cooperation contact management operations
   - name: poll question
     description: Poll question management operations
+  - name: polled house
+    description: Polled house management operations
   - name: poll vote
     description: Poll vote management operations
 
@@ -744,7 +747,7 @@ paths:
       description: The endpoint gets all apartments of the house
       operationId: queryApartment
       parameters:
-        - $ref: 'p_house_id'
+        - $ref: '#/components/parameters/p_house_id'
         - $ref: '#/components/parameters/page_number'
         - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/sort'
@@ -1485,21 +1488,21 @@ components:
       properties:
         title:
           type: string
-          example: News In The Local Area
+          example: "News In The Local Area"
           maximum: 70
         photo_url:
           type: string
           format: url
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
-          example: Gas turn off
+          example: "Gas turn off"
         source:
           type: string
-          example: Example
+          example: "https://example.com"
         text:
           type: string
-          example: example
+          example: "example of text"
     CreateNews:
       required:
         - title
@@ -1509,25 +1512,25 @@ components:
       properties:
         title:
           type: string
-          example: News in the Some Area
+          example: "News in the Some Area"
           minLength: 1
           maxLength: 70
         photo_url:
           type: string
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example"
         source:
           type: string
-          example: example
+          example: "https://example.com"
         text:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example of text"
     UpdateNews:
       type: object
       required:
@@ -1539,23 +1542,23 @@ components:
           type: string
           minLength: 1
           maxLength: 70
-          example: example
+          example: "example"
         photo_url:
           type: string
-          example: https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
         description:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example"
         source:
           type: string
-          example: example
+          example: "https://example.com"
         text:
           type: string
           minLength: 1
           maxLength: 150
-          example: example
+          example: "example of text"
     ApiError:
       type: object
       properties:
@@ -1564,7 +1567,7 @@ components:
           example: 404
         error_message:
           type: string
-          example: example
+          example: "example"
     CreateUser:
       required:
         - first_name
@@ -1599,11 +1602,13 @@ components:
           maxLength: 128
         contacts:
           type: array
-          example:
-            - type: "email"
-            - id: 1
-            - main: false
-            - email: "createUserEmail@example.com"
+          example: [
+            {
+              "type": "email",
+              "main": false,
+              "email": "createUserEmail@example.com"
+            }
+          ]
           items:
             $ref: '#/components/schemas/CreateContact'
     ReadUser:
@@ -1613,25 +1618,25 @@ components:
       properties:
         first_name:
           type: string
-          example: Petro
+          example: "Petro"
         last_name:
           type: string
-          example: Petrov
+          example: "Petrov"
         email:
           type: string
-          example: home@gmail.com
+          example: "home@gmail.com"
         contacts:
           type: array
-          example:
-            - type: "email"
-            - id: 1
-            - main: false
-            - email: "readUserEmail@example.com"
+          example: [
+            { "id": 1,
+              "type": "email",
+              "main": false,
+              "email": "readUserEmail@example.com"
+            }
+          ]
           items:
             $ref: '#/components/schemas/ReadContact'
     UpdateUser:
-      allOf:
-        - $ref: '#/components/schemas/BaseReadView'
       type: object
       required:
         - first_name
@@ -1642,21 +1647,21 @@ components:
         first_name:
           pattern: '\w+'
           type: string
-          example: Petro
+          example: "Petro"
           minLength: 1
           maxLength: 50
         last_name:
           pattern: '\w+'
           type: string
-          example: Petrov
+          example: "Petrov"
           minLength: 1
           maxLength: 50
         email:
-          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           minLength: 5
           maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: example@gmail.com
+          example: "test.put.messages@gmail.com"
         password:
           pattern: '[a-zA-Z0-9]{8,}'
           type: string
@@ -1686,6 +1691,13 @@ components:
         main:
           type: boolean
           example: false
+      example:
+        {
+          "id": 1,
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
     ReadEmailContact:
       allOf:
         - $ref: '#/components/schemas/ReadContact'
@@ -1693,7 +1705,7 @@ components:
       properties:
         email:
           type: string
-          example: home@gmail.com
+          example: "home@gmail.com"
     ReadPhoneContact:
       allOf:
         - $ref: '#/components/schemas/ReadContact'
@@ -1721,6 +1733,12 @@ components:
           default: false
           type: boolean
           example: false
+      example:
+        {
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
     CreateEmailContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
@@ -1733,7 +1751,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: home@gmail.com
+          example: "home.example@gmail.com"
     CreatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/CreateContact'
@@ -1762,6 +1780,12 @@ components:
         main:
           type: boolean
           example: false
+      example:
+        {
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
     UpdateEmailContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
@@ -1771,10 +1795,10 @@ components:
       properties:
         email:
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          minLength: 9
+          minLength: 5
           maxLength: 320
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     UpdatePhoneContact:
       allOf:
         - $ref: '#/components/schemas/UpdateContact'
@@ -1817,20 +1841,43 @@ components:
           minLength: 5
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
         address:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: List of houses
+          example: [
+            {
+              "quantity_flat": 96,
+              "house_area": 4348.8,
+              "adjoining_area": 400,
+              "address": {
+                "region": "Dnipro",
+                "city": "Dnepr",
+                "district": "District",
+                "street": "street",
+                "house_block": "block",
+                "house_number": "number",
+                "zip_code": "zipCode"
+              }
+            }
+          ]
           items:
             $ref: "#/components/schemas/CreateHouse"
         contacts:
           type: array
-          example:
-            - type: "email"
-            - main: false
-            - email: "createUserEmail@example.com"
+          example: [
+            {
+              "type": "email",
+              "email": "createUserEmail@example.com",
+              "main": false
+            },
+            {
+              "type": "phone",
+              "phone": "+380506617305",
+              "main": false
+            }
+          ]
           items:
             $ref: "#/components/schemas/CreateContact"
 
@@ -1854,25 +1901,42 @@ components:
           example: "77778"
           minLength: 1
           maxLength: 50
-        admin_email:
-          type: string
-          minLength: 5
-          maxLength: 320
-          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-          example: test.receive.messages@gmail.com
         address:
           $ref: '#/components/schemas/Address'
         houses:
           type: array
-          example: List of houses
+          example: [
+            {
+              "quantity_flat": 96,
+              "house_area": 4348.8,
+              "adjoining_area": 400,
+              "address": {
+                "region": "Dnipro",
+                "city": "Dnepr",
+                "district": "District",
+                "street": "street",
+                "house_block": "block",
+                "house_number": "number",
+                "zip_code": "zipCode"
+              }
+            }
+          ]
           items:
             $ref: "#/components/schemas/ReadHouse"
         contacts:
           type: array
-          example:
-            - type: "email"
-            - main: false
-            - email: "createUserEmail@example.com"
+          example: [
+            {
+              "type": "email",
+              "main": false,
+              "email": "createUserEmail@example.com"
+            },
+            {
+              "type": "phone",
+              "phone": "+380506617305",
+              "main": false
+            }
+          ]
           items:
             $ref: "#/components/schemas/ReadContact"
     UpdateCooperation:
@@ -1935,7 +1999,7 @@ components:
           maxLength: 10
         zip_code:
           type: string
-          example: 52956
+          example: "52956"
     CreateHouse:
       required:
         - quantity_flat
@@ -2009,7 +2073,7 @@ components:
       enum:
         - cooperation
         - apartment
-      example: apartment
+      example: "apartment"
 
     ReadInvitation:
       allOf:
@@ -2028,7 +2092,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
         status:
           $ref: '#/components/schemas/InvitationStatus'
     ReadCooperationInvitation:
@@ -2071,7 +2135,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     CreateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/CreateInvitation'
@@ -2105,7 +2169,7 @@ components:
           maxLength: 320
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: test.receive.messages@gmail.com
+          example: "test.receive.messages@gmail.com"
     UpdateCooperationInvitation:
       allOf:
         - $ref: '#/components/schemas/UpdateInvitation'
@@ -2170,13 +2234,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateInvitation'
-          example:
-            - email: test.receive.messages@gmail.com
-              type: apartment
-              ownership_part: 0.3
-            - email: test.receive.messages@gmail.com
-              type: apartment
-              ownership_part: 0.7
+          example: [
+            {
+              "email": "test.receive.messages@gmail.com",
+              "type": "apartment",
+              "ownership_part": 0.3
+            },
+            {
+              "email": "test.receive.messages@gmail.com",
+              "type": "apartment",
+              "ownership_part": 0.7
+            }
+          ]
     UpdateApartment:
       required:
         - number
@@ -2216,33 +2285,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadOwnership'
-          example:
-            - id: 1
-              user:
-                id: 1
-                first_name: Petro
-                last_name: Petrov
-                contacts:
-                  - id: 1
-                    type: email
-                    main: true
-                  - id: 2
-                    type: phone
-                    main: false
-              ownership_part: 0.72
-            - id: 2
-              user:
-                id: 2
-                first_name: Ivan
-                last_name: Ivanov
-                contacts:
-                  - id: 3
-                    type: email
-                    main: true
-                  - id: 4
-                    type: phone
-                    main: false
-              ownership_part: 0.38
+          example: [
+            {
+              "id": 1,
+              "user": {
+                "id": 1,
+                "first_name": "Petro",
+                "last_name": "Petrov",
+                "contacts": [
+                  {
+                    "id": 1,
+                    "type": "email",
+                    "main": true,
+                    "email": "get.example@mail.com"
+                  },
+                  {
+                    "id": 2,
+                    "type": "phone",
+                    "main": false,
+                    "phone": "+380506617305"
+                  }
+                ]
+              },
+              "ownership_part": 0.72
+            },
+            {
+              "id": 2,
+              "user": {
+                "id": 2,
+                "first_name": "Ivan",
+                "last_name": "Ivanov",
+                "contacts": [
+                  {
+                    "id": 3,
+                    "type": "email",
+                    "main": true,
+                    "email": "get2.example@mail.com"
+                  },
+                  {
+                    "id": 4,
+                    "type": "phone",
+                    "main": false,
+                    "phone": "+380506617306"
+                  }
+                ]
+              },
+              "ownership_part": 0.38
+            }
+          ]
 
     HouseLookup:
       type: object
@@ -2260,14 +2350,14 @@ components:
         - active
         - completed
         - suspended
-      example: active
+      example: "active"
 
     PollType:
       description: Indicates the type of a Poll
       type: string
       enum: &poll_type_values
         - simple
-      example: simple
+      example: "simple"
 
     ReadPoll:
       allOf:
@@ -2276,44 +2366,51 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         creation_date:
           type: string
           format: date-time
-          example: 2021-05-30T08:30:00Z
+          example: "2021-05-30T08:30:00Z"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         polled_houses:
           type: array
           items:
             $ref: '#/components/schemas/ReadHouse'
-          example:
-            - id: 1,
-              quantity_flat: 45,
-              house_area: 25,
-              adjoining_area: 12,
-              address:
-                region: "Dnipropetrovsk region"
-                city: "Dnipro"
-                district: "Zavodskoy"
-                street: "Kirova"
-                house_block: "2/B"
-                house_number: "23-B"
-                zip_code: "52956"
-            - id: 2,
-              quantity_flat: 60,
-              house_area: 50,
-              adjoining_area: 20,
-              address:
-                region: "Dnipropetrovsk region"
-                city: "Dnipro"
-                district: "Zavodskoy"
-                street: "Kirova"
-                house_block: "2/C"
-                house_number: "24-C"
-                zip_code: "52956"
+          example: [
+            {
+              "id": "1,",
+              "quantity_flat": "45,",
+              "house_area": "25,",
+              "adjoining_area": "12,",
+              "address": {
+                "region": "Dnipropetrovsk region",
+                "city": "Dnipro",
+                "district": "Zavodskoy",
+                "street": "Kirova",
+                "house_block": "2/B",
+                "house_number": "23-B",
+                "zip_code": "52956"
+              }
+            },
+            {
+              "id": "2,",
+              "quantity_flat": "60,",
+              "house_area": "50,",
+              "adjoining_area": "20,",
+              "address": {
+                "region": "Dnipropetrovsk region",
+                "city": "Dnipro",
+                "district": "Zavodskoy",
+                "street": "Kirova",
+                "house_block": "2/C",
+                "house_number": "24-C",
+                "zip_code": "52956"
+              }
+            }
+          ]
         status:
           $ref: '#/components/schemas/PollStatus'
         type:
@@ -2328,18 +2425,24 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         houses:
           type: array
           items:
             $ref: '#/components/schemas/HouseLookup'
-          example:
-            - id: 1
-            - id: 2
+          example: [
+            {
+              "id": 1
+            },
+            {
+              "id": 2
+            }
+          ]
+
         type:
           $ref: '#/components/schemas/PollType'
     UpdatePoll:
@@ -2351,11 +2454,11 @@ components:
       properties:
         header:
           type: string
-          example: New poll for our houses
+          example: "New poll for our houses"
         completion_date:
           type: string
           format: date-time
-          example: 2021-06-20T06:00:00Z
+          example: "2021-06-20T06:00:00Z"
         status:
           $ref: '#/components/schemas/PollStatus'
     QuestionType:
@@ -2364,7 +2467,7 @@ components:
       enum: &question_type_values
         - multiple_choice
         - advice
-      example: advice
+      example: "advice"
 
     QuestionLookup:
       type: object
@@ -2390,7 +2493,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     ReadMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/ReadQuestion'
@@ -2401,11 +2504,16 @@ components:
           minItems: 2
           items:
             $ref: '#/components/schemas/ReadAnswerVariant'
-          example:
-            - id: 1
-              answer: Green
-            - id: 2
-              answer: Blue
+          example: [
+            {
+              "id": 1,
+              "answer": "Green"
+            },
+            {
+              'id': 2,
+              "answer": "Blue"
+            }
+          ]
         max_answer_count:
           type: integer
           minimum: 1
@@ -2433,7 +2541,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     CreateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/CreateQuestion'
@@ -2447,9 +2555,14 @@ components:
           minItems: 2
           items:
             $ref: '#/components/schemas/CreateUpdateAnswerVariant'
-          example:
-            - answer: Green
-            - answer: Blue
+          example: [
+            {
+              "answer": "Green"
+            },
+            {
+              "answer": "Blue"
+            }
+          ]
         max_answer_count:
           type: integer
           minimum: 1
@@ -2477,7 +2590,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: What color should we paint the door?
+          example: "What color should we paint the door?"
     UpdateMultipleChoiceQuestion:
       allOf:
         - $ref: '#/components/schemas/UpdateQuestion'
@@ -2491,9 +2604,14 @@ components:
           minItems: 2
           items:
             $ref: '#/components/schemas/CreateUpdateAnswerVariant'
-          example:
-            - answer: Green
-            - answer: Blue
+          example: [
+            {
+              "answer": "Green"
+            },
+            {
+              "answer": "Blue"
+            }
+          ]
         max_answer_count:
           type: integer
           minimum: 1
@@ -2511,7 +2629,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: Green
+          example: "Green"
     CreateUpdateAnswerVariant:
       type: object
       required:
@@ -2521,7 +2639,7 @@ components:
           type: string
           minLength: 1
           maxLength: 255
-          example: Green
+          example: "Green"
 
     CreateVote:
       type: object
@@ -3228,21 +3346,21 @@ components:
       name: status
       schema:
         type: string
-      example: pending
+      example: "pending"
     creation_date:
       in: query
       name: creation_date
       schema:
         type: string
         format: date-time
-      example: 2021-05-30T08:30
+      example: "2021-05-30T08:30"
     completion_date:
       in: query
       name: completion_date
       schema:
         type: string
         format: date-time
-      example: 2021-06-20T06:00
+      example: "2021-06-20T06:00"
     poll_type:
       in: query
       name: type
@@ -3256,11 +3374,11 @@ components:
       schema:
         $ref: '#/components/schemas/PollStatus'
       description: Status of the Poll
-      example: draft
+      example: "draft"
     question_type:
       in: query
       name: type
       schema:
         $ref: '#/components/schemas/QuestionType'
       description: Type of the Question
-      example: advice
+      example: "advice"

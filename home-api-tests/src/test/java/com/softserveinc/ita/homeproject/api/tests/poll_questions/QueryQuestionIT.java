@@ -14,7 +14,6 @@ import com.softserveinc.ita.homeproject.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.api.tests.query.PollQuestionQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.BaseReadView;
 import com.softserveinc.ita.homeproject.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.CreateMultipleChoiceQuestion;
@@ -59,7 +58,7 @@ class QueryQuestionIT {
                 .sort("id,asc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId));
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId));
     }
 
     @Test
@@ -78,7 +77,7 @@ class QueryQuestionIT {
                 .sort("id,desc")
                 .build().perform();
 
-        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(BaseReadView::getId).reversed());
+        assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId).reversed());
     }
 
     @Test
