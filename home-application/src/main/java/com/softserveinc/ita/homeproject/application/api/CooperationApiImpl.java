@@ -86,7 +86,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Override
     public Response createHouse(Long cooperationId, CreateHouse createHouse) {
         HouseDto createHouseDto = mapper.convert(createHouse, HouseDto.class);
-        var cooperationDto = cooperationService.getOne(cooperationId);
+        CooperationDto cooperationDto = cooperationService.getOne(cooperationId);
         HouseDto readHouseDto = houseService.createHouse(cooperationDto, createHouseDto);
         ReadHouse readHouse = mapper.convert(readHouseDto, ReadHouse.class);
         return Response.status(Response.Status.CREATED).entity(readHouse).build();
@@ -97,6 +97,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     public Response createContactOnCooperation(Long cooperationId,
                                                CreateContact createCooperationContact) {
         var createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
+        //todo dto
         var readContactDto = contactService.createContact(cooperationId, createContactDto);
         var readContact = mapper.convert(readContactDto, ReadContact.class);
         return Response.status(Response.Status.CREATED).entity(readContact).build();
@@ -110,7 +111,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
             .map(HouseLookup::getId)
             .map(id -> houseService.getOne(id))
             .collect(Collectors.toList()));
-        PollDto readPollDto = pollService.create(cooperationId, createPollDto);
+        CooperationDto cooperationDto = cooperationService.getOne(cooperationId);
+        PollDto readPollDto = pollService.create(cooperationDto, createPollDto);
         ReadPoll readPoll = mapper.convert(readPollDto, ReadPoll.class);
         return Response.status(Response.Status.CREATED).entity(readPoll).build();
     }
@@ -235,8 +237,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @PreAuthorize(DELETE_POLL_PERMISSION)
     @Override
     public Response deleteCooperationPoll(Long cooperationId, Long id) {
-        //todo dto
-        pollService.deactivate(id);
+        pollService.deactivate(pollService.getOne(id, getSpecification()));
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -267,18 +268,16 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         //todo dto
         var updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
         var readContact = mapper.convert(updatedContactDto, ReadContact.class);
-
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     @PreAuthorize(UPDATE_POLL_PERMISSION)
     @Override
     public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll) {
+        PollDto oldPollDto = pollService.getOne(id, getSpecification());
         PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
-        //todo dto
-        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto);
+        PollDto updatedPollDto = pollService.update(oldPollDto, updatePollDto);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
-
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 }

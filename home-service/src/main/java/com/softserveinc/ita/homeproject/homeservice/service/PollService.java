@@ -1,12 +1,13 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Poll;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 
 public interface PollService extends QueryableService<Poll, PollDto> {
-    PollDto create(Long cooperationId, PollDto pollDto);
+    PollDto create(CooperationDto cooperationDto, PollDto pollDto);
 
-    PollDto update(Long cooperationId, Long id, PollDto pollDto);
+    PollDto update(PollDto oldPollDto, PollDto updatePollDto);
 
-    void deactivate(Long id);
+    void deactivate(PollDto pollDto);
 }

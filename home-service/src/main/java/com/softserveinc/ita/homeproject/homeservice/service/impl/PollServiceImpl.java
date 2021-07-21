@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Poll;
 import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollStatusDto;
@@ -48,7 +49,9 @@ public class PollServiceImpl implements PollService {
 
     @Override
     @Transactional
-    public PollDto create(Long cooperationId, PollDto pollDto) {
+    public PollDto create(CooperationDto cooperationDto, PollDto pollDto) {
+        //we need it for set cooperation in 60 line (can we set CooperationDto?)
+        Long cooperationId = cooperationDto.getId();
         pollDto.getPolledHouses().forEach(houseDto -> validateHouse(cooperationId, houseDto));
         Poll poll = mapper.convert(pollDto, Poll.class);
         Cooperation cooperation = getCooperationById(cooperationId);
@@ -63,25 +66,26 @@ public class PollServiceImpl implements PollService {
 
     @Override
     @Transactional
-    public PollDto update(Long cooperationId, Long id, PollDto pollDto) {
-        Poll poll = pollRepository.findById(id)
+    public PollDto update(PollDto oldPollDto, PollDto updatePollDto) {
+        //we need it for find cooperation
+        Long pollId = oldPollDto.getId();
+        Poll poll = pollRepository.findById(pollId)
             .filter(Poll::getEnabled)
-            .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
-        validatePollStatus(poll, pollDto.getStatus());
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", pollId)));
+        validatePollStatus(poll, updatePollDto.getStatus());
 
-        if (pollDto.getHeader() != null) {
-            poll.setHeader(pollDto.getHeader());
+        if (updatePollDto.getHeader() != null) {
+            poll.setHeader(updatePollDto.getHeader());
         }
 
-        if (pollDto.getCompletionDate() != null) {
-            LocalDateTime completionDate = pollDto.getCompletionDate();
+        if (updatePollDto.getCompletionDate() != null) {
+            LocalDateTime completionDate = updatePollDto.getCompletionDate();
             validateCompletionDate(completionDate, poll.getCreationDate());
             poll.setCompletionDate(completionDate);
         }
 
-        if (pollDto.getStatus() != null) {
-            poll.setStatus(PollStatus.valueOf(pollDto.getStatus().name()));
+        if (updatePollDto.getStatus() != null) {
+            poll.setStatus(PollStatus.valueOf(updatePollDto.getStatus().name()));
         }
 
         poll.setUpdateDate(LocalDateTime.now());
@@ -90,7 +94,9 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public void deactivate(Long id) {
+    public void deactivate(PollDto pollDto) {
+        //only for saving binding with cooperation
+        Long id = pollDto.getId();
         Poll poll = pollRepository.findById(id).filter(Poll::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, null);

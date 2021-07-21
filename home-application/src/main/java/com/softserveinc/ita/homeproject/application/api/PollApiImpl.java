@@ -43,9 +43,6 @@ import org.springframework.stereotype.Component;
 public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
-    private CooperationService cooperationService;
-
-    @Autowired
     private PollService pollService;
 
     @Autowired
