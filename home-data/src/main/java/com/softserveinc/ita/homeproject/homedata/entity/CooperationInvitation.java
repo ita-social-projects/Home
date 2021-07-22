@@ -1,18 +1,19 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @DiscriminatorValue("cooperation")
-public class CooperationInvitation extends Invitation {
+public class CooperationInvitation extends Invitation{
 
     @Column(name = "role")
     @Convert(converter = InvitationRoleConverter.class)
