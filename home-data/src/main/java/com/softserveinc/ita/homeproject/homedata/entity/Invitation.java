@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -9,9 +12,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter
