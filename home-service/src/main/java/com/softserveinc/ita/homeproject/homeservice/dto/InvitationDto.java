@@ -1,16 +1,22 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class InvitationDto extends BaseDto{
+public abstract class InvitationDto extends BaseDto {
 
     private InvitationStatusDto status;
 
     private InvitationTypeDto type;
 
     private String email;
+
+    private LocalDateTime sentDatetime;
+
+    private LocalDateTime requestEndTime;
 
 }
