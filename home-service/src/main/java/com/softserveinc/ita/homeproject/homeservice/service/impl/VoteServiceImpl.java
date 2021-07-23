@@ -69,17 +69,15 @@ public class VoteServiceImpl implements VoteService {
     @Transactional
     @Override
     public ReadVoteDto createVote(User currentUser, CreateVoteDto voteDto) {
-        Long pollId = voteDto.getPollId();
-        validatePollEnabled(pollId);
-        validatePollStatus(pollId);
-        validateReVoting(pollId, currentUser);
-        validateQuestionVotesCount(pollId, voteDto);
+        Poll votedPoll = validatePollEnabled(voteDto.getPollId());
+        validatePollStatus(votedPoll.getId());
+        validateReVoting(votedPoll.getId(), currentUser);
+        validateQuestionVotesCount(voteDto);
         validateDeletedPollQuestions(voteDto);
-        validatePollQuestionsMatching(pollId, voteDto);
+        validatePollQuestionsMatching(voteDto);
         transformAnswersForAdviceChoiceQuestions(voteDto);
         validateAnswerCounts(voteDto);
         validateAnswersMatching(voteDto);
-        voteDto.setPollId(pollId);
         var newVote = mapper.convert(voteDto, Vote.class);
         newVote.setUser(currentUser);
         voteRepository.save(newVote);
@@ -101,8 +99,8 @@ public class VoteServiceImpl implements VoteService {
         return readVoteDto;
     }
 
-    private void validatePollEnabled(Long pollId) {
-        pollRepository.findById(pollId).filter(Poll::getEnabled)
+    private Poll validatePollEnabled(Long pollId) {
+        return pollRepository.findById(pollId).filter(Poll::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", pollId)));
     }
 
@@ -122,13 +120,13 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
-    private void validateQuestionVotesCount(Long pollId, CreateVoteDto voteDto) {
+    private void validateQuestionVotesCount(CreateVoteDto voteDto) {
         int questionVotesCount = voteDto.getQuestionVoteDtos().size();
-        int questionsCount = pollRepository.findById(pollId).orElseThrow(() -> new NotFoundHomeException(
-            String.format(NOT_FOUND_MESSAGE, "Poll", pollId))).getPollQuestions().size();
+        int questionsCount = pollRepository.findById(voteDto.getPollId()).orElseThrow(() -> new NotFoundHomeException(
+            String.format(NOT_FOUND_MESSAGE, "Poll", voteDto.getPollId()))).getPollQuestions().size();
         if (questionVotesCount != questionsCount) {
             throw new BadRequestHomeException(
-                String.format(WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE, pollId));
+                String.format(WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE, voteDto.getPollId()));
         }
     }
 
@@ -136,7 +134,7 @@ public class VoteServiceImpl implements VoteService {
         voteDto.getQuestionVoteDtos().forEach(qv -> getQuestionWithCheckItsExistence(qv.getQuestionId()));
     }
 
-    private void validatePollQuestionsMatching(Long pollId, CreateVoteDto voteDto) {
+    private void validatePollQuestionsMatching(CreateVoteDto voteDto) {
         List<CreateQuestionVoteDto> questionVotes = voteDto.getQuestionVoteDtos();
         int questionsCount = questionVotes.size();
         int controlNumber = 0;
@@ -144,13 +142,13 @@ public class VoteServiceImpl implements VoteService {
             Long questionId = questionVote.getQuestionId();
             PollQuestion question = getQuestionWithCheckItsExistence(questionId);
             Long questionPollId = question.getPoll().getId();
-            if (questionPollId.equals(pollId)) {
+            if (questionPollId.equals(voteDto.getPollId())) {
                 controlNumber++;
             }
         }
         if (questionsCount != controlNumber) {
             throw new BadRequestHomeException(
-                String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, pollId));
+                String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, voteDto.getPollId()));
         }
     }
 
