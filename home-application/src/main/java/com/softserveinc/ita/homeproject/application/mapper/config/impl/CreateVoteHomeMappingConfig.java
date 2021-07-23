@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreateVoteVoteDtoHomeMappingConfig implements HomeMappingConfig<CreateVote, CreateVoteDto> {
+public class CreateVoteHomeMappingConfig implements HomeMappingConfig<CreateVote, CreateVoteDto> {
 
     @Override
     public void addMappings(TypeMap<CreateVote, CreateVoteDto> typeMap) {
@@ -18,4 +18,3 @@ public class CreateVoteVoteDtoHomeMappingConfig implements HomeMappingConfig<Cre
             .addMappings(mapper -> mapper.map(CreateVote::getQuestionVotes, CreateVoteDto::setQuestionVoteDtos));
     }
 }
-

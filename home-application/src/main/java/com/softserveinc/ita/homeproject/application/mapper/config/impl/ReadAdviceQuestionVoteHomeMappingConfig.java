@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadAdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadAnswerVariantDto;
+import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.model.ReadAnswerVariant;
 import com.softserveinc.ita.homeproject.model.ReadQuestionVote;
@@ -34,6 +35,7 @@ public class ReadAdviceQuestionVoteHomeMappingConfig implements
             ReadAdviceQuestionVoteDto source = context.getSource();
             ReadQuestionVote destination = context.getDestination();
             ReadAdviceQuestionVote extendedDestination = (ReadAdviceQuestionVote) destination;
+            extendedDestination.setType(QuestionType.ADVICE);
             ReadAnswerVariantDto answer = source.getAnswer();
             extendedDestination.setAnswer(homeMapper.convert(answer, ReadAnswerVariant.class));
             return extendedDestination;

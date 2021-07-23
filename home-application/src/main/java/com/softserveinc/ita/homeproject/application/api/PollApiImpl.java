@@ -13,9 +13,6 @@ import static com.softserveinc.ita.homeproject.application.constants.Permissions
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -58,13 +55,13 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     private PollHouseService housePollService;
 
     @Autowired
+    private HouseService houseService;
+
+    @Autowired
     private PollQuestionService pollQuestionService;
 
     @Autowired
     private PollService pollService;
-
-    @Autowired
-    private HouseService houseService;
 
     @Autowired
     private VoteService voteService;
@@ -105,7 +102,6 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
-
     @PreAuthorize(GET_POLL_PERMISSION)
     @Override
     public Response queryPoll(
@@ -140,7 +136,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
         var createVoteDto = mapper.convert(createVote, CreateVoteDto.class);
-        var readVoteDto = voteService.createVote(pollId, currentUser, createVoteDto);
+        createVoteDto.setPollId(pollId);
+        var readVoteDto = voteService.createVote(currentUser, createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
         return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
@@ -198,5 +195,4 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
-
 }

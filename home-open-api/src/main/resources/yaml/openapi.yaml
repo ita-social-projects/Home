@@ -2650,7 +2650,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateQuestionVote'
-          example: List of question votes
+          example:
+            [
+              {
+                "question": { "id": 1 },
+                "type": "advice",
+                "answer": { "answer": "yellow" }
+              },
+              {
+                "question": { "id": 2 },
+                "type": "multiple_choice",
+                "answers": [
+                  { "id": 1 },
+                  { "id": 3 }
+                ]
+              }
+            ]
 
     CreateQuestionVote:
       type: object
@@ -2681,8 +2696,14 @@ components:
           items:
             $ref: '#/components/schemas/AnswerVariantLookup'
           example:
-            - id: 1
-            - id: 2
+            [
+              {
+                "id": 1
+              },
+              {
+                "id": 3
+              }
+            ]
 
     CreateAdviceQuestionVote:
       allOf:
@@ -2723,6 +2744,8 @@ components:
           multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestionVote'
           advice: '#/components/schemas/ReadAdviceQuestionVote'
       properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
         question:
           $ref: '#/components/schemas/ReadQuestion'
 

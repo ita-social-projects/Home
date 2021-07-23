@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadAnswerVariantDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadMultipleChoiceQuestionVoteDto;
+import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadAnswerVariant;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestionVote;
@@ -39,6 +40,7 @@ public class ReadMultipleChoiceQuestionVoteHomeMappingConfig implements
             ReadMultipleChoiceQuestion readQuestion =
                 homeMapper.convert(source.getQuestion(), ReadMultipleChoiceQuestion.class);
             ReadMultipleChoiceQuestionVote extendedDestination = (ReadMultipleChoiceQuestionVote) destination;
+            extendedDestination.setType(QuestionType.MULTIPLE_CHOICE);
             extendedDestination.setQuestion(readQuestion);
             List<ReadAnswerVariantDto> answers = source.getAnswers();
             extendedDestination.setAnswers(answers.stream()

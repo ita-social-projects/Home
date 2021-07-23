@@ -5,5 +5,5 @@ import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ReadVoteDto;
 
 public interface VoteService {
-    ReadVoteDto createVote(Long pollId, User currentUser, CreateVoteDto voteDto);
+    ReadVoteDto createVote(User currentUser, CreateVoteDto voteDto);
 }

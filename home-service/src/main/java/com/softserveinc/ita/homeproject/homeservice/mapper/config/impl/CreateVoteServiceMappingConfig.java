@@ -14,7 +14,9 @@ public class CreateVoteServiceMappingConfig implements ServiceMappingConfig<Crea
     @Override
     public void addMappings(TypeMap<CreateVoteDto, Vote> typeMap) {
         typeMap
+            .addMappings(mapper -> mapper.skip(Vote::setId))
             .addMappings(mapper -> mapper.map(CreateVoteDto::getPollId, Vote::setPollId))
+            .addMappings(mapper -> mapper.skip(Vote::setUser))
             .addMappings(mapper -> mapper.map(CreateVoteDto::getQuestionVoteDtos, Vote::setQuestionVotes));
     }
 }

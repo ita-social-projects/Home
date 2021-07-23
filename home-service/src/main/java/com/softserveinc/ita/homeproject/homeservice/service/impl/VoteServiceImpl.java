@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import static com.softserveinc.ita.homeproject.homeservice.service.QueryableService.NOT_FOUND_MESSAGE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homedata.entity.MultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.Poll;
 import com.softserveinc.ita.homeproject.homedata.entity.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.entity.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
@@ -17,6 +20,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionReposito
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.QuestionVoteRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.CreateAdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateMultipleChoiceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
@@ -34,8 +38,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
-
-    private static final String NOT_FOUND_MESSAGE = "%s with 'id: %d' is not found";
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't create vote on poll with status: '%s'";
 
@@ -66,32 +68,27 @@ public class VoteServiceImpl implements VoteService {
 
     @Transactional
     @Override
-    public ReadVoteDto createVote(Long pollId, User currentUser, CreateVoteDto voteDto) {
+    public ReadVoteDto createVote(User currentUser, CreateVoteDto voteDto) {
+        Long pollId = voteDto.getPollId();
+        validatePollEnabled(pollId);
         validatePollStatus(pollId);
         validateReVoting(pollId, currentUser);
         validateQuestionVotesCount(pollId, voteDto);
+        validateDeletedPollQuestions(voteDto);
         validatePollQuestionsMatching(pollId, voteDto);
+        transformAnswersForAdviceChoiceQuestions(voteDto);
         validateAnswerCounts(voteDto);
         validateAnswersMatching(voteDto);
-        var newVote = new Vote();
-        newVote.setPollId(pollId);
+        voteDto.setPollId(pollId);
+        var newVote = mapper.convert(voteDto, Vote.class);
         newVote.setUser(currentUser);
-        var savedVote = voteRepository.save(newVote);
-        List<QuestionVote> savedQuestionVotes = new ArrayList<>();
-        for (CreateQuestionVoteDto dto : voteDto.getQuestionVoteDtos()) {
-            QuestionVote newQuestionVote = mapper.convert(dto, QuestionVote.class);
-            newQuestionVote.setVote(savedVote);
-            var savedQuestionVote = questionVoteRepository.save(newQuestionVote);
-            savedQuestionVotes.add(savedQuestionVote);
-        }
-        savedVote.setQuestionVotes(savedQuestionVotes);
-        var reSavedVote = voteRepository.save(savedVote);
+        voteRepository.save(newVote);
+        newVote.getQuestionVotes().forEach(qv -> qv.setVote(newVote));
+        questionVoteRepository.saveAll(newVote.getQuestionVotes());
         List<ReadQuestionVoteDto> questionVoteDtos = new ArrayList<>();
-        for (QuestionVote qv : reSavedVote.getQuestionVotes()) {
+        for (QuestionVote qv : newVote.getQuestionVotes()) {
             Long questionId = qv.getQuestionId();
-            PollQuestionType questionType =
-                questionRepository.findById(questionId).orElseThrow(() -> new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "Poll question", questionId))).getType();
+            PollQuestionType questionType = getQuestionWithCheckItsExistence(questionId).getType();
             if (questionType.equals(PollQuestionType.ADVICE)) {
                 questionVoteDtos.add(mapper.convert(qv, ReadAdviceQuestionVoteDto.class));
             } else {
@@ -99,9 +96,14 @@ public class VoteServiceImpl implements VoteService {
             }
         }
         ReadVoteDto readVoteDto = new ReadVoteDto();
-        readVoteDto.setId(reSavedVote.getId());
+        readVoteDto.setId(newVote.getId());
         readVoteDto.setQuestionVoteDtos(questionVoteDtos);
         return readVoteDto;
+    }
+
+    private void validatePollEnabled(Long pollId) {
+        pollRepository.findById(pollId).filter(Poll::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", pollId)));
     }
 
     private void validatePollStatus(Long pollId) {
@@ -130,14 +132,17 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
+    private void validateDeletedPollQuestions(CreateVoteDto voteDto) {
+        voteDto.getQuestionVoteDtos().forEach(qv -> getQuestionWithCheckItsExistence(qv.getQuestionId()));
+    }
+
     private void validatePollQuestionsMatching(Long pollId, CreateVoteDto voteDto) {
         List<CreateQuestionVoteDto> questionVotes = voteDto.getQuestionVoteDtos();
         int questionsCount = questionVotes.size();
         int controlNumber = 0;
         for (CreateQuestionVoteDto questionVote : questionVotes) {
             Long questionId = questionVote.getQuestionId();
-            PollQuestion question = questionRepository.findById(questionId).orElseThrow(
-                () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll question", questionId)));
+            PollQuestion question = getQuestionWithCheckItsExistence(questionId);
             Long questionPollId = question.getPoll().getId();
             if (questionPollId.equals(pollId)) {
                 controlNumber++;
@@ -149,13 +154,20 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
+    private void transformAnswersForAdviceChoiceQuestions(CreateVoteDto voteDto) {
+        for (CreateQuestionVoteDto questionVote : voteDto.getQuestionVoteDtos()) {
+            if (questionVote.getClass() == CreateAdviceQuestionVoteDto.class) {
+                ((CreateAdviceQuestionVoteDto) questionVote).setAnswer(
+                    ((CreateAdviceQuestionVoteDto) questionVote).getAnswer().trim().toUpperCase());
+            }
+        }
+    }
+
     private void validateAnswerCounts(CreateVoteDto voteDto) {
-        List<CreateQuestionVoteDto> questionVotes = voteDto.getQuestionVoteDtos();
-        for (CreateQuestionVoteDto questionVote : questionVotes) {
+        for (CreateQuestionVoteDto questionVote : voteDto.getQuestionVoteDtos()) {
             Long questionId = questionVote.getQuestionId();
-            PollQuestion question = questionRepository.findById(questionId).orElseThrow(
-                () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll question", questionId)));
-            if (question.getClass() == MultipleChoiceQuestion.class) {
+            PollQuestion question = getQuestionWithCheckItsExistence(questionId);
+            if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
                 Integer maxAnswerCount = ((MultipleChoiceQuestion) question).getMaxAnswerCount();
                 int realAnswerCount = ((CreateMultipleChoiceQuestionVoteDto) questionVote).getAnswerVariantIds().size();
                 if (realAnswerCount < 1 || realAnswerCount > maxAnswerCount) {
@@ -167,24 +179,27 @@ public class VoteServiceImpl implements VoteService {
     }
 
     private void validateAnswersMatching(CreateVoteDto voteDto) {
-        List<CreateQuestionVoteDto> questionVotes = voteDto.getQuestionVoteDtos();
-        for (CreateQuestionVoteDto questionVote : questionVotes) {
+        for (CreateQuestionVoteDto questionVote : voteDto.getQuestionVoteDtos()) {
             Long questionId = questionVote.getQuestionId();
-            PollQuestion question = questionRepository.findById(questionId).orElseThrow(
-                () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll question", questionId)));
-            if (question.getClass() == MultipleChoiceQuestion.class) {
-                List<Long> pollQuestionAnswerIds = ((MultipleChoiceQuestion) question).getAnswerVariants().stream().map(
-                    BaseEntity::getId).collect(Collectors.toList());
+            PollQuestion question = getQuestionWithCheckItsExistence(questionId);
+            if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
+                List<Long> pollQuestionAnswerIds = ((MultipleChoiceQuestion) question).getAnswerVariants().stream()
+                    .map(BaseEntity::getId).collect(Collectors.toList());
                 List<Long> questionVoteAnswerIds =
                     ((CreateMultipleChoiceQuestionVoteDto) questionVote).getAnswerVariantIds();
-                for (Long voteQuestionAnswerId : questionVoteAnswerIds) {
-                    if (!pollQuestionAnswerIds.contains(voteQuestionAnswerId)) {
+                questionVoteAnswerIds.forEach(id -> {
+                    if (!pollQuestionAnswerIds.contains(id)) {
                         throw new BadRequestHomeException(
-                            String.format(ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE, voteQuestionAnswerId,
-                                questionId));
+                            String.format(ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE, id, questionId));
                     }
-                }
+                });
             }
         }
+    }
+
+    private PollQuestion getQuestionWithCheckItsExistence(Long questionId) {
+        return questionRepository.findById(questionId).filter(PollQuestion::getEnabled)
+            .orElseThrow(
+                () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll question", questionId)));
     }
 }
