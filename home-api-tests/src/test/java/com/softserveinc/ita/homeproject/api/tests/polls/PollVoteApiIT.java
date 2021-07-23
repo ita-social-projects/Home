@@ -47,7 +47,7 @@ import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-public class PollVoteApiIT {
+class PollVoteApiIT {
 
     public static final int BAD_REQUEST = Response.Status.BAD_REQUEST.getStatusCode();
 
