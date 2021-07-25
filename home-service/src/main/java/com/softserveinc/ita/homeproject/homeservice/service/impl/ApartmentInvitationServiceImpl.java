@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,12 +143,16 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                 .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
 
-    public void deactivateApartmentInvitations() {
+    public List<ApartmentInvitation> deactivateApartmentInvitations() {
+        List<ApartmentInvitation> deactivatedApartmentInvitations = new ArrayList<>();
+
         for (ApartmentInvitation apartmentInvitation : apartmentInvitationRepository
                 .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
                         getInvitationForDeactivating(root, criteriaBuilder))) {
             apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
             apartmentInvitationRepository.save(apartmentInvitation);
+            deactivatedApartmentInvitations.add(apartmentInvitation);
         }
+        return deactivatedApartmentInvitations;
     }
 }

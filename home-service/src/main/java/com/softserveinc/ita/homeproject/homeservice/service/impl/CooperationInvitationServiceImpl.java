@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,12 +54,16 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
                 .collect(Collectors.toList());
     }
 
-    public void deactivateCooperationInvitations() {
+    public List<CooperationInvitation> deactivateCooperationInvitations() {
+        List<CooperationInvitation> deactivatedCooperationInvitations = new ArrayList<>();
+
         for (CooperationInvitation cooperationInvitation : cooperationInvitationRepository
                 .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
                         getInvitationForDeactivating(root, criteriaBuilder))) {
             cooperationInvitation.setStatus(InvitationStatus.DEACTIVATED);
             cooperationInvitationRepository.save(cooperationInvitation);
+            deactivatedCooperationInvitations.add(cooperationInvitation);
         }
+        return deactivatedCooperationInvitations;
     }
 }

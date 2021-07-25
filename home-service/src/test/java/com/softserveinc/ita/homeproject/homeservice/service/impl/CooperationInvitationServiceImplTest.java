@@ -1,11 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,18 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @ExtendWith(MockitoExtension.class)
-class ApartmentInvitationServiceImplTest {
+class CooperationInvitationServiceImplTest {
 
-    private static List<ApartmentInvitation> apartmentInvitations;
+    private static List<CooperationInvitation> cooperationInvitations;
 
-    private ApartmentInvitationServiceImpl apartmentInvitationService;
+    private CooperationInvitationServiceImpl cooperationInvitationService;
+
     @Mock
-    ApartmentInvitationRepository apartmentInvitationRepository;
+    CooperationInvitationRepository cooperationInvitationRepository;
 
-    @MockBean
-    private OwnershipRepository ownershipRepository;
-    @MockBean
-    private ApartmentRepository apartmentRepository;
     @MockBean
     InvitationRepository invitationRepository;
     @MockBean
@@ -41,28 +36,28 @@ class ApartmentInvitationServiceImplTest {
 
     @BeforeEach
     public void init() {
-        apartmentInvitationService = new ApartmentInvitationServiceImpl(invitationRepository, mapper,
-                apartmentInvitationRepository, ownershipRepository, apartmentRepository);
+        cooperationInvitationService = new CooperationInvitationServiceImpl(invitationRepository,
+                mapper, cooperationInvitationRepository);
     }
 
     @BeforeAll
-    private static void addApartmentInvitations() {
-        apartmentInvitations = new ArrayList<>();
+    private static void addCooperationInvitations() {
+        cooperationInvitations = new ArrayList<>();
 
         for (int i = 1; i < 5; i++) {
-            ApartmentInvitation invitation = new ApartmentInvitation();
+            CooperationInvitation invitation = new CooperationInvitation();
             invitation.setId((long) i);
             invitation.setStatus(InvitationStatus.PROCESSING);
             invitation.setSentDatetime(LocalDateTime.now().minusDays(18));
             invitation.setRequestEndTime(LocalDateTime.now().minusDays(8));
-            apartmentInvitations.add(invitation);
+            cooperationInvitations.add(invitation);
         }
     }
 
     @Test
     void deactivateApartmentInvitations() {
-        for (ApartmentInvitation invitation :
-                apartmentInvitationService.deactivateApartmentInvitations()) {
+        for (CooperationInvitation invitation :
+                cooperationInvitationService.deactivateCooperationInvitations()) {
             assertEquals(invitation.getStatus(), InvitationStatus.DEACTIVATED);
         }
     }
