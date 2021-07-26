@@ -43,9 +43,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected Predicate getInvitationForDeactivating(Root<? extends Invitation> root, CriteriaBuilder criteriaBuilder) {
         LocalDateTime currentTime = LocalDateTime.now();
         return criteriaBuilder
-                .and((criteriaBuilder.notEqual(root.get("status"), InvitationStatus.DEACTIVATED)),
+                .and((criteriaBuilder.notEqual(root.get("status"), InvitationStatus.OVERDUE)),
                         (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.ACCEPTED)),
-                        (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.OVERDUE)),
                         (criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime.minusDays(DAYS))));
     }
 
