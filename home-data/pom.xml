@@ -18,7 +18,6 @@
         <postgresql.verson>42.2.16</postgresql.verson>
         <rsql-jpa-spring-boot-starter.version>5.0.9</rsql-jpa-spring-boot-starter.version>
         <commons-lang3.version>3.11</commons-lang3.version>
-        <query-dsl.version>4.4.0</query-dsl.version>
     </properties>
 
     <dependencies>

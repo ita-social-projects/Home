@@ -47,7 +47,7 @@ public class UserCooperationImpl implements UserCooperationService {
                 .ifPresent(userCooperation::setCooperation);
 
         userCooperation.setRole(roleRepository.findByName(invitation.getRole().getName().toUpperCase())
-                .orElseThrow(() -> new NotFoundHomeException("RoleDto not found.")));
+                .orElseThrow(() -> new NotFoundHomeException("Role not found.")));
 
         userCooperationRepository.save(userCooperation);
     }

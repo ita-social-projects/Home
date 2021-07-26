@@ -66,7 +66,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         return cooperationInvitationRepository.findInvitationByEmail(email).stream()
                 .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
                         || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
-                .filter(invitation -> invitation.getType().equals(InvitationType.APARTMENT))
+                .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
                 .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
     }
 

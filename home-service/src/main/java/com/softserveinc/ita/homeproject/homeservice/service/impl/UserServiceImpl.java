@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
 
-        User toCreate = mapper.convert(createUserDto, User.class);
-
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
+            User toCreate = mapper.convert(createUserDto, User.class);
+
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
         validateEmailsMatching(invitation.getEmail(), userDto.getEmail());
 
-        switch(invitation.getType()){
+        switch (invitation.getType()) {
             case APARTMENT:
                 apartmentInvitationService.acceptUserInvitation(invitation);
                 break;
@@ -159,7 +159,6 @@ public class UserServiceImpl implements UserService {
                         throw new BadRequestHomeException("User cannot be deleted");
                     }
                 });
-
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
