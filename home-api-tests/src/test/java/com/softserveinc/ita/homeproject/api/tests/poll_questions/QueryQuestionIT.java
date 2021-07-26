@@ -28,7 +28,9 @@ import com.softserveinc.ita.homeproject.model.ReadQuestion;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -78,6 +80,22 @@ class QueryQuestionIT {
                 .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId).reversed());
+    }
+
+
+    @Test
+    void getAllQuestionFromNotExistingPoll() {
+        Long wrongPollId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new PollQuestionQuery
+                        .Builder(pollQuestionApi)
+                        .pollId(wrongPollId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Poll with 'id: " + wrongPollId + "' is not found");
     }
 
     @Test

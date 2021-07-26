@@ -92,6 +92,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                     String email,
                                     BigDecimal ownershipPart,
                                     String status) {
+        verifyExistence(apartmentId, apartmentService);
         Page<ApartmentInvitationDto> readApartmentInvitation = invitationService
                 .findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
@@ -107,7 +108,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                    Long id,
                                    Long userId,
                                    BigDecimal ownershipPart) {
-
+        verifyExistence(apartmentId, apartmentService);
         Page<OwnershipDto> readOwnership = ownershipService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readOwnership, ReadOwnership.class);
     }

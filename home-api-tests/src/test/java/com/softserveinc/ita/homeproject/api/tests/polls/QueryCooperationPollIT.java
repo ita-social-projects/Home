@@ -5,7 +5,6 @@ import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -77,13 +76,12 @@ public class QueryCooperationPollIT extends QueryPoll {
                 .build().perform();
     }
 
-    @Disabled("Should sent exception. Is not ready yet. Created task#251.")
     @Test
     @Override
     void getAllPollsFromNotExistingCooperation() throws ApiException {
 
         createPoll();
-        Long wrongCooperationId = 99999999999L;
+        Long wrongCooperationId = 999999999L;
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> buildQueryPollWithCooperationId(wrongCooperationId))
