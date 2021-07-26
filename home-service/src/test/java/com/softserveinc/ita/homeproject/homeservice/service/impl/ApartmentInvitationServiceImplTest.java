@@ -17,8 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -61,9 +64,12 @@ class ApartmentInvitationServiceImplTest {
 
     @Test
     void deactivateApartmentInvitations() {
+        when(apartmentInvitationRepository.findAll(any(Specification.class)))
+                .thenReturn(apartmentInvitations);
+
         for (ApartmentInvitation invitation :
                 apartmentInvitationService.deactivateApartmentInvitations()) {
-            assertEquals(invitation.getStatus(), InvitationStatus.DEACTIVATED);
+            assertEquals(invitation.getStatus(), InvitationStatus.OVERDUE);
         }
     }
 }

@@ -8,6 +8,7 @@ import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -56,9 +59,12 @@ class CooperationInvitationServiceImplTest {
 
     @Test
     void deactivateApartmentInvitations() {
+        when(cooperationInvitationRepository.findAll(any(Specification.class)))
+                .thenReturn(cooperationInvitations);
+
         for (CooperationInvitation invitation :
                 cooperationInvitationService.deactivateCooperationInvitations()) {
-            assertEquals(invitation.getStatus(), InvitationStatus.DEACTIVATED);
+            Assertions.assertEquals(invitation.getStatus(), InvitationStatus.OVERDUE);
         }
     }
 }

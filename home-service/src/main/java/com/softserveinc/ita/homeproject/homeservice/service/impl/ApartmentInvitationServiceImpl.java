@@ -149,7 +149,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         for (ApartmentInvitation apartmentInvitation : apartmentInvitationRepository
                 .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
                         getInvitationForDeactivating(root, criteriaBuilder))) {
-            apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
+            apartmentInvitation.setStatus(InvitationStatus.OVERDUE);
             apartmentInvitationRepository.save(apartmentInvitation);
             deactivatedApartmentInvitations.add(apartmentInvitation);
         }

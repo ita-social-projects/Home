@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
 
+    private final static int DAYS = 7;
+
     protected final InvitationRepository invitationRepository;
 
     protected final ServiceMapper mapper;
@@ -43,7 +45,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
         return criteriaBuilder
                 .and((criteriaBuilder.notEqual(root.get("status"), InvitationStatus.DEACTIVATED)),
                         (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.ACCEPTED)),
-                        (criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime.minusDays(7))));
+                        (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.OVERDUE)),
+                        (criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime.minusDays(DAYS))));
     }
 
     private Invitation findInvitationById(Long id) {

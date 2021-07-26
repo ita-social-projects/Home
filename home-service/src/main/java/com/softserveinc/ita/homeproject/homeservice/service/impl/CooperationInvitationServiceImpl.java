@@ -60,7 +60,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         for (CooperationInvitation cooperationInvitation : cooperationInvitationRepository
                 .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
                         getInvitationForDeactivating(root, criteriaBuilder))) {
-            cooperationInvitation.setStatus(InvitationStatus.DEACTIVATED);
+            cooperationInvitation.setStatus(InvitationStatus.OVERDUE);
             cooperationInvitationRepository.save(cooperationInvitation);
             deactivatedCooperationInvitations.add(cooperationInvitation);
         }
