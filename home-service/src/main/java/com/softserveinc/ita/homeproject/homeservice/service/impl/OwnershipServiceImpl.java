@@ -89,7 +89,7 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .map(ownership -> mapper.convert(ownership, OwnershipDto.class));
     }
 
-    public void validateSumOwnershipPart(Long apartmentId, Ownership toUpdate, OwnershipDto updateOwnershipDto){
+    public void validateSumOwnershipPart(Long apartmentId, Ownership toUpdate, OwnershipDto updateOwnershipDto) {
         BigDecimal activeInvitationsSumOwnerPart = invitationRepository
                 .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
                 .stream()
@@ -100,15 +100,16 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .stream()
                 .filter(Ownership::getEnabled)
                 .map(Ownership::getOwnershipPart)
-                .reduce(BigDecimal.ZERO,BigDecimal::add)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .add(activeInvitationsSumOwnerPart)
                 .subtract(toUpdate.getOwnershipPart())
                 .add(updateOwnershipDto.getOwnershipPart());
 
-        if(sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1))>0) {
+        if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(
-                    "Entered sum of area = "
-                            + sumOfOwnerPartsWithNewInput + " The sum of the entered area cannot be greater than 1");
+                    "Entered sum of ownerships parts = " + sumOfOwnerPartsWithNewInput
+                            + " The sum of the entered ownership parts "
+                            + "cannot be greater than 1");
         }
     }
 }

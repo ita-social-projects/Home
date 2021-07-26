@@ -63,7 +63,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     }
 
     private boolean isCooperationInvitationNonExists(String email, String name){
-        return cooperationInvitationRepository.findInvitationByEmail(email).stream()
+        return cooperationInvitationRepository.findCooperationInvitationsByEmail(email).stream()
                 .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
                         || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
                 .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))

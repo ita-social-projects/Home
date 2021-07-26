@@ -44,8 +44,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private final UserCooperationService userCooperationService;
 
-    private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of area = %.3f "
-            + "The sum of the entered area cannot be greater than 1";
+    private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of ownership parts = %.3f "
+            + "The sum of the entered ownership parts cannot be greater than 1";
 
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
