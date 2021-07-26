@@ -86,7 +86,7 @@ class CooperationPollApiIT {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
             .plusDays(MIN_POLL_DURATION_IN_DAYS)
-            .plusMinutes(1L);
+            .plusMinutes(5L);
         return new CreatePoll()
             .header("Poll for our houses")
             .type(PollType.SIMPLE)
@@ -133,7 +133,7 @@ class CooperationPollApiIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("G.Y.Andreevich@gmail.com")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .addHousesItem(createHouse())
             .addHousesItem(createHouse())
@@ -144,7 +144,7 @@ class CooperationPollApiIT {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
             .plusDays(MIN_POLL_DURATION_IN_DAYS)
-            .plusMinutes(1L);
+            .plusMinutes(5L);
         return new UpdatePoll()
             .header("Updated poll for our houses")
             .completionDate(completionDate)

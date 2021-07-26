@@ -245,7 +245,7 @@ class QuestionApiIT {
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
-                .plusMinutes(1L);
+                .plusMinutes(5L);
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
