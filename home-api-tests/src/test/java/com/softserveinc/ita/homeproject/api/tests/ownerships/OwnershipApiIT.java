@@ -147,7 +147,7 @@ class OwnershipApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> ownershipApi.updateOwnership(TEST_APARTMENT_ID, expectedOwnership.getId(), updateOwnership))
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("Entered sum of area = 1.2 The sum of the entered area cannot be greater than 1");
+                .withMessageContaining("Entered sum of ownerships parts = 1.2 The sum of the entered ownership parts cannot be greater than 1");
     }
 
     @Test
