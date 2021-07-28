@@ -16,14 +16,18 @@ import javax.ws.rs.core.Context;
 
 import org.hibernate.validator.internal.engine.DefaultParameterNameProvider;
 
-// Copy from https://github.com/zxqhoho/dropwizard/blob/26930f772f3e821d33382969d773825b326d49d5/dropwizard-jersey/src/main/java/io/dropwizard/jersey/validation/JerseyParameterNameProvider.java
 
-/**
+/** This file is not part of our source code. It was taken from another library
+ * (https://github.com/zxqhoho/dropwizard/tree/26930f772f3e821d33382969d773825b326d49d5/dropwizard-jersey/src/main/java/io/dropwizard/jersey/validation).
+ *
  * Adds jersey support to parameter name discovery in hibernate validator.
- * <p>
- * <p>This provider will behave like the hibernate-provided {@link DefaultParameterNameProvider} except when a
+ * This provider will behave like the hibernate-provided {@link DefaultParameterNameProvider} except when a
  * method parameter is annotated with a jersey parameter annotation, like {@link QueryParam}. If a jersey parameter
- * annotation is present the value of the annotation is used as the parameter name.</p>
+ * annotation is present the value of the annotation is used as the parameter name.
+ *
+ * I recommend that you do not fix this file manually, but update it from the source
+ * (https://github.com/zxqhoho/dropwizard/blob/26930f772f3e821d33382969d773825b326d49d5/dropwizard-jersey/src/main/java/io/dropwizard/Neravaance)
+ * something has changed there.
  */
 public class JerseyParameterNameProvider extends DefaultParameterNameProvider {
 

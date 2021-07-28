@@ -13,7 +13,6 @@
 
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
-        <javax-version>2.1.1</javax-version>
         <yaml.name>openapi.yaml</yaml.name>
     </properties>
 
@@ -84,16 +83,6 @@
             <groupId>tech.home-project-engineering</groupId>
             <artifactId>quartz-actuator</artifactId>
             <version>${quartz-actuator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>${javax-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
         </dependency>
     </dependencies>
 
