@@ -64,7 +64,7 @@ class CooperationInvitationServiceImplTest {
 
         for (CooperationInvitation invitation :
                 cooperationInvitationService.deactivateCooperationInvitations()) {
-            Assertions.assertEquals(invitation.getStatus(), InvitationStatus.OVERDUE);
+            Assertions.assertEquals(InvitationStatus.OVERDUE, invitation.getStatus());
         }
     }
 }

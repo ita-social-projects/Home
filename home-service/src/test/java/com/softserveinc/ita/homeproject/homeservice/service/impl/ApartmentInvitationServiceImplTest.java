@@ -69,7 +69,7 @@ class ApartmentInvitationServiceImplTest {
 
         for (ApartmentInvitation invitation :
                 apartmentInvitationService.deactivateApartmentInvitations()) {
-            assertEquals(invitation.getStatus(), InvitationStatus.OVERDUE);
+            assertEquals(InvitationStatus.OVERDUE, invitation.getStatus());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;

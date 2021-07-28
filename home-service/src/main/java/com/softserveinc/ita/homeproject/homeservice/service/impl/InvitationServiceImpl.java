@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
 
-    private final static int DAYS = 7;
+    private static final int DAYS = 7;
 
     protected final InvitationRepository invitationRepository;
 
