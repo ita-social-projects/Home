@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
@@ -16,6 +18,7 @@ import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
 class QueryCooperationIT {
@@ -137,14 +140,20 @@ class QueryCooperationIT {
     @Test
     void invalidPageSizeTest() {
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> new CooperationQuery
-                .Builder(cooperationApi)
-                .pageNumber(1)
-                .pageSize(0)
-                .build()
-                .perform())
-            .matches((actual) -> actual.getCode() == 400)
-            .withMessageContaining("Parameter `query param page_size` is invalid - must be greater than or equal to 1.");
+            .isThrownBy(new ThrowableAssert.ThrowingCallable() {
+                @Override
+                public void call() throws Throwable {
+                    new CooperationQuery
+                        .Builder(cooperationApi)
+                        .pageNumber(1)
+                        .pageSize(0)
+                        .build()
+                        .perform();
+                }
+            })
+            .matches(actual -> actual.getCode() == 400)
+            .matches(actual -> "Parameter `query param page_size` is invalid - must be greater than or equal to 1."
+                .equals(ApiClientUtil.getErrorMessage(actual)));
     }
 
     @Test
