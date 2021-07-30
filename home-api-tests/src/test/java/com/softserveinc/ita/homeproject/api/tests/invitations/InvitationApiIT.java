@@ -33,7 +33,7 @@ class InvitationApiIT {
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
-                .name("newCooperationTest")
+                .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
                 .adminEmail("test.receive.subject@gmail.com")
