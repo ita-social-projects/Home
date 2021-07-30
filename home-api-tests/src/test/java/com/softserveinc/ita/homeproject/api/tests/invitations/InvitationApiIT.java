@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,12 @@ class InvitationApiIT {
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         assertTrue(response.getCount() > 0);
-        assertTrue(getSubjectByEmail(response,createCoop.getAdminEmail()).contains("invitation to cooperation"));
+        assertTrue(getSubjectByEmail(response, createCoop.getAdminEmail()).contains("invitation to cooperation"));
     }
 
     private String getSubjectByEmail(MailHogApiResponse response, String email) {
-        String message="";
-        for (int i=0; i<response.getItems().size(); i++){
+        String message = "";
+        for (int i = 0; i < response.getItems().size(); i++) {
             if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
                 message = String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
                 break;
@@ -47,6 +48,17 @@ class InvitationApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .adminEmail("test.receive.subject@gmail.com");
+                .adminEmail("test.receive.subject@gmail.com")
+                .address(createAddress());
+    }
+
+    private Address createAddress() {
+        return new Address().city("Dnepr")
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
     }
 }
