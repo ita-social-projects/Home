@@ -28,20 +28,7 @@ class InvitationApiIT {
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
-        System.out.println(getSubjectByEmail(response, createCoop.getAdminEmail()));
-        System.out.println(response.getCount());
         assertTrue(response.getCount() > 0);
-    }
-
-    private String getSubjectByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = String.valueOf(response.getItems().get(0).getContent().getHeaders().getSubject());
-                break;
-            }
-        }
-        return message;
     }
 
     private CreateCooperation createCooperation() {
