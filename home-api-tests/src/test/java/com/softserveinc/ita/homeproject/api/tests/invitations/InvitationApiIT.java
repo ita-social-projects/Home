@@ -28,8 +28,9 @@ class InvitationApiIT {
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
+        System.out.println(getSubjectByEmail(response, createCoop.getAdminEmail()));
+        System.out.println(response.getCount());
         assertTrue(response.getCount() > 0);
-        assertTrue(getSubjectByEmail(response, createCoop.getAdminEmail()).contains("invitation to cooperation"));
     }
 
     private String getSubjectByEmail(MailHogApiResponse response, String email) {
