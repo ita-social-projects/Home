@@ -2,9 +2,6 @@ package com.softserveinc.ita.homeproject.api.tests.invitations;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
@@ -12,14 +9,8 @@ import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
@@ -56,50 +47,6 @@ class InvitationApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .adminEmail("test.receive.342@gmail.com")
-                .address(createAddress())
-                .houses(createHouseList())
-                .contacts(createContactList());
-    }
-
-    private List<CreateHouse> createHouseList() {
-        List<CreateHouse> createHouses = new ArrayList<>();
-        createHouses.add(new CreateHouse()
-                .quantityFlat(96)
-                .houseArea(BigDecimal.valueOf(4348.8))
-                .adjoiningArea(400)
-                .address(createAddress()));
-
-        createHouses.add(new CreateHouse()
-                .quantityFlat(150)
-                .houseArea(BigDecimal.valueOf(7260))
-                .adjoiningArea(600)
-                .address(createAddress()));
-
-        return createHouses;
-    }
-
-    private List<CreateContact> createContactList() {
-        List<CreateContact> createContact = new ArrayList<>();
-        createContact.add(new CreateEmailContact()
-                .email("primaryemail@example.com")
-                .type(ContactType.EMAIL)
-                .main(true));
-
-        createContact.add(new CreateEmailContact()
-                .email("secondaryemail@example.com")
-                .type(ContactType.EMAIL)
-                .main(false));
-        return createContact;
-    }
-
-    private Address createAddress() {
-        return new Address().city("Dnepr")
-                .district("District")
-                .houseBlock("block")
-                .houseNumber("number")
-                .region("Dnipro")
-                .street("street")
-                .zipCode("zipCode");
+                .adminEmail("test.receive.subject@gmail.com");
     }
 }
