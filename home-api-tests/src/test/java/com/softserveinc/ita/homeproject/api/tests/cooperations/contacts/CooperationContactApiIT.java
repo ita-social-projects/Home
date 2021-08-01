@@ -32,9 +32,12 @@ import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class CooperationContactApiIT {
+
+    private static final String CONTACT_NOT_FOUND = "Contact with 'id: %d and cooperation_id %d' is not found";
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
     private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
@@ -320,6 +323,40 @@ class CooperationContactApiIT {
                 .deleteContactOnCooperation(expectedCooperation.getId(), wrongId))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("Can't find contact with given ID:" + wrongId);
+    }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void deleteContactInNotExistingCooperationTest () throws ApiException {
+        Long wrongCoopId = 9999999L;
+
+        ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
+
+        ReadContact savedEmailContact = cooperationContactApi
+                .createContactOnCooperation(cooperation.getId(), createEmailContact());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationContactApi
+                        .deleteContactOnCooperation(wrongCoopId, savedEmailContact.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(CONTACT_NOT_FOUND, savedEmailContact.getId(), wrongCoopId);
+    }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void deleteContactInNotRelatedCooperationTest () throws ApiException {
+
+        ReadCooperation cooperation = cooperationApi.createCooperation(createCooperation());
+        ReadCooperation other_cooperation = cooperationApi.createCooperation(createCooperation());
+
+        ReadContact savedEmailContact = cooperationContactApi
+                .createContactOnCooperation(cooperation.getId(), createEmailContact());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationContactApi
+                        .deleteContactOnCooperation(other_cooperation.getId(), savedEmailContact.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(CONTACT_NOT_FOUND, savedEmailContact.getId(), other_cooperation.getId());
     }
 
     @Test

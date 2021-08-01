@@ -32,6 +32,7 @@ import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ConstantConditions")
@@ -53,6 +54,8 @@ class CooperationPollApiIT {
 
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
+    static final Long NONEXISTENT_COOP_ID = 999999999L;
+
     final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
     private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
@@ -62,6 +65,11 @@ class CooperationPollApiIT {
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
     static final String WRONG_DATA_MESSAGE = "Can't add or remove house, invalid poll_id or house_id";
+
+    static final String POLL_NOT_FOUND = "Poll with 'id: %d' is not found";
+
+    static final String COOPERATION_NOT_FOUND = "Cooperation with 'id: %d' is not found";
+
 
     static {
         ReadCooperation cooperationOne = null;
@@ -391,6 +399,31 @@ class CooperationPollApiIT {
                 .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
     }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void deleteCooperationPollFromNotExistingCooperationTest() throws ApiException {
+        ReadPoll poll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> COOPERATION_POLL_API
+                        .deleteCooperationPoll(NONEXISTENT_COOP_ID, poll.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(POLL_NOT_FOUND, poll.getId()));
+    }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void deleteCooperationPollFromNotRelatedCooperationTest() throws ApiException {
+        ReadPoll poll = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> COOPERATION_POLL_API
+                        .deleteCooperationPoll(SECOND_COOPERATION_ID, poll.getId()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(POLL_NOT_FOUND, poll.getId()));
+    }
+
 
     private void assertPoll(CreatePoll expected, ReadPoll actual) {
         List<Long> expectedHouseIdList = expected.getHouses()
