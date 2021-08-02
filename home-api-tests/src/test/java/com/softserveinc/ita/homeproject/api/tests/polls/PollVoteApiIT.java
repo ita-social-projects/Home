@@ -262,7 +262,7 @@ class PollVoteApiIT {
     }
 
     @Test
-    void votingOnMultipleChoiceQuestionWithExceedingAnswersNumberThrowsExceptionTest() throws ApiException {
+    void votingOnMultipleChoiceQuestionWithExceedingNumberOfAnswersThrowsExceptionTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
         CreateMultipleChoiceQuestion createdMultipleQuestion = createMultipleChoiceQuestion();

@@ -50,6 +50,8 @@ import org.springframework.stereotype.Component;
 @Provider
 @Component
 public class PollApiImpl extends CommonApi implements PollsApi {
+    @Autowired
+    private PollService pollService;
 
     @Autowired
     private PollHouseService housePollService;
@@ -59,9 +61,6 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
     private PollQuestionService pollQuestionService;
-
-    @Autowired
-    private PollService pollService;
 
     @Autowired
     private VoteService voteService;
@@ -78,12 +77,14 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(GET_POLL_PERMISSION)
+    @PreAuthorize(CREATE_QUESTION_PERMISSION)
     @Override
-    public Response getPoll(Long id) {
-        var pollDto = pollService.getOne(id);
-        var readPoll = mapper.convert(pollDto, ReadPoll.class);
-        return Response.status(Response.Status.OK).entity(readPoll).build();
+    public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
+        var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
+        var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
+        var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
+
+        return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
 
     @PreAuthorize(DELETE_POLL_HOUSE_PERMISSION)
@@ -91,6 +92,21 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     public Response deletePolledHouse(Long pollId, Long id) {
         housePollService.remove(id, pollId);
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PreAuthorize(DELETE_QUESTION_PERMISSION)
+    @Override
+    public Response deleteQuestion(Long pollId, Long id) {
+        pollQuestionService.deactivatePollQuestion(pollId, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PreAuthorize(GET_POLL_PERMISSION)
+    @Override
+    public Response getPoll(Long id) {
+        var pollDto = pollService.getOne(id);
+        var readPoll = mapper.convert(pollDto, ReadPoll.class);
+        return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 
     @PreAuthorize(GET_POLL_HOUSE_PERMISSION)
@@ -102,53 +118,6 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
-    @PreAuthorize(GET_POLL_PERMISSION)
-    @Override
-    public Response queryPoll(
-        Long cooperationId,
-        Integer pageNumber,
-        Integer pageSize,
-        String sort,
-        String filter,
-        Long id,
-        LocalDateTime creationDate,
-        LocalDateTime completionDate,
-        PollType type,
-        PollStatus status
-    ) {
-        Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readPoll, ReadPoll.class);
-    }
-
-    @PreAuthorize(CREATE_QUESTION_PERMISSION)
-    @Override
-    public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
-        var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
-        var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
-        var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
-
-        return Response.status(Response.Status.CREATED).entity(readQuestion).build();
-    }
-
-    @PreAuthorize(CREATE_VOTE_PERMISSION)
-    @Override
-    public Response createVote(Long pollId, CreateVote createVote) {
-        User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
-        var createVoteDto = mapper.convert(createVote, VoteDto.class);
-        createVoteDto.setPollId(pollId);
-        var readVoteDto = voteService.createVote(currentUser, createVoteDto);
-        var readVote = mapper.convert(readVoteDto, ReadVote.class);
-        return Response.status(Response.Status.CREATED).entity(readVote).build();
-    }
-
-    @PreAuthorize(DELETE_QUESTION_PERMISSION)
-    @Override
-    public Response deleteQuestion(Long pollId, Long id) {
-        pollQuestionService.deactivatePollQuestion(pollId, id);
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
     @PreAuthorize(GET_QUESTION_PERMISSION)
     @Override
     public Response getQuestion(Long pollId, Long id) {
@@ -156,6 +125,37 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         var readQuestion = mapper.convert(toGet, ReadMultipleChoiceQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
+    }
+
+    @PreAuthorize(GET_POLL_PERMISSION)
+    @Override
+    public Response queryPoll(Long cooperationId,
+                              Integer pageNumber,
+                              Integer pageSize,
+                              String sort,
+                              String filter,
+                              Long id,
+                              LocalDateTime creationDate,
+                              LocalDateTime completionDate,
+                              PollType type,
+                              PollStatus status) {
+        Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
+        return buildQueryResponse(readPoll, ReadPoll.class);
+    }
+
+    @PreAuthorize(GET_ALL_POLL_HOUSES_PERMISSION)
+    @Override
+    public Response queryPolledHouse(Long pollId,
+                                     Integer pageNumber,
+                                     Integer pageSize,
+                                     String sort,
+                                     String filter,
+                                     Long id,
+                                     Integer quantityFlat,
+                                     Integer adjoiningArea,
+                                     BigDecimal houseArea) {
+        Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
+        return buildQueryResponse(readHouse, ReadHouse.class);
     }
 
     @PreAuthorize(GET_QUESTION_PERMISSION)
@@ -181,18 +181,15 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
 
-    @PreAuthorize(GET_ALL_POLL_HOUSES_PERMISSION)
+    @PreAuthorize(CREATE_VOTE_PERMISSION)
     @Override
-    public Response queryPolledHouse(Long pollId,
-                                     Integer pageNumber,
-                                     Integer pageSize,
-                                     String sort,
-                                     String filter,
-                                     Long id,
-                                     Integer quantityFlat,
-                                     Integer adjoiningArea,
-                                     BigDecimal houseArea) {
-        Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readHouse, ReadHouse.class);
+    public Response createVote(Long pollId, CreateVote createVote) {
+        User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
+            SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
+        var createVoteDto = mapper.convert(createVote, VoteDto.class);
+        createVoteDto.setPollId(pollId);
+        var readVoteDto = voteService.createVote(currentUser, createVoteDto);
+        var readVote = mapper.convert(readVoteDto, ReadVote.class);
+        return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
 }

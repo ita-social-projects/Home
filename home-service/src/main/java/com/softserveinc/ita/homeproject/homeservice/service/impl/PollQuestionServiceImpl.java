@@ -52,11 +52,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var poll = getPollById(pollId);
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
-            .filter(question -> question.getId().equals(id)).findFirst()
-            .filter(PollQuestion::getEnabled)
-            .orElseThrow(() ->
-                new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "Question", id)));
+                .filter(question -> question.getId().equals(id)).findFirst()
+                .filter(PollQuestion::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Question", id)));
 
 
         if (updatePollQuestionDto.getQuestion() != null) {
@@ -87,7 +87,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         if (pollQuestionDto.getAnswerVariants() != null) {
             for (var i = 0; i < multipleChoiceQuestion.getAnswerVariants().size(); i++) {
                 multipleChoiceQuestion.getAnswerVariants().get(i).setAnswer(
-                    pollQuestionDto.getAnswerVariants().get(i).getAnswer());
+                        pollQuestionDto.getAnswerVariants().get(i).getAnswer());
             }
         }
 
@@ -117,13 +117,13 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         return mapper.convert(pollQuestionDto, AdviceChoiceQuestion.class);
     }
 
-    private Poll getPollById(Long id) {
+    private Poll getPollById(Long id){
         return pollRepository.findById(id)
-            .filter(Poll::getEnabled)
-            .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
-            .orElseThrow(() ->
-                new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+                .filter(Poll::getEnabled)
+                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Poll", id)));
     }
 
     @Transactional
@@ -132,11 +132,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var poll = getPollById(pollId);
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
-            .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
-            .filter(PollQuestion::getEnabled)
-            .orElseThrow(() ->
-                new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "Question", pollQuestionId)));
+                .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
+                .filter(PollQuestion::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Question", pollQuestionId)));
 
         toDelete.setEnabled(false);
         pollQuestionRepository.save(toDelete);
@@ -147,9 +147,9 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                                          Integer pageSize,
                                          Specification<PollQuestion> specification) {
         specification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("poll").get("enabled"), true));
+                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                        .equal(root.get("poll").get("enabled"), true));
         return pollQuestionRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
+                .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
     }
 }
