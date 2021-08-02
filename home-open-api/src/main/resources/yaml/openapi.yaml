@@ -1570,12 +1570,17 @@ components:
           example: "example"
     CreateUser:
       required:
+        - registration_token
         - first_name
         - last_name
         - email
         - password
       type: object
       properties:
+        registration_token:
+          type: string
+          example: f8e20775-da55-11eb-a58d-775374b8f3a1
+          minLength: 36
         first_name:
           pattern: '\w+'
           type: string
