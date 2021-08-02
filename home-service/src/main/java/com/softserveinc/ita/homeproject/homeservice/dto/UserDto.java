@@ -18,4 +18,6 @@ public class UserDto extends BaseDto {
     private String password;
 
     private List<ContactDto> contacts;
+
+    private String registrationToken;
 }

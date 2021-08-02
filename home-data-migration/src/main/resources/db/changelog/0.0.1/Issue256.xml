@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="Issue256.001" author="Ilya-Ross">
+        <addColumn tableName="invitations">
+            <column name="REGISTRATION_TOKEN" type="VARCHAR(45)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="Issue256.002" author="Ilya-Ross">
+        <addColumn tableName="user_cooperation">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="Issue256.003" author="Ilya-Ross">
+        <createSequence incrementBy="50" sequenceName="user_cooperation_sequence"/>
+    </changeSet>
+    <changeSet id="Issue256.004" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="roles">
+            <column name="id" value="3"/>
+            <column name="name" value="OWNER"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="roles">
+            <column name="id" value="4"/>
+            <column name="name" value="COOPERATION_ADMIN"/>
+        </insert>
+    </changeSet>
+    <changeSet id="Issue256.005" author="Ilya-Ross">
+        <addColumn tableName="ownerships">
+            <column name="cooperation_id" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="cooperation_fk"
+                             references="cooperations(ID)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="256.006" author="Ilya-Ross">
+        <delete schemaName="public"
+                tableName="user_cooperation">
+            <where>id='1'</where>
+        </delete>
+    </changeSet>
+    <changeSet id="Issue256.007" author="Ilya-Ross">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user_cooperation">
+            <column name="id" valueSequenceNext="user_cooperation_sequence"/>
+            <column name="role_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

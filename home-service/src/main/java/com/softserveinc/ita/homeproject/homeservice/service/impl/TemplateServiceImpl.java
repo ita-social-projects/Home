@@ -2,8 +2,8 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -14,6 +14,7 @@ import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,11 +31,13 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         var text = "";
-        try (Reader reader = new BufferedReader(
-            new InputStreamReader(this.getClass().getResourceAsStream(getInvitationTemplate(mailDto).toString())))) {
+        try (InputStream resource = new ClassPathResource(
+                getInvitationTemplate(mailDto).toString()).getInputStream();
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(resource))) {
             text = Mustache.compiler()
-                .compile(reader)
-                .execute(mailDto);
+                    .compile(reader)
+                    .execute(mailDto);
         } catch (IOException e) {
             throw new InvitationException(Arrays.toString(e.getStackTrace()));
         }
