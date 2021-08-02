@@ -12,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AnswerVariantRepository extends JpaRepository<AnswerVariant, Long> {
 
-    AnswerVariant findByQuestionAndAnswer(PollQuestion question, String answer);
+    AnswerVariant findAnswerVariantByAnswerAndQuestion(String answer, PollQuestion question);
 }

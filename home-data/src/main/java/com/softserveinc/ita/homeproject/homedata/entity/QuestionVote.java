@@ -1,11 +1,12 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -18,19 +19,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "question_votes")
 @SequenceGenerator(name = "sequence", sequenceName = "question_votes_sequence")
-public class QuestionVote extends BaseEntity {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
+public abstract class QuestionVote extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
-    @Column(name = "question_id")
-    private Long questionId;
+    @Convert(converter = PollQuestionTypeAttributeConverter.class)
+    @Column(name = "type", insertable = false, updatable = false)
+    private PollQuestionType type;
 
-    @ManyToMany
-    @JoinTable(name = "quest_vote_answer_var",
-        joinColumns = @JoinColumn(name = "question_vote_id"),
-        inverseJoinColumns = @JoinColumn(name = "answer_variant_id")
-    )
-    private List<AnswerVariant> answerVariants;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private PollQuestion question;
 }

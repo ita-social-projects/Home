@@ -31,8 +31,14 @@
                              foreignKeyName="vote_fk"
                              references="votes(ID)"/>
             </column>
-            <column name="QUESTION_ID" type="BIGINT">
+            <column name="TYPE" type="VARCHAR(31)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="QUESTION_ID" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ANSWER_VARIANT_ID" type="BIGINT">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>

@@ -20,10 +20,10 @@ import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.application.service.impl.HomeUserDetailsService;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homeservice.dto.CreateVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
@@ -135,7 +135,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     public Response createVote(Long pollId, CreateVote createVote) {
         User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
             SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
-        var createVoteDto = mapper.convert(createVote, CreateVoteDto.class);
+        var createVoteDto = mapper.convert(createVote, VoteDto.class);
         createVoteDto.setPollId(pollId);
         var readVoteDto = voteService.createVote(currentUser, createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
