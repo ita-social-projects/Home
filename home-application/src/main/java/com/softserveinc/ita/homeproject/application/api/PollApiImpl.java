@@ -82,7 +82,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
         var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
-        var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
+        var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
