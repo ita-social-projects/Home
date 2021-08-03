@@ -33,7 +33,6 @@ import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
 import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
 import com.softserveinc.ita.homeproject.model.ReadQuestion;
 import com.softserveinc.ita.homeproject.model.ReadVote;
@@ -115,7 +114,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response getQuestion(Long pollId, Long id) {
         PollQuestionDto toGet = pollQuestionService.getOne(id, getSpecification());
-        var readQuestion = mapper.convert(toGet, ReadMultipleChoiceQuestion.class);
+        var readQuestion = mapper.convert(toGet, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
@@ -161,7 +160,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
                                   Long id,
                                   QuestionType type) {
         Page<PollQuestionDto> readQuestion = pollQuestionService.findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readQuestion, ReadMultipleChoiceQuestion.class);
+        return buildQueryResponse(readQuestion, ReadQuestion.class);
     }
 
     @PreAuthorize(UPDATE_QUESTION_PERMISSION)
@@ -169,7 +168,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
         var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
         var toUpdate = pollQuestionService.updatePollQuestion(pollId, id, updateQuestionDto);
-        var readQuestion = mapper.convert(toUpdate, ReadMultipleChoiceQuestion.class);
+        var readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
