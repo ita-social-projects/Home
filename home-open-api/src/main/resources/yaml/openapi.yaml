@@ -14,6 +14,8 @@ servers:
   - url: /api/0
 
 tags:
+  - name: invitations
+    description: Invitations managment
   - name: news
     description: News management operations
   - name: user
@@ -44,6 +46,28 @@ tags:
     description: Polled house management operations
 
 paths:
+  /invitations/invitation-approval:
+    post:
+      tags:
+        - invitations
+      summary: Approve invitation
+      description: The endpoint approves invitation
+      operationId: approveInvitation
+      requestBody:
+        $ref: '#/components/requestBodies/InvitationTokenBody'
+      responses:
+        201:
+          $ref: '#/components/responses/InvitationResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        409:
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /news:
     post:
       tags:
@@ -1455,6 +1479,14 @@ components:
           type: integer
           format: int64
           example: 1
+    InvitationToken:
+      type: object
+      required:
+        - invitation_token
+      properties:
+        invitation_token:
+          type: string
+          example: "95eb8223-f2d4-11eb-82f4-2f106ba224d5"
     ReadNews:
       allOf:
         - $ref: '#/components/schemas/BaseReadView'
@@ -2763,6 +2795,12 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/ReadOwnership"
+    InvitationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReadInvitation"
     ApartmentInvitationResponse:
       description: Success
       content:
@@ -2807,6 +2845,13 @@ components:
               $ref: "#/components/schemas/ReadQuestion"
 
   requestBodies:
+    InvitationTokenBody:
+      description: A payload invitation token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvitationToken'
+      required: true
     CreateNewsBody:
       description: A payload for creating a new News
       content:
