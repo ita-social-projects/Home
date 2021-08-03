@@ -32,6 +32,7 @@ import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class CooperationContactApiIT {
@@ -96,6 +97,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Contact with 'id: " + wrongId + "' is not found");
     }
 
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullCooperationIdWhenGetContactTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -105,6 +107,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Missing the required parameter 'cooperationId' when calling getContactOnCooperation");
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullWhenGetContactTest() throws ApiException {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
@@ -322,6 +325,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
+
     @Test
     void passNullIdWhenDeleteAnyContactTest() throws ApiException {
         ReadCooperation expectedUser = cooperationApi.createCooperation(createCooperation());
@@ -333,6 +337,7 @@ class CooperationContactApiIT {
                 " when calling deleteContactOnCooperation");
     }
 
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullUserIdWhenDeleteAnyContactTest() {
         assertThatExceptionOfType(ApiException.class)

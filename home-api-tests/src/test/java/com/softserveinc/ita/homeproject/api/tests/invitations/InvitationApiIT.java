@@ -22,6 +22,7 @@ class InvitationApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
 
+    @Disabled("NotValid test")
     @Test
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();

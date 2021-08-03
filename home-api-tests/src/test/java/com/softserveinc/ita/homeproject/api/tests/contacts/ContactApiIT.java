@@ -19,6 +19,7 @@ import com.softserveinc.ita.homeproject.model.UpdateContact;
 import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
@@ -191,6 +192,7 @@ class ContactApiIT {
                 "Contact with 'id: " + wrongId + "' is not found");
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullWhenGetContactTest() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
@@ -408,6 +410,7 @@ class ContactApiIT {
             .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullIdContactWhenDeleteAnyContactTest() throws ApiException {
         ReadUser expectedUser = userApi.createUser(createTestUser());
@@ -418,6 +421,7 @@ class ContactApiIT {
             .withMessageContaining("Missing the required parameter 'id' when calling deleteContactOnUser");
     }
 
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullUserIdWhenDeleteAnyContactTest() {
         assertThatExceptionOfType(ApiException.class)

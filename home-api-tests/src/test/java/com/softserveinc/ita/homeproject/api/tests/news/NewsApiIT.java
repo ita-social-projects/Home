@@ -19,6 +19,7 @@ import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
@@ -240,6 +241,7 @@ class NewsApiIT {
             .withMessageContaining("News with 'id: " + wrongId + "' is not found");
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullWhenReceivingNewsTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -436,6 +438,7 @@ class NewsApiIT {
             .withMessageContaining("Can't find news with given ID: " + wrongId);
     }
 
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullWhenDeleteNewsTest() {
         assertThatExceptionOfType(ApiException.class)
