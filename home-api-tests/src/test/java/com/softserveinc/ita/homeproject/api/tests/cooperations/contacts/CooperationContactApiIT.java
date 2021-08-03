@@ -325,7 +325,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
-
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
     @Test
     void passNullIdWhenDeleteAnyContactTest() throws ApiException {
         ReadCooperation expectedUser = cooperationApi.createCooperation(createCooperation());
