@@ -17,9 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
-import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
-import com.softserveinc.ita.homeproject.application.service.impl.HomeUserDetailsService;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
@@ -44,7 +41,6 @@ import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Provider
@@ -64,9 +60,6 @@ public class PollApiImpl extends CommonApi implements PollsApi {
 
     @Autowired
     private VoteService voteService;
-
-    @Autowired
-    private HomeUserDetailsService userDetailsService;
 
     @PreAuthorize(CREATE_POLLED_HOUSE_PERMISSION)
     @Override
@@ -184,12 +177,11 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(CREATE_VOTE_PERMISSION)
     @Override
     public Response createVote(Long pollId, CreateVote createVote) {
-        User currentUser = ((HomeUserWrapperDetails) userDetailsService.loadUserByUsername(
-            SecurityContextHolder.getContext().getAuthentication().getName())).getUser();
         var createVoteDto = mapper.convert(createVote, VoteDto.class);
         createVoteDto.setPollId(pollId);
-        var readVoteDto = voteService.createVote(currentUser, createVoteDto);
+        var readVoteDto = voteService.createVote(createVoteDto);
         var readVote = mapper.convert(readVoteDto, ReadVote.class);
+
         return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
 }

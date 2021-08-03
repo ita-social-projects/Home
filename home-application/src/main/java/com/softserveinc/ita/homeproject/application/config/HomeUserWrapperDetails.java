@@ -65,8 +65,4 @@ public class HomeUserWrapperDetails implements UserDetails {
     public boolean isEnabled() {
         return user.getEnabled();
     }
-
-    public User getUser() {
-        return user;
-    }
 }

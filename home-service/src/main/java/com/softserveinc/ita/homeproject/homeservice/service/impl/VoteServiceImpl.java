@@ -21,6 +21,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Vote;
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.AdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionVoteDto;
@@ -32,6 +33,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeExcept
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,6 +41,8 @@ import org.springframework.stereotype.Service;
 public class VoteServiceImpl implements VoteService {
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't create vote on poll with status: '%s'";
+
+    private static final String USER_NOT_FOUND_MESSAGE = "User with 'login: %s' is not found";
 
     private static final String TRYING_TO_REVOTE_MESSAGE =
         "You are trying to re-vote on a poll with 'id: %d' that you have already voted";
@@ -63,13 +67,16 @@ public class VoteServiceImpl implements VoteService {
 
     private final VoteRepository voteRepository;
 
+    private final UserRepository userRepository;
+
     private final ServiceMapper mapper;
 
     @Transactional
     @Override
-    public VoteDto createVote(User currentUser, VoteDto voteDto) {
+    public VoteDto createVote(VoteDto voteDto) {
         Poll votedPoll = validatePollEnabled(voteDto);
         validatePollStatus(votedPoll);
+        User currentUser = getVoter();
         validateReVoting(votedPoll, currentUser);
         validateQuestionVotesCount(voteDto, votedPoll);
 
@@ -108,6 +115,12 @@ public class VoteServiceImpl implements VoteService {
             throw new BadRequestHomeException(
                 String.format(POLL_STATUS_VALIDATION_MESSAGE, votedPoll.getStatus()));
         }
+    }
+
+    private User getVoter() {
+        String voter = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(voter).orElseThrow(
+            () -> new NotFoundHomeException(String.format(USER_NOT_FOUND_MESSAGE, voter)));
     }
 
     private void validateReVoting(Poll votedPoll, User currentUser) {
