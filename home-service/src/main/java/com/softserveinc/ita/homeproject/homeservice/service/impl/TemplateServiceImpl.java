@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
         }
         return text;
     }
+
 
     private Path getInvitationTemplate(MailDto mailDto) {
         if (mailDto.getIsRegistered()) {

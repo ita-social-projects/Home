@@ -121,12 +121,12 @@ public class {{classname}} {
     // verify the required parameter '{{paramName}}' is set
     // queryPoll operationId check added as a temporary solution for api tests
     if ({{paramName}} == null && !"queryPoll".equals("{{operationId}}")) {
-      throw new ApiException(400, "Missing the required parameter '{{paramName}}' when calling {{operationId}}");
+    //   throw new ApiException(400, "Missing the required parameter '{{paramName}}' when calling {{operationId}}");
     }
     {{/required}}{{/allParams}}
     // create path and map variables
     String localVarPath = "{{{path}}}"{{#pathParams}}
-      .replaceAll("\\{" + "{{baseName}}" + "\\}", apiClient.escapeString({{{paramName}}}.toString())){{/pathParams}};
+      .replaceAll("\\{" + "{{baseName}}" + "\\}", apiClient.escapeString({{{paramName}}} == null ? "" : {{{paramName}}}.toString())){{/pathParams}};
 
     // query params
     {{javaUtilPrefix}}List<Pair> localVarQueryParams = new {{javaUtilPrefix}}ArrayList<Pair>();
