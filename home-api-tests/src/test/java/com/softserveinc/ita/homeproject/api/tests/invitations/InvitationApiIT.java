@@ -65,9 +65,9 @@ class InvitationApiIT {
 
         ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
 
-        assertEquals(readInvitation.getEmail(), userEmail);
-        assertEquals(readInvitation.getType(), InvitationType.APARTMENT);
-        assertEquals(readInvitation.getStatus(),InvitationStatus.ACCEPTED);
+        assertEquals(userEmail, readInvitation.getEmail());
+        assertEquals(InvitationType.APARTMENT, readInvitation.getType());
+        assertEquals(InvitationStatus.ACCEPTED,readInvitation.getStatus());
     }
 
     @Test
@@ -85,9 +85,9 @@ class InvitationApiIT {
 
         ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
 
-        assertEquals(readInvitation.getEmail(), userEmail);
-        assertEquals(readInvitation.getType(), InvitationType.COOPERATION);
-        assertEquals(readInvitation.getStatus(),InvitationStatus.ACCEPTED);
+        assertEquals(userEmail, readInvitation.getEmail());
+        assertEquals(InvitationType.COOPERATION, readInvitation.getType());
+        assertEquals(InvitationStatus.ACCEPTED,readInvitation.getStatus());
     }
 
     public InvitationToken buildInvitationPayload(String invitationToken){
