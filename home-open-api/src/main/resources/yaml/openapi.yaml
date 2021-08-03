@@ -2093,7 +2093,7 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          base: '#/components/schemas/ReadCooperationInvitation'
+          cooperation: '#/components/schemas/ReadCooperationInvitation'
           apartment: '#/components/schemas/ReadApartmentInvitation'
       properties:
         type:

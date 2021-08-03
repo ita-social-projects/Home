@@ -35,8 +35,6 @@ class InvitationApiIT {
 
     private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getClient());
 
-    private static String userEmail;
-
     @Test
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
@@ -50,13 +48,13 @@ class InvitationApiIT {
         assertTrue(response.getCount() > 0);
     }
 
-
     @Test
-    void isTokenAccepted() throws Exception {
-        ReadCooperation readCooperation = createTestCooperationAndUserViaInvitation();
+    void isApartmentTokenAccepted() throws Exception {
+        String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
+        ReadCooperation readCooperation = createTestCooperationAndUserViaInvitationWithUserEmail(userEmail);
 
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
-        apartmentApi.createApartment(createdHouse.getId(), createApartment());
+        apartmentApi.createApartment(createdHouse.getId(), createApartmentWithEmail(userEmail));
 
         TimeUnit.MILLISECONDS.sleep(5000);
 
@@ -65,11 +63,30 @@ class InvitationApiIT {
 
         String apartmentInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
 
-        ApiResponse<ReadInvitation> readInvitationApiResponse = invitationApi.approveInvitationWithHttpInfo(buildInvitationPayload(apartmentInvitationToken));
-        ReadInvitation readInvitation = readInvitationApiResponse.getData();
+        ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
 
         assertEquals(readInvitation.getEmail(), userEmail);
         assertEquals(readInvitation.getType(), InvitationType.APARTMENT);
+        assertEquals(readInvitation.getStatus(),InvitationStatus.ACCEPTED);
+    }
+
+    @Test
+    void isCooperationTokenAccepted() throws Exception {
+        String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
+        createTestCooperationAndUserViaInvitationWithUserEmail(userEmail);
+        createTestCooperationWithUserEmail(userEmail);
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiUsageFacade api = new ApiUsageFacade();
+        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+
+        String cooperationInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
+
+        ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
+
+        assertEquals(readInvitation.getEmail(), userEmail);
+        assertEquals(readInvitation.getType(), InvitationType.COOPERATION);
         assertEquals(readInvitation.getStatus(),InvitationStatus.ACCEPTED);
     }
 
@@ -80,32 +97,33 @@ class InvitationApiIT {
     }
 
     @SneakyThrows
-    private ReadCooperation createTestCooperationAndUserViaInvitation() {
-        CreateCooperation createCoop = createCooperation();
+    private ReadCooperation createTestCooperationWithUserEmail(String userEmail) {
+        CreateCooperation createCoop = createCooperationWithUserEmail(userEmail);
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCoop);
+        return readCooperation;
+    }
 
+    @SneakyThrows
+    private ReadCooperation createTestCooperationAndUserViaInvitationWithUserEmail(String userEmail) {
+        ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
         TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
-        expectedUser.setEmail(createCoop.getAdminEmail());
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,userEmail)));
+        expectedUser.setEmail(userEmail);
         userApi.createUser(expectedUser);
         return readCooperation;
     }
 
     private CreateUser createBaseUser() {
-        if(userEmail == null){
-            userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
-        }
-
         return new CreateUser()
-                .firstName("firstName")
-                .lastName("lastName")
-                .password("password")
-                .email(userEmail);
+                   .firstName("firstName")
+                   .lastName("lastName")
+                   .password("password")
+                   .email( RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
 
     private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
@@ -130,6 +148,16 @@ class InvitationApiIT {
 
         return result.trim();
     }
+
+    private CreateCooperation createCooperationWithUserEmail(String email) {
+        return new CreateCooperation()
+                .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail(email)
+                .address(createAddress());
+    }
+
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
@@ -157,18 +185,18 @@ class InvitationApiIT {
                 .address(createAddress());
     }
 
-    private CreateApartment createApartment() {
+    private CreateApartment createApartmentWithEmail(String userEmail) {
         return new CreateApartment()
                 .area(BigDecimal.valueOf(72.5))
                 .number("15")
-                .invitations(createApartmentInvitation());
+                .invitations(createApartmentInvitationWithEmail(userEmail));
     }
 
-    private List<CreateInvitation> createApartmentInvitation() {
+    private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
                 .ownershipPart(BigDecimal.valueOf(0.3))
-                .email(createBaseUser().getEmail())
+                .email( userEmail)
                 .type(InvitationType.APARTMENT));
         return createInvitations;
     }

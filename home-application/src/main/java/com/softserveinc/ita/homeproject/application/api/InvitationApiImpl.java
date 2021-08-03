@@ -7,7 +7,11 @@ import com.softserveinc.ita.homeproject.api.InvitationsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.model.InvitationStatus;
+import com.softserveinc.ita.homeproject.model.InvitationToken;
+import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
+import com.softserveinc.ita.homeproject.model.ReadCooperationInvitation;
+import com.softserveinc.ita.homeproject.model.ReadInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
