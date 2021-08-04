@@ -43,7 +43,25 @@ import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import javax.ws.rs.core.Response;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ContactApiIT {
 
@@ -104,6 +122,7 @@ class ContactApiIT {
                 .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullIdContactWhenDeleteAnyContactTest() {
         ReadUser expectedUser = createTestUserViaInvitation();
@@ -114,6 +133,7 @@ class ContactApiIT {
                 .withMessageContaining("Missing the required parameter 'id' when calling deleteContactOnUser");
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullUserIdWhenDeleteAnyContactTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -275,6 +295,7 @@ class ContactApiIT {
                         "Contact with 'id: " + wrongId + "' is not found");
     }
 
+    @Disabled("NotValid test. Will be fixed in issue # 288.")
     @Test
     void passNullWhenGetContactTest() {
         ReadUser expectedUser = createTestUserViaInvitation();

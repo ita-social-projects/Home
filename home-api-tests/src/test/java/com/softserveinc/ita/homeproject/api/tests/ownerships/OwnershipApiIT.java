@@ -214,7 +214,7 @@ class OwnershipApiIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomAlphabetic(10))
                 .iban(RandomStringUtils.randomAlphabetic(20))
-                .adminEmail("test.receive.messages@gmail.com")
+                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .address(createAddress());
     }
 
