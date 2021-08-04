@@ -241,7 +241,7 @@ class NewsApiIT {
             .withMessageContaining("News with 'id: " + wrongId + "' is not found");
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullWhenReceivingNewsTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -438,7 +438,7 @@ class NewsApiIT {
             .withMessageContaining("Can't find news with given ID: " + wrongId);
     }
 
-    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 290.")
     @Test
     void passNullWhenDeleteNewsTest() {
         assertThatExceptionOfType(ApiException.class)

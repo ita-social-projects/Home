@@ -250,7 +250,7 @@ class UserApiIT {
                 .withMessageContaining("Parameter `password` is invalid - must not be null.");
     }
 
-    @Disabled("error similar to Issue#250. Will be fixed in issue # 288.")
+    @Disabled("error similar to Issue#250. Will be fixed in issue # 290.")
     @Test
     void createNullUserTest() {
         CreateUser expectedUser = null;
@@ -270,7 +270,7 @@ class UserApiIT {
                 .withMessageContaining("User with 'id: " + userId + "' is not found");
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullWhenReceivingTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -399,7 +399,7 @@ class UserApiIT {
                 .withMessageContaining("User with id: " + userId + " is not found");
     }
 
-    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 290.")
     @Test
     void passNullWhenDeleteUserTest() {
         assertThatExceptionOfType(ApiException.class)

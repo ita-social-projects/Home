@@ -97,7 +97,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Contact with 'id: " + wrongId + "' is not found");
     }
 
-    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 290.")
     @Test
     void passNullCooperationIdWhenGetContactTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -107,7 +107,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Missing the required parameter 'cooperationId' when calling getContactOnCooperation");
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullWhenGetContactTest() throws ApiException {
         ReadCooperation expectedCooperation = cooperationApi.createCooperation(createCooperation());
@@ -325,7 +325,7 @@ class CooperationContactApiIT {
             .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
-    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 290.")
     @Test
     void passNullIdWhenDeleteAnyContactTest() throws ApiException {
         ReadCooperation expectedUser = cooperationApi.createCooperation(createCooperation());
@@ -337,7 +337,7 @@ class CooperationContactApiIT {
                 " when calling deleteContactOnCooperation");
     }
 
-    @Disabled("Associated with Issue# 250. Will be fixed in issue # 288.")
+    @Disabled("Associated with Issue# 250. Will be fixed in issue # 290.")
     @Test
     void passNullUserIdWhenDeleteAnyContactTest() {
         assertThatExceptionOfType(ApiException.class)

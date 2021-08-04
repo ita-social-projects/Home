@@ -122,7 +122,7 @@ class ContactApiIT {
                 .withMessageContaining("Can't find contact with given ID:" + wrongId);
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullIdContactWhenDeleteAnyContactTest() {
         ReadUser expectedUser = createTestUserViaInvitation();
@@ -133,7 +133,7 @@ class ContactApiIT {
                 .withMessageContaining("Missing the required parameter 'id' when calling deleteContactOnUser");
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullUserIdWhenDeleteAnyContactTest() {
         assertThatExceptionOfType(ApiException.class)
@@ -295,7 +295,7 @@ class ContactApiIT {
                         "Contact with 'id: " + wrongId + "' is not found");
     }
 
-    @Disabled("NotValid test. Will be fixed in issue # 288.")
+    @Disabled("NotValid test. Will be fixed in issue # 290.")
     @Test
     void passNullWhenGetContactTest() {
         ReadUser expectedUser = createTestUserViaInvitation();
