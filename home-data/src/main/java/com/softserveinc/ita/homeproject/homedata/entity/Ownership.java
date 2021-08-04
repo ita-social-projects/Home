@@ -32,4 +32,8 @@ public class Ownership extends BaseEntity {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @ManyToOne
+    @JoinColumn(name = "cooperation_id", referencedColumnName = "id")
+    private Cooperation cooperation;
+
 }
