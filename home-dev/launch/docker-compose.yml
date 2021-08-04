@@ -48,6 +48,6 @@ services:
 
 networks:
   home_network:
-    external: true
+#    external: true
     name: home_network
     driver: bridge

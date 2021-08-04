@@ -1,19 +1,5 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
@@ -30,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_USER;
 
 
 /**
@@ -48,7 +40,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize(CREATE_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response createContactOnUser(Long userId, CreateContact createContact) {
         ContactDto createContactDto = mapper.convert(createContact, ContactDto.class);
@@ -65,7 +57,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param createUser are incoming data needed for user's creation
      * @return Response to generated controller
      */
-    @PreAuthorize(CREATE_USER_PERMISSION)
+    @PreAuthorize(CREATE_USER)
     @Override
     public Response createUser(CreateUser createUser) {
         UserDto createUserDto = mapper.convert(createUser, UserDto.class);
@@ -82,7 +74,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param id is user's id in the database
      * @return Response to generated controller
      */
-    @PreAuthorize(GET_USER_BY_ID_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response getUser(Long id) {
         UserDto readUserDto = userService.getOne(id);
@@ -91,7 +83,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.OK).entity(readUser).build();
     }
 
-    @PreAuthorize(GET_ALL_USER_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response queryContactsOnUser(Long userId,
                                         Integer pageNumber,
@@ -108,7 +100,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return buildQueryResponse(contacts, ReadContact.class);
     }
 
-    @PreAuthorize(DELETE_USER_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response deleteContactOnUser(Long userId, Long id) {
         contactService.deactivateContact(id);
@@ -124,7 +116,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
-    @PreAuthorize(GET_ALL_USERS_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response getAllUsers(Integer pageNumber,
                                 Integer pageSize,
@@ -141,7 +133,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return buildQueryResponse(users, ReadUser.class);
     }
 
-    @PreAuthorize(GET_USER_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response getContactOnUser(Long userId, Long id) {
         ContactDto readContactDto = contactService.getOne(id, getSpecification());
@@ -157,7 +149,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param id is id of the user that has to be deactivated
      * @return Response to generated controller
      */
-    @PreAuthorize(DELETE_USER_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response deleteUser(Long id) {
         userService.deactivateUser(id);
@@ -165,7 +157,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(UPDATE_USER_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response updateContactOnUser(Long userId, Long id, UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
@@ -183,7 +175,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param updateUser are incoming data needed for user's update
      * @return Response to generated controller
      */
-    @PreAuthorize(UPDATE_USER_PERMISSION)
+    @PreAuthorize(MANAGE_USER)
     @Override
     public Response updateUser(Long id, UpdateUser updateUser) {
         UserDto updateUserDto = mapper.convert(updateUser, UserDto.class);

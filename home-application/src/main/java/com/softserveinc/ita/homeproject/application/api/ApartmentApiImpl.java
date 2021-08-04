@@ -1,13 +1,5 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
-
-import java.math.BigDecimal;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
 import com.softserveinc.ita.homeproject.api.ApartmentsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
@@ -25,6 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+import java.math.BigDecimal;
+
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_APARTMENT_INFO;
+
 @Provider
 @Component
 public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
@@ -38,6 +37,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Autowired
     private ApartmentService apartmentService;
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response createInvitation(Long apartmentId,
                                      CreateApartmentInvitation createApartmentInvitation) {
@@ -50,19 +50,21 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteInvitation(Long apartmentId, Long id) {
         invitationService.deactivateInvitationById(apartmentId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DELETE_OWNERSHIP_PERMISSION)
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteOwnership(Long apartmentId, Long id) {
         ownershipService.deactivateOwnershipById(apartmentId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
 
@@ -73,7 +75,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                 .entity(readApartmentInvitation).build();
     }
 
-    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
@@ -82,6 +84,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response queryInvitation(Long apartmentId,
                                     Integer pageNumber,
@@ -97,7 +100,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
     }
 
-    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response queryOwnership(Long apartmentId,
                                    Integer pageNumber,
@@ -112,6 +115,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return buildQueryResponse(readOwnership, ReadOwnership.class);
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateInvitation(Long apartmentId,
                                      Long id,
@@ -123,7 +127,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
-    @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateOwnership(Long apartmentId, Long id, UpdateOwnership updateOwnership) {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
