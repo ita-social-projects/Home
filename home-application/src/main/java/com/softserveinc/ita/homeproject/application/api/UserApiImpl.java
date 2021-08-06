@@ -17,10 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER;
 import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_USER;
 
 
@@ -57,7 +57,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
      * @param createUser are incoming data needed for user's creation
      * @return Response to generated controller
      */
-    @PreAuthorize(CREATE_USER)
+    @PermitAll
     @Override
     public Response createUser(CreateUser createUser) {
         UserDto createUserDto = mapper.convert(createUser, UserDto.class);
