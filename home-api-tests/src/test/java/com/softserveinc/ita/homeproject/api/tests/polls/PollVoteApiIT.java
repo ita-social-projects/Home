@@ -368,7 +368,7 @@ class PollVoteApiIT {
             .name(String.format("Cooperation #%d for vote test", ++cooperationNumber))
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
             .address(createAddress());
     }
 

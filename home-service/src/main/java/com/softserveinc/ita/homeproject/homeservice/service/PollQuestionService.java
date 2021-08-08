@@ -5,9 +5,9 @@ import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 
 public interface PollQuestionService extends QueryableService<PollQuestion, PollQuestionDto>  {
 
-    PollQuestionDto createPollQuestion(Long pollId, PollQuestionDto pollQuestionDto);
+    PollQuestionDto createPollQuestion(PollQuestionDto pollQuestionDto);
 
-    PollQuestionDto updatePollQuestion(Long pollId, Long id, PollQuestionDto updatePollQuestion);
+    PollQuestionDto updatePollQuestion(PollQuestionDto updatePollQuestion);
 
     void deactivatePollQuestion(Long pollId, Long pollQuestionId);
 }

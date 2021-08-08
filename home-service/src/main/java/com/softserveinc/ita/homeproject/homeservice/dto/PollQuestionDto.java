@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +11,5 @@ public class PollQuestionDto extends BaseDto {
 
     private String question;
 
-    private Integer maxAnswerCount;
-
-    private List<AnswerVariantDto> answerVariants;
+    private Long pollId;
 }

@@ -21,7 +21,7 @@ import lombok.Setter;
 @SequenceGenerator(name = "sequence", sequenceName = "poll_questions_sequence")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")
-public abstract class PollQuestion extends BaseEntity{
+public abstract class PollQuestion extends BaseEntity {
 
     @Convert(converter = PollQuestionTypeAttributeConverter.class)
     @Column(name = "type", insertable = false, updatable = false)

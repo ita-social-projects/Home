@@ -86,6 +86,7 @@ class CooperationPollApiIT {
         LocalDateTime completionDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.MINUTES)
             .plusDays(MIN_POLL_DURATION_IN_DAYS)
+            .plusHours(1)
             .plusMinutes(1L);
         return new CreatePoll()
             .header("Poll for our houses")

@@ -7,7 +7,6 @@ import com.softserveinc.ita.homeproject.model.ReadAdviceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.model.ReadQuestionVote;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.Converter;
 import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,15 +21,10 @@ public class ReadAdviceQuestionVoteHomeMappingConfig
     @Override
     public void addMappings(TypeMap<AdviceQuestionVoteDto, ReadQuestionVote> typeMap) {
         typeMap.setProvider(request -> homeMapper.convert(request.getSource(), ReadAdviceQuestionVote.class))
-            .setPostConverter(questionConverter());
-    }
-
-    private Converter<AdviceQuestionVoteDto, ReadQuestionVote> questionConverter() {
-        return context -> {
-            AdviceQuestionVoteDto source = context.getSource();
-            ReadQuestionVote destination = context.getDestination();
-            destination.setQuestion(homeMapper.convert(source.getQuestion(), ReadAdviceQuestion.class));
-            return destination;
-        };
+            .setPostConverter(c -> {
+                var dest = c.getDestination();
+                dest.setQuestion(homeMapper.convert(c.getSource().getQuestion(), ReadAdviceQuestion.class));
+                return dest;
+            });
     }
 }

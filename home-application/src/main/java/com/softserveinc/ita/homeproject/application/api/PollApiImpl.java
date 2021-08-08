@@ -73,7 +73,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
-        var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
+        createQuestionDto.setPollId(pollId);
+        var readQuestionDto = pollQuestionService.createPollQuestion(createQuestionDto);
         var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
@@ -167,7 +168,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
         var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
-        var toUpdate = pollQuestionService.updatePollQuestion(pollId, id, updateQuestionDto);
+        updateQuestionDto.setId(id);
+        updateQuestionDto.setPollId(pollId);
+        var toUpdate = pollQuestionService.updatePollQuestion(updateQuestionDto);
         var readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();

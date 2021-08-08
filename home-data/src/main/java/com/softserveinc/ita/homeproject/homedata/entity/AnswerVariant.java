@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "answer_variants")
 @SequenceGenerator(name = "sequence", sequenceName = "answer_variants_sequence")
-public class AnswerVariant extends BaseEntity{
+public class AnswerVariant extends BaseEntity {
 
     @Column(name = "answer")
     private String answer;
