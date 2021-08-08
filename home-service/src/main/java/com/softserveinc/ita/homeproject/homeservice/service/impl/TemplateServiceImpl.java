@@ -1,12 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.util.Arrays;
-
 import com.samskivert.mustache.Mustache;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
@@ -16,6 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +43,6 @@ public class TemplateServiceImpl implements TemplateService {
         }
         return text;
     }
-
 
     private Path getInvitationTemplate(MailDto mailDto) {
         if (mailDto.getIsRegistered()) {

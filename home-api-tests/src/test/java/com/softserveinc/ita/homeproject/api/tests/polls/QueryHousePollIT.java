@@ -64,7 +64,7 @@ class QueryHousePollIT {
         assertEquals(1, queryHouse.size());
         assertEquals(houseId, queryHouse.get(0).getId());
     }
-    @Disabled("broken test disabled")
+
     @Test
     void getAllHousesFromPollsByQuantityFlat() throws ApiException {
         ReadPoll readPoll = COOPERATION_POLL_API

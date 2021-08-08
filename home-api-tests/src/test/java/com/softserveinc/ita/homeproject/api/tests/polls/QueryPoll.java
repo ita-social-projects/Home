@@ -67,7 +67,6 @@ abstract class QueryPoll {
         assertThat(queryPoll).isSortedAccordingTo(Comparator.comparing(ReadPoll::getId));
     }
 
-    @Disabled("broken test disabled")
     @Test
     void getAllPollsDescSort() throws ApiException {
 
