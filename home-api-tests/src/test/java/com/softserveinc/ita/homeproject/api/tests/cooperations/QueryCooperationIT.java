@@ -18,7 +18,6 @@ import com.softserveinc.ita.homeproject.model.Address;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
 class QueryCooperationIT {
@@ -140,17 +139,12 @@ class QueryCooperationIT {
     @Test
     void invalidPageSizeTest() {
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(new ThrowableAssert.ThrowingCallable() {
-                @Override
-                public void call() throws Throwable {
-                    new CooperationQuery
+                .isThrownBy(() -> new CooperationQuery
                         .Builder(cooperationApi)
                         .pageNumber(1)
                         .pageSize(0)
                         .build()
-                        .perform();
-                }
-            })
+                        .perform())
             .matches(actual -> actual.getCode() == 400)
             .matches(actual -> "Parameter `query param page_size` is invalid - must be greater than or equal to 1."
                 .equals(ApiClientUtil.getErrorMessage(actual)));

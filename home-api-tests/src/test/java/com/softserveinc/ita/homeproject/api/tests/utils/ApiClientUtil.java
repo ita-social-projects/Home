@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
@@ -60,7 +59,6 @@ public final class ApiClientUtil {
 
     @SneakyThrows
     public static String getErrorMessage(ApiException apiException) {
-        Map<String, Object> result = new HashMap<>();
         return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
     }
 }
