@@ -70,6 +70,7 @@ abstract class QueryPoll {
     void getAllPollsDescSort() throws ApiException {
 
         createPoll();
+        createPoll();
 
         List<ReadPoll> queryPoll = buildQueryPollWithSort("id,desc");
 
