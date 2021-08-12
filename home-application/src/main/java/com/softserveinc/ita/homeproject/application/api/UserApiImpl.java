@@ -1,5 +1,11 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_USER;
+
+import javax.annotation.security.PermitAll;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.UsersApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
@@ -16,13 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.security.PermitAll;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_USER;
-
 
 /**
  * UserApiServiceImpl class is the inter layer between generated

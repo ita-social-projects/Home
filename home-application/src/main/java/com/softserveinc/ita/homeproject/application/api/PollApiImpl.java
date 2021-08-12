@@ -1,5 +1,13 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_POLL;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
@@ -21,14 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_POLLS;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_POLL;
 
 @Provider
 @Component

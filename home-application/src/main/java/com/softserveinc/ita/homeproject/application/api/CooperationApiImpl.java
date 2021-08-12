@@ -1,5 +1,19 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_DELETE_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_POLL;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_COOPERATION;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
@@ -29,21 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_DELETE_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_COOPERATION_DATA;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_POLLS;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION_DATA;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_POLL;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_COOPERATION;
-
 
 @Provider
 @Component

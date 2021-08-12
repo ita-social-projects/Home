@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_APARTMENT_INFO;
+
+import java.math.BigDecimal;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
 import com.softserveinc.ita.homeproject.api.ApartmentsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
@@ -16,13 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.math.BigDecimal;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_APARTMENT_INFO;
 
 @Provider
 @Component
