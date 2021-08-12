@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "*/users").permitAll()
+                .antMatchers(HttpMethod.GET, "*/api/*/apidocs/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
