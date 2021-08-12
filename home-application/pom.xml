@@ -84,12 +84,6 @@
             <artifactId>quartz-actuator</artifactId>
             <version>${quartz-actuator.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-java-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
