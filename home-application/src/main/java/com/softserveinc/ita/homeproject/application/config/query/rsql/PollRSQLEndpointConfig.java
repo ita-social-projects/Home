@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.softserveinc.ita.homeproject.application.config.query.PollQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.Poll;
+import com.softserveinc.ita.homeproject.homedata.entity.poll.Poll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

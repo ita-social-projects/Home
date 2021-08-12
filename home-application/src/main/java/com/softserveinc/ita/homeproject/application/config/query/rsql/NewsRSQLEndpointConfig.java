@@ -6,7 +6,7 @@ import java.util.Map;
 import com.softserveinc.ita.homeproject.application.config.query.NewsQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.NewsQueryConfig.NewsQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.News;
+import com.softserveinc.ita.homeproject.homedata.entity.news.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

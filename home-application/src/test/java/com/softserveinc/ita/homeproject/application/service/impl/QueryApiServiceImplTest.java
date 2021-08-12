@@ -9,7 +9,7 @@ import java.util.Collections;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.UriInfo;
 
-import com.softserveinc.ita.homeproject.application.service.QueryApiService;
+import com.softserveinc.ita.homeproject.application.service.query.QueryApiService;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

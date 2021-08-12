@@ -6,10 +6,11 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import com.softserveinc.ita.homeproject.homedata.entity.News;
-import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
+import com.softserveinc.ita.homeproject.homedata.entity.news.News;
+import com.softserveinc.ita.homeproject.homedata.repository.news.NewsRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.news.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.news.NewsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

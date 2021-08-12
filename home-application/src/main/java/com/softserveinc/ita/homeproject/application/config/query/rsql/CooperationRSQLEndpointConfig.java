@@ -6,7 +6,7 @@ import java.util.Map;
 import com.softserveinc.ita.homeproject.application.config.query.CooperationQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.CooperationQueryConfig.CooperationQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.Cooperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

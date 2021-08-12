@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.application.config.query;
 import java.util.Arrays;
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.entity.house.House;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.UserQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.UserQueryConfig.UserQueryParamEnum;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

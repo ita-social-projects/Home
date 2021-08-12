@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.application.config.query;
 import java.util.Arrays;
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.Cooperation;
 import org.springframework.stereotype.Component;
 
 

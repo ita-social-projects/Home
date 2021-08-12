@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.HousesApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.dto.apartment.ApartmentDto;
+import com.softserveinc.ita.homeproject.homeservice.service.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.model.CreateApartment;
 import com.softserveinc.ita.homeproject.model.ReadApartment;
 import com.softserveinc.ita.homeproject.model.UpdateApartment;

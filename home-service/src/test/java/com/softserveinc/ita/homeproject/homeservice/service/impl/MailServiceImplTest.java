@@ -6,9 +6,10 @@ import static org.mockito.Mockito.when;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
+import com.softserveinc.ita.homeproject.homeservice.dto.invitation.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.mail.MailDto;
+import com.softserveinc.ita.homeproject.homeservice.service.mail.MailServiceImpl;
+import com.softserveinc.ita.homeproject.homeservice.service.template.TemplateService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
