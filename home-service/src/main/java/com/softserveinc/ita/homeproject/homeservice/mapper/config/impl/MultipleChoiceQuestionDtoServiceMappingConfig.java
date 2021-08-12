@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper.config.impl;
 
-import com.softserveinc.ita.homeproject.homedata.entity.MultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.MultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

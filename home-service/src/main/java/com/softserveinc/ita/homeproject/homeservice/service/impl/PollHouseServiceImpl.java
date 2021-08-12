@@ -3,8 +3,8 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;

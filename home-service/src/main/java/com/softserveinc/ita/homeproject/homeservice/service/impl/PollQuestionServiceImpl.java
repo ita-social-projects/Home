@@ -2,13 +2,13 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.util.stream.Collectors;
 
-import com.softserveinc.ita.homeproject.homedata.entity.AdviceChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.AnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.entity.MultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestionType;
-import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollQuestionType;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AdviceChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.MultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;

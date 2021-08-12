@@ -7,27 +7,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
-import com.softserveinc.ita.homeproject.homedata.entity.AdviceQuestionVote;
-import com.softserveinc.ita.homeproject.homedata.entity.AnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.entity.MultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.MultipleChoiceQuestionVote;
-import com.softserveinc.ita.homeproject.homedata.entity.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestionType;
-import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.QuestionVote;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.entity.Vote;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollQuestionType;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.results.AdviceResultQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.MultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.AdviceQuestionVote;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.MultipleChoiceQuestionVote;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.QuestionVote;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.Vote;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.VoteQuestionVariant;
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.ResultQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.VoteQuestionVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.AdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.QuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.VoteQuestionVariantDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -69,6 +74,10 @@ public class VoteServiceImpl implements VoteService {
 
     private final UserRepository userRepository;
 
+    private final VoteQuestionVariantRepository voteQuestionVariantRepository;
+
+    private final ResultQuestionRepository resultQuestionRepository;
+
     private final ServiceMapper mapper;
 
     @Transactional
@@ -85,15 +94,12 @@ public class VoteServiceImpl implements VoteService {
         newVote.setUser(currentUser);
         var newQuestionVotes = new ArrayList<QuestionVote>();
         for (QuestionVoteDto questionVoteDto : voteDto.getQuestionVotes()) {
-            if (questionVoteDto.getType().equals(PollQuestionTypeDto.ADVICE)) {
-                var newQuestionVote = createAdviceQuestionVote(questionVoteDto);
-                newQuestionVote.setVote(newVote);
-                newQuestionVotes.add(newQuestionVote);
-            } else {
-                var newQuestionVote = createMultipleChoiceQuestionVote(questionVoteDto);
-                newQuestionVote.setVote(newVote);
-                newQuestionVotes.add(newQuestionVote);
-            }
+            QuestionVote newQuestionVote;
+            newQuestionVote = questionVoteDto.getType().equals(PollQuestionTypeDto.ADVICE)
+                ? createAdviceQuestionVote((AdviceQuestionVoteDto) questionVoteDto)
+                : createMultipleChoiceQuestionVote((MultipleChoiceQuestionVoteDto) questionVoteDto);
+            newQuestionVote.setVote(newVote);
+            newQuestionVotes.add(newQuestionVote);
         }
 
         validatePollQuestionsMatching(newQuestionVotes, votedPoll);
@@ -102,6 +108,7 @@ public class VoteServiceImpl implements VoteService {
 
         newVote.setQuestionVotes(newQuestionVotes);
         voteRepository.save(newVote);
+
         return mapper.convert(newVote, VoteDto.class);
     }
 
@@ -143,8 +150,7 @@ public class VoteServiceImpl implements VoteService {
         int votedQuestionsCount = questionVotes.size();
         int controlNumber = 0;
         for (QuestionVote questionVote : questionVotes) {
-            PollQuestion question = questionVote.getQuestion();
-            Long questionPollId = question.getPoll().getId();
+            Long questionPollId = questionVote.getQuestion().getPoll().getId();
             if (questionPollId.equals(votedPoll.getId())) {
                 controlNumber++;
             }
@@ -155,34 +161,29 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
-    private AdviceQuestionVote createAdviceQuestionVote(QuestionVoteDto questionVoteDto) {
+    private AdviceQuestionVote createAdviceQuestionVote(AdviceQuestionVoteDto questionVoteDto) {
         var newQuestionVote = new AdviceQuestionVote();
         newQuestionVote.setType(PollQuestionType.ADVICE);
         var question = getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId());
         newQuestionVote.setQuestion(question);
-        String transformedAnswer =
-            ((AdviceQuestionVoteDto) questionVoteDto).getAnswer().getAnswer().trim().toUpperCase();
-        AnswerVariant repeatedAnswerVariant =
-            getAnswerVariantByQuestionAndAnswerString(question, transformedAnswer);
-        if (repeatedAnswerVariant != null) {
-            newQuestionVote.setAnswer(repeatedAnswerVariant);
-        } else {
-            var newAnswerVariant = new AnswerVariant();
-            newAnswerVariant.setAnswer(transformedAnswer);
-            newAnswerVariant.setQuestion(question);
-            answerVariantRepository.save(newAnswerVariant);
-            newQuestionVote.setAnswer(newAnswerVariant);
-        }
+        newQuestionVote.setAnswer(questionVoteDto.getAnswer().trim());
+        checkExistenceAndSetResultQuestion(newQuestionVote, question);
         return newQuestionVote;
     }
 
-    private MultipleChoiceQuestionVote createMultipleChoiceQuestionVote(QuestionVoteDto questionVoteDto) {
+    private MultipleChoiceQuestionVote createMultipleChoiceQuestionVote(MultipleChoiceQuestionVoteDto questionVoteDto) {
         var newQuestionVote = new MultipleChoiceQuestionVote();
         newQuestionVote.setType(PollQuestionType.MULTIPLE_CHOICE);
         newQuestionVote.setQuestion(getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId()));
-        newQuestionVote.setAnswers((((MultipleChoiceQuestionVoteDto) questionVoteDto)
-            .getAnswers().stream().map(dto -> getAnswerVariantByIdWithCheckItsExistence(dto.getId()))
-            .collect(Collectors.toList())));
+        var voteQuestionVariantList = new ArrayList<VoteQuestionVariant>();
+        for (VoteQuestionVariantDto dto : questionVoteDto.getAnswers()) {
+            var voteVariant = new VoteQuestionVariant();
+            voteVariant.setQuestionVote(newQuestionVote);
+            voteVariant.setAnswerVariant(getAnswerVariantByIdWithCheckItsExistence(dto.getAnswerVariant().getId()));
+            voteQuestionVariantRepository.save(voteVariant);
+            voteQuestionVariantList.add(voteVariant);
+        }
+        newQuestionVote.setAnswers(voteQuestionVariantList);
         return newQuestionVote;
     }
 
@@ -208,7 +209,7 @@ public class VoteServiceImpl implements VoteService {
                     .map(AnswerVariant::getId).collect(Collectors.toList());
                 List<Long> questionVoteAnswersIds =
                     ((MultipleChoiceQuestionVote) questionVote).getAnswers().stream()
-                        .map(AnswerVariant::getId).collect(Collectors.toList());
+                        .map(votedVariant -> votedVariant.getAnswerVariant().getId()).collect(Collectors.toList());
                 questionVoteAnswersIds.forEach(answerId -> {
                     if (!questionAnswersIds.contains(answerId)) {
                         throw new BadRequestHomeException(
@@ -226,13 +227,30 @@ public class VoteServiceImpl implements VoteService {
                 () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll question", questionId)));
     }
 
-    private AnswerVariant getAnswerVariantByQuestionAndAnswerString(PollQuestion question, String answer) {
-        return answerVariantRepository.findAnswerVariantByAnswerAndQuestion(answer, question);
-    }
-
     private AnswerVariant getAnswerVariantByIdWithCheckItsExistence(Long answerId) {
         return answerVariantRepository.findById(answerId)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE,
                 "Answer variant", answerId)));
+    }
+
+    private void checkExistenceAndSetResultQuestion(AdviceQuestionVote questionVote, PollQuestion question) {
+        var checkedResultQuestion = resultQuestionRepository.findByQuestion(question);
+        AdviceResultQuestion adviceResultQuestion;
+        if (checkedResultQuestion == null) {
+            adviceResultQuestion = new AdviceResultQuestion();
+            adviceResultQuestion.setType(PollQuestionType.ADVICE);
+            adviceResultQuestion.setQuestion(question);
+            ArrayList<AdviceQuestionVote> answerList = new ArrayList<>();
+            answerList.add(questionVote);
+            adviceResultQuestion.setAnswers(answerList);
+        } else {
+            adviceResultQuestion = (AdviceResultQuestion) checkedResultQuestion;
+            List<AdviceQuestionVote> answerList = adviceResultQuestion.getAnswers();
+            answerList.add(questionVote);
+            adviceResultQuestion.setAnswers(answerList);
+        }
+        adviceResultQuestion.setVoteCount(adviceResultQuestion.getAnswers().size());
+        resultQuestionRepository.save(adviceResultQuestion);
+        questionVote.setResultQuestion(adviceResultQuestion);
     }
 }

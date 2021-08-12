@@ -6,9 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class QuestionVoteDto extends BaseDto {
-    private PollQuestionTypeDto type;
 
     private Long voteId;
+
+    private PollQuestionTypeDto type;
 
     private PollQuestionDto question;
 }

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata.entity.polls.enums;
 
 public enum PollStatus {
 

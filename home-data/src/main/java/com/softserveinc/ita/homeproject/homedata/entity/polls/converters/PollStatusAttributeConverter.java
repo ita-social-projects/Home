@@ -1,10 +1,12 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata.entity.polls.converters;
 
 import javax.persistence.AttributeConverter;
 
-public class PollTypeAttributeConverter implements AttributeConverter<PollType, String> {
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
+
+public class PollStatusAttributeConverter implements AttributeConverter<PollStatus, String> {
     @Override
-    public String convertToDatabaseColumn(PollType attribute) {
+    public String convertToDatabaseColumn(PollStatus attribute) {
         if (attribute == null) {
             return null;
         } else {
@@ -13,12 +15,12 @@ public class PollTypeAttributeConverter implements AttributeConverter<PollType, 
     }
 
     @Override
-    public PollType convertToEntityAttribute(String dbData) {
+    public PollStatus convertToEntityAttribute(String dbData) {
         if (dbData == null) {
             return null;
         } else {
             try {
-                return PollType.valueOf(dbData);
+                return PollStatus.valueOf(dbData);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(dbData + " not supported.");
             }

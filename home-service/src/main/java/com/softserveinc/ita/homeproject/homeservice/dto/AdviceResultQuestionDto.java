@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MultipleChoiceQuestionVoteDto extends QuestionVoteDto {
+public class AdviceResultQuestionDto extends ResultQuestionDto {
 
-    private List<VoteQuestionVariantDto> answers;
+    private List<Long> answers;
 }

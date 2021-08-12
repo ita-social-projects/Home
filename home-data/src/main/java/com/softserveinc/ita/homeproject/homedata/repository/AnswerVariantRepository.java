@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
-import com.softserveinc.ita.homeproject.homedata.entity.AnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AnswerVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * AnswerVariantRepository is the interface that is needed
@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Ihor Samoshost
  */
+@Repository
 public interface AnswerVariantRepository extends JpaRepository<AnswerVariant, Long> {
-
-    AnswerVariant findAnswerVariantByAnswerAndQuestion(String answer, PollQuestion question);
 }

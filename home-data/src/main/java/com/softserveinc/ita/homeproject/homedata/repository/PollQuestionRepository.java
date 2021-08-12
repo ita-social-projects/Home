@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.repository;
 
-import com.softserveinc.ita.homeproject.homedata.entity.PollQuestion;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

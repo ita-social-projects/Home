@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata.entity.polls.templates;
 
 import java.util.List;
 import javax.persistence.CascadeType;

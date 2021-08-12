@@ -1,6 +1,8 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata.entity.polls.converters;
 
 import javax.persistence.AttributeConverter;
+
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollQuestionType;
 
 public class PollQuestionTypeAttributeConverter implements AttributeConverter<PollQuestionType,String> {
 

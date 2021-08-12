@@ -9,8 +9,8 @@ import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
+import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)

@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata.entity.polls.templates;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

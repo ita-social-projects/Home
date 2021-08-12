@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class PollQuestionDto extends BaseDto {
+public abstract class ResultQuestionDto extends BaseDto {
 
     private PollQuestionTypeDto type;
 
-    private String question;
+    private PollQuestionDto question;
 
-    private Long pollId;
+    private int voteCount;
 }

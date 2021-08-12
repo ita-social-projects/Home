@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue230.001" author="IhorSamoshost">
+        <createTable tableName="result_questions">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="QUESTION_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="question_fk"
+                             references="poll_questions(ID)"/>
+            </column>
+            <column name="vote_count" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue230.002" author="IhorSamoshost">
+        <createTable tableName="result_question_variants">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="result_question_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="result_question_fk"
+                             references="result_questions(ID)"/>
+            </column>
+            <column name="answer_variant_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="answer_variant_fk"
+                             references="answer_variants(ID)"/>
+            </column>
+            <column name="vote_count" type="INTEGER">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue230.003" author="IhorSamoshost">
+        <createSequence incrementBy="50" sequenceName="result_questions_sequence"/>
+        <createSequence incrementBy="50" sequenceName="result_question_variants_sequence"/>
+    </changeSet>
+</databaseChangeLog>

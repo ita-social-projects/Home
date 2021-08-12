@@ -7,5 +7,7 @@ import lombok.Setter;
 @Setter
 public class AdviceQuestionVoteDto extends QuestionVoteDto {
 
-    private AnswerVariantDto answer;
+    private String answer;
+
+    private AdviceResultQuestionDto resultQuestion;
 }
