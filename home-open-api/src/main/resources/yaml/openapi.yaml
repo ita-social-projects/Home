@@ -498,7 +498,118 @@ paths:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-
+  /cooperation/{id}/tasks:
+    post:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: createTask
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+      requestBody:
+        content:
+          applicaion/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: '#/components/schemas/TaskType'
+                data_scope:
+                  $ref: '#/components/schemas/CooperationDataScope'
+      responses:
+        201:
+          $ref: '#/components/responses/NoContentResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: getTasks
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+      responses:
+        201:
+          $ref: '#/components/responses/TasksResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{id}/tasks/{task_id}:
+    get:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: getTask
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+        - $ref: '#/components/parameters/p_task_id'
+      responses:
+        201:
+          $ref: '#/components/responses/TaskResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{id}/tasks/{task_id}/file:
+    get:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: getFile
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+        - $ref: '#/components/parameters/p_task_id'
+      responses:
+        201:
+          $ref: '#/components/responses/XlsxFileResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /cooperation/{id}/tasks/{task_id}/report:
+    get:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: getReport
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+        - $ref: '#/components/parameters/p_task_id'
+      responses:
+        201:
+          $ref: '#/components/responses/ReportResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /cooperation/{cooperation_id}/houses:
     post:
       tags:
@@ -1791,6 +1902,58 @@ components:
           maxLength: 13
           type: string
           example: "+380966617305"
+    CooperationDataScope:
+      type: string
+      enum:
+        - ALL
+        - ADRESS
+        - APARTMETS
+        - OWNERS
+    TaskStatus:
+      type: string
+      enum:
+        - ERROR
+        - WORKING
+        - COMPLETED
+        - CANCELED
+    TaskType:
+      type: string
+      enum:
+        - IMPORT
+        - EXPORT
+    ReadTask:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        type:
+          $ref: '#/components/schemas/TaskType'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+    ReadReport:
+      type: object
+      properties:
+        houses_amount:
+          type: integer
+          format: int64
+          example: 1
+        apartments:
+          type: integer
+          format: int64
+          example: 1
+        owners:
+          type: integer
+          format: int64
+          example: 1
+        ownerships:
+          type: integer
+          format: int64
+          example: 1
+    ReadXlsxFile:
+      type: string
+      format: binary
     CreateCooperation:
       required:
         - name
@@ -2707,6 +2870,32 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ReadCooperation'
+    ReportResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadReport'
+    XlsxFileResponse:
+      description: OK
+      content:
+        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+          schema:
+            $ref: '#/components/schemas/ReadXlsxFile'
+    TaskResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadTask'
+    TasksResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadTask'
     CooperationsResponse:
       description: OK
       content:
@@ -2849,6 +3038,13 @@ components:
           schema:
             $ref: "#/components/schemas/UpdateContact"
       required: true
+    TaskTypeBody:
+      description: A payload task type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaskType'
+      required: true
     CreateCooperationBody:
       description: A payload for creating a Cooperation
       content:
@@ -2948,6 +3144,15 @@ components:
       name: id
       in: path
       description: The ID
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_task_id:
+      name: task_id
+      in: path
+      description: task id
       required: true
       schema:
         type: integer
