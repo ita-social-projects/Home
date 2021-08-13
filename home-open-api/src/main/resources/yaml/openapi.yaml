@@ -508,18 +508,10 @@ paths:
       parameters:
         - $ref: '#/components/parameters/p_id'
       requestBody:
-        content:
-          applicaion/json:
-            schema:
-              type: object
-              properties:
-                type:
-                  $ref: '#/components/schemas/TaskType'
-                data_scope:
-                  $ref: '#/components/schemas/CooperationDataScope'
+         $ref: '#/components/requestBodies/TaskTypeBody'
       responses:
         201:
-          $ref: '#/components/responses/CreateTaskResponse'
+          $ref: '#/components/responses/TaskResponse'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -581,6 +573,28 @@ paths:
       responses:
         201:
           $ref: '#/components/responses/XlsxFileResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - cooperation
+      summary: TODO
+      description: TODO
+      operationId: createFile
+      parameters:
+        - $ref: '#/components/parameters/p_id'
+        - $ref: '#/components/parameters/p_task_id'
+      requestBody:
+        $ref: '#/components/requestBodies/ExcelBody'
+      responses:
+        201:
+          $ref: '#/components/responses/NoContentResponse'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -1930,8 +1944,6 @@ components:
           example: 1
         type:
           $ref: '#/components/schemas/TaskType'
-        data_scope:
-          $ref: '#/components/schemas/CooperationDataScope'
         status:
           $ref: '#/components/schemas/TaskStatus'
     ReadReport:
@@ -1945,11 +1957,7 @@ components:
           type: integer
           format: int64
           example: 1
-        owners:
-          type: integer
-          format: int64
-          example: 1
-        ownerships:
+        invitations:
           type: integer
           format: int64
           example: 1
@@ -1965,8 +1973,6 @@ components:
           example: 1
         type:
           $ref: '#/components/schemas/TaskType'
-        data_scope:
-          $ref: '#/components/schemas/CooperationDataScope'
         status:
           $ref: '#/components/schemas/TaskStatus'
     CreateCooperation:
@@ -2911,12 +2917,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ReadTask'
-    CreateTaskResponse:
-      description: OK
-      content:
-        aplication/json:
-          schema:
-            $ref: '#/components/schemas/CreateTask'
     CooperationsResponse:
       description: OK
       content:
@@ -3066,6 +3066,12 @@ components:
           schema:
             $ref: '#/components/schemas/TaskType'
       required: true
+    ExcelBody:
+      description: A payload for multipart excel file
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/ReadXlsxFile'
     CreateCooperationBody:
       description: A payload for creating a Cooperation
       content:
