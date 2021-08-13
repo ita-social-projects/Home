@@ -519,7 +519,7 @@ paths:
                   $ref: '#/components/schemas/CooperationDataScope'
       responses:
         201:
-          $ref: '#/components/responses/NoContentResponse'
+          $ref: '#/components/responses/CreateTaskResponse'
         400:
           $ref: '#/components/responses/BadRequest'
         401:
@@ -1930,6 +1930,8 @@ components:
           example: 1
         type:
           $ref: '#/components/schemas/TaskType'
+        data_scope:
+          $ref: '#/components/schemas/CooperationDataScope'
         status:
           $ref: '#/components/schemas/TaskStatus'
     ReadReport:
@@ -1954,6 +1956,19 @@ components:
     ReadXlsxFile:
       type: string
       format: binary
+    CreateTask:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        type:
+          $ref: '#/components/schemas/TaskType'
+        data_scope:
+          $ref: '#/components/schemas/CooperationDataScope'
+        status:
+          $ref: '#/components/schemas/TaskStatus'
     CreateCooperation:
       required:
         - name
@@ -2896,6 +2911,12 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ReadTask'
+    CreateTaskResponse:
+      description: OK
+      content:
+        aplication/json:
+          schema:
+            $ref: '#/components/schemas/CreateTask'
     CooperationsResponse:
       description: OK
       content:
