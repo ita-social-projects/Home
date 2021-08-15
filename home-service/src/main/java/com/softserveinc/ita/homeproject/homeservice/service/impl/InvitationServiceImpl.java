@@ -54,6 +54,11 @@ public abstract class InvitationServiceImpl implements InvitationService {
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
                 .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+
+        if(!invitation.getStatus().equals(InvitationStatus.PROCESSING)){
+            throw new InvitationException("Invitation status is not equal to processing");
+        }
+
         acceptUserInvitation(invitation);
     }
 
