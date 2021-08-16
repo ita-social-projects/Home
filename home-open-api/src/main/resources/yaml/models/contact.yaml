@@ -1,0 +1,144 @@
+ContactType:
+  description: Indicates the type of contact
+  type: string
+  enum:
+    - email
+    - phone
+ReadContact:
+  allOf:
+    - $ref: 'baseReadView.yaml#/BaseReadView'
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      email: '#/ReadEmailContact'
+      phone: '#/ReadPhoneContact'
+  required:
+    - type
+  properties:
+    type:
+      $ref: '#/ContactType'
+    main:
+      type: boolean
+      example: false
+  example:
+    {
+      "id": 1,
+      "type": "email",
+      "main": false,
+      "email": "test.put.messages@gmail.com"
+    }
+ReadEmailContact:
+  allOf:
+    - $ref: '#/ReadContact'
+  type: object
+  properties:
+    email:
+      type: string
+      example: "home@gmail.com"
+ReadPhoneContact:
+  allOf:
+    - $ref: '#/ReadContact'
+  type: object
+  properties:
+    phone:
+      pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+      minLength: 9
+      maxLength: 13
+      type: string
+      example: "+380506617305"
+CreateContact:
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      email: '#/CreateEmailContact'
+      phone: '#/CreatePhoneContact'
+  required:
+    - type
+  properties:
+    type:
+      $ref: '#/ContactType'
+    main:
+      default: false
+      type: boolean
+      example: false
+  example:
+    {
+      "type": "email",
+      "main": false,
+      "email": "test.put.messages@gmail.com"
+    }
+CreateEmailContact:
+  allOf:
+    - $ref: '#/CreateContact'
+  type: object
+  required:
+    - email
+  properties:
+    email:
+      minLength: 5
+      maxLength: 320
+      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+      type: string
+      example: "home.example@gmail.com"
+CreatePhoneContact:
+  allOf:
+    - $ref: '#/CreateContact'
+  type: object
+  required:
+    - phone
+  properties:
+    phone:
+      pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+      minLength: 9
+      maxLength: 13
+      type: string
+      example: "+380506617305"
+UpdateContact:
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      email: '#/UpdateEmailContact'
+      phone: '#/UpdatePhoneContact'
+  required:
+    - type
+  properties:
+    type:
+      $ref: '#/ContactType'
+    main:
+      type: boolean
+      example: false
+  example:
+    {
+      "type": "email",
+      "main": false,
+      "email": "test.put.messages@gmail.com"
+    }
+UpdateEmailContact:
+  allOf:
+    - $ref: '#/UpdateContact'
+  type: object
+  required:
+    - email
+  properties:
+    email:
+      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+      minLength: 5
+      maxLength: 320
+      type: string
+      example: "test.receive.messages@gmail.com"
+UpdatePhoneContact:
+  allOf:
+    - $ref: '#/UpdateContact'
+  type: object
+  required:
+    - phone
+  properties:
+    phone:
+      pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+      minLength: 9
+      maxLength: 13
+      type: string
+      example: "+380966617305"

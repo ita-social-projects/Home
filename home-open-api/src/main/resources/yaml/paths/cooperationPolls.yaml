@@ -1,0 +1,116 @@
+cooperation-cooperationId-polls:
+  get:
+    tags:
+      - cooperation poll
+    summary: Get all cooperation polls
+    description: The endpoint gets all cooperation polls
+    operationId: queryCooperationPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/creation_date'
+      - $ref: '../parameters/parameters.yaml#/completion_date'
+      - $ref: '../parameters/parameters.yaml#/poll_type'
+      - $ref: '../parameters/parameters.yaml#/poll_status'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  post:
+    tags:
+      - cooperation poll
+    summary: Create cooperation poll
+    description: The endpoint creates a new cooperation poll
+    operationId: createCooperationPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreatePollBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/PollResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperation-cooperationId-polls-pollId:
+  get:
+    tags:
+      - cooperation poll
+    summary: Get cooperation poll
+    description: Get a cooperation poll by a poll id
+    operationId: getCooperationPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - cooperation poll
+    summary: Update cooperation poll
+    description: Update a cooperation poll by a poll ID. Poll can be updated only if its status is draft
+    operationId: updateCooperationPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdatePollBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - cooperation poll
+    summary: Delete cooperation poll
+    description: Delete a cooperation poll by a poll ID. Poll can be deleted only if its status is draft
+    operationId: deleteCooperationPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        description: Success
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

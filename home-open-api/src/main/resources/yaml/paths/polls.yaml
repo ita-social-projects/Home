@@ -1,0 +1,50 @@
+polls:
+  get:
+    tags:
+      - poll
+    summary: Get all polls
+    description: The endpoint gets all polls
+    operationId: queryPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/creation_date'
+      - $ref: '../parameters/parameters.yaml#/completion_date'
+      - $ref: '../parameters/parameters.yaml#/poll_type'
+      - $ref: '../parameters/parameters.yaml#/poll_status'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+polls-pollId:
+  get:
+    tags:
+      - poll
+    summary: Get poll
+    description: Get a poll by a poll id
+    operationId: getPoll
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

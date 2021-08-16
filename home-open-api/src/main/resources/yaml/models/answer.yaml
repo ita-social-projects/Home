@@ -1,0 +1,20 @@
+ReadAnswerVariant:
+  allOf:
+    - $ref: 'baseReadView.yaml#/BaseReadView'
+  type: object
+  properties:
+    answer:
+      type: string
+      minLength: 1
+      maxLength: 255
+      example: "Green"
+CreateUpdateAnswerVariant:
+  type: object
+  required:
+    - answer
+  properties:
+    answer:
+      type: string
+      minLength: 1
+      maxLength: 255
+      example: "Green"

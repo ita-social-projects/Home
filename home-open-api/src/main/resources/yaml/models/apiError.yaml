@@ -1,0 +1,9 @@
+ApiError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 404
+    error_message:
+      type: string
+      example: "example"

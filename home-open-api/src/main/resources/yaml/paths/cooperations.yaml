@@ -1,0 +1,107 @@
+cooperation:
+  post:
+    tags:
+      - cooperation
+    summary: Create Cooperation
+    description: The endpoint creates a new Cooperation
+    operationId: createCooperation
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateCooperationBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/CooperationResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - cooperation
+    summary: Get All Cooperations
+    description: Get all cooperation
+    operationId: queryCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/name'
+      - $ref: '../parameters/parameters.yaml#/iban'
+      - $ref: '../parameters/parameters.yaml#/usreo'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/CooperationsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperation-cooperationId:
+  get:
+    tags:
+      - cooperation
+    summary: Get Cooperation by ID
+    description: The endpoint gets Cooperation by ID
+    operationId: getCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/CooperationResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - cooperation
+    summary: Update current Cooperation
+    description: The endpoint updates current Cooperation by ID
+    operationId: updateCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateCooperationBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/CooperationResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - cooperation
+    summary: Delete cooperation by ID
+    description: The endpoint deletes Cooperation by ID
+    operationId: deleteCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        description: Success
+      401:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

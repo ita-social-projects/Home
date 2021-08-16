@@ -1,0 +1,36 @@
+Address:
+  type: object
+  properties:
+    region:
+      type: string
+      example: "Dnipropetrovsk region"
+      minLength: 1
+      maxLength: 50
+    city:
+      type: string
+      example: "Dnipro"
+      minLength: 1
+      maxLength: 50
+    district:
+      type: string
+      example: "Zavodskoy"
+      minLength: 1
+      maxLength: 50
+    street:
+      type: string
+      example: "Kirova"
+      minLength: 1
+      maxLength: 25
+    house_block:
+      type: string
+      example: "2/B"
+      minLength: 1
+      maxLength: 10
+    house_number:
+      type: string
+      example: "23-B"
+      minLength: 1
+      maxLength: 10
+    zip_code:
+      type: string
+      example: "52956"

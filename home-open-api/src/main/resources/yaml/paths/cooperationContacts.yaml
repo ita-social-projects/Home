@@ -1,0 +1,119 @@
+cooperation-cooperationId-contacts:
+  post:
+    tags:
+      - cooperation contact
+    summary: Create new Contact for the Cooperation
+    description: The endpoint creates Contacts for the specified Cooperation ID
+    operationId: createContactOnCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateContactBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/ContactResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - cooperation contact
+    summary: Get all Contacts by Cooperation ID
+    description: The endpoint retrieves the list of contacts associated with the specified cooperation ID
+    operationId: queryContactsOnCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/phone'
+      - $ref: '../parameters/parameters.yaml#/email'
+      - $ref: '../parameters/parameters.yaml#/main'
+      - $ref: '../parameters/parameters.yaml#/type'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ContactsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperation-cooperationId-contacts-contactId:
+  get:
+    tags:
+      - cooperation contact
+    summary: Get Contact by ID
+    description: The endpoint retrieves an existing contact
+      associated with the specified Cooperation by Cooperation and Contact IDs
+    operationId: getContactOnCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ContactResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - cooperation contact
+    summary: Update Contact
+    description: The endpoint updates information on a contact that exists
+      in the system by the specified Cooperation and Contact IDs
+    operationId: updateContactOnCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateContactBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ContactResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - cooperation contact
+    summary: Delete Contact
+    description: The endpoint deletes an existing Contact on a Cooperation associated with the
+      specified Cooperation and Contact IDs
+    operationId: deleteContactOnCooperation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

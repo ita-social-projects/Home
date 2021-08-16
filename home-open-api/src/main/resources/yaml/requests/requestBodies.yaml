@@ -1,0 +1,136 @@
+CreateNewsBody:
+  description: A payload for creating a new News
+  content:
+    application/json:
+      schema:
+        $ref: '../models/news.yaml#/CreateNews'
+  required: true
+UpdateNewsBody:
+  description: A payload for updating an existing News
+  content:
+    application/json:
+      schema:
+        $ref: '../models/news.yaml#/UpdateNews'
+  required: true
+CreateUserBody:
+  description: A payload for creating a User
+  content:
+    application/json:
+      schema:
+        $ref: '../models/user.yaml#/CreateUser'
+  required: true
+UpdateUserBody:
+  description: A payload for updating current User
+  content:
+    application/json:
+      schema:
+        $ref: '../models/user.yaml#/UpdateUser'
+  required: true
+CreateContactBody:
+  description: A payload for creating a contact
+  content:
+    application/json:
+      schema:
+        $ref: '../models/contact.yaml#/CreateContact'
+  required: true
+UpdateContactBody:
+  description: A payload for updating an existing Contact
+  content:
+    application/json:
+      schema:
+        $ref: "../models/contact.yaml#/UpdateContact"
+  required: true
+CreateCooperationBody:
+  description: A payload for creating a Cooperation
+  content:
+    application/json:
+      schema:
+        $ref: '../models/cooperation.yaml#/CreateCooperation'
+  required: true
+UpdateCooperationBody:
+  description: A payload for updating current Cooperation
+  content:
+    application/json:
+      schema:
+        $ref: '../models/cooperation.yaml#/UpdateCooperation'
+  required: true
+CreateHouseBody:
+  description: A payload for creating a house
+  content:
+    application/json:
+      schema:
+        $ref: '../models/house.yaml#/CreateHouse'
+  required: true
+UpdateHouseBody:
+  description: A payload for updating an existing House
+  content:
+    application/json:
+      schema:
+        $ref: '../models/house.yaml#/UpdateHouse'
+  required: true
+LookupHouseBody:
+  description: A payload for creating a new Poll
+  content:
+    application/json:
+      schema:
+        $ref: '../models/houseLookup.yaml#/HouseLookup'
+  required: true
+CreateApartmentBody:
+  description: A payload for creating a new Apartment
+  content:
+    application/json:
+      schema:
+        $ref: '../models/apartment.yaml#/CreateApartment'
+  required: true
+UpdateApartmentBody:
+  description: A payload for updating a new Apartment
+  content:
+    application/json:
+      schema:
+        $ref: '../models/apartment.yaml#/UpdateApartment'
+  required: true
+UpdateOwnershipBody:
+  description: A payload for updating an ownership for the apartment
+  content:
+    application/json:
+      schema:
+        $ref: '../models/ownership.yaml#/UpdateOwnership'
+  required: true
+CreateApartmentInvitationBody:
+  description: A payload for creating a new Invitation
+  content:
+    application/json:
+      schema:
+        $ref: '../models/invitation.yaml#/CreateApartmentInvitation'
+UpdateApartmentInvitationBody:
+  description: A payload for updating an invitation for the apartment owner
+  content:
+    application/json:
+      schema:
+        $ref: '../models/invitation.yaml#/UpdateApartmentInvitation'
+  required: true
+CreatePollBody:
+  description: A payload for creating a new cooperation poll
+  content:
+    application/json:
+      schema:
+        $ref: '../models/poll.yaml#/CreatePoll'
+UpdatePollBody:
+  description: A payload for updating a cooperation poll
+  content:
+    application/json:
+      schema:
+        $ref: '../models/poll.yaml#/UpdatePoll'
+  required: true
+CreateQuestionBody:
+  description: A payload for creating a new question
+  content:
+    application/json:
+      schema:
+        $ref: '../models/question.yaml#/CreateQuestion'
+UpdateQuestionBody:
+  description: A payload for updating a question
+  content:
+    application/json:
+      schema:
+        $ref: '../models/question.yaml#/UpdateQuestion'

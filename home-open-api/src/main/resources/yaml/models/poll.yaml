@@ -1,0 +1,117 @@
+PollStatus:
+  description: Indicates the status of a Poll
+  type: string
+  enum: &poll_status_values
+    - draft
+    - active
+    - completed
+    - suspended
+  example: "active"
+PollType:
+  description: Indicates the type of a Poll
+  type: string
+  enum: &poll_type_values
+    - simple
+  example: "simple"
+
+ReadPoll:
+  allOf:
+    - $ref: 'baseReadView.yaml#/BaseReadView'
+  type: object
+  properties:
+    header:
+      type: string
+      example: "New poll for our houses"
+    creation_date:
+      type: string
+      format: date-time
+      example: "2021-05-30T08:30:00Z"
+    completion_date:
+      type: string
+      format: date-time
+      example: "2021-06-20T06:00:00Z"
+    polled_houses:
+      type: array
+      items:
+        $ref: '../models/house.yaml#/ReadHouse'
+      example: [
+        {
+          "id": "1,",
+          "quantity_flat": "45,",
+          "house_area": "25,",
+          "adjoining_area": "12,",
+          "address": {
+            "region": "Dnipropetrovsk region",
+            "city": "Dnipro",
+            "district": "Zavodskoy",
+            "street": "Kirova",
+            "house_block": "2/B",
+            "house_number": "23-B",
+            "zip_code": "52956"
+          }
+        },
+        {
+          "id": "2,",
+          "quantity_flat": "60,",
+          "house_area": "50,",
+          "adjoining_area": "20,",
+          "address": {
+            "region": "Dnipropetrovsk region",
+            "city": "Dnipro",
+            "district": "Zavodskoy",
+            "street": "Kirova",
+            "house_block": "2/C",
+            "house_number": "24-C",
+            "zip_code": "52956"
+          }
+        }
+      ]
+    status:
+      $ref: '#/PollStatus'
+    type:
+      $ref: '#/PollType'
+CreatePoll:
+  type: object
+  required:
+    - header
+    - completion_date
+    - houses
+    - type
+  properties:
+    header:
+      type: string
+      example: "New poll for our houses"
+    completion_date:
+      type: string
+      format: date-time
+      example: "2021-06-20T06:00:00Z"
+    houses:
+      type: array
+      items:
+        $ref: 'houseLookup.yaml#/HouseLookup'
+      example: [
+        {
+          "id": 1
+        },
+        {
+          "id": 2
+        }
+      ]
+    type:
+      $ref: '#/PollType'
+UpdatePoll:
+  type: object
+  required:
+    - header
+    - completion_date
+    - status
+  properties:
+    header:
+      type: string
+      example: "New poll for our houses"
+    completion_date:
+      type: string
+      format: date-time
+      example: "2021-06-20T06:00:00Z"
+    status:
+      $ref: '#/PollStatus'

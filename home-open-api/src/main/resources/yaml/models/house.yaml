@@ -1,0 +1,54 @@
+CreateHouse:
+  required:
+    - quantity_flat
+    - house_area
+    - adjoining_area
+    - address
+  type: object
+  properties:
+    quantity_flat:
+      type: integer
+      example: 45
+    house_area:
+      type: number
+      example: 25
+    adjoining_area:
+      type: integer
+      example: 12
+    address:
+      $ref: './address.yaml#/Address'
+ReadHouse:
+  allOf:
+    - $ref: 'baseReadView.yaml#/BaseReadView'
+  type: object
+  properties:
+    quantity_flat:
+      type: integer
+      example: 45
+    house_area:
+      type: number
+      example: 25
+    adjoining_area:
+      type: integer
+      example: 12
+    address:
+      $ref: './address.yaml#/Address'
+UpdateHouse:
+  required:
+    - quantity_flat
+    - house_area
+    - adjoining_area
+    - address
+  type: object
+  properties:
+    quantity_flat:
+      type: integer
+      example: 45
+    house_area:
+      type: number
+      example: 25
+    adjoining_area:
+      type: integer
+      example: 12
+    address:
+      $ref: './address.yaml#/Address'

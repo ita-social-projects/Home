@@ -1,0 +1,109 @@
+news:
+  post:
+    tags:
+      - news
+    summary: Add a News to the home page
+    description: The endpoint adds a News to the home page
+    operationId: createNews
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateNewsBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/NewsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - news
+    summary: Get all News to the home page
+    description: This endpoint delivers all News to the Home Page
+    operationId: getAllNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/title'
+      - $ref: '../parameters/parameters.yaml#/text'
+      - $ref: '../parameters/parameters.yaml#/source'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NewsListResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+news-newsId:
+  get:
+    tags:
+      - news
+    summary: Get an existing news by its ID
+    description: View an existing news by its ID
+    operationId: getNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NewsResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - news
+    summary: Update an existing News
+    description: Update an existing News by its ID
+    operationId: updateNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateNewsBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NewsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - news
+    summary: Delete the chosen news
+    description: Delete news by ID
+    operationId: deleteNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

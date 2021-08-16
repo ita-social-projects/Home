@@ -1,0 +1,130 @@
+InvitationStatus:
+  description: Indicates the status of an Invitation
+  type: string
+  enum:
+    - pending
+    - processing
+    - accepted
+    - declined
+    - overdue
+    - deactivated
+    - error
+InvitationType:
+  description: Indicates a type of an Invitation
+  type: string
+  enum:
+    - cooperation
+    - apartment
+  example: "apartment"
+
+ReadInvitation:
+  allOf:
+    - $ref: 'baseReadView.yaml#/BaseReadView'
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      base: '#/ReadCooperationInvitation'
+      apartment: '#/ReadApartmentInvitation'
+  properties:
+    type:
+      $ref: '#/InvitationType'
+    email:
+      minLength: 5
+      maxLength: 320
+      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+      type: string
+      example: "test.receive.messages@gmail.com"
+    status:
+      $ref: '#/InvitationStatus'
+ReadCooperationInvitation:
+  allOf:
+    - $ref: '#/ReadInvitation'
+  properties:
+    role:
+      $ref: '#/Role'
+ReadApartmentInvitation:
+  allOf:
+    - $ref: '#/ReadInvitation'
+  type: object
+  properties:
+    ownership_part:
+      type: number
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588
+Role:
+  description: User role
+  type: string
+  enum:
+    - admin
+    - user
+CreateInvitation:
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      cooperation: '#/CreateCooperationInvitation'
+      apartment: '#/CreateApartmentInvitation'
+  required:
+    - email
+  properties:
+    type:
+      $ref: '#/InvitationType'
+    email:
+      minLength: 5
+      maxLength: 320
+      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+      type: string
+      example: "test.receive.messages@gmail.com"
+CreateCooperationInvitation:
+  allOf:
+    - $ref: '#/CreateInvitation'
+  type: object
+  required:
+    - role
+  properties:
+    role:
+      $ref: '#/Role'
+CreateApartmentInvitation:
+  allOf:
+    - $ref: '#/CreateInvitation'
+  type: object
+  required:
+    - ownership_part
+  properties:
+    ownership_part:
+      type: number
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588
+
+UpdateInvitation:
+  type: object
+  required:
+    - email
+  properties:
+    email:
+      minLength: 5
+      maxLength: 320
+      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+      type: string
+      example: "test.receive.messages@gmail.com"
+UpdateCooperationInvitation:
+  allOf:
+    - $ref: '#/UpdateInvitation'
+UpdateApartmentInvitation:
+  allOf:
+    - $ref: '#/UpdateInvitation'
+  type: object
+  required:
+    - ownership_part
+  properties:
+    ownership_part:
+      type: number
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588
