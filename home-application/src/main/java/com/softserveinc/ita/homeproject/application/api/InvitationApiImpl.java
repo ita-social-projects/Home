@@ -33,8 +33,7 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
     }
 
     private ReadInvitation registerWithCorrectService(String token){
-        InvitationDto invitation = apartmentInvitationService
-                .findInvitationByRegistrationToken(token);
+        InvitationDto invitation = apartmentInvitationService.findInvitationByRegistrationToken(token);
 
         ReadInvitation readInvitation;
 
@@ -50,7 +49,6 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
             default:
                 throw new UnsupportedOperationException(invitation.getType() + "not supported");
         }
-
         readInvitation.setStatus(InvitationStatus.ACCEPTED);
         return readInvitation;
     }
