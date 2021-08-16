@@ -50,7 +50,7 @@
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*/${yaml.name}</includes>
+                            <includes>*/${json.name}</includes>
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                         </configuration>
                     </execution>
