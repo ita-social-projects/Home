@@ -1912,10 +1912,11 @@ components:
     TaskStatus:
       type: string
       enum:
+        - PENDING
         - ERROR
-        - WORKING
-        - COMPLETED
-        - CANCELED
+        - PROCESSING
+        - ACCEPTED
+        - DECLINED
     TaskType:
       type: string
       enum:
