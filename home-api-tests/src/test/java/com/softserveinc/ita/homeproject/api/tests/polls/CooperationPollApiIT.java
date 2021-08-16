@@ -53,11 +53,11 @@ class CooperationPollApiIT {
 
     static final Long NONEXISTENT_POLL_ID = 10000003L;
 
-    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getAdminClient());
 
-    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getAdminClient());
 
-    final static PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
@@ -67,9 +67,9 @@ class CooperationPollApiIT {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
         try {
-            cooperationOne = new CooperationApi(ApiClientUtil.getClient())
+            cooperationOne = new CooperationApi(ApiClientUtil.getAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
-            cooperationTwo = new CooperationApi(ApiClientUtil.getClient())
+            cooperationTwo = new CooperationApi(ApiClientUtil.getAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
         } catch (ApiException e) {
             e.printStackTrace();

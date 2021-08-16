@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 abstract class QueryPoll {
 
-    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getAdminClient());
 
     abstract List<ReadPoll> buildQueryPollWithCooperationId(Long id) throws ApiException;
     abstract List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException;

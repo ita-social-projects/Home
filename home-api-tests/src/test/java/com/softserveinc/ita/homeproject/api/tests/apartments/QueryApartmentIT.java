@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueryApartmentIT {
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllApartmentsAscSort() throws ApiException {

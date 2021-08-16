@@ -17,9 +17,9 @@ import com.softserveinc.ita.homeproject.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 class QueryHousePollIT {
-    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getAdminClient());
 
-    final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+    final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllHousesFromPollsAscSort() throws ApiException {

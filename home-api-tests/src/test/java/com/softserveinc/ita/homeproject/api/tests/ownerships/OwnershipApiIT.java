@@ -47,15 +47,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OwnershipApiIT {
 
-    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
+    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
     private static final long TEST_OWNERSHIP_ID = 10000001L;
 

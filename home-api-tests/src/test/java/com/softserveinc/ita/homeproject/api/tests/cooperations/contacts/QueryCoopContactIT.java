@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueryCoopContactIT {
 
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllContactsAscSort() throws ApiException {

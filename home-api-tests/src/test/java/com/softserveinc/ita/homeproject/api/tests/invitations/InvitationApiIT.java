@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
     @Test
     void isEmailSentTest() throws Exception {

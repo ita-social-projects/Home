@@ -42,10 +42,10 @@ import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
+    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedUserClient());
 
     @Test
     void getUserTest() throws ApiException {

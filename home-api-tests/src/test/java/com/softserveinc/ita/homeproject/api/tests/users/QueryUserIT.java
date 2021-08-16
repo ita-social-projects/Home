@@ -34,14 +34,14 @@ import org.junit.jupiter.api.Test;
 
 class QueryUserIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
     private final CreateUser expectedUser = new CreateUser()
             .firstName("Bill")
             .lastName("White")
             .password("password");
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllUsers() throws ApiException {

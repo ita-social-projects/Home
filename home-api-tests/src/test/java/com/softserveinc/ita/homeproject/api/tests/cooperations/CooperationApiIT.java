@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 class CooperationApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
     @Test
     void createCooperationTest() throws ApiException {

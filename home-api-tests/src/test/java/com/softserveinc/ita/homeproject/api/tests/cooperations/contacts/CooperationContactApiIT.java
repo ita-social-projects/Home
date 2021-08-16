@@ -36,8 +36,8 @@ import org.junit.jupiter.api.Test;
 
 class CooperationContactApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getAdminClient());
 
     @Test
     void createCooperationContactTest() throws ApiException {

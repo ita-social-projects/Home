@@ -41,11 +41,11 @@ import org.junit.jupiter.api.Test;
 
 class QueryContactIT {
 
-    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getClient());
+    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllContactsAscSort() throws ApiException {

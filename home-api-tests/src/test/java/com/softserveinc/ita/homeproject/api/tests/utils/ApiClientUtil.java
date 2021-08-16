@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.ApiClient;
 import com.softserveinc.ita.homeproject.ServerConfiguration;
 import org.glassfish.jersey.logging.LoggingFeature;
-
-import javax.ws.rs.core.Response;
 
 public final class ApiClientUtil {
 
@@ -18,9 +17,13 @@ public final class ApiClientUtil {
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
     private static final String APPLICATION_ADMIN_USER_NAME = System.getProperty("home.application.admin.username");
     private static final String APPLICATION_ADMIN_PASSWORD = System.getProperty("home.application.admin.password");
+    private static final String APPLICATION_COOPERATION_ADMIN_USER_NAME = System.getProperty("home.application.cooperationadmin.username");
+    private static final String APPLICATION_COOPERATION_ADMIN_PASSWORD = System.getProperty("home.application.cooperationadmin.password");
+    private static final String APPLICATION_OWNER_USER_NAME = System.getProperty("home.application.owner.username");
+    private static final String APPLICATION_OWNER_PASSWORD = System.getProperty("home.application.owner.password");
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
 
-    public static ApiClient getClient() {
+    public static ApiClient getAdminClient() {
         ApiClient client = new ApiClient();
         setLoggingFeature(client);
         client.setUsername(APPLICATION_ADMIN_USER_NAME);
@@ -29,7 +32,25 @@ public final class ApiClientUtil {
         return client;
     }
 
-    public static ApiClient getUnauthorizedClient() {
+    public static ApiClient getCooperationAdminClient() {
+        ApiClient client = new ApiClient();
+        setLoggingFeature(client);
+        client.setUsername(APPLICATION_COOPERATION_ADMIN_USER_NAME);
+        client.setPassword(APPLICATION_COOPERATION_ADMIN_PASSWORD);
+        setServers(client);
+        return client;
+    }
+
+    public static ApiClient getOwnerClient() {
+        ApiClient client = new ApiClient();
+        setLoggingFeature(client);
+        client.setUsername(APPLICATION_OWNER_USER_NAME);
+        client.setPassword(APPLICATION_OWNER_PASSWORD);
+        setServers(client);
+        return client;
+    }
+
+    public static ApiClient getUnauthorizedUserClient() {
         ApiClient client = new ApiClient();
         setLoggingFeature(client);
         setServers(client);

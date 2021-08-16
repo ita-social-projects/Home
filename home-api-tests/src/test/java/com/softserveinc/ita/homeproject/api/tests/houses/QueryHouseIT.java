@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 
 class QueryHouseIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllHousesAscSort() throws ApiException {

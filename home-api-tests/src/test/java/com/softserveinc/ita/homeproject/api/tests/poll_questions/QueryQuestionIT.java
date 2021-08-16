@@ -34,11 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueryQuestionIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getClient());
+    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getAdminClient());
 
-    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getClient());
+    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
