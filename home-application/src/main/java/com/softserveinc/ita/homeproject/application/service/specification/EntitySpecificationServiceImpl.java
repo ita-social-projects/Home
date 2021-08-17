@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.service.entity;
+package com.softserveinc.ita.homeproject.application.service.specification;
 
 import java.util.Optional;
 import java.util.stream.Collectors;

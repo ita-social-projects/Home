@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.service.home;
+package com.softserveinc.ita.homeproject.application.service.security;
 
 import java.util.List;
 import java.util.stream.Collectors;

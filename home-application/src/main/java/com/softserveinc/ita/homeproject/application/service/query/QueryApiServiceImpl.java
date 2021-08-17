@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.service.query;
 
 import javax.ws.rs.core.UriInfo;
 
-import com.softserveinc.ita.homeproject.application.service.entity.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.application.service.specification.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
