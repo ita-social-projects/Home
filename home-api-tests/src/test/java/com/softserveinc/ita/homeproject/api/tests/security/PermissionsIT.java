@@ -33,16 +33,20 @@ import com.softserveinc.ita.homeproject.model.ReadUser;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class PermissionsIT {
 
-    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
     private final static UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
+    @Test
+    void testUserAdmin(){
+        new UserApi(ApiClientUtil.getAdminClient());
+    }
 
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
@@ -82,28 +86,22 @@ public class PermissionsIT {
 
         return Stream.of(
 
-
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CreateContact createEmailContact = createEmailContact();
                             ContactApi contactApi = new ContactApi(apiClient);
                             ReadUser expectedUser = createTestUserViaInvitation();
 
-                            ApiResponse<ReadContact> createEmailResponse = null;
                             try {
-                                createEmailResponse = contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(),
-                                        createEmailContact);
+                                return contactApi.createContactOnUserWithHttpInfo(expectedUser.getId(), createEmailContact);
                             } catch (ApiException e) {
-                                e.printStackTrace();
+                                return new ApiResponse<ReadContact>(401, null);
                             }
-
-                            return createEmailResponse;
-
                         },
                         "create Contact On User",
                         true,
                         true,
-                        true
-                        , false
+                        true,
+                        false
                 ),
 
 /*
@@ -138,9 +136,8 @@ public class PermissionsIT {
                             try {
                                 return userApi.getUserWithHttpInfo(readUser.getId());
                             } catch (ApiException e) {
-                                e.printStackTrace();
+                                return new ApiResponse<ReadUser>(401, null);
                             }
-                            return null;
                         },
                         "get User",
                         true,
@@ -205,7 +202,7 @@ public class PermissionsIT {
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
         expectedUser.setEmail(createCoop.getAdminEmail());
         return userApi.createUser(expectedUser);
     }
