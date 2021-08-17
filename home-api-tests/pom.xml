@@ -15,7 +15,6 @@
 
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
-        <assertj-version>3.18.1</assertj-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
         <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
@@ -382,7 +381,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
