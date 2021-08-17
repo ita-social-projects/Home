@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class InvitationDto extends BaseDto{
+public class InvitationDto extends BaseDto{
 
     private InvitationStatusDto status;
 
