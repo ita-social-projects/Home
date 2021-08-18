@@ -14,6 +14,8 @@ servers:
   - url: /api/0
 
 tags:
+  - name: invitations
+    description: Invitations managment
   - name: news
     description: News management operations
   - name: user
@@ -44,6 +46,28 @@ tags:
     description: Polled house management operations
 
 paths:
+  /invitations/invitation-approval:
+    post:
+      tags:
+        - invitations
+      summary: Approve invitation
+      description: The endpoint approves invitation
+      operationId: approveInvitation
+      requestBody:
+        $ref: '#/components/requestBodies/InvitationTokenBody'
+      responses:
+        201:
+          $ref: '#/components/responses/InvitationResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        409:
+          $ref: '#/components/responses/Conflict'
+        default:
+          $ref: '#/components/responses/InternalServerError'
   /news:
     $ref: './paths/news.yaml#/news'
 
@@ -130,3 +154,1812 @@ components:
     basicAuth:
       type: http
       scheme: basic
+
+  schemas:
+    BaseReadView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+    InvitationToken:
+      type: object
+      required:
+        - invitation_token
+      properties:
+        invitation_token:
+          type: string
+          example: "95eb8223-f2d4-11eb-82f4-2f106ba224d5"
+    ReadNews:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        title:
+          type: string
+          example: "News In The Local Area"
+          maximum: 70
+        photo_url:
+          type: string
+          format: url
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+        description:
+          type: string
+          example: "Gas turn off"
+        source:
+          type: string
+          example: "https://example.com"
+        text:
+          type: string
+          example: "example of text"
+    CreateNews:
+      required:
+        - title
+        - description
+        - text
+      type: object
+      properties:
+        title:
+          type: string
+          example: "News in the Some Area"
+          minLength: 1
+          maxLength: 70
+        photo_url:
+          type: string
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+        description:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: "example"
+        source:
+          type: string
+          example: "https://example.com"
+        text:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: "example of text"
+    UpdateNews:
+      type: object
+      required:
+        - title
+        - description
+        - text
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 70
+          example: "example"
+        photo_url:
+          type: string
+          example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+        description:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: "example"
+        source:
+          type: string
+          example: "https://example.com"
+        text:
+          type: string
+          minLength: 1
+          maxLength: 150
+          example: "example of text"
+    ApiError:
+      type: object
+      properties:
+        response_code:
+          type: integer
+          example: 404
+        error_message:
+          type: string
+          example: "example"
+    CreateUser:
+      required:
+        - registration_token
+        - first_name
+        - last_name
+        - email
+        - password
+      type: object
+      properties:
+        registration_token:
+          type: string
+          example: f8e20775-da55-11eb-a58d-775374b8f3a1
+          minLength: 36
+        first_name:
+          pattern: '\w+'
+          type: string
+          example: "Petro"
+          minLength: 1
+          maxLength: 50
+        last_name:
+          pattern: '\w+'
+          type: string
+          example: "Zinchenko"
+          minLength: 1
+          maxLength: 50
+        email:
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 5
+          maxLength: 320
+        password:
+          pattern: '[a-zA-Z0-9]{8,}'
+          type: string
+          example: "mySuperStrongPass"
+          minLength: 8
+          maxLength: 128
+        contacts:
+          type: array
+          example: [
+            {
+              "type": "email",
+              "main": false,
+              "email": "createUserEmail@example.com"
+            }
+          ]
+          items:
+            $ref: '#/components/schemas/CreateContact'
+    ReadUser:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "Petro"
+        last_name:
+          type: string
+          example: "Petrov"
+        email:
+          type: string
+          example: "home@gmail.com"
+        contacts:
+          type: array
+          example: [
+            { "id": 1,
+              "type": "email",
+              "main": false,
+              "email": "readUserEmail@example.com"
+            }
+          ]
+          items:
+            $ref: '#/components/schemas/ReadContact'
+    UpdateUser:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      properties:
+        first_name:
+          pattern: '\w+'
+          type: string
+          example: "Petro"
+          minLength: 1
+          maxLength: 50
+        last_name:
+          pattern: '\w+'
+          type: string
+          example: "Petrov"
+          minLength: 1
+          maxLength: 50
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "test.put.messages@gmail.com"
+        password:
+          pattern: '[a-zA-Z0-9]{8,}'
+          type: string
+          example: "mySuperStrongPass"
+          minLength: 8
+          maxLength: 128
+    ContactType:
+      description: Indicates the type of contact
+      type: string
+      enum:
+        - email
+        - phone
+    ReadContact:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/ReadEmailContact'
+          phone: '#/components/schemas/ReadPhoneContact'
+      required:
+        - type
+      properties:
+        type:
+          $ref: '#/components/schemas/ContactType'
+        main:
+          type: boolean
+          example: false
+      example:
+        {
+          "id": 1,
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
+    ReadEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        email:
+          type: string
+          example: "home@gmail.com"
+    ReadPhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/ReadContact'
+      type: object
+      properties:
+        phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
+          type: string
+          example: "+380506617305"
+    CreateContact:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/CreateEmailContact'
+          phone: '#/components/schemas/CreatePhoneContact'
+      required:
+        - type
+      properties:
+        type:
+          $ref: '#/components/schemas/ContactType'
+        main:
+          default: false
+          type: boolean
+          example: false
+      example:
+        {
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
+    CreateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "home.example@gmail.com"
+    CreatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/CreateContact'
+      type: object
+      required:
+        - phone
+      properties:
+        phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
+          type: string
+          example: "+380506617305"
+    UpdateContact:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          email: '#/components/schemas/UpdateEmailContact'
+          phone: '#/components/schemas/UpdatePhoneContact'
+      required:
+        - type
+      properties:
+        type:
+          $ref: '#/components/schemas/ContactType'
+        main:
+          type: boolean
+          example: false
+      example:
+        {
+          "type": "email",
+          "main": false,
+          "email": "test.put.messages@gmail.com"
+        }
+    UpdateEmailContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          minLength: 5
+          maxLength: 320
+          type: string
+          example: "test.receive.messages@gmail.com"
+    UpdatePhoneContact:
+      allOf:
+        - $ref: '#/components/schemas/UpdateContact'
+      type: object
+      required:
+        - phone
+      properties:
+        phone:
+          pattern: '^(\+)?([- _():=+]?\d[- _():=+]?){10,13}(\s*)?$'
+          minLength: 9
+          maxLength: 13
+          type: string
+          example: "+380966617305"
+    CreateCooperation:
+      required:
+        - name
+        - usreo
+        - iban
+        - address
+        - admin_email
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 34
+        admin_email:
+          type: string
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          example: "test.receive.messages@gmail.com"
+        address:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          example: [
+            {
+              "quantity_flat": 96,
+              "house_area": 4348.8,
+              "adjoining_area": 400,
+              "address": {
+                "region": "Dnipro",
+                "city": "Dnepr",
+                "district": "District",
+                "street": "street",
+                "house_block": "block",
+                "house_number": "number",
+                "zip_code": "zipCode"
+              }
+            }
+          ]
+          items:
+            $ref: "#/components/schemas/CreateHouse"
+        contacts:
+          type: array
+          example: [
+            {
+              "type": "email",
+              "email": "createUserEmail@example.com",
+              "main": false
+            },
+            {
+              "type": "phone",
+              "phone": "+380506617305",
+              "main": false
+            }
+          ]
+          items:
+            $ref: "#/components/schemas/CreateContact"
+
+    ReadCooperation:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 50
+        address:
+          $ref: '#/components/schemas/Address'
+        houses:
+          type: array
+          example: [
+            {
+              "quantity_flat": 96,
+              "house_area": 4348.8,
+              "adjoining_area": 400,
+              "address": {
+                "region": "Dnipro",
+                "city": "Dnepr",
+                "district": "District",
+                "street": "street",
+                "house_block": "block",
+                "house_number": "number",
+                "zip_code": "zipCode"
+              }
+            }
+          ]
+          items:
+            $ref: "#/components/schemas/ReadHouse"
+        contacts:
+          type: array
+          example: [
+            {
+              "type": "email",
+              "main": false,
+              "email": "createUserEmail@example.com"
+            },
+            {
+              "type": "phone",
+              "phone": "+380506617305",
+              "main": false
+            }
+          ]
+          items:
+            $ref: "#/components/schemas/ReadContact"
+    UpdateCooperation:
+      required:
+        - name
+        - usreo
+        - iban
+        - address
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Home Association"
+          minLength: 1
+          maxLength: 50
+        usreo:
+          type: string
+          example: "A2456FT90"
+          minLength: 1
+          maxLength: 12
+        iban:
+          type: string
+          example: "77778"
+          minLength: 1
+          maxLength: 50
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        region:
+          type: string
+          example: "Dnipropetrovsk region"
+          minLength: 1
+          maxLength: 50
+        city:
+          type: string
+          example: "Dnipro"
+          minLength: 1
+          maxLength: 50
+        district:
+          type: string
+          example: "Zavodskoy"
+          minLength: 1
+          maxLength: 50
+        street:
+          type: string
+          example: "Kirova"
+          minLength: 1
+          maxLength: 25
+        house_block:
+          type: string
+          example: "2/B"
+          minLength: 1
+          maxLength: 10
+        house_number:
+          type: string
+          example: "23-B"
+          minLength: 1
+          maxLength: 10
+        zip_code:
+          type: string
+          example: "52956"
+    CreateHouse:
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'
+    ReadHouse:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'
+    UpdateHouse:
+      required:
+        - quantity_flat
+        - house_area
+        - adjoining_area
+        - address
+      type: object
+      properties:
+        quantity_flat:
+          type: integer
+          example: 45
+        house_area:
+          type: number
+          example: 25
+        adjoining_area:
+          type: integer
+          example: 12
+        address:
+          $ref: '#/components/schemas/Address'
+
+    InvitationStatus:
+      description: Indicates the status of an Invitation
+      type: string
+      enum:
+        - pending
+        - processing
+        - accepted
+        - declined
+        - overdue
+        - deactivated
+        - error
+
+    InvitationType:
+      description: Indicates a type of an Invitation
+      type: string
+      enum:
+        - cooperation
+        - apartment
+      example: "apartment"
+
+    ReadInvitation:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          cooperation: '#/components/schemas/ReadCooperationInvitation'
+          apartment: '#/components/schemas/ReadApartmentInvitation'
+      properties:
+        type:
+          $ref: '#/components/schemas/InvitationType'
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "test.receive.messages@gmail.com"
+        status:
+          $ref: '#/components/schemas/InvitationStatus'
+    ReadCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/ReadInvitation'
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+    ReadApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/ReadInvitation'
+      type: object
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+    Role:
+      description: User role
+      type: string
+      enum:
+        - admin
+        - user
+    CreateInvitation:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          cooperation: '#/components/schemas/CreateCooperationInvitation'
+          apartment: '#/components/schemas/CreateApartmentInvitation'
+      required:
+        - email
+      properties:
+        type:
+          $ref: '#/components/schemas/InvitationType'
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "test.receive.messages@gmail.com"
+    CreateCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/CreateInvitation'
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+    CreateApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/CreateInvitation'
+      type: object
+      required:
+        - ownership_part
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    UpdateInvitation:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          minLength: 5
+          maxLength: 320
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "test.receive.messages@gmail.com"
+    UpdateCooperationInvitation:
+      allOf:
+        - $ref: '#/components/schemas/UpdateInvitation'
+    UpdateApartmentInvitation:
+      allOf:
+        - $ref: '#/components/schemas/UpdateInvitation'
+      type: object
+      required:
+        - ownership_part
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    ReadOwnership:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/ReadUser'
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+    UpdateOwnership:
+      type: object
+      required:
+        - ownership_part
+      properties:
+        ownership_part:
+          type: number
+          minimum: 0.0001
+          maximum: 1.0
+          multipleOf: 1e-4
+          example: 0.6588
+
+    CreateApartment:
+      required:
+        - number
+        - area
+      type: object
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateInvitation'
+          example: [
+            {
+              "email": "test.receive.messages@gmail.com",
+              "type": "apartment",
+              "ownership_part": 0.3
+            },
+            {
+              "email": "test.receive.messages@gmail.com",
+              "type": "apartment",
+              "ownership_part": 0.7
+            }
+          ]
+    UpdateApartment:
+      required:
+        - number
+        - area
+      type: object
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+    ReadApartment:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        apartment_number:
+          type: string
+          minLength: 1
+          maxLength: 6
+          pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+          example: 15
+        apartment_area:
+          type: number
+          minimum: 10
+          maximum: 1000
+          multipleOf: 1e-2
+          example: 75.28
+        ownerships:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadOwnership'
+          example: [
+            {
+              "id": 1,
+              "user": {
+                "id": 1,
+                "first_name": "Petro",
+                "last_name": "Petrov",
+                "contacts": [
+                  {
+                    "id": 1,
+                    "type": "email",
+                    "main": true,
+                    "email": "get.example@mail.com"
+                  },
+                  {
+                    "id": 2,
+                    "type": "phone",
+                    "main": false,
+                    "phone": "+380506617305"
+                  }
+                ]
+              },
+              "ownership_part": 0.72
+            },
+            {
+              "id": 2,
+              "user": {
+                "id": 2,
+                "first_name": "Ivan",
+                "last_name": "Ivanov",
+                "contacts": [
+                  {
+                    "id": 3,
+                    "type": "email",
+                    "main": true,
+                    "email": "get2.example@mail.com"
+                  },
+                  {
+                    "id": 4,
+                    "type": "phone",
+                    "main": false,
+                    "phone": "+380506617306"
+                  }
+                ]
+              },
+              "ownership_part": 0.38
+            }
+          ]
+
+    HouseLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    PollStatus:
+      description: Indicates the status of a Poll
+      type: string
+      enum: &poll_status_values
+        - draft
+        - active
+        - completed
+        - suspended
+      example: "active"
+
+    PollType:
+      description: Indicates the type of a Poll
+      type: string
+      enum: &poll_type_values
+        - simple
+      example: "simple"
+
+    ReadPoll:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        header:
+          type: string
+          example: "New poll for our houses"
+        creation_date:
+          type: string
+          format: date-time
+          example: "2021-05-30T08:30:00Z"
+        completion_date:
+          type: string
+          format: date-time
+          example: "2021-06-20T06:00:00Z"
+        polled_houses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadHouse'
+          example: [
+            {
+              "id": "1,",
+              "quantity_flat": "45,",
+              "house_area": "25,",
+              "adjoining_area": "12,",
+              "address": {
+                "region": "Dnipropetrovsk region",
+                "city": "Dnipro",
+                "district": "Zavodskoy",
+                "street": "Kirova",
+                "house_block": "2/B",
+                "house_number": "23-B",
+                "zip_code": "52956"
+              }
+            },
+            {
+              "id": "2,",
+              "quantity_flat": "60,",
+              "house_area": "50,",
+              "adjoining_area": "20,",
+              "address": {
+                "region": "Dnipropetrovsk region",
+                "city": "Dnipro",
+                "district": "Zavodskoy",
+                "street": "Kirova",
+                "house_block": "2/C",
+                "house_number": "24-C",
+                "zip_code": "52956"
+              }
+            }
+          ]
+        status:
+          $ref: '#/components/schemas/PollStatus'
+        type:
+          $ref: '#/components/schemas/PollType'
+    CreatePoll:
+      type: object
+      required:
+        - header
+        - completion_date
+        - houses
+        - type
+      properties:
+        header:
+          type: string
+          example: "New poll for our houses"
+        completion_date:
+          type: string
+          format: date-time
+          example: "2021-06-20T06:00:00Z"
+        houses:
+          type: array
+          items:
+            $ref: '#/components/schemas/HouseLookup'
+          example: [
+            {
+              "id": 1
+            },
+            {
+              "id": 2
+            }
+          ]
+
+        type:
+          $ref: '#/components/schemas/PollType'
+    UpdatePoll:
+      type: object
+      required:
+        - header
+        - completion_date
+        - status
+      properties:
+        header:
+          type: string
+          example: "New poll for our houses"
+        completion_date:
+          type: string
+          format: date-time
+          example: "2021-06-20T06:00:00Z"
+        status:
+          $ref: '#/components/schemas/PollStatus'
+    QuestionType:
+      description: Indicates a type of an Question
+      type: string
+      enum: &question_type_values
+        - multiple_choice
+        - advice
+      example: "advice"
+
+    QuestionLookup:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+
+    ReadQuestion:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/ReadMultipleChoiceQuestion'
+          advice: '#/components/schemas/ReadAdviceQuestion'
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "What color should we paint the door?"
+    ReadMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/ReadQuestion'
+      type: object
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/ReadAnswerVariant'
+          example: [
+            {
+              "id": 1,
+              "answer": "Green"
+            },
+            {
+              'id': 2,
+              "answer": "Blue"
+            }
+          ]
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    ReadAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/ReadQuestion'
+      type: object
+
+    CreateQuestion:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/CreateMultipleChoiceQuestion'
+          advice: '#/components/schemas/CreateAdviceQuestion'
+      required:
+        - type
+        - question
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "What color should we paint the door?"
+    CreateMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestion'
+      type: object
+      required:
+        - answer_variants
+        - max_answer_count
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/CreateUpdateAnswerVariant'
+          example: [
+            {
+              "answer": "Green"
+            },
+            {
+              "answer": "Blue"
+            }
+          ]
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    CreateAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/CreateQuestion'
+      type: object
+
+    UpdateQuestion:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: '#/components/schemas/UpdateMultipleChoiceQuestion'
+          advice: '#/components/schemas/UpdateAdviceQuestion'
+      required:
+        - type
+        - question
+      properties:
+        type:
+          $ref: '#/components/schemas/QuestionType'
+        question:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "What color should we paint the door?"
+    UpdateMultipleChoiceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/UpdateQuestion'
+      type: object
+      required:
+        - answer_variants
+        - max_answer_count
+      properties:
+        answer_variants:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/CreateUpdateAnswerVariant'
+          example: [
+            {
+              "answer": "Green"
+            },
+            {
+              "answer": "Blue"
+            }
+          ]
+        max_answer_count:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: 5
+    UpdateAdviceQuestion:
+      allOf:
+        - $ref: '#/components/schemas/UpdateQuestion'
+    ReadAnswerVariant:
+      allOf:
+        - $ref: '#/components/schemas/BaseReadView'
+      type: object
+      properties:
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Green"
+    CreateUpdateAnswerVariant:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Green"
+
+  responses:
+    NoContentResponse:
+      description: The request was succesfully processed.
+    BadRequest:
+      description: Validation Exception.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Unauthorized:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Forbidden:
+      description: You do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Conflict:
+      description: Conflict with current state of the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    InternalServerError:
+      description: Something went wrong.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NewsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadNews'
+    NewsListResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadNews'
+    UserResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadUser'
+    UsersResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadUser"
+    ContactResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadContact'
+    ContactsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadContact'
+    CooperationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadCooperation'
+    CooperationsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadCooperation'
+    HouseResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadHouse'
+    PollHouseResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadHouse'
+    HousesResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadHouse'
+    ApartmentResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadApartment'
+    ApartmentsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadApartment"
+    OwnershipResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReadOwnership"
+    OwnershipsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadOwnership"
+    InvitationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReadInvitation"
+    ApartmentInvitationResponse:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadApartmentInvitation'
+    ApartmentInvitationsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadApartmentInvitation"
+    PollResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadPoll'
+    PollsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadPoll"
+    QuestionResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReadQuestion"
+    QuestionsResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/ReadQuestion"
+
+  requestBodies:
+    InvitationTokenBody:
+      description: A payload invitation token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvitationToken'
+      required: true
+    CreateNewsBody:
+      description: A payload for creating a new News
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateNews'
+      required: true
+    UpdateNewsBody:
+      description: A payload for updating an existing News
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateNews'
+      required: true
+    CreateUserBody:
+      description: A payload for creating a User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateUser'
+      required: true
+    UpdateUserBody:
+      description: A payload for updating current User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUser'
+      required: true
+    CreateContactBody:
+      description: A payload for creating a contact
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateContact'
+      required: true
+    UpdateContactBody:
+      description: A payload for updating an existing Contact
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UpdateContact"
+      required: true
+    CreateCooperationBody:
+      description: A payload for creating a Cooperation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCooperation'
+      required: true
+    UpdateCooperationBody:
+      description: A payload for updating current Cooperation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCooperation'
+      required: true
+    CreateHouseBody:
+      description: A payload for creating a house
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateHouse'
+      required: true
+    UpdateHouseBody:
+      description: A payload for updating an existing House
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateHouse'
+      required: true
+    LookupHouseBody:
+      description: A payload for creating a new Poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HouseLookup'
+      required: true
+    CreateApartmentBody:
+      description: A payload for creating a new Apartment
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApartment'
+      required: true
+    UpdateApartmentBody:
+      description: A payload for updating a new Apartment
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateApartment'
+      required: true
+    UpdateOwnershipBody:
+      description: A payload for updating an ownership for the apartment
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateOwnership'
+      required: true
+    CreateApartmentInvitationBody:
+      description: A payload for creating a new Invitation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApartmentInvitation'
+    UpdateApartmentInvitationBody:
+      description: A payload for updating an invitation for the apartment owner
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateApartmentInvitation'
+      required: true
+    CreatePollBody:
+      description: A payload for creating a new cooperation poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreatePoll'
+    UpdatePollBody:
+      description: A payload for updating a cooperation poll
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdatePoll'
+      required: true
+    CreateQuestionBody:
+      description: A payload for creating a new question
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateQuestion'
+    UpdateQuestionBody:
+      description: A payload for updating a question
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateQuestion'
+  parameters:
+    p_id:
+      name: id
+      in: path
+      description: The ID
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_user_id:
+      name: user_id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_cooperation_id:
+      name: cooperation_id
+      in: path
+      required: true
+      description: The ID of the Cooperation
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_house_id:
+      name: "house_id"
+      in: path
+      required: true
+      description: ID of the house where apartment is located
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+    p_apartment_id:
+      name: "apartment_id"
+      in: "path"
+      description: Apartment ID to which the ownership belongs
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_ownership_id:
+      name: "id"
+      in: "path"
+      description: ID of the ownership
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_invitation_id:
+      name: "id"
+      in: "path"
+      description: ID of the invitation
+      required: true
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    p_poll_id:
+      name: "poll_id"
+      in: "path"
+      description: ID of the poll to which polled houses belongs
+      required: true
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+    page_number:
+      in: query
+      name: page_number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      required: false
+      description: The number of current page.
+    page_size:
+      in: query
+      name: page_size
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 5
+      required: false
+      description: The number of items to return.
+    id:
+      in: query
+      name: id
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    user_id:
+      in: query
+      name: user_id
+      schema:
+        type: integer
+        format: int64
+      example: 1
+    cooperation_id:
+      in: query
+      name: cooperation_id
+      required: true
+      description: ID of the polled cooperation
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+      example: 1
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        default: id,asc
+    filter:
+      in: query
+      name: filter
+      schema:
+        type: string
+    title:
+      in: query
+      name: title
+      schema:
+        type: string
+      description: The title of the News
+    text:
+      in: query
+      name: text
+      schema:
+        type: string
+      description: The content of the News
+    source:
+      in: query
+      name: source
+      schema:
+        type: string
+      description: The source of the News
+    email:
+      in: query
+      name: email
+      schema:
+        type: string
+      description: The email of the User
+    phone:
+      in: query
+      name: phone
+      schema:
+        type: string
+      description: Phone of the Contact
+    first_name:
+      in: query
+      name: first_name
+      schema:
+        type: string
+      description: The First Name of the User
+    last_name:
+      in: query
+      name: last_name
+      schema:
+        type: string
+      description: The Last name of the User
+    contact_phone:
+      in: query
+      name: contact_phone
+      schema:
+        type: string
+      description: Contact phone of the User
+    contact_email:
+      in: query
+      name: contact_email
+      schema:
+        type: string
+      description: Contact email of the User
+    main:
+      in: query
+      name: main
+      schema:
+        type: string
+      description: Specifies if its a main Contact of the User
+    type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/ContactType'
+      description: Type of the Contact
+    name:
+      in: query
+      name: name
+      schema:
+        type: string
+      example: "Dobro"
+    iban:
+      in: query
+      name: iban
+      schema:
+        type: string
+      example: "77778"
+    usreo:
+      in: query
+      name: usreo
+      schema:
+        type: string
+      example: "A9856738"
+    quantity_flat:
+      in: query
+      name: quantity_flat
+      schema:
+        type: integer
+      example: 10
+    adjoining_area:
+      in: query
+      name: adjoining_area
+      schema:
+        type: integer
+      example: 40
+    house_area:
+      in: query
+      name: house_area
+      schema:
+        type: number
+      example: 20
+    apartment_number:
+      in: query
+      name: apartment_number
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 6
+        pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+    apartment_area:
+      in: query
+      name: apartment_area
+      schema:
+        type: number
+    ownership_part:
+      in: query
+      name: ownership_part
+      schema:
+        type: number
+        minimum: 0.0001
+        maximum: 1.0
+        multipleOf: 1e-4
+      example: 0.6588
+    status:
+      in: query
+      name: status
+      schema:
+        type: string
+      example: "pending"
+    creation_date:
+      in: query
+      name: creation_date
+      schema:
+        type: string
+        format: date-time
+      example: "2021-05-30T08:30"
+    completion_date:
+      in: query
+      name: completion_date
+      schema:
+        type: string
+        format: date-time
+      example: "2021-06-20T06:00"
+    poll_type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/PollType'
+      description: Type of the Poll
+      example: simple
+    poll_status:
+      in: query
+      name: status
+      schema:
+        $ref: '#/components/schemas/PollStatus'
+      description: Status of the Poll
+      example: "draft"
+    question_type:
+      in: query
+      name: type
+      schema:
+        $ref: '#/components/schemas/QuestionType'
+      description: Type of the Question
+      example: "advice"

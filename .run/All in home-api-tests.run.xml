@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="All in home-api-tests" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+    <module name="home-api-tests" />
+    <option name="PACKAGE_NAME" value="" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="package" />
+    <option name="VM_PARAMETERS" value="-ea -Dpostgres.user=postgres -Dpostgres.password=password -Dhome.application.admin.username=admin@example.com -Dhome.application.admin.password=password -Dhome.application.external.port=8080 -Dmailhog.external.port=8025" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
