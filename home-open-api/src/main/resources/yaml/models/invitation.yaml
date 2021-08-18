@@ -1,3 +1,11 @@
+InvitationToken:
+  type: object
+  required:
+    - invitation_token
+  properties:
+    invitation_token:
+      type: string
+      example: "95eb8223-f2d4-11eb-82f4-2f106ba224d5"
 InvitationStatus:
   description: Indicates the status of an Invitation
   type: string
@@ -19,12 +27,12 @@ InvitationType:
 
 ReadInvitation:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   discriminator:
     propertyName: type
     mapping:
-      base: '#/ReadCooperationInvitation'
+      cooperation: '#/ReadCooperationInvitation'
       apartment: '#/ReadApartmentInvitation'
   properties:
     type:

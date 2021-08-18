@@ -45,10 +45,10 @@ CreateUser:
         }
       ]
       items:
-        $ref: './contact.yaml#/CreateContact'
+        $ref: 'contact.yaml#/CreateContact'
 ReadUser:
   allOf:
-    - $ref: './baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
     first_name:
@@ -70,7 +70,7 @@ ReadUser:
         }
       ]
       items:
-        $ref: './contact.yaml#/ReadContact'
+        $ref: 'contact.yaml#/ReadContact'
 UpdateUser:
   type: object
   required:

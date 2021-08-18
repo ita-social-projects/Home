@@ -16,7 +16,7 @@ PollType:
 
 ReadPoll:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
     header:
@@ -33,7 +33,7 @@ ReadPoll:
     polled_houses:
       type: array
       items:
-        $ref: '../models/house.yaml#/ReadHouse'
+        $ref: 'house.yaml#/ReadHouse'
       example: [
         {
           "id": "1,",
@@ -88,7 +88,7 @@ CreatePoll:
     houses:
       type: array
       items:
-        $ref: 'houseLookup.yaml#/HouseLookup'
+        $ref: 'common.yaml#/HouseLookup'
       example: [
         {
           "id": 1

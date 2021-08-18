@@ -16,10 +16,10 @@ CreateHouse:
       type: integer
       example: 12
     address:
-      $ref: './address.yaml#/Address'
+      $ref: 'address.yaml#/Address'
 ReadHouse:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
     quantity_flat:
@@ -32,7 +32,7 @@ ReadHouse:
       type: integer
       example: 12
     address:
-      $ref: './address.yaml#/Address'
+      $ref: 'address.yaml#/Address'
 UpdateHouse:
   required:
     - quantity_flat
@@ -51,4 +51,4 @@ UpdateHouse:
       type: integer
       example: 12
     address:
-      $ref: './address.yaml#/Address'
+      $ref: 'address.yaml#/Address'

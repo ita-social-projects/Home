@@ -1,3 +1,10 @@
+InvitationTokenBody:
+  description: A payload invitation token
+  content:
+    application/json:
+      schema:
+        $ref: '../models/invitation.yaml#/InvitationToken'
+  required: true
 CreateNewsBody:
   description: A payload for creating a new News
   content:
@@ -73,7 +80,7 @@ LookupHouseBody:
   content:
     application/json:
       schema:
-        $ref: '../models/houseLookup.yaml#/HouseLookup'
+        $ref: '../models/common.yaml#/HouseLookup'
   required: true
 CreateApartmentBody:
   description: A payload for creating a new Apartment

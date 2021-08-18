@@ -19,7 +19,7 @@ CreateApartment:
     invitations:
       type: array
       items:
-        $ref: '../models/invitation.yaml#/CreateInvitation'
+        $ref: 'invitation.yaml#/CreateInvitation'
       example: [
         {
           "email": "test.receive.messages@gmail.com",
@@ -52,7 +52,7 @@ UpdateApartment:
       example: 75.28
 ReadApartment:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
     apartment_number:
@@ -70,7 +70,7 @@ ReadApartment:
     ownerships:
       type: array
       items:
-        $ref: '../models/ownership.yaml#/ReadOwnership'
+        $ref: 'ownership.yaml#/ReadOwnership'
       example: [
         {
           "id": 1,

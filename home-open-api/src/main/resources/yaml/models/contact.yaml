@@ -6,7 +6,7 @@ ContactType:
     - phone
 ReadContact:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   discriminator:
     propertyName: type

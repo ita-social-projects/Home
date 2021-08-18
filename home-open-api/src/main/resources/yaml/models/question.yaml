@@ -15,7 +15,7 @@ QuestionLookup:
 
 ReadQuestion:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   discriminator:
     propertyName: type
@@ -39,7 +39,7 @@ ReadMultipleChoiceQuestion:
       type: array
       minItems: 2
       items:
-        $ref: './answer.yaml#/ReadAnswerVariant'
+        $ref: 'answer.yaml#/ReadAnswerVariant'
       example: [
         {
           "id": 1,
@@ -90,7 +90,7 @@ CreateMultipleChoiceQuestion:
       type: array
       minItems: 2
       items:
-        $ref: './answer.yaml#/CreateUpdateAnswerVariant'
+        $ref: 'answer.yaml#/CreateUpdateAnswerVariant'
       example: [
         {
           "answer": "Green"
@@ -139,7 +139,7 @@ UpdateMultipleChoiceQuestion:
       type: array
       minItems: 2
       items:
-        $ref: './answer.yaml#/CreateUpdateAnswerVariant'
+        $ref: 'answer.yaml#/CreateUpdateAnswerVariant'
       example: [
         {
           "answer": "Green"

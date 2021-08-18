@@ -1,10 +1,10 @@
 ReadOwnership:
   allOf:
-    - $ref: 'baseReadView.yaml#/BaseReadView'
+    - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
     user:
-      $ref: '../models/user.yaml#/ReadUser'
+      $ref: 'user.yaml#/ReadUser'
     ownership_part:
       type: number
       minimum: 0.0001
