@@ -12,5 +12,8 @@ public interface CooperationInvitationRepository extends PagingAndSortingReposit
 
     List<CooperationInvitation> findAllBySentDatetimeIsNullAndStatusEquals(
             InvitationStatus status);
+
+    List<CooperationInvitation> findCooperationInvitationsByEmail(String email);
+
 }
 

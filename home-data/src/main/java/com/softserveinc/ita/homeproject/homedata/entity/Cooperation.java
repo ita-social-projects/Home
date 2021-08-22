@@ -1,3 +1,4 @@
+
 package com.softserveinc.ita.homeproject.homedata.entity;
 
 import java.time.LocalDate;
@@ -7,8 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -52,13 +51,9 @@ public class Cooperation extends BaseEntity {
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<Contact> contacts;
 
-    @ManyToMany
-    @JoinTable(name = "user_cooperation",
-        joinColumns =  @JoinColumn(name = "cooperation_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> user;
-
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<Poll> polls;
+
+    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
+    private List<UserCooperation> userCooperations;
 }

@@ -1,3 +1,4 @@
+
 package com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(value = { "MIME","Body","Raw"})
+@JsonIgnoreProperties(value = {"Body","Raw"})
 @JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
 public class ResponseEmailItem {
 
@@ -25,4 +26,7 @@ public class ResponseEmailItem {
     EmailContent content;
 
     String created;
+
+    @JsonProperty("MIME")
+    EmailMime mime;
 }

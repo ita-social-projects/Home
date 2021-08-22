@@ -25,12 +25,19 @@ public abstract class Invitation extends BaseEntity {
     @Column(name = "email")
     private String email;
 
+    @Convert(converter = InvitationTypeAttributeConverter.class)
+    @Column(name = "type", insertable = false, updatable = false)
+    private InvitationType type;
+
     @Convert(converter = InvitationStatusAttributeConverter.class)
     @Column(name = "status")
     private InvitationStatus status;
 
     @Column(name = "sent_datetime")
     private LocalDateTime sentDatetime;
+
+    @Column(name = "registration_token")
+    private String registrationToken;
 
     @Column(name = "end_time")
     private LocalDateTime requestEndTime;

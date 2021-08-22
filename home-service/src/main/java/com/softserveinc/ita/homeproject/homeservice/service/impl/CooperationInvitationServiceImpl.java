@@ -4,14 +4,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.uuid.Generators;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
+import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.UserCooperationService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +26,15 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
 
     private final CooperationInvitationRepository cooperationInvitationRepository;
 
+    private final UserCooperationService userCooperationService;
+
     public CooperationInvitationServiceImpl(InvitationRepository invitationRepository,
                                             ServiceMapper mapper,
-                                            CooperationInvitationRepository cooperationInvitationRepository) {
+                                            CooperationInvitationRepository cooperationInvitationRepository,
+                                            UserCooperationService userCooperationService) {
         super(invitationRepository, mapper);
         this.cooperationInvitationRepository = cooperationInvitationRepository;
+        this.userCooperationService = userCooperationService;
     }
 
     @Override
@@ -35,12 +44,31 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         var cooperationInvitation =
             mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
-        cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
-        cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
-        cooperationInvitation.setStatus(InvitationStatus.PENDING);
-        invitationRepository.save(cooperationInvitation);
-        cooperationInvitationDto.setId(cooperationInvitation.getId());
-        return cooperationInvitationDto;
+        if(isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationName())) {
+            cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
+            cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
+            cooperationInvitation.setStatus(InvitationStatus.PENDING);
+            cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
+            invitationRepository.save(cooperationInvitation);
+            cooperationInvitationDto.setId(cooperationInvitation.getId());
+            return cooperationInvitationDto;
+        }
+        throw new AlreadyExistHomeException("Invitation already exist for cooperation");
+    }
+
+    @Override
+    public void acceptUserInvitation(Invitation invitation) {
+        userCooperationService.createUserCooperationViaInvitation((CooperationInvitation) invitation);
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+        invitationRepository.save(invitation);
+    }
+
+    private boolean isCooperationInvitationNonExists(String email, String name){
+        return cooperationInvitationRepository.findCooperationInvitationsByEmail(email).stream()
+                .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
+                        || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
+                .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
+                .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
     }
 
     @Override
