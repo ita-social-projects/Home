@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,11 +31,11 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     @Override
     protected InvitationDto saveInvitation(InvitationDto invitationDto) {
         var cooperationInvitationDto =
-                mapper.convert(invitationDto, CooperationInvitationDto.class);
+            mapper.convert(invitationDto, CooperationInvitationDto.class);
         var cooperationInvitation =
-                mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
+            mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
-        cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));
+        cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
         cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
         cooperationInvitation.setStatus(InvitationStatus.PENDING);
         invitationRepository.save(cooperationInvitation);
@@ -47,23 +46,20 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
         var allNotSentInvitations = cooperationInvitationRepository
-                .findAllBySentDatetimeIsNullAndStatusEquals(
-                        InvitationStatus.PENDING);
+            .findAllBySentDatetimeIsNullAndStatusEquals(
+                InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
-                .collect(Collectors.toList());
+            .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
+            .collect(Collectors.toList());
     }
 
-    public List<CooperationInvitation> deactivateCooperationInvitations() {
-        List<CooperationInvitation> deactivatedCooperationInvitations = new ArrayList<>();
-
-        for (CooperationInvitation cooperationInvitation : cooperationInvitationRepository
-                .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
-                        getInvitationForDeactivating(root, criteriaBuilder))) {
-            cooperationInvitation.setStatus(InvitationStatus.OVERDUE);
-            cooperationInvitationRepository.save(cooperationInvitation);
-            deactivatedCooperationInvitations.add(cooperationInvitation);
-        }
-        return deactivatedCooperationInvitations;
+    public void markAsOverdueCooperationInvitations() {
+        var overdueCooperationInvitations = cooperationInvitationRepository
+            .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
+                getOverdueInvitation(root, criteriaBuilder));
+        overdueCooperationInvitations.forEach(invitation -> {
+            invitation.setStatus(InvitationStatus.OVERDUE);
+            cooperationInvitationRepository.save(invitation);
+        });
     }
 }

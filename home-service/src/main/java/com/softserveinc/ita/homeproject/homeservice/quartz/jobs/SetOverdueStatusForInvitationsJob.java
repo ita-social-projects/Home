@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 @QuartzJobBeanAutoConfiguration(cron = "0 0 11,23 ? * *")
-public class DeactivateInvitationsJob extends QuartzJobBean {
+public class SetOverdueStatusForInvitationsJob extends QuartzJobBean {
 
-    private final ApartmentInvitationServiceImpl apartmentInvitationJob;
+    private final ApartmentInvitationServiceImpl apartmentInvitationService;
 
-    private final CooperationInvitationServiceImpl cooperationInvitationJob;
+    private final CooperationInvitationServiceImpl cooperationInvitationService;
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        apartmentInvitationJob.deactivateApartmentInvitations();
-        cooperationInvitationJob.deactivateCooperationInvitations();
+        apartmentInvitationService.markAsOverdueApartmentInvitations();
+        cooperationInvitationService.markAsOverdueCooperationInvitations();
     }
 }

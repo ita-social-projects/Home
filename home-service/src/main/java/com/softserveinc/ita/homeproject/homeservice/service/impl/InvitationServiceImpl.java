@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
 
-    private static final int DAYS = 7;
+    protected static final int EXPIRATION_TERM = 7;
 
     protected final InvitationRepository invitationRepository;
 
@@ -40,17 +40,17 @@ public abstract class InvitationServiceImpl implements InvitationService {
         invitationRepository.save(invitation);
     }
 
-    protected Predicate getInvitationForDeactivating(Root<? extends Invitation> root, CriteriaBuilder criteriaBuilder) {
+    protected Predicate getOverdueInvitation(Root<? extends Invitation> root, CriteriaBuilder criteriaBuilder) {
         LocalDateTime currentTime = LocalDateTime.now();
-        return criteriaBuilder
-                .and((criteriaBuilder.notEqual(root.get("status"), InvitationStatus.OVERDUE)),
-                        (criteriaBuilder.notEqual(root.get("status"), InvitationStatus.ACCEPTED)),
-                        (criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime.minusDays(DAYS))));
+        Predicate predicateForStatus
+            = criteriaBuilder.or((criteriaBuilder.equal(root.get("status"), InvitationStatus.PENDING)),
+            (criteriaBuilder.equal(root.get("status"), InvitationStatus.PROCESSING)));
+        return criteriaBuilder.and(predicateForStatus,
+            criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime));
     }
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
-                new InvitationException("Invitation with id " + id + " was not found"));
+            new InvitationException("Invitation with id " + id + " was not found"));
     }
-
 }

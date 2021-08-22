@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,11 +50,11 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                                 Long id,
                                                 ApartmentInvitationDto updateInvitationDto) {
         ApartmentInvitation toUpdate = apartmentInvitationRepository.findById(id)
-                .filter(invitation -> invitation.getSentDatetime() == null
-                        && invitation.getApartment().getId().equals(apartmentId)
-                        && invitation.getStatus().equals(InvitationStatus.PENDING))
-                .orElseThrow(() ->
-                        new NotFoundHomeException("Invitation with id:" + id + "not found."));
+            .filter(invitation -> invitation.getSentDatetime() == null
+                && invitation.getApartment().getId().equals(apartmentId)
+                && invitation.getStatus().equals(InvitationStatus.PENDING))
+            .orElseThrow(() ->
+                new NotFoundHomeException("Invitation with id:" + id + "not found."));
 
         validateSumOwnershipPart(apartmentId, toUpdate, updateInvitationDto);
 
@@ -70,61 +69,59 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                           ApartmentInvitation toUpdate,
                                           ApartmentInvitationDto updateOwnershipDto) {
         BigDecimal activeInvitationsSumOwnerPart = apartmentInvitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
-                .stream()
-                .map(ApartmentInvitation::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
+            .stream()
+            .map(ApartmentInvitation::getOwnershipPart)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-                .stream()
-                .filter(Ownership::getEnabled)
-                .map(Ownership::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .add(activeInvitationsSumOwnerPart)
-                .subtract(toUpdate.getOwnershipPart())
-                .add(updateOwnershipDto.getOwnershipPart());
+            .stream()
+            .filter(Ownership::getEnabled)
+            .map(Ownership::getOwnershipPart)
+            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            .add(activeInvitationsSumOwnerPart)
+            .subtract(toUpdate.getOwnershipPart())
+            .add(updateOwnershipDto.getOwnershipPart());
 
         if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(
-                    "Entered sum of area = "
-                            + sumOfOwnerPartsWithNewInput + " The sum of the entered area cannot be greater than 1");
+                "Entered sum of ownership parts = " + sumOfOwnerPartsWithNewInput
+                    + " The sum of the entered ownership parts cannot be greater than 1");
         }
-
     }
 
     @Override
     public InvitationDto saveInvitation(InvitationDto invitationDto) {
         var apartmentInvitation = mapper
-                .convert(invitationDto, ApartmentInvitation.class);
+            .convert(invitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
-        apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(7));
+        apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(EXPIRATION_TERM));
         var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
-                .findById(apartmentId)
-                .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
+            .findById(apartmentId)
+            .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
         invitationRepository.save(apartmentInvitation);
         return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
     }
 
-
     @Override
     public List<ApartmentInvitationDto> getAllActiveInvitations() {
         List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
-                .findAllBySentDatetimeIsNullAndStatusEquals(
-                        InvitationStatus.PENDING);
+            .findAllBySentDatetimeIsNullAndStatusEquals(
+                InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
-                .collect(Collectors.toList());
+            .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
+            .collect(Collectors.toList());
     }
 
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
         var apartmentInvitation = apartmentInvitationRepository.findById(id)
-                .filter(invitation -> invitation.getSentDatetime() == null
-                        && invitation.getApartment().getId().equals(apartmentId)
-                        && invitation.getStatus().equals(InvitationStatus.PENDING))
-                .orElseThrow(() ->
-                        new NotFoundHomeException("Invitation with id:" + id + "not found."));
+            .filter(invitation -> invitation.getSentDatetime() == null
+                && invitation.getApartment().getId().equals(apartmentId)
+                && invitation.getStatus().equals(InvitationStatus.PENDING))
+            .orElseThrow(() ->
+                new NotFoundHomeException("Invitation with id:" + id + "not found."));
         apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
@@ -135,24 +132,21 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                                 Integer pageSize,
                                                 Specification<ApartmentInvitation> specification) {
         Specification<ApartmentInvitation> apartmentInvitationSpecification = specification
-                .and((root, criteriaQuery, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("enabled"), true));
         return apartmentInvitationRepository
-                .findAll(apartmentInvitationSpecification, PageRequest
-                        .of(pageNumber - 1, pageSize))
-                .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
+            .findAll(apartmentInvitationSpecification, PageRequest
+                .of(pageNumber - 1, pageSize))
+            .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
 
-    public List<ApartmentInvitation> deactivateApartmentInvitations() {
-        List<ApartmentInvitation> deactivatedApartmentInvitations = new ArrayList<>();
-
-        for (ApartmentInvitation apartmentInvitation : apartmentInvitationRepository
-                .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
-                        getInvitationForDeactivating(root, criteriaBuilder))) {
-            apartmentInvitation.setStatus(InvitationStatus.OVERDUE);
-            apartmentInvitationRepository.save(apartmentInvitation);
-            deactivatedApartmentInvitations.add(apartmentInvitation);
-        }
-        return deactivatedApartmentInvitations;
+    public void markAsOverdueApartmentInvitations() {
+        var overdueApartmentInvitations = apartmentInvitationRepository
+            .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
+                getOverdueInvitation(root, criteriaBuilder));
+        overdueApartmentInvitations.forEach(invitation -> {
+            invitation.setStatus(InvitationStatus.OVERDUE);
+            apartmentInvitationRepository.save(invitation);
+        });
     }
 }
