@@ -43,10 +43,10 @@ public class PermissionsIT {
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
     private final static UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
-    @Test
+/*    @Test
     void testUserAdmin(){
         new UserApi(ApiClientUtil.getAdminClient());
-    }
+    }*/
 
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
