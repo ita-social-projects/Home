@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
@@ -137,14 +139,15 @@ class QueryCooperationIT {
     @Test
     void invalidPageSizeTest() {
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> new CooperationQuery
-                .Builder(cooperationApi)
-                .pageNumber(1)
-                .pageSize(0)
-                .build()
-                .perform())
-            .matches((actual) -> actual.getCode() == 400)
-            .withMessageContaining("Parameter `arg1` is invalid - must be greater than or equal to 1.");
+                .isThrownBy(() -> new CooperationQuery
+                        .Builder(cooperationApi)
+                        .pageNumber(1)
+                        .pageSize(0)
+                        .build()
+                        .perform())
+            .matches(actual -> actual.getCode() == 400)
+            .matches(actual -> "Parameter `query param page_size` is invalid - must be greater than or equal to 1."
+                .equals(ApiClientUtil.getErrorMessage(actual)));
     }
 
     @Test

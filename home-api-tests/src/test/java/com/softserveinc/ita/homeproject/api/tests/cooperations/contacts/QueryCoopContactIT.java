@@ -192,7 +192,7 @@ class QueryCoopContactIT {
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
-            .name("newCooperationTest")
+            .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
             .adminEmail("test.receive.messages@gmail.com")

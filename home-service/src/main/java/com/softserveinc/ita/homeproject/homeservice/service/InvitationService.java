@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
+import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
 
 public interface InvitationService {
@@ -8,4 +9,9 @@ public interface InvitationService {
 
     void updateSentDateTimeAndStatus(Long id);
 
+    void acceptUserInvitation(Invitation invitation);
+
+    void registerWithRegistrationToken(String token);
+
+    InvitationDto findInvitationByRegistrationToken(String token);
 }
