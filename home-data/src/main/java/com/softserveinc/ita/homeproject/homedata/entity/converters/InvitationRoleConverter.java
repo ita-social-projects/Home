@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity.converters;
 
 import javax.persistence.AttributeConverter;
 
-import com.softserveinc.ita.homeproject.homedata.entity.role.RoleEnum;
+import com.softserveinc.ita.homeproject.homedata.entity.security.role.RoleEnum;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

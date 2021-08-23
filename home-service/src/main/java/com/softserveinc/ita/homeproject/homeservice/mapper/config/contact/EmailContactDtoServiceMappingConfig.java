@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper.config.contact;
 
-import com.softserveinc.ita.homeproject.homedata.entity.contact.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.contact.EmailContact;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.EmailContactDto;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.contact.Contact;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.contact.EmailContact;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;

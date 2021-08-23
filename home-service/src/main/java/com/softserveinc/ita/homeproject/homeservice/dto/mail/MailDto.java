@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import javax.validation.constraints.Email;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.invitation.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationTypeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

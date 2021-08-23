@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.softserveinc.ita.homeproject.application.config.query.OwnershipQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.ownership.Ownership;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.ownership.Ownership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -10,8 +10,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
-import com.softserveinc.ita.homeproject.homedata.entity.contact.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.ownership.Ownership;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.contact.Contact;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.ownership.Ownership;
+import com.softserveinc.ita.homeproject.homedata.entity.security.UserCooperation;
 import lombok.Getter;
 import lombok.Setter;
 

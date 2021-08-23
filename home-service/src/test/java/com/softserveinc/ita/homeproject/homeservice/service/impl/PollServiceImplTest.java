@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.entity.cooperation.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.house.House;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.entity.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.entity.poll.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.poll.PollRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;

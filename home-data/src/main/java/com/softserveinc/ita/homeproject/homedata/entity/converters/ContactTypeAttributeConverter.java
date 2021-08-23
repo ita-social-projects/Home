@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity.converters;
 
 import javax.persistence.AttributeConverter;
 
-import com.softserveinc.ita.homeproject.homedata.entity.contact.ContactType;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.contact.ContactType;
 
 public class ContactTypeAttributeConverter implements AttributeConverter<ContactType, String> {
     @Override

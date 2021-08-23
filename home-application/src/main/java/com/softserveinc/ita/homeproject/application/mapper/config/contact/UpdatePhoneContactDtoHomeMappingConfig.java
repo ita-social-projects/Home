@@ -2,8 +2,8 @@ package com.softserveinc.ita.homeproject.application.mapper.config.contact;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.PhoneContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.PhoneContactDto;
 import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.TypeMap;

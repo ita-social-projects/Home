@@ -3,10 +3,9 @@ package com.softserveinc.ita.homeproject.application.service.security;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
-import com.softserveinc.ita.homeproject.homedata.entity.permission.Permission;
+import com.softserveinc.ita.homeproject.homedata.entity.security.permission.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.user.User;
-import com.softserveinc.ita.homeproject.homedata.repository.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.security.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

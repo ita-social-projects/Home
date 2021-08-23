@@ -9,11 +9,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.ApartmentsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.invitation.ApartmentInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.ownership.OwnershipDto;
-import com.softserveinc.ita.homeproject.homeservice.service.apartment.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.invitation.ApartmentInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.ownership.OwnershipService;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.ownership.OwnershipDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.apartment.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.ownership.OwnershipService;
 import com.softserveinc.ita.homeproject.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.InvitationType;
 import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;

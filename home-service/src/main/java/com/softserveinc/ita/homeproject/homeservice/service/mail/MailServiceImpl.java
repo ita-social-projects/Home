@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 import javax.mail.MessagingException;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.mail.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.mail.MailService;
-import com.softserveinc.ita.homeproject.homeservice.service.template.TemplateService;
+import com.softserveinc.ita.homeproject.homeservice.service.mail.template.TemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

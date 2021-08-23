@@ -14,11 +14,11 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
-import com.softserveinc.ita.homeproject.homedata.entity.address.Address;
-import com.softserveinc.ita.homeproject.homedata.entity.contact.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.house.House;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.contact.Contact;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.house.apartment.address.Address;
 import com.softserveinc.ita.homeproject.homedata.entity.poll.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.user.UserCooperation;
+import com.softserveinc.ita.homeproject.homedata.entity.security.UserCooperation;
 import lombok.Getter;
 import lombok.Setter;
 

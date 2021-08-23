@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity.converters;
 
 import javax.persistence.AttributeConverter;
 
-import com.softserveinc.ita.homeproject.homedata.entity.invitation.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.invitation.InvitationStatus;
 
 public class InvitationStatusAttributeConverter implements AttributeConverter<InvitationStatus, String> {
     @Override

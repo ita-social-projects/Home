@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.softserveinc.ita.homeproject.application.config.query.ApartmentQueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.apartment.Apartment;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.house.apartment.Apartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

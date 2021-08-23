@@ -18,7 +18,8 @@ import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
 import com.softserveinc.ita.homeproject.homedata.entity.converters.PollStatusAttributeConverter;
 import com.softserveinc.ita.homeproject.homedata.entity.converters.PollTypeAttributeConverter;
 import com.softserveinc.ita.homeproject.homedata.entity.cooperation.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.house.House;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.entity.poll.question.PollQuestion;
 import lombok.Getter;
 import lombok.Setter;
 

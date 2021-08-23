@@ -15,9 +15,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.service.contact.UserContactService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.contact.UserContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserService;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;

@@ -16,13 +16,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.service.house.HouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.poll.PollHouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.poll.PollQuestionService;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.house.PollHouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.question.PollQuestionService;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.PollStatus;

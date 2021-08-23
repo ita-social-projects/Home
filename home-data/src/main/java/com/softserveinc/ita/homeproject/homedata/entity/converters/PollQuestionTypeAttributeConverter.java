@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity.converters;
 
 import javax.persistence.AttributeConverter;
 
-import com.softserveinc.ita.homeproject.homedata.entity.poll.PollQuestionType;
+import com.softserveinc.ita.homeproject.homedata.entity.poll.question.PollQuestionType;
 
 public class PollQuestionTypeAttributeConverter implements AttributeConverter<PollQuestionType,String> {
 

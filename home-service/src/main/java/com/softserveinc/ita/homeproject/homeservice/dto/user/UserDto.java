@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.dto.user;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.ContactDto;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -27,13 +27,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.contact.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.service.contact.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.CooperationService;
-import com.softserveinc.ita.homeproject.homeservice.service.house.HouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.contact.CooperationContactService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;

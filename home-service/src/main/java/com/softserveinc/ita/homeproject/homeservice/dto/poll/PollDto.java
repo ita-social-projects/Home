@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import lombok.Getter;
 import lombok.Setter;
 

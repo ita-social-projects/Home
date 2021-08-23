@@ -4,20 +4,20 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN
 
 import java.time.LocalDateTime;
 
-import com.softserveinc.ita.homeproject.homedata.entity.invitation.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.invitation.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.entity.security.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.entity.user.User;
-import com.softserveinc.ita.homeproject.homedata.entity.user.UserCooperation;
-import com.softserveinc.ita.homeproject.homedata.repository.invitation.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.role.RoleRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.cooperation.invitation.InvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.security.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.security.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.user.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.invitation.ApartmentInvitationServiceImpl;
-import com.softserveinc.ita.homeproject.homeservice.service.invitation.CooperationInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.ApartmentInvitationServiceImpl;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.CooperationInvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.entity.converters;
 
 import javax.persistence.AttributeConverter;
 
-import com.softserveinc.ita.homeproject.homedata.entity.invitation.InvitationType;
+import com.softserveinc.ita.homeproject.homedata.entity.cooperation.invitation.InvitationType;
 
 public class InvitationTypeAttributeConverter implements AttributeConverter<InvitationType, String> {
 
