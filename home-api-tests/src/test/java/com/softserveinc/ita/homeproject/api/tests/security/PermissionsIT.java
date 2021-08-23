@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.security;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -104,31 +105,54 @@ public class PermissionsIT {
                         false
                 ),
 
-/*
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            ReadUser user = createBaseUserForTests();
+                            UserApi userApi = new UserApi(apiClient);
 
-                            CreateUser userWithExistEmail = new CreateUser()
+                            CreateCooperation createCoop = createBaseCooperation();
+                            try {
+                                cooperationApi.createCooperation(createCoop);
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(5000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            ApiUsageFacade api = new ApiUsageFacade();
+                            MailHogApiResponse mailResponse = null;
+                            try {
+                                mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            CreateUser createUser = new CreateUser()
                                     .firstName("firstName")
                                     .lastName("lastName")
                                     .password("password")
-                                    .email(user.getEmail())
+                                    .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
                                     .registrationToken(RandomStringUtils.randomAlphabetic(36))
                                     .contacts(createContactList());
 
+                            createUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
+                            createUser.setEmail(createCoop.getAdminEmail());
+
                             try {
-                                return userApi.createUserWithHttpInfo(userWithExistEmail);
+                                return userApi.createUserWithHttpInfo(createUser);
                             } catch (ApiException e) {
                                 e.printStackTrace();
                             }
                             return null;
                         },
-                        "Create User",
+                        "create User",
                         true,
                         true,
                         true,
                         true),
-*/
+
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ReadUser readUser = createBaseUserForTests();
                             UserApi userApi = new UserApi(apiClient);
