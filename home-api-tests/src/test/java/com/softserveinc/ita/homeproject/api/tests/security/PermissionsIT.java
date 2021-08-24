@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.security;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -27,11 +26,9 @@ import com.softserveinc.ita.homeproject.model.*;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -94,7 +91,6 @@ public class PermissionsIT {
         return Stream.of(
 // UserAPI
 /*
-
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ContactApi contactApi = new ContactApi(apiClient);
                             CreateContact createEmailContact = createEmailContact();
@@ -138,11 +134,10 @@ public class PermissionsIT {
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ContactApi contactApi = new ContactApi(apiClient);
-                            ReadUser expectedUser = createAndReadTestUserViaInvitation();
 
                             try {
                                 return contactApi.queryContactsOnUserWithHttpInfo(
-                                        expectedUser.getId(), 1, 10, "id,asc",
+                                        0L, 1, 10, "id,asc",
                                         null, null, null, null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(401, null);
@@ -287,8 +282,7 @@ public class PermissionsIT {
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
 
-                            CreateCooperation createCooperation = createCooperationForPoll();
-                            ReadCooperation readCooperation = readCooperation(createCooperation);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
                             CreatePoll createPoll = createPoll(readCooperation);
 
                             try {
@@ -308,7 +302,7 @@ public class PermissionsIT {
                             try {
                                 return cooperationApi.getCooperationWithHttpInfo(createdCooperation.getId());
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadCooperation>(403, null);
+                                return new ApiResponse<ReadCooperation>(401, null);
                             }
                         },
                         "get Cooperation",
@@ -331,8 +325,7 @@ public class PermissionsIT {
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationContactApi cooperationContactApi = new CooperationContactApi(apiClient);
                             ReadCooperation expectedCoop = createAndReadBaseCooperation();
-                            CreateContact createEmailContact = createEmailContact();
-                            ReadContact savedEmailContact = saveContactInCooperation(createEmailContact, expectedCoop);
+                            ReadContact savedEmailContact = saveContactInCooperation(createEmailContact(), expectedCoop);
 
                             try {
                                 return cooperationContactApi.getContactOnCooperationWithHttpInfo(
@@ -347,177 +340,193 @@ public class PermissionsIT {
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
 
-                            CreateCooperation createCooperation = createCooperationForPoll();
-                            ReadCooperation readCooperation = readCooperation(createCooperation);
-                            CreatePoll createPoll = createPoll(readCooperation);
-
-                            ReadPoll expectedPoll = getCooperationPoll(readCooperation, createPoll);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
 
                             try {
                                 return cooperationPollApi.getCooperationPollWithHttpInfo(
-                                        readCooperation.getId(), expectedPoll.getId());
+                                        readCooperation.getId(), readPoll.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadPoll>(403, null);
                             }
                         },
                         "get Cooperation Poll",
-                        false, true, true, false)/*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
 
                             try {
-                                return cooperationApi.queryCooperationWithHttpInfo();
+                                return cooperationApi.queryCooperationWithHttpInfo(
+                                        1, 10, "id,asc", null,
+                                        null, null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(401, null);
                             }
                         },
                         "query Cooperation",
-                        true, true, true, false)*//*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             HouseApi houseApi = new HouseApi(apiClient);
 
                             try {
-                                return houseApi.queryHouseWithHttpInfo();
+                                return houseApi.queryHouseWithHttpInfo(
+                                        0L, 1, 10, "id,asc", null,
+                                        null, null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(401, null);
                             }
                         },
                         "query House",
-                        true, true, true, false)*//*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationContactApi cooperationContactApi = new CooperationContactApi(apiClient);
 
                             try {
-                                return cooperationContactApi.queryContactsOnCooperationWithHttpInfo();
+                                return cooperationContactApi.queryContactsOnCooperationWithHttpInfo(
+                                        0L, 1, 10, "id,asc", null,
+                                        null, null, null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(401, null);
                             }
                         },
                         "query Contacts On Cooperation",
-                        true, true, true, false)*//*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
 
                             try {
-                                return cooperationPollApi.queryCooperationPollWithHttpInfo();
+                                return cooperationPollApi.queryCooperationPollWithHttpInfo(
+                                        0L, 1, 10, "id,asc", null,
+                                        null, null, null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Cooperation Poll",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
+                            ReadCooperation createdCooperation = createAndReadBaseCooperation();
 
                             try {
-                                return cooperationApi.deleteCooperationWithHttpInfo();
+                                return cooperationApi.deleteCooperationWithHttpInfo(createdCooperation.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Cooperation",
-                        true, false, false, false)*//*,
+                        true, false, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             HouseApi houseApi = new HouseApi(apiClient);
-
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
                             try {
-                                return houseApi.deleteHouseWithHttpInfo();
+                                return houseApi.deleteHouseWithHttpInfo(expectedCoop.getId(), expectedHouse.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete House",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationContactApi cooperationContactApi = new CooperationContactApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadContact savedEmailContact = saveContactInCooperation(createEmailContact(), expectedCoop);
 
                             try {
-                                return cooperationContactApi.deleteContactOnCooperationWithHttpInfo();
+                                return cooperationContactApi.deleteContactOnCooperationWithHttpInfo(
+                                        expectedCoop.getId(), savedEmailContact.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Contact On Cooperation",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll expectedPoll = createAndReadCooperationPoll(readCooperation);
 
                             try {
-                                return cooperationPollApi.deleteCooperationPollWithHttpInfo();
+                                return cooperationPollApi.deleteCooperationPollWithHttpInfo(
+                                        readCooperation.getId(), expectedPoll.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Cooperation Poll",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadBaseCooperation();
+                            UpdateCooperation updateCoop = getUpdateCooperation();
 
                             try {
-                                return cooperationApi.updateCooperationWithHttpInfo();
+                                return cooperationApi.updateCooperationWithHttpInfo(
+                                        readCooperation.getId(), updateCoop);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Cooperation",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             HouseApi houseApi = new HouseApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            UpdateHouse updateHouse = updateHouse();
 
                             try {
-                                return houseApi.updateHouseWithHttpInfo();
+                                return houseApi.updateHouseWithHttpInfo(
+                                        expectedCoop.getId(), expectedHouse.getId(), updateHouse);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update House",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationContactApi cooperationContactApi = new CooperationContactApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadContact savedEmailContact = saveContactInCooperation(createEmailContact(), expectedCoop);
+                            UpdateContact updateEmailContact = updateEmailContact();
 
                             try {
-                                return cooperationContactApi.updateContactOnCooperationWithHttpInfo();
+                                return cooperationContactApi.updateContactOnCooperationWithHttpInfo(
+                                        expectedCoop.getId(), savedEmailContact.getId(), updateEmailContact);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Contact On Cooperation",
-                        true, true, false, false)*//*,
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            CooperationContactApi cooperationContactApi = new CooperationContactApi(apiClient);
-
-                            try {
-                                return cooperationContactApi.updateContactOnCooperationWithHttpInfo();
-                            } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
-                            }
-                        },
-                        "update Contact On Cooperation",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
+                            UpdatePoll updatePoll = updatePoll();
 
                             try {
-                                return cooperationPollApi.updateCooperationPollWithHttpInfo();
+                                return cooperationPollApi.updateCooperationPollWithHttpInfo(
+                                        readCooperation.getId(), readPoll.getId(), updatePoll);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Cooperation Poll",
-                        true, true, false, false)*/
+                        false, true, false, false)
 
 // HouseApiImpl
                 /*,
@@ -642,18 +651,6 @@ public class PermissionsIT {
                         },
                         "get Ownership",
                         false, true, true, false)*//*,
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
-
-                            try {
-                                return apartmentInvitationApi.queryInvitationWithHttpInfo();
-                            } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
-                            }
-                        },
-                        "query Invitation",
-                        false, true, false, false)*//*,
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
@@ -901,6 +898,49 @@ public class PermissionsIT {
         );
     }
 
+    private static UpdatePoll updatePoll() {
+        LocalDateTime completionDate = LocalDateTime.now()
+                .truncatedTo(ChronoUnit.MINUTES)
+                .plusDays(MIN_POLL_DURATION_IN_DAYS)
+                .plusMinutes(1L);
+        return new UpdatePoll()
+                .header("Updated poll for our houses")
+                .completionDate(completionDate)
+                .status(PollStatus.SUSPENDED);
+    }
+
+    private static UpdateHouse updateHouse() {
+        return new UpdateHouse()
+                .adjoiningArea(2000)
+                .houseArea(BigDecimal.valueOf(2000.0))
+                .quantityFlat(200)
+                .address(new Address()
+                        .region("upd")
+                        .city("upd")
+                        .district("upd")
+                        .street("upd")
+                        .houseBlock("upd")
+                        .houseNumber("upd")
+                        .zipCode("upd"));
+    }
+
+    private static UpdateCooperation getUpdateCooperation() {
+        return new UpdateCooperation()
+                .name("upd")
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .address(new Address()
+                        .city("upd")
+                        .district("upd")
+                        .houseBlock("upd")
+                        .houseNumber("upd")
+                        .region("upd")
+                        .street("upd")
+                        .zipCode("upd"));
+    }
+
+
+
 
 
 
@@ -1000,6 +1040,11 @@ public class PermissionsIT {
                 .contacts(createContactList());
     }
 
+    @SneakyThrows
+    private static ReadCooperation createAndReadBaseCooperation() {
+        return cooperationApi.createCooperation(createBaseCooperation());
+    }
+
     private static CreateCooperation createCooperationForPoll() {
         return new CreateCooperation()
                 .name("newCooperationTest")
@@ -1013,8 +1058,8 @@ public class PermissionsIT {
     }
 
     @SneakyThrows
-    private static ReadCooperation createAndReadBaseCooperation() {
-        return cooperationApi.createCooperation(createBaseCooperation());
+    private static ReadCooperation createAndReadCooperationForPoll() {
+        return cooperationApi.createCooperationWithHttpInfo(createCooperationForPoll()).getData();
     }
 
     private static CreateUser createBaseUser() {
@@ -1056,10 +1101,6 @@ public class PermissionsIT {
         return houseApi.createHouse(readCooperation.getId(), createHouse());
     }
 
-    @SneakyThrows
-    private static ReadCooperation readCooperation(CreateCooperation createCooperation) {
-        return cooperationApi.createCooperationWithHttpInfo(createCooperation).getData();
-    }
 
     @SneakyThrows
     private static CreatePoll createPoll(ReadCooperation readCooperation) {
@@ -1077,9 +1118,9 @@ public class PermissionsIT {
     }
 
     @SneakyThrows
-    private static ReadPoll getCooperationPoll(ReadCooperation readCooperation, CreatePoll createPoll) {
+    private static ReadPoll createAndReadCooperationPoll(ReadCooperation readCooperation) {
         return cooperationPollApiCooperationAdmin.createCooperationPoll(
-                readCooperation.getId(), createPoll);
+                readCooperation.getId(), createPoll(readCooperation));
     }
 
     private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
