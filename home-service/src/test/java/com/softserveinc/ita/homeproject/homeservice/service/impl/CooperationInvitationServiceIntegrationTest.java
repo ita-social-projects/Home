@@ -16,10 +16,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestComponent;
 import org.springframework.data.jpa.domain.Specification;
 
+@TestComponent
 @SpringBootTest(classes = HomeServiceTestContextConfig.class)
-class CooperationInvitationServiceIntegrationTest {
+public class CooperationInvitationServiceIntegrationTest {
 
     @Autowired
     private CooperationInvitationRepository cooperationInvitationRepository;
@@ -28,146 +30,146 @@ class CooperationInvitationServiceIntegrationTest {
     private CooperationInvitationServiceImpl cooperationInvitationService;
 
     @BeforeEach
-    private void initCooperationInvitationsTestDB() {
-        cooperationInvitationRepository.save(createNotOverduePendingInvitation());
-        cooperationInvitationRepository.save(createOverduePendingInvitation());
-        cooperationInvitationRepository.save(createNotOverdueProcessingInvitation());
-        cooperationInvitationRepository.save(createOverdueProcessingInvitation());
-        cooperationInvitationRepository.save(createNotOverdueAcceptedInvitation());
-        cooperationInvitationRepository.save(createOverdueAcceptedInvitation());
-        cooperationInvitationRepository.save(createNotOverdueDeclinedInvitation());
-        cooperationInvitationRepository.save(createOverdueDeclinedInvitation());
-        cooperationInvitationRepository.save(createNotOverdueDeactivatedInvitation());
-        cooperationInvitationRepository.save(createOverdueDeactivatedInvitation());
-        cooperationInvitationRepository.save(createOverdueInvitation());
-        cooperationInvitationRepository.save(createNotOverdueErrorInvitation());
-        cooperationInvitationRepository.save(createOverdueErrorInvitation());
+    public void initCooperationInvitationTestDB() {
+        cooperationInvitationRepository.save(createNotOverduePendingCooperationInvitation());
+        cooperationInvitationRepository.save(createOverduePendingCooperationInvitation());
+        cooperationInvitationRepository.save(createNotOverdueProcessingCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueProcessingCooperationInvitation());
+        cooperationInvitationRepository.save(createNotOverdueAcceptedCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueAcceptedCooperationInvitation());
+        cooperationInvitationRepository.save(createNotOverdueDeclinedCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueDeclinedCooperationInvitation());
+        cooperationInvitationRepository.save(createNotOverdueDeactivatedCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueDeactivatedCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueCooperationInvitation());
+        cooperationInvitationRepository.save(createNotOverdueErrorCooperationInvitation());
+        cooperationInvitationRepository.save(createOverdueErrorCooperationInvitation());
     }
 
     @AfterEach
-    private void dropCooperationInvitationsTestDB() {
+    public void dropCooperationInvitationTestDB() {
         cooperationInvitationRepository.deleteAll();
     }
 
     @Test
-    void getInvitationsForMarkingAsOverdueTest() {
-        List<CooperationInvitation> allInvitationsFromBeginningDB =
+    void getCooperationInvitationsForMarkingAsOverdueTest() {
+        List<CooperationInvitation> allCooperationInvitationsFromBeginningDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        List<CooperationInvitation> invitationsForOverdue = cooperationInvitationRepository
+        List<CooperationInvitation> cooperationInvitationsForSetOverdue = cooperationInvitationRepository
             .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
                 cooperationInvitationService.getOverdueInvitation(root, criteriaBuilder));
 
-        assertEquals(13, allInvitationsFromBeginningDB.size());
-        assertEquals(2, invitationsForOverdue.size());
-        assertEquals(InvitationStatus.PENDING, invitationsForOverdue.get(0).getStatus());
-        assertEquals(InvitationStatus.PROCESSING, invitationsForOverdue.get(1).getStatus());
+        assertEquals(13, allCooperationInvitationsFromBeginningDB.size());
+        assertEquals(2, cooperationInvitationsForSetOverdue.size());
+        assertEquals(InvitationStatus.PENDING, cooperationInvitationsForSetOverdue.get(0).getStatus());
+        assertEquals(InvitationStatus.PROCESSING, cooperationInvitationsForSetOverdue.get(1).getStatus());
     }
 
     @Test
     void markAsOverdueCooperationInvitationsTest() {
-        List<CooperationInvitation> allInvitationsFromBeginningDB =
+        List<CooperationInvitation> allCooperationInvitationsFromBeginningDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
         cooperationInvitationService.markAsOverdueCooperationInvitations();
 
-        List<CooperationInvitation> allInvitationsFromTransformedDB =
+        List<CooperationInvitation> allCooperationInvitationsFromTransformedDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        assertEquals(InvitationStatus.PENDING, allInvitationsFromBeginningDB.get(1).getStatus());
-        assertEquals(InvitationStatus.PROCESSING, allInvitationsFromBeginningDB.get(3).getStatus());
-        assertEquals(InvitationStatus.OVERDUE, allInvitationsFromTransformedDB.get(1).getStatus());
-        assertEquals(InvitationStatus.OVERDUE, allInvitationsFromTransformedDB.get(3).getStatus());
+        assertEquals(InvitationStatus.PENDING, allCooperationInvitationsFromBeginningDB.get(1).getStatus());
+        assertEquals(InvitationStatus.PROCESSING, allCooperationInvitationsFromBeginningDB.get(3).getStatus());
+        assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(1).getStatus());
+        assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(3).getStatus());
     }
 
-    private CooperationInvitation createNotOverduePendingInvitation() {
+    private CooperationInvitation createNotOverduePendingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverduePendingInvitation() {
+    private CooperationInvitation createOverduePendingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createNotOverdueProcessingInvitation() {
+    private CooperationInvitation createNotOverdueProcessingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueProcessingInvitation() {
+    private CooperationInvitation createOverdueProcessingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createNotOverdueAcceptedInvitation() {
+    private CooperationInvitation createNotOverdueAcceptedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueAcceptedInvitation() {
+    private CooperationInvitation createOverdueAcceptedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createNotOverdueDeclinedInvitation() {
+    private CooperationInvitation createNotOverdueDeclinedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.DECLINED);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueDeclinedInvitation() {
+    private CooperationInvitation createOverdueDeclinedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.DECLINED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createNotOverdueDeactivatedInvitation() {
+    private CooperationInvitation createNotOverdueDeactivatedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.DEACTIVATED);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueDeactivatedInvitation() {
+    private CooperationInvitation createOverdueDeactivatedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.DEACTIVATED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueInvitation() {
+    private CooperationInvitation createOverdueCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.OVERDUE);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createNotOverdueErrorInvitation() {
+    private CooperationInvitation createNotOverdueErrorCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
-    private CooperationInvitation createOverdueErrorInvitation() {
+    private CooperationInvitation createOverdueErrorCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));

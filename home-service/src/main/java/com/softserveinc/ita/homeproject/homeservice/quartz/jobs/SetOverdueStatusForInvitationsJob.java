@@ -20,7 +20,7 @@ public class SetOverdueStatusForInvitationsJob extends QuartzJobBean {
     private final CooperationInvitationServiceImpl cooperationInvitationService;
 
     @Override
-    protected void executeInternal(JobExecutionContext context) {
+    public void executeInternal(JobExecutionContext context) {
         apartmentInvitationService.markAsOverdueApartmentInvitations();
         cooperationInvitationService.markAsOverdueCooperationInvitations();
     }
