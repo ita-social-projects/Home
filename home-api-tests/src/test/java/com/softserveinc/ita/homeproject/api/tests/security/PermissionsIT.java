@@ -45,6 +45,11 @@ public class PermissionsIT {
 
     private final static UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
 
+    private final static ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
+
+    private final static CooperationPollApi cooperationPollApiCooperationAdmin
+            = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
+
     //    private final static ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
@@ -88,6 +93,7 @@ public class PermissionsIT {
 
         return Stream.of(
 // UserAPI
+/*
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ContactApi contactApi = new ContactApi(apiClient);
@@ -150,19 +156,13 @@ public class PermissionsIT {
                             ContactApi contactApi = new ContactApi(apiClient);
                             ReadUser expectedUser = createAndReadTestUserViaInvitation();
 
-                            ReadContact savedPhoneContact;
-                            try {
-                                savedPhoneContact =
-                                        contactApi.createContactOnUser(expectedUser.getId(), createPhoneContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(401, null);
-                            }
+                            ReadContact savedPhoneContact = createContact(expectedUser.getId(), createPhoneContact());
 
                             try {
                                 return contactApi.deleteContactOnUserWithHttpInfo(expectedUser.getId(),
                                         savedPhoneContact.getId());
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(401, null);
+                                return new ApiResponse<Void>(401, null);
                             }
 
                         },
@@ -240,10 +240,9 @@ public class PermissionsIT {
                             }
                         },
                         "update User",
-                        true, true, true, false)
-// CooperationApi
-/*
-                , Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+                        true, true, true, false),*/
+// CooperationApi // ↑↑↑ all right
+                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
                             CreateCooperation createCooperation = createBaseCooperation();
 
@@ -283,25 +282,24 @@ public class PermissionsIT {
                             }
                         },
                         "create Contact On Cooperation",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
 
-
-                            ReadCooperation createdCooperation = createAndReadBaseCooperation();
-                            CreatePoll createPoll = createPoll();
-
+                            CreateCooperation createCooperation = createCooperationForPoll();
+                            ReadCooperation readCooperation = readCooperation(createCooperation);
+                            CreatePoll createPoll = createPoll(readCooperation);
 
                             try {
                                 return cooperationPollApi.createCooperationPollWithHttpInfo(
-                                        createdCooperation.getId(), createPoll);
+                                        readCooperation.getId(), createPoll);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadCooperation>(403, null);
                             }
                         },
                         "create Cooperation Poll",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
@@ -344,24 +342,26 @@ public class PermissionsIT {
                             }
                         },
                         "get Contact On Cooperation",
-                        true, true, true, false)*/
-
-
-
-
-                /*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationPollApi cooperationPollApi = new CooperationPollApi(apiClient);
 
+                            CreateCooperation createCooperation = createCooperationForPoll();
+                            ReadCooperation readCooperation = readCooperation(createCooperation);
+                            CreatePoll createPoll = createPoll(readCooperation);
+
+                            ReadPoll expectedPoll = getCooperationPoll(readCooperation, createPoll);
+
                             try {
-                                return cooperationPollApi.getCooperationPollWithHttpInfo();
+                                return cooperationPollApi.getCooperationPollWithHttpInfo(
+                                        readCooperation.getId(), expectedPoll.getId());
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
+                                return new ApiResponse<ReadPoll>(403, null);
                             }
                         },
                         "get Cooperation Poll",
-                        false, true, true, false)*//*,
+                        false, true, true, false)/*,
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
@@ -903,6 +903,8 @@ public class PermissionsIT {
 
 
 
+
+
 /*    @Test
     void testUserAdmin() throws ApiException {
         ApiClient apiClient = ApiClientUtil.getAdminClient();
@@ -961,18 +963,7 @@ public class PermissionsIT {
 
     @SneakyThrows
     private static ReadUser createAndReadTestUserViaInvitation() {
-        CreateCooperation createCoop = createBaseCooperation();
-        cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
-        expectedUser.setEmail(createCoop.getAdminEmail());
-        return userApi.createUser(expectedUser);
+        return userApi.createUser(createBaseUserViaInvitation());
     }
 
     private static CreateContact createEmailContact() {
@@ -980,6 +971,11 @@ public class PermissionsIT {
                 .email("newEmailContact@example.com")
                 .main(false)
                 .type(ContactType.EMAIL);
+    }
+
+    @SneakyThrows
+    private static ReadContact createContact(Long id, CreateContact createContact) {
+        return contactApi.createContactOnUser(id, createContact);
     }
 
     @SneakyThrows
@@ -1002,6 +998,18 @@ public class PermissionsIT {
                 .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
                 .address(createAddress())
                 .contacts(createContactList());
+    }
+
+    private static CreateCooperation createCooperationForPoll() {
+        return new CreateCooperation()
+                .name("newCooperationTest")
+                .usreo(RandomStringUtils.randomAlphabetic(10))
+                .iban(RandomStringUtils.randomAlphabetic(20))
+                .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
+                .address(createAddress())
+                .addHousesItem(createHouse())
+                .addHousesItem(createHouse())
+                .addHousesItem(createHouse());
     }
 
     @SneakyThrows
@@ -1048,33 +1056,31 @@ public class PermissionsIT {
         return houseApi.createHouse(readCooperation.getId(), createHouse());
     }
 
-    /*private static CreatePoll createPoll() {
+    @SneakyThrows
+    private static ReadCooperation readCooperation(CreateCooperation createCooperation) {
+        return cooperationApi.createCooperationWithHttpInfo(createCooperation).getData();
+    }
+
+    @SneakyThrows
+    private static CreatePoll createPoll(ReadCooperation readCooperation) {
+
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
                 .plusMinutes(1L);
-
-        ReadCooperation cooperationOne = null;
-        ReadCooperation cooperationTwo = null;
-        try {
-            cooperationOne = new CooperationApi(ApiClientUtil.getAdminClient())
-                    .createCooperationWithHttpInfo(createCooperation()).getData();
-            cooperationTwo = new CooperationApi(ApiClientUtil.getAdminClient())
-                    .createCooperationWithHttpInfo(createCooperation()).getData();
-        } catch (ApiException e) {
-            e.printStackTrace();
-        }
-
-        HOUSE_ONE_ID = cooperationOne.getHouses().get(0).getId();
-        HOUSE_TWO_ID = cooperationOne.getHouses().get(1).getId();
-
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
                 .completionDate(completionDate)
-                .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
-                .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID));
-    }*/
+                .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(0).getId()))
+                .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(1).getId()));
+    }
+
+    @SneakyThrows
+    private static ReadPoll getCooperationPoll(ReadCooperation readCooperation, CreatePoll createPoll) {
+        return cooperationPollApiCooperationAdmin.createCooperationPoll(
+                readCooperation.getId(), createPoll);
+    }
 
     private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
         String message = "";
