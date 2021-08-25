@@ -11,6 +11,7 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.api.HousesApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.model.CreateApartment;
 import com.softserveinc.ita.homeproject.model.ReadApartment;
 import com.softserveinc.ita.homeproject.model.UpdateApartment;
@@ -25,6 +26,9 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
 
     @Autowired
     private ApartmentService apartmentService;
+
+    @Autowired
+    private HouseService houseService;
 
     @PreAuthorize(CREATE_APARTMENT_PERMISSION)
     @Override
@@ -62,7 +66,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    Long id,
                                    String apartmentNumber,
                                    BigDecimal apartmentArea) {
-
+        verifyExistence(houseId, houseService);
         Page<ApartmentDto> readApartment = apartmentService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
