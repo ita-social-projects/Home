@@ -23,6 +23,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.polls.votes.VoteQuestion
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.repository.QuestionVoteRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.ResultQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.VoteQuestionVariantRepository;
@@ -78,6 +79,8 @@ public class VoteServiceImpl implements VoteService {
 
     private final ResultQuestionRepository resultQuestionRepository;
 
+    private final QuestionVoteRepository questionVoteRepository;
+
     private final ServiceMapper mapper;
 
     @Transactional
@@ -92,6 +95,7 @@ public class VoteServiceImpl implements VoteService {
         var newVote = new Vote();
         newVote.setPollId(votedPoll.getId());
         newVote.setUser(currentUser);
+        voteRepository.save(newVote);
         var newQuestionVotes = new ArrayList<QuestionVote>();
         for (QuestionVoteDto questionVoteDto : voteDto.getQuestionVotes()) {
             QuestionVote newQuestionVote;
@@ -184,7 +188,7 @@ public class VoteServiceImpl implements VoteService {
             voteQuestionVariantList.add(voteVariant);
         }
         newQuestionVote.setAnswers(voteQuestionVariantList);
-        return newQuestionVote;
+        return questionVoteRepository.save(newQuestionVote);
     }
 
     private void validateAnswerCounts(List<QuestionVote> questionVotes) {

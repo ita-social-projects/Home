@@ -338,29 +338,33 @@ class PollVoteApiIT {
         assertNotNull(actual.getQuestionVotes());
         assertFalse(actual.getQuestionVotes().contains(null));
         assertEquals(expected.getQuestionVotes().size(), actual.getQuestionVotes().size());
+
         for (int i = 1; i < expected.getQuestionVotes().size(); i++) {
             assertEquals(expected.getQuestionVotes().get(i).getQuestion().getId(),
                 Objects.requireNonNull(actual.getQuestionVotes().get(i).getQuestion()).getId());
         }
+
         CreateAdviceQuestionVote expectedAdviceQuestionVote =
             (CreateAdviceQuestionVote) expected.getQuestionVotes().get(0);
         ReadAdviceQuestionVote actualAdviceQuestionVote = (ReadAdviceQuestionVote) actual.getQuestionVotes().get(0);
-        assertEquals(expectedAdviceQuestionVote.getAnswer().getAnswer().toUpperCase(),
+        assertEquals(expectedAdviceQuestionVote.getAnswer().getAnswer().trim(),
             actualAdviceQuestionVote.getAnswer().getAnswer());
+
         CreateMultipleChoiceQuestionVote expectedMultipleChoiceQuestionVote =
             (CreateMultipleChoiceQuestionVote) expected.getQuestionVotes().get(1);
         ReadMultipleChoiceQuestionVote actualMultipleChoiceQuestionVote =
             (ReadMultipleChoiceQuestionVote) actual.getQuestionVotes().get(1);
-        assertEquals(expectedMultipleChoiceQuestionVote.getAnswers().stream().map(AnswerVariantLookup::getId).collect(
-                Collectors.toList()),
-            actualMultipleChoiceQuestionVote.getAnswers().stream().map(ReadAnswerVariant::getId).collect(
-                Collectors.toList()));
+        assertEquals(expectedMultipleChoiceQuestionVote.getAnswers().stream().map(AnswerVariantLookup::getId)
+                .collect(Collectors.toList()),
+            actualMultipleChoiceQuestionVote.getAnswers().stream().map(ReadAnswerVariant::getId)
+                .collect(Collectors.toList()));
+
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedAdviceQuestionVote.getQuestion().getId()).getQuestion(),
-            Objects.requireNonNull(actualAdviceQuestionVote.getQuestion()).getQuestion());
+            pollQuestionApi.getQuestion(pollId, expectedAdviceQuestionVote.getQuestion().getId()),
+            Objects.requireNonNull(actualAdviceQuestionVote.getQuestion()));
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedMultipleChoiceQuestionVote.getQuestion().getId()).getQuestion(),
-            Objects.requireNonNull(actualMultipleChoiceQuestionVote.getQuestion()).getQuestion());
+            pollQuestionApi.getQuestion(pollId, expectedMultipleChoiceQuestionVote.getQuestion().getId()),
+            Objects.requireNonNull(actualMultipleChoiceQuestionVote.getQuestion()));
     }
 
     private CreateCooperation createCooperation() {
@@ -433,9 +437,8 @@ class PollVoteApiIT {
     private CreateAdviceQuestionVote createAdviceQuestionVote(ReadAdviceQuestion question) {
         CreateAdviceQuestionVote newCreateAdviceQuestionVote = new CreateAdviceQuestionVote()
             .answer(createAnswerVariant());
-        newCreateAdviceQuestionVote.setType(question.getType());
-        newCreateAdviceQuestionVote.setQuestion(new QuestionLookup().id(question.getId()));
-        return newCreateAdviceQuestionVote;
+        return (CreateAdviceQuestionVote) newCreateAdviceQuestionVote.type(question.getType())
+            .question(new QuestionLookup().id(question.getId()));
     }
 
     private CreateUpdateAnswerVariant createAnswerVariant() {
@@ -445,9 +448,8 @@ class PollVoteApiIT {
     private CreateMultipleChoiceQuestionVote createMultipleChoiceQuestionVote(ReadMultipleChoiceQuestion question) {
         CreateMultipleChoiceQuestionVote newCreateMultipleChoiceQuestionVote = new CreateMultipleChoiceQuestionVote()
             .answers(getChosenAnswerVariantLookups(question));
-        newCreateMultipleChoiceQuestionVote.setType(question.getType());
-        newCreateMultipleChoiceQuestionVote.setQuestion(new QuestionLookup().id(question.getId()));
-        return newCreateMultipleChoiceQuestionVote;
+        return (CreateMultipleChoiceQuestionVote) newCreateMultipleChoiceQuestionVote.type(question.getType())
+            .question(new QuestionLookup().id(question.getId()));
     }
 
     private List<AnswerVariantLookup> getChosenAnswerVariantLookups(
@@ -491,15 +493,19 @@ class PollVoteApiIT {
     private CreateVote createVoteWithNotMatchingQuestions(List<ReadAdviceQuestion> questionList, int questionQuantity) {
         CreateVote createdVote = new CreateVote();
         int questionVotesNumber = 0;
-        do {
+        int i = 0;
+        while (questionVotesNumber <= questionQuantity) {
             createdVote.addQuestionVotesItem(
-                createAdviceQuestionVote(questionList.get(questionVotesNumber + questionQuantity + 1)));
+                createAdviceQuestionVote(questionList.get(i + questionQuantity + 1)));
             questionVotesNumber++;
             if (questionVotesNumber <= questionQuantity) {
-                createdVote.addQuestionVotesItem(createAdviceQuestionVote(questionList.get(questionVotesNumber - 1)));
+                createdVote.addQuestionVotesItem(createAdviceQuestionVote(questionList.get(i)));
                 questionVotesNumber++;
+            } else {
+                break;
             }
-        } while (questionVotesNumber < questionQuantity + 1);
+            i++;
+        }
         return createdVote;
     }
 

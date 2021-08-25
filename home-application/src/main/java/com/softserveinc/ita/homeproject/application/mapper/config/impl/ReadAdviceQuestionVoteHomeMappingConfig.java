@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.application.mapper.config.impl;
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import com.softserveinc.ita.homeproject.homeservice.dto.AdviceQuestionVoteDto;
+import com.softserveinc.ita.homeproject.model.ReadAdviceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.model.ReadQuestionVote;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,13 @@ public class ReadAdviceQuestionVoteHomeMappingConfig
 
     @Override
     public void addMappings(TypeMap<AdviceQuestionVoteDto, ReadQuestionVote> typeMap) {
-        typeMap.setProvider(request -> homeMapper.convert(request.getSource(), ReadAdviceQuestionVote.class));
-        // Можно оставить и так - оно будет работать. Но в ответе будет приходить не ReadAdviceQuestion, а ReadQuestion.
-        //    .setPostConverter(c -> {
-        //        var dest = c.getDestination();
-        //        dest.setQuestion(homeMapper.convert(c.getSource().getQuestion(), ReadAdviceQuestion.class));
-        //        return dest;
-        //    });
+        typeMap.setProvider(request -> homeMapper.convert(request.getSource(), ReadAdviceQuestionVote.class))
+            // Можно оставить и так - с виду оно будет работать. Но в ответе будет приходить не ReadAdviceQuestion,
+            //  а ReadQuestion и два теста (с успешным голосованием и с повторным голосованием) будут валиться
+            .setPostConverter(c -> {
+                var dest = c.getDestination();
+                dest.setQuestion(homeMapper.convert(c.getSource().getQuestion(), ReadAdviceQuestion.class));
+                return dest;
+            });
     }
 }

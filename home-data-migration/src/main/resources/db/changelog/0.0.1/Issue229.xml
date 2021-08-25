@@ -89,4 +89,9 @@
         <createSequence incrementBy="50" sequenceName="question_votes_sequence"/>
         <createSequence incrementBy="50" sequenceName="vote_question_variants_sequence"/>
     </changeSet>
+
+    <changeSet id="Issue229.007" author="IhorSamoshost">
+        <dropNotNullConstraint tableName="answer_variants"
+                               columnName="POLL_QUESTION_ID"/>
+    </changeSet>
 </databaseChangeLog>

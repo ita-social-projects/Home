@@ -40,7 +40,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="POLL_QUESTION_ID" type="BIGINT">
-                <constraints nullable="true"
+                <constraints nullable="false"
                              foreignKeyName="poll_question_fk"
                              references="poll_questions(ID)"/>
             </column>
