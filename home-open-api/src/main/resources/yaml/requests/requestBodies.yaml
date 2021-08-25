@@ -141,3 +141,10 @@ UpdateQuestionBody:
     application/json:
       schema:
         $ref: '../models/question.yaml#/UpdateQuestion'
+CreateVoteBody:
+  description: A payload for creating a new vote
+  content:
+    application/json:
+      schema:
+        $ref: '../models/vote.yaml#/CreateVote'
+  required: true
