@@ -1,0 +1,113 @@
+users:
+  post:
+    tags:
+      - user
+    summary: Create user
+    description: The endpoint creates a new User
+    operationId: createUser
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateUserBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/UserResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - user
+    summary: Get all Users
+    description: The endpoint gets all Users
+    operationId: getAllUsers
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/email'
+      - $ref: '../parameters/parameters.yaml#/first_name'
+      - $ref: '../parameters/parameters.yaml#/last_name'
+      - $ref: '../parameters/parameters.yaml#/contact_phone'
+      - $ref: '../parameters/parameters.yaml#/contact_email'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/UsersResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+users-userId:
+  get:
+    tags:
+      - user
+    summary: Get User by ID
+    description: The endpoint gets User by ID
+    operationId: getUser
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/UserResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - user
+    summary: Update current User
+    description: The endpoint updates current User by ID
+    operationId: updateUser
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateUserBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/UserResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - user
+    summary: Delete user by ID
+    description: The endpoint deletes User by ID
+    operationId: deleteUser
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

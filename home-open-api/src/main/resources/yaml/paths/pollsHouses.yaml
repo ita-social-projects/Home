@@ -1,0 +1,93 @@
+polls-pollId-houses:
+  get:
+    tags:
+      - polled house
+    summary: Get all polled houses
+    description: The endpoint gets all polled houses of the poll
+    operationId: queryPolledHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_poll_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/quantity_flat'
+      - $ref: '../parameters/parameters.yaml#/adjoining_area'
+      - $ref: '../parameters/parameters.yaml#/house_area'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/HousesResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+  post:
+    tags:
+      - polled house
+    summary: Create polled house
+    description: The endpoint creates a polled house in the poll. House can be created only if poll status is draft
+    operationId: createPolledHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_poll_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/LookupHouseBody'
+    responses:
+      204:
+        description: Success
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+polls-pollId-houses-houseId:
+  get:
+    tags:
+      - polled house
+    summary: Get polled house
+    description: Get a polled house by a polled house id
+    operationId: getPolledHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_poll_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/PollHouseResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+  delete:
+    tags:
+      - polled house
+    summary: Delete polled house
+    description: Delete a polled house by a polled house ID. House can be deleted only if poll status is draft
+    operationId: deletePolledHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_poll_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        description: Success
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

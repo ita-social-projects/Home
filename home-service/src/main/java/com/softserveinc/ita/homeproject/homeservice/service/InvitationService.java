@@ -10,4 +10,8 @@ public interface InvitationService {
     void updateSentDateTimeAndStatus(Long id);
 
     void acceptUserInvitation(Invitation invitation);
+
+    void registerWithRegistrationToken(String token);
+
+    InvitationDto findInvitationByRegistrationToken(String token);
 }

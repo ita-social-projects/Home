@@ -11,11 +11,12 @@ import com.softserveinc.ita.homeproject.model.ApiError;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * @author Mykyta Morar
+ *
  * Abstract class for handling the mapping to the response
  * Changeable data is in abstract method.
  *
  * @param <T> type of incoming exception
- * @author Mykyta Morar
  */
 @Slf4j
 public abstract class BaseExceptionMapper<T extends Throwable> implements ExceptionMapper<T> {

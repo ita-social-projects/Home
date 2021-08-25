@@ -17,13 +17,18 @@ import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class HouseApiIT {
 
+    private final Long wrongCooperationId = 999999999L;
+
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+
+    private static final String HOUSE_NOT_FOUND = "House with 'id: %d and cooperation_id %d' is not found";
 
     @Test
     void createHouseTest() throws ApiException {
@@ -54,24 +59,40 @@ class HouseApiIT {
         ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
 
-        UpdateHouse updateHouse = new UpdateHouse()
-            .adjoiningArea(2000)
-            .houseArea(BigDecimal.valueOf(2000.0))
-            .quantityFlat(200)
-            .address(new Address()
-                .region("upd")
-                .city("upd")
-                .district("upd")
-                .street("upd")
-                .houseBlock("upd")
-                .houseNumber("upd")
-                .zipCode("upd"));
+        UpdateHouse updateHouse = getUpdatedHouse();
 
         ApiResponse<ReadHouse> response =
             houseApi.updateHouseWithHttpInfo(expectedCoop.getId(), expectedHouse.getId(), updateHouse);
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertHouse(expectedHouse, updateHouse, response.getData());
+    }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void updateHouseFromNotExistingCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCooperationId, expectedHouse.getId(), getUpdatedHouse()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId(), expectedCoop.getId()));
+    }
+
+    @Disabled("Should be exception. Created task#284.")
+    @Test
+    void updateHouseFromNotRelatedCooperationTest() throws ApiException {
+        CreateHouse createHouse = createHouse();
+        ReadCooperation expectedCoop = cooperationApi.createCooperation(createCooperation());
+        ReadCooperation wrongCoop = cooperationApi.createCooperation(createCooperation());
+        ReadHouse expectedHouse = houseApi.createHouse(expectedCoop.getId(), createHouse);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> houseApi.updateHouseWithHttpInfo(wrongCoop.getId(), expectedHouse.getId(), getUpdatedHouse()))
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining(String.format(HOUSE_NOT_FOUND, expectedHouse.getId(), expectedCoop.getId()));
     }
 
     @Test
@@ -231,6 +252,21 @@ class HouseApiIT {
             .contacts(createContactList());
     }
 
+    private UpdateHouse getUpdatedHouse(){
+        return new UpdateHouse()
+                .adjoiningArea(2000)
+                .houseArea(BigDecimal.valueOf(2000.0))
+                .quantityFlat(200)
+                .address(new Address()
+                        .region("upd")
+                        .city("upd")
+                        .district("upd")
+                        .street("upd")
+                        .houseBlock("upd")
+                        .houseNumber("upd")
+                        .zipCode("upd"));
+    }
+
     private List<CreateHouse> createHouseList() {
         List<CreateHouse> createHouses = new ArrayList<>();
         createHouses.add(new CreateHouse()
@@ -271,6 +307,4 @@ class HouseApiIT {
             .street("street")
             .zipCode("zipCode");
     }
-
-
 }
