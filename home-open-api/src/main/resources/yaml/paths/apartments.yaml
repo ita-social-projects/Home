@@ -1,0 +1,115 @@
+houses-houseId-apartments:
+  get:
+    tags:
+      - apartment
+    summary: Get all apartments
+    description: The endpoint gets all apartments of the house
+    operationId: queryApartment
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_house_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/apartment_number'
+      - $ref: '../parameters/parameters.yaml#/apartment_area'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ApartmentsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  post:
+    tags:
+      - apartment
+    summary: Create new Apartment for the House
+    description: The endpoint creates a new Apartment for specified House ID
+    operationId: createApartment
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_house_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateApartmentBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/ApartmentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+houses-houseId-apartments-apartmentId:
+  get:
+    tags:
+      - apartment
+    summary: Get apartment by ID
+    description: The endpoint retrieves an existing apartment
+      associated with the specified House by House and Aparment IDs
+    operationId: getApartment
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_house_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ApartmentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - apartment
+    summary: Update apartment
+    description: Update an apartment by apartment ID
+    operationId: updateApartment
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_house_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateApartmentBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/ApartmentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - apartment
+    summary: Delete apartment
+    description: Delete an apartment by an apartment ID
+    operationId: deleteApartment
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_house_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

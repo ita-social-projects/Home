@@ -1,0 +1,78 @@
+ReadNews:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    title:
+      type: string
+      example: "News In The Local Area"
+      maximum: 70
+    photo_url:
+      type: string
+      format: url
+      example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+    description:
+      type: string
+      example: "Gas turn off"
+    source:
+      type: string
+      example: "https://example.com"
+    text:
+      type: string
+      example: "example of text"
+CreateNews:
+  required:
+    - title
+    - description
+    - text
+  type: object
+  properties:
+    title:
+      type: string
+      example: "News in the Some Area"
+      minLength: 1
+      maxLength: 70
+    photo_url:
+      type: string
+      example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+    description:
+      type: string
+      minLength: 1
+      maxLength: 150
+      example: "example"
+    source:
+      type: string
+      example: "https://example.com"
+    text:
+      type: string
+      minLength: 1
+      maxLength: 150
+      example: "example of text"
+UpdateNews:
+  type: object
+  required:
+    - title
+    - description
+    - text
+  properties:
+    title:
+      type: string
+      minLength: 1
+      maxLength: 70
+      example: "example"
+    photo_url:
+      type: string
+      example: "https://miro.medium.com/max/2400/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+    description:
+      type: string
+      minLength: 1
+      maxLength: 150
+      example: "example"
+    source:
+      type: string
+      example: "https://example.com"
+    text:
+      type: string
+      minLength: 1
+      maxLength: 150
+      example: "example of text"

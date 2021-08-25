@@ -1,0 +1,121 @@
+CreateApartment:
+  required:
+    - number
+    - area
+  type: object
+  properties:
+    number:
+      type: string
+      minLength: 1
+      maxLength: 6
+      pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+      example: 15
+    area:
+      type: number
+      minimum: 10
+      maximum: 1000
+      multipleOf: 1e-2
+      example: 75.28
+    invitations:
+      type: array
+      items:
+        $ref: 'invitation.yaml#/CreateInvitation'
+      example: [
+        {
+          "email": "test.receive.messages@gmail.com",
+          "type": "apartment",
+          "ownership_part": 0.3
+        },
+        {
+          "email": "test.receive.messages@gmail.com",
+          "type": "apartment",
+          "ownership_part": 0.7
+        }
+      ]
+UpdateApartment:
+  required:
+    - number
+    - area
+  type: object
+  properties:
+    number:
+      type: string
+      minLength: 1
+      maxLength: 6
+      pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+      example: 15
+    area:
+      type: number
+      minimum: 10
+      maximum: 1000
+      multipleOf: 1e-2
+      example: 75.28
+ReadApartment:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    apartment_number:
+      type: string
+      minLength: 1
+      maxLength: 6
+      pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+      example: 15
+    apartment_area:
+      type: number
+      minimum: 10
+      maximum: 1000
+      multipleOf: 1e-2
+      example: 75.28
+    ownerships:
+      type: array
+      items:
+        $ref: 'ownership.yaml#/ReadOwnership'
+      example: [
+        {
+          "id": 1,
+          "user": {
+            "id": 1,
+            "first_name": "Petro",
+            "last_name": "Petrov",
+            "contacts": [
+              {
+                "id": 1,
+                "type": "email",
+                "main": true,
+                "email": "get.example@mail.com"
+              },
+              {
+                "id": 2,
+                "type": "phone",
+                "main": false,
+                "phone": "+380506617305"
+              }
+            ]
+          },
+          "ownership_part": 0.72
+        },
+        {
+          "id": 2,
+          "user": {
+            "id": 2,
+            "first_name": "Ivan",
+            "last_name": "Ivanov",
+            "contacts": [
+              {
+                "id": 3,
+                "type": "email",
+                "main": true,
+                "email": "get2.example@mail.com"
+              },
+              {
+                "id": 4,
+                "type": "phone",
+                "main": false,
+                "phone": "+380506617306"
+              }
+            ]
+          },
+          "ownership_part": 0.38
+        }
+      ]
