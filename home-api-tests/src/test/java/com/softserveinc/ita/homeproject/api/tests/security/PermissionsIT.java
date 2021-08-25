@@ -26,6 +26,7 @@ import com.softserveinc.ita.homeproject.model.*;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,9 +39,22 @@ public class PermissionsIT {
 
     private final static CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getAdminClient());
 
-    private final static HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
+    private final static HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final static ApartmentApi apartmentApiCooperationAdmin = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final static ApartmentInvitationApi apartmentInvitationApiCooperationAdmin =
+            new ApartmentInvitationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final static ApartmentOwnershipApi apartmentOwnershipApiCooperationAdmin =
+            new ApartmentOwnershipApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final static PollQuestionApi pollQuestionApiCooperationAdmin =
+            new PollQuestionApi(ApiClientUtil.getCooperationAdminClient());
 
     private final static UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
+
+    private final static NewsApi newsApiAdmin = new NewsApi(ApiClientUtil.getAdminClient());
 
     private final static ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
 
@@ -50,6 +64,15 @@ public class PermissionsIT {
     //    private final static ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
+
+
+    private static final long TEST_OWNERSHIP_ID = 10000001L;
+
+    private static final long TEST_OWNERSHIP_APARTMENT_ID = 100000000L;
+
+    private static final long TEST_DELETE_OWNERSHIP_ID = 10000004L;
+
+    private static final long TEST_DELETE_OWNERSHIP_APARTMENT_ID = 100000001L;
 
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -89,8 +112,8 @@ public class PermissionsIT {
     static Stream<Arguments> check() {
 
         return Stream.of(
-// UserAPI
-/*
+
+/*// UserAPI
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ContactApi contactApi = new ContactApi(apiClient);
                             CreateContact createEmailContact = createEmailContact();
@@ -235,8 +258,9 @@ public class PermissionsIT {
                             }
                         },
                         "update User",
-                        true, true, true, false),*/
+                        true, true, true, false),
 // CooperationApi // ↑↑↑ all right
+
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             CooperationApi cooperationApi = new CooperationApi(apiClient);
                             CreateCooperation createCooperation = createBaseCooperation();
@@ -526,367 +550,488 @@ public class PermissionsIT {
                             }
                         },
                         "update Cooperation Poll",
-                        false, true, false, false)
-
-// HouseApiImpl
-                /*,
+                        false, true, false, false),
+// HouseApiImpl // ↑↑↑ all right
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentApi apartmentApi = new ApartmentApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartment();
 
                             try {
-                                return apartmentApi.createApartmentWithHttpInfo();
+                                return apartmentApi.createApartmentWithHttpInfo(
+                                        expectedHouse.getId(), createApartment);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "create Apartment",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentApi apartmentApi = new ApartmentApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartment();
+                            ReadApartment createdApartment = createApartment(expectedHouse, createApartment);
 
                             try {
-                                return apartmentApi.deleteApartmentWithHttpInfo();
+                                return apartmentApi.deleteApartmentWithHttpInfo(
+                                        expectedHouse.getId(), createdApartment.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Apartment",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentApi apartmentApi = new ApartmentApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartment();
+                            ReadApartment createdApartment = createApartment(expectedHouse, createApartment);
 
                             try {
-                                return apartmentApi.getApartmentWithHttpInfo();
+                                return apartmentApi.getApartmentWithHttpInfo(
+                                        expectedHouse.getId(), createdApartment.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Apartment",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentApi apartmentApi = new ApartmentApi(apiClient);
 
                             try {
-                                return apartmentApi.queryApartmentWithHttpInfo();
+                                return apartmentApi.queryApartmentWithHttpInfo(
+                                        1L, 1,10, "id,asc", null,
+                                        null, null, null);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Apartment",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentApi apartmentApi = new ApartmentApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartment();
+                            ReadApartment createdApartment = createApartment(expectedHouse, createApartment);
+                            UpdateApartment updateApartment = updateApartment();
 
                             try {
-                                return apartmentApi.updateApartmentWithHttpInfo();
+                                return apartmentApi.updateApartmentWithHttpInfo(
+                                        expectedHouse.getId(), createdApartment.getId(), updateApartment);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Apartment",
-                        false, true, false, false)*//*,
-
-// ApartmentApiImpl
+                        false, true, false, false),
+// ApartmentApiImpl // ↑↑↑ all right
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartment();
+
+                            ReadApartment readApartment = createApartment(expectedHouse, createApartment);
+                            CreateApartmentInvitation createApartmentInvitation = createApartmentInvitation();
 
                             try {
-                                return apartmentInvitationApi.createInvitationWithHttpInfo();
+                                return apartmentInvitationApi.createInvitationWithHttpInfo(
+                                        readApartment.getId(), createApartmentInvitation);
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
+                                return new ApiResponse<Void>(403, null);
                             }
                         },
                         "create Invitation",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
 
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+
+                            CreateApartment createApartment = createApartmentWithoutInvitation();
+                            ReadApartment readApartment = createApartment(expectedHouse, createApartment);
+
+                            CreateApartmentInvitation createApartmentInvitation = createApartmentInvitation();
+                            ReadApartmentInvitation readApartmentInvitation =
+                                    createInvitation(readApartment, createApartmentInvitation);
+
                             try {
-                                return apartmentInvitationApi.deleteInvitationWithHttpInfo();
+                                return apartmentInvitationApi.deleteInvitationWithHttpInfo(
+                                        readApartment.getId(), readApartmentInvitation.getId());
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
+                                return new ApiResponse<Void>(403, null);
                             }
                         },
                         "delete Invitation",
-                        false, true, false, false)*//*,
-
+                        false, true, false, false),
+                // TODO not stable, work only once after sql script
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentOwnershipApi apartmentOwnershipApi = new ApartmentOwnershipApi(apiClient);
 
                             try {
-                                return apartmentOwnershipApi.deleteOwnershipWithHttpInfo();
+                                return apartmentOwnershipApi.deleteOwnershipWithHttpInfo(
+                                        TEST_DELETE_OWNERSHIP_APARTMENT_ID, TEST_DELETE_OWNERSHIP_ID);
                             } catch (ApiException e) {
-                                return new ApiResponse<ReadContact>(403, null);
+                                return new ApiResponse<Void>(403, null);
                             }
                         },
                         "delete Ownership",
-                        false, true, false, false)*//*,
-
+                        false, true, false, false),*/
+                // TODO error
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+
+                            CreateApartment createApartment = createApartmentWithoutInvitation();
+                            ReadApartment readApartment = createApartment(expectedHouse, createApartment);
+
+                            CreateApartmentInvitation createApartmentInvitation = createApartmentInvitation();
+                            ReadApartmentInvitation readApartmentInvitation =
+                                    createInvitation(readApartment, createApartmentInvitation);
 
                             try {
-                                return apartmentInvitationApi.getInvitationWithHttpInfo();
+                                return apartmentInvitationApi.getInvitationWithHttpInfo(
+                                        readApartment.getId(), readApartmentInvitation.getId());
                             } catch (ApiException e) {
+                                System.out.println("-->" + e.getCode());
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Invitation",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
-
+/*
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentOwnershipApi apartmentOwnershipApi = new ApartmentOwnershipApi(apiClient);
 
                             try {
-                                return apartmentOwnershipApi.getOwnershipWithHttpInfo();
+                                return apartmentOwnershipApi.getOwnershipWithHttpInfo(
+                                        TEST_OWNERSHIP_APARTMENT_ID, TEST_OWNERSHIP_ID);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Ownership",
-                        false, true, true, false)*//*,
-
+                        false, true, true, false),*/
+                // TODO error2
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
 
                             try {
-                                return apartmentInvitationApi.queryInvitationWithHttpInfo();
+                                return apartmentInvitationApi.queryInvitationWithHttpInfo(
+                                        1L, 1, 10, "id,asc", null,
+                                        null, null, null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Invitation",
-                        false, true, false, false)*//*,
-
+                        false, true, false, false),/*
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentOwnershipApi apartmentOwnershipApi = new ApartmentOwnershipApi(apiClient);
 
                             try {
-                                return apartmentOwnershipApi.queryOwnershipWithHttpInfo();
+                                return apartmentOwnershipApi.queryOwnershipWithHttpInfo(
+                                        1L, 1, 10, "id,asc", null,
+                                        null, null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Ownership",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(apiClient);
+                            ReadCooperation expectedCoop = createAndReadBaseCooperation();
+                            ReadHouse expectedHouse = createAndReadHouse(expectedCoop);
+                            CreateApartment createApartment = createApartmentWithoutInvitation();
+                            ReadApartment readApartment = createApartment(expectedHouse, createApartment);
+                            CreateApartmentInvitation createApartmentInvitation = createApartmentInvitation();
+                            ReadApartmentInvitation readApartmentInvitation =
+                                    createInvitation(readApartment, createApartmentInvitation);
+
+                            UpdateApartmentInvitation updateApartmentInvitation = updateApartmentInvitation();
 
                             try {
-                                return apartmentInvitationApi.updateInvitationWithHttpInfo();
+                                return apartmentInvitationApi.updateInvitationWithHttpInfo(
+                                        readApartment.getId(), readApartmentInvitation.getId(), updateApartmentInvitation);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Invitation",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             ApartmentOwnershipApi apartmentOwnershipApi = new ApartmentOwnershipApi(apiClient);
+                            UpdateOwnership updateOwnership = new UpdateOwnership()
+                                    .ownershipPart(BigDecimal.valueOf(0.5));
 
                             try {
-                                return apartmentOwnershipApi.updateOwnershipWithHttpInfo();
+                                return apartmentOwnershipApi.updateOwnershipWithHttpInfo(
+                                        TEST_OWNERSHIP_APARTMENT_ID, TEST_OWNERSHIP_ID, updateOwnership
+                                );
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update Ownership",
-                        false, true, false, false),*/
+                        false, true, false, false),
 
 // NewsApiImpl
-                /*Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             NewsApi newsApi = new NewsApi(apiClient);
+                            CreateNews expectedNews = createNews();
 
                             try {
-                                return newsApi.createNewsWithHttpInfo();
+                                return newsApi.createNewsWithHttpInfo(expectedNews);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "create News",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             NewsApi newsApi = new NewsApi(apiClient);
+                            ReadNews readNews = createAndReadNews();
 
                             try {
-                                return newsApi.deleteNewsWithHttpInfo();
+                                return newsApi.deleteNewsWithHttpInfo(readNews.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete News",
-                        true, true, false, false)*//*,
+                        true, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             NewsApi newsApi = new NewsApi(apiClient);
 
                             try {
-                                return newsApi.getAllNewsWithHttpInfo();
+                                return newsApi.getAllNewsWithHttpInfo(
+                                        1, 1, "id,asc", null,
+                                        null, null, null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get All News",
-                        true, true, true, false)*//*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             NewsApi newsApi = new NewsApi(apiClient);
+                            ReadNews readNews = createAndReadNews();
 
                             try {
-                                return newsApi.getNewsWithHttpInfo();
+                                return newsApi.getNewsWithHttpInfo(readNews.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get News",
-                        true, true, true, false)*//*,
+                        true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             NewsApi newsApi = new NewsApi(apiClient);
+                            ReadNews readNews = createAndReadNews();
+                            UpdateNews updateNews = updateNews();
 
                             try {
-                                return newsApi.updateNewsWithHttpInfo();
+                                return newsApi.updateNewsWithHttpInfo(readNews.getId(), updateNews);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "update News",
-                        true, true, false, false),*/
+                        true, true, false, false),
 
-//PollApiImpl
-                /*Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+//PollApiImpl // ↑↑↑ all right
+                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PolledHouseApi polledHouseApi = new PolledHouseApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadHouse expectedHouse = createAndReadHouse(readCooperation);
+                            CreatePoll createPoll = createPoll(readCooperation);
+                            HouseLookup houseLookup = new HouseLookup().id(expectedHouse.getId());
+                            ReadPoll readPoll = readCooperationPoll(readCooperation, createPoll);
 
                             try {
-                                return polledHouseApi.createPolledHouseWithHttpInfo();
+                                return polledHouseApi.createPolledHouseWithHttpInfo(readPoll.getId(), houseLookup);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "create Polled House",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollQuestionApi pollQuestionApi = new PollQuestionApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
+                            CreateQuestion createQuestion = createAdviceQuestion();
 
                             try {
-                                return pollQuestionApi.createQuestionWithHttpInfo();
+                                return pollQuestionApi.createQuestionWithHttpInfo(readPoll.getId(), createQuestion);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "create Question",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PolledHouseApi polledHouseApi = new PolledHouseApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadHouse expectedHouse = createAndReadHouse(readCooperation);
+                            CreatePoll createPoll = createPoll(readCooperation);
+                            ReadPoll readPoll = readCooperationPoll(readCooperation, createPoll);
 
                             try {
-                                return polledHouseApi.deletePolledHouseWithHttpInfo();
+                                return polledHouseApi.deletePolledHouseWithHttpInfo(
+                                        readPoll.getId(), expectedHouse.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Polled House",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollQuestionApi pollQuestionApi = new PollQuestionApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
+                            CreateQuestion createQuestion = createAdviceQuestion();
+                            ReadQuestion createdQuestion = createdQuestion(readPoll, createQuestion);
 
                             try {
-                                return pollQuestionApi.deleteQuestionWithHttpInfo();
+                                return pollQuestionApi.deleteQuestionWithHttpInfo(
+                                        readPoll.getId(), createdQuestion.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "delete Question",
-                        false, true, false, false)*//*,
+                        false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollApi pollApi = new PollApi(apiClient);
-
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
                             try {
-                                return pollApi.getPollWithHttpInfo();
+                                return pollApi.getPollWithHttpInfo(readPoll.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Poll",
-                        false, true, true, false)*//*,
-
+                        false, true, true, false),*/
+                // TODO debug
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PolledHouseApi polledHouseApi = new PolledHouseApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadHouse expectedHouse = createAndReadHouse(readCooperation);
+                            CreatePoll createPoll = createPoll(readCooperation);
+                            ReadPoll readPoll = readCooperationPoll(readCooperation, createPoll);
 
                             try {
-                                return polledHouseApi.getPolledHouseWithHttpInfo();
+                                return polledHouseApi.getPolledHouseWithHttpInfo(
+                                        readPoll.getId(), expectedHouse.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Polled House",
-                        false, true, true, false)*//*,
+                        false, true, true, false)/*,
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollQuestionApi pollQuestionApi = new PollQuestionApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
+                            CreateQuestion createQuestion = createAdviceQuestion();
+                            ReadQuestion readQuestion = createdQuestion(readPoll, createQuestion);
 
                             try {
-                                return pollQuestionApi.getQuestionWithHttpInfo();
+                                return pollQuestionApi.getQuestionWithHttpInfo(
+                                        readPoll.getId(), readQuestion.getId());
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "get Question",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollApi pollApi = new PollApi(apiClient);
 
                             try {
-                                return pollApi.queryPollWithHttpInfo();
+                                return pollApi.queryPollWithHttpInfo(
+                                        1L, 1, 10, "id,asc", null,
+                                        null, null, null, null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Poll",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PolledHouseApi polledHouseApi = new PolledHouseApi(apiClient);
 
                             try {
-                                return polledHouseApi.queryPolledHouseWithHttpInfo();
+                                return polledHouseApi.queryPolledHouseWithHttpInfo(
+                                        1L, 1, 10, "id,asc", null,
+                                        null, null, null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Polled House",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollQuestionApi pollQuestionApi = new PollQuestionApi(apiClient);
 
                             try {
-                                return pollQuestionApi.queryQuestionWithHttpInfo();
+                                return pollQuestionApi.queryQuestionWithHttpInfo(
+                                        1L, 1, 10, "id,asc", null,
+                                        null, null);
+
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
                         },
                         "query Question",
-                        false, true, true, false)*//*,
+                        false, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
                             PollQuestionApi pollQuestionApi = new PollQuestionApi(apiClient);
+                            ReadCooperation readCooperation = createAndReadCooperationForPoll();
+                            ReadPoll readPoll = createAndReadCooperationPoll(readCooperation);
+                            CreateQuestion createQuestion = createAdviceQuestion();
+                            ReadQuestion readQuestion = createdQuestion(readPoll, createQuestion);
+                            UpdateQuestion updateQuestion = updateQuestion();
 
                             try {
-                                return pollQuestionApi.updateQuestionWithHttpInfo();
+                                return pollQuestionApi.updateQuestionWithHttpInfo(
+                                        readPoll.getId(), readQuestion.getId(), updateQuestion);
                             } catch (ApiException e) {
                                 return new ApiResponse<ReadContact>(403, null);
                             }
@@ -894,8 +1039,114 @@ public class PermissionsIT {
                         "update Question",
                         false, true, false, false)*/
 
-
         );
+    }
+
+    private static UpdateQuestion updateQuestion() {
+        return new UpdateQuestion()
+                .question("Do you like updated question?")
+                .type(QuestionType.ADVICE);
+    }
+
+    @SneakyThrows
+    private static ReadQuestion createdQuestion(ReadPoll readPoll, CreateQuestion createQuestion) {
+        return pollQuestionApiCooperationAdmin.createQuestion(
+                readPoll.getId(), createQuestion);
+    }
+
+    private static CreateQuestion createAdviceQuestion() {
+        return new CreateAdviceQuestion()
+                .question("Your proposal for your house?")
+                .type(QuestionType.ADVICE);
+    }
+
+    private static UpdateNews updateNews() {
+        return new UpdateNews()
+                .title("UpdatedTitle")
+                .description("UpdatedDescription")
+                .text("UpdatedText")
+                .photoUrl("http://updatedurl.example.com")
+                .source("UpdatedSource");
+    }
+
+    @SneakyThrows
+    private static ReadNews createAndReadNews() {
+        return newsApiAdmin.createNews(createNews().title("FirstTitle"));
+    }
+
+    private static CreateNews createNews() {
+        return new CreateNews()
+                .title("Title")
+                .description("Description")
+                .text("Text")
+                .photoUrl("http://someurl.example.com")
+                .source("Source");
+    }
+
+    @SneakyThrows
+    private static ReadApartmentInvitation createInvitation(
+            ReadApartment readApartment, CreateApartmentInvitation createApartmentInvitation) {
+        return apartmentInvitationApiCooperationAdmin.
+                createInvitation(readApartment.getId(), createApartmentInvitation);
+    }
+
+    private static UpdateApartment updateApartment() {
+        return new UpdateApartment()
+                .number("27")
+                .area(BigDecimal.valueOf(32.1));
+    }
+
+    @SneakyThrows
+    private static ReadApartment createApartment(ReadHouse expectedHouse, CreateApartment createApartment) {
+        return apartmentApiCooperationAdmin.createApartment(expectedHouse.getId(), createApartment);
+    }
+
+    private static List<CreateInvitation> createListOfInvitation() {
+        List<CreateInvitation> createInvitations = new ArrayList<>();
+        createInvitations.add(new CreateApartmentInvitation()
+                .ownershipPart(BigDecimal.valueOf(0.1))
+                .email("test.receive.messages@gmail.com")
+                .type(InvitationType.APARTMENT));
+
+        createInvitations.add(new CreateApartmentInvitation()
+                .ownershipPart(BigDecimal.valueOf(0.1))
+                .email("test.receive.messages@gmail.com")
+                .type(InvitationType.APARTMENT));
+
+        return createInvitations;
+    }
+
+    private static CreateApartmentInvitation createApartmentInvitation() {
+        return (CreateApartmentInvitation) new CreateApartmentInvitation()
+                .ownershipPart(BigDecimal.valueOf(0.1))
+                .email("test.receive.messages@gmail.com")
+                .type(InvitationType.APARTMENT);
+    }
+
+    private static UpdateApartmentInvitation updateApartmentInvitation() {
+        return new UpdateApartmentInvitation()
+                .ownershipPart(BigDecimal.valueOf(1))
+                .email("test.receive.messages@gmail.com");
+    }
+
+    private static CreateApartment createApartment(List<CreateInvitation> createInvitations) {
+        return new CreateApartment()
+                .area(BigDecimal.valueOf(72.5))
+                .number("15")
+                .invitations(createInvitations);
+    }
+
+    private static CreateApartment createApartmentWithoutInvitation() {
+        return new CreateApartment()
+                .area(BigDecimal.valueOf(72.5))
+                .number("15");
+    }
+
+    private static CreateApartment createApartment() {
+        return new CreateApartment()
+                .area(BigDecimal.valueOf(72.5))
+                .number("15")
+                .invitations(createListOfInvitation());
     }
 
     private static UpdatePoll updatePoll() {
@@ -938,21 +1189,6 @@ public class PermissionsIT {
                         .street("upd")
                         .zipCode("upd"));
     }
-
-
-
-
-
-
-
-/*    @Test
-    void testUserAdmin() throws ApiException {
-        ApiClient apiClient = ApiClientUtil.getAdminClient();
-//        System.out.println(apiClient instanceof ApiClientUtil);
-
-//        CooperationApi cooperationApi = new CooperationApi(apiClient);
-//        cooperationApi.getCooperation(1L);
-    }*/
 
 
     private int getStatusCode(Function<ApiClient, ApiResponse<?>> action, ApiClient unauthorizedClient) {
@@ -1121,6 +1357,12 @@ public class PermissionsIT {
     private static ReadPoll createAndReadCooperationPoll(ReadCooperation readCooperation) {
         return cooperationPollApiCooperationAdmin.createCooperationPoll(
                 readCooperation.getId(), createPoll(readCooperation));
+    }
+
+    @SneakyThrows
+    private static ReadPoll readCooperationPoll(ReadCooperation readCooperation, CreatePoll createPoll) {
+        return cooperationPollApiCooperationAdmin.createCooperationPoll(
+                readCooperation.getId(), createPoll);
     }
 
     private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {

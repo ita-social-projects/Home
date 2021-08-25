@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OwnershipApiIT {
 
-    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getAdminClient());
+    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
 

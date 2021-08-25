@@ -2096,6 +2096,8 @@ components:
       type: string
       enum:
         - admin
+        - cooperation_admin
+        - owner
         - user
     CreateInvitation:
       type: object
