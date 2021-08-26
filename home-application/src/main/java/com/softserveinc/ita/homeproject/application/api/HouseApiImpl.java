@@ -10,6 +10,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.HousesApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.apartment.ApartmentDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.model.CreateApartment;
 import com.softserveinc.ita.homeproject.model.ReadApartment;

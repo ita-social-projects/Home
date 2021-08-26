@@ -18,11 +18,11 @@ public abstract class BaseEmailService implements EmailService {
     @Autowired
     private UserRepository userRepository;
 
-    protected abstract void executeAllInvitationsByType();
+    public abstract void executeAllInvitationsByType();
 
-    protected abstract MailDto createMailDto(InvitationDto invitationDto);
+    public abstract MailDto createMailDto(InvitationDto invitationDto);
 
-    protected void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
+    public void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
         if(userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
             mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/users");
             mailDto.setIsRegistered(false);

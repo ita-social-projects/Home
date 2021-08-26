@@ -4,9 +4,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.InvitationsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.model.InvitationStatus;
 import com.softserveinc.ita.homeproject.model.InvitationToken;
 import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
