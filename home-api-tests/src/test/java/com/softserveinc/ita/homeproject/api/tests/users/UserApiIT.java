@@ -108,7 +108,7 @@ class UserApiIT {
         CreateUser expectedUser = createTestUser();
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser))
-                .matches(exception -> exception.getCode() == Response.Status.UNAUTHORIZED.getStatusCode());
+                .matches(exception -> exception.getCode() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
@@ -262,7 +262,7 @@ class UserApiIT {
 
     @Test
     void getNonExistentUserTest() {
-        Long userId = 100L;
+        Long userId = 0L;
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
@@ -391,7 +391,7 @@ class UserApiIT {
 
     @Test
     void deleteNonExistentUserTest() {
-        Long userId = 100L;
+        Long userId = 0L;
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.deleteUserWithHttpInfo(userId))

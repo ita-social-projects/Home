@@ -38,7 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
-    // TODO add all other necessary endpoints for permitAll()
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

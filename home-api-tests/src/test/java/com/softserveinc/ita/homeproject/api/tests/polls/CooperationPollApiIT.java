@@ -56,11 +56,11 @@ class CooperationPollApiIT {
 
     static final Long NONEXISTENT_COOP_ID = 999999999L;
 
-    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getAdminClient());
+    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getAdminClient());
+    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    final static PollApi POLL_API = new PollApi(ApiClientUtil.getAdminClient());
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getCooperationAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 

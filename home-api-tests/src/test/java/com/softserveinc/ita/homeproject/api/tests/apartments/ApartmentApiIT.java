@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ApartmentApiIT {
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getAdminClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 

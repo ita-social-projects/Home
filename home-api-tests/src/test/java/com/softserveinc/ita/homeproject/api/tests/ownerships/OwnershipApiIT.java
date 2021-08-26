@@ -49,9 +49,9 @@ class OwnershipApiIT {
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getAdminClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 

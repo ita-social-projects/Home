@@ -64,7 +64,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(MANAGE_IN_COOPERATION) // TODO trouble with this / untested method
+    @PreAuthorize(MANAGE_IN_COOPERATION) // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
 
@@ -84,7 +84,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
-    @PreAuthorize(MANAGE_IN_COOPERATION)  // TODO trouble with this / untested method
+    @PreAuthorize(MANAGE_IN_COOPERATION)  // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response queryInvitation(Long apartmentId,
                                     Integer pageNumber,
