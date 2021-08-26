@@ -13,7 +13,7 @@
 
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
-        <yaml.name>openapi.yaml</yaml.name>
+        <json.name>openapi.json</json.name>
     </properties>
 
     <dependencies>
@@ -137,7 +137,7 @@
                     <execution>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <inputSpec>${project.build.outputDirectory}/static/api/0/apidocs/${yaml.name}</inputSpec>
+                            <inputSpec>${project.build.outputDirectory}/static/api/0/apidocs/${json.name}</inputSpec>
                             <generatorName>jaxrs-spec</generatorName>
                             <configOptions>
                                 <java8>true</java8>

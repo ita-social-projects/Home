@@ -1,0 +1,116 @@
+cooperation-cooperationId-houses:
+  post:
+    tags:
+      - house
+    summary: Create new House for the Cooperation
+    description: The endpoint creates a new House for the specified Cooperation ID
+    operationId: createHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateHouseBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/HouseResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - house
+    summary: Get all Houses by Cooperation
+    description: The endpoint retrieves the list of houses associated with the specified cooperation ID
+    operationId: queryHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/quantity_flat'
+      - $ref: '../parameters/parameters.yaml#/adjoining_area'
+      - $ref: '../parameters/parameters.yaml#/house_area'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/HousesResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperation-cooperationId-houses-houseId:
+  get:
+    tags:
+      - house
+    summary: Get House by ID
+    description: The endpoint retrieves an existing house
+      associated with the specified Cooperation by Cooperation and House IDs
+    operationId: getHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/HouseResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  put:
+    tags:
+      - house
+    summary: Update current House
+    description: The endpoint updates information on a house that exists
+      in the system by the specified Cooperation and House IDs
+    operationId: updateHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/UpdateHouseBody'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/HouseResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  delete:
+    tags:
+      - house
+    summary: Delete house by ID
+    description: The endpoint deletes an existing House on a Cooperation associated with the
+      specified Coopeartion and House IDs
+    operationId: deleteHouse
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
