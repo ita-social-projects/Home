@@ -181,7 +181,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                Integer quantityFlat,
                                Integer adjoiningArea,
                                BigDecimal houseArea) {
-
+        verifyExistence(cooperationId, cooperationService);
         Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
@@ -197,6 +197,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                                String email,
                                                String main,
                                                ContactType type) {
+        verifyExistence(cooperationId, cooperationService);
         Page<ContactDto> readContact = contactService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readContact, ReadContact.class);
     }
@@ -213,6 +214,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
                                          LocalDateTime completionDate,
                                          PollType type,
                                          PollStatus status) {
+        verifyExistence(cooperationId, cooperationService);
         Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
     }

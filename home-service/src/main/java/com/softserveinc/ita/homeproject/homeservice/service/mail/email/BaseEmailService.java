@@ -18,25 +18,19 @@ public abstract class BaseEmailService implements EmailService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
+    protected abstract void executeAllInvitationsByType();
+
+    protected abstract MailDto createMailDto(InvitationDto invitationDto);
+
+    protected void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
         if(userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
             mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/users");
             mailDto.setIsRegistered(false);
-            return;
-        }
-        switch (invitationDto.getType()) {
-            case COOPERATION:
-                mailDto.setLink("Link for joining into cooperation");
-                mailDto.setIsRegistered(true);
-                break;
-            case APARTMENT:
-                mailDto.setLink("Link for joining into apartment");
-                mailDto.setIsRegistered(true);
-                break;
-            default:
-                throw new InvitationException("Wrong invitation type.");
+        } else {
+            mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
+            mailDto.setIsRegistered(true);
         }
     }
+
 
 }

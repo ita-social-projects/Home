@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.cooperation.invitation.I
 import com.softserveinc.ita.homeproject.homedata.repository.cooperation.invitation.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,4 +40,24 @@ public abstract class InvitationServiceImpl implements InvitationService {
         return invitationRepository.findById(id).orElseThrow(() ->
                 new InvitationException("Invitation with id " + id + " was not found"));
     }
+
+    @Override
+    public InvitationDto findInvitationByRegistrationToken(String token) {
+        Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
+                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+        return mapper.convert(invitation, InvitationDto.class);
+    }
+
+    @Override
+    public void registerWithRegistrationToken(String token) {
+        Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
+                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+
+        if(!invitation.getStatus().equals(InvitationStatus.PROCESSING)){
+            throw new InvitationException("Invitation status is not equal to processing");
+        }
+
+        acceptUserInvitation(invitation);
+    }
+
 }

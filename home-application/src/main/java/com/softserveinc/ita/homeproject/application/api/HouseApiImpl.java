@@ -26,6 +26,9 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @Autowired
     private ApartmentService apartmentService;
 
+    @Autowired
+    private HouseService houseService;
+
     @PreAuthorize(CREATE_APARTMENT_PERMISSION)
     @Override
     public Response createApartment(Long houseId, CreateApartment createApartment) {
@@ -62,7 +65,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
                                    Long id,
                                    String apartmentNumber,
                                    BigDecimal apartmentArea) {
-
+        verifyExistence(houseId, houseService);
         Page<ApartmentDto> readApartment = apartmentService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartment, ReadApartment.class);
     }

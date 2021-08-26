@@ -1,0 +1,24 @@
+ReadOwnership:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    user:
+      $ref: 'user.yaml#/ReadUser'
+    ownership_part:
+      type: number
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588
+UpdateOwnership:
+  type: object
+  required:
+    - ownership_part
+  properties:
+    ownership_part:
+      type: number
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588
