@@ -37,6 +37,8 @@ import org.junit.jupiter.api.Test;
 
 class CooperationContactApiIT {
 
+    private static final String CONTACT_NOT_FOUND = "Contact with 'id: %d and cooperation_id %d' is not found";
+
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
     private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
 
