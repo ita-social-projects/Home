@@ -12,7 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,6 +49,21 @@ class QueryOwnershipIT {
                 .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadOwnership::getId).reversed());
+    }
+
+    @Test
+    void getAllOwnershipsFromNotExistingApartment() {
+        Long wrongApartmentId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new OwnershipQuery
+                        .Builder(ownershipApi)
+                        .apartmentId(wrongApartmentId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Apartment with 'id: " + wrongApartmentId + "' is not found");
     }
 
     @Test

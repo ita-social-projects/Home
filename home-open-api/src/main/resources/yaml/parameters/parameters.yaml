@@ -1,0 +1,290 @@
+p_id:
+  name: id
+  in: path
+  description: The ID
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_user_id:
+  name: user_id
+  in: path
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_cooperation_id:
+  name: cooperation_id
+  in: path
+  required: true
+  description: The ID of the Cooperation
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_house_id:
+  name: "house_id"
+  in: path
+  required: true
+  description: ID of the house where apartment is located
+  schema:
+    type: integer
+    format: int64
+    minimum: 1
+p_apartment_id:
+  name: "apartment_id"
+  in: "path"
+  description: Apartment ID to which the ownership belongs
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_ownership_id:
+  name: "id"
+  in: "path"
+  description: ID of the ownership
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_invitation_id:
+  name: "id"
+  in: "path"
+  description: ID of the invitation
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+p_poll_id:
+  name: "poll_id"
+  in: "path"
+  description: ID of the poll to which polled houses belongs
+  required: true
+  schema:
+    type: integer
+    format: int64
+    minimum: 1
+page_number:
+  in: query
+  name: page_number
+  schema:
+    type: integer
+    minimum: 1
+    default: 1
+  required: false
+  description: The number of current page.
+page_size:
+  in: query
+  name: page_size
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 10
+    default: 5
+  required: false
+  description: The number of items to return.
+id:
+  in: query
+  name: id
+  schema:
+    type: integer
+    format: int64
+  example: 1
+user_id:
+  in: query
+  name: user_id
+  schema:
+    type: integer
+    format: int64
+  example: 1
+cooperation_id:
+  in: query
+  name: cooperation_id
+  required: true
+  description: ID of the polled cooperation
+  schema:
+    type: integer
+    format: int64
+    minimum: 1
+  example: 1
+sort:
+  in: query
+  name: sort
+  schema:
+    type: string
+    default: id,asc
+filter:
+  in: query
+  name: filter
+  schema:
+    type: string
+title:
+  in: query
+  name: title
+  schema:
+    type: string
+  description: The title of the News
+text:
+  in: query
+  name: text
+  schema:
+    type: string
+  description: The content of the News
+source:
+  in: query
+  name: source
+  schema:
+    type: string
+  description: The source of the News
+email:
+  in: query
+  name: email
+  schema:
+    type: string
+  description: The email of the User
+phone:
+  in: query
+  name: phone
+  schema:
+    type: string
+  description: Phone of the Contact
+first_name:
+  in: query
+  name: first_name
+  schema:
+    type: string
+  description: The First Name of the User
+last_name:
+  in: query
+  name: last_name
+  schema:
+    type: string
+  description: The Last name of the User
+contact_phone:
+  in: query
+  name: contact_phone
+  schema:
+    type: string
+  description: Contact phone of the User
+contact_email:
+  in: query
+  name: contact_email
+  schema:
+    type: string
+  description: Contact email of the User
+main:
+  in: query
+  name: main
+  schema:
+    type: string
+  description: Specifies if its a main Contact of the User
+type:
+  in: query
+  name: type
+  schema:
+    $ref: '../models/contact.yaml#/ContactType'
+  description: Type of the Contact
+name:
+  in: query
+  name: name
+  schema:
+    type: string
+  example: "Dobro"
+iban:
+  in: query
+  name: iban
+  schema:
+    type: string
+  example: "77778"
+usreo:
+  in: query
+  name: usreo
+  schema:
+    type: string
+  example: "A9856738"
+quantity_flat:
+  in: query
+  name: quantity_flat
+  schema:
+    type: integer
+  example: 10
+adjoining_area:
+  in: query
+  name: adjoining_area
+  schema:
+    type: integer
+  example: 40
+house_area:
+  in: query
+  name: house_area
+  schema:
+    type: number
+  example: 20
+apartment_number:
+  in: query
+  name: apartment_number
+  schema:
+    type: string
+    minLength: 1
+    maxLength: 6
+    pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+apartment_area:
+  in: query
+  name: apartment_area
+  schema:
+    type: number
+ownership_part:
+  in: query
+  name: ownership_part
+  schema:
+    type: number
+    minimum: 0.0001
+    maximum: 1.0
+    multipleOf: 1e-4
+  example: 0.6588
+status:
+  in: query
+  name: status
+  schema:
+    type: string
+  example: "pending"
+creation_date:
+  in: query
+  name: creation_date
+  schema:
+    type: string
+    format: date-time
+  example: "2021-05-30T08:30"
+completion_date:
+  in: query
+  name: completion_date
+  schema:
+    type: string
+    format: date-time
+  example: "2021-06-20T06:00"
+poll_type:
+  in: query
+  name: type
+  schema:
+    $ref: '../models/poll.yaml#/PollType'
+  description: Type of the Poll
+  example: simple
+poll_status:
+  in: query
+  name: status
+  schema:
+    $ref: '../models/poll.yaml#/PollStatus'
+  description: Status of the Poll
+  example: "draft"
+question_type:
+  in: query
+  name: type
+  schema:
+    $ref: '../models/question.yaml#/QuestionType'
+  description: Type of the Question
+  example: "advice"
