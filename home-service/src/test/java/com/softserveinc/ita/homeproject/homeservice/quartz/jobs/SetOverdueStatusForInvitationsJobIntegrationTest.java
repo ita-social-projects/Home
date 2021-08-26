@@ -17,11 +17,17 @@ import com.softserveinc.ita.homeproject.homeservice.service.impl.CooperationInvi
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 @SpringBootTest(classes = HomeServiceTestContextConfig.class)
-public class SetOverdueStatusForInvitationsJobTest {
+public class SetOverdueStatusForInvitationsJobIntegrationTest {
 
     @Autowired
     private ApartmentInvitationRepository apartmentInvitationRepository;
@@ -36,7 +42,14 @@ public class SetOverdueStatusForInvitationsJobTest {
     CooperationInvitationServiceIntegrationTest cooperationInvitationServiceIntegrationTest;
 
     @Autowired
-    private SetOverdueStatusForInvitationsJob setOverdueStatusForInvitationsJob;
+    private SchedulerFactoryBean schedulerFactoryBean;
+
+    @Autowired
+    @Qualifier("testSetOverdueStatusForInvitationsJob")
+    JobDetailFactoryBean jobDetailFactoryBean;
+
+    @Autowired
+    SimpleTriggerFactoryBean triggerFactoryBean;
 
     @BeforeEach
     private void initInvitationTestDB() {
@@ -51,18 +64,21 @@ public class SetOverdueStatusForInvitationsJobTest {
     }
 
     @Test
-    void setOverdueStatusForInvitationsJobTest() {
-        setOverdueStatusForInvitationsJob.executeInternal(null);
+    void callSetOverdueStatusForInvitationsJobByQuartzBeansTest() throws SchedulerException, InterruptedException {
+        Scheduler testScheduler = schedulerFactoryBean.getScheduler();
+        testScheduler.scheduleJob(jobDetailFactoryBean.getObject(), triggerFactoryBean.getObject());
+
+        testScheduler.start();
+        Thread.sleep(1000 * 3);
+        testScheduler.shutdown();
 
         List<CooperationInvitation> allCooperationInvitationsFromTransformedDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
-        allCooperationInvitationsFromTransformedDB.forEach(System.out::println);
 
         List<ApartmentInvitation> allApartmentInvitationsFromTransformedDB =
             StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
-        allApartmentInvitationsFromTransformedDB.forEach(System.out::println);
 
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(1).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(3).getStatus());
