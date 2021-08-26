@@ -181,7 +181,7 @@
                         </auth>
                     </to>
                     <container>
-                        <mainClass>com.softserveinc.ita.homeproject.application.HomeApplication</mainClass>
+                        <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
                     </container>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>

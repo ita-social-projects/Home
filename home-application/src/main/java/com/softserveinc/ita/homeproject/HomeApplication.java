@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application;
+package com.softserveinc.ita.homeproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
