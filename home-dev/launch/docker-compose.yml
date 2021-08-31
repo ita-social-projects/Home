@@ -35,6 +35,8 @@ services:
         condition: service_completed_successfully
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      MAIL_HOST: localhost
+      MAIL_PORT: 1025
     ports:
       - 8080:8080
     networks:

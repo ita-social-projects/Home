@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.converter;
 
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
+import com.softserveinc.ita.homeproject.homedata.general.entity.contact.ContactType;
 import org.springframework.core.convert.converter.Converter;
 
 @Provider
