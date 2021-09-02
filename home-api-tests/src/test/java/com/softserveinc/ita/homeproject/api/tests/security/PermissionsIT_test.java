@@ -4,9 +4,11 @@ import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiClient;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
-import com.softserveinc.ita.homeproject.client.api.ContactApi;
-import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.*;
 import com.softserveinc.ita.homeproject.client.model.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -63,42 +66,62 @@ public class PermissionsIT_test {
         checkUnauthenticatedUser(guestUser, statusCode);
 
     }
-    @SneakyThrows
+
+/*    @SneakyThrows
     @Test
-    void reflectionConstructor(){
+    void reflectionConstructor() {
 //        Class<?> contactApi = ContactApi.class;
 //        Constructor[] constructors = contactApi.getConstructors();
         Constructor<?> constructor = ContactApi.class.getConstructor(ApiClient.class);
         ContactApi myObject = (ContactApi)
                 constructor.newInstance(new ApiClient());
         System.out.println(myObject);
-    }
+    }*/
 
-
+    static List<PermissionMapper> arrayListClasses = Arrays.asList(
+            new PermissionMapper(new ContactApi(),
+                    "create Contact On User", true, true, true, false),
+            new PermissionMapper(new ContactApi(),
+                    "create User", true, true, true, true));
 
     static Stream<Arguments> check() {
+        Arguments[] values = new Arguments[arrayListClasses.size()];
+        int i = 0;
+        for (PermissionMapper arrayListClass : arrayListClasses) {
 
+            values[i] = Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+                        try {
+                            arrayListClass.getApi().setApiClient(apiClient);
+                            return arrayListClass.getApi().createContactOnUserWithHttpInfo(
+                                    1L, new CreateContact());
+                        } catch (ApiException e) {
+                            return new ApiResponse<>(e.getCode(), null);
+                        }
+                    },
+                    arrayListClass.getMethodName(),
+                    arrayListClass.getAdmin(),
+                    arrayListClass.getCoopAdmin(),
+                    arrayListClass.getOwner(),
+                    arrayListClass.getUserGuest()
+            );
+            i++;
+        }
 
-        return Stream.of(
-/*        for (Object o :) {
-
-        }*/
-// UserAPI
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).createContactOnUserWithHttpInfo(
-                                        1L, new CreateContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<>(e.getCode(), null);
-                            }
-                        },
-                        "create Contact On User",
-                        true, true, true, false)
-
-
-
-        );
+        return Arrays.stream(values);
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class PermissionMapper {
+        private ContactApi api;
+        private String methodName;
+        private Boolean admin;
+        private Boolean coopAdmin;
+        private Boolean owner;
+        private Boolean userGuest;
+    }
+
 
     private int getStatusCode(Function<ApiClient, ApiResponse<?>> action, ApiClient unauthorizedClient) {
         int statusCode;

@@ -1,11 +1,15 @@
 package com.softserveinc.ita.homeproject.api.tests.security;
 
-import com.softserveinc.ita.homeproject.client.api.ContactApi;
+import com.softserveinc.ita.homeproject.client.api.*;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.lang.module.ModuleReader;
+import java.lang.module.ResolvedModule;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,19 +28,56 @@ public class TempIT {
 
     private static final String BAD_PACKAGE_ERROR = "Unable to get resources from path '%s'. Are you sure the package '%s' exists?";
 
+    ArrayList<String> allMethods = new ArrayList<>();
+
     @Test
     void someFind() {
-        ContactApi apartmentApi = new ContactApi();
-        Class<? extends ContactApi> someClass = apartmentApi.getClass();
-        Method[] methods = someClass.getMethods();
-//        System.out.println(Arrays.toString(someClass.getMethods()));
-        Arrays.stream(methods)
+
+        List<?> arrayListClasses = Arrays.asList(
+                new ApartmentApi(),
+                new ApartmentInvitationApi(),
+                new ApartmentOwnershipApi(),
+                new ContactApi(),
+                new CooperationApi(),
+                new CooperationContactApi(),
+                new CooperationPollApi(),
+                new HouseApi(),
+                new InvitationsApi(),
+                new NewsApi(),
+                new PollApi(),
+                new PolledHouseApi(),
+                new PollQuestionApi(),
+                new UserApi());
+
+        ArrayList<String> arrayListMethods;
+        for (Object arrayListClass : arrayListClasses) {
+            arrayListMethods = getMethods(getArrayOfMethods(arrayListClass));
+            allMethods.addAll(arrayListMethods);
+        }
+
+        int i = 0;
+        for (String s : allMethods) {
+            System.out.println(s);
+        }
+    }
+
+    private Method[] getArrayOfMethods(Object someApi) {
+        return someApi.getClass().getMethods();
+    }
+
+    private ArrayList<String> getMethods(Method[] methods) {
+        return Arrays.stream(methods)
                 .filter((s) -> s.toString().contains("WithHttpInfo"))
+                .filter((s) -> s.toString().contains("approveInvitation"))
                 .map((s) -> s.toString().replaceAll(
-                        "\\Qpublic com.softserveinc.ita.homeproject.ApiResponse com.softserveinc.ita.homeproject.api.ContactApi.\\E", ""))
-                .map((s) -> s.split("\\)")[0] + ")")
-//                .map((s) -> s.substring(0,s.compareTo(")")))
-                .forEach(System.out::println);
+                        "\\Qpublic com.softserveinc.ita.homeproject.client.ApiResponse " +
+                                "com.softserveinc.ita.homeproject.client.api.\\E", ""))
+                .map((s) -> s.split("\\(")[0])
+//                .map((s) -> s.split("\\.")[1])
+//                .map((s) -> s.toString().replaceAll(
+//                        "\\QWithHttpInfo\\E", ""))
+                .map((s) -> s.split("\\(")[0])
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -58,8 +99,8 @@ public class TempIT {
 //        List<Class<?>> find = find("C:\\Users\\vfrolo\\IdeaProjects\\Home\\home-clients\\target\\generated-sources\\openapi\\client\\src\\gen\\java\\main\\com\\softserveinc\\ita\\homeproject\\api");
 //        List<Class<?>> find = find("com.softserveinc");
 //        List<Class<?>> find = find(packageName);
-//        List<Class<?>> find = find("com.softserveinc.ita.homeproject.application.api");
-        List<Class<?>> find = find(packageName);
+        List<Class<?>> find = find("com.softserveinc.ita.homeproject.api");
+//        List<Class<?>> find = find(packageName);
         int i = 0;
         for (Class<?> aClass : find) {
             System.out.println(++i + " --> " + aClass);
@@ -128,5 +169,20 @@ public class TempIT {
         String scannedUrl = Thread.currentThread().getContextClassLoader();
         System.out.println(scannedUrl);
     }*/
+
+
+    @Test
+    void scanAllModules() {
+        ModuleLayer.boot().configuration().modules().stream()
+                .map(ResolvedModule::reference)
+                .forEach(mref -> {
+                    System.out.println(mref.descriptor().name());
+                    try (ModuleReader reader = mref.open()) {
+                        reader.list().forEach(System.out::println);
+                    } catch (IOException ioe) {
+                        throw new UncheckedIOException(ioe);
+                    }
+                });
+    }
 
 }
