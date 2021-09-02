@@ -2,12 +2,12 @@ package com.softserveinc.ita.homeproject.api.tests.query;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 
 public class CooperationContactQuery extends BaseQuery{
 

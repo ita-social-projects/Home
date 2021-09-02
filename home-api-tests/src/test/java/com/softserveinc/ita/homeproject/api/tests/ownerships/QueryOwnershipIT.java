@@ -1,10 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.ownerships;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.ApartmentOwnershipApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.ApartmentOwnershipApi;
 import com.softserveinc.ita.homeproject.api.tests.query.OwnershipQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ReadOwnership;
+import com.softserveinc.ita.homeproject.client.model.ReadOwnership;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

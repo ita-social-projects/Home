@@ -11,14 +11,14 @@ import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT
 import java.util.List;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.CreateNews;
-import com.softserveinc.ita.homeproject.model.ReadNews;
-import com.softserveinc.ita.homeproject.model.UpdateNews;
+import com.softserveinc.ita.homeproject.client.model.CreateNews;
+import com.softserveinc.ita.homeproject.client.model.ReadNews;
+import com.softserveinc.ita.homeproject.client.model.UpdateNews;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

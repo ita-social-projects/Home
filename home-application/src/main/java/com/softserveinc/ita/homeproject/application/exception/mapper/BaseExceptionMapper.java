@@ -7,7 +7,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Providers;
 
 import com.softserveinc.ita.homeproject.homeservice.exception.BaseHomeException;
-import com.softserveinc.ita.homeproject.model.ApiError;
+import com.softserveinc.ita.homeproject.application.model.ApiError;
 import lombok.extern.slf4j.Slf4j;
 
 /**
