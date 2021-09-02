@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,24 +16,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.UserApi;
-import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
+import com.softserveinc.ita.homeproject.client.model.*;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
@@ -80,7 +70,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(this::createNotMatchingUser)
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("The e-mail to which the token was sent")
                 .withMessageContaining("does not match provided");
     }
@@ -129,7 +119,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Invitation with provided token not found");
     }
 
@@ -143,7 +133,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `registrationToken` is invalid - must not be null.");
     }
 
@@ -157,7 +147,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
@@ -172,7 +162,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
@@ -187,7 +177,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
@@ -201,7 +191,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
@@ -215,7 +205,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
     }
 
@@ -229,7 +219,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
     }
 
@@ -243,7 +233,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.createUser(createUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `email` is invalid - must not be null.")
@@ -266,7 +256,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("User with 'id: " + userId + "' is not found");
     }
 
@@ -295,7 +285,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
@@ -310,7 +300,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
@@ -325,7 +315,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
@@ -339,7 +329,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
     }
 
@@ -354,7 +344,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
     }
 
@@ -369,7 +359,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
     }
 
@@ -383,7 +373,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `email` is invalid - must not be null.");
@@ -395,7 +385,7 @@ class UserApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.deleteUserWithHttpInfo(userId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("User with id: " + userId + " is not found");
     }
 

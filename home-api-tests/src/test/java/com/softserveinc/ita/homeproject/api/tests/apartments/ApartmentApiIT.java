@@ -1,23 +1,20 @@
 package com.softserveinc.ita.homeproject.api.tests.apartments;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.ApartmentApi;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.HouseApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
+import com.softserveinc.ita.homeproject.client.api.HouseApi;
+import com.softserveinc.ita.homeproject.client.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,7 +50,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .createApartmentWithHttpInfo(wrongId, createApartment))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("House with 'id: " + wrongId +"' is not found");
     }
 
@@ -81,7 +78,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .getApartmentWithHttpInfo(expectedHouse.getId(), wrongId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("Apartment with 'id: " + wrongId + "' is not found");
     }
 
@@ -98,7 +95,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .getApartmentWithHttpInfo(wrongId, expectedApartment.getId()))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("Apartment with 'id: " + expectedApartment.getId() + "' is not found");
     }
 
@@ -110,7 +107,7 @@ class ApartmentApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), createApartment))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("The sum of the entered area of the apartment = 1.5. Area cannot be greater than 1");
     }
 
@@ -123,12 +120,12 @@ class ApartmentApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), emptyNumber))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `number` is invalid - must meet the rule.")
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), longNumber))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
                 .withMessageContaining("Parameter `number` is invalid - must meet the rule.")
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
     }
@@ -165,7 +162,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .updateApartmentWithHttpInfo(createdHouse.getId(), wrongId, updateApartment))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
     }
 
@@ -186,7 +183,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .updateApartmentWithHttpInfo(wrongId, createdApartment.getId(), updateApartment))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
     }
 
@@ -218,7 +215,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .deleteApartmentWithHttpInfo(wrongId, createdApartment.getId()))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Apartment with 'id: " + createdApartment.getId() +"' is not found");
     }
 
@@ -232,7 +229,7 @@ class ApartmentApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi
                         .deleteApartmentWithHttpInfo(createdHouse.getId(), wrongId))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Apartment with 'id: " + wrongId +"' is not found");
     }
 

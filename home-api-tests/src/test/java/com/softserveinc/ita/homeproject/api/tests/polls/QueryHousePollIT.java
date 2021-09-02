@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,14 +8,13 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.HousePollQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 class QueryHousePollIT {
@@ -78,7 +76,7 @@ class QueryHousePollIT {
                         .pageNumber(1)
                         .pageSize(10)
                         .build().perform())
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Poll with 'id: " + wrongPollId + "' is not found");
     }
 

@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.client.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

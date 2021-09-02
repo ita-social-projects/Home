@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils;
-import com.softserveinc.ita.homeproject.model.CreateNews;
-import com.softserveinc.ita.homeproject.model.ReadNews;
+import com.softserveinc.ita.homeproject.client.model.CreateNews;
+import com.softserveinc.ita.homeproject.client.model.ReadNews;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -30,8 +30,7 @@ class QueryNewsIT {
     void getAllNews() throws ApiException {
         List<ReadNews> expectedListNews = saveListNews();
 
-        List<ReadNews> actualListNews = new NewsQuery
-            .Builder(newsApi)
+        List<ReadNews> actualListNews = new NewsQuery.Builder(newsApi)
             .pageNumber(1)
             .pageSize(10)
             .build()

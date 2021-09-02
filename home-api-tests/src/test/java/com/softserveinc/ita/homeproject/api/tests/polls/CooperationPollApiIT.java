@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,24 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.api.PollApi;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
+import com.softserveinc.ita.homeproject.client.api.PollApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.CreatePoll;
-import com.softserveinc.ita.homeproject.model.HouseLookup;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
-import com.softserveinc.ita.homeproject.model.UpdatePoll;
+import com.softserveinc.ita.homeproject.client.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -199,7 +187,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("House with 'id: " + NONEXISTENT_HOUSE_ID + "' is not found");
     }
 
@@ -214,7 +202,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> POLLED_HOUSE_API
                 .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("House with 'id: " + NONEXISTENT_HOUSE_ID + "' is not found");
     }
 
@@ -224,7 +212,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("House with 'id: " + HOUSE_ID_FROM_NON_RELATED_COOPERATION + "' is not found");
     }
 
@@ -239,7 +227,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> POLLED_HOUSE_API
                 .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining(WRONG_DATA_MESSAGE);
     }
 
@@ -249,7 +237,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
-            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
             .withMessageContaining("Completion date of the poll has not to be less than 2 days after creation");
     }
 
@@ -279,7 +267,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .getCooperationPollWithHttpInfo(COOPERATION_ID, NONEXISTENT_POLL_ID))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
     }
 
@@ -290,7 +278,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .getCooperationPollWithHttpInfo(SECOND_COOPERATION_ID, expectedPoll.getId()))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("Poll with 'id: " + expectedPoll.getId() + "' is not found");
     }
 
@@ -302,7 +290,7 @@ class CooperationPollApiIT {
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API.getCooperationPoll(COOPERATION_ID, deletedPoll.getId()))
-            .matches((actual) -> actual.getCode() == NOT_FOUND);
+            .matches((actual) -> actual.getCode() == ApiClientUtil.NOT_FOUND);
     }
 
     @Test
@@ -322,7 +310,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll))
-            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
             .withMessageContaining("Completion date of the poll has not to be less than 2 days after creation");
     }
 
@@ -333,7 +321,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll))
-            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
             .withMessageContaining("Poll status can't be changed to 'completed'");
     }
 
@@ -350,7 +338,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> POLLED_HOUSE_API
                 .getPolledHouseWithHttpInfo(poll.getId(), HOUSE_TWO_ID))
-            .matches((actual) -> actual.getCode() == NOT_FOUND)
+            .matches((actual) -> actual.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("House with 'id: " + HOUSE_TWO_ID + "' is not found");
     }
 
@@ -364,7 +352,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> POLLED_HOUSE_API
                 .deletePolledHouseWithHttpInfo(poll.getId(), NONEXISTENT_HOUSE_ID))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining("House with 'id: " + NONEXISTENT_HOUSE_ID + "' is not found");
     }
 
@@ -378,7 +366,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> POLLED_HOUSE_API
                 .deletePolledHouseWithHttpInfo(poll.getId(), HOUSE_ID_FROM_NON_RELATED_COOPERATION))
-            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
             .withMessageContaining(WRONG_DATA_MESSAGE);
     }
 
@@ -396,7 +384,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> POLL_API
                         .getPollWithHttpInfo(NONEXISTENT_POLL_ID))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining("Poll with 'id: " + NONEXISTENT_POLL_ID + "' is not found");
     }
 
@@ -408,7 +396,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> COOPERATION_POLL_API
                         .deleteCooperationPoll(NONEXISTENT_COOP_ID, poll.getId()))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining(String.format(POLL_NOT_FOUND, poll.getId()));
     }
 
@@ -420,7 +408,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> COOPERATION_POLL_API
                         .deleteCooperationPoll(SECOND_COOPERATION_ID, poll.getId()))
-                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
                 .withMessageContaining(String.format(POLL_NOT_FOUND, poll.getId()));
     }
 

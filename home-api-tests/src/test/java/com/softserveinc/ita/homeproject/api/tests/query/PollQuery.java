@@ -1,10 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.PollApi;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.PollApi;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import lombok.Getter;
 import lombok.Setter;
 
