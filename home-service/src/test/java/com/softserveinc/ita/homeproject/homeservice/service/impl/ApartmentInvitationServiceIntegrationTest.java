@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
-import org.springframework.data.jpa.domain.Specification;
 
 @TestComponent
 @SpringBootTest(classes = HomeServiceTestContextConfig.class)
@@ -52,28 +51,12 @@ public class ApartmentInvitationServiceIntegrationTest {
     }
 
     @Test
-    void getApartmentInvitationsForMarkingAsOverdueTest() {
-        List<ApartmentInvitation> allApartmentInvitationsFromBeginningDB =
-            StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-
-        List<ApartmentInvitation> apartmentInvitationsForSetOverdue = apartmentInvitationRepository
-            .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
-                apartmentInvitationService.getOverdueInvitation(root, criteriaBuilder));
-
-        assertEquals(13, allApartmentInvitationsFromBeginningDB.size());
-        assertEquals(2, apartmentInvitationsForSetOverdue.size());
-        assertEquals(InvitationStatus.PENDING, apartmentInvitationsForSetOverdue.get(0).getStatus());
-        assertEquals(InvitationStatus.PROCESSING, apartmentInvitationsForSetOverdue.get(1).getStatus());
-    }
-
-    @Test
     void markAsOverdueApartmentInvitationsTest() {
         List<ApartmentInvitation> allApartmentInvitationsFromBeginningDB =
             StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        apartmentInvitationService.markAsOverdueApartmentInvitations();
+        apartmentInvitationService.markInvitationsAsOverdue();
 
         List<ApartmentInvitation> allApartmentInvitationsFromTransformedDB =
             StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)

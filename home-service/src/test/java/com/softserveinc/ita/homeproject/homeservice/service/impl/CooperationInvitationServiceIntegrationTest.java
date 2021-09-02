@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
-import org.springframework.data.jpa.domain.Specification;
 
 @TestComponent
 @SpringBootTest(classes = HomeServiceTestContextConfig.class)
@@ -52,28 +51,12 @@ public class CooperationInvitationServiceIntegrationTest {
     }
 
     @Test
-    void getCooperationInvitationsForMarkingAsOverdueTest() {
-        List<CooperationInvitation> allCooperationInvitationsFromBeginningDB =
-            StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-
-        List<CooperationInvitation> cooperationInvitationsForSetOverdue = cooperationInvitationRepository
-            .findAll((Specification<CooperationInvitation>) (root, criteriaQuery, criteriaBuilder) ->
-                cooperationInvitationService.getOverdueInvitation(root, criteriaBuilder));
-
-        assertEquals(13, allCooperationInvitationsFromBeginningDB.size());
-        assertEquals(2, cooperationInvitationsForSetOverdue.size());
-        assertEquals(InvitationStatus.PENDING, cooperationInvitationsForSetOverdue.get(0).getStatus());
-        assertEquals(InvitationStatus.PROCESSING, cooperationInvitationsForSetOverdue.get(1).getStatus());
-    }
-
-    @Test
     void markAsOverdueCooperationInvitationsTest() {
         List<CooperationInvitation> allCooperationInvitationsFromBeginningDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        cooperationInvitationService.markAsOverdueCooperationInvitations();
+        cooperationInvitationService.markInvitationsAsOverdue();
 
         List<CooperationInvitation> allCooperationInvitationsFromTransformedDB =
             StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)

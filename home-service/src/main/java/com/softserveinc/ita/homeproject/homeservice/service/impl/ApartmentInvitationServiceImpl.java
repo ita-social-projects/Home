@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.fasterxml.uuid.Generators;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
+import com.softserveinc.ita.homeproject.homedata.entity.QApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
@@ -31,7 +33,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implements ApartmentInvitationService {
 
@@ -46,7 +47,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     private final UserCooperationService userCooperationService;
 
     private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of ownership parts = %.3f "
-            + "The sum of the entered ownership parts cannot be greater than 1";
+        + "The sum of the entered ownership parts cannot be greater than 1";
 
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
@@ -87,13 +88,13 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                           ApartmentInvitation toUpdate,
                                           ApartmentInvitationDto updateOwnershipDto) {
         BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-                .stream()
-                .filter(Ownership::getEnabled)
-                .map(Ownership::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .add(getAllActiveInvitationsByApartmentId(apartmentId))
-                .subtract(toUpdate.getOwnershipPart())
-                .add(updateOwnershipDto.getOwnershipPart());
+            .stream()
+            .filter(Ownership::getEnabled)
+            .map(Ownership::getOwnershipPart)
+            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            .add(getAllActiveInvitationsByApartmentId(apartmentId))
+            .subtract(toUpdate.getOwnershipPart())
+            .add(updateOwnershipDto.getOwnershipPart());
 
         if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(String.format(INVALID_SUM_OWNERSHIP_AREA, sumOfOwnerPartsWithNewInput));
@@ -103,12 +104,12 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     private void validateSumOwnershipPart(Long apartmentId,
                                           ApartmentInvitation toCreate) {
         BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-                .stream()
-                .filter(Ownership::getEnabled)
-                .map(Ownership::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .add(getAllActiveInvitationsByApartmentId(apartmentId))
-                .add(toCreate.getOwnershipPart());
+            .stream()
+            .filter(Ownership::getEnabled)
+            .map(Ownership::getOwnershipPart)
+            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            .add(getAllActiveInvitationsByApartmentId(apartmentId))
+            .add(toCreate.getOwnershipPart());
 
         if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(String.format(INVALID_SUM_OWNERSHIP_AREA, sumOfOwnerPartsWithNewInput));
@@ -120,8 +121,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                 .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
                 .stream(), apartmentInvitationRepository
                 .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING).stream())
-                .map(ApartmentInvitation::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .map(ApartmentInvitation::getOwnershipPart)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
@@ -133,8 +134,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(EXPIRATION_TERM));
         var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
-                .findById(apartmentId)
-                .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
+            .findById(apartmentId)
+            .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
 
         if (isApartmentInvitationNonExists(invitationDto.getEmail(), apartmentId)) {
             validateSumOwnershipPart(apartmentId, apartmentInvitation);
@@ -154,10 +155,10 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private boolean isApartmentInvitationNonExists(String email, Long id) {
         return apartmentInvitationRepository.findApartmentInvitationsByEmail(email).stream()
-                .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
-                        || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
-                .filter(invitation -> invitation.getType().equals(InvitationType.APARTMENT))
-                .filter(invitation -> invitation.getApartment().getId().equals(id)).findAny().isEmpty();
+            .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
+                || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
+            .filter(invitation -> invitation.getType().equals(InvitationType.APARTMENT))
+            .filter(invitation -> invitation.getApartment().getId().equals(id)).findAny().isEmpty();
     }
 
     @Override
@@ -196,10 +197,14 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
 
-    public void markAsOverdueApartmentInvitations() {
-        var overdueApartmentInvitations = apartmentInvitationRepository
-            .findAll((Specification<ApartmentInvitation>) (root, criteriaQuery, criteriaBuilder) ->
-                getOverdueInvitation(root, criteriaBuilder));
+    @Override
+    public void markInvitationsAsOverdue() {
+        var qApartmentInvitation = QApartmentInvitation.apartmentInvitation;
+        JPAQuery<?> query = new JPAQuery<>(entityManager);
+        var overdueApartmentInvitations = query.select(qApartmentInvitation).from(qApartmentInvitation)
+            .where((qApartmentInvitation.status.eq(InvitationStatus.PENDING))
+                    .or(qApartmentInvitation.status.eq(InvitationStatus.PROCESSING)),
+                qApartmentInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueApartmentInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             apartmentInvitationRepository.save(invitation);

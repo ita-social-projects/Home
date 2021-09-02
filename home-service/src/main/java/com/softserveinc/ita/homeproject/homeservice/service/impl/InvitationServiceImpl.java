@@ -1,9 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import java.time.LocalDateTime;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
@@ -16,7 +15,6 @@ import com.softserveinc.ita.homeproject.homeservice.service.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public abstract class InvitationServiceImpl implements InvitationService {
@@ -26,6 +24,9 @@ public abstract class InvitationServiceImpl implements InvitationService {
     protected final InvitationRepository invitationRepository;
 
     protected final ServiceMapper mapper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
@@ -42,14 +43,7 @@ public abstract class InvitationServiceImpl implements InvitationService {
         invitationRepository.save(invitation);
     }
 
-    protected Predicate getOverdueInvitation(Root<? extends Invitation> root, CriteriaBuilder criteriaBuilder) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        Predicate predicateForStatus
-            = criteriaBuilder.or((criteriaBuilder.equal(root.get("status"), InvitationStatus.PENDING)),
-            (criteriaBuilder.equal(root.get("status"), InvitationStatus.PROCESSING)));
-        return criteriaBuilder.and(predicateForStatus,
-            criteriaBuilder.lessThanOrEqualTo(root.get("requestEndTime"), currentTime));
-    }
+    public abstract void markInvitationsAsOverdue();
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
@@ -59,20 +53,18 @@ public abstract class InvitationServiceImpl implements InvitationService {
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
         return mapper.convert(invitation, InvitationDto.class);
     }
 
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
 
-        if(!invitation.getStatus().equals(InvitationStatus.PROCESSING)){
+        if (!invitation.getStatus().equals(InvitationStatus.PROCESSING)) {
             throw new InvitationException("Invitation status is not equal to processing");
         }
-
         acceptUserInvitation(invitation);
     }
-
 }
