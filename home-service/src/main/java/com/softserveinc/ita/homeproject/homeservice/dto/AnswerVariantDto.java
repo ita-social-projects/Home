@@ -8,5 +8,5 @@ import lombok.Setter;
 public class AnswerVariantDto extends BaseDto {
     private String answer;
 
-    private Long questionId;
+//    private Long questionId;
 }

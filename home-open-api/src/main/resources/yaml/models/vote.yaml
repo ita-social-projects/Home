@@ -37,8 +37,6 @@ CreateQuestionVote:
   properties:
     type:
       $ref: 'question.yaml#/QuestionType'
-    question:
-      $ref: 'question.yaml#/QuestionLookup'
 
 CreateMultipleChoiceQuestionVote:
   allOf:
@@ -47,6 +45,8 @@ CreateMultipleChoiceQuestionVote:
   required:
     - answers
   properties:
+    question:
+      $ref: 'question.yaml#/MultipleChoiceQuestionLookup'
     answers:
       type: array
       minItems: 1
@@ -69,8 +69,10 @@ CreateAdviceQuestionVote:
   required:
     - answer
   properties:
+    question:
+      $ref: 'question.yaml#/AdviceQuestionLookup'
     answer:
-      $ref: 'answer.yaml#/CreateUpdateAnswerVariant'
+      $ref: './answer.yaml#/CreateUpdateAnswerVariant'
 
 AnswerVariantLookup:
   type: object

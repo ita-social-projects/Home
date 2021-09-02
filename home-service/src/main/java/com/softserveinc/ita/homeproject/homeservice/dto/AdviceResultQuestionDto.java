@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class AdviceResultQuestionDto extends ResultQuestionDto {
 
-    private List<Long> answers;
+//    private List<Long> answers;
 }
