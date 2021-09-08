@@ -80,7 +80,7 @@ LookupHouseBody:
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/HouseLookup'
+        $ref: '../models/house.yaml#/HouseLookup'
   required: true
 CreateApartmentBody:
   description: A payload for creating a new Apartment
