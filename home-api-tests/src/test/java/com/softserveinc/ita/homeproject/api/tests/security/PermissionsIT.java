@@ -2,36 +2,49 @@ package com.softserveinc.ita.homeproject.api.tests.security;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiClient;
-import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.*;
 import com.softserveinc.ita.homeproject.client.model.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import javax.ws.rs.core.Response;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PermissionsIT {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    static private final List<ApiClientMethods> apiClientMethods = getAllApiClientMethods(listApiClientClassInstances());
+
 
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
     void testAdmin(Function<ApiClient, ApiResponse<?>> action, String x, boolean admin) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getAdminClient());
-        checkAuthenticatedUser(admin, statusCode);
+        checkUser(admin, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -40,7 +53,7 @@ public class PermissionsIT {
                               boolean admin, boolean coopAdmin) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getCooperationAdminClient());
-        checkAuthenticatedUser(coopAdmin, statusCode);
+        checkUser(coopAdmin, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -48,7 +61,7 @@ public class PermissionsIT {
     void testOwner(Function<ApiClient, ApiResponse<?>> action, String x,
                    boolean admin, boolean coopAdmin, boolean owner) {
         int statusCode = getStatusCode(action, ApiClientUtil.getOwnerClient());
-        checkAuthenticatedUser(owner, statusCode);
+        checkUser(owner, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -57,689 +70,266 @@ public class PermissionsIT {
                        boolean admin, boolean coopAdmin, boolean owner, boolean guestUser) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getUnauthorizedUserClient());
-        checkUnauthenticatedUser(guestUser, statusCode);
+        checkUser(guestUser, statusCode);
     }
 
-    static Stream<Arguments> check() {
+    static private Stream<Arguments> check() {
+        Arguments[] values = new Arguments[apiClientMethods.size()];
+        int i = 0;
+        for (ApiClientMethods acm : apiClientMethods) {
 
-        return Stream.of(
-
-// UserAPI
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).createContactOnUserWithHttpInfo(
-                                        1L, new CreateContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<>(e.getCode(), null);
+            values[i++] = Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+                        int count = 0;
+                        int param = 0;
+                        int stab = 0;
+                        try {
+                            if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param])
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab]));
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
                             }
-                        },
-                        "create Contact On User",
-                        true, true, true, false),
 
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new UserApi(apiClient).createUserWithHttpInfo(new CreateUser());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
+                        } catch (InvocationTargetException | IllegalAccessException |
+                                InstantiationException | NoSuchMethodException e) {
+                            String regex = ":\\d{3},";
+                            Pattern pattern = Pattern.compile(regex);
+                            Matcher matcher = pattern.matcher(e.getCause().getMessage());
+                            StringBuilder s = new StringBuilder();
+                            if (matcher.find()) {
+                                s.append(matcher.group(0)
+                                        .replaceAll(":", "")
+                                        .replaceAll(",", ""));
                             }
-                        },
-                        "create User",
-                        true, true, true, true),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new UserApi(apiClient).getUserWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get User",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).queryContactsOnUserWithHttpInfo(
-                                        1L, 1, 10, "id,asc",
-                                        null, null, null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Contacts On User",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).deleteContactOnUserWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Contact On User",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new UserApi(apiClient).getAllUsersWithHttpInfo(
-                                        1, 10, "id,asc", null, null,
-                                        null, null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get All Users",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).getContactOnUserWithHttpInfo(1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Contact On User",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new UserApi(apiClient).deleteUserWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete User",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ContactApi(apiClient).updateContactOnUserWithHttpInfo(
-                                        1L, 1L, new UpdateContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Contact OnUser",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new UserApi(apiClient).updateUserWithHttpInfo(
-                                        1L, new UpdateUser());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update User",
-                        true, true, true, false),
-
-// CooperationApi
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationApi(apiClient).createCooperationWithHttpInfo(
-                                        createBaseCooperation());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Cooperation",
-                        true, false, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new HouseApi(apiClient).createHouseWithHttpInfo(
-                                        1L, createHouse());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create House",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationContactApi(apiClient).createContactOnCooperationWithHttpInfo(
-                                        1L, createEmailContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Contact On Cooperation",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationPollApi(apiClient).createCooperationPollWithHttpInfo(
-                                        1L, createPoll(createAndReadCooperationForPoll()));
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Cooperation Poll",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationApi(apiClient).getCooperationWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Cooperation",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new HouseApi(apiClient).getHouseWithHttpInfo(1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get House",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationContactApi(apiClient).getContactOnCooperationWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Contact On Cooperation",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationPollApi(apiClient).getCooperationPollWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Cooperation Poll",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationApi(apiClient).queryCooperationWithHttpInfo(
-                                        1, 10, "id,asc", null,
-                                        null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Cooperation",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new HouseApi(apiClient).queryHouseWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query House",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationContactApi(apiClient).queryContactsOnCooperationWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Contacts On Cooperation",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationPollApi(apiClient).queryCooperationPollWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Cooperation Poll",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationApi(apiClient).deleteCooperationWithHttpInfo(
-                                        1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Cooperation",
-                        true, false, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new HouseApi(apiClient).deleteHouseWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete House",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationContactApi(apiClient).deleteContactOnCooperationWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Contact On Cooperation",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationPollApi(apiClient).deleteCooperationPollWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Cooperation Poll",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationApi(apiClient).updateCooperationWithHttpInfo(
-                                        1L, updateCooperation());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Cooperation",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new HouseApi(apiClient).updateHouseWithHttpInfo(
-                                        1L, 1L, updateHouse());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update House",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationContactApi(apiClient).updateContactOnCooperationWithHttpInfo(
-                                        1L, 1L, updateEmailContact());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Contact On Cooperation",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new CooperationPollApi(apiClient).updateCooperationPollWithHttpInfo(
-                                        1L, 1L, updatePoll());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Cooperation Poll",
-                        false, true, false, false),
-
-// HouseApiImpl // ↑↑↑ all right
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentApi(apiClient).createApartmentWithHttpInfo(
-                                        1L, createApartment());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Apartment",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentApi(apiClient).deleteApartmentWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Apartment",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentApi(apiClient).getApartmentWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Apartment",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentApi(apiClient).queryApartmentWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Apartment",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentApi(apiClient).updateApartmentWithHttpInfo(
-                                        1L, 1L, updateApartment());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Apartment",
-                        false, true, false, false),
-
-// ApartmentApiImpl // ↑↑↑ all right
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentInvitationApi(apiClient).createInvitationWithHttpInfo(
-                                        1L, createApartmentInvitation());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Invitation",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentInvitationApi(apiClient).deleteInvitationWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Invitation",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentOwnershipApi(apiClient).deleteOwnershipWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Ownership",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentInvitationApi(apiClient).getInvitationWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Invitation",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentOwnershipApi(apiClient).getOwnershipWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Ownership",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentInvitationApi(apiClient).queryInvitationWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Invitation",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentOwnershipApi(apiClient).queryOwnershipWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Ownership",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentInvitationApi(apiClient).updateInvitationWithHttpInfo(
-                                        1L, 1L, updateApartmentInvitation());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Invitation",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new ApartmentOwnershipApi(apiClient).updateOwnershipWithHttpInfo(
-                                        1L, 1L,
-                                        new UpdateOwnership().ownershipPart(BigDecimal.valueOf(0.5)));
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Ownership",
-                        false, true, false, false),
-
-// NewsApiImpl
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new NewsApi(apiClient).createNewsWithHttpInfo(createNews());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create News",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new NewsApi(apiClient).deleteNewsWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete News",
-                        true, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new NewsApi(apiClient).getAllNewsWithHttpInfo(
-                                        1, 1, "id,asc", null,
-                                        null, null, null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get All News",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new NewsApi(apiClient).getNewsWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get News",
-                        true, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new NewsApi(apiClient).updateNewsWithHttpInfo(1L, updateNews());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update News",
-                        true, true, false, false),
-
-//PollApiImpl
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PolledHouseApi(apiClient).createPolledHouseWithHttpInfo(1L,
-                                        new HouseLookup().id(1L));
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Polled House",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollQuestionApi(apiClient).createQuestionWithHttpInfo(
-                                        1L, createAdviceQuestion());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "create Question",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PolledHouseApi(apiClient).deletePolledHouseWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Polled House",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollQuestionApi(apiClient).deleteQuestionWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "delete Question",
-                        false, true, false, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollApi(apiClient).getPollWithHttpInfo(1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Poll",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PolledHouseApi(apiClient).getPolledHouseWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Polled House",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollQuestionApi(apiClient).getQuestionWithHttpInfo(
-                                        1L, 1L);
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "get Question",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollApi(apiClient).queryPollWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Poll",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PolledHouseApi(apiClient).queryPolledHouseWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null, null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Polled House",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollQuestionApi(apiClient).queryQuestionWithHttpInfo(
-                                        1L, 1, 10, "id,asc", null,
-                                        null, null);
-
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "query Question",
-                        false, true, true, false),
-
-                Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
-                            try {
-                                return new PollQuestionApi(apiClient).updateQuestionWithHttpInfo(
-                                        1L, 1L, updateQuestion());
-                            } catch (ApiException e) {
-                                return new ApiResponse<Void>(e.getCode(), null);
-                            }
-                        },
-                        "update Question",
-                        false, true, false, false)
-
-        );
+                            return new ApiResponse<Void>(Integer.parseInt(s.toString()), null);
+                        }
+                        throw new UnsupportedOperationException();
+                    },
+                    acm.getMethodName().replaceAll("\\QWithHttpInfo\\E", ""),
+                    acm.getAdmin(),
+                    acm.getCoopAdmin(),
+                    acm.getOwner(),
+                    acm.getUserGuest()
+            );
+        }
+
+        return Arrays.stream(values);
+    }
+
+    private static Object getStubParam(Class<?> parameterType) {
+        switch (parameterType.getName()) {
+            case "java.lang.String":
+            case "com.softserveinc.ita.homeproject.client.model.ContactType":
+            case "com.softserveinc.ita.homeproject.client.model.PollStatus":
+            case "com.softserveinc.ita.homeproject.client.model.QuestionType":
+            case "com.softserveinc.ita.homeproject.client.model.PollType":
+            case "java.time.LocalDateTime":
+                return null;
+            case "java.lang.Integer":
+                return 1;
+            case "java.lang.Long":
+                return 1L;
+            case "java.math.BigDecimal":
+                return new BigDecimal(1);
+            case "com.softserveinc.ita.homeproject.client.model.UpdateUser":
+                return new UpdateUser();
+            case "com.softserveinc.ita.homeproject.client.model.CreateUser":
+                return new CreateUser();
+            case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
+                return new HouseLookup().id(1L);
+            case "com.softserveinc.ita.homeproject.client.model.UpdateOwnership":
+                return new UpdateOwnership().ownershipPart(BigDecimal.valueOf(0.5));
+            case "com.softserveinc.ita.homeproject.client.model.CreatePoll":
+                return createPoll(createAndReadCooperationForPoll());
+            case "com.softserveinc.ita.homeproject.client.model.UpdatePoll":
+                return updatePoll();
+            case "com.softserveinc.ita.homeproject.client.model.createAdviceQuestion":
+            case "com.softserveinc.ita.homeproject.client.model.CreateQuestion":
+                return createAdviceQuestion();
+            case "com.softserveinc.ita.homeproject.client.model.CreateContact":
+                return createEmailContact();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateContact":
+                return updateEmailContact();
+            case "com.softserveinc.ita.homeproject.client.model.CreateHouse":
+                return createHouse();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateHouse":
+                return updateHouse();
+            case "com.softserveinc.ita.homeproject.client.model.CreateApartment":
+                return createApartment();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateApartment":
+                return updateApartment();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateQuestion":
+                return updateQuestion();
+            case "com.softserveinc.ita.homeproject.client.model.CreateNews":
+                return createNews();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateNews":
+                return updateNews();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateCooperation":
+                return updateCooperation();
+            case "com.softserveinc.ita.homeproject.client.model.CreateCooperation":
+                return createBaseCooperation();
+            case "com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation":
+                return createApartmentInvitation();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation":
+                return updateApartmentInvitation();
+            case "com.softserveinc.ita.homeproject.client.model.InvitationToken":
+                return getInvitationToken();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     private int getStatusCode(Function<ApiClient, ApiResponse<?>> action, ApiClient unauthorizedClient) {
@@ -749,7 +339,7 @@ public class PermissionsIT {
         return statusCode;
     }
 
-    public void checkAuthenticatedUser(boolean role, int statusCode) {
+    public void checkUser(boolean role, int statusCode) {
         if (role) {
             Assertions.assertNotEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
             Assertions.assertNotEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
@@ -762,20 +352,161 @@ public class PermissionsIT {
         }
     }
 
-    public void checkUnauthenticatedUser(boolean unauthenticatedPermission, int statusCode) {
-        if (unauthenticatedPermission) {
-            Assertions.assertNotEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
-            Assertions.assertNotEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
-        } else {
-            if (statusCode == 401) {
-                Assertions.assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
-            } else {
-                Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
-            }
-        }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class ApiClientMethods {
+        private Object api;
+        private Method method;
+        private String methodName;
+        private Boolean admin;
+        private Boolean coopAdmin;
+        private Boolean owner;
+        private Boolean userGuest;
     }
 
+    // populate of class instance via inner class
+    private static List<ApiClientMethods> getAllApiClientMethods(List<Object> clientApiInstances) {
+        ArrayList<ApiClientMethods> allMethods = new ArrayList<>();
+        for (Object instance : clientApiInstances) {
+            getApiMethods(instance);
+            for (Method aMethod : getApiMethods(instance)) {
+                String methodName = aMethod.toString()
+                        .split("\\(")[0]
+                        .split("\\.")[aMethod.toString().split("\\(")[0].split("\\.").length - 1];
+                boolean[] permission = findPermission(methodName.replaceAll("\\QWithHttpInfo\\E", ""));
+                allMethods.add(new ApiClientMethods(instance, aMethod, methodName,
+                        permission[0], permission[1], permission[2], permission[3]));
+            }
+        }
+        return allMethods;
+    }
+
+    private static boolean[] findPermission(String methodName) {
+        boolean[] setPermission;
+        switch (methodName) {
+            case "createUser":
+                setPermission = new boolean[]{true, true, true, true};
+                break;
+            case "createContactOnUser":
+            case "getUser":
+            case "queryContactsOnUser":
+            case "deleteContactOnUser":
+            case "getNews":
+            case "getAllNews":
+            case "queryContactsOnCooperation":
+            case "queryHouse":
+            case "queryCooperation":
+            case "getContactOnCooperation":
+            case "getHouse":
+            case "getCooperation":
+            case "updateUser":
+            case "updateContactOnUser":
+            case "deleteUser":
+            case "getAllUsers":
+            case "getContactOnUser":
+                setPermission = new boolean[]{true, true, true, false};
+                break;
+            case "createHouse":
+            case "updateNews":
+            case "deleteNews":
+            case "createNews":
+            case "updateContactOnCooperation":
+            case "updateHouse":
+            case "updateCooperation":
+            case "deleteContactOnCooperation":
+            case "deleteHouse":
+            case "createContactOnCooperation":
+                setPermission = new boolean[]{true, true, false, false};
+                break;
+            case "deleteCooperation":
+            case "createCooperation":
+                setPermission = new boolean[]{true, false, false, false};
+                break;
+            case "getCooperationPoll":
+            case "queryQuestion":
+            case "queryPolledHouse":
+            case "queryPoll":
+            case "getQuestion":
+            case "getPolledHouse":
+            case "getPoll":
+            case "queryOwnership":
+            case "getOwnership":
+            case "queryApartment":
+            case "getApartment":
+            case "queryCooperationPoll":
+                setPermission = new boolean[]{false, true, true, false};
+                break;
+            case "approveInvitation":
+            case "updateQuestion":
+            case "deleteQuestion":
+            case "deletePolledHouse":
+            case "createQuestion":
+            case "createPolledHouse":
+            case "updateOwnership":
+            case "updateInvitation":
+            case "queryInvitation":
+            case "getInvitation":
+            case "deleteOwnership":
+            case "deleteInvitation":
+            case "createInvitation":
+            case "updateApartment":
+            case "deleteApartment":
+            case "createApartment":
+            case "updateCooperationPoll":
+            case "deleteCooperationPoll":
+            case "createCooperationPoll":
+                setPermission = new boolean[]{false, true, false, false};
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+        return setPermission;
+    }
+
+    @SneakyThrows
+    private static List<Object> listApiClientClassInstances() {
+        List<Object> classInstances = new ArrayList<>();
+        for (Class<?> aClass : getAllClassesOfClientApi()) {
+            classInstances.add(aClass.getConstructor().newInstance());
+        }
+        return classInstances;
+    }
+
+    @SneakyThrows
+    private static List<Class<?>> getAllClassesOfClientApi() {
+        return getAllClassesFromPackage(ContactApi.class.getPackageName());
+    }
+
+    private static List<Class<?>> getAllClassesFromPackage(String packageName) {
+        return new Reflections(packageName, new SubTypesScanner(false))
+                .getAllTypes()
+                .stream()
+                .map(name -> {
+                    try {
+                        return Class.forName(name);
+                    } catch (ClassNotFoundException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private static ArrayList<Method> getApiMethods(Object someApiInstance) {
+        return Arrays.stream(someApiInstance.getClass().getMethods())
+                .filter(s -> s.toString().contains("WithHttpInfo"))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
     // Auxiliary methods
+    private static InvitationToken getInvitationToken() {
+        InvitationToken invitationToken = new InvitationToken();
+        invitationToken.setInvitationToken("95eb8223-f2d4-11eb-82f4-2f106ba224d5");
+        return invitationToken;
+    }
+
     private static UpdateQuestion updateQuestion() {
         return new UpdateQuestion()
                 .question("Do you like updated question?")

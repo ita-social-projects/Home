@@ -6,6 +6,11 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="Issue272.001" author="Vladyslav-Frolov">
+        <sql>UPDATE users
+             SET first_name = 'User_ADMIN',
+                 last_name  = 'User_ADMIN'
+             WHERE email = 'admin@example.com'</sql>
+
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="users">
@@ -36,21 +41,6 @@
             <column name="enabled" value="true"/>
             <column name="update_date" value="null"/>
         </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="users">
-            <column name="id" valueSequenceNext="hibernate_sequence"/>
-            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
-            <column name="email" value="user@example.com"/>
-            <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuxwyeiB1OFYjeuYbRaqbC"/>
-            <column name="first_name" value="User_GUEST"/>
-            <column name="last_name" value="User_GUEST"/>
-            <column name="expired" value="false"/>
-            <column name="locked" value="false"/>
-            <column name="credentials_expired" value="false"/>
-            <column name="enabled" value="true"/>
-            <column name="update_date" value="null"/>
-        </insert>
     </changeSet>
 
     <changeSet id="Issue272.002" author="Vladyslav-Frolov">
@@ -63,8 +53,7 @@
         <sql>UPDATE roles
              SET name = 'COOPERATION_ADMIN'
              WHERE id = 2</sql>
-        <sql>UPDATE roles
-             SET name = 'GUEST'
+        <sql>DELETE FROM roles
              WHERE id = 4</sql>
     </changeSet>
 
@@ -73,8 +62,6 @@
              VALUES ('2', (SELECT ID FROM users WHERE email = 'cooperation_admin@example.com'))</sql>
         <sql>INSERT INTO user_cooperation (role_id, user_id)
              VALUES ('3', (SELECT ID FROM users WHERE email = 'owner@example.com'))</sql>
-        <sql>INSERT INTO user_cooperation (role_id, user_id)
-             VALUES ('4', (SELECT ID FROM users WHERE email = 'user@example.com'))</sql>
     </changeSet>
 
 
