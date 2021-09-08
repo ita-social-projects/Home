@@ -20,7 +20,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository
 import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -142,7 +142,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             invitationRepository.save(apartmentInvitation);
             return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
         }
-        throw new AlreadyExistHomeException("Invitation already exist for apartment");
+        throw new BadRequestHomeException("Invitation already exist for apartment");
     }
 
     @Override

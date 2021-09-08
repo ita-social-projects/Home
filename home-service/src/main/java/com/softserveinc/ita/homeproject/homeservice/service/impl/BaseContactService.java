@@ -11,8 +11,8 @@ import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.exception.TypeOfTheContactDoesntMatchHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public abstract class BaseContactService implements ContactService {
         if (existingContactType == updateContactDto.getType()) {
             return updateContact(contact, updateContactDto);
         } else {
-            throw new TypeOfTheContactDoesntMatchHomeException("Type of the contact doesn't match");
+            throw new BadRequestHomeException("Type of the contact doesn't match");
         }
     }
 

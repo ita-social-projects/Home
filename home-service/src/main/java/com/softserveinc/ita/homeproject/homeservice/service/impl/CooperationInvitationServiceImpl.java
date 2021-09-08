@@ -15,7 +15,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitatio
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserCooperationService;
@@ -53,7 +53,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
         }
-        throw new AlreadyExistHomeException("Invitation already exist for cooperation");
+        throw new BadRequestHomeException("Invitation already exist for cooperation");
     }
 
     @Override
