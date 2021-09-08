@@ -1,6 +1,6 @@
 name: CI
 
-on:  
+on:
   pull_request:
     branches: [ dev, master ]
 
@@ -30,6 +30,10 @@ jobs:
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dhome.application.admin.username=${{secrets.HOME_APPLICATION_ADMIN_USERNAME}}
           -Dhome.application.admin.password=${{secrets.HOME_APPLICATION_ADMIN_PASSWORD}}
+          -Dhome.application.cooperationadmin.username=cooperation_admin@example.com
+          -Dhome.application.cooperationadmin.password=password
+          -Dhome.application.owner.username=owner@example.com
+          -Dhome.application.owner.password=password
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
           -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
           -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
