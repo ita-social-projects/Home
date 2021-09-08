@@ -10,8 +10,8 @@ import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionReposito
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.exception.TypeOfTheContactDoesntMatchHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         if (existingQuestionType == updatePollQuestionDto.getType()) {
             return updateQuestion(toUpdate, updatePollQuestionDto);
         } else {
-            throw new TypeOfTheContactDoesntMatchHomeException("Type of the question doesn't match");
+            throw new BadRequestHomeException("Type of the question doesn't match");
         }
     }
 

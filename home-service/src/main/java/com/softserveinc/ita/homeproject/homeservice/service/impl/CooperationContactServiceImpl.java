@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
@@ -41,7 +41,7 @@ public class CooperationContactServiceImpl extends BaseContactService implements
                 .filter(Contact::getMain)
                 .findAny()
                 .ifPresent(contact -> {
-                    throw new AlreadyExistHomeException("Cooperation with id "
+                    throw new BadRequestHomeException("Cooperation with id "
                         + parentEntityId + " already has main " + contactDto.getType() + " contact");
                 });
         }
