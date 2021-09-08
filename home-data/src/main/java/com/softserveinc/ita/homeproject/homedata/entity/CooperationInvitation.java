@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homedata.entity;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
@@ -15,9 +14,6 @@ import lombok.Setter;
 @Entity
 @DiscriminatorValue("cooperation")
 public class CooperationInvitation extends Invitation{
-
-    @Column(name = "end_time")
-    private LocalDateTime requestEndTime;
 
     @Column(name = "role")
     @Convert(converter = InvitationRoleConverter.class)
