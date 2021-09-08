@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -15,9 +17,6 @@ import com.softserveinc.ita.homeproject.model.ReadInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
-
 
 @Provider
 @Component

@@ -13,14 +13,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import javax.ws.rs.core.Response;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,25 +33,14 @@ public class PermissionsIT_new {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
 
-    private final List<Object> clientApiClasses = Arrays.asList(
-            new ApartmentApi(),
-            new ApartmentInvitationApi(),
-            new ApartmentOwnershipApi(),
-            new ContactApi(),
-            new CooperationApi(),
-            new CooperationContactApi(),
-            new CooperationPollApi(),
-            new HouseApi(),
-            new InvitationsApi(),
-            new NewsApi(),
-            new PollApi(),
-            new PolledHouseApi(),
-            new PollQuestionApi(),
-            new UserApi());
+    private final List<Object> clientApiClasses = listApiClientClassInstances();
 
     @Test
-    void amountCheck(){
-        Assertions.assertEquals(check().count(), findAmountOfAllMethods());
+    void amountCheck() {
+        // total amount of methods
+        int expected = findAmountOfAllMethods();
+        long actual = check().count();
+        Assertions.assertEquals(expected, actual);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -74,6 +67,7 @@ public class PermissionsIT_new {
         int statusCode = getStatusCode(action, ApiClientUtil.getOwnerClient());
         checkAuthenticatedUser(owner, statusCode);
     }
+
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
     void testGuestUser(Function<ApiClient, ApiResponse<?>> action, String x,
@@ -96,7 +90,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<>(e.getCode(), null);
                             }
                         },
-                        "approve Invitation",
+                        "approve Invitation", // +
                         false, true, false, false),
 
 // UserAPI
@@ -108,7 +102,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<>(e.getCode(), null);
                             }
                         },
-                        "create Contact On User",
+                        "create Contact On User", // +
                         true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -118,7 +112,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<Void>(e.getCode(), null);
                             }
                         },
-                        "create User",
+                        "create User", //+
                         true, true, true, true),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -128,7 +122,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<Void>(e.getCode(), null);
                             }
                         },
-                        "get User",
+                        "get User", // +
                         true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -140,7 +134,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<Void>(e.getCode(), null);
                             }
                         },
-                        "query Contacts On User",
+                        "query Contacts On User", // +
                         true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -151,7 +145,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<Void>(e.getCode(), null);
                             }
                         },
-                        "delete Contact On User",
+                        "delete Contact On User",//+
                         true, true, true, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -384,7 +378,7 @@ public class PermissionsIT_new {
                                 return new ApiResponse<Void>(e.getCode(), null);
                             }
                         },
-                        "delete Cooperation Poll",
+                        "delete Cooperation Poll",//++++++++++++
                         false, true, false, false),
 
                 Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
@@ -778,7 +772,6 @@ public class PermissionsIT_new {
     }
 
 
-
     private int getStatusCode(Function<ApiClient, ApiResponse<?>> action, ApiClient unauthorizedClient) {
         int statusCode;
         ApiResponse<?> resp = action.apply(unauthorizedClient);
@@ -812,7 +805,37 @@ public class PermissionsIT_new {
         }
     }
 
-    // for check amount
+    // populate of class instance
+    @SneakyThrows
+    List<Object> listApiClientClassInstances() {
+        List<Object> classInstances = new ArrayList<>();
+        for (Class<?> aClass : getAllClassesOfClientApi()) {
+            classInstances.add(aClass.getConstructor().newInstance());
+        }
+        return classInstances;
+    }
+
+    @SneakyThrows
+    List<Class<?>> getAllClassesOfClientApi() {
+        return getAllClassesFrom(ContactApi.class.getPackageName());
+    }
+
+    private List<Class<?>> getAllClassesFrom(String packageName) {
+        return new Reflections(packageName, new SubTypesScanner(false))
+                .getAllTypes()
+                .stream()
+                .map(name -> {
+                    try {
+                        return Class.forName(name);
+                    } catch (ClassNotFoundException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    // for check amount of Classes
     int findAmountOfAllMethods() {
         ArrayList<String> allMethods = new ArrayList<>();
         for (Object arrayListClass : clientApiClasses) {
@@ -823,12 +846,8 @@ public class PermissionsIT_new {
 
     private ArrayList<String> getMethods(Object someApi) {
         return Arrays.stream(someApi.getClass().getMethods())
-                .filter((s) -> s.toString().contains("WithHttpInfo"))
-                .map((s) -> s.toString().replaceAll(
-                        "\\Qpublic com.softserveinc.ita.homeproject.client.ApiResponse " +
-                                "com.softserveinc.ita.homeproject.client.api.\\E", ""))
-                .map((s) -> s.split("\\(")[0])
-                .map((s) -> s.split("\\.")[1])
+                .map(Method::toString)
+                .filter(s -> s.contains("WithHttpInfo"))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

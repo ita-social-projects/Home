@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.api.tests.security;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiClient;
-import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.*;
 import com.softserveinc.ita.homeproject.client.model.*;
@@ -12,32 +11,40 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import javax.ws.rs.core.Response;
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PermissionsIT_test {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    static private final List<ApiClientMethods> apiClientMethods = getAllApiClientMethods(listApiClientClassInstances());
+
 
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
     void testAdmin(Function<ApiClient, ApiResponse<?>> action, String x, boolean admin) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getAdminClient());
-        checkAuthenticatedUser(admin, statusCode);
+        checkUser(admin, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -46,7 +53,7 @@ public class PermissionsIT_test {
                               boolean admin, boolean coopAdmin) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getCooperationAdminClient());
-        checkAuthenticatedUser(coopAdmin, statusCode);
+        checkUser(coopAdmin, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -54,7 +61,7 @@ public class PermissionsIT_test {
     void testOwner(Function<ApiClient, ApiResponse<?>> action, String x,
                    boolean admin, boolean coopAdmin, boolean owner) {
         int statusCode = getStatusCode(action, ApiClientUtil.getOwnerClient());
-        checkAuthenticatedUser(owner, statusCode);
+        checkUser(owner, statusCode);
     }
 
     @ParameterizedTest(name = "{index}-{1}")
@@ -63,65 +70,267 @@ public class PermissionsIT_test {
                        boolean admin, boolean coopAdmin, boolean owner, boolean guestUser) {
 
         int statusCode = getStatusCode(action, ApiClientUtil.getUnauthorizedUserClient());
-        checkUnauthenticatedUser(guestUser, statusCode);
-
+        checkUser(guestUser, statusCode);
     }
 
-/*    @SneakyThrows
-    @Test
-    void reflectionConstructor() {
-//        Class<?> contactApi = ContactApi.class;
-//        Constructor[] constructors = contactApi.getConstructors();
-        Constructor<?> constructor = ContactApi.class.getConstructor(ApiClient.class);
-        ContactApi myObject = (ContactApi)
-                constructor.newInstance(new ApiClient());
-        System.out.println(myObject);
-    }*/
-
-    static List<PermissionMapper> arrayListClasses = Arrays.asList(
-            new PermissionMapper(new ContactApi(),
-                    "create Contact On User", true, true, true, false),
-            new PermissionMapper(new ContactApi(),
-                    "create User", true, true, true, true));
-
-    static Stream<Arguments> check() {
-        Arguments[] values = new Arguments[arrayListClasses.size()];
+    static private Stream<Arguments> check() {
+        Arguments[] values = new Arguments[apiClientMethods.size()];
         int i = 0;
-        for (PermissionMapper arrayListClass : arrayListClasses) {
+        for (ApiClientMethods acm : apiClientMethods) {
 
-            values[i] = Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+            values[i++] = Arguments.of((Function<ApiClient, ApiResponse<?>>) (ApiClient apiClient) -> {
+                        int count = 0;
+                        int param = 0;
+                        int stab = 0;
                         try {
-                            arrayListClass.getApi().setApiClient(apiClient);
-                            return arrayListClass.getApi().createContactOnUserWithHttpInfo(
-                                    1L, new CreateContact());
-                        } catch (ApiException e) {
-                            return new ApiResponse<>(e.getCode(), null);
+                            if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param])
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab]));
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            } else if (acm.getMethod().getParameterCount() == ++count) {
+                                return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param++],
+                                                acm.getMethod().getParameterTypes()[param]
+                                        )
+                                        .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab++]),
+                                                getStubParam(acm.getMethod().getParameterTypes()[stab])
+                                        );
+                            }
+
+                        } catch (InvocationTargetException | IllegalAccessException |
+                                InstantiationException | NoSuchMethodException e) {
+                            String regex = ":\\d{3},";
+                            Pattern pattern = Pattern.compile(regex);
+                            Matcher matcher = pattern.matcher(e.getCause().getMessage());
+                            StringBuilder s = new StringBuilder();
+                            if (matcher.find()) {
+                                s.append(matcher.group(0)
+                                        .replaceAll(":", "")
+                                        .replaceAll(",", ""));
+                            }
+                            return new ApiResponse<Void>(Integer.parseInt(s.toString()), null);
                         }
+                        throw new UnsupportedOperationException();
                     },
-                    arrayListClass.getMethodName(),
-                    arrayListClass.getAdmin(),
-                    arrayListClass.getCoopAdmin(),
-                    arrayListClass.getOwner(),
-                    arrayListClass.getUserGuest()
+                    acm.getMethodName().replaceAll("\\QWithHttpInfo\\E", ""),
+                    acm.getAdmin(),
+                    acm.getCoopAdmin(),
+                    acm.getOwner(),
+                    acm.getUserGuest()
             );
-            i++;
         }
 
         return Arrays.stream(values);
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    private static class PermissionMapper {
-        private ContactApi api;
-        private String methodName;
-        private Boolean admin;
-        private Boolean coopAdmin;
-        private Boolean owner;
-        private Boolean userGuest;
+    private static Object getStubParam(Class<?> parameterType) {
+        switch (parameterType.getName()) {
+            case "java.lang.String":
+            case "com.softserveinc.ita.homeproject.client.model.ContactType":
+            case "com.softserveinc.ita.homeproject.client.model.PollStatus":
+            case "com.softserveinc.ita.homeproject.client.model.QuestionType":
+            case "com.softserveinc.ita.homeproject.client.model.PollType":
+            case "java.time.LocalDateTime":
+                return null;
+            case "java.lang.Integer":
+                return 1;
+            case "java.lang.Long":
+                return 1L;
+            case "java.math.BigDecimal":
+                return new BigDecimal(1);
+            case "com.softserveinc.ita.homeproject.client.model.UpdateUser":
+                return new UpdateUser();
+            case "com.softserveinc.ita.homeproject.client.model.CreateUser":
+                return new CreateUser();
+            case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
+                return new HouseLookup().id(1L);
+            case "com.softserveinc.ita.homeproject.client.model.UpdateOwnership":
+                return new UpdateOwnership().ownershipPart(BigDecimal.valueOf(0.5));
+            case "com.softserveinc.ita.homeproject.client.model.CreatePoll":
+                return createPoll(createAndReadCooperationForPoll());
+            case "com.softserveinc.ita.homeproject.client.model.UpdatePoll":
+                return updatePoll();
+            case "com.softserveinc.ita.homeproject.client.model.createAdviceQuestion":
+            case "com.softserveinc.ita.homeproject.client.model.CreateQuestion":
+                return createAdviceQuestion();
+            case "com.softserveinc.ita.homeproject.client.model.CreateContact":
+                return createEmailContact();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateContact":
+                return updateEmailContact();
+            case "com.softserveinc.ita.homeproject.client.model.CreateHouse":
+                return createHouse();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateHouse":
+                return updateHouse();
+            case "com.softserveinc.ita.homeproject.client.model.CreateApartment":
+                return createApartment();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateApartment":
+                return updateApartment();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateQuestion":
+                return updateQuestion();
+            case "com.softserveinc.ita.homeproject.client.model.CreateNews":
+                return createNews();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateNews":
+                return updateNews();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateCooperation":
+                return updateCooperation();
+            case "com.softserveinc.ita.homeproject.client.model.CreateCooperation":
+                return createBaseCooperation();
+            case "com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation":
+                return createApartmentInvitation();
+            case "com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation":
+                return updateApartmentInvitation();
+            case "com.softserveinc.ita.homeproject.client.model.InvitationToken":
+                return getInvitationToken();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
-
 
     private int getStatusCode(Function<ApiClient, ApiResponse<?>> action, ApiClient unauthorizedClient) {
         int statusCode;
@@ -130,7 +339,7 @@ public class PermissionsIT_test {
         return statusCode;
     }
 
-    public void checkAuthenticatedUser(boolean role, int statusCode) {
+    public void checkUser(boolean role, int statusCode) {
         if (role) {
             Assertions.assertNotEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
             Assertions.assertNotEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
@@ -143,20 +352,161 @@ public class PermissionsIT_test {
         }
     }
 
-    public void checkUnauthenticatedUser(boolean unauthenticatedPermission, int statusCode) {
-        if (unauthenticatedPermission) {
-            Assertions.assertNotEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
-            Assertions.assertNotEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
-        } else {
-            if (statusCode == 401) {
-                Assertions.assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), statusCode);
-            } else {
-                Assertions.assertEquals(Response.Status.FORBIDDEN.getStatusCode(), statusCode);
-            }
-        }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class ApiClientMethods {
+        private Object api;
+        private Method method;
+        private String methodName;
+        private Boolean admin;
+        private Boolean coopAdmin;
+        private Boolean owner;
+        private Boolean userGuest;
     }
 
+    // populate of class instance via inner class
+    private static List<ApiClientMethods> getAllApiClientMethods(List<Object> clientApiInstances) {
+        ArrayList<ApiClientMethods> allMethods = new ArrayList<>();
+        for (Object instance : clientApiInstances) {
+            getApiMethods(instance);
+            for (Method aMethod : getApiMethods(instance)) {
+                String methodName = aMethod.toString()
+                        .split("\\(")[0]
+                        .split("\\.")[aMethod.toString().split("\\(")[0].split("\\.").length - 1];
+                boolean[] permission = findPermission(methodName.replaceAll("\\QWithHttpInfo\\E", ""));
+                allMethods.add(new ApiClientMethods(instance, aMethod, methodName,
+                        permission[0], permission[1], permission[2], permission[3]));
+            }
+        }
+        return allMethods;
+    }
+
+    private static boolean[] findPermission(String methodName) {
+        boolean[] setPermission;
+        switch (methodName) {
+            case "createUser":
+                setPermission = new boolean[]{true, true, true, true};
+                break;
+            case "createContactOnUser":
+            case "getUser":
+            case "queryContactsOnUser":
+            case "deleteContactOnUser":
+            case "getNews":
+            case "getAllNews":
+            case "queryContactsOnCooperation":
+            case "queryHouse":
+            case "queryCooperation":
+            case "getContactOnCooperation":
+            case "getHouse":
+            case "getCooperation":
+            case "updateUser":
+            case "updateContactOnUser":
+            case "deleteUser":
+            case "getAllUsers":
+            case "getContactOnUser":
+                setPermission = new boolean[]{true, true, true, false};
+                break;
+            case "createHouse":
+            case "updateNews":
+            case "deleteNews":
+            case "createNews":
+            case "updateContactOnCooperation":
+            case "updateHouse":
+            case "updateCooperation":
+            case "deleteContactOnCooperation":
+            case "deleteHouse":
+            case "createContactOnCooperation":
+                setPermission = new boolean[]{true, true, false, false};
+                break;
+            case "deleteCooperation":
+            case "createCooperation":
+                setPermission = new boolean[]{true, false, false, false};
+                break;
+            case "getCooperationPoll":
+            case "queryQuestion":
+            case "queryPolledHouse":
+            case "queryPoll":
+            case "getQuestion":
+            case "getPolledHouse":
+            case "getPoll":
+            case "queryOwnership":
+            case "getOwnership":
+            case "queryApartment":
+            case "getApartment":
+            case "queryCooperationPoll":
+                setPermission = new boolean[]{false, true, true, false};
+                break;
+            case "approveInvitation":
+            case "updateQuestion":
+            case "deleteQuestion":
+            case "deletePolledHouse":
+            case "createQuestion":
+            case "createPolledHouse":
+            case "updateOwnership":
+            case "updateInvitation":
+            case "queryInvitation":
+            case "getInvitation":
+            case "deleteOwnership":
+            case "deleteInvitation":
+            case "createInvitation":
+            case "updateApartment":
+            case "deleteApartment":
+            case "createApartment":
+            case "updateCooperationPoll":
+            case "deleteCooperationPoll":
+            case "createCooperationPoll":
+                setPermission = new boolean[]{false, true, false, false};
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+        return setPermission;
+    }
+
+    @SneakyThrows
+    private static List<Object> listApiClientClassInstances() {
+        List<Object> classInstances = new ArrayList<>();
+        for (Class<?> aClass : getAllClassesOfClientApi()) {
+            classInstances.add(aClass.getConstructor().newInstance());
+        }
+        return classInstances;
+    }
+
+    @SneakyThrows
+    private static List<Class<?>> getAllClassesOfClientApi() {
+        return getAllClassesFromPackage(ContactApi.class.getPackageName());
+    }
+
+    private static List<Class<?>> getAllClassesFromPackage(String packageName) {
+        return new Reflections(packageName, new SubTypesScanner(false))
+                .getAllTypes()
+                .stream()
+                .map(name -> {
+                    try {
+                        return Class.forName(name);
+                    } catch (ClassNotFoundException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private static ArrayList<Method> getApiMethods(Object someApiInstance) {
+        return Arrays.stream(someApiInstance.getClass().getMethods())
+                .filter(s -> s.toString().contains("WithHttpInfo"))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
     // Auxiliary methods
+    private static InvitationToken getInvitationToken() {
+        InvitationToken invitationToken = new InvitationToken();
+        invitationToken.setInvitationToken("95eb8223-f2d4-11eb-82f4-2f106ba224d5");
+        return invitationToken;
+    }
+
     private static UpdateQuestion updateQuestion() {
         return new UpdateQuestion()
                 .question("Do you like updated question?")

@@ -43,8 +43,8 @@
             <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
             <column name="email" value="user@example.com"/>
             <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuxwyeiB1OFYjeuYbRaqbC"/>
-            <column name="first_name" value="User_USER"/>
-            <column name="last_name" value="User_USER"/>
+            <column name="first_name" value="User_GUEST"/>
+            <column name="last_name" value="User_GUEST"/>
             <column name="expired" value="false"/>
             <column name="locked" value="false"/>
             <column name="credentials_expired" value="false"/>
@@ -64,7 +64,7 @@
              SET name = 'COOPERATION_ADMIN'
              WHERE id = 2</sql>
         <sql>UPDATE roles
-             SET name = 'USER'
+             SET name = 'GUEST'
              WHERE id = 4</sql>
     </changeSet>
 

@@ -1,6 +1,8 @@
 package com.softserveinc.ita.homeproject.api.tests.security;
 
 import com.softserveinc.ita.homeproject.client.api.*;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class TempIT {
 
     private static final char PKG_SEPARATOR = '.';
@@ -85,12 +88,21 @@ public class TempIT {
      */
     @Test
     void findAllClasses() {
-        ContactApi apartmentApi = new ContactApi();
+        ContactApi apartmentApi = null;
 
-        Package aPackage = apartmentApi.getClass().getPackage();
-        System.out.println(aPackage.toString()); // package com.softserveinc.ita.homeproject.api
+        try {
+            Class<?> clazz = Class.forName(ContactApi.class.getName());
+            apartmentApi = (ContactApi) clazz.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-        String packageName = apartmentApi.getClass().getPackageName();
+        Package aPackage = apartmentApi != null ? apartmentApi.getClass().getPackage() : null;
+        if (aPackage != null) {
+            System.out.println(aPackage.toString()); // package com.softserveinc.ita.homeproject.api
+        }
+
+        String packageName = apartmentApi != null ? apartmentApi.getClass().getPackageName() : null;
         System.out.println(packageName); // com.softserveinc.ita.homeproject.api
         System.out.println("===================================");
 //        List<Class<?>> find = find("home-application/src/main/java/com/softserveinc/ita/homeproject/application/api");
@@ -98,8 +110,8 @@ public class TempIT {
 //        List<Class<?>> find = find("home-clients.target/generated-sources/openapi/client/src/gen/java/main/com/softserveinc/ita/homeproject/api");
 //        List<Class<?>> find = find("C:\\Users\\vfrolo\\IdeaProjects\\Home\\home-clients\\target\\generated-sources\\openapi\\client\\src\\gen\\java\\main\\com\\softserveinc\\ita\\homeproject\\api");
 //        List<Class<?>> find = find("com.softserveinc");
-//        List<Class<?>> find = find(packageName);
-        List<Class<?>> find = find("com.softserveinc.ita.homeproject.api");
+        List<Class<?>> find = find(Objects.requireNonNull(aPackage).toString());
+//        List<Class<?>> find = find("com.softserveinc.ita.homeproject.api");
 //        List<Class<?>> find = find(packageName);
         int i = 0;
         for (Class<?> aClass : find) {
@@ -144,9 +156,20 @@ public class TempIT {
         return classes;
     }
 
+    @SneakyThrows
     @Test
-    void getAllClasses() {
-        List<Class<?>> listOfClasses = getAllClassesFrom("com.softserveinc.ita.homeproject.application.client.api");
+    List<Object> listWithInstanceClasses() {
+        List<Class<?>> allClassesOfClientApi = getAllClassesOfClientApi();
+        List<Object> classInstances = new ArrayList<>(allClassesOfClientApi.size());
+        for (Class<?> aClass : allClassesOfClientApi) {
+            classInstances.add(aClass.getConstructor().newInstance());
+        }
+        return classInstances;
+    }
+
+    @SneakyThrows
+    List<Class<?>> getAllClassesOfClientApi() {
+        return getAllClassesFrom(ContactApi.class.getPackageName());
     }
 
     private List<Class<?>> getAllClassesFrom(String packageName) {
