@@ -7,6 +7,4 @@ import lombok.Setter;
 @Setter
 public class AnswerVariantDto extends BaseDto {
     private String answer;
-
-//    private Long questionId;
 }

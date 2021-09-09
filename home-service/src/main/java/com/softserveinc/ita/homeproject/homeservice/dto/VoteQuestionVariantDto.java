@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VoteQuestionVariantDto extends BaseDto {
-    private Long questionVoteId;
 
     private AnswerVariantDto answerVariant;
 }

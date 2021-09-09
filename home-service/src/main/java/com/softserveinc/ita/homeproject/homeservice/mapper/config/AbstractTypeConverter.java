@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config;
 
 import java.lang.reflect.Modifier;
 import java.util.Set;
@@ -10,25 +10,31 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
 public class AbstractTypeConverter<S, D> implements ConditionalConverter<S, D> {
-    
+
     private final String destinationPackagePrefix;
+
     private final String sourcePackagePrefix;
+
     private final TypeMatcher<S, D> typeMatcher;
+
     private final Reflections reflections;
+
     private final BiPredicate<Reflections, Class<?>> abstractChecker;
 
     public AbstractTypeConverter(String sourcePackagePrefix, String destinationPackagePrefix) {
         this(sourcePackagePrefix, destinationPackagePrefix, (sourceType, destinationType) -> {
             String destinationSimpleName = destinationType.getSimpleName();
             String sourceTypeSimpleName = sourceType.getSimpleName();
-            return destinationSimpleName.contains(sourceTypeSimpleName) || sourceTypeSimpleName.contains(destinationSimpleName);
+            return destinationSimpleName.contains(sourceTypeSimpleName)
+                || sourceTypeSimpleName.contains(destinationSimpleName);
         });
     }
 
     public AbstractTypeConverter(String sourcePackagePrefix,
                                  String destinationPackagePrefix,
                                  TypeMatcher<S, D> typeMatcher) {
-        this(sourcePackagePrefix, destinationPackagePrefix, typeMatcher, (r, destinationType) -> Modifier.isAbstract(destinationType.getModifiers()));
+        this(sourcePackagePrefix, destinationPackagePrefix, typeMatcher,
+            (r, destinationType) -> Modifier.isAbstract(destinationType.getModifiers()));
     }
 
     public AbstractTypeConverter(String sourcePackagePrefix,
@@ -44,20 +50,20 @@ public class AbstractTypeConverter<S, D> implements ConditionalConverter<S, D> {
 
     @Override
     public D convert(MappingContext<S, D> context) {
-        Set<Class<? extends D>> subTypesOf = reflections.getSubTypesOf(context.getDestinationType());
+        Set<Class<? extends D>> destinationSubTypes = reflections.getSubTypesOf(context.getDestinationType());
         Class<? extends S> sourceType = context.getSourceType();
-        Class<? extends D> dto = subTypesOf.stream()
-                .filter(destinationSybType -> this.typeMatcher.match(sourceType, destinationSybType))
-                .findFirst()
-                .orElseThrow();
-        return context.getMappingEngine().map(context.create(context.getSource(), dto));
+        Class<? extends D> destinationSubType = destinationSubTypes.stream()
+            .filter(destinationSybType -> this.typeMatcher.match(sourceType, destinationSybType))
+            .findFirst()
+            .orElseThrow();
+        return context.getMappingEngine().map(context.create(context.getSource(), destinationSubType));
     }
 
     @Override
     public MatchResult match(Class<?> sourceType, Class<?> destinationType) {
         return
-                destinationType.getPackageName().contains(destinationPackagePrefix) &&
-                sourceType.getPackageName().contains(sourcePackagePrefix) &&
-                        abstractChecker.test(reflections, destinationType) ? MatchResult.FULL : MatchResult.NONE;
+            destinationType.getPackageName().contains(destinationPackagePrefix)
+                && sourceType.getPackageName().contains(sourcePackagePrefix)
+                && abstractChecker.test(reflections, destinationType) ? MatchResult.FULL : MatchResult.NONE;
     }
 }

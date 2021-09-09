@@ -14,13 +14,13 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.client.api.PollVoteApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.AnswerVariantLookup;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
@@ -37,7 +37,6 @@ import com.softserveinc.ita.homeproject.client.model.QuestionLookup;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadAdviceQuestion;
 import com.softserveinc.ita.homeproject.client.model.ReadAdviceQuestionVote;
-import com.softserveinc.ita.homeproject.client.model.ReadAnswerVariant;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.ReadMultipleChoiceQuestionVote;
@@ -356,14 +355,17 @@ class PollVoteApiIT {
             (ReadMultipleChoiceQuestionVote) actual.getQuestionVotes().get(1);
         assertEquals(expectedMultipleChoiceQuestionVote.getAnswers().stream().map(AnswerVariantLookup::getId)
                 .collect(Collectors.toList()),
-            actualMultipleChoiceQuestionVote.getAnswers().stream().map(ReadAnswerVariant::getId)
+            actualMultipleChoiceQuestionVote.getAnswers().stream().map(var -> Objects.requireNonNull(
+                    var.getAnswerVariant()).getId())
                 .collect(Collectors.toList()));
 
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedAdviceQuestionVote.getQuestion().getId()),
+            pollQuestionApi.getQuestion(pollId,
+                Objects.requireNonNull(expectedAdviceQuestionVote.getQuestion()).getId()),
             Objects.requireNonNull(actualAdviceQuestionVote.getQuestion()));
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedMultipleChoiceQuestionVote.getQuestion().getId()),
+            pollQuestionApi.getQuestion(pollId, Objects.requireNonNull(expectedMultipleChoiceQuestionVote.getQuestion())
+                .getId()),
             Objects.requireNonNull(actualMultipleChoiceQuestionVote.getQuestion()));
     }
 
