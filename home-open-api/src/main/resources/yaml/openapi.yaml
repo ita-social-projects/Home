@@ -44,6 +44,8 @@ tags:
     description: Poll question management operations
   - name: polled house
     description: Polled house management operations
+  - name: poll vote
+    description: Poll vote management operations
 
 paths:
   /invitations/invitation-approval:
@@ -126,6 +128,9 @@ paths:
 
   /polls/{poll_id}/houses/{id}:
     $ref: './paths/pollsHouses.yaml#/polls-pollId-houses-houseId'
+
+  /polls/{poll_id}/votes:
+    $ref: './paths/pollsVotes.yaml#/polls-votes'
 
 security:
   - basicAuth: [ ]

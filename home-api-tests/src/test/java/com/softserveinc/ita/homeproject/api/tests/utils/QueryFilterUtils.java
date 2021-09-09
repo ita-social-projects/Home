@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import java.util.StringJoiner;
 
-import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiException;
 
 public final class QueryFilterUtils {
 

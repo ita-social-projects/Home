@@ -1,10 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import com.softserveinc.ita.homeproject.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

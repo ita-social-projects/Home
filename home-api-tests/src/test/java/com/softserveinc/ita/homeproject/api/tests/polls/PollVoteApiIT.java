@@ -14,36 +14,35 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.PollQuestionApi;
-import com.softserveinc.ita.homeproject.api.PollVoteApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.AnswerVariantLookup;
-import com.softserveinc.ita.homeproject.model.CreateAdviceQuestion;
-import com.softserveinc.ita.homeproject.model.CreateAdviceQuestionVote;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateMultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.model.CreateMultipleChoiceQuestionVote;
-import com.softserveinc.ita.homeproject.model.CreatePoll;
-import com.softserveinc.ita.homeproject.model.CreateUpdateAnswerVariant;
-import com.softserveinc.ita.homeproject.model.CreateVote;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.QuestionLookup;
-import com.softserveinc.ita.homeproject.model.QuestionType;
-import com.softserveinc.ita.homeproject.model.ReadAdviceQuestion;
-import com.softserveinc.ita.homeproject.model.ReadAdviceQuestionVote;
-import com.softserveinc.ita.homeproject.model.ReadAnswerVariant;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestionVote;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
-import com.softserveinc.ita.homeproject.model.ReadVote;
-import com.softserveinc.ita.homeproject.model.UpdatePoll;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
+import com.softserveinc.ita.homeproject.client.api.PollVoteApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.AnswerVariantLookup;
+import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
+import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestionVote;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestionVote;
+import com.softserveinc.ita.homeproject.client.model.CreatePoll;
+import com.softserveinc.ita.homeproject.client.model.CreateUpdateAnswerVariant;
+import com.softserveinc.ita.homeproject.client.model.CreateVote;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.QuestionLookup;
+import com.softserveinc.ita.homeproject.client.model.QuestionType;
+import com.softserveinc.ita.homeproject.client.model.ReadAdviceQuestion;
+import com.softserveinc.ita.homeproject.client.model.ReadAdviceQuestionVote;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadMultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.client.model.ReadMultipleChoiceQuestionVote;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.ReadVote;
+import com.softserveinc.ita.homeproject.client.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -338,29 +337,36 @@ class PollVoteApiIT {
         assertNotNull(actual.getQuestionVotes());
         assertFalse(actual.getQuestionVotes().contains(null));
         assertEquals(expected.getQuestionVotes().size(), actual.getQuestionVotes().size());
+
         for (int i = 1; i < expected.getQuestionVotes().size(); i++) {
             assertEquals(expected.getQuestionVotes().get(i).getQuestion().getId(),
                 Objects.requireNonNull(actual.getQuestionVotes().get(i).getQuestion()).getId());
         }
+
         CreateAdviceQuestionVote expectedAdviceQuestionVote =
             (CreateAdviceQuestionVote) expected.getQuestionVotes().get(0);
         ReadAdviceQuestionVote actualAdviceQuestionVote = (ReadAdviceQuestionVote) actual.getQuestionVotes().get(0);
-        assertEquals(expectedAdviceQuestionVote.getAnswer().getAnswer().toUpperCase(),
+        assertEquals(expectedAdviceQuestionVote.getAnswer().getAnswer().trim(),
             actualAdviceQuestionVote.getAnswer().getAnswer());
+
         CreateMultipleChoiceQuestionVote expectedMultipleChoiceQuestionVote =
             (CreateMultipleChoiceQuestionVote) expected.getQuestionVotes().get(1);
         ReadMultipleChoiceQuestionVote actualMultipleChoiceQuestionVote =
             (ReadMultipleChoiceQuestionVote) actual.getQuestionVotes().get(1);
-        assertEquals(expectedMultipleChoiceQuestionVote.getAnswers().stream().map(AnswerVariantLookup::getId).collect(
-                Collectors.toList()),
-            actualMultipleChoiceQuestionVote.getAnswers().stream().map(ReadAnswerVariant::getId).collect(
-                Collectors.toList()));
+        assertEquals(expectedMultipleChoiceQuestionVote.getAnswers().stream().map(AnswerVariantLookup::getId)
+                .collect(Collectors.toList()),
+            actualMultipleChoiceQuestionVote.getAnswers().stream().map(var -> Objects.requireNonNull(
+                    var.getAnswerVariant()).getId())
+                .collect(Collectors.toList()));
+
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedAdviceQuestionVote.getQuestion().getId()).getQuestion(),
-            Objects.requireNonNull(actualAdviceQuestionVote.getQuestion()).getQuestion());
+            pollQuestionApi.getQuestion(pollId,
+                Objects.requireNonNull(expectedAdviceQuestionVote.getQuestion()).getId()),
+            Objects.requireNonNull(actualAdviceQuestionVote.getQuestion()));
         assertEquals(
-            pollQuestionApi.getQuestion(pollId, expectedMultipleChoiceQuestionVote.getQuestion().getId()).getQuestion(),
-            Objects.requireNonNull(actualMultipleChoiceQuestionVote.getQuestion()).getQuestion());
+            pollQuestionApi.getQuestion(pollId, Objects.requireNonNull(expectedMultipleChoiceQuestionVote.getQuestion())
+                .getId()),
+            Objects.requireNonNull(actualMultipleChoiceQuestionVote.getQuestion()));
     }
 
     private CreateCooperation createCooperation() {
@@ -368,7 +374,7 @@ class PollVoteApiIT {
             .name(String.format("Cooperation #%d for vote test", ++cooperationNumber))
             .usreo(RandomStringUtils.randomAlphabetic(10))
             .iban(RandomStringUtils.randomAlphabetic(20))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
             .address(createAddress());
     }
 
@@ -433,9 +439,8 @@ class PollVoteApiIT {
     private CreateAdviceQuestionVote createAdviceQuestionVote(ReadAdviceQuestion question) {
         CreateAdviceQuestionVote newCreateAdviceQuestionVote = new CreateAdviceQuestionVote()
             .answer(createAnswerVariant());
-        newCreateAdviceQuestionVote.setType(question.getType());
-        newCreateAdviceQuestionVote.setQuestion(new QuestionLookup().id(question.getId()));
-        return newCreateAdviceQuestionVote;
+        return (CreateAdviceQuestionVote) newCreateAdviceQuestionVote.type(question.getType())
+            .question(new QuestionLookup().id(question.getId()));
     }
 
     private CreateUpdateAnswerVariant createAnswerVariant() {
@@ -445,9 +450,8 @@ class PollVoteApiIT {
     private CreateMultipleChoiceQuestionVote createMultipleChoiceQuestionVote(ReadMultipleChoiceQuestion question) {
         CreateMultipleChoiceQuestionVote newCreateMultipleChoiceQuestionVote = new CreateMultipleChoiceQuestionVote()
             .answers(getChosenAnswerVariantLookups(question));
-        newCreateMultipleChoiceQuestionVote.setType(question.getType());
-        newCreateMultipleChoiceQuestionVote.setQuestion(new QuestionLookup().id(question.getId()));
-        return newCreateMultipleChoiceQuestionVote;
+        return (CreateMultipleChoiceQuestionVote) newCreateMultipleChoiceQuestionVote.type(question.getType())
+            .question(new QuestionLookup().id(question.getId()));
     }
 
     private List<AnswerVariantLookup> getChosenAnswerVariantLookups(
@@ -491,15 +495,19 @@ class PollVoteApiIT {
     private CreateVote createVoteWithNotMatchingQuestions(List<ReadAdviceQuestion> questionList, int questionQuantity) {
         CreateVote createdVote = new CreateVote();
         int questionVotesNumber = 0;
-        do {
+        int i = 0;
+        while (questionVotesNumber <= questionQuantity) {
             createdVote.addQuestionVotesItem(
-                createAdviceQuestionVote(questionList.get(questionVotesNumber + questionQuantity + 1)));
+                createAdviceQuestionVote(questionList.get(i + questionQuantity + 1)));
             questionVotesNumber++;
             if (questionVotesNumber <= questionQuantity) {
-                createdVote.addQuestionVotesItem(createAdviceQuestionVote(questionList.get(questionVotesNumber - 1)));
+                createdVote.addQuestionVotesItem(createAdviceQuestionVote(questionList.get(i)));
                 questionVotesNumber++;
+            } else {
+                break;
             }
-        } while (questionVotesNumber < questionQuantity + 1);
+            i++;
+        }
         return createdVote;
     }
 

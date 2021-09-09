@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softserveinc.ita.homeproject.ApiClient;
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ServerConfiguration;
-import com.softserveinc.ita.homeproject.model.ApiError;
+import com.softserveinc.ita.homeproject.client.ApiClient;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ServerConfiguration;
+import com.softserveinc.ita.homeproject.client.model.ApiError;
 import lombok.SneakyThrows;
 import org.glassfish.jersey.logging.LoggingFeature;
 

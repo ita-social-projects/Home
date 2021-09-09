@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
 import lombok.Getter;
 import lombok.Setter;
 

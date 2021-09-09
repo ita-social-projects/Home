@@ -16,27 +16,26 @@ import java.time.LocalDateTime;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.PollsApi;
+import com.softserveinc.ita.homeproject.application.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.application.model.CreateVote;
+import com.softserveinc.ita.homeproject.application.model.HouseLookup;
+import com.softserveinc.ita.homeproject.application.model.PollStatus;
+import com.softserveinc.ita.homeproject.application.model.PollType;
+import com.softserveinc.ita.homeproject.application.model.QuestionType;
+import com.softserveinc.ita.homeproject.application.model.ReadHouse;
+import com.softserveinc.ita.homeproject.application.model.ReadPoll;
+import com.softserveinc.ita.homeproject.application.model.ReadQuestion;
+import com.softserveinc.ita.homeproject.application.model.ReadVote;
+import com.softserveinc.ita.homeproject.application.model.UpdateQuestion;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.VoteDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.votes.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
 import com.softserveinc.ita.homeproject.homeservice.service.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.VoteService;
-import com.softserveinc.ita.homeproject.model.CreateQuestion;
-import com.softserveinc.ita.homeproject.model.CreateVote;
-import com.softserveinc.ita.homeproject.model.HouseLookup;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.QuestionType;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
-import com.softserveinc.ita.homeproject.model.ReadQuestion;
-import com.softserveinc.ita.homeproject.model.ReadVote;
-import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,7 +72,8 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
-        var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
+        createQuestionDto.setPollId(pollId);
+        var readQuestionDto = pollQuestionService.createPollQuestion(createQuestionDto);
         var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
@@ -169,7 +169,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
         var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
-        var toUpdate = pollQuestionService.updatePollQuestion(pollId, id, updateQuestionDto);
+        updateQuestionDto.setId(id);
+        updateQuestionDto.setPollId(pollId);
+        var toUpdate = pollQuestionService.updatePollQuestion(updateQuestionDto);
         var readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
