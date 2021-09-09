@@ -139,8 +139,8 @@ class CooperationPollApiIT {
     static CreateCooperation createCooperation() {
         return new CreateCooperation()
             .name("newCooperationTest")
-            .usreo(RandomStringUtils.randomAlphabetic(10))
-            .iban(RandomStringUtils.randomAlphabetic(20))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
             .address(createAddress())
             .addHousesItem(createHouse())

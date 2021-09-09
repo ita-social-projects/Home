@@ -5,20 +5,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.uuid.Generators;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.Invitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationType;
+import com.softserveinc.ita.homeproject.homedata.entity.QCooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.UserCooperationService;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class CooperationInvitationServiceImpl extends InvitationServiceImpl implements CooperationInvitationService {
@@ -39,12 +40,12 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     @Override
     protected InvitationDto saveInvitation(InvitationDto invitationDto) {
         var cooperationInvitationDto =
-                mapper.convert(invitationDto, CooperationInvitationDto.class);
+            mapper.convert(invitationDto, CooperationInvitationDto.class);
         var cooperationInvitation =
-                mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
+            mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
-        if(isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationName())) {
-            cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(7));
+        if (isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationName())) {
+            cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
             cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
             cooperationInvitation.setStatus(InvitationStatus.PENDING);
             cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
@@ -52,7 +53,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
         }
-        throw new AlreadyExistHomeException("Invitation already exist for cooperation");
+        throw new BadRequestHomeException("Invitation already exist for cooperation");
     }
 
     @Override
@@ -62,21 +63,35 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         invitationRepository.save(invitation);
     }
 
-    private boolean isCooperationInvitationNonExists(String email, String name){
+    private boolean isCooperationInvitationNonExists(String email, String name) {
         return cooperationInvitationRepository.findCooperationInvitationsByEmail(email).stream()
-                .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
-                        || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
-                .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
-                .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
+            .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
+                || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
+            .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
+            .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
     }
 
     @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
         var allNotSentInvitations = cooperationInvitationRepository
-                .findAllBySentDatetimeIsNullAndStatusEquals(
-                        InvitationStatus.PENDING);
+            .findAllBySentDatetimeIsNullAndStatusEquals(
+                InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
-                .collect(Collectors.toList());
+            .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public void markInvitationsAsOverdue() {
+        var qCooperationInvitation = QCooperationInvitation.cooperationInvitation;
+        JPAQuery<?> query = new JPAQuery<>(entityManager);
+        var overdueCooperationInvitations = query.select(qCooperationInvitation).from(qCooperationInvitation)
+            .where((qCooperationInvitation.status.eq(InvitationStatus.PENDING))
+                    .or(qCooperationInvitation.status.eq(InvitationStatus.PROCESSING)),
+                qCooperationInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+        overdueCooperationInvitations.forEach(invitation -> {
+            invitation.setStatus(InvitationStatus.OVERDUE);
+            cooperationInvitationRepository.save(invitation);
+        });
     }
 }

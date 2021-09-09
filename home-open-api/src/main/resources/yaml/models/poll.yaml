@@ -88,7 +88,7 @@ CreatePoll:
     houses:
       type: array
       items:
-        $ref: 'common.yaml#/HouseLookup'
+        $ref: 'house.yaml#/HouseLookup'
       example: [
         {
           "id": 1

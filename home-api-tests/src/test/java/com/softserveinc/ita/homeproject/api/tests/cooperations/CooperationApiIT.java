@@ -46,8 +46,8 @@ class CooperationApiIT {
 
         UpdateCooperation updateCoop = new UpdateCooperation()
             .name("upd")
-            .usreo(RandomStringUtils.randomAlphabetic(10))
-            .iban(RandomStringUtils.randomAlphabetic(20))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .address(new Address()
                 .city("upd")
                 .district("upd")
@@ -80,8 +80,9 @@ class CooperationApiIT {
     void createCooperationInvalidNameTest() {
         CreateCooperation createCoopInvalidName = new CreateCooperation()
             .name("Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation")
-            .usreo("usreo")
-            .iban("77778")
+            .usreo("25252525")
+            .iban("UA250820210147250819980000000")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList());
 
@@ -96,37 +97,107 @@ class CooperationApiIT {
         CreateCooperation createCoopInvalidUsreo = new CreateCooperation()
             .name("name")
             .usreo("123456789101112131415")
-            .iban("77778")
+            .iban("UA250820210147250819980000000")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList());
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidUsreo))
             .matches((actual) -> actual.getCode() == BAD_REQUEST)
-            .withMessageContaining("Parameter `usreo` is invalid - size must be between 1 and 12 signs.");
+            .withMessageContaining("Parameter `usreo` is invalid - must meet the rule.");
     }
 
     @Test
     void createCooperationInvalidIbanTest() {
         CreateCooperation createCoopInvalidIban = new CreateCooperation()
             .name("name")
-            .usreo("usreo")
+            .usreo("25252525")
             .iban("12345678910111213141516171819202122232425")
+            .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList());
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> cooperationApi.createCooperation(createCoopInvalidIban))
             .matches((actual) -> actual.getCode() == BAD_REQUEST)
-            .withMessageContaining("Parameter `iban` is invalid - size must be between 1 and 34 signs.");
+            .withMessageContaining("Parameter `iban` is invalid - must meet the rule.");
     }
 
+    @Test
+    void createCooperationWithExistingUsreoTest() throws ApiException {
+        CreateCooperation createCoop = createCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        CreateCooperation createCoopSameUsreo = new CreateCooperation()
+                .name("name")
+                .usreo(createCoop.getUsreo())
+                .iban("UA213223130000026007233566011")
+                .adminEmail("test.receive.messages@gmail.com")
+                .address(createAddress())
+                .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameUsreo))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining("The cooperations must be unique. Key `usreo`=`" + createCoopSameUsreo.getUsreo() + "` already exists.");
+    }
+
+    @Test
+    void createCooperationWithExistingIbanTest() throws ApiException {
+        CreateCooperation createCoop = createCooperation();
+        cooperationApi.createCooperation(createCoop);
+
+        CreateCooperation createCoopSameIban = new CreateCooperation()
+                .name("name")
+                .usreo("26573474")
+                .iban(createCoop.getIban())
+                .adminEmail("test.receive.messages@gmail.com")
+                .address(createAddress())
+                .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameIban))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining("The cooperations must be unique. Key `iban`=`" + createCoopSameIban.getIban() + "` already exists.");
+    }
+
+    @Test
+    void createCooperationWithExistingUsreoAndIbanTest() {
+        CreateCooperation createCoopSameUsreoAndIban = new CreateCooperation()
+                .name("name")
+                .usreo("11111111")
+                .iban("UA111111111111111111111111111")
+                .adminEmail("test.receive.messages@gmail.com")
+                .address(createAddress())
+                .houses(createHouseList());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameUsreoAndIban))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining("The cooperations must be unique. Key `usreo`=`" + createCoopSameUsreoAndIban.getUsreo() + "` already exists.");
+    }
+
+    @Test
+    void createCooperationWithNullParameterTest() {
+        CreateCooperation createCoopSame = new CreateCooperation()
+                .name("name")
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
+                .adminEmail("test.receive.messages@gmail.com")
+                .address(createAddressWithNull());
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSame))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining("Parameter `city` is invalid - must not be null.");
+    }
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-            .usreo(RandomStringUtils.randomAlphabetic(10))
-            .iban(RandomStringUtils.randomAlphabetic(20))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList())
@@ -172,6 +243,16 @@ class CooperationApiIT {
             .region("Dnipro")
             .street("street")
             .zipCode("zipCode");
+    }
+
+    private Address createAddressWithNull() {
+        return new Address().city(null)
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
     }
 
     private void assertCooperation(CreateCooperation expected, ReadCooperation actual) {

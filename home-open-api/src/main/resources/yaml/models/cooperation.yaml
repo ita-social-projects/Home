@@ -14,14 +14,12 @@ CreateCooperation:
       maxLength: 50
     usreo:
       type: string
-      example: "A2456FT90"
-      minLength: 1
-      maxLength: 12
+      example: "12345678"
+      pattern: '^\d{8}$'
     iban:
       type: string
-      example: "77778"
-      minLength: 1
-      maxLength: 34
+      example: "UA213223130000026007233566001"
+      pattern: '^UA\d{27}$'
     admin_email:
       type: string
       minLength: 5
@@ -78,14 +76,12 @@ ReadCooperation:
       maxLength: 50
     usreo:
       type: string
-      example: "A2456FT90"
-      minLength: 1
-      maxLength: 12
+      example: "12345678"
+      pattern: '^\d{8}$'
     iban:
       type: string
-      example: "77778"
-      minLength: 1
-      maxLength: 50
+      example: "UA213223130000026007233566001"
+      pattern: '^UA\d{27}$'
     address:
       $ref: 'address.yaml#/Address'
     houses:
@@ -139,13 +135,11 @@ UpdateCooperation:
       maxLength: 50
     usreo:
       type: string
-      example: "A2456FT90"
-      minLength: 1
-      maxLength: 12
+      example: "12345678"
+      pattern: '^\d{8}$'
     iban:
       type: string
-      example: "77778"
-      minLength: 1
-      maxLength: 50
+      example: "UA213223130000026007233566001"
+      pattern: '^UA\d{27}$'
     address:
       $ref: 'address.yaml#/Address'
