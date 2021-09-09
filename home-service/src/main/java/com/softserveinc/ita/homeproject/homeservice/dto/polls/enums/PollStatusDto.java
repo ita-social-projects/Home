@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.dto;
+package com.softserveinc.ita.homeproject.homeservice.dto.polls.enums;
 
 public enum PollStatusDto {
     DRAFT("draft"),

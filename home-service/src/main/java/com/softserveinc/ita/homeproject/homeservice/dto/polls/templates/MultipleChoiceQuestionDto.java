@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.dto;
+package com.softserveinc.ita.homeproject.homeservice.dto.polls.templates;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
-package com.softserveinc.ita.homeproject.homeservice.dto;
+package com.softserveinc.ita.homeproject.homeservice.dto.polls.votes;
 
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.results.AdviceResultQuestionDto;
 import lombok.Getter;
 import lombok.Setter;
 

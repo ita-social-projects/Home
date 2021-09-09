@@ -12,9 +12,9 @@ import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQues
 import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.MultipleChoiceQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollQuestionTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.MultipleChoiceQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

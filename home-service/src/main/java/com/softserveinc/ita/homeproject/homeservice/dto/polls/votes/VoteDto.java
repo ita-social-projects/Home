@@ -1,7 +1,8 @@
-package com.softserveinc.ita.homeproject.homeservice.dto;
+package com.softserveinc.ita.homeproject.homeservice.dto.polls.votes;
 
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import lombok.Getter;
 import lombok.Setter;
 

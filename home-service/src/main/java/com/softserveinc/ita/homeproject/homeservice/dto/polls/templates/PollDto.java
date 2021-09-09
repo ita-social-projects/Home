@@ -1,8 +1,12 @@
-package com.softserveinc.ita.homeproject.homeservice.dto;
+package com.softserveinc.ita.homeproject.homeservice.dto.polls.templates;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollStatusDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollTypeDto;
 import lombok.Getter;
 import lombok.Setter;
 

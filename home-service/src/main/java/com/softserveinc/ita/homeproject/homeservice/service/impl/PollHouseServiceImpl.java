@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
 import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;

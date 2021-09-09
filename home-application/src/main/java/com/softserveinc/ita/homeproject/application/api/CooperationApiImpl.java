@@ -45,7 +45,7 @@ import com.softserveinc.ita.homeproject.application.model.UpdatePoll;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
