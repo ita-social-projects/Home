@@ -372,8 +372,8 @@ class PollVoteApiIT {
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
             .name(String.format("Cooperation #%d for vote test", ++cooperationNumber))
-            .usreo(RandomStringUtils.randomAlphabetic(10))
-            .iban(RandomStringUtils.randomAlphabetic(20))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
             .address(createAddress());
     }
