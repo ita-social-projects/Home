@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source;
 
 public class Inner2 extends Inner {
     private String onChild2;

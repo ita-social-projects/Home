@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination;
 
 public class Inner2Dto extends InnerDto {
     private String onChild2;

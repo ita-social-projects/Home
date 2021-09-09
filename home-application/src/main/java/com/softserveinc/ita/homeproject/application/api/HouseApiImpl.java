@@ -8,13 +8,12 @@ import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.application.api.HousesApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import com.softserveinc.ita.homeproject.application.model.CreateApartment;
 import com.softserveinc.ita.homeproject.application.model.ReadApartment;
 import com.softserveinc.ita.homeproject.application.model.UpdateApartment;
+import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
+import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +42,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @Override
     public Response deleteApartment(Long houseId, Long id) {
 
-        apartmentService.deactivateApartment(houseId,id);
+        apartmentService.deactivateApartment(houseId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
@@ -74,7 +73,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @Override
     public Response updateApartment(Long houseId, Long id, UpdateApartment updateApartment) {
         var updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
-        var toUpdate = apartmentService.updateApartment(houseId,id,updateApartmentDto);
+        var toUpdate = apartmentService.updateApartment(houseId, id, updateApartmentDto);
         var readApartment = mapper.convert(toUpdate, ReadApartment.class);
 
         return Response.status(Response.Status.OK).entity(readApartment).build();

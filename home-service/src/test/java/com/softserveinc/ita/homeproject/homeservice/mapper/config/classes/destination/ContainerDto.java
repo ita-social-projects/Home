@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination;
 
 public abstract class ContainerDto extends BaseModelDto {
     private InnerDto outerField;

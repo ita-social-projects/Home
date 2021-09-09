@@ -1,40 +1,43 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination.BaseModelDto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination.Container1Dto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination.Inner1Dto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination.InnerDto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination.InnerItem1Dto;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source.BaseModel;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source.ChildContainer1;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source.Container;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source.Inner1;
-import com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source.InnerItem1;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination.BaseModelDto;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination.Container1Dto;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination.Inner1Dto;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination.InnerDto;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source.BaseModel;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source.ChildContainer1;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source.Container;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source.Inner1;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source.InnerItem1;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination.InnerItem1Dto;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.ConditionalConverter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 class AbstractTypeConverterTest {
 
-    private static final String DESTINATION_PACKAGE_PREFIX = "com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination";
-    private static final String SOURCE_PACKAGE_PREFIX = "com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source";
+    private static final String DESTINATION_PACKAGE_PREFIX =
+        "com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination";
+
+    private static final String SOURCE_PACKAGE_PREFIX =
+        "com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source";
 
     private static Stream<MapperProvider> mappersProvider() {
         return Stream.of(
-                MapperProvider.create((modelMapper) -> {
-                    ConditionalConverter<BaseModel, BaseModelDto> conditionalConverter =
-                            new AbstractTypeConverter<>(SOURCE_PACKAGE_PREFIX, DESTINATION_PACKAGE_PREFIX);
-                    modelMapper.getConfiguration().getConverters().add(0, conditionalConverter);
-                })
+            MapperProvider.create((modelMapper) -> {
+                ConditionalConverter<BaseModel, BaseModelDto> conditionalConverter =
+                    new AbstractTypeConverter<>(SOURCE_PACKAGE_PREFIX, DESTINATION_PACKAGE_PREFIX);
+                modelMapper.getConfiguration().getConverters().add(0, conditionalConverter);
+            })
         );
     }
 

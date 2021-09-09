@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.destination;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.source;
 
-public abstract class InnerDto extends BaseModelDto {
+public abstract class Inner extends BaseModel {
     private String onParent;
 
     public void setOnParent(String onParent) {

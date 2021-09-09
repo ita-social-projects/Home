@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.homeservice.mapper.config.converter.classes.source;
+package com.softserveinc.ita.homeproject.homeservice.mapper.config.classes.destination;
 
-public abstract class InnerItem {
+public abstract class InnerItemDto {
 
     private String name;
 
