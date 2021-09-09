@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.mapper.config.impl;
 
 import com.softserveinc.ita.homeproject.application.mapper.HomeMapper;
 import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
-import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.EmailContactDto;
 import com.softserveinc.ita.homeproject.model.ReadContact;
 import com.softserveinc.ita.homeproject.model.ReadEmailContact;
 import lombok.RequiredArgsConstructor;
