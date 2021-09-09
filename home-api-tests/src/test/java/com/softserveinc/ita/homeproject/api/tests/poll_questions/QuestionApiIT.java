@@ -245,7 +245,7 @@ class QuestionApiIT {
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
-                .plusMinutes(1L);
+                .plusMinutes(5L);
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
@@ -265,8 +265,8 @@ class QuestionApiIT {
     private static CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(12).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail("test.ita.emails@gmail.com")
                 .address(createAddress());
     }

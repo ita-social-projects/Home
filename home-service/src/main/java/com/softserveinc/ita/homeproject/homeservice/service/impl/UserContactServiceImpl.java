@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
@@ -40,7 +40,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
                 .filter(Contact::getMain)
                 .findAny()
                 .ifPresent(contact -> {
-                    throw new AlreadyExistHomeException("User with id "
+                    throw new BadRequestHomeException("User with id "
                         + parentEntityId + " already has main " + contactDto.getType() + " contact");
                 });
         }

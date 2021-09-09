@@ -12,7 +12,7 @@ import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.AlreadyExistHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
             checkAndSaveUserByInvitation(createUserDto);
             return mapper.convert(toCreate, UserDto.class);
         }
-        throw new AlreadyExistHomeException("User with email " + createUserDto.getEmail() + " is already exists");
+        throw new BadRequestHomeException("User with email " + createUserDto.getEmail() + " is already exists");
     }
 
     private void checkAndSaveUserByInvitation(UserDto userDto) {
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
                 .ifPresent(userByEmail -> {
                     if (!user.getId().equals(userByEmail.getId())) {
-                        throw new AlreadyExistHomeException("User with email "
+                        throw new BadRequestHomeException("User with email "
                                 + userDto.getEmail() + " is already exists");
                     }
                 });

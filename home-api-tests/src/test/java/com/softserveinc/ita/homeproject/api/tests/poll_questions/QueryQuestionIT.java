@@ -28,7 +28,9 @@ import com.softserveinc.ita.homeproject.model.ReadQuestion;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -78,6 +80,22 @@ class QueryQuestionIT {
                 .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadQuestion::getId).reversed());
+    }
+
+
+    @Test
+    void getAllQuestionFromNotExistingPoll() {
+        Long wrongPollId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new PollQuestionQuery
+                        .Builder(pollQuestionApi)
+                        .pollId(wrongPollId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Poll with 'id: " + wrongPollId + "' is not found");
     }
 
     @Test
@@ -149,7 +167,7 @@ class QueryQuestionIT {
         LocalDateTime completionDate = LocalDateTime.now()
                 .truncatedTo(ChronoUnit.MINUTES)
                 .plusDays(MIN_POLL_DURATION_IN_DAYS)
-                .plusMinutes(1L);
+                .plusMinutes(5L);
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
@@ -169,8 +187,8 @@ class QueryQuestionIT {
     private static CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(12).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail("test.ita.emails@gmail.com")
                 .address(createAddress());
     }

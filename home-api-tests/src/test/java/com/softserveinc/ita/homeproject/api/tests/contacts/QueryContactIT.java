@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.contacts;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,6 +78,21 @@ class QueryContactIT {
 
         assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId).reversed());
         assertEquals(Objects.requireNonNull(expectedUser.getContacts()).size(), queryContactsResponse.size());
+    }
+
+    @Test
+    void getAllContactsFromNotExistingUser() {
+        Long wrongUserId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new ContactQuery
+                        .Builder(contactApi)
+                        .userId(wrongUserId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("User with 'id: " + wrongUserId + "' is not found");
     }
 
     @Test
@@ -305,8 +321,8 @@ class QueryContactIT {
     private CreateCooperation createBaseCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .address(createAddress());
     }

@@ -146,6 +146,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
                                      Integer quantityFlat,
                                      Integer adjoiningArea,
                                      BigDecimal houseArea) {
+        verifyExistence(pollId, pollService);
         Page<HouseDto> readHouse = houseService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
@@ -159,6 +160,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
                                   String filter,
                                   Long id,
                                   QuestionType type) {
+        verifyExistence(pollId, pollService);
         Page<PollQuestionDto> readQuestion = pollQuestionService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readQuestion, ReadQuestion.class);
     }

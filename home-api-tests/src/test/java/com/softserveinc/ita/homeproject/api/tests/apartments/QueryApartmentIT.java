@@ -5,6 +5,7 @@ import com.softserveinc.ita.homeproject.api.ApartmentApi;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.HouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
+import com.softserveinc.ita.homeproject.api.tests.query.HouseQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,7 +17,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -63,6 +66,21 @@ class QueryApartmentIT {
                 .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId).reversed());
+    }
+
+    @Test
+    void getAllApartmentsFromNotExistingHouse() {
+        Long wrongHouseId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new ApartmentQuery
+                        .Builder(apartmentApi)
+                        .houseId(wrongHouseId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("House with 'id: " + wrongHouseId + "' is not found");
     }
 
     @Test
@@ -188,8 +206,8 @@ class QueryApartmentIT {
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .address(createAddress())
                 .adminEmail("test.receive.messages@gmail.com");
     }

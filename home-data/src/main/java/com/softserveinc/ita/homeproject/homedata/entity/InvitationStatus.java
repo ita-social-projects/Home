@@ -17,6 +17,8 @@ public enum InvitationStatus {
 
     DEACTIVATED("deactivated"),
 
+    OVERDUE("overdue"),
+
     ERROR("error");
 
 

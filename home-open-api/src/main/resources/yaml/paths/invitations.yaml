@@ -1,0 +1,22 @@
+invitations-invitationApproval:
+  post:
+    tags:
+      - invitations
+    summary: Approve invitation
+    description: The endpoint approves invitation
+    operationId: approveInvitation
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/InvitationTokenBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/InvitationResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

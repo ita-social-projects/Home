@@ -82,7 +82,6 @@
                     <validateOperationSummary>true</validateOperationSummary>
                     <validateModelPropertiesExample>true</validateModelPropertiesExample>
                     <validateModelNoLocalDef>true</validateModelNoLocalDef>
-                    <pathNamingConvention>UnderscoreCase</pathNamingConvention>
                     <parameterNamingConvention>UnderscoreCase</parameterNamingConvention>
                     <headerNamingConvention>UnderscoreCase</headerNamingConvention>
                     <propertyNamingConvention>UnderscoreCase</propertyNamingConvention>

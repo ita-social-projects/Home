@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.api.tests.cooperations.contacts;
 import com.softserveinc.ita.homeproject.ApiException;
 import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.CooperationContactApi;
+import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
@@ -15,7 +16,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,6 +42,21 @@ class QueryCoopContactIT {
 
         assertThat(queryContactsResponse).isSortedAccordingTo(Comparator.comparing(ReadContact::getId));
         assertEquals(Objects.requireNonNull(expectedCooperation.getContacts()).size(), queryContactsResponse.size());
+    }
+
+    @Test
+    void getAllContactsFromNotExistingCooperation() {
+        Long wrongCooperationId = 999999999L;
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> new CooperationContactQuery
+                        .Builder(cooperationContactApi)
+                        .cooperationId(wrongCooperationId)
+                        .pageNumber(1)
+                        .pageSize(10)
+                        .build().perform())
+                .matches(exception -> exception.getCode() == NOT_FOUND)
+                .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
     }
 
     @Test
@@ -175,8 +193,8 @@ class QueryCoopContactIT {
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-            .usreo(RandomStringUtils.randomAlphabetic(10))
-            .iban(RandomStringUtils.randomAlphabetic(20))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .adminEmail("test.receive.messages@gmail.com")
             .address(createAddress())
             .houses(createHouseList())
