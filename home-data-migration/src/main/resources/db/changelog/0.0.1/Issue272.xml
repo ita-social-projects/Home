@@ -11,7 +11,7 @@
                  last_name  = 'User_ADMIN'
              WHERE email = 'admin@example.com'</sql>
 
-        <insert dbms="postgresql"
+<!--        <insert dbms="postgresql"
                 schemaName="public"
                 tableName="users">
             <column name="id" valueSequenceNext="hibernate_sequence"/>
@@ -40,28 +40,22 @@
             <column name="credentials_expired" value="false"/>
             <column name="enabled" value="true"/>
             <column name="update_date" value="null"/>
-        </insert>
+        </insert>-->
     </changeSet>
 
     <changeSet id="Issue272.002" author="Vladyslav-Frolov">
-        <sql>UPDATE roles
-             SET name = 'COOPERATION_ADMIN_t'
-             WHERE id = 2</sql>
-        <sql>UPDATE roles
-             SET name = 'USER_t'
+        <sql>DELETE FROM roles
              WHERE id = 4</sql>
         <sql>UPDATE roles
              SET name = 'COOPERATION_ADMIN'
              WHERE id = 2</sql>
-        <sql>DELETE FROM roles
-             WHERE id = 4</sql>
     </changeSet>
 
     <changeSet id="Issue272.003" author="Vladyslav-Frolov">
-        <sql>INSERT INTO user_cooperation (role_id, user_id)
+<!--        <sql>INSERT INTO user_cooperation (role_id, user_id)
              VALUES ('2', (SELECT ID FROM users WHERE email = 'cooperation_admin@example.com'))</sql>
         <sql>INSERT INTO user_cooperation (role_id, user_id)
-             VALUES ('3', (SELECT ID FROM users WHERE email = 'owner@example.com'))</sql>
+             VALUES ('3', (SELECT ID FROM users WHERE email = 'owner@example.com'))</sql>-->
     </changeSet>
 
 

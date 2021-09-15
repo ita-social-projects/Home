@@ -1,5 +1,19 @@
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import javax.ws.rs.core.Response;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
@@ -14,18 +28,8 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.glassfish.jersey.logging.LoggingFeature;
-
-import javax.ws.rs.core.Response;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public final class ApiClientUtil {
 
@@ -41,6 +45,7 @@ public final class ApiClientUtil {
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
     private static final UserApi USER_API = new UserApi(getAdminClient());
     private static final CooperationApi COOPERATION_API = new CooperationApi(getAdminClient());
+    private Assertions AssertEquals;
 
     public static ApiClient getAdminClient() {
         ApiClient client = new ApiClient();
@@ -97,7 +102,7 @@ public final class ApiClientUtil {
         return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
     }
 
-/*    @SneakyThrows
+    @SneakyThrows
     static ReadUser createCooperationAdminUser() {
         CreateUser createUser = new CreateUser()
                 .firstName("User_COOPERATION_ADMIN")
@@ -109,13 +114,14 @@ public final class ApiClientUtil {
     }
 
     @Data
-    private static class InnerUserDto{
+    private static class InnerUserDto {
         private final String email;
         private final String password;
     }
 
     @SneakyThrows
-    private static InnerUserDto createTestUserViaInvitation() {
+    @Test
+    public InnerUserDto createTestUserViaInvitation() {
         CreateCooperation createCoop = createBaseCooperation();
         COOPERATION_API.createCooperation(createCoop);
 
@@ -125,9 +131,10 @@ public final class ApiClientUtil {
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
+        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
         expectedUser.setEmail(createCoop.getAdminEmail());
 
+        assertEquals(1, 1);
         return new InnerUserDto(USER_API.createUser(expectedUser).getEmail(), expectedUser.getPassword());
     }
 
@@ -162,9 +169,9 @@ public final class ApiClientUtil {
     }
 
     private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message="";
-        for (int i=0; i<response.getItems().size(); i++){
-            if(response.getItems().get(i).getContent().getHeaders().getTo().contains(email)){
+        String message = "";
+        for (int i = 0; i < response.getItems().size(); i++) {
+            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
                 message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
                 break;
             }
@@ -195,5 +202,5 @@ public final class ApiClientUtil {
                 .main(true));
 
         return createContactList;
-    }*/
+    }
 }
