@@ -200,13 +200,13 @@ iban:
   name: iban
   schema:
     type: string
-  example: "77778"
+  example: "UA213223130000026007233566001"
 usreo:
   in: query
   name: usreo
   schema:
     type: string
-  example: "A9856738"
+  example: "12345678"
 quantity_flat:
   in: query
   name: quantity_flat
