@@ -244,6 +244,21 @@ class CooperationPollApiIT {
     }
 
     @Test
+    void addAlreadyAddedPolledHouseTest() throws ApiException {
+        HouseLookup houseLookup = new HouseLookup().id(HOUSE_ONE_ID);
+        CreatePoll createPoll = createPoll();
+
+        ReadPoll poll = COOPERATION_POLL_API
+                .createCooperationPoll(COOPERATION_ID, createPoll);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> POLLED_HOUSE_API
+                        .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining(String.format("House with id:%s already exists in poll with id:%s", HOUSE_ONE_ID, poll.getId()));
+    }
+
+    @Test
     void createCooperationPollWithCompletionDateLessThanTwoDaysTest() {
         CreatePoll createPoll = createPollWithCompletionDateLessThanTwoDaysTest();
         assertThatExceptionOfType(ApiException.class)
