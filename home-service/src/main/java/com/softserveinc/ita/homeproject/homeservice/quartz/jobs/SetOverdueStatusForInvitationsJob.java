@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.quartz.jobs;
 import java.util.Set;
 
 import com.softserveinc.ita.homeproject.homeservice.quartz.config.QuartzJobBeanAutoConfiguration;
-import com.softserveinc.ita.homeproject.homeservice.service.impl.InvitationServiceImpl;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import lombok.NoArgsConstructor;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
