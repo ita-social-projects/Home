@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.application.converter.StringToContactTypeConverter;
+import com.softserveinc.ita.homeproject.application.converter.StringToInvitationStatusConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollStatusConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollTypeConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToQuestionTypeConverter;
@@ -34,6 +35,7 @@ public class RSQLConfig {
             RSQLCommonSupport.addConverter(new StringToPollTypeConverter());
             RSQLCommonSupport.addConverter(new StringToPollStatusConverter());
             RSQLCommonSupport.addConverter(new StringToQuestionTypeConverter());
+            RSQLCommonSupport.addConverter(new StringToInvitationStatusConverter());
 
             RSQLCommonSupport.addPropertyWhitelist(
                 entityClass,

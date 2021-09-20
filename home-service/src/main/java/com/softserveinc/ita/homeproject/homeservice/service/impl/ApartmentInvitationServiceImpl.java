@@ -188,13 +188,10 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     public Page<ApartmentInvitationDto> findAll(Integer pageNumber,
                                                 Integer pageSize,
                                                 Specification<ApartmentInvitation> specification) {
-        Specification<ApartmentInvitation> apartmentInvitationSpecification = specification
-            .and((root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("enabled"), true));
-        return apartmentInvitationRepository
-            .findAll(apartmentInvitationSpecification, PageRequest
-                .of(pageNumber - 1, pageSize))
-            .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
+        specification = specification.and((root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.notEqual(root.get("status"), InvitationStatus.DEACTIVATED));
+        return apartmentInvitationRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
+                .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
 
     @Override
