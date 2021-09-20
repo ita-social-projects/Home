@@ -1,4 +1,4 @@
-cooperation-cooperationId-contacts:
+cooperations-cooperationId-contacts:
   post:
     tags:
       - cooperation contact
@@ -49,7 +49,7 @@ cooperation-cooperationId-contacts:
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
-cooperation-cooperationId-contacts-contactId:
+cooperations-cooperationId-contacts-contactId:
   get:
     tags:
       - cooperation contact

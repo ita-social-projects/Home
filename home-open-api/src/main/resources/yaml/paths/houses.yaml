@@ -1,4 +1,4 @@
-cooperation-cooperationId-houses:
+cooperations-cooperationId-houses:
   post:
     tags:
       - house
@@ -46,8 +46,8 @@ cooperation-cooperationId-houses:
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
-cooperation-cooperationId-houses-houseId:
-  get:
+cooperations-es-houseId:
+  get:cooperationId-hous
     tags:
       - house
     summary: Get House by ID
