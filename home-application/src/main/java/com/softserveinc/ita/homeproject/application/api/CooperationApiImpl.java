@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.CooperationApi;
+import com.softserveinc.ita.homeproject.api.CooperationsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
@@ -59,7 +59,7 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-public class CooperationApiImpl extends CommonApi implements CooperationApi {
+public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @Autowired
     private CooperationService cooperationService;
