@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service;
 
 import java.util.Optional;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import org.springframework.core.GenericTypeResolver;

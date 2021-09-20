@@ -1,14 +1,14 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_POLLED_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_QUESTION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_POLL_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_QUESTION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_POLL_HOUSES_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_POLL_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_QUESTION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_QUESTION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_POLLED_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_QUESTION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_POLL_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_QUESTION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_ALL_POLL_HOUSES_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_POLL_HOUSE_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_POLL_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_QUESTION_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_QUESTION_PERMISSION;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,13 +16,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.PollsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollHouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollQuestionService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollService;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.house.PollHouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.question.PollQuestionService;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.PollStatus;
