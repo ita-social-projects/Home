@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.application.security.config;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 
 /**
  * SecurityConfig class configures security in application.
@@ -39,10 +41,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .csrf().disable()
-            .httpBasic();
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().disable()
+                .cors().configurationSource(request ->
+                        getCorsConfiguration()).and()
+                .httpBasic();
+    }
+
+    private CorsConfiguration getCorsConfiguration() {
+        var corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+        corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+        return corsConfiguration;
     }
 
     @Bean
