@@ -1,12 +1,12 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.cooperation.invitation.apartment;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.config.query.ApartmentInvitationQueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.ApartmentInvitationQueryConfig.ApartmentInvitationQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
+import com.softserveinc.ita.homeproject.application.config.query.cooperation.invitation.apartment.ApartmentInvitationQueryConfig.ApartmentInvitationQueryParamEnum;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

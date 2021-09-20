@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.service.impl;
+package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

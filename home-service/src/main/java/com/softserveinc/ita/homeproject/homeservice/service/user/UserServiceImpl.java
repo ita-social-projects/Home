@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.service.impl;
+package com.softserveinc.ita.homeproject.homeservice.service.user;
 
 import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
 

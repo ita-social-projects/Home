@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.application.converter;
 
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import org.springframework.core.convert.converter.Converter;
 
 @Provider
