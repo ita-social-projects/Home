@@ -45,7 +45,7 @@ public class JerseyConfig extends ResourceConfig {
         // register providers
         this.registerPackageClasses("com.softserveinc.ita.homeproject.application.provider", scanner);
         // register resolvers
-        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.resolver", scanner);
+        this.registerPackageClasses("com.softserveinc.ita.homeproject.application.config.resolver", scanner);
     }
 
     private void registerPackageClasses(String packageName, ClassPathScanningCandidateComponentProvider scanner) {
