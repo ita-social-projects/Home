@@ -29,8 +29,6 @@ public class QueryApiServiceImpl<T extends BaseEntity> implements QueryApiServic
         String sort = QueryApiService.getParameterValue(DefaultQueryParams.SORT.getParameter(), uriInfo)
                 .orElse(DefaultQueryParams.SORT.getValue());
         return specificationService.getSpecification(QueryApiService.getFilterMap(uriInfo), filter, sort)
-                .and((root, criteriaQuery, criteriaBuilder) -> uriInfo.getPath().contains("invitations")
-                        ? criteriaBuilder.notEqual(root.get("status"), InvitationStatus.DEACTIVATED)
-                        : criteriaBuilder.equal(root.get("enabled"), true));
+                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
     }
 }
