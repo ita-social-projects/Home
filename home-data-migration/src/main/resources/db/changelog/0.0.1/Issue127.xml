@@ -13,6 +13,9 @@
             </column>
             <column name="COOPERATION_NAME" type="VARCHAR(70)">
             </column>
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

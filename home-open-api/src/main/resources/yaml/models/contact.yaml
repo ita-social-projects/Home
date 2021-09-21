@@ -63,12 +63,12 @@ CreateContact:
       default: false
       type: boolean
       example: false
-  example:
-    {
-      "type": "email",
-      "main": false,
-      "email": "test.put.messages@gmail.com"
-    }
+#  example:
+#    {
+#      "type": "email",
+#      "main": false,
+#      "email": "test.put.messages@gmail.com"
+#    }
 CreateEmailContact:
   allOf:
     - $ref: '#/CreateContact'
@@ -110,12 +110,12 @@ UpdateContact:
     main:
       type: boolean
       example: false
-  example:
-    {
-      "type": "email",
-      "main": false,
-      "email": "test.put.messages@gmail.com"
-    }
+#  example:
+#    {
+#      "type": "email",
+#      "main": false,
+#      "email": "test.put.messages@gmail.com"
+#    }
 UpdateEmailContact:
   allOf:
     - $ref: '#/UpdateContact'

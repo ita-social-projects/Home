@@ -49,6 +49,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
             cooperationInvitation.setStatus(InvitationStatus.PENDING);
             cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
+            cooperationInvitation.setEnabled(true);
             invitationRepository.save(cooperationInvitation);
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
