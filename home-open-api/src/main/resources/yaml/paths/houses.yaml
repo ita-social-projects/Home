@@ -1,4 +1,4 @@
-cooperation-cooperationId-houses:
+cooperations-cooperationId-houses:
   post:
     tags:
       - house
@@ -46,7 +46,7 @@ cooperation-cooperationId-houses:
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
-cooperation-cooperationId-houses-houseId:
+cooperations-cooperationId-houses-houseId:
   get:
     tags:
       - house
