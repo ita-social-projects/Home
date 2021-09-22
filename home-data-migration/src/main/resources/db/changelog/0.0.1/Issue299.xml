@@ -5,13 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="Issue127.001" author="likeRewca">
+    <changeSet id="Issue299.001" author="sBogdan">
         <addColumn tableName="invitations">
-            <column name="END_TIME" type="TIMESTAMP">
-            </column>
-            <column name="ROLE" type="VARCHAR(20)">
-            </column>
-            <column name="COOPERATION_NAME" type="VARCHAR(70)">
+            <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>

@@ -116,12 +116,13 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         }
     }
 
-    //enabled
     private BigDecimal getAllActiveInvitationsByApartmentId(Long apartmentId) {
         return Stream.concat(apartmentInvitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
-                .stream(), apartmentInvitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING).stream())
+                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
+                                .stream().filter(invitation -> invitation.getEnabled().equals(true)),
+                        apartmentInvitationRepository
+                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
+                                .stream().filter(invitation -> invitation.getEnabled().equals(true)))
             .map(ApartmentInvitation::getOwnershipPart)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
