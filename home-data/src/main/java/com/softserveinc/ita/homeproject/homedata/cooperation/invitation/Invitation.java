@@ -38,6 +38,9 @@ public abstract class Invitation extends BaseEntity {
     @Column(name = "status")
     private InvitationStatus status;
 
+    @Column(name = "enabled")
+    private Boolean enabled;
+
     @Column(name = "sent_datetime")
     private LocalDateTime sentDatetime;
 
