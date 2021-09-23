@@ -17,8 +17,8 @@
         <surefire-version>3.0.0-M5</surefire-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
-        <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
-        <docker.image.application>home-application:${revision}</docker.image.application>
+        <docker.image.data.migration>homeacademy/data-migration:${revision}</docker.image.data.migration>
+        <docker.image.application>homeacademy/home-application:${revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.image.psql>governmentpaas/psql</docker.image.psql>

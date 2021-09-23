@@ -14,6 +14,7 @@
     <properties>
         <surefire-version>3.0.0-M5</surefire-version>
         <json.name>openapi.json</json.name>
+        <image.application.path>homeacademy/home-application</image.application.path>
     </properties>
 
     <dependencies>
