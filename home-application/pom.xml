@@ -182,6 +182,7 @@
                     </to>
                     <container>
                         <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
