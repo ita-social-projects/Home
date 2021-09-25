@@ -69,6 +69,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
                                                 ApartmentInvitationDto updateInvitationDto) {
         ApartmentInvitation toUpdate = apartmentInvitationRepository.findById(id)
             .filter(invitation -> invitation.getSentDatetime() == null
+                && invitation.getEnabled().equals(true)
                 && invitation.getApartment().getId().equals(apartmentId)
                 && invitation.getStatus().equals(InvitationStatus.PENDING))
             .orElseThrow(() ->
@@ -117,9 +118,11 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private BigDecimal getAllActiveInvitationsByApartmentId(Long apartmentId) {
         return Stream.concat(apartmentInvitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
-                .stream(), apartmentInvitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING).stream())
+                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
+                                .stream().filter(invitation -> invitation.getEnabled().equals(true)),
+                        apartmentInvitationRepository
+                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
+                                .stream().filter(invitation -> invitation.getEnabled().equals(true)))
             .map(ApartmentInvitation::getOwnershipPart)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -131,6 +134,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
         apartmentInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
         apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(EXPIRATION_TERM));
+        apartmentInvitation.setEnabled(true);
+
         var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
             .findById(apartmentId)
@@ -174,10 +179,12 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     public void deactivateInvitationById(Long apartmentId, Long id) {
         var apartmentInvitation = apartmentInvitationRepository.findById(id)
             .filter(invitation -> invitation.getSentDatetime() == null
+                && invitation.getEnabled().equals(true)
                 && invitation.getApartment().getId().equals(apartmentId)
                 && invitation.getStatus().equals(InvitationStatus.PENDING))
             .orElseThrow(() ->
                 new NotFoundHomeException("Invitation with id:" + id + "not found."));
+        apartmentInvitation.setEnabled(false);
         apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
