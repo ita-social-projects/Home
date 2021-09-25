@@ -1,9 +1,6 @@
 CreateCooperation:
   required:
-    - name
     - usreo
-    - iban
-    - address
     - admin_email
   type: object
   properties:
@@ -64,6 +61,7 @@ CreateCooperation:
       ]
       items:
         $ref: "contact.yaml#/CreateContact"
+
 ReadCooperation:
   allOf:
     - $ref: 'common.yaml#/BaseReadView'

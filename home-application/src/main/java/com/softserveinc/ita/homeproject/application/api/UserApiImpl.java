@@ -1,16 +1,16 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_USER;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_USER;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.UsersApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
-import com.softserveinc.ita.homeproject.homeservice.service.UserContactService;
-import com.softserveinc.ita.homeproject.homeservice.service.UserService;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.service.general.contact.user.UserContactService;
+import com.softserveinc.ita.homeproject.homeservice.service.user.UserService;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateUser;

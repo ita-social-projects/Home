@@ -1,12 +1,13 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_DELETE_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_COOPERATION_DATA;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_POLLS;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_COOPERATION_DATA;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_POLL;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_COOPERATION;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_DELETE_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_POLL;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_COOPERATION;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,15 +15,15 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationContactService;
-import com.softserveinc.ita.homeproject.homeservice.service.CooperationService;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
-import com.softserveinc.ita.homeproject.homeservice.service.PollService;
+import com.softserveinc.ita.homeproject.api.CooperationsApi;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.CooperationService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation.CooperationContactService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
 import com.softserveinc.ita.homeproject.model.ContactType;
 import com.softserveinc.ita.homeproject.model.CreateContact;
 import com.softserveinc.ita.homeproject.model.CreateCooperation;
@@ -46,7 +47,7 @@ import org.springframework.stereotype.Component;
 
 @Provider
 @Component
-public class CooperationApiImpl extends CommonApi implements CooperationApi {
+public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @Autowired
     private CooperationService cooperationService;

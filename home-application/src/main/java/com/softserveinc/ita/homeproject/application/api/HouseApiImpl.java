@@ -1,16 +1,17 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_APARTMENT_INFO;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_APARTMENT_INFO;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.HousesApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.HouseService;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.apartment.ApartmentDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.model.CreateApartment;
 import com.softserveinc.ita.homeproject.model.ReadApartment;
 import com.softserveinc.ita.homeproject.model.UpdateApartment;

@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -232,12 +233,27 @@ class CooperationPollApiIT {
     }
 
     @Test
+    void addAlreadyAddedPolledHouseTest() throws ApiException {
+        HouseLookup houseLookup = new HouseLookup().id(HOUSE_ONE_ID);
+        CreatePoll createPoll = createPoll();
+
+        ReadPoll poll = COOPERATION_POLL_API
+                .createCooperationPoll(COOPERATION_ID, createPoll);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> POLLED_HOUSE_API
+                        .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining(String.format("House with id:%s already exists in poll with id:%s", HOUSE_ONE_ID, poll.getId()));
+    }
+
+    @Test
     void createCooperationPollWithCompletionDateLessThanTwoDaysTest() {
         CreatePoll createPoll = createPollWithCompletionDateLessThanTwoDaysTest();
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Completion date of the poll has not to be less than 2 days after creation");
     }
 
@@ -310,7 +326,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Completion date of the poll has not to be less than 2 days after creation");
     }
 
@@ -321,7 +337,7 @@ class CooperationPollApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> COOPERATION_POLL_API
                 .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Poll status can't be changed to 'completed'");
     }
 

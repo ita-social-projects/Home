@@ -1,14 +1,15 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_NEWS;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_NEWS;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_NEWS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_NEWS;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.NewsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
-import com.softserveinc.ita.homeproject.homeservice.service.NewsService;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.news.NewsDto;
+import com.softserveinc.ita.homeproject.homeservice.service.general.news.NewsService;
 import com.softserveinc.ita.homeproject.model.CreateNews;
 import com.softserveinc.ita.homeproject.model.ReadNews;
 import com.softserveinc.ita.homeproject.model.UpdateNews;

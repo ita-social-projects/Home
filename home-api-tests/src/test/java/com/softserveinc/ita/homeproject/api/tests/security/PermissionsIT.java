@@ -3,8 +3,41 @@ package com.softserveinc.ita.homeproject.api.tests.security;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiClient;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
-import com.softserveinc.ita.homeproject.client.api.*;
-import com.softserveinc.ita.homeproject.client.model.*;
+import com.softserveinc.ita.homeproject.client.api.ContactApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
+import com.softserveinc.ita.homeproject.client.model.CreateApartment;
+import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
+import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
+import com.softserveinc.ita.homeproject.client.model.CreateNews;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.CreatePoll;
+import com.softserveinc.ita.homeproject.client.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.client.model.CreateUser;
+import com.softserveinc.ita.homeproject.client.model.HouseLookup;
+import com.softserveinc.ita.homeproject.client.model.InvitationToken;
+import com.softserveinc.ita.homeproject.client.model.InvitationType;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.QuestionType;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
+import com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation;
+import com.softserveinc.ita.homeproject.client.model.UpdateContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.client.model.UpdateNews;
+import com.softserveinc.ita.homeproject.client.model.UpdateOwnership;
+import com.softserveinc.ita.homeproject.client.model.UpdatePoll;
+import com.softserveinc.ita.homeproject.client.model.UpdateQuestion;
+import com.softserveinc.ita.homeproject.client.model.UpdateUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -69,7 +102,7 @@ public class PermissionsIT {
     void testGuestUser(Function<ApiClient, ApiResponse<?>> action, String x,
                        boolean admin, boolean coopAdmin, boolean owner, boolean guestUser) {
 
-        int statusCode = getStatusCode(action, ApiClientUtil.getUnauthorizedUserClient());
+        int statusCode = getStatusCode(action, ApiClientUtil.getUserGuestClient());
         checkUser(guestUser, statusCode);
     }
 

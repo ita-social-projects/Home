@@ -1,18 +1,19 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.MANAGE_IN_COOPERATION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.READ_APARTMENT_INFO;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_APARTMENT_INFO;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import com.softserveinc.ita.homeproject.api.ApartmentsApi;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.OwnershipService;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.ownership.OwnershipDto;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import com.softserveinc.ita.homeproject.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.InvitationType;
 import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
