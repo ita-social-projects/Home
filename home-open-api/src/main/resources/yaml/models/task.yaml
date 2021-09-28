@@ -1,0 +1,65 @@
+TaskStatus:
+  type: string
+  enum:
+    - PENDING
+    - ERROR
+    - PROCESSING
+    - ACCEPTED
+    - DECLINED
+TaskType:
+  type: string
+  enum:
+    - IMPORT
+    - EXPORT
+CreateTask:
+  type: object
+  required:
+    - type
+  properties:
+    type:
+      $ref: '#/TaskType'
+ReadTask:
+  type: object
+  properties:
+    id:
+      type: integer
+      format: int64
+      example: 1
+    type:
+      $ref: '#/TaskType'
+    status:
+      $ref: '#/TaskStatus'
+#ReadHouse:
+#  allOf:
+#    - $ref: 'common.yaml#/BaseReadView'
+#  type: object
+#  properties:
+#    quantity_flat:
+#      type: integer
+#      example: 45
+#    house_area:
+#      type: number
+#      example: 25
+#    adjoining_area:
+#      type: integer
+#      example: 12
+#    address:
+#      $ref: 'address.yaml#/Address'
+ReadReport:
+  type: object
+  properties:
+    houses_amount:
+      type: integer
+      format: int64
+      example: 1
+    apartments:
+      type: integer
+      format: int64
+      example: 1
+    invitations:
+      type: integer
+      format: int64
+      example: 1
+ReadXlsxFile:
+  type: string
+  format: binary

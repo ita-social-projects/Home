@@ -141,3 +141,9 @@ UpdateQuestionBody:
     application/json:
       schema:
         $ref: '../models/question.yaml#/UpdateQuestion'
+CreateTaskBody:
+  description: A payload for creating Task
+  content:
+    application/json:
+      schema:
+        $ref: '../models/task.yaml#/CreateTask'

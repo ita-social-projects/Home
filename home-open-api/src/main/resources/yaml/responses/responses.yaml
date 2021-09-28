@@ -188,3 +188,17 @@ QuestionsResponse:
         type: array
         items:
           $ref: "../models/question.yaml#/ReadQuestion"
+TaskResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        $ref: '../models/task.yaml#/ReadTask'
+TasksResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: '../models/task.yaml#/ReadTask'

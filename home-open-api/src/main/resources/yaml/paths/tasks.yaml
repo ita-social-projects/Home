@@ -1,0 +1,134 @@
+cooperations-cooperationId-tasks:
+  post:
+    tags:
+      - task
+    summary: Create a new Task for the Cooperation
+    description: The endpoint creates a new Task(import/export) for the specified Cooperation ID
+    operationId: createTask
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateTaskBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/TaskResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - task
+    summary: Get all Tasks by Cooperation
+    description: The endpoint retrieves the list of tasks associated with the specified cooperation ID
+    operationId: getTasks
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/TaskResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperations-cooperationId-tasks-taskId:
+  get:
+    tags:
+      - task
+    summary: Get Task by ID
+    description: The endpoint retrieves an existing Task associated with the specified Cooperation by Cooperation and Task IDs
+    operationId: getTask
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/TaskResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperations-cooperationId-tasks-taskId-xlsx:
+  post:
+    tags:
+      - task
+    summary: Import Xlsx-file for the Task
+    description: The endpoint creates import of the Xlsx-file for the specified Cooperation and Task IDs
+    content: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    operationId: importFile
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_task_id'
+#    requestBody:
+#      $ref: '../requests/requestBodies.yaml#/CreateTaskBody'
+#    responses:
+#      201:
+#        $ref: '../responses/responses.yaml#/TaskResponse'
+#      400:
+#        $ref: '../responses/responses.yaml#/BadRequest'
+#      401:
+#        $ref: '../responses/responses.yaml#/Unauthorized'
+#      403:
+#        $ref: '../responses/responses.yaml#/Forbidden'
+#      default:
+#        $ref: '../responses/responses.yaml#/InternalServerError'
+  get:
+    tags:
+      - task
+    summary: Export Xlsx-file for the Task
+    description: The endpoint creates export of the Xlsx-file for the specified Cooperation and Task IDs
+    operationId: exportFile
+    consumes:
+      - "application/json"
+    produces:
+      - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_task_id'
+#      responses:
+#        201:
+#          $ref: '../responses/responses.yaml#/TaskResponse'
+#        400:
+#          $ref: '../responses/responses.yaml#/BadRequest'
+#        401:
+#          $ref: '../responses/responses.yaml#/Unauthorized'
+#        403:
+#          $ref: '../responses/responses.yaml#/Forbidden'
+#        default:
+#          $ref: '../responses/responses.yaml#/InternalServerError'
+
+cooperations-cooperationId-tasks-taskId-summary:
+  get:
+    tags:
+      - task
+    summary: Get Summary of the Task by Task ID
+    description: The endpoint retrieves a summary for existing Task associated with the specified Cooperation by Cooperation and Task IDs
+    operationId: getSummary
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/p_task_id'
+#    responses:
+#      201:
+#        $ref: '../responses/responses.yaml#/TaskResponse'
+#      400:
+#        $ref: '../responses/responses.yaml#/BadRequest'
+#      401:
+#        $ref: '../responses/responses.yaml#/Unauthorized'
+#      403:
+#        $ref: '../responses/responses.yaml#/Forbidden'
+#      default:
+#        $ref: '../responses/responses.yaml#/InternalServerError'

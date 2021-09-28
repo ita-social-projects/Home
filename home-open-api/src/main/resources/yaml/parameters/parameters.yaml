@@ -24,6 +24,15 @@ p_cooperation_id:
     type: integer
     format: int64
   example: 1
+p_task_id:
+  name: task_id
+  in: path
+  required: true
+  description: The ID of the Task
+  schema:
+    type: integer
+    format: int64
+  example: 1
 p_house_id:
   name: "house_id"
   in: path

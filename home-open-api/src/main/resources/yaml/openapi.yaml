@@ -24,6 +24,8 @@ tags:
     description: Contact management operations
   - name: cooperation
     description: Cooperation management
+  - name: task
+    description: Task management
   - name: house
     description: Operations with house
   - name: address
@@ -72,6 +74,18 @@ paths:
 
   /cooperations/{id}:
     $ref: './paths/cooperations.yaml#/cooperations-cooperationId'
+
+  /cooperations/{cooperation_id}/tasks:
+    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks'
+
+  /cooperation/{cooperation_id}/tasks/{task_id}:
+    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId'
+
+  /cooperation/{id}/tasks/{task_id}/xlsx:
+    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId-xlsx'
+
+  /cooperation/{id}/tasks/{task_id}/summary:
+    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId-summary'
 
   /cooperations/{cooperation_id}/houses:
     $ref: './paths/houses.yaml#/cooperations-cooperationId-houses'
