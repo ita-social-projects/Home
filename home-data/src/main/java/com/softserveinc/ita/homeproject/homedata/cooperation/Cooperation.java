@@ -44,6 +44,9 @@ public class Cooperation extends BaseEntity {
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
+    @Column(name = "admin_email")
+    private String adminEmail;
+
     @Column(name = "enabled")
     private Boolean enabled;
 

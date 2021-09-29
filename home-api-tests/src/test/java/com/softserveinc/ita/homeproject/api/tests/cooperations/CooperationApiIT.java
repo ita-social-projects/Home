@@ -16,6 +16,7 @@ import com.softserveinc.ita.homeproject.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class CooperationApiIT {
@@ -124,6 +125,7 @@ class CooperationApiIT {
             .withMessageContaining("Parameter `iban` is invalid - must meet the rule.");
     }
 
+    @Disabled("Usreo is now to unique")
     @Test
     void createCooperationWithExistingUsreoTest() throws ApiException {
         CreateCooperation createCoop = createCooperation();
@@ -162,6 +164,7 @@ class CooperationApiIT {
                 .withMessageContaining("The cooperations must be unique. Key `iban`=`" + createCoopSameIban.getIban() + "` already exists.");
     }
 
+    @Disabled("Usreo is now to unique")
     @Test
     void createCooperationWithExistingUsreoAndIbanTest() {
         CreateCooperation createCoopSameUsreoAndIban = new CreateCooperation()

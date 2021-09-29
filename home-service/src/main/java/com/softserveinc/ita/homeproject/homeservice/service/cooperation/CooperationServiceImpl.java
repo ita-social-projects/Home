@@ -49,6 +49,10 @@ public class CooperationServiceImpl implements CooperationService {
 
         cooperationRepository.save(cooperation);
 
+        Long id = cooperation.getId();
+
+        createCooperationDto.setId(id);
+
         invitationService.createInvitation(createInvitationForAdmin(createCooperationDto));
 
         return mapper.convert(cooperation, CooperationDto.class);
@@ -57,7 +61,7 @@ public class CooperationServiceImpl implements CooperationService {
     private CooperationInvitationDto createInvitationForAdmin(CooperationDto cooperationDto) {
         var invitationDto = new CooperationInvitationDto();
         invitationDto.setRole(RoleDto.COOPERATION_ADMIN);
-        invitationDto.setCooperationName(cooperationDto.getName());
+        invitationDto.setCooperationId(cooperationDto.getId());
         invitationDto.setEmail(cooperationDto.getAdminEmail());
         invitationDto.setType(InvitationTypeDto.COOPERATION);
         return invitationDto;

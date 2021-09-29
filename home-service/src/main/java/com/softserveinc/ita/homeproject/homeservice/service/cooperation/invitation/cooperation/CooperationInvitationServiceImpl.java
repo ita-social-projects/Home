@@ -44,9 +44,9 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         var cooperationInvitation =
             mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
-        if (isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationName())) {
+        if (isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationId())) {
             cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
-            cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
+            cooperationInvitation.setCooperationId(cooperationInvitationDto.getCooperationId());
             cooperationInvitation.setStatus(InvitationStatus.PENDING);
             cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
             cooperationInvitation.setEnabled(true);
@@ -64,12 +64,12 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         invitationRepository.save(invitation);
     }
 
-    private boolean isCooperationInvitationNonExists(String email, String name) {
+    private boolean isCooperationInvitationNonExists(String email, Long cooperationId) {
         return cooperationInvitationRepository.findCooperationInvitationsByEmail(email).stream()
             .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
                 || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
             .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
-            .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
+            .filter(invitation -> invitation.getCooperationId().equals(cooperationId)).findAny().isEmpty();
     }
 
     @Override

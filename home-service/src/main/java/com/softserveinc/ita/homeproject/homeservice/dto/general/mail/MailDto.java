@@ -24,6 +24,8 @@ public class MailDto extends BaseDto {
 
     private String cooperationName;
 
+    private String cooperationAdminEmail;
+
     private BigDecimal ownershipPat;
 
     private String apartmentNumber;

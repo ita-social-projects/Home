@@ -11,6 +11,5 @@ public class CooperationInvitationDto extends InvitationDto {
 
     private RoleDto role;
 
-    private String cooperationName;
-
+    private Long cooperationId;
 }

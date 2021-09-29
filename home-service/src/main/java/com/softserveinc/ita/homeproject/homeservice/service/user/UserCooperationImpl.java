@@ -42,7 +42,7 @@ public class UserCooperationImpl implements UserCooperationService {
         userRepository.findByEmail(invitation.getEmail())
                 .ifPresent(userCooperation::setUser);
 
-        cooperationRepository.findCooperationByName(invitation.getCooperationName())
+        cooperationRepository.findCooperationById(invitation.getCooperationId())
                 .ifPresent(userCooperation::setCooperation);
 
         userCooperation.setRole(roleRepository.findByName(invitation.getRole().getName().toUpperCase())
