@@ -5,7 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
-    <option name="VM_PARAMETERS" value="-Dpostgres.user=postgres -Dpostgres.password=password -Dhome.application.admin.username=admin@example.com -Dhome.application.admin.password=password -Dhome.application.external.port=8080 -Dmailhog.external.port=8025 -Dmail.host=1025 -Dmail.port=8025" />
+    <option name="VM_PARAMETERS" value="-Dpostgres.user=postgres -Dpostgres.password=password -Dhome.application.admin.username=admin@example.com -Dhome.application.admin.password=password -Dhome.application.external.port=8080 -Dmailhog.external.port=8025" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
