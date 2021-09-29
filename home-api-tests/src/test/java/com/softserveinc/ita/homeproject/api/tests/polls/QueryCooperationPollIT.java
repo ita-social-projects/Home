@@ -1,17 +1,17 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.client.model.PollStatus;
-import com.softserveinc.ita.homeproject.client.model.PollType;
-import com.softserveinc.ita.homeproject.client.model.ReadPoll;
-import org.junit.jupiter.api.Test;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
+import org.junit.jupiter.api.Test;
 
 public class QueryCooperationPollIT extends QueryPoll {
 
@@ -85,7 +85,7 @@ public class QueryCooperationPollIT extends QueryPoll {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> buildQueryPollWithCooperationId(wrongCooperationId))
-                .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
+                .matches(exception -> exception.getCode() == NOT_FOUND)
                 .withMessageContaining("Cooperation with 'id: " + wrongCooperationId + "' is not found");
     }
 }

@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -235,7 +236,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.getNewsWithHttpInfo(wrongId))
-            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
+            .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("News with 'id: " + wrongId + "' is not found");
     }
 
@@ -432,7 +433,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.deleteNewsWithHttpInfo(wrongId))
-            .matches(exception -> exception.getCode() == ApiClientUtil.NOT_FOUND)
+            .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("Can't find news with given ID: " + wrongId);
     }
 
