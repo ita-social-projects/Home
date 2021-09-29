@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.apartments;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -117,7 +118,7 @@ class ApartmentApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), createApartment))
-                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("The sum of the entered area of the apartment = 1.5. Area cannot be greater than 1");
     }
 
@@ -130,12 +131,12 @@ class ApartmentApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), emptyNumber))
-                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `number` is invalid - must meet the rule.")
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), longNumber))
-                .matches((actual) -> actual.getCode() == ApiClientUtil.BAD_REQUEST)
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `number` is invalid - must meet the rule.")
                 .withMessageContaining("Parameter `number` is invalid - size must be between 1 and 6 signs.");
     }
