@@ -66,7 +66,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PermissionsIT {
+class PermissionsIT {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
     static private final List<ApiClientMethods> apiClientMethods = getAllApiClientMethods(listApiClientClassInstances());
@@ -640,8 +640,8 @@ public class PermissionsIT {
     private static UpdateCooperation updateCooperation() {
         return new UpdateCooperation()
                 .name("upd")
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .address(new Address()
                         .city("upd")
                         .district("upd")
@@ -669,8 +669,8 @@ public class PermissionsIT {
     private static CreateCooperation createBaseCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
                 .address(createAddress())
                 .contacts(createContactList());
@@ -679,8 +679,8 @@ public class PermissionsIT {
     private static CreateCooperation createCooperationForPoll() {
         return new CreateCooperation()
                 .name("newCooperationTest")
-                .usreo(RandomStringUtils.randomAlphabetic(10))
-                .iban(RandomStringUtils.randomAlphabetic(20))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
                 .address(createAddress())
                 .addHousesItem(createHouse())
@@ -722,7 +722,7 @@ public class PermissionsIT {
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
                 .completionDate(completionDate)
-                .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(0).getId()))
+                .addHousesItem(new HouseLookup().id(Objects.requireNonNull(readCooperation.getHouses()).get(0).getId()))
                 .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(1).getId()));
     }
 

@@ -114,7 +114,7 @@ class UserApiIT {
         CreateUser expectedUser = createTestUser();
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser))
-                .matches(exception -> exception.getCode() == Response.Status.UNAUTHORIZED.getStatusCode());
+                .matches(exception -> exception.getCode() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test

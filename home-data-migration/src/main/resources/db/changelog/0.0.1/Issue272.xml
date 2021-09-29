@@ -10,60 +10,25 @@
              SET first_name = 'User_ADMIN',
                  last_name  = 'User_ADMIN'
              WHERE email = 'admin@example.com'</sql>
-
-<!--        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="users">
-            <column name="id" valueSequenceNext="hibernate_sequence"/>
-            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
-            <column name="email" value="cooperation_admin@example.com"/>
-            <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuxwyeiB1OFYjeuYbRaqbC"/>
-            <column name="first_name" value="User_COOPERATION_ADMIN"/>
-            <column name="last_name" value="User_COOPERATION_ADMIN"/>
-            <column name="expired" value="false"/>
-            <column name="locked" value="false"/>
-            <column name="credentials_expired" value="false"/>
-            <column name="enabled" value="true"/>
-            <column name="update_date" value="null"/>
-        </insert>
-        <insert dbms="postgresql"
-                schemaName="public"
-                tableName="users">
-            <column name="id" valueSequenceNext="hibernate_sequence"/>
-            <column name="create_date" valueComputed="CURRENT_TIMESTAMP" type="TIMESTAMP"/>
-            <column name="email" value="owner@example.com"/>
-            <column name="password" value="{bcrypt}$2a$10$dp.3Muw2krCykzwILSlhse16CdowCELLuxwyeiB1OFYjeuYbRaqbC"/>
-            <column name="first_name" value="User_OWNER"/>
-            <column name="last_name" value="User_OWNER"/>
-            <column name="expired" value="false"/>
-            <column name="locked" value="false"/>
-            <column name="credentials_expired" value="false"/>
-            <column name="enabled" value="true"/>
-            <column name="update_date" value="null"/>
-        </insert>-->
     </changeSet>
 
     <changeSet id="Issue272.002" author="Vladyslav-Frolov">
-        <sql>DELETE FROM roles
+        <sql>DELETE
+             FROM roles
              WHERE id = 4</sql>
         <sql>UPDATE roles
              SET name = 'COOPERATION_ADMIN'
              WHERE id = 2</sql>
+        <sql>UPDATE roles
+             SET name = 'OWNER'
+             WHERE id = 3</sql>
     </changeSet>
 
     <changeSet id="Issue272.003" author="Vladyslav-Frolov">
-<!--        <sql>INSERT INTO user_cooperation (role_id, user_id)
-             VALUES ('2', (SELECT ID FROM users WHERE email = 'cooperation_admin@example.com'))</sql>
-        <sql>INSERT INTO user_cooperation (role_id, user_id)
-             VALUES ('3', (SELECT ID FROM users WHERE email = 'owner@example.com'))</sql>-->
-    </changeSet>
-
-
-    <changeSet id="Issue272.004" author="Vladyslav-Frolov">
         <sql>TRUNCATE TABLE role_permissions, permissions</sql>
     </changeSet>
 
-    <changeSet id="Issue272.005" author="Vladyslav-Frolov">
+    <changeSet id="Issue272.004" author="Vladyslav-Frolov">
         <sql>INSERT INTO permissions
              values (1, 'READ_NEWS')</sql>
         <sql>INSERT INTO permissions
@@ -90,7 +55,7 @@
              values (12, 'MANAGE_POLLS')</sql>
     </changeSet>
 
-    <changeSet id="Issue272.006" author="Vladyslav-Frolov">
+    <changeSet id="Issue272.005" author="Vladyslav-Frolov">
         <sql>INSERT INTO role_permissions
              VALUES (1, 1)</sql>
         <sql>INSERT INTO role_permissions
