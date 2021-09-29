@@ -68,12 +68,9 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @PreAuthorize(MANAGE_IN_COOPERATION) // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
-
-        var toGet = invitationService.getOne(id, getSpecification());
-        var readApartmentInvitation = mapper
-                .convert(toGet, ReadApartmentInvitation.class);
-        return Response.status(Response.Status.OK)
-                .entity(readApartmentInvitation).build();
+        ApartmentInvitationDto toGet = invitationService.getOne(id, getSpecification());
+        var readApartmentInvitation = mapper.convert(toGet, ReadApartmentInvitation.class);
+        return Response.status(Response.Status.OK).entity(readApartmentInvitation).build();
     }
 
     @PreAuthorize(READ_APARTMENT_INFO)
@@ -81,7 +78,6 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
         var readOwnership = mapper.convert(toGet, ReadOwnership.class);
-
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
@@ -135,7 +131,6 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
         var toUpdate = ownershipService.updateOwnership(apartmentId, id, updateOwnershipDto);
         var readOwnership = mapper.convert(toUpdate, ReadOwnership.class);
-
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 }

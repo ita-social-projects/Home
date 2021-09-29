@@ -23,6 +23,7 @@
     <properties>
         <java.version>11</java.version>
         <revision>0.0.1-SNAPSHOT</revision>
+        <docker.revision>latest</docker.revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.3.8.RELEASE</spring.boot.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>

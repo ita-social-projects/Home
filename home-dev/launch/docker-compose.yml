@@ -20,7 +20,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: home-data-migration:0.0.1-SNAPSHOT
+    image: homeacademy/data-migration
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
     ports:
@@ -29,7 +29,7 @@ services:
       - home_network
 
   home-application:
-    image: home-application:0.0.1-SNAPSHOT
+    image: homeacademy/home-application
     depends_on:
       home-data-migration:
         condition: service_completed_successfully
