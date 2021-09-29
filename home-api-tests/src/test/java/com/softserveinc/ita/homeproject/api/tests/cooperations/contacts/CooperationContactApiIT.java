@@ -13,14 +13,24 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.client.model.*;
 import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
+import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

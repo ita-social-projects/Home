@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.api.tests.polls;
 
-import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.client.model.*;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,9 +11,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.UpdatePoll;
+import org.junit.jupiter.api.Test;
 
 abstract class QueryPoll {
 

@@ -36,6 +36,7 @@
         <docker-files>${basedir}/target/docker</docker-files>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <reflections.version>0.9.12</reflections.version>
     </properties>
     <profiles>
         <profile>
@@ -412,7 +413,7 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
+            <version>${reflections.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

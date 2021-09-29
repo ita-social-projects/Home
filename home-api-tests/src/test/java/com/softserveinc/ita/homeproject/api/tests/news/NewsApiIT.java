@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -9,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import javax.ws.rs.core.Response;
 
+import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.NewsApi;
-import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.model.CreateNews;
 import com.softserveinc.ita.homeproject.client.model.ReadNews;
 import com.softserveinc.ita.homeproject.client.model.UpdateNews;
@@ -97,7 +98,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - must not be null.");
     }
 
@@ -112,7 +113,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
     }
 
@@ -128,7 +129,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> newsApi.createNews(createNewsInvalidTitle))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
     }
 
@@ -143,7 +144,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - must not be null.");
     }
 
@@ -158,7 +159,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -175,7 +176,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -190,7 +191,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - must not be null.");
     }
 
@@ -205,7 +206,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -224,7 +225,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.createNews(createNewsInvalidDescription))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -243,7 +244,7 @@ class NewsApiIT {
     void passNullWhenReceivingNewsTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.getNewsWithHttpInfo(null))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Missing the required parameter 'id' when calling getNews");
     }
 
@@ -262,7 +263,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - must not be null.");
     }
 
@@ -281,7 +282,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
     }
 
@@ -301,7 +302,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `title` is invalid - size must be between 1 and 70 signs.");
     }
 
@@ -320,7 +321,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - must not be null.");
     }
 
@@ -339,7 +340,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -360,7 +361,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `description` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -379,7 +380,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - must not be null.");
     }
 
@@ -398,7 +399,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -421,7 +422,7 @@ class NewsApiIT {
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.updateNewsWithHttpInfo(savedNews.getId(), updateNews))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `text` is invalid - size must be between 1 and 150 signs.");
     }
 
@@ -440,7 +441,7 @@ class NewsApiIT {
     void passNullWhenDeleteNewsTest() {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.deleteNewsWithHttpInfo(null))
-            .matches(exception -> exception.getCode() == ApiClientUtil.BAD_REQUEST)
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Missing the required parameter 'id' when calling deleteNews");
     }
 
