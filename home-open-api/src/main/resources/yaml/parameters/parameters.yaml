@@ -303,7 +303,7 @@ task_type:
   schema:
     $ref: '../models/task.yaml#/TaskType'
   description: Type of the Type
-type_data_scope_type:
+task_data_scope_type:
   in: query
   name: data_scope_type
   schema:

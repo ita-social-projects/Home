@@ -34,7 +34,7 @@ cooperations-cooperationId-tasks:
       - $ref: '../parameters/parameters.yaml#/filter'
       - $ref: '../parameters/parameters.yaml#/id'
       - $ref: '../parameters/parameters.yaml#/task_type'
-      - $ref: '../parameters/parameters.yaml#/type_data_scope_type'
+      - $ref: '../parameters/parameters.yaml#/task_data_scope_type'
     responses:
       201:
         $ref: '../responses/responses.yaml#/TasksResponse'
