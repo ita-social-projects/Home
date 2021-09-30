@@ -147,3 +147,15 @@ CreateTaskBody:
     application/json:
       schema:
         $ref: '../models/task.yaml#/CreateTask'
+ImportFileBody:
+  description: A payload for import a File for the Task
+  content:
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+      schema:
+        $ref: '../models/task.yaml#/ReadXlsxFile'
+ExportFileBody:
+  description: A payload for export a File for the Task
+  content:
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+      schema:
+        $ref: '../models/task.yaml#/ReadXlsxFile'

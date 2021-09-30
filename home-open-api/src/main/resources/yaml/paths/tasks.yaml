@@ -3,7 +3,7 @@ cooperations-cooperationId-tasks:
     tags:
       - task
     summary: Create a new Task for the Cooperation
-    description: The endpoint creates a new Task(import/export) for the specified Cooperation ID
+    description: The endpoint creates a new Task for the specified Cooperation ID
     operationId: createTask
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
@@ -27,10 +27,17 @@ cooperations-cooperationId-tasks:
     description: The endpoint retrieves the list of tasks associated with the specified cooperation ID
     operationId: getTasks
     parameters:
-      - $ref: '../parameters/parameters.yaml#/p_id'
+      - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/task_type'
+      - $ref: '../parameters/parameters.yaml#/type_data_scope_type'
     responses:
       201:
-        $ref: '../responses/responses.yaml#/TaskResponse'
+        $ref: '../responses/responses.yaml#/TasksResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
       401:
@@ -62,54 +69,51 @@ cooperations-cooperationId-tasks-taskId:
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
-cooperations-cooperationId-tasks-taskId-xlsx:
+cooperations-cooperationId-tasks-taskId-file:
   post:
     tags:
       - task
-    summary: Import Xlsx-file for the Task
-    description: The endpoint creates import of the Xlsx-file for the specified Cooperation and Task IDs
-    content: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    summary: Import File for the Task
+    description: The endpoint creates import of the File for the specified Cooperation and Task IDs
     operationId: importFile
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_task_id'
-#    requestBody:
-#      $ref: '../requests/requestBodies.yaml#/CreateTaskBody'
-#    responses:
-#      201:
-#        $ref: '../responses/responses.yaml#/TaskResponse'
-#      400:
-#        $ref: '../responses/responses.yaml#/BadRequest'
-#      401:
-#        $ref: '../responses/responses.yaml#/Unauthorized'
-#      403:
-#        $ref: '../responses/responses.yaml#/Forbidden'
-#      default:
-#        $ref: '../responses/responses.yaml#/InternalServerError'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/ImportFileBody'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
   get:
     tags:
       - task
-    summary: Export Xlsx-file for the Task
-    description: The endpoint creates export of the Xlsx-file for the specified Cooperation and Task IDs
+    summary: Export File for the Task
+    description: The endpoint creates export of the File for the specified Cooperation and Task IDs
     operationId: exportFile
-    consumes:
-      - "application/json"
-    produces:
-      - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_task_id'
-#      responses:
-#        201:
-#          $ref: '../responses/responses.yaml#/TaskResponse'
-#        400:
-#          $ref: '../responses/responses.yaml#/BadRequest'
-#        401:
-#          $ref: '../responses/responses.yaml#/Unauthorized'
-#        403:
-#          $ref: '../responses/responses.yaml#/Forbidden'
-#        default:
-#          $ref: '../responses/responses.yaml#/InternalServerError'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/ExportFileBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/TaskResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
 
 cooperations-cooperationId-tasks-taskId-summary:
   get:
@@ -121,14 +125,14 @@ cooperations-cooperationId-tasks-taskId-summary:
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_task_id'
-#    responses:
-#      201:
-#        $ref: '../responses/responses.yaml#/TaskResponse'
-#      400:
-#        $ref: '../responses/responses.yaml#/BadRequest'
-#      401:
-#        $ref: '../responses/responses.yaml#/Unauthorized'
-#      403:
-#        $ref: '../responses/responses.yaml#/Forbidden'
-#      default:
-#        $ref: '../responses/responses.yaml#/InternalServerError'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/SummaryResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

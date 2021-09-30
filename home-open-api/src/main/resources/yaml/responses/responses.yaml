@@ -202,3 +202,15 @@ TasksResponse:
         type: array
         items:
           $ref: '../models/task.yaml#/ReadTask'
+ExportFileResponse:
+  description: OK
+  content:
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+      schema:
+        $ref: '../models/task.yaml#/ReadXlsxFile'
+SummaryResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        $ref: '../models/task.yaml#/ReadSummary'

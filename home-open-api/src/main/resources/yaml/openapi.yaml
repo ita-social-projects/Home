@@ -78,13 +78,13 @@ paths:
   /cooperations/{cooperation_id}/tasks:
     $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks'
 
-  /cooperation/{cooperation_id}/tasks/{task_id}:
+  /cooperations/{cooperation_id}/tasks/{id}:
     $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId'
 
-  /cooperation/{id}/tasks/{task_id}/xlsx:
-    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId-xlsx'
+  /cooperations/{cooperation_id}/tasks/{task_id}/file:
+    $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId-file'
 
-  /cooperation/{id}/tasks/{task_id}/summary:
+  /cooperations/{cooperation_id}/tasks/{task_id}/summary:
     $ref: './paths/tasks.yaml#/cooperations-cooperationId-tasks-taskId-summary'
 
   /cooperations/{cooperation_id}/houses:

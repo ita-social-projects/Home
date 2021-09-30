@@ -11,13 +11,39 @@ TaskType:
   enum:
     - IMPORT
     - EXPORT
+TaskDataScope:
+  type: string
+  enum:
+    - ALL
+    - ADDRESSES
+    - APARTMENTS
+    - OWNERS
 CreateTask:
   type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      IMPORT: '#/CreateImportTask'
+      EXPORT: '#/CreateExportTask'
   required:
     - type
   properties:
     type:
       $ref: '#/TaskType'
+CreateImportTask:
+  allOf:
+    - $ref: '#/CreateTask'
+CreateExportTask:
+  type : object
+  allOf:
+    - $ref: '#/CreateTask'
+  required:
+    - data_scope_type
+  properties:
+    type:
+      $ref: '#/TaskType'
+    data_scope_type:
+      $ref: '#/TaskDataScope'
 ReadTask:
   type: object
   properties:
@@ -29,33 +55,17 @@ ReadTask:
       $ref: '#/TaskType'
     status:
       $ref: '#/TaskStatus'
-#ReadHouse:
-#  allOf:
-#    - $ref: 'common.yaml#/BaseReadView'
-#  type: object
-#  properties:
-#    quantity_flat:
-#      type: integer
-#      example: 45
-#    house_area:
-#      type: number
-#      example: 25
-#    adjoining_area:
-#      type: integer
-#      example: 12
-#    address:
-#      $ref: 'address.yaml#/Address'
-ReadReport:
+ReadSummary:
   type: object
   properties:
     houses_amount:
       type: integer
       format: int64
-      example: 1
+      example: 2
     apartments:
       type: integer
       format: int64
-      example: 1
+      example: 56
     invitations:
       type: integer
       format: int64
