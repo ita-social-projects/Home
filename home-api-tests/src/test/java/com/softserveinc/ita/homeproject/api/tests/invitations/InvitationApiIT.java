@@ -105,7 +105,7 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationAndUserViaInvitationWithUserEmail(String userEmail) {
         ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
-        TimeUnit.MILLISECONDS.sleep(10000);
+        TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);

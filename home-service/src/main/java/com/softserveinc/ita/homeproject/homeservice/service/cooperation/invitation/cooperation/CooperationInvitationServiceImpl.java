@@ -54,7 +54,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
         }
-        throw new BadRequestHomeException("Invitation already exist for cooperation");
+        throw new IllegalStateException("Invitation already exist for cooperation");
     }
 
     @Override

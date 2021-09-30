@@ -50,7 +50,6 @@ public class SendCooperationEmailService extends BaseEmailService {
         mailDto.setEmail(invitation.getEmail());
         mailDto.setRegistrationToken(invitation.getRegistrationToken());
         mailDto.setRole(invitation.getRole().getName());
-        mailDto.setCooperationAdminEmail(coop.getAdminEmail());
         mailDto.setCooperationName(coop.getName());
         checkRegistration(invitation, mailDto);
         return mailDto;
