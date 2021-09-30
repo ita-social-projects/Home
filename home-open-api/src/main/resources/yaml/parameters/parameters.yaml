@@ -309,4 +309,3 @@ task_data_scope_type:
   schema:
     $ref: '../models/task.yaml#/TaskDataScope'
   description: Type of the Type
-
