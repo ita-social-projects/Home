@@ -68,17 +68,9 @@ import java.util.stream.Stream;
 
 class PermissionsIT {
 
-    private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
     static private final List<ApiClientMethods> apiClientMethods = getAllApiClientMethods(listApiClientClassInstances());
-
-
-    @ParameterizedTest(name = "{index}-{1}")
-    @MethodSource("check")
-    void testAdmin(Function<ApiClient, ApiResponse<?>> action, String x, boolean admin) {
-
-        int statusCode = getStatusCode(action, ApiClientUtil.getAdminClient());
-        checkUser(admin, statusCode);
-    }
 
     @ParameterizedTest(name = "{index}-{1}")
     @MethodSource("check")
@@ -419,6 +411,7 @@ class PermissionsIT {
         boolean[] setPermission;
         switch (methodName) {
             case "createUser":
+            case "createCooperation":
                 setPermission = new boolean[]{true, true, true, true};
                 break;
             case "createContactOnUser":
@@ -453,7 +446,6 @@ class PermissionsIT {
                 setPermission = new boolean[]{true, true, false, false};
                 break;
             case "deleteCooperation":
-            case "createCooperation":
                 setPermission = new boolean[]{true, false, false, false};
                 break;
             case "getCooperationPoll":

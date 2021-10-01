@@ -40,11 +40,11 @@ import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
     private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 

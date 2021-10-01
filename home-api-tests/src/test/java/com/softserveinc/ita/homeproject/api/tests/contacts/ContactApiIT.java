@@ -48,11 +48,11 @@ import org.junit.jupiter.api.Test;
 
 class ContactApiIT {
 
-    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getAdminClient());
+    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     @SneakyThrows
     private ReadUser createTestUserViaInvitation() {

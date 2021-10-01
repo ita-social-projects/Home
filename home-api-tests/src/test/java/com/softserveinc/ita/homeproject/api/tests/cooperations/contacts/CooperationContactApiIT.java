@@ -39,8 +39,9 @@ class CooperationContactApiIT {
 
     private static final String CONTACT_NOT_FOUND = "Contact with 'id: %d and cooperation_id %d' is not found";
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createCooperationContactTest() throws ApiException {

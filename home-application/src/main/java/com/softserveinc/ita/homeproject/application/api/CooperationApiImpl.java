@@ -12,6 +12,7 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -61,7 +62,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
     @Autowired
     private PollService pollService;
 
-    @PreAuthorize(CREATE_DELETE_COOPERATION)
+    @PermitAll
     @Override
     public Response createCooperation(CreateCooperation createCooperation) {
         CooperationDto createCoopDto = mapper.convert(createCooperation, CooperationDto.class);

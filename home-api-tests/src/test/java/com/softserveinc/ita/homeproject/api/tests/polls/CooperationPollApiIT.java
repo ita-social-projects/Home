@@ -75,9 +75,9 @@ class CooperationPollApiIT {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
         try {
-            cooperationOne = new CooperationApi(ApiClientUtil.getAdminClient())
+            cooperationOne = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
-            cooperationTwo = new CooperationApi(ApiClientUtil.getAdminClient())
+            cooperationTwo = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
         } catch (ApiException e) {
             e.printStackTrace();

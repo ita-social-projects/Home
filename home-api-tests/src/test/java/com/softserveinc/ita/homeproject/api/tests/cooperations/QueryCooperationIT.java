@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class QueryCooperationIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
 
     @Test

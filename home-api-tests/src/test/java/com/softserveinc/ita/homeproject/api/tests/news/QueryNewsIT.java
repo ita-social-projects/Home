@@ -18,13 +18,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class QueryNewsIT {
+
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getCooperationAdminClient());
+
     private final CreateNews expectedNews = new CreateNews()
         .description("description")
         .source("source")
         .text("text")
         .photoUrl("photoUrl");
-
-    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getAdminClient());
 
     @Test
     void getAllNews() throws ApiException {

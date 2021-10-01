@@ -44,9 +44,12 @@ import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
-    private static final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
-    private static final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private static final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
+
+    private static final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
     private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUserGuestClient());
+
     private static ReadUser baseUserForTests;
 
     @BeforeAll

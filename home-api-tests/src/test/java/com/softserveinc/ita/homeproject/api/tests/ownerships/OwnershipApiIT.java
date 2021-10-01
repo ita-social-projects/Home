@@ -53,9 +53,9 @@ class OwnershipApiIT {
 
     private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getAdminClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
     private static final long TEST_OWNERSHIP_ID = 10000001L;
 

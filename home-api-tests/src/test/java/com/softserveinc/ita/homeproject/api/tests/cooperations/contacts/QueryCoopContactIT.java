@@ -33,9 +33,9 @@ import org.junit.jupiter.api.Test;
 
 class QueryCoopContactIT {
 
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getAdminClient());
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void getAllContactsAscSort() throws ApiException {

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getAdminClient());
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createNewsTest() throws ApiException {

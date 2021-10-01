@@ -6,13 +6,16 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="Issue272.001" author="Vladyslav-Frolov">
-        <sql>UPDATE users
-             SET first_name = 'User_ADMIN',
-                 last_name  = 'User_ADMIN'
+        <sql>TRUNCATE TABLE role_permissions, permissions, user_cooperation</sql>
+    </changeSet>
+
+    <changeSet id="Issue272.002" author="sBogdan">
+        <sql>DELETE
+             FROM users
              WHERE email = 'admin@example.com'</sql>
     </changeSet>
 
-    <changeSet id="Issue272.002" author="Vladyslav-Frolov">
+    <changeSet id="Issue272.003" author="Vladyslav-Frolov">
         <sql>DELETE
              FROM roles
              WHERE id = 4</sql>
@@ -22,10 +25,6 @@
         <sql>UPDATE roles
              SET name = 'OWNER'
              WHERE id = 3</sql>
-    </changeSet>
-
-    <changeSet id="Issue272.003" author="Vladyslav-Frolov">
-        <sql>TRUNCATE TABLE role_permissions, permissions</sql>
     </changeSet>
 
     <changeSet id="Issue272.004" author="Vladyslav-Frolov">

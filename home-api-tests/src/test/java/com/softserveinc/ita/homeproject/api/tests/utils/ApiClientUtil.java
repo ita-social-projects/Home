@@ -61,28 +61,17 @@ public final class ApiClientUtil {
 
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
 
-    private static final String APPLICATION_ADMIN_USER_NAME = System.getProperty("home.application.admin.username");
-
-    private static final String APPLICATION_ADMIN_PASSWORD = System.getProperty("home.application.admin.password");
-
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
 
     private static final String USER_PASSWORD = "password";
 
-    private static final UserApi userApi = new UserApi(getAdminClient());
+    private static final UserApi userApi = new UserApi();
 
-    private static final CooperationApi cooperationApi = new CooperationApi(getAdminClient());
+    private static final CooperationApi cooperationApi = new CooperationApi();
 
-    private static final HouseApi houseApi = new HouseApi(getAdminClient());
+    private static final HouseApi houseApi = new HouseApi(getCooperationAdminClient());
 
     private static final ApartmentApi apartmentApi = new ApartmentApi(getCooperationAdminClient());
-
-    public static ApiClient getAdminClient() {
-        if (authorizedAdminClient == null) {
-            authorizedAdminClient = generateAdminClient();
-        }
-        return authorizedAdminClient;
-    }
 
     public static ApiClient getCooperationAdminClient() {
         if (authorizedCoopAdminClient == null) {
@@ -103,15 +92,6 @@ public final class ApiClientUtil {
             unauthorizedGuestClient = generateUnauthorizedClient();
         }
         return unauthorizedGuestClient;
-    }
-
-    private static ApiClient generateAdminClient() {
-        ApiClient client = new ApiClient();
-        setLoggingFeature(client);
-        client.setUsername(APPLICATION_ADMIN_USER_NAME);
-        client.setPassword(APPLICATION_ADMIN_PASSWORD);
-        setServers(client);
-        return client;
     }
 
     private static ApiClient generateCoopAdminClient() {
@@ -141,23 +121,6 @@ public final class ApiClientUtil {
         return client;
     }
 
-    private static void setLoggingFeature(ApiClient client) {
-        if (Boolean.parseBoolean(VERBOSE_LOGGING)) {
-            Logger logger = Logger.getLogger(ApiClient.class.getName());
-            client.getHttpClient()
-                    .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
-        }
-    }
-
-    private static void setServers(ApiClient client) {
-        client.setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap<>())));
-    }
-
-    @SneakyThrows
-    public static String getErrorMessage(ApiException apiException) {
-        return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
-    }
 
     @SneakyThrows
     private static ReadUser createCooperationAdmin() {
@@ -244,29 +207,6 @@ public final class ApiClientUtil {
         return createContactList;
     }
 
-    private static String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
-    }
-
-    private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
     @SneakyThrows
     static ReadUser createOwnerUser() {
         CreateApartment createApartment = createApartment();
@@ -310,5 +250,46 @@ public final class ApiClientUtil {
                 .type(InvitationType.APARTMENT));
 
         return createInvitations;
+    }
+
+    private static void setLoggingFeature(ApiClient client) {
+        if (Boolean.parseBoolean(VERBOSE_LOGGING)) {
+            Logger logger = Logger.getLogger(ApiClient.class.getName());
+            client.getHttpClient()
+                    .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
+        }
+    }
+
+    private static void setServers(ApiClient client) {
+        client.setServers(List.of(new ServerConfiguration("http://localhost:" +
+                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap<>())));
+    }
+
+    @SneakyThrows
+    public static String getErrorMessage(ApiException apiException) {
+        return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
+    }
+
+    private static String getToken(String str) {
+        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
+        Matcher matcher = pattern.matcher(str);
+
+        String result = "";
+        if (matcher.find()) {
+            result = matcher.group();
+        }
+
+        return result.trim();
+    }
+
+    private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
+        String message = "";
+        for (int i = 0; i < response.getItems().size(); i++) {
+            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
+                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
+                break;
+            }
+        }
+        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
     }
 }

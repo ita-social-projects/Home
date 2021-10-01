@@ -33,9 +33,9 @@ class HouseApiIT {
 
     private final Long wrongCooperationId = 999999999L;
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getAdminClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private static final String HOUSE_NOT_FOUND = "House with 'id: %d and cooperation_id %d' is not found";
 

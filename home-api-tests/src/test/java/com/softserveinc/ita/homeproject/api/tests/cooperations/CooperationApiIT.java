@@ -24,11 +24,12 @@ import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class CooperationApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createCooperationTest() throws ApiException {
@@ -72,6 +73,7 @@ class CooperationApiIT {
         assertCooperation(savedCooperation, updateCoop, response.getData());
     }
 
+    @Disabled("This test is disabled until we decide for the System Administrator Role")
     @Test
     void deleteCooperationTest() throws ApiException {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());

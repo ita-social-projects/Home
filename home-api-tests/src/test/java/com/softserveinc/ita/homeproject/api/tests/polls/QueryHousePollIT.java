@@ -20,6 +20,7 @@ import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 class QueryHousePollIT {
+
     final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
     final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getCooperationAdminClient());

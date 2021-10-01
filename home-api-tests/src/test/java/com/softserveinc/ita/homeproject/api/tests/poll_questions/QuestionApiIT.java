@@ -40,7 +40,7 @@ class QuestionApiIT {
 
     private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 

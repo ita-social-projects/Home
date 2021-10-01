@@ -32,7 +32,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class QueryApartmentIT {
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 

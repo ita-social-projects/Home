@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 
 class QueryQuestionIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getAdminClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
