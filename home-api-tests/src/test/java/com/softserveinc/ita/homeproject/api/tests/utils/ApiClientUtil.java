@@ -49,8 +49,6 @@ public final class ApiClientUtil {
 
     private static ApiClient unauthorizedGuestClient;
 
-    private static ApiClient authorizedAdminClient;
-
     private static ApiClient authorizedCoopAdminClient;
 
     private static ApiClient authorizedOwnerAdminClient;
@@ -65,9 +63,9 @@ public final class ApiClientUtil {
 
     private static final String USER_PASSWORD = "password";
 
-    private static final UserApi userApi = new UserApi();
-
     private static final CooperationApi cooperationApi = new CooperationApi();
+
+    private static final UserApi userApi = new UserApi();
 
     private static final HouseApi houseApi = new HouseApi(getCooperationAdminClient());
 
@@ -127,7 +125,7 @@ public final class ApiClientUtil {
         CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
+        TimeUnit.MILLISECONDS.sleep(10_000);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
