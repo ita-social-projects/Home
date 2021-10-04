@@ -33,12 +33,11 @@ import org.junit.jupiter.api.Test;
 
 class ApartmentApiIT {
 
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
     private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
-
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
-
 
     @Test
     void createApartmentTest() throws ApiException {

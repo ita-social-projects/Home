@@ -49,8 +49,6 @@ public final class ApiClientUtil {
 
     private static ApiClient unauthorizedGuestClient;
 
-    private static ApiClient authorizedAdminClient;
-
     private static ApiClient authorizedCoopAdminClient;
 
     private static ApiClient authorizedOwnerAdminClient;
@@ -65,9 +63,9 @@ public final class ApiClientUtil {
 
     private static final String USER_PASSWORD = "password";
 
-    private static final UserApi userApi = new UserApi();
+    private static final UserApi userApi = new UserApi(getUserGuestClient());
 
-    private static final CooperationApi cooperationApi = new CooperationApi();
+    private static final CooperationApi cooperationApi = new CooperationApi(getUserGuestClient());
 
     private static final HouseApi houseApi = new HouseApi(getCooperationAdminClient());
 

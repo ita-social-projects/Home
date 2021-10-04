@@ -347,10 +347,6 @@
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <mailhog.external.port>${mailhog.external.port}</mailhog.external.port>
-                                <home.application.admin.username>${home.application.admin.username}
-                                </home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}
-                                </home.application.admin.password>
                                 <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
                             </systemPropertyVariables>
                         </configuration>
