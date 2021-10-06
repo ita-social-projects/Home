@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_APARTMENT_INFO;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
@@ -38,6 +38,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Autowired
     private ApartmentService apartmentService;
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response createInvitation(Long apartmentId,
                                      CreateApartmentInvitation createApartmentInvitation) {
@@ -50,19 +51,21 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteInvitation(Long apartmentId, Long id) {
         invitationService.deactivateInvitationById(apartmentId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DELETE_OWNERSHIP_PERMISSION)
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteOwnership(Long apartmentId, Long id) {
         ownershipService.deactivateOwnershipById(apartmentId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION) // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
         ApartmentInvitationDto toGet = invitationService.getOne(id, getSpecification());
@@ -70,7 +73,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readApartmentInvitation).build();
     }
 
-    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
@@ -78,6 +81,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)  // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response queryInvitation(Long apartmentId,
                                     Integer pageNumber,
@@ -94,7 +98,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
     }
 
-    @PreAuthorize(GET_OWNERSHIP_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response queryOwnership(Long apartmentId,
                                    Integer pageNumber,
@@ -109,6 +113,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return buildQueryResponse(readOwnership, ReadOwnership.class);
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateInvitation(Long apartmentId,
                                      Long id,
@@ -120,7 +125,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
-    @PreAuthorize(UPDATE_OWNERSHIP_PERMISSION)
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateOwnership(Long apartmentId, Long id, UpdateOwnership updateOwnership) {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);

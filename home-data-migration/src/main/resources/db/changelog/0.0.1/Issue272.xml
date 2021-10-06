@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue272.001" author="Vladyslav-Frolov">
+        <sql>TRUNCATE TABLE role_permissions, permissions, user_cooperation</sql>
+    </changeSet>
+
+    <changeSet id="Issue272.002" author="sBogdan">
+        <sql>DELETE
+             FROM users
+             WHERE email = 'admin@example.com'</sql>
+    </changeSet>
+
+    <changeSet id="Issue272.003" author="Vladyslav-Frolov">
+        <sql>DELETE
+             FROM roles
+             WHERE id = 4</sql>
+        <sql>UPDATE roles
+             SET name = 'COOPERATION_ADMIN'
+             WHERE id = 2</sql>
+        <sql>UPDATE roles
+             SET name = 'OWNER'
+             WHERE id = 3</sql>
+    </changeSet>
+
+    <changeSet id="Issue272.004" author="Vladyslav-Frolov">
+        <sql>INSERT INTO permissions
+             values (1, 'READ_NEWS')</sql>
+        <sql>INSERT INTO permissions
+             values (2, 'MANAGE_NEWS')</sql>
+        <sql>INSERT INTO permissions
+             values (3, 'MANAGE_USER')</sql>
+        <sql>INSERT INTO permissions
+             values (4, 'READ_COOPERATION')</sql>
+        <sql>INSERT INTO permissions
+             values (5, 'CREATE_DELETE_COOPERATION')</sql>
+        <sql>INSERT INTO permissions
+             values (6, 'UPDATE_COOPERATION')</sql>
+        <sql>INSERT INTO permissions
+             values (7, 'READ_COOPERATION_DATA')</sql>
+        <sql>INSERT INTO permissions
+             values (8, 'MANAGE_COOPERATION_DATA')</sql>
+        <sql>INSERT INTO permissions
+             values (9, 'MANAGE_IN_COOPERATION')</sql>
+        <sql>INSERT INTO permissions
+             values (10, 'READ_APARTMENT_INFO')</sql>
+        <sql>INSERT INTO permissions
+             values (11, 'READ_POLL')</sql>
+        <sql>INSERT INTO permissions
+             values (12, 'MANAGE_POLLS')</sql>
+    </changeSet>
+
+    <changeSet id="Issue272.005" author="Vladyslav-Frolov">
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 1)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 2)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 3)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 4)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 5)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 6)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 7)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (1, 8)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 1)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 2)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 3)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 4)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 6)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 7)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 8)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 9)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 10)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 11)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (2, 12)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 1)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 3)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 4)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 7)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 10)</sql>
+        <sql>INSERT INTO role_permissions
+             VALUES (3, 11)</sql>
+    </changeSet>
+
+</databaseChangeLog>

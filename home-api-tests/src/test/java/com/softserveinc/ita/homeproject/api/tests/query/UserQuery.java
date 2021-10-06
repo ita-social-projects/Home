@@ -2,9 +2,10 @@ package com.softserveinc.ita.homeproject.api.tests.query;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.UserApi;
-import com.softserveinc.ita.homeproject.model.ReadUser;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
+import com.softserveinc.ita.homeproject.client.model.ReadUser;
+
 
 public class UserQuery extends BaseQuery {
     private String email;

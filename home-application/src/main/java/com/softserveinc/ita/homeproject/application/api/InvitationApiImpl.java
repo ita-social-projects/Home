@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -13,8 +15,8 @@ import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.ReadCooperationInvitation;
 import com.softserveinc.ita.homeproject.model.ReadInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
 
 @Provider
 @Component
@@ -26,6 +28,7 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
     @Autowired
     CooperationInvitationService cooperationInvitationService;
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response approveInvitation(InvitationToken token){
         ReadInvitation readInvitation = registerWithCorrectService(token.getInvitationToken());

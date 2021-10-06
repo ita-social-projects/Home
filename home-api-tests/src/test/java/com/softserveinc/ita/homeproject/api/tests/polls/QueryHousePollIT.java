@@ -8,21 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.api.tests.query.HousePollQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
 class QueryHousePollIT {
-    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
 
-    final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+    final CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
+
+    final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void getAllHousesFromPollsAscSort() throws ApiException {
@@ -55,7 +56,7 @@ class QueryHousePollIT {
         ReadPoll readPoll = COOPERATION_POLL_API
             .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
-        Long houseId = readPoll.getPolledHouses().get(0).getId();
+        Long houseId = Objects.requireNonNull(readPoll.getPolledHouses()).get(0).getId();
 
         List<ReadHouse> queryHouse = new HousePollQuery.Builder(POLLED_HOUSE_API)
             .pollId(readPoll.getId())
@@ -87,7 +88,7 @@ class QueryHousePollIT {
         ReadPoll readPoll = COOPERATION_POLL_API
             .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
-        Integer quantityFlat = readPoll.getPolledHouses().get(0).getQuantityFlat();
+        Integer quantityFlat = Objects.requireNonNull(readPoll.getPolledHouses()).get(0).getQuantityFlat();
 
         List<ReadHouse> queryHouse = new HousePollQuery.Builder(POLLED_HOUSE_API)
             .pollId(readPoll.getId())
@@ -104,7 +105,7 @@ class QueryHousePollIT {
         ReadPoll readPoll = COOPERATION_POLL_API
             .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
-        Integer adjoiningArea = readPoll.getPolledHouses().get(0).getAdjoiningArea();
+        Integer adjoiningArea = Objects.requireNonNull(readPoll.getPolledHouses()).get(0).getAdjoiningArea();
 
         List<ReadHouse> queryHouse = new HousePollQuery.Builder(POLLED_HOUSE_API)
             .pollId(readPoll.getId())
@@ -121,7 +122,7 @@ class QueryHousePollIT {
         ReadPoll readPoll = COOPERATION_POLL_API
             .createCooperationPoll(CooperationPollApiIT.COOPERATION_ID, CooperationPollApiIT.createPoll());
 
-        BigDecimal houseArea = readPoll.getPolledHouses().get(0).getHouseArea();
+        BigDecimal houseArea = Objects.requireNonNull(readPoll.getPolledHouses()).get(0).getHouseArea();
 
         List<ReadHouse> queryHouse = new HousePollQuery.Builder(POLLED_HOUSE_API)
             .pollId(readPoll.getId())

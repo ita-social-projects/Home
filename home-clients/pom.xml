@@ -75,9 +75,9 @@
                                 <artifactId>home-java-client</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>
                                 <groupId>${project.groupId}</groupId>
-                                <modelPackage>com.softserveinc.ita.homeproject.model</modelPackage>
-                                <apiPackage>com.softserveinc.ita.homeproject.api</apiPackage>
-                                <invokerPackage>com.softserveinc.ita.homeproject</invokerPackage>
+                                <modelPackage>com.softserveinc.ita.homeproject.client.model</modelPackage>
+                                <apiPackage>com.softserveinc.ita.homeproject.client.api</apiPackage>
+                                <invokerPackage>com.softserveinc.ita.homeproject.client</invokerPackage>
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
