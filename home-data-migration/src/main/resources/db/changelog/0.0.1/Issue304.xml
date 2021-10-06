@@ -21,14 +21,6 @@
     </changeSet>
 
     <changeSet id="Issue304.003" author="sBogdan">
-        <addNotNullConstraint tableName="invitations"
-                              columnName="cooperation_id"
-                              columnDataType="bigint"
-                              schemaName="public"
-                              validate="false"/>
-    </changeSet>
-
-    <changeSet id="Issue304.004" author="sBogdan">
         <addForeignKeyConstraint baseColumnNames="cooperation_id"
                                  baseTableName="invitations"
                                  constraintName="fk_invitations_cooperation_id"
@@ -36,13 +28,13 @@
                                  referencedTableName="cooperations"/>
     </changeSet>
 
-    <changeSet id="Issue304.005" author="sBogdan">
+    <changeSet id="Issue304.004" author="sBogdan">
         <dropColumn tableName="invitations">
             <column name="cooperation_name"/>
         </dropColumn>
     </changeSet>
 
-    <changeSet id="Issue304.006" author="klaeck">
+    <changeSet id="Issue304.005" author="klaeck">
         <dropUniqueConstraint tableName="cooperations" constraintName="cooperation_usero_key"/>
         <dropNotNullConstraint tableName="cooperations" columnName="name"/>
         <dropNotNullConstraint tableName="cooperations" columnName="iban"/>
