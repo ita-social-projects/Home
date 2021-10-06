@@ -112,7 +112,7 @@ cooperations-cooperationId-tasks-taskId-file:
     requestBody:
       $ref: '../requests/requestBodies.yaml#/ExportFileBody'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/TaskResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
@@ -136,7 +136,7 @@ cooperations-cooperationId-tasks-taskId-summary:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_task_id'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/SummaryResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'

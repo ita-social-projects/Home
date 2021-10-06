@@ -213,6 +213,4 @@ SummaryResponse:
   content:
     application/json:
       schema:
-        oneOf:
-          - $ref: '../models/task.yaml#/ReadImportSummary'
-          - $ref: '../models/task.yaml#/ReadExportSummary'
+        $ref: '../models/task.yaml#/ReadSummary'

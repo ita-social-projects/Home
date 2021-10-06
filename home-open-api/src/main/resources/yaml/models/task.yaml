@@ -59,8 +59,18 @@ ReadTask:
     status:
       $ref: '#/TaskStatus'
 
-ReadImportSummary:
+ReadSummary:
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      import: '#/ReadImportSummary'
+      export: '#/ReadExportSummary'
+  required:
+    - type
   properties:
+    type:
+      $ref: '#/TaskType'
     houses_amount:
       type: integer
       format: int64
@@ -70,16 +80,19 @@ ReadImportSummary:
       format: int64
       example: 56
 
-ReadExportSummary:
+ReadImportSummary:
+  allOf:
+    - $ref: '#/ReadSummary'
   properties:
-    houses_amount:
+    ownerships:
       type: integer
       format: int64
       example: 2
-    apartments:
-      type: integer
-      format: int64
-      example: 56
+
+ReadExportSummary:
+  allOf:
+    - $ref: '#/ReadSummary'
+  properties:
     invitations:
       type: integer
       format: int64
