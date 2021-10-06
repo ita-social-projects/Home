@@ -18,6 +18,8 @@ cooperations-cooperationId-tasks:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
   get:
@@ -36,7 +38,7 @@ cooperations-cooperationId-tasks:
       - $ref: '../parameters/parameters.yaml#/task_type'
       - $ref: '../parameters/parameters.yaml#/task_data_scope_type'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/TasksResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
@@ -44,6 +46,8 @@ cooperations-cooperationId-tasks:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
@@ -58,7 +62,7 @@ cooperations-cooperationId-tasks-taskId:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_id'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/TaskResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
@@ -66,6 +70,8 @@ cooperations-cooperationId-tasks-taskId:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
@@ -73,7 +79,7 @@ cooperations-cooperationId-tasks-taskId-file:
   post:
     tags:
       - task
-    summary: Import File for the Task
+    summary: Upload File for the Task
     description: The endpoint creates import of the File for the specified Cooperation and Task IDs
     operationId: importFile
     parameters:
@@ -90,12 +96,14 @@ cooperations-cooperationId-tasks-taskId-file:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
   get:
     tags:
       - task
-    summary: Export File for the Task
+    summary: Download File for the Task
     description: The endpoint creates export of the File for the specified Cooperation and Task IDs
     operationId: exportFile
     parameters:
@@ -112,6 +120,8 @@ cooperations-cooperationId-tasks-taskId-file:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
@@ -134,5 +144,7 @@ cooperations-cooperationId-tasks-taskId-summary:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'

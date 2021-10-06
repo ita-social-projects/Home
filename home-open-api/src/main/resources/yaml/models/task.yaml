@@ -1,38 +1,40 @@
 TaskStatus:
   type: string
   enum:
-    - PENDING
-    - ERROR
-    - PROCESSING
-    - ACCEPTED
-    - DECLINED
+    - pending
+    - error
+    - processing
+    - accepted
+    - declined
+
 TaskType:
   type: string
   enum:
-    - IMPORT
-    - EXPORT
+    - import
+    - export
+
 TaskDataScope:
   type: string
   enum:
-    - ALL
-    - ADDRESSES
-    - APARTMENTS
-    - OWNERS
+    - all
+
 CreateTask:
   type: object
   discriminator:
     propertyName: type
     mapping:
-      IMPORT: '#/CreateImportTask'
-      EXPORT: '#/CreateExportTask'
+      import: '#/CreateImportTask'
+      export: '#/CreateExportTask'
   required:
     - type
   properties:
     type:
       $ref: '#/TaskType'
+
 CreateImportTask:
   allOf:
     - $ref: '#/CreateTask'
+
 CreateExportTask:
   type : object
   allOf:
@@ -44,6 +46,7 @@ CreateExportTask:
       $ref: '#/TaskType'
     data_scope_type:
       $ref: '#/TaskDataScope'
+
 ReadTask:
   type: object
   properties:
@@ -55,8 +58,19 @@ ReadTask:
       $ref: '#/TaskType'
     status:
       $ref: '#/TaskStatus'
-ReadSummary:
-  type: object
+
+ReadImportSummary:
+  properties:
+    houses_amount:
+      type: integer
+      format: int64
+      example: 2
+    apartments:
+      type: integer
+      format: int64
+      example: 56
+
+ReadExportSummary:
   properties:
     houses_amount:
       type: integer
@@ -70,6 +84,7 @@ ReadSummary:
       type: integer
       format: int64
       example: 1
+
 ReadXlsxFile:
   type: string
   format: binary
