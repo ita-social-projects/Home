@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_OWNERSHIP_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_OWNERSHIP_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_OWNERSHIP_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_OWNERSHIP_PERMISSION;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;

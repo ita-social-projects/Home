@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.constants;
+package com.softserveinc.ita.homeproject.application.security.constants;
 
 /**
  * Permissions final class is used to store

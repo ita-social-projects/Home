@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_APARTMENT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENTS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_APARTMENT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_APARTMENT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_APARTMENTS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_APARTMENT_PERMISSION;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;

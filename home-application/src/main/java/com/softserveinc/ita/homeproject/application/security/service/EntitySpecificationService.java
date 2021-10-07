@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.service;
+package com.softserveinc.ita.homeproject.application.security.service;
 
 import javax.ws.rs.core.MultivaluedMap;
 

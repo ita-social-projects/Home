@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.converter;
+package com.softserveinc.ita.homeproject.application.mapper;
 
 import java.util.HashMap;
 import java.util.Map;

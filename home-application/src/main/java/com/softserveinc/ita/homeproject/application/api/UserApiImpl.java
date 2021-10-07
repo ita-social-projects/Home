@@ -1,15 +1,15 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.CREATE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.DELETE_USER_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USERS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_ALL_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_BY_ID_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.GET_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.constants.Permissions.UPDATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_USER_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_USER_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_ALL_USERS_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_ALL_USER_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_USER_BY_ID_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_USER_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_USER_CONTACT_PERMISSION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_USER_PERMISSION;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;

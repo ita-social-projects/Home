@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.security.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

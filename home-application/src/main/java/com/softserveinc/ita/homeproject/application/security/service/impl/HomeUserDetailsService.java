@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.application.security.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.softserveinc.ita.homeproject.application.config.HomeUserWrapperDetails;
+import com.softserveinc.ita.homeproject.application.security.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.entity.Permission;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;

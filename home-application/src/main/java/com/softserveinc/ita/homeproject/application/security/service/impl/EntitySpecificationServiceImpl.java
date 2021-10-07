@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.MultivaluedMap;
 
-import com.softserveinc.ita.homeproject.application.service.EntitySpecificationService;
+import com.softserveinc.ita.homeproject.application.security.service.EntitySpecificationService;
 import io.github.perplexhub.rsql.RSQLJPASupport;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

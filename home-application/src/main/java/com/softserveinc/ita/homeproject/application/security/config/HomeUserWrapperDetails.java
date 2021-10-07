@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config;
+package com.softserveinc.ita.homeproject.application.security.config;
 
 import java.util.Collection;
 import java.util.Set;
