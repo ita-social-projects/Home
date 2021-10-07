@@ -8,7 +8,8 @@ import javax.mail.internet.MimeMessage;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.TemplateService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.mail.MailServiceImpl;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.template.TemplateService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

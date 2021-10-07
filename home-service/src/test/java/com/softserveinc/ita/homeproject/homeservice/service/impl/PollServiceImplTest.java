@@ -18,6 +18,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollStatusDt
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.PollServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

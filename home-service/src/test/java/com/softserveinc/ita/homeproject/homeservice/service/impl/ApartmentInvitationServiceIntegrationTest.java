@@ -11,6 +11,7 @@ import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

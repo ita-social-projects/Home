@@ -16,9 +16,9 @@ import com.softserveinc.ita.homeproject.application.model.UpdateApartmentInvitat
 import com.softserveinc.ita.homeproject.application.model.UpdateOwnership;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentInvitationService;
-import com.softserveinc.ita.homeproject.homeservice.service.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.OwnershipService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
