@@ -2,12 +2,12 @@ package com.softserveinc.ita.homeproject.homeservice.service.user.ownership;
 
 import java.math.BigDecimal;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.OwnershipRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
+import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;

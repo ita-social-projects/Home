@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.application.security.config.HomeUserWrapperDetails;
-import com.softserveinc.ita.homeproject.homedata.entity.Permission;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.User;
+import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.permission.Permission;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

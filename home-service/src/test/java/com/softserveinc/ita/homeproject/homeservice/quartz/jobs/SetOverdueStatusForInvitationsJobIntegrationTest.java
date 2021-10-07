@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.CooperationInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationInvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.impl.ApartmentInvitationServiceIntegrationTest;
 import com.softserveinc.ita.homeproject.homeservice.service.impl.CooperationInvitationServiceIntegrationTest;

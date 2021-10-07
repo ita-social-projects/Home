@@ -2,11 +2,11 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll.house;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.Poll;
+import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;

@@ -2,10 +2,10 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation.house;
 
 import java.time.LocalDateTime;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

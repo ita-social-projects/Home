@@ -3,8 +3,8 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;

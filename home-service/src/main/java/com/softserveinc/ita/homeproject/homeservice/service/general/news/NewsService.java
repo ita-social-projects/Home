@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.news;
 
-import com.softserveinc.ita.homeproject.homedata.entity.News;
+import com.softserveinc.ita.homeproject.homedata.general.news.News;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 

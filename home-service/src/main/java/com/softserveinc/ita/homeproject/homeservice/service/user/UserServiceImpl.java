@@ -4,13 +4,13 @@ import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN
 
 import java.time.LocalDateTime;
 
-import com.softserveinc.ita.homeproject.homedata.entity.InvitationStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.entity.UserCooperation;
-import com.softserveinc.ita.homeproject.homedata.repository.InvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.RoleRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.user.User;
+import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
+import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;

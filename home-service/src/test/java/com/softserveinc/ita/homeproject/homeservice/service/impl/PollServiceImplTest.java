@@ -7,12 +7,12 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 import java.util.Optional;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
-import com.softserveinc.ita.homeproject.homedata.repository.CooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.poll.Poll;
+import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;

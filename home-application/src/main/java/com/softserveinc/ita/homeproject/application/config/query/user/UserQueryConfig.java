@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.user.User;
 import org.springframework.stereotype.Component;
 
 @Component

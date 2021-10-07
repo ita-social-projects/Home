@@ -6,7 +6,7 @@ import java.util.Map;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
 import com.softserveinc.ita.homeproject.application.config.query.poll.house.PollHouseQueryConfig.PollHouseQueryParamEnum;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

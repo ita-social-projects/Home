@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ComponentScan(basePackages = {"com.softserveinc.ita.homeproject.homeservice",
     "com.softserveinc.ita.homeproject.homedata"})
-@EnableJpaRepositories("com.softserveinc.ita.homeproject.homedata.repository")
+@EnableJpaRepositories("com.softserveinc.ita.homeproject.homedata")
 @PropertySource("/application-home-service-test.properties")
 public class HomeServiceTestContextConfig {
     @Autowired

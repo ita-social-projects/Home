@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Apartment;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
-import com.softserveinc.ita.homeproject.homedata.repository.ApartmentRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.HouseRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.Apartment;
+import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.ApartmentRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;

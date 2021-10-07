@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import com.softserveinc.ita.homeproject.homedata.entity.News;
-import com.softserveinc.ita.homeproject.homedata.repository.NewsRepository;
+import com.softserveinc.ita.homeproject.homedata.general.news.News;
+import com.softserveinc.ita.homeproject.homedata.general.news.NewsRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.general.news.NewsServiceImpl;

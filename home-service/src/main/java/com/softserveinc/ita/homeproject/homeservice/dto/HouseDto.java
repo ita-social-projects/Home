@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.dto;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Address;
+import com.softserveinc.ita.homeproject.homedata.general.address.Address;
 import lombok.Getter;
 import lombok.Setter;
 

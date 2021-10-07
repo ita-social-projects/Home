@@ -2,11 +2,11 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.contact.use
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Contact;
-import com.softserveinc.ita.homeproject.homedata.entity.ContactType;
-import com.softserveinc.ita.homeproject.homedata.entity.User;
-import com.softserveinc.ita.homeproject.homedata.repository.ContactRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
+import com.softserveinc.ita.homeproject.homedata.general.contact.ContactRepository;
+import com.softserveinc.ita.homeproject.homedata.general.contact.ContactType;
+import com.softserveinc.ita.homeproject.homedata.user.User;
+import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homedata.entity.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import org.springframework.stereotype.Component;
 
 @Component

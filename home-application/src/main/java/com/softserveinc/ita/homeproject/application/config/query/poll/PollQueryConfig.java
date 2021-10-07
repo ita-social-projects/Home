@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
 import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
+import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import org.springframework.stereotype.Component;
 
 @Component

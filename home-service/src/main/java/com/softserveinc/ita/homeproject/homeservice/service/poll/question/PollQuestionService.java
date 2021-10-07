@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.question;
 
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 

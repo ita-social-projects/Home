@@ -2,16 +2,16 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll.question;
 
 import java.util.stream.Collectors;
 
-import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollQuestionType;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollStatus;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AdviceChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.MultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.Poll;
-import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;
-import com.softserveinc.ita.homeproject.homedata.repository.AnswerVariantRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.PollQuestionRepository;
-import com.softserveinc.ita.homeproject.homedata.repository.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.Poll;
+import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
+import com.softserveinc.ita.homeproject.homedata.poll.question.AdviceChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.enums.PollQuestionTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.MultipleChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollQuestionDto;

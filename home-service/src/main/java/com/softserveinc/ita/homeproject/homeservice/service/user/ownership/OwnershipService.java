@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user.ownership;
 
-import com.softserveinc.ita.homeproject.homedata.entity.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.entity.Ownership;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 

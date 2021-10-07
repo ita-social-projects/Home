@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.contact;
 
-import com.softserveinc.ita.homeproject.homedata.entity.Contact;
+import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 

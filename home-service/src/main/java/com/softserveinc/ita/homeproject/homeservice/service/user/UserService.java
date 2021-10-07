@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
-import com.softserveinc.ita.homeproject.homedata.entity.User;
+import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 
