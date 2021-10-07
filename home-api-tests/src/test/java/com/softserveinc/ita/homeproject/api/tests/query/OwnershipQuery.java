@@ -1,9 +1,7 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
 import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
 import com.softserveinc.ita.homeproject.client.api.ApartmentOwnershipApi;
-import com.softserveinc.ita.homeproject.client.model.ReadApartment;
 import com.softserveinc.ita.homeproject.client.model.ReadOwnership;
 
 import java.math.BigDecimal;

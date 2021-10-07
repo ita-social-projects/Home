@@ -12,7 +12,6 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
 import com.softserveinc.ita.homeproject.api.tests.query.HousePollQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.model.ReadHouse;

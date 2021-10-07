@@ -1,12 +1,21 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations.contacts;
 
+import com.softserveinc.ita.homeproject.api.tests.query.CooperationContactQuery;
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
-import com.softserveinc.ita.homeproject.api.tests.query.CooperationContactQuery;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.client.model.*;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
+import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
