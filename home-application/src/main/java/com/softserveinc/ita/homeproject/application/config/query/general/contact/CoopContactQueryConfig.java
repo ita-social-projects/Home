@@ -1,13 +1,15 @@
-package com.softserveinc.ita.homeproject.application.config.query;
+package com.softserveinc.ita.homeproject.application.config.query.general.contact;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContactQueryConfig implements QueryConfig<Contact> {
+public class CoopContactQueryConfig implements QueryConfig<Contact> {
 
     @Override
     public Class<Contact> getEntityClass() {
@@ -16,13 +18,13 @@ public class ContactQueryConfig implements QueryConfig<Contact> {
 
     @Override
     public List<QueryParamEnum> getWhiteListEnums() {
-        return Arrays.asList(ContactQueryParamEnum.values());
+        return Arrays.asList(CoopContactQueryConfig.CoopContactQueryParamEnum.values());
     }
 
-    public enum ContactQueryParamEnum implements QueryParamEnum {
+    public enum CoopContactQueryParamEnum implements QueryParamEnum {
 
         ID("id"),
-        USER_ID("user.id"),
+        COOPERATION_ID("cooperation.id"),
         PHONE("phone"),
         EMAIL("email"),
         MAIN("main"),
@@ -30,7 +32,7 @@ public class ContactQueryConfig implements QueryConfig<Contact> {
 
         private final String parameter;
 
-        ContactQueryParamEnum(String parameter) {
+        CoopContactQueryParamEnum(String parameter) {
             this.parameter = parameter;
         }
 

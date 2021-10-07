@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.general.contact;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.config.query.CoopContactQueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.CoopContactQueryConfig.CoopContactQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
+import com.softserveinc.ita.homeproject.application.config.query.general.contact.CoopContactQueryConfig.CoopContactQueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

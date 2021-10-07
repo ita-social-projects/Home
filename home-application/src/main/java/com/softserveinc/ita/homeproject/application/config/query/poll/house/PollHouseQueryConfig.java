@@ -1,8 +1,11 @@
-package com.softserveinc.ita.homeproject.application.config.query;
+package com.softserveinc.ita.homeproject.application.config.query.poll.house;
 
 import java.util.Arrays;
 import java.util.List;
 
+import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
+import com.softserveinc.ita.homeproject.application.config.query.poll.PollQueryConfig;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import org.springframework.stereotype.Component;
 

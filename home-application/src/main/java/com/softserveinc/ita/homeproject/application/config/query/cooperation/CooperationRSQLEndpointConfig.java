@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.cooperation;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.config.query.CooperationQueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.CooperationQueryConfig.CooperationQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
+import com.softserveinc.ita.homeproject.application.config.query.cooperation.CooperationQueryConfig.CooperationQueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.Cooperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CooperationRSQLEndpointConfig implements RSQLEndpointConfig
-    <Cooperation, CooperationQueryConfig.CooperationQueryParamEnum> {
+        <Cooperation, CooperationQueryParamEnum> {
 
     @Autowired
     private CooperationQueryConfig queryConfig;

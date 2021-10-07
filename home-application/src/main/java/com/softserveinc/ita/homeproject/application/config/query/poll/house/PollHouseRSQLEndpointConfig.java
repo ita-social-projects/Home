@@ -1,11 +1,11 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.poll.house;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.config.query.PollHouseQueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.PollHouseQueryConfig.PollHouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
+import com.softserveinc.ita.homeproject.application.config.query.poll.house.PollHouseQueryConfig.PollHouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

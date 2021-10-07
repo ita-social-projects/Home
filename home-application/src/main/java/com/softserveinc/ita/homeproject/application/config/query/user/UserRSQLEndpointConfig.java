@@ -1,10 +1,10 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.user;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.user.UserQueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
 import com.softserveinc.ita.homeproject.application.config.query.user.UserQueryConfig.UserQueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;

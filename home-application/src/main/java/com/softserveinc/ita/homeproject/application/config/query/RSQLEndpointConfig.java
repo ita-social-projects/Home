@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query;
 
 import java.util.Map;
 

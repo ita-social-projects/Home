@@ -1,11 +1,10 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
-import com.softserveinc.ita.homeproject.application.config.query.QueryParamEnum;
 import com.softserveinc.ita.homeproject.application.converter.StringToContactTypeConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollStatusConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollTypeConverter;

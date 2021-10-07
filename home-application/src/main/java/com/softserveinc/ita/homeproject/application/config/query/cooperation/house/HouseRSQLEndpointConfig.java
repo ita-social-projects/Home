@@ -1,18 +1,18 @@
-package com.softserveinc.ita.homeproject.application.config.query.rsql;
+package com.softserveinc.ita.homeproject.application.config.query.cooperation.house;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.softserveinc.ita.homeproject.application.config.query.HouseQueryConfig;
-import com.softserveinc.ita.homeproject.application.config.query.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.application.config.query.QueryConfig;
+import com.softserveinc.ita.homeproject.application.config.query.RSQLEndpointConfig;
+import com.softserveinc.ita.homeproject.application.config.query.cooperation.house.HouseQueryConfig.HouseQueryParamEnum;
 import com.softserveinc.ita.homeproject.homedata.entity.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQueryConfig.HouseQueryParamEnum> {
+public class HouseRSQLEndpointConfig implements RSQLEndpointConfig<House, HouseQueryParamEnum> {
 
     @Autowired
     private HouseQueryConfig queryConfig;
