@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.service.impl;
+package com.softserveinc.ita.homeproject.application.security.service.impl;
 
 import javax.ws.rs.core.UriInfo;
 

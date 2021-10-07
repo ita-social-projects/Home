@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.resolver;
+package com.softserveinc.ita.homeproject.application.config.resolver;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
