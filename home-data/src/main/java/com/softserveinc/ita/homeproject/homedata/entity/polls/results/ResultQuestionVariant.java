@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.AnswerVariant;
 import lombok.Getter;
 import lombok.Setter;

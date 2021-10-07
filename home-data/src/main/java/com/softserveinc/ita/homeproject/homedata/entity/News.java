@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

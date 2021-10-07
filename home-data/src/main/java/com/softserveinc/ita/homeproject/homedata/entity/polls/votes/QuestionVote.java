@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homedata.entity.polls.converters.PollQuestionTypeAttributeConverter;
 import com.softserveinc.ita.homeproject.homedata.entity.polls.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.entity.polls.templates.PollQuestion;

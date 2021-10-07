@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.mapper;
 
 import javax.annotation.PostConstruct;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.AbstractTypeConverter;
 import lombok.RequiredArgsConstructor;

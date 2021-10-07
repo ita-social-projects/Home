@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homedata.entity;
+package com.softserveinc.ita.homeproject.homedata;
 
 import java.io.Serializable;
 import javax.persistence.GeneratedValue;

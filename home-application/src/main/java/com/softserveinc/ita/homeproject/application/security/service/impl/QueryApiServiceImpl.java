@@ -4,7 +4,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.softserveinc.ita.homeproject.application.security.service.EntitySpecificationService;
 import com.softserveinc.ita.homeproject.application.security.service.QueryApiService;
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

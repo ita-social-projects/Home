@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "apartments")
 @SequenceGenerator(name = "sequence", sequenceName = "apartments_sequence")
-public class Apartment extends BaseEntity{
+public class Apartment extends BaseEntity {
     @Column(name = "apartment_number")
     private String apartmentNumber;
 

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

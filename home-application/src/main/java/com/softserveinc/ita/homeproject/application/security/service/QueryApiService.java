@@ -12,7 +12,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import org.springframework.data.jpa.domain.Specification;
 

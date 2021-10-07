@@ -9,7 +9,7 @@ import com.softserveinc.ita.homeproject.application.converter.StringToContactTyp
 import com.softserveinc.ita.homeproject.application.converter.StringToPollStatusConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToPollTypeConverter;
 import com.softserveinc.ita.homeproject.application.converter.StringToQuestionTypeConverter;
-import com.softserveinc.ita.homeproject.homedata.entity.BaseEntity;
+import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import io.github.perplexhub.rsql.RSQLCommonSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
