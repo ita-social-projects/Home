@@ -1,9 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_NEWS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_NEWS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_NEWS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_NEWS_PERMISSION;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_NEWS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_NEWS;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -40,7 +39,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      * @param createNews are incoming data needed for creation new news
      * @return Response to generated controller
      */
-    @PreAuthorize(CREATE_NEWS_PERMISSION)
+    @PreAuthorize(MANAGE_NEWS)
     @Override
     public Response createNews(CreateNews createNews) {
         NewsDto newsDto = mapper.convert(createNews, NewsDto.class);
@@ -56,7 +55,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      * @param id is the id of the news that has to be deleted
      * @return Response to generated controller
      */
-    @PreAuthorize(DELETE_NEWS_PERMISSION)
+    @PreAuthorize(MANAGE_NEWS)
     @Override
     public Response deleteNews(Long id) {
         newsService.deactivateNews(id);
@@ -71,7 +70,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      * @param pageSize   is amount of the returned elements
      * @return Response to generated controller
      */
-    @PreAuthorize(GET_NEWS_PERMISSION)
+    @PreAuthorize(READ_NEWS)
     @Override
     public Response getAllNews(Integer pageNumber,
                                Integer pageSize,
@@ -93,7 +92,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      * @param id is id of the news in the database
      * @return Response to generated controller
      */
-    @PreAuthorize(GET_NEWS_PERMISSION)
+    @PreAuthorize(READ_NEWS)
     @Override
     public Response getNews(Long id) {
         NewsDto readNewsDto = newsService.getOne(id);
@@ -109,7 +108,7 @@ public class NewsApiImpl extends CommonApi implements NewsApi {
      * @param updateNews are incoming data needed for news update
      * @return Response to generated controller
      */
-    @PreAuthorize(UPDATE_NEWS_PERMISSION)
+    @PreAuthorize(MANAGE_NEWS)
     @Override
     public Response updateNews(Long id, UpdateNews updateNews) {
         NewsDto updateNewsDto = mapper.convert(updateNews, NewsDto.class);

@@ -1,21 +1,30 @@
 package com.softserveinc.ita.homeproject.api.tests.houses;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
-import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.HouseApi;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.HouseApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.UpdateHouse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -24,9 +33,9 @@ class HouseApiIT {
 
     private final Long wrongCooperationId = 999999999L;
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private static final String HOUSE_NOT_FOUND = "House with 'id: %d and cooperation_id %d' is not found";
 

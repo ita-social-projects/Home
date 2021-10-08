@@ -13,24 +13,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.api.PollApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.CreatePoll;
-import com.softserveinc.ita.homeproject.model.HouseLookup;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
-import com.softserveinc.ita.homeproject.model.UpdatePoll;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
+import com.softserveinc.ita.homeproject.client.api.PollApi;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreatePoll;
+import com.softserveinc.ita.homeproject.client.model.HouseLookup;
+import com.softserveinc.ita.homeproject.client.model.PollStatus;
+import com.softserveinc.ita.homeproject.client.model.PollType;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
+import com.softserveinc.ita.homeproject.client.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -56,11 +56,11 @@ class CooperationPollApiIT {
 
     static final Long NONEXISTENT_COOP_ID = 999999999L;
 
-    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    final static PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getCooperationAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
@@ -75,9 +75,9 @@ class CooperationPollApiIT {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
         try {
-            cooperationOne = new CooperationApi(ApiClientUtil.getClient())
+            cooperationOne = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
-            cooperationTwo = new CooperationApi(ApiClientUtil.getClient())
+            cooperationTwo = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
         } catch (ApiException e) {
             e.printStackTrace();

@@ -12,27 +12,43 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.softserveinc.ita.homeproject.api.*;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
-import com.softserveinc.ita.homeproject.model.*;
+import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.HouseApi;
+import com.softserveinc.ita.homeproject.client.api.InvitationsApi;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.CreateApartment;
+import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
+import com.softserveinc.ita.homeproject.client.model.CreateUser;
+import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
+import com.softserveinc.ita.homeproject.client.model.InvitationToken;
+import com.softserveinc.ita.homeproject.client.model.InvitationType;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getClient());
+    private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void isEmailSentTest() throws Exception {
@@ -98,8 +114,7 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationWithUserEmail(String userEmail) {
         CreateCooperation createCoop = createCooperationWithUserEmail(userEmail);
-        ReadCooperation readCooperation = cooperationApi.createCooperation(createCoop);
-        return readCooperation;
+        return cooperationApi.createCooperation(createCoop);
     }
 
     @SneakyThrows

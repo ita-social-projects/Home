@@ -18,24 +18,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.model.CreateUser;
-import com.softserveinc.ita.homeproject.model.ReadUser;
-import com.softserveinc.ita.homeproject.model.UpdateUser;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.CreateUser;
+import com.softserveinc.ita.homeproject.client.model.ReadUser;
+import com.softserveinc.ita.homeproject.client.model.UpdateUser;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,9 +44,12 @@ import org.junit.jupiter.api.Test;
 
 class UserApiIT {
 
-    private static final UserApi userApi = new UserApi(ApiClientUtil.getClient());
-    private static final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUnauthorizedClient());
+    private static final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
+
+    private static final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final UserApi unauthorizedUserApi = new UserApi(ApiClientUtil.getUserGuestClient());
+
     private static ReadUser baseUserForTests;
 
     @BeforeAll
@@ -114,7 +117,7 @@ class UserApiIT {
         CreateUser expectedUser = createTestUser();
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> unauthorizedUserApi.createUserWithHttpInfo(expectedUser))
-                .matches(exception -> exception.getCode() == Response.Status.UNAUTHORIZED.getStatusCode());
+                .matches(exception -> exception.getCode() == Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test

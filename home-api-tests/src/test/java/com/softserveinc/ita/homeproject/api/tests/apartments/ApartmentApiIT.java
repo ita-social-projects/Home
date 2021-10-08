@@ -1,36 +1,43 @@
 package com.softserveinc.ita.homeproject.api.tests.apartments;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.ApartmentApi;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.HouseApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.*;
-import io.swagger.annotations.Api;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Test;
-
-import javax.ws.rs.core.Response;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.core.Response;
+
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.HouseApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.CreateApartment;
+import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
+import com.softserveinc.ita.homeproject.client.model.InvitationType;
+import com.softserveinc.ita.homeproject.client.model.ReadApartment;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Test;
+
 class ApartmentApiIT {
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createApartmentTest() throws ApiException {

@@ -3,9 +3,9 @@ package com.softserveinc.ita.homeproject.api.tests.query;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.PolledHouseApi;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
+import com.softserveinc.ita.homeproject.client.model.ReadHouse;
 import lombok.Getter;
 import lombok.Setter;
 

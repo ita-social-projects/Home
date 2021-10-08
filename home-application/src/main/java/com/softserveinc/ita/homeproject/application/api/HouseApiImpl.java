@@ -1,8 +1,8 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_APARTMENT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_APARTMENTS_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_APARTMENT_PERMISSION;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_APARTMENT_INFO;
 
 import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
@@ -30,7 +30,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @Autowired
     private HouseService houseService;
 
-    @PreAuthorize(CREATE_APARTMENT_PERMISSION)
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response createApartment(Long houseId, CreateApartment createApartment) {
         var createApartmentDto = mapper.convert(createApartment, ApartmentDto.class);
@@ -40,14 +40,15 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
         return Response.status(Response.Status.CREATED).entity(readApartment).build();
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteApartment(Long houseId, Long id) {
 
-        apartmentService.deactivateApartment(houseId,id);
+        apartmentService.deactivateApartment(houseId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(GET_APARTMENT_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response getApartment(Long houseId, Long id) {
         ApartmentDto toGet = apartmentService.getOne(id, getSpecification());
@@ -56,7 +57,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
         return Response.status(Response.Status.OK).entity(readApartment).build();
     }
 
-    @PreAuthorize(GET_APARTMENTS_PERMISSION)
+    @PreAuthorize(READ_APARTMENT_INFO)
     @Override
     public Response queryApartment(Long houseId,
                                    Integer pageNumber,
@@ -71,10 +72,11 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
         return buildQueryResponse(readApartment, ReadApartment.class);
     }
 
+    @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateApartment(Long houseId, Long id, UpdateApartment updateApartment) {
         var updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
-        var toUpdate = apartmentService.updateApartment(houseId,id,updateApartmentDto);
+        var toUpdate = apartmentService.updateApartment(houseId, id, updateApartmentDto);
         var readApartment = mapper.convert(toUpdate, ReadApartment.class);
 
         return Response.status(Response.Status.OK).entity(readApartment).build();
