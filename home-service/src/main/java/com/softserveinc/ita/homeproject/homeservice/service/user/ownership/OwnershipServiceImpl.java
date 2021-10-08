@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.In
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.ownership.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

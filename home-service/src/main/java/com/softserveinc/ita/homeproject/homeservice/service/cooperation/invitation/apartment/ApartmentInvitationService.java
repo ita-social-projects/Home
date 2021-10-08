@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitat
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 

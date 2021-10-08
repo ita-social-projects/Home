@@ -22,7 +22,7 @@ public class PollHouseQueryConfig implements QueryConfig<House> {
     }
 
     public enum PollHouseQueryParamEnum implements QueryParamEnum {
-        POLL_ID("polls.id"),
+        POLL_ID("poll.id"),
         QUANTITY_FLAT("quantityFlat"),
         ADJOINING_AREA("adjoiningArea"),
         HOUSE_AREA("houseArea");

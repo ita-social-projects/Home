@@ -8,7 +8,7 @@ import com.softserveinc.ita.homeproject.application.model.InvitationToken;
 import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.application.model.ReadCooperationInvitation;
 import com.softserveinc.ita.homeproject.application.model.ReadInvitation;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;
 import org.springframework.beans.factory.annotation.Autowired;

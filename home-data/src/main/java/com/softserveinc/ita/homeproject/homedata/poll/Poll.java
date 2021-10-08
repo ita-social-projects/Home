@@ -28,7 +28,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "polls")
+@Table(name = "poll")
 @SequenceGenerator(name = "sequence", sequenceName = "polls_sequence")
 public class Poll extends BaseEntity {
     @Column(name = "header")

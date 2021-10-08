@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.application.model.CreateNews;
 import com.softserveinc.ita.homeproject.application.model.ReadNews;
 import com.softserveinc.ita.homeproject.application.model.UpdateNews;
-import com.softserveinc.ita.homeproject.homeservice.dto.NewsDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.news.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.general.news.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

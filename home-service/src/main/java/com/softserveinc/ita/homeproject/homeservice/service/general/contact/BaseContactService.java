@@ -7,10 +7,10 @@ import com.softserveinc.ita.homeproject.homedata.general.contact.ContactReposito
 import com.softserveinc.ita.homeproject.homedata.general.contact.ContactType;
 import com.softserveinc.ita.homeproject.homedata.general.contact.email.EmailContact;
 import com.softserveinc.ita.homeproject.homedata.general.contact.phone.PhoneContact;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.EmailContactDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.PhoneContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.EmailContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.PhoneContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.enums.ContactTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

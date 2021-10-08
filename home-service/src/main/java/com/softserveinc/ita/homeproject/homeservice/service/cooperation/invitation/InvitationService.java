@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 
 public interface InvitationService {
 

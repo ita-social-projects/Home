@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import com.samskivert.mustache.Mustache;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

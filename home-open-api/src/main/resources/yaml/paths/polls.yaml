@@ -2,8 +2,8 @@ polls:
   get:
     tags:
       - poll
-    summary: Get all polls
-    description: The endpoint gets all polls
+    summary: Get all poll
+    description: The endpoint gets all poll
     operationId: queryPoll
     parameters:
       - $ref: '../parameters/parameters.yaml#/cooperation_id'

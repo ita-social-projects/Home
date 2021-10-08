@@ -5,10 +5,10 @@ import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.RoleDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.role.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;

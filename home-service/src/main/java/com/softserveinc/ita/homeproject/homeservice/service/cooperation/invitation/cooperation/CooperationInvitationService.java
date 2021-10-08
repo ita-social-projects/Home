@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitat
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 
 public interface CooperationInvitationService extends InvitationService {

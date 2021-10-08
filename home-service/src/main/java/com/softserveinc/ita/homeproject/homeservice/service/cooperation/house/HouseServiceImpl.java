@@ -6,7 +6,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import lombok.RequiredArgsConstructor;

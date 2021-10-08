@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 import com.softserveinc.ita.homeproject.application.model.CreateApartment;
 import com.softserveinc.ita.homeproject.application.model.ReadApartment;
 import com.softserveinc.ita.homeproject.application.model.UpdateApartment;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.apartment.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import org.springframework.beans.factory.annotation.Autowired;

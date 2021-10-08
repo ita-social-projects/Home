@@ -2,10 +2,10 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.InvitationTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.MailDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

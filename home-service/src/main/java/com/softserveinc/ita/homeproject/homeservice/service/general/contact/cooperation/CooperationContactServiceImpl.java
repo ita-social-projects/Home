@@ -7,7 +7,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationReposito
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.general.contact.ContactRepository;
 import com.softserveinc.ita.homeproject.homedata.general.contact.ContactType;
-import com.softserveinc.ita.homeproject.homeservice.dto.ContactDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;

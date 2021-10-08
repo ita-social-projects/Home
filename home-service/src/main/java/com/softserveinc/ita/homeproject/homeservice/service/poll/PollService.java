@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
-import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 
 public interface PollService extends QueryableService<Poll, PollDto> {

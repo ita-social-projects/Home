@@ -7,8 +7,8 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseReposito
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
-import com.softserveinc.ita.homeproject.homeservice.dto.HouseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.polls.templates.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import lombok.RequiredArgsConstructor;

@@ -14,8 +14,8 @@ import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitatio
 import com.softserveinc.ita.homeproject.application.model.ReadOwnership;
 import com.softserveinc.ita.homeproject.application.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.application.model.UpdateOwnership;
-import com.softserveinc.ita.homeproject.homeservice.dto.ApartmentInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.OwnershipDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.ownership.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
