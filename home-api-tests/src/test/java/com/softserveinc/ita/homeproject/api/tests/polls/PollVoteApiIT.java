@@ -76,13 +76,13 @@ class PollVoteApiIT {
     private static final PollStatus[] POLL_STATUSES_WITHOUT_ACTIVE_AND_COMPLETED =
         {PollStatus.DRAFT, PollStatus.SUSPENDED};
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getClient());
+    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getClient());
+    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final PollVoteApi pollVoteApi = new PollVoteApi(ApiClientUtil.getClient());
+    private final PollVoteApi pollVoteApi = new PollVoteApi(ApiClientUtil.getOwnerClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 

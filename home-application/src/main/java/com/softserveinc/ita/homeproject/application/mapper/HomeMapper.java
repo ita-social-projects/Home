@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 
-import com.softserveinc.ita.homeproject.application.model.CreateAdviceQuestion;
-import com.softserveinc.ita.homeproject.application.model.QuestionLookup;
-import com.softserveinc.ita.homeproject.application.model.ReadAdviceQuestion;
-import com.softserveinc.ita.homeproject.application.model.UpdateAdviceQuestion;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.AdviceChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.MultipleChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.AbstractTypeConverter;
+import com.softserveinc.ita.homeproject.model.CreateAdviceQuestion;
+import com.softserveinc.ita.homeproject.model.QuestionLookup;
+import com.softserveinc.ita.homeproject.model.ReadAdviceQuestion;
+import com.softserveinc.ita.homeproject.model.UpdateAdviceQuestion;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.ConditionalConverter;

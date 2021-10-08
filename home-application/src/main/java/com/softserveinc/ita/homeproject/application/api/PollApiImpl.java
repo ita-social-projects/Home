@@ -13,11 +13,14 @@ import com.softserveinc.ita.homeproject.api.PollsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.house.PollHouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.question.PollQuestionService;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.vote.VoteService;
 import com.softserveinc.ita.homeproject.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.model.CreateVote;
 import com.softserveinc.ita.homeproject.model.HouseLookup;
 import com.softserveinc.ita.homeproject.model.PollStatus;
 import com.softserveinc.ita.homeproject.model.PollType;
@@ -25,6 +28,8 @@ import com.softserveinc.ita.homeproject.model.QuestionType;
 import com.softserveinc.ita.homeproject.model.ReadHouse;
 import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.model.ReadQuestion;
+import com.softserveinc.ita.homeproject.model.ReadVote;
 import com.softserveinc.ita.homeproject.model.UpdateQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -167,7 +172,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
 
-    @PreAuthorize(CREATE_VOTE_PERMISSION)
+    @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response createVote(Long pollId, CreateVote createVote) {
         var createVoteDto = mapper.convert(createVote, VoteDto.class);
