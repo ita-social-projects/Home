@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
+            toCreate.setLocked(false);
+            toCreate.setCredentialsExpired(false);
             toCreate.setCreateDate(LocalDateTime.now());
             toCreate.getContacts().forEach(contact -> {
                 contact.setUser(toCreate);
@@ -76,7 +78,8 @@ public class UserServiceImpl implements UserService {
     private void checkAndSaveUserByInvitation(UserDto userDto) {
 
         var invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
-                .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING))
+                .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING)
+                    && invitation1.getEnabled().equals(true))
                 .orElseThrow(() -> new NotFoundHomeException("Invitation with provided token not found"));
 
         validateEmailsMatching(invitation.getEmail(), userDto.getEmail());

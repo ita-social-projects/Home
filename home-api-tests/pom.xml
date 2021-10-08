@@ -17,8 +17,8 @@
         <surefire-version>3.0.0-M5</surefire-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
-        <docker.image.data.migration>home-data-migration:${revision}</docker.image.data.migration>
-        <docker.image.application>home-application:${revision}</docker.image.application>
+        <docker.image.data.migration>homeacademy/data-migration:${docker.revision}</docker.image.data.migration>
+        <docker.image.application>homeacademy/home-application:${docker.revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.image.psql>governmentpaas/psql</docker.image.psql>
@@ -36,6 +36,7 @@
         <docker-files>${basedir}/target/docker</docker-files>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <reflections.version>0.9.12</reflections.version>
     </properties>
     <profiles>
         <profile>
@@ -346,10 +347,6 @@
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <mailhog.external.port>${mailhog.external.port}</mailhog.external.port>
-                                <home.application.admin.username>${home.application.admin.username}
-                                </home.application.admin.username>
-                                <home.application.admin.password>${home.application.admin.password}
-                                </home.application.admin.password>
                                 <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
                             </systemPropertyVariables>
                         </configuration>
@@ -379,6 +376,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
@@ -398,6 +400,17 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

@@ -49,6 +49,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
             cooperationInvitation.setStatus(InvitationStatus.PENDING);
             cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
+            cooperationInvitation.setEnabled(true);
             invitationRepository.save(cooperationInvitation);
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
@@ -72,6 +73,20 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
     }
 
     @Override
+    public void markInvitationsAsOverdue() {
+        var qCooperationInvitation = QCooperationInvitation.cooperationInvitation;
+        JPAQuery<?> query = new JPAQuery<>(entityManager);
+        var overdueCooperationInvitations = query.select(qCooperationInvitation).from(qCooperationInvitation)
+                .where((qCooperationInvitation.status.eq(InvitationStatus.PENDING))
+                                .or(qCooperationInvitation.status.eq(InvitationStatus.PROCESSING)),
+                        qCooperationInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+        overdueCooperationInvitations.forEach(invitation -> {
+            invitation.setStatus(InvitationStatus.OVERDUE);
+            cooperationInvitationRepository.save(invitation);
+        });
+    }
+
+    @Override
     public List<CooperationInvitationDto> getAllActiveInvitations() {
         var allNotSentInvitations = cooperationInvitationRepository
             .findAllBySentDatetimeIsNullAndStatusEquals(
@@ -79,19 +94,5 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         return allNotSentInvitations.stream()
             .map(invitation -> mapper.convert(invitation, CooperationInvitationDto.class))
             .collect(Collectors.toList());
-    }
-
-    @Override
-    public void markInvitationsAsOverdue() {
-        var qCooperationInvitation = QCooperationInvitation.cooperationInvitation;
-        JPAQuery<?> query = new JPAQuery<>(entityManager);
-        var overdueCooperationInvitations = query.select(qCooperationInvitation).from(qCooperationInvitation)
-            .where((qCooperationInvitation.status.eq(InvitationStatus.PENDING))
-                    .or(qCooperationInvitation.status.eq(InvitationStatus.PROCESSING)),
-                qCooperationInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
-        overdueCooperationInvitations.forEach(invitation -> {
-            invitation.setStatus(InvitationStatus.OVERDUE);
-            cooperationInvitationRepository.save(invitation);
-        });
     }
 }

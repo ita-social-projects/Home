@@ -1,5 +1,27 @@
 package com.softserveinc.ita.homeproject.api.tests.ownerships;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.ws.rs.core.Response;
+
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
@@ -7,10 +29,6 @@ import com.softserveinc.ita.homeproject.client.api.ApartmentOwnershipApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.HouseApi;
 import com.softserveinc.ita.homeproject.client.api.UserApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
@@ -27,35 +45,17 @@ import com.softserveinc.ita.homeproject.client.model.UpdateOwnership;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class OwnershipApiIT {
 
-    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getClient());
+    private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
     private static final long TEST_OWNERSHIP_ID = 10000001L;
 

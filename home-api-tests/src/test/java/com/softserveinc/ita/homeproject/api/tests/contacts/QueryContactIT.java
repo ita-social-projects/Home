@@ -16,15 +16,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.client.api.ContactApi;
-import com.softserveinc.ita.homeproject.client.api.CooperationApi;
-import com.softserveinc.ita.homeproject.client.api.UserApi;
 import com.softserveinc.ita.homeproject.api.tests.query.ContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.ContactApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.ContactType;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
@@ -32,7 +33,6 @@ import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
-import com.softserveinc.ita.homeproject.client.model.ReadContact;
 import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
 import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
 import com.softserveinc.ita.homeproject.client.model.ReadUser;
@@ -42,11 +42,11 @@ import org.junit.jupiter.api.Test;
 
 class QueryContactIT {
 
-    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getClient());
+    private final ContactApi contactApi = new ContactApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void getAllContactsAscSort() throws ApiException {

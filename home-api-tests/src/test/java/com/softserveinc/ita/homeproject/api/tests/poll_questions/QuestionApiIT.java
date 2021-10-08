@@ -1,18 +1,23 @@
 package com.softserveinc.ita.homeproject.api.tests.poll_questions;
 
-import javax.ws.rs.core.Response;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.ws.rs.core.Response;
 
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
@@ -31,18 +36,13 @@ import com.softserveinc.ita.homeproject.client.model.UpdateQuestion;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class QuestionApiIT {
 
-    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getClient());
+    private final PollQuestionApi pollQuestionApi = new PollQuestionApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getClient());
+    private final CooperationPollApi cooperationPollApi = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 

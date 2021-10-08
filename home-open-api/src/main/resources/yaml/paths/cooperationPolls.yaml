@@ -1,4 +1,4 @@
-cooperation-cooperationId-polls:
+cooperations-cooperationId-polls:
   get:
     tags:
       - cooperation poll
@@ -49,7 +49,7 @@ cooperation-cooperationId-polls:
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
 
-cooperation-cooperationId-polls-pollId:
+cooperations-cooperationId-polls-pollId:
   get:
     tags:
       - cooperation poll

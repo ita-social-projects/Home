@@ -1,47 +1,22 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_POLL_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.DELETE_POLL_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_ALL_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_ALL_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_HOUSES_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.GET_POLL_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_COOPERATION_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_COOP_CONTACT_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_HOUSE_PERMISSION;
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_POLL_PERMISSION;
+
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_DELETE_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_POLL;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_COOPERATION;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.application.model.ContactType;
-import com.softserveinc.ita.homeproject.application.model.CreateContact;
-import com.softserveinc.ita.homeproject.application.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.application.model.CreateHouse;
-import com.softserveinc.ita.homeproject.application.model.CreatePoll;
-import com.softserveinc.ita.homeproject.application.model.HouseLookup;
-import com.softserveinc.ita.homeproject.application.model.PollStatus;
-import com.softserveinc.ita.homeproject.application.model.PollType;
-import com.softserveinc.ita.homeproject.application.model.ReadContact;
-import com.softserveinc.ita.homeproject.application.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.application.model.ReadHouse;
-import com.softserveinc.ita.homeproject.application.model.ReadPoll;
-import com.softserveinc.ita.homeproject.application.model.UpdateContact;
-import com.softserveinc.ita.homeproject.application.model.UpdateCooperation;
-import com.softserveinc.ita.homeproject.application.model.UpdateHouse;
-import com.softserveinc.ita.homeproject.application.model.UpdatePoll;
+import com.softserveinc.ita.homeproject.api.CooperationsApi;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
@@ -50,15 +25,30 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.Cooperat
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
+import com.softserveinc.ita.homeproject.model.ContactType;
+import com.softserveinc.ita.homeproject.model.CreateContact;
+import com.softserveinc.ita.homeproject.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.model.CreateHouse;
+import com.softserveinc.ita.homeproject.model.CreatePoll;
+import com.softserveinc.ita.homeproject.model.HouseLookup;
+import com.softserveinc.ita.homeproject.model.PollStatus;
+import com.softserveinc.ita.homeproject.model.PollType;
+import com.softserveinc.ita.homeproject.model.ReadContact;
+import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.model.ReadHouse;
+import com.softserveinc.ita.homeproject.model.ReadPoll;
+import com.softserveinc.ita.homeproject.model.UpdateContact;
+import com.softserveinc.ita.homeproject.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.model.UpdatePoll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-
 @Provider
 @Component
-public class CooperationApiImpl extends CommonApi implements CooperationApi {
+public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @Autowired
     private CooperationService cooperationService;
@@ -72,7 +62,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     @Autowired
     private PollService pollService;
 
-    @PreAuthorize(CREATE_COOPERATION_PERMISSION)
+    @PermitAll
     @Override
     public Response createCooperation(CreateCooperation createCooperation) {
         CooperationDto createCoopDto = mapper.convert(createCooperation, CooperationDto.class);
@@ -82,7 +72,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.CREATED).entity(readCoop).build();
     }
 
-    @PreAuthorize(CREATE_HOUSE_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response createHouse(Long cooperationId, CreateHouse createHouse) {
         HouseDto createHouseDto = mapper.convert(createHouse, HouseDto.class);
@@ -92,7 +82,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.CREATED).entity(readHouse).build();
     }
 
-    @PreAuthorize(CREATE_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response createContactOnCooperation(Long cooperationId,
                                                CreateContact createCooperationContact) {
@@ -103,21 +93,21 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
 
-    @PreAuthorize(CREATE_POLL_PERMISSION)
+    @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response createCooperationPoll(Long cooperationId, CreatePoll createPoll) {
         PollDto createPollDto = mapper.convert(createPoll, PollDto.class);
         createPollDto.setPolledHouses(createPoll.getHouses().stream()
-            .map(HouseLookup::getId)
-            .map(id -> houseService.getOne(id))
-            .collect(Collectors.toList()));
+                .map(HouseLookup::getId)
+                .map(id -> houseService.getOne(id))
+                .collect(Collectors.toList()));
         PollDto readPollDto = pollService.create(cooperationId, createPollDto);
         ReadPoll readPoll = mapper.convert(readPollDto, ReadPoll.class);
 
         return Response.status(Response.Status.CREATED).entity(readPoll).build();
     }
 
-    @PreAuthorize(GET_COOPERATION_PERMISSION)
+    @PreAuthorize(READ_COOPERATION)
     @Override
     public Response getCooperation(Long id) {
         CooperationDto readCoopDto = cooperationService.getOne(id);
@@ -127,7 +117,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
     }
 
 
-    @PreAuthorize(GET_HOUSE_PERMISSION)
+    @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response getHouse(Long cooperationId, Long id) {
         HouseDto toGet = houseService.getOne(id, getSpecification());
@@ -136,7 +126,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
-    @PreAuthorize(GET_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long id) {
         var readContactDto = contactService.getOne(id, getSpecification());
@@ -145,7 +135,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
-    @PreAuthorize(GET_POLL_PERMISSION)
+    @PreAuthorize(READ_POLL)
     @Override
     public Response getCooperationPoll(Long cooperationId, Long id) {
         PollDto pollDto = pollService.getOne(id, getSpecification());
@@ -154,7 +144,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 
-    @PreAuthorize(GET_ALL_COOPERATION_PERMISSION)
+    @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response queryCooperation(Integer pageNumber,
                                      Integer pageSize,
@@ -169,7 +159,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readCooperation, ReadCooperation.class);
     }
 
-    @PreAuthorize(GET_HOUSES_PERMISSION)
+    @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response queryHouse(Long cooperationId,
                                Integer pageNumber,
@@ -185,7 +175,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readHouse, ReadHouse.class);
     }
 
-    @PreAuthorize(GET_ALL_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response queryContactsOnCooperation(Long cooperationId,
                                                Integer pageNumber,
@@ -201,7 +191,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readContact, ReadContact.class);
     }
 
-    @PreAuthorize(GET_POLL_PERMISSION)
+    @PreAuthorize(READ_POLL)
     @Override
     public Response queryCooperationPoll(Long cooperationId,
                                          Integer pageNumber,
@@ -218,35 +208,35 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return buildQueryResponse(readPoll, ReadPoll.class);
     }
 
-    @PreAuthorize(DELETE_COOPERATION_PERMISSION)
+    @PreAuthorize(CREATE_DELETE_COOPERATION)
     @Override
     public Response deleteCooperation(Long id) {
         cooperationService.deactivateCooperation(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DELETE_HOUSE_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response deleteHouse(Long cooperationId, Long id) {
         houseService.deactivateById(cooperationId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DELETE_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response deleteContactOnCooperation(Long cooperationId, Long id) {
         contactService.deactivateContact(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(DELETE_POLL_PERMISSION)
+    @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response deleteCooperationPoll(Long cooperationId, Long id) {
         pollService.deactivate(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PreAuthorize(UPDATE_COOPERATION_PERMISSION)
+    @PreAuthorize(UPDATE_COOPERATION)
     @Override
     public Response updateCooperation(Long id, UpdateCooperation updateCooperation) {
         CooperationDto updateCoopDto = mapper.convert(updateCooperation, CooperationDto.class);
@@ -256,7 +246,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readCooperation).build();
     }
 
-    @PreAuthorize(UPDATE_HOUSE_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response updateHouse(Long cooperationId, Long id, UpdateHouse updateHouse) {
         HouseDto updateHouseDto = mapper.convert(updateHouse, HouseDto.class);
@@ -266,7 +256,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
 
-    @PreAuthorize(UPDATE_COOP_CONTACT_PERMISSION)
+    @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response updateContactOnCooperation(Long cooperationId, Long id, UpdateContact updateContact) {
         var updateContactDto = mapper.convert(updateContact, ContactDto.class);
@@ -276,7 +266,7 @@ public class CooperationApiImpl extends CommonApi implements CooperationApi {
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
-    @PreAuthorize(UPDATE_POLL_PERMISSION)
+    @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll) {
         PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);

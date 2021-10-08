@@ -9,6 +9,7 @@ import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,12 @@ public class PollHouseServiceImpl implements PollHouseService {
 
         if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();
+
+            if (houses.contains(house)) {
+                throw new BadRequestHomeException(
+                        String.format("House with id:%s already exists in poll with id:%s", houseId, pollId));
+            }
+
             houses.add(house);
 
             poll.setPolledHouses(houses);

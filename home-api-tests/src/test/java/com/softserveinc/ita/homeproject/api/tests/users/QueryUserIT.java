@@ -14,15 +14,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.client.api.CooperationApi;
-import com.softserveinc.ita.homeproject.client.api.UserApi;
-import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.UserApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
@@ -34,14 +34,14 @@ import org.junit.jupiter.api.Test;
 
 class QueryUserIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
     private final CreateUser expectedUser = new CreateUser()
             .firstName("Bill")
             .lastName("White")
             .password("password");
-
-    private final UserApi userApi = new UserApi(ApiClientUtil.getClient());
 
     @Test
     void getAllUsers() throws ApiException {

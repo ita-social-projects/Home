@@ -1,5 +1,17 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations.contacts;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationContactQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
@@ -19,23 +31,11 @@ import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 class QueryCoopContactIT {
 
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void getAllContactsAscSort() throws ApiException {

@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.ContactType;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
@@ -39,8 +39,9 @@ class CooperationContactApiIT {
 
     private static final String CONTACT_NOT_FOUND = "Contact with 'id: %d and cooperation_id %d' is not found";
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createCooperationContactTest() throws ApiException {

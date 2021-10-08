@@ -1,28 +1,28 @@
 package com.softserveinc.ita.homeproject.api.tests.cooperations;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import com.softserveinc.ita.homeproject.client.ApiException;
-import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.api.tests.query.CooperationQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class QueryCooperationIT {
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
 
     @Test

@@ -1,19 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.question;
 
-import java.util.stream.Collectors;
-
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AdviceChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollQuestionTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.MultipleChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -25,53 +20,43 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class PollQuestionServiceImpl implements PollQuestionService {
-
-    private static final String UPDATE_QUESTION_TYPE_MISMATCH_MESSAGE = "Type of the PollQuestion doesn't match";
-
-    private static final String QUESTION_TYPE_NOT_FOUND_MESSAGE = "Type of the PollQuestion is not found";
 
     private final PollQuestionRepository pollQuestionRepository;
 
     private final PollRepository pollRepository;
 
-    private final AnswerVariantRepository answerRepository;
-
     private final ServiceMapper mapper;
 
     @Transactional
     @Override
-    public PollQuestionDto createPollQuestion(PollQuestionDto pollQuestionDto) {
-        var poll = getPollById(pollQuestionDto.getPollId());
-        var question = mapper.convert(pollQuestionDto, PollQuestion.class);
-        question.setEnabled(true);
+    public PollQuestionDto createPollQuestion(Long pollId, PollQuestionDto pollQuestionDto) {
+        var poll = getPollById(pollId);
+
+        PollQuestion question = fillMultipleQuestionType(pollQuestionDto);
+
         question.setPoll(poll);
+        question.setEnabled(true);
+
         pollQuestionRepository.save(question);
-        if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
-            ((MultipleChoiceQuestion) question).getAnswerVariants().forEach(answer -> {
-                answer.setQuestion(question);
-                answerRepository.save(answer);
-            });
-        }
-        pollQuestionRepository.save(question);
-        poll.getPollQuestions().add(question);
-        pollRepository.save(poll);
         return mapper.convert(question, PollQuestionDto.class);
     }
 
     @Transactional
     @Override
-    public PollQuestionDto updatePollQuestion(PollQuestionDto updatePollQuestionDto) {
-        var poll = getPollById(updatePollQuestionDto.getPollId());
+    public PollQuestionDto updatePollQuestion(Long pollId, Long id, PollQuestionDto updatePollQuestionDto) {
+        var poll = getPollById(pollId);
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
-            .filter(question -> question.getId().equals(updatePollQuestionDto.getId())).findFirst()
-            .filter(PollQuestion::getEnabled)
-            .orElseThrow(() ->
-                new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "PollQuestion", updatePollQuestionDto.getId())));
+                .filter(question -> question.getId().equals(id)).findFirst()
+                .filter(PollQuestion::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Question", id)));
+
 
         if (updatePollQuestionDto.getQuestion() != null) {
             toUpdate.setQuestion(updatePollQuestionDto.getQuestion());
@@ -82,36 +67,31 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         if (existingQuestionType == updatePollQuestionDto.getType()) {
             return updateQuestion(toUpdate, updatePollQuestionDto);
         } else {
-            throw new BadRequestHomeException(UPDATE_QUESTION_TYPE_MISMATCH_MESSAGE);
+            throw new BadRequestHomeException("Type of the question doesn't match");
         }
     }
 
     private PollQuestionDto updateQuestion(PollQuestion pollQuestion, PollQuestionDto updatePollQuestionDto) {
         if (pollQuestion.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
-            return updateMultiChoiceQuestion((MultipleChoiceQuestion) pollQuestion,
-                (MultipleChoiceQuestionDto) updatePollQuestionDto);
+            return updateMultiChoiceQuestion((MultipleChoiceQuestion) pollQuestion, updatePollQuestionDto);
         } else if (pollQuestion.getType().equals(PollQuestionType.ADVICE)) {
             return updateAdviceChoiceQuestion((AdviceChoiceQuestion) pollQuestion);
         } else {
-            throw new NotFoundHomeException(QUESTION_TYPE_NOT_FOUND_MESSAGE);
+            throw new NotFoundHomeException("Type of the question is not found");
         }
     }
 
     private PollQuestionDto updateMultiChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion,
-                                                      MultipleChoiceQuestionDto multipleChoiceQuestionDto) {
-        if (multipleChoiceQuestionDto.getAnswerVariants() != null) {
-            multipleChoiceQuestion.setAnswerVariants(
-                multipleChoiceQuestionDto.getAnswerVariants().stream()
-                    .map(answerDto -> mapper.convert(answerDto, AnswerVariant.class))
-                    .peek(answer -> {
-                        answer.setQuestion(multipleChoiceQuestion);
-                        answerRepository.save(answer);
-                    })
-                    .collect(Collectors.toList()));
+                                                      PollQuestionDto pollQuestionDto) {
+        if (pollQuestionDto.getAnswerVariants() != null) {
+            for (var i = 0; i < multipleChoiceQuestion.getAnswerVariants().size(); i++) {
+                multipleChoiceQuestion.getAnswerVariants().get(i).setAnswer(
+                        pollQuestionDto.getAnswerVariants().get(i).getAnswer());
+            }
         }
 
-        if (multipleChoiceQuestionDto.getMaxAnswerCount() != null) {
-            multipleChoiceQuestion.setMaxAnswerCount(multipleChoiceQuestionDto.getMaxAnswerCount());
+        if (pollQuestionDto.getMaxAnswerCount() != null) {
+            multipleChoiceQuestion.setMaxAnswerCount(pollQuestionDto.getMaxAnswerCount());
         }
 
         pollQuestionRepository.save(multipleChoiceQuestion);
@@ -126,13 +106,23 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         return mapper.convert(adviceChoiceQuestion, PollQuestionDto.class);
     }
 
-    private Poll getPollById(Long id) {
+    private PollQuestion fillMultipleQuestionType(PollQuestionDto pollQuestionDto) {
+        if (pollQuestionDto.getType().equals(PollQuestionTypeDto.MULTIPLE_CHOICE)) {
+            var multipleChoiceQuestion = mapper.convert(pollQuestionDto, MultipleChoiceQuestion.class);
+            multipleChoiceQuestion.getAnswerVariants().forEach(element ->
+                    element.setMultipleChoiceQuestion(multipleChoiceQuestion));
+            return multipleChoiceQuestion;
+        }
+        return mapper.convert(pollQuestionDto, AdviceChoiceQuestion.class);
+    }
+
+    private Poll getPollById(Long id){
         return pollRepository.findById(id)
-            .filter(Poll::getEnabled)
-            .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
-            .orElseThrow(() ->
-                new NotFoundHomeException(
-                    String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+                .filter(Poll::getEnabled)
+                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Poll", id)));
     }
 
     @Transactional
@@ -141,10 +131,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var poll = getPollById(pollId);
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
-            .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
-            .filter(PollQuestion::getEnabled)
-            .orElseThrow(
-                () -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "PollQuestion", pollQuestionId)));
+                .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
+                .filter(PollQuestion::getEnabled)
+                .orElseThrow(() ->
+                        new NotFoundHomeException(
+                                String.format(NOT_FOUND_MESSAGE,"Question", pollQuestionId)));
 
         toDelete.setEnabled(false);
         pollQuestionRepository.save(toDelete);
@@ -155,9 +146,9 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                                          Integer pageSize,
                                          Specification<PollQuestion> specification) {
         specification = specification
-            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("poll").get("enabled"), true));
+                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                        .equal(root.get("poll").get("enabled"), true));
         return pollQuestionRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
+                .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
     }
 }

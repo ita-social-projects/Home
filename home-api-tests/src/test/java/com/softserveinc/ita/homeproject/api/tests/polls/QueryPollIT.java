@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 class QueryPollIT extends QueryPoll {
 
-    private final PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
+    private final PollApi POLL_API = new PollApi(ApiClientUtil.getCooperationAdminClient());
 
     @Override
     List<ReadPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {

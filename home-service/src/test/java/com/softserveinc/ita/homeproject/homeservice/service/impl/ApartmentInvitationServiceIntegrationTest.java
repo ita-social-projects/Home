@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;

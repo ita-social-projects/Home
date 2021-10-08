@@ -69,23 +69,23 @@ paths:
   /users/{user_id}/contacts/{id}:
     $ref: './paths/contacts.yaml#/users-userId-contacts-contactId'
 
-  /cooperation:
-    $ref: './paths/cooperations.yaml#/cooperation'
+  /cooperations:
+    $ref: './paths/cooperations.yaml#/cooperations'
 
-  /cooperation/{id}:
-    $ref: './paths/cooperations.yaml#/cooperation-cooperationId'
+  /cooperations/{id}:
+    $ref: './paths/cooperations.yaml#/cooperations-cooperationId'
 
-  /cooperation/{cooperation_id}/houses:
-    $ref: './paths/houses.yaml#/cooperation-cooperationId-houses'
+  /cooperations/{cooperation_id}/houses:
+    $ref: './paths/houses.yaml#/cooperations-cooperationId-houses'
 
-  /cooperation/{cooperation_id}/houses/{id}:
-    $ref: './paths/houses.yaml#/cooperation-cooperationId-houses-houseId'
+  /cooperations/{cooperation_id}/houses/{id}:
+    $ref: './paths/houses.yaml#/cooperations-cooperationId-houses-houseId'
 
-  /cooperation/{cooperation_id}/contacts:
-    $ref: './paths/cooperationContacts.yaml#/cooperation-cooperationId-contacts'
+  /cooperations/{cooperation_id}/contacts:
+    $ref: './paths/cooperationContacts.yaml#/cooperations-cooperationId-contacts'
 
-  /cooperation/{cooperation_id}/contacts/{id}:
-    $ref: './paths/cooperationContacts.yaml#/cooperation-cooperationId-contacts-contactId'
+  /cooperations/{cooperation_id}/contacts/{id}:
+    $ref: './paths/cooperationContacts.yaml#/cooperations-cooperationId-contacts-contactId'
 
   /houses/{house_id}/apartments:
     $ref: './paths/apartments.yaml#/houses-houseId-apartments'
@@ -105,11 +105,11 @@ paths:
   /apartments/{apartment_id}/invitations/{id}:
     $ref: './paths/apartmentInvitations.yaml#/apartments-apartmentId-invitations-invitationId'
 
-  /cooperation/{cooperation_id}/polls:
-    $ref: './paths/cooperationPolls.yaml#/cooperation-cooperationId-polls'
+  /cooperations/{cooperation_id}/polls:
+    $ref: './paths/cooperationPolls.yaml#/cooperations-cooperationId-polls'
 
-  /cooperation/{cooperation_id}/polls/{id}:
-    $ref: './paths/cooperationPolls.yaml#/cooperation-cooperationId-polls-pollId'
+  /cooperations/{cooperation_id}/polls/{id}:
+    $ref: './paths/cooperationPolls.yaml#/cooperations-cooperationId-polls-pollId'
 
   /polls:
     $ref: './paths/polls.yaml#/polls'

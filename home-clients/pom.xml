@@ -13,7 +13,6 @@
 
     <properties>
         <json.name>openapi.json</json.name>
-        <home-client.package>com.softserveinc.ita.homeproject.client</home-client.package>
     </properties>
 
     <artifactId>home-clients</artifactId>
@@ -76,9 +75,9 @@
                                 <artifactId>home-java-client</artifactId>
                                 <artifactVersion>${revision}</artifactVersion>
                                 <groupId>${project.groupId}</groupId>
-                                <modelPackage>${home-client.package}.model</modelPackage>
-                                <apiPackage>${home-client.package}.api</apiPackage>
-                                <invokerPackage>${home-client.package}</invokerPackage>
+                                <modelPackage>com.softserveinc.ita.homeproject.client.model</modelPackage>
+                                <apiPackage>com.softserveinc.ita.homeproject.client.api</apiPackage>
+                                <invokerPackage>com.softserveinc.ita.homeproject.client</invokerPackage>
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>

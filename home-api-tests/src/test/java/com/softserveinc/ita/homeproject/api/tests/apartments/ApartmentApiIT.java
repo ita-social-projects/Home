@@ -1,5 +1,16 @@
 package com.softserveinc.ita.homeproject.api.tests.apartments;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
@@ -20,25 +31,13 @@ import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import javax.ws.rs.core.Response;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class ApartmentApiIT {
 
-    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getClient());
+    private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-
+    private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createApartmentTest() throws ApiException {

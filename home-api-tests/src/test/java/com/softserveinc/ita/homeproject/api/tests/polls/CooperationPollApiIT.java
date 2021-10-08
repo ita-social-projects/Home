@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Response;
 
+import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
-import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.client.api.PollApi;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
@@ -56,11 +56,11 @@ class CooperationPollApiIT {
 
     static final Long NONEXISTENT_COOP_ID = 999999999L;
 
-    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getClient());
+    final static CooperationPollApi COOPERATION_POLL_API = new CooperationPollApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getClient());
+    private final PolledHouseApi POLLED_HOUSE_API = new PolledHouseApi(ApiClientUtil.getCooperationAdminClient());
 
-    final static PollApi POLL_API = new PollApi(ApiClientUtil.getClient());
+    final static PollApi POLL_API = new PollApi(ApiClientUtil.getCooperationAdminClient());
 
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
@@ -75,9 +75,9 @@ class CooperationPollApiIT {
         ReadCooperation cooperationOne = null;
         ReadCooperation cooperationTwo = null;
         try {
-            cooperationOne = new CooperationApi(ApiClientUtil.getClient())
+            cooperationOne = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
-            cooperationTwo = new CooperationApi(ApiClientUtil.getClient())
+            cooperationTwo = new CooperationApi(ApiClientUtil.getCooperationAdminClient())
                 .createCooperationWithHttpInfo(createCooperation()).getData();
         } catch (ApiException e) {
             e.printStackTrace();
@@ -241,6 +241,21 @@ class CooperationPollApiIT {
                 .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining(WRONG_DATA_MESSAGE);
+    }
+
+    @Test
+    void addAlreadyAddedPolledHouseTest() throws ApiException {
+        HouseLookup houseLookup = new HouseLookup().id(HOUSE_ONE_ID);
+        CreatePoll createPoll = createPoll();
+
+        ReadPoll poll = COOPERATION_POLL_API
+                .createCooperationPoll(COOPERATION_ID, createPoll);
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> POLLED_HOUSE_API
+                        .createPolledHouseWithHttpInfo(poll.getId(), houseLookup))
+                .matches((actual) -> actual.getCode() == BAD_REQUEST)
+                .withMessageContaining(String.format("House with id:%s already exists in poll with id:%s", HOUSE_ONE_ID, poll.getId()));
     }
 
     @Test

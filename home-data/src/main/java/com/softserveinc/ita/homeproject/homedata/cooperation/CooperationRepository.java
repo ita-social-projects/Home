@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homedata.cooperation;
 
 import java.util.Optional;
 
+import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
