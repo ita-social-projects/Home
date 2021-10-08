@@ -95,7 +95,7 @@
                 <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>resource-dependencies</id>
+                        <id>resource-dependencies-rapidoc</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -113,6 +113,7 @@
                                     </fileMappers>
                                     <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
                                 </artifactItem>
+
                                 <artifactItem>
                                     <groupId>org.webjars.npm</groupId>
                                     <artifactId>rapidoc</artifactId>
@@ -122,13 +123,89 @@
                                     <fileMappers>
                                         <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
                                     </fileMappers>
-                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs/rapidoc</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                             <includes>*/openapi.yaml,*/openapi.json,**/dist/*</includes>
                             <excludes>**/dist/index.html</excludes>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>resource-dependencies-swagger-ui</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                                    <artifactId>home-open-api</artifactId>
+                                    <version>${revision}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>swagger-ui</artifactId>
+                                    <version>${swagger.ui.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs/swagger-ui</outputDirectory>
+                                </artifactItem>
+
+                            </artifactItems>
+                            <includes>*/openapi.yaml,*/openapi.json,**/3.52.3/*</includes>
+                            <excludes>**/dist/index.html</excludes>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>resource-dependencies-redoc</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                                    <artifactId>home-open-api</artifactId>
+                                    <version>${revision}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars.npm</groupId>
+                                    <artifactId>redoc</artifactId>
+                                    <version>${redoc.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
+                                    </fileMappers>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/apidocs/redoc</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>*/openapi.yaml,*/openapi.json,**/bundles/*</includes>
+                            <excludes>**/dist/index.html</excludes>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
             <plugin>
