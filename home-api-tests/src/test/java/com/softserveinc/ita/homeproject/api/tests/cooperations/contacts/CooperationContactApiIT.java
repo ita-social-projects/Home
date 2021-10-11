@@ -12,25 +12,25 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.api.CooperationContactApi;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.Address;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.CreateContact;
-import com.softserveinc.ita.homeproject.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.model.CreateHouse;
-import com.softserveinc.ita.homeproject.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.model.ReadContact;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.model.ReadEmailContact;
-import com.softserveinc.ita.homeproject.model.ReadPhoneContact;
-import com.softserveinc.ita.homeproject.model.UpdateContact;
-import com.softserveinc.ita.homeproject.model.UpdateEmailContact;
-import com.softserveinc.ita.homeproject.model.UpdatePhoneContact;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
+import com.softserveinc.ita.homeproject.client.model.Address;
+import com.softserveinc.ita.homeproject.client.model.ContactType;
+import com.softserveinc.ita.homeproject.client.model.CreateContact;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
+import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateContact;
+import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -39,8 +39,9 @@ class CooperationContactApiIT {
 
     private static final String CONTACT_NOT_FOUND = "Contact with 'id: %d and cooperation_id %d' is not found";
 
-    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getClient());
-    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getClient());
+    private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createCooperationContactTest() throws ApiException {

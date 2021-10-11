@@ -1,9 +1,9 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
 import java.util.List;
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.CooperationApi;
-import com.softserveinc.ita.homeproject.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 
 public class CooperationQuery extends BaseQuery {
 

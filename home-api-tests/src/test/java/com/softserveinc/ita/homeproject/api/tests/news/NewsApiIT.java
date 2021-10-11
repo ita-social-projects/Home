@@ -1,30 +1,30 @@
 package com.softserveinc.ita.homeproject.api.tests.news;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
+import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
 import java.util.List;
 import javax.ws.rs.core.Response;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.ApiResponse;
-import com.softserveinc.ita.homeproject.api.NewsApi;
 import com.softserveinc.ita.homeproject.api.tests.query.NewsQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.model.CreateNews;
-import com.softserveinc.ita.homeproject.model.ReadNews;
-import com.softserveinc.ita.homeproject.model.UpdateNews;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
+import com.softserveinc.ita.homeproject.client.api.NewsApi;
+import com.softserveinc.ita.homeproject.client.model.CreateNews;
+import com.softserveinc.ita.homeproject.client.model.ReadNews;
+import com.softserveinc.ita.homeproject.client.model.UpdateNews;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class NewsApiIT {
 
-    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getClient());
+    private final NewsApi newsApi = new NewsApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createNewsTest() throws ApiException {
@@ -77,8 +77,7 @@ class NewsApiIT {
 
         ApiResponse<Void> removeResponse = newsApi.deleteNewsWithHttpInfo(expectedNews.getId());
 
-        List<ReadNews> actualNewsList = new NewsQuery
-            .Builder(newsApi)
+        List<ReadNews> actualNewsList = new NewsQuery.Builder(newsApi)
             .pageNumber(1)
             .pageSize(10)
             .build().perfom();

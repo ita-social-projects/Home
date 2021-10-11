@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
+            toCreate.setLocked(false);
+            toCreate.setCredentialsExpired(false);
             toCreate.setCreateDate(LocalDateTime.now());
             toCreate.getContacts().forEach(contact -> {
                 contact.setUser(toCreate);

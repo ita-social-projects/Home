@@ -1,16 +1,10 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
-import com.softserveinc.ita.homeproject.ApiException;
-import com.softserveinc.ita.homeproject.api.ApartmentApi;
-import com.softserveinc.ita.homeproject.api.PollQuestionApi;
-import com.softserveinc.ita.homeproject.model.ContactType;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.QuestionType;
-import com.softserveinc.ita.homeproject.model.ReadApartment;
-import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.model.ReadQuestion;
+import com.softserveinc.ita.homeproject.client.ApiException;
+import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
+import com.softserveinc.ita.homeproject.client.model.QuestionType;
+import com.softserveinc.ita.homeproject.client.model.ReadQuestion;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class PollQuestionQuery extends BaseQuery {
