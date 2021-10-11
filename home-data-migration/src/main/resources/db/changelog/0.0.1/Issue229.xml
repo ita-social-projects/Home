@@ -71,11 +71,20 @@
                 schemaName="public"
                 tableName="permissions">
             <column name="id" value="50"/>
-            <column name="name" value="CREATE_VOTE_PERMISSION"/>
+            <column name="name" value="READ_VOTE"/>
         </insert>
     </changeSet>
 
-    <changeSet id="Issue229.005" author="IhorSamoshost">
+    <changeSet id="Issue229.005" author="SerhiiPakulia">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="51"/>
+            <column name="name" value="MANAGE_VOTES"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.006" author="IhorSamoshost">
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
@@ -84,13 +93,22 @@
         </insert>
     </changeSet>
 
-    <changeSet id="Issue229.006" author="IhorSamoshost">
+    <changeSet id="Issue229.007" author="SerhiiPakulia">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="3"/>
+            <column name="permission_id" value="51"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.008" author="IhorSamoshost">
         <createSequence incrementBy="50" sequenceName="votes_sequence"/>
         <createSequence incrementBy="50" sequenceName="question_votes_sequence"/>
         <createSequence incrementBy="50" sequenceName="vote_question_variants_sequence"/>
     </changeSet>
 
-    <changeSet id="Issue229.007" author="IhorSamoshost">
+    <changeSet id="Issue229.009" author="IhorSamoshost">
         <dropNotNullConstraint tableName="answer_variants"
                                columnName="POLL_QUESTION_ID"/>
     </changeSet>

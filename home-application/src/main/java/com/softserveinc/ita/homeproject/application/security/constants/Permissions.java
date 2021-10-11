@@ -36,4 +36,8 @@ public final class Permissions {
 
     public static final String MANAGE_POLLS = "hasAuthority('MANAGE_POLLS')";
 
+    public static final String READ_VOTE = "hasAuthority('READ_VOTE')";
+
+    public static final String MANAGE_VOTES = "hasAuthority('MANAGE_VOTES')";
+
 }
