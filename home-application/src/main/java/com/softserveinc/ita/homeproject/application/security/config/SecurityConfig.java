@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .cors().configurationSource(request ->
-                getCorsConfiguration())
+                        getCorsConfiguration())
                 .and()
                 .httpBasic();
     }
