@@ -5,15 +5,14 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.InvitationsApi;
+import com.softserveinc.ita.homeproject.application.model.InvitationStatus;
+import com.softserveinc.ita.homeproject.application.model.InvitationToken;
+import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitation;
+import com.softserveinc.ita.homeproject.application.model.ReadCooperationInvitation;
+import com.softserveinc.ita.homeproject.application.model.ReadInvitation;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;
-import com.softserveinc.ita.homeproject.model.InvitationStatus;
-import com.softserveinc.ita.homeproject.model.InvitationToken;
-import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
-import com.softserveinc.ita.homeproject.model.ReadCooperationInvitation;
-import com.softserveinc.ita.homeproject.model.ReadInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;

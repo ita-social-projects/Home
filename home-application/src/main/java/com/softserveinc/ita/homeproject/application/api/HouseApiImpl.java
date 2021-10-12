@@ -8,13 +8,12 @@ import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.HousesApi;
+import com.softserveinc.ita.homeproject.application.model.CreateApartment;
+import com.softserveinc.ita.homeproject.application.model.ReadApartment;
+import com.softserveinc.ita.homeproject.application.model.UpdateApartment;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.apartment.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
-import com.softserveinc.ita.homeproject.model.CreateApartment;
-import com.softserveinc.ita.homeproject.model.ReadApartment;
-import com.softserveinc.ita.homeproject.model.UpdateApartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;

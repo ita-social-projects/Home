@@ -68,7 +68,6 @@ public class CooperationInvitationServiceIntegrationTest {
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(1).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(3).getStatus());
     }
-
     private CooperationInvitation createNotOverduePendingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);

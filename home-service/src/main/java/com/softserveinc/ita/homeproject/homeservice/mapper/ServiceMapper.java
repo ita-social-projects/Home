@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ServiceMapper {
 
-    private static final String ENTITY_PACKAGE = "com.softserveinc.ita.homeproject.homedata.entity";
+    private static final String ENTITY_PACKAGE = "com.softserveinc.ita.homeproject.homedata";
 
     private static final String DTO_PACKAGE = "com.softserveinc.ita.homeproject.homeservice.dto";
 

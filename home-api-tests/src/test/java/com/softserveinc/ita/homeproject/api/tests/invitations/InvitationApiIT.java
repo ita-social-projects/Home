@@ -114,8 +114,7 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationWithUserEmail(String userEmail) {
         CreateCooperation createCoop = createCooperationWithUserEmail(userEmail);
-        ReadCooperation readCooperation = cooperationApi.createCooperation(createCoop);
-        return readCooperation;
+        return cooperationApi.createCooperation(createCoop);
     }
 
     @SneakyThrows
