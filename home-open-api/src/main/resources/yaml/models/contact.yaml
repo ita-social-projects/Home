@@ -112,9 +112,9 @@ UpdateContact:
       example: false
   example:
     {
-      "type": "email",
-      "main": false,
-      "email": "test.put.messages@gmail.com"
+    "type": "email",
+    "main": false,
+    "email": "test.put.messages@gmail.com"
     }
 UpdateEmailContact:
   allOf:

@@ -44,7 +44,7 @@ class MailServiceImplTest {
         mailDto.setId(111L);
         mailDto.setEmail("test.receive.messages@gmail.com");
         mailDto.setRole("admin");
-        mailDto.setCooperationName("Main cooperation");
+        mailDto.setCooperationName("Test Cooperation");
         mailDto.setIsRegistered(true);
         mailDto.setLink("some-link");
     }

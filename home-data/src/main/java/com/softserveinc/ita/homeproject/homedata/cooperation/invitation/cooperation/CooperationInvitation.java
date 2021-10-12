@@ -22,6 +22,7 @@ public class CooperationInvitation extends Invitation {
     @Convert(converter = InvitationRoleConverter.class)
     private RoleEnum role;
 
-    @Column(name = "cooperation_name")
-    private String cooperationName;
+    @Column(name = "cooperation_id")
+    private Long cooperationId;
+
 }

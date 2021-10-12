@@ -14,8 +14,8 @@ import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homedata.user.role.Role;
+import com.softserveinc.ita.homeproject.homedata.user.role.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
-import com.softserveinc.ita.homeproject.homeservice.constants.Roles;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class UserCooperationImpl implements UserCooperationService {
         userRepository.findByEmail(invitation.getEmail())
                 .ifPresent(userCooperation::setUser);
 
-        cooperationRepository.findCooperationByName(invitation.getCooperationName())
+        cooperationRepository.findCooperationById(invitation.getCooperationId())
                 .ifPresent(userCooperation::setCooperation);
 
         userCooperation.setRole(roleRepository.findByName(invitation.getRole().getName().toUpperCase())
@@ -52,7 +52,7 @@ public class UserCooperationImpl implements UserCooperationService {
     }
 
     public void createUserCooperationForOwnership(Ownership ownership) {
-        var role = roleRepository.findByName(Roles.OWNER_ROLE)
+        var role = roleRepository.findByName(RoleEnum.OWNER.getName().toUpperCase())
                 .orElseThrow(() -> new NotFoundHomeException("Role not found."));
         var userCooperation = new UserCooperation();
         if (isUserCooperationNonExists(ownership.getUser(), role, ownership.getCooperation())) {

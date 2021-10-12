@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface CooperationRepository
     extends PagingAndSortingRepository<Cooperation, Long>, JpaSpecificationExecutor<Cooperation> {
 
-    Optional<Cooperation> findCooperationByName(String name);
+    Optional<Cooperation> findCooperationById(Long id);
 
 }

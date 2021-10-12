@@ -15,7 +15,6 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.In
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
@@ -44,9 +43,9 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         var cooperationInvitation =
             mapper.convert(cooperationInvitationDto, CooperationInvitation.class);
 
-        if (isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationName())) {
+        if (isCooperationInvitationNonExists(invitationDto.getEmail(), cooperationInvitation.getCooperationId())) {
             cooperationInvitation.setRequestEndTime(LocalDateTime.from(LocalDateTime.now()).plusDays(EXPIRATION_TERM));
-            cooperationInvitation.setCooperationName(cooperationInvitationDto.getCooperationName());
+            cooperationInvitation.setCooperationId(cooperationInvitationDto.getCooperationId());
             cooperationInvitation.setStatus(InvitationStatus.PENDING);
             cooperationInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
             cooperationInvitation.setEnabled(true);
@@ -54,7 +53,7 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
         }
-        throw new BadRequestHomeException("Invitation already exist for cooperation");
+        throw new IllegalStateException("Invitation already exist for cooperation");
     }
 
     @Override
@@ -64,12 +63,12 @@ public class CooperationInvitationServiceImpl extends InvitationServiceImpl impl
         invitationRepository.save(invitation);
     }
 
-    private boolean isCooperationInvitationNonExists(String email, String name) {
+    private boolean isCooperationInvitationNonExists(String email, Long cooperationId) {
         return cooperationInvitationRepository.findCooperationInvitationsByEmail(email).stream()
             .filter(invitation -> invitation.getStatus().equals(InvitationStatus.PROCESSING)
                 || invitation.getStatus().equals(InvitationStatus.ACCEPTED))
             .filter(invitation -> invitation.getType().equals(InvitationType.COOPERATION))
-            .filter(invitation -> invitation.getCooperationName().equals(name)).findAny().isEmpty();
+            .filter(invitation -> invitation.getCooperationId().equals(cooperationId)).findAny().isEmpty();
     }
 
     @Override
