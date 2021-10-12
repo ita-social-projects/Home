@@ -15,7 +15,7 @@
         <sql>
             UPDATE invitations
             SET cooperation_id = (SELECT cooperations.id FROM cooperations
-            WHERE cooperations.name = invitations.cooperation_name)
+                                  WHERE cooperations.name = invitations.cooperation_name)
             WHERE cooperation_id IS NULL;
         </sql>
     </changeSet>
