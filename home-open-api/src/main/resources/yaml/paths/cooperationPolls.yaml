@@ -2,8 +2,8 @@ cooperations-cooperationId-polls:
   get:
     tags:
       - cooperation poll
-    summary: Get all cooperation poll
-    description: The endpoint gets all cooperation poll
+    summary: Get all cooperation polls
+    description: The endpoint gets all cooperation polls
     operationId: queryCooperationPoll
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'

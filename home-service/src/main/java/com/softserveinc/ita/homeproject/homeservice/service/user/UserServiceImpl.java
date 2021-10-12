@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
-import static com.softserveinc.ita.homeproject.homeservice.constants.Roles.ADMIN_ROLE;
-
 import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
@@ -10,6 +8,7 @@ import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.role.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
 
         userCooperation.stream()
                 .map(UserCooperation::getRole).forEach(role -> {
-                    if (role.equals(roleRepository.findByName(ADMIN_ROLE).orElseThrow())) {
+                    if (role.equals(roleRepository.findByName(RoleEnum.ADMIN.getName().toUpperCase()).orElseThrow())) {
                         throw new BadRequestHomeException("User cannot be deleted");
                     }
                 });

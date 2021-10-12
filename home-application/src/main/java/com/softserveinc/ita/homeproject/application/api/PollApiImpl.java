@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_VOTES;
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_POLL;
 
 import java.math.BigDecimal;
@@ -170,7 +171,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
 
-    @PreAuthorize(MANAGE_POLLS)
+    @PreAuthorize(MANAGE_VOTES)
     @Override
     public Response createVote(Long pollId, CreateVote createVote) {
         var createVoteDto = mapper.convert(createVote, VoteDto.class);

@@ -135,25 +135,6 @@ class CooperationApiIT {
     }
 
     @Test
-    void createCooperationWithExistingUsreoTest() throws ApiException {
-        CreateCooperation createCoop = createCooperation();
-        cooperationApi.createCooperation(createCoop);
-
-        CreateCooperation createCoopSameUsreo = new CreateCooperation()
-                .name("name")
-                .usreo(createCoop.getUsreo())
-                .iban("UA213223130000026007233566011")
-                .adminEmail("test.receive.messages@gmail.com")
-                .address(createAddress())
-                .houses(createHouseList());
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameUsreo))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("The cooperations must be unique. Key `usreo`=`" + createCoopSameUsreo.getUsreo() + "` already exists.");
-    }
-
-    @Test
     void createCooperationWithExistingIbanTest() throws ApiException {
         CreateCooperation createCoop = createCooperation();
         cooperationApi.createCooperation(createCoop);
@@ -170,22 +151,6 @@ class CooperationApiIT {
                 .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameIban))
                 .matches((actual) -> actual.getCode() == BAD_REQUEST)
                 .withMessageContaining("The cooperations must be unique. Key `iban`=`" + createCoopSameIban.getIban() + "` already exists.");
-    }
-
-    @Test
-    void createCooperationWithExistingUsreoAndIbanTest() {
-        CreateCooperation createCoopSameUsreoAndIban = new CreateCooperation()
-                .name("name")
-                .usreo("11111111")
-                .iban("UA111111111111111111111111111")
-                .adminEmail("test.receive.messages@gmail.com")
-                .address(createAddress())
-                .houses(createHouseList());
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameUsreoAndIban))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("The cooperations must be unique. Key `usreo`=`" + createCoopSameUsreoAndIban.getUsreo() + "` already exists.");
     }
 
     @Test
