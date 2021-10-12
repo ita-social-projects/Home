@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homedata.user.role;
 
 import java.util.Optional;
 
-import com.softserveinc.ita.homeproject.homedata.user.role.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

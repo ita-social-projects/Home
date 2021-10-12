@@ -1,0 +1,195 @@
+CreateVote:
+  type: object
+  required:
+    - question_votes
+  properties:
+    question_votes:
+      type: array
+      items:
+        $ref: '#/CreateQuestionVote'
+      example:
+        [
+          {
+            "question": { "id": 1 },
+            "type": "advice",
+            "answer": { "answer": "yellow" }
+          },
+          {
+            "question": { "id": 2 },
+            "type": "multiple_choice",
+            "answers": [
+              { "id": 1 },
+              { "id": 3 }
+            ]
+          }
+        ]
+
+CreateQuestionVote:
+  type: object
+  required:
+    - question
+    - type
+  discriminator:
+    propertyName: type
+    mapping:
+      multiple_choice: '#/CreateMultipleChoiceQuestionVote'
+      advice: '#/CreateAdviceQuestionVote'
+  properties:
+    type:
+      $ref: 'question.yaml#/QuestionType'
+    question:
+      $ref: 'question.yaml#/QuestionLookup'
+
+CreateMultipleChoiceQuestionVote:
+  allOf:
+    - $ref: '#/CreateQuestionVote'
+  type: object
+  required:
+    - answers
+  properties:
+    answers:
+      type: array
+      minItems: 1
+      items:
+        $ref: 'answer.yaml#/AnswerVariantLookup'
+      example:
+        [
+          {
+            "id": 1
+          },
+          {
+            "id": 3
+          }
+        ]
+
+CreateAdviceQuestionVote:
+  allOf:
+    - $ref: '#/CreateQuestionVote'
+  type: object
+  required:
+    - answer
+  properties:
+    answer:
+      $ref: 'answer.yaml#/CreateUpdateAnswerVariant'
+
+ReadVote:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    question_votes:
+      type: array
+      items:
+        $ref: '#/ReadQuestionVote'
+      example:
+        { "question_votes": [
+          { "type": "advice",
+            "question": { "type": "advice",
+                          "question": "What color should we paint the door?",
+                          "id": 1
+            },
+            "id": 1,
+            "answer": {
+              "answer": "yellow"
+            }
+          },
+          { "type": "multiple_choice",
+            "question": { "type": "multiple_choice",
+                          "question": "What color should we paint the fence?",
+                          "id": 2,
+                          "answer_variants": [
+                            { "answer": "White",
+                              "id": 1
+                            },
+                            { "answer": "Black",
+                              "id": 2
+                            },
+                            { "answer": "Grey",
+                              "id": 3
+                            },
+                            { "answer": "Blue",
+                              "id": 4
+                            }
+                          ],
+                          "max_answer_count": 2
+            },
+            "id": 2,
+            "answers": [
+              { "answer_variant": {
+                "answer": "White",
+                "id": 1
+              },
+                "id": 1
+              },
+              { "answer_variant": {
+                "answer": "Grey",
+                "id": 3
+              },
+                "id": 2
+              }
+            ]
+          }
+        ],
+          "id": 1
+        }
+
+ReadQuestionVote:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  discriminator:
+    propertyName: type
+    mapping:
+      multiple_choice: '#/ReadMultipleChoiceQuestionVote'
+      advice: '#/ReadAdviceQuestionVote'
+  properties:
+    type:
+      $ref: 'question.yaml#/QuestionType'
+    question:
+      $ref: 'question.yaml#/ReadQuestion'
+
+ReadMultipleChoiceQuestionVote:
+  allOf:
+    - $ref: '#/ReadQuestionVote'
+  type: object
+  required:
+    - answers
+  properties:
+    answers:
+      type: array
+      minItems: 1
+      items:
+        $ref: '#/ReadVoteQuestionVariant'
+      example:
+        "answers": [
+          { "answer_variant": {
+            "answer": "White",
+            "id": 1
+          },
+            "id": 1
+          },
+          { "answer_variant": {
+            "answer": "Grey",
+            "id": 3
+          },
+            "id": 2
+          }
+        ]
+
+ReadAdviceQuestionVote:
+  allOf:
+    - $ref: '#/ReadQuestionVote'
+  type: object
+  required:
+    - answer
+  properties:
+    answer:
+      $ref: 'answer.yaml#/ReadAnswerVariant'
+
+ReadVoteQuestionVariant:
+  type: object
+  required:
+    - answerVariant
+  properties:
+    answer_variant:
+      $ref: 'answer.yaml#/ReadAnswerVariant'

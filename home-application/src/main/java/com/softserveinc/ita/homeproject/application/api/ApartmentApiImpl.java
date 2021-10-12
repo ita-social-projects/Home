@@ -8,18 +8,17 @@ import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.ApartmentsApi;
+import com.softserveinc.ita.homeproject.application.model.CreateApartmentInvitation;
+import com.softserveinc.ita.homeproject.application.model.InvitationType;
+import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitation;
+import com.softserveinc.ita.homeproject.application.model.ReadOwnership;
+import com.softserveinc.ita.homeproject.application.model.UpdateApartmentInvitation;
+import com.softserveinc.ita.homeproject.application.model.UpdateOwnership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.ownership.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
-import com.softserveinc.ita.homeproject.model.CreateApartmentInvitation;
-import com.softserveinc.ita.homeproject.model.InvitationType;
-import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
-import com.softserveinc.ita.homeproject.model.ReadOwnership;
-import com.softserveinc.ita.homeproject.model.UpdateApartmentInvitation;
-import com.softserveinc.ita.homeproject.model.UpdateOwnership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,9 +67,12 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @PreAuthorize(MANAGE_IN_COOPERATION) // TODO don't work issue# 299 / untested method issue# 300
     @Override
     public Response getInvitation(Long apartmentId, Long id) {
-        ApartmentInvitationDto toGet = invitationService.getOne(id, getSpecification());
-        var readApartmentInvitation = mapper.convert(toGet, ReadApartmentInvitation.class);
-        return Response.status(Response.Status.OK).entity(readApartmentInvitation).build();
+
+        var toGet = invitationService.getOne(id, getSpecification());
+        var readApartmentInvitation = mapper
+            .convert(toGet, ReadApartmentInvitation.class);
+        return Response.status(Response.Status.OK)
+            .entity(readApartmentInvitation).build();
     }
 
     @PreAuthorize(READ_APARTMENT_INFO)
@@ -78,6 +80,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
         var readOwnership = mapper.convert(toGet, ReadOwnership.class);
+
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
@@ -94,7 +97,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                     String status) {
         verifyExistence(apartmentId, apartmentService);
         Page<ApartmentInvitationDto> readApartmentInvitation = invitationService
-                .findAll(pageNumber, pageSize, getSpecification());
+            .findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
     }
 
@@ -119,7 +122,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                      Long id,
                                      UpdateApartmentInvitation updateApartmentInvitation) {
         var updateInvitationDto = mapper.convert(updateApartmentInvitation,
-                ApartmentInvitationDto.class);
+            ApartmentInvitationDto.class);
         var toUpdate = invitationService.updateInvitation(apartmentId, id, updateInvitationDto);
         var readInvitation = mapper.convert(toUpdate, ReadApartmentInvitation.class);
         return Response.status(Response.Status.OK).entity(readInvitation).build();
@@ -131,6 +134,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
         var toUpdate = ownershipService.updateOwnership(apartmentId, id, updateOwnershipDto);
         var readOwnership = mapper.convert(toUpdate, ReadOwnership.class);
+
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 }
