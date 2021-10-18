@@ -43,9 +43,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
 
         if (apartmentRepository.findByApartmentNumberAndHouseId(createApartmentDto.getApartmentNumber(), houseId)
-        .isPresent()) {
-        throw new BadRequestHomeException("Apartment with number " + createApartmentDto.getApartmentNumber() +
-         " already exist in this house");
+            .isPresent()) {
+            throw new BadRequestHomeException("Apartment with number " + createApartmentDto.getApartmentNumber()
+                +" already exist in this house");
         }
 
         var house = houseRepository.findById(houseId).filter(House::getEnabled)
