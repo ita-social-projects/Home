@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="Issue313.001" author="S.Kolesnychenko">
+        <sql>
+            CREATE UNIQUE INDEX apartment_number_key ON apartments (apartment_number, house_id);
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>
