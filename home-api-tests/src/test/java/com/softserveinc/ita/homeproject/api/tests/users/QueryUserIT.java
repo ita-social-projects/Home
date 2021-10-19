@@ -40,6 +40,7 @@ class QueryUserIT {
 
     private final CreateUser expectedUser = new CreateUser()
             .firstName("Bill")
+            .middleName("Billievich")
             .lastName("White")
             .password("password");
 
@@ -86,6 +87,21 @@ class QueryUserIT {
     }
 
     @Test
+    void getAllUsersByMiddleNameTest() throws ApiException {
+
+        ReadUser user = createBaseUserForTests();
+
+        List<ReadUser> actualListUsers = new UserQuery
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .middleName(user.getMiddleName())
+            .build().perfom();
+
+        actualListUsers.forEach(readUser -> assertThat(readUser.getMiddleName()).isEqualTo(user.getMiddleName()));
+    }
+
+    @Test
     void getAllUsersAscSortByLastNameTest() throws ApiException {
         saveListUser();
 
@@ -114,6 +130,21 @@ class QueryUserIT {
 
         assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
                 .requireNonNull(u2.getFirstName()).compareToIgnoreCase(Objects.requireNonNull(u1.getFirstName())));
+    }
+
+    @Test
+    void getAllUsersDescSortByMiddleNameTest() throws ApiException {
+        saveListUser();
+
+        List<ReadUser> actualListUsers = new UserQuery
+            .Builder(userApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("middleName,desc")
+            .build().perfom();
+
+        assertThat(actualListUsers).isSortedAccordingTo((u1, u2) -> Objects
+            .requireNonNull(u2.getMiddleName()).compareToIgnoreCase(Objects.requireNonNull(u1.getMiddleName())));
     }
 
     @Test
@@ -201,30 +232,35 @@ class QueryUserIT {
         List<CreateUser> list = new ArrayList<>();
         list.add(new CreateUser().
                 firstName("Alex").
+                middleName("Alexovich").
                 lastName("Young").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password("password")
         );
         list.add(new CreateUser().
                 firstName("Bob").
+                middleName("Bobovich").
                 lastName("Smith").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password("password")
         );
         list.add(new CreateUser().
                 firstName("Jack").
+                middleName("Jackovich").
                 lastName("Gray").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password("password")
         );
         list.add(new CreateUser().
                 firstName("Sindy").
+                middleName("Sindivna").
                 lastName("Black").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password("password")
         );
         list.add(new CreateUser().
                 firstName("Victor").
+                middleName("Viktorovich").
                 lastName("Along").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password("password")
@@ -243,6 +279,7 @@ class QueryUserIT {
     private CreateUser createBaseUser() {
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email("test.receive.apartment@gmail.com");
@@ -301,6 +338,7 @@ class QueryUserIT {
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);
         assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getMiddleName(), actual.getMiddleName());
         assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getEmail(), actual.getEmail());
     }

@@ -77,6 +77,7 @@ ReadApartment:
           "user": {
             "id": 1,
             "first_name": "Petro",
+            "middle_name": "Petrovich",
             "last_name": "Petrov",
             "contacts": [
               {
@@ -100,6 +101,7 @@ ReadApartment:
           "user": {
             "id": 2,
             "first_name": "Ivan",
+            "middle_name": "Ivanovich",
             "last_name": "Ivanov",
             "contacts": [
               {
