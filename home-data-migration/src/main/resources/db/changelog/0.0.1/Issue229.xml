@@ -70,7 +70,7 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="50"/>
+            <column name="id" value="13"/>
             <column name="name" value="READ_VOTE"/>
         </insert>
     </changeSet>
@@ -79,7 +79,7 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="permissions">
-            <column name="id" value="51"/>
+            <column name="id" value="14"/>
             <column name="name" value="MANAGE_VOTES"/>
         </insert>
     </changeSet>
@@ -88,8 +88,8 @@
         <insert dbms="postgresql"
                 schemaName="public"
                 tableName="role_permissions">
-            <column name="role_id" value="1"/>
-            <column name="permission_id" value="50"/>
+            <column name="role_id" value="2"/>
+            <column name="permission_id" value="13"/>
         </insert>
     </changeSet>
 
@@ -98,7 +98,7 @@
                 schemaName="public"
                 tableName="role_permissions">
             <column name="role_id" value="3"/>
-            <column name="permission_id" value="51"/>
+            <column name="permission_id" value="14"/>
         </insert>
     </changeSet>
 
