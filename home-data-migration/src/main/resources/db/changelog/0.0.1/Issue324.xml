@@ -6,11 +6,18 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="Issue324.001" author="S.Kolesnychenko">
-        <sql>
-            ALTER TABLE users
-                ADD COLUMN middle_name VARCHAR(255);
-            ALTER TABLE users ALTER COLUMN middle_name SET NOT NULL;
-        </sql>
-
+<!--        <sql>-->
+<!--            ALTER TABLE users-->
+<!--                ADD COLUMN middle_name VARCHAR(255);-->
+<!--            ALTER TABLE users ALTER COLUMN middle_name SET NOT NULL;-->
+<!--        </sql>-->
+        <addColumn tableName="users">
+            <column name="middle_name" type="VARCHAR(50)">
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="Issue324.002" author="S.Kolesnychenko">
+        <addNotNullConstraint tableName="users"
+                              columnName="middle_name"/>
     </changeSet>
 </databaseChangeLog>
