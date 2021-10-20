@@ -124,6 +124,7 @@ public class UserApiImpl extends CommonApi implements UsersApi {
                                 Long id,
                                 String email,
                                 String firstName,
+                                String middleName,
                                 String lastName,
                                 String contactPhone,
                                 String contactEmail) {

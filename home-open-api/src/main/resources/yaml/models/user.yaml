@@ -2,6 +2,7 @@ CreateUser:
   required:
     - registration_token
     - first_name
+    - middle_name
     - last_name
     - email
     - password
@@ -15,6 +16,12 @@ CreateUser:
       pattern: '\w+'
       type: string
       example: "Petro"
+      minLength: 1
+      maxLength: 50
+    middle_name:
+      pattern: '\w+'
+      type: string
+      example: "Petrovich"
       minLength: 1
       maxLength: 50
     last_name:
@@ -54,6 +61,9 @@ ReadUser:
     first_name:
       type: string
       example: "Petro"
+    middle_name:
+      type: string
+      example: "Petrovich"
     last_name:
       type: string
       example: "Petrov"
@@ -75,6 +85,7 @@ UpdateUser:
   type: object
   required:
     - first_name
+    - middle_name
     - last_name
     - email
     - password
@@ -83,6 +94,12 @@ UpdateUser:
       pattern: '\w+'
       type: string
       example: "Petro"
+      minLength: 1
+      maxLength: 50
+    middle_name:
+      pattern: '\w+'
+      type: string
+      example: "Petrovich"
       minLength: 1
       maxLength: 50
     last_name:

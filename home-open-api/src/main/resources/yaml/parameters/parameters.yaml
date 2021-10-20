@@ -159,6 +159,12 @@ first_name:
   schema:
     type: string
   description: The First Name of the User
+middle_name:
+  in: query
+  name: middle_name
+  schema:
+    type: string
+  description: The Middle Name of the User
 last_name:
   in: query
   name: last_name
