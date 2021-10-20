@@ -204,6 +204,7 @@ class OwnershipApiIT {
     private CreateUser createBaseUser() {
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
@@ -292,6 +293,7 @@ class OwnershipApiIT {
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);
         assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getMiddleName(), actual.getMiddleName());
         assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getEmail(), actual.getEmail());
     }

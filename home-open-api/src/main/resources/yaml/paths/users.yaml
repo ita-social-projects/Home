@@ -34,6 +34,7 @@ users:
       - $ref: '../parameters/parameters.yaml#/id'
       - $ref: '../parameters/parameters.yaml#/email'
       - $ref: '../parameters/parameters.yaml#/first_name'
+      - $ref: '../parameters/parameters.yaml#/middle_name'
       - $ref: '../parameters/parameters.yaml#/last_name'
       - $ref: '../parameters/parameters.yaml#/contact_phone'
       - $ref: '../parameters/parameters.yaml#/contact_email'

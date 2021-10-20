@@ -73,6 +73,7 @@ class UserApiIT {
         ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
+                .middleName("updatedMiddleName")
                 .lastName("updatedLastName")
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
                 .password("somePassword");
@@ -132,6 +133,7 @@ class UserApiIT {
         CreateUser createUser = new CreateUser()
                 .firstName("FirstName")
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
+                .middleName("MiddleName")
                 .lastName("LastName")
                 .password("somePassword")
                 .email("walker@email.com");
@@ -146,6 +148,7 @@ class UserApiIT {
     void createUserWithRegistrationTokenNull() {
         CreateUser createUser = new CreateUser()
                 .firstName("FirstName")
+                .middleName("MiddleName")
                 .lastName("LastName")
                 .password("somePassword")
                 .email("walker@email.com");
@@ -157,9 +160,10 @@ class UserApiIT {
     }
 
     @Test
-    void createUserWithEmptyFirstNameAndLastNameTest() {
+    void createUserWithEmptyFirstNameAndMiddleNameAndLastNameTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("")
+                .middleName("")
                 .lastName("")
                 .password("somePassword")
                 .email("walker@email.com");
@@ -168,13 +172,15 @@ class UserApiIT {
                 .isThrownBy(() -> userApi.createUser(createUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+                .withMessageContaining("Parameter `middleName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
 
     @Test
-    void createUserWithInvalidFirstNameAndLastNameTest() {
+    void createUserWithInvalidFirstNameAndMiddleNameAndLastNameTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+                .middleName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .password("somePassword")
                 .email("walker@email.com");
@@ -183,6 +189,7 @@ class UserApiIT {
                 .isThrownBy(() -> userApi.createUser(createUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+                .withMessageContaining("Parameter `middleName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -190,6 +197,7 @@ class UserApiIT {
     void createUserWithEmptyEmailTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("alan")
+                .middleName("alanovich")
                 .lastName("walker")
                 .password("somePassword")
                 .email("");
@@ -204,6 +212,7 @@ class UserApiIT {
     void createUserInvalidEmailTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("alan")
+                .middleName("alanovich")
                 .lastName("walker")
                 .password("somePassword")
                 .email("email.com");
@@ -218,6 +227,7 @@ class UserApiIT {
     void createUserWithEmptyPasswordTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("alan")
+                .middleName("alanovich")
                 .lastName("walker")
                 .password("")
                 .email("email@example.com");
@@ -232,6 +242,7 @@ class UserApiIT {
     void createUserInvalidPasswordTest() {
         CreateUser createUser = new CreateUser()
                 .firstName("alan")
+                .middleName("alanovich")
                 .lastName("walker")
                 .password("some password")
                 .email("email@example.com");
@@ -246,6 +257,7 @@ class UserApiIT {
     void createUserWithAllNullParametersTest() {
         CreateUser createUser = new CreateUser()
                 .firstName(null)
+                .middleName(null)
                 .lastName(null)
                 .email(null)
                 .password(null);
@@ -254,6 +266,7 @@ class UserApiIT {
                 .isThrownBy(() -> userApi.createUser(createUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
+                .withMessageContaining("Parameter `middleName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
                 .withMessageContaining("Parameter `email` is invalid - must not be null.")
                 .withMessageContaining("Parameter `password` is invalid - must not be null.");
@@ -295,10 +308,11 @@ class UserApiIT {
     }
 
     @Test
-    void updateUserWithEmptyFirstNameAndLastNameTest() {
+    void updateUserWithEmptyFirstNameAndMiddleNameAndLastNameTest() {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("")
+                .middleName("")
                 .lastName("")
                 .email("mr.smith@gmail.com");
 
@@ -306,14 +320,16 @@ class UserApiIT {
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+                .withMessageContaining("Parameter `middleName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
 
     @Test
-    void updateUserWithInvalidFirstNameAndLastNameTest() {
+    void updateUserWithInvalidFirstNameAndMiddleNameAndLastNameTest() {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
+                .middleName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .email("mr.smith@gmail.com");
 
@@ -321,6 +337,7 @@ class UserApiIT {
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - size must be between 1 and 50 signs.")
+                .withMessageContaining("Parameter `middleName` is invalid - size must be between 1 and 50 signs.")
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
 
@@ -329,6 +346,7 @@ class UserApiIT {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("John")
+                .middleName("Johnovich")
                 .lastName("Smith")
                 .email("");
 
@@ -343,6 +361,7 @@ class UserApiIT {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("John")
+                .middleName("Johnovich")
                 .lastName("Smith")
                 .email("mr.smith@");
 
@@ -357,6 +376,7 @@ class UserApiIT {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("John")
+                .middleName("Johnovich")
                 .lastName("Smith")
                 .email("mr.smith@")
                 .password("");
@@ -372,6 +392,7 @@ class UserApiIT {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName("John")
+                .middleName("Johnovich")
                 .lastName("Smith")
                 .email("mr.smith@")
                 .password("1234");
@@ -387,6 +408,7 @@ class UserApiIT {
         ReadUser savedUser = baseUserForTests;
         UpdateUser updateUser = new UpdateUser()
                 .firstName(null)
+                .middleName(null)
                 .lastName(null)
                 .email(null);
 
@@ -460,6 +482,7 @@ class UserApiIT {
         return new CreateUser()
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
@@ -479,6 +502,7 @@ class UserApiIT {
     private static CreateUser createBaseUser() {
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email("test.receive.apartment@gmail.com");
@@ -522,6 +546,7 @@ class UserApiIT {
 
         CreateUser userWithExistEmail = new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email(user.getEmail())
@@ -538,6 +563,7 @@ class UserApiIT {
 
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
+                .middleName("middleName")
                 .lastName("updatedLastName")
                 .email(additional.getEmail())
                 .password("somePassword");
@@ -578,6 +604,7 @@ class UserApiIT {
     private void assertUser(ReadUser expected, ReadUser actual) {
         assertNotNull(expected);
         assertEquals(expected.getFirstName(), actual.getFirstName());
+        assertEquals(expected.getMiddleName(), actual.getMiddleName());
         assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getEmail(), actual.getEmail());
     }
@@ -586,6 +613,7 @@ class UserApiIT {
         assertNotNull(updated);
         assertNotEquals(saved, updated);
         assertEquals(update.getFirstName(), updated.getFirstName());
+        assertEquals(update.getMiddleName(), updated.getMiddleName());
         assertEquals(update.getLastName(), updated.getLastName());
     }
 }
