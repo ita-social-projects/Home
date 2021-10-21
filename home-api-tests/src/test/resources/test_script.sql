@@ -1,4 +1,4 @@
-INSERT INTO users VALUES(10000000,'2021-06-09 19:53:50.874076',false,'ownertest@example.com',true,false,'test','test',false,'123','2021-06-09 19:53:50.874076');
+INSERT INTO users VALUES(10000000,'2021-06-09 19:53:50.874076',false,'ownertest@example.com',true,false,'test','test',false,'123','2021-06-09 19:53:50.874076','test');
 INSERT INTO addresses VALUES (10000000, 'test','test','test','test','test','test','test');
 INSERT INTO cooperations VALUES (10000000,'test','11111111','UA111111111111111111111111111','2021-06-09','2021-06-09',true,10000000);
 INSERT INTO houses VALUES (10000000,66,111,66,10000000,10000000,'2021-06-09 19:53:50.894313','2021-06-09 19:53:50.894313',true);

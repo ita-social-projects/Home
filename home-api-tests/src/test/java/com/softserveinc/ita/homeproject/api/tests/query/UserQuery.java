@@ -12,6 +12,8 @@ public class UserQuery extends BaseQuery {
 
     private String firstName;
 
+    private String middleName;
+
     private String lastName;
 
     private String contactEmail;
@@ -26,6 +28,10 @@ public class UserQuery extends BaseQuery {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
     public void setLastName(String lastName) {
@@ -53,6 +59,7 @@ public class UserQuery extends BaseQuery {
                 this.getId(),
                 email,
                 firstName,
+                middleName,
                 lastName,
                 contactPhone,
                 contactEmail);
@@ -71,6 +78,11 @@ public class UserQuery extends BaseQuery {
 
         public Builder firstName(String firstName) {
             queryClass.setFirstName(firstName);
+            return this;
+        }
+
+        public Builder middleName(String middleName) {
+            queryClass.setMiddleName(middleName);
             return this;
         }
 

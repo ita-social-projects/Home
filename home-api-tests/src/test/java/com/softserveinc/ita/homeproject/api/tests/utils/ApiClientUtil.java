@@ -159,6 +159,7 @@ public final class ApiClientUtil {
 
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password(USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com")

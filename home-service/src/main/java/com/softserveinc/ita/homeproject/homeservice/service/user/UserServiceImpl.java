@@ -113,6 +113,10 @@ public class UserServiceImpl implements UserService {
             fromDB.setFirstName(updateUserDto.getFirstName());
         }
 
+        if (updateUserDto.getMiddleName() != null) {
+            fromDB.setMiddleName(updateUserDto.getMiddleName());
+        }
+
         if (updateUserDto.getLastName() != null) {
             fromDB.setLastName(updateUserDto.getLastName());
         }

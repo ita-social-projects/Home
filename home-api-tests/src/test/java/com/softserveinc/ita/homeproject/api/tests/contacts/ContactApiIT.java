@@ -552,6 +552,7 @@ class ContactApiIT {
     private CreateUser createBaseUser() {
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email("test.receive.apartment@gmail.com");
@@ -570,6 +571,7 @@ class ContactApiIT {
     private CreateUser createTestUser() {
         return new CreateUser()
                 .firstName("firstName")
+                .middleName("middleName")
                 .lastName("lastName")
                 .password("password")
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
