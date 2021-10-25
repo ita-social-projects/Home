@@ -22,7 +22,10 @@ import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.UpdateContact;
 import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
+import com.softserveinc.ita.homeproject.client.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -52,7 +55,6 @@ class CooperationApiIT {
     void updateCooperationTest() throws ApiException {
         CreateCooperation createCoop = createCooperation();
         ReadCooperation savedCooperation = cooperationApi.createCooperation(createCoop);
-
         UpdateCooperation updateCoop = new UpdateCooperation()
             .name("upd")
             .usreo(RandomStringUtils.randomNumeric(8))
@@ -64,7 +66,8 @@ class CooperationApiIT {
                 .houseNumber("upd")
                 .region("upd")
                 .street("upd")
-                .zipCode("upd"));
+                .zipCode("upd"))
+            .contacts(updateContactList());
 
         ApiResponse<ReadCooperation> response = cooperationApi
             .updateCooperationWithHttpInfo(savedCooperation.getId(), updateCoop);
@@ -140,32 +143,33 @@ class CooperationApiIT {
         cooperationApi.createCooperation(createCoop);
 
         CreateCooperation createCoopSameIban = new CreateCooperation()
-                .name("name")
-                .usreo("26573474")
-                .iban(createCoop.getIban())
-                .adminEmail("test.receive.messages@gmail.com")
-                .address(createAddress())
-                .houses(createHouseList());
+            .name("name")
+            .usreo("26573474")
+            .iban(createCoop.getIban())
+            .adminEmail("test.receive.messages@gmail.com")
+            .address(createAddress())
+            .houses(createHouseList());
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameIban))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("The cooperations must be unique. Key `iban`=`" + createCoopSameIban.getIban() + "` already exists.");
+            .isThrownBy(() -> cooperationApi.createCooperation(createCoopSameIban))
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
+            .withMessageContaining(
+                "The cooperations must be unique. Key `iban`=`" + createCoopSameIban.getIban() + "` already exists.");
     }
 
     @Test
     void createCooperationWithNullParameterTest() {
         CreateCooperation createCoopSame = new CreateCooperation()
-                .name("name")
-                .usreo(RandomStringUtils.randomNumeric(8))
-                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail("test.receive.messages@gmail.com")
-                .address(createAddressWithNull());
+            .name("name")
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
+            .adminEmail("test.receive.messages@gmail.com")
+            .address(createAddressWithNull());
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> cooperationApi.createCooperation(createCoopSame))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("Parameter `city` is invalid - must not be null.");
+            .isThrownBy(() -> cooperationApi.createCooperation(createCoopSame))
+            .matches((actual) -> actual.getCode() == BAD_REQUEST)
+            .withMessageContaining("Parameter `city` is invalid - must not be null.");
     }
 
     private CreateCooperation createCooperation() {
@@ -210,6 +214,20 @@ class CooperationApiIT {
         return createContact;
     }
 
+    private List<UpdateContact> updateContactList() {
+        List<UpdateContact> updateContact = new ArrayList<>();
+        updateContact.add(new UpdateEmailContact()
+            .email("primaryemail@example.com")
+            .type(ContactType.EMAIL)
+            .main(true));
+
+        updateContact.add(new UpdatePhoneContact()
+            .phone("+380991234567")
+            .type(ContactType.PHONE)
+            .main(false));
+        return updateContact;
+    }
+
     private Address createAddress() {
         return new Address().city("Dnepr")
             .district("District")
@@ -222,12 +240,12 @@ class CooperationApiIT {
 
     private Address createAddressWithNull() {
         return new Address().city(null)
-                .district("District")
-                .houseBlock("block")
-                .houseNumber("number")
-                .region("Dnipro")
-                .street("street")
-                .zipCode("zipCode");
+            .district("District")
+            .houseBlock("block")
+            .houseNumber("number")
+            .region("Dnipro")
+            .street("street")
+            .zipCode("zipCode");
     }
 
     private void assertCooperation(CreateCooperation expected, ReadCooperation actual) {
@@ -247,6 +265,7 @@ class CooperationApiIT {
         assertEquals(update.getIban(), updated.getIban());
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
+        assertEquals(update.getContacts(), updated.getContacts());
     }
 
 }

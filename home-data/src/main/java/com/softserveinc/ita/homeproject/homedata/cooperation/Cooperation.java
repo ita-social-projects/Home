@@ -54,7 +54,8 @@ public class Cooperation extends BaseEntity {
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
     private List<House> houses;
 
-    @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "cooperation", cascade = {CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
+
     private List<Contact> contacts;
 
     @OneToMany(mappedBy = "cooperation", cascade = CascadeType.PERSIST)
