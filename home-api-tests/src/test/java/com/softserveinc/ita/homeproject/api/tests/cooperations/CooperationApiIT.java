@@ -265,7 +265,6 @@ class CooperationApiIT {
         assertEquals(update.getIban(), updated.getIban());
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
-        assertEquals(update.getContacts(), updated.getContacts());
     }
 
 }
