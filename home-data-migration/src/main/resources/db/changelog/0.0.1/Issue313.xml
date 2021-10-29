@@ -6,32 +6,46 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="Issue313.001" author="S.Kolesnychenko">
-    <dropUniqueConstraint tableName="ownerships" constraintName="apartment_fk"/>
+        <dropForeignKeyConstraint
+                baseTableName="ownerships"
+                constraintName="apartment_fk"/>
     </changeSet>
-
     <changeSet id="Issue313.002" author="S.Kolesnychenko">
+        <dropForeignKeyConstraint
+                baseTableName="invitations"
+                constraintName="apartment_fk"/>
+    </changeSet>
+    <changeSet id="Issue313.003" author="S.Kolesnychenko">
         <sql>
-            DELETE FROM apartments a USING (
+            DELETE
+            FROM apartments a USING (
             SELECT MIN(ctid) as ctid, apartment_number
             FROM apartments
             GROUP BY apartment_number HAVING COUNT(*) > 1
             ) b
             WHERE a.apartment_number = b.apartment_number
-            AND a.ctid<>b.ctid
-</sql>
+              AND a.ctid
+                !=
+                b.ctid
+        </sql>
     </changeSet>
-
-    <changeSet id="Issue313.003" author="S.Kolesnychenko">
-            <addUniqueConstraint  columnNames="apartment_id"
-                                  constraintName="apartment_fk"
-                                  tableName="ownerships"/>
-        </changeSet>
-
-
     <changeSet id="Issue313.004" author="S.Kolesnychenko">
+        <addForeignKeyConstraint baseColumnNames="apartment_id"
+                                 baseTableName="ownerships"
+                                 constraintName="apartment_fk"
+                                 referencedColumnNames="id"
+                                 referencedTableName="apartments"/>
+    </changeSet>
+    <changeSet id="Issue313.005" author="S.Kolesnychenko">
+        <addForeignKeyConstraint baseColumnNames="apartment_id"
+                                 baseTableName="invitations"
+                                 constraintName="apartment_fk"
+                                 referencedColumnNames="id"
+                                 referencedTableName="apartments"/>
+    </changeSet>
+    <changeSet id="Issue313.006" author="S.Kolesnychenko">
         <sql>
             CREATE UNIQUE INDEX apartment_number_key ON apartments (apartment_number, house_id);
         </sql>
-
     </changeSet>
 </databaseChangeLog>
