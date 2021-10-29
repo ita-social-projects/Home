@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [ dev, master, release, feature/* ]
+    branches: [ dev, master, release, feature/** ]
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
         run: echo "REVISION=-${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
 
       - name: Feature branch
-        if: github.ref == 'refs/heads/feature/*'
+        if: github.ref == 'refs/heads/feature/**'
         run: echo "REVISION=-${{github.ref}}_${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
 
       - name: Build with Maven
