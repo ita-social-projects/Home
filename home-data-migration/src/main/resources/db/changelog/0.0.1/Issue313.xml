@@ -16,6 +16,22 @@
                 constraintName="apartment_fk"/>
     </changeSet>
     <changeSet id="Issue313.003" author="S.Kolesnychenko">
+        <addForeignKeyConstraint baseColumnNames="apartment_id"
+                                 baseTableName="ownerships"
+                                 constraintName="apartment_fk"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="apartments"/>
+    </changeSet>
+    <changeSet id="Issue313.004" author="S.Kolesnychenko">
+        <addForeignKeyConstraint baseColumnNames="apartment_id"
+                                 baseTableName="invitations"
+                                 constraintName="apartment_fk"
+                                 onDelete="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="apartments"/>
+    </changeSet>
+    <changeSet id="Issue313.005" author="S.Kolesnychenko">
         <sql>
             DELETE
             FROM apartments a USING (
@@ -29,20 +45,7 @@
                 b.ctid
         </sql>
     </changeSet>
-    <changeSet id="Issue313.004" author="S.Kolesnychenko">
-        <addForeignKeyConstraint baseColumnNames="apartment_id"
-                                 baseTableName="ownerships"
-                                 constraintName="apartment_fk"
-                                 referencedColumnNames="id"
-                                 referencedTableName="apartments"/>
-    </changeSet>
-    <changeSet id="Issue313.005" author="S.Kolesnychenko">
-        <addForeignKeyConstraint baseColumnNames="apartment_id"
-                                 baseTableName="invitations"
-                                 constraintName="apartment_fk"
-                                 referencedColumnNames="id"
-                                 referencedTableName="apartments"/>
-    </changeSet>
+
     <changeSet id="Issue313.006" author="S.Kolesnychenko">
         <sql>
             CREATE UNIQUE INDEX apartment_number_key ON apartments (apartment_number, house_id);
