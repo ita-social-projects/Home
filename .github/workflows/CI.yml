@@ -5,7 +5,7 @@ on:
     branches:
       - dev
       - master
-      - release
+      - 'release/**'
       - 'feature/**'
 
 jobs:
@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REVISION: '-SNAPSHOT'
+      BRANCH_NAME: ''
     steps:
       - uses: actions/checkout@v2
         with:
@@ -23,21 +24,30 @@ jobs:
         with:
           java-version: 1.11
 
-      - name: Master branch
-        if: github.ref == 'refs/heads/master'
-        run: echo "REVISION=-${{github.run_number}}" >> $GITHUB_ENV
+      - name: Branch name
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Release branch
-        if: github.ref == 'refs/heads/release/*'
-        run: echo "REVISION=-rc-${{github.run_number}}" >> $GITHUB_ENV
-
-      - name: Develop branch
-        if: github.ref == 'refs/heads/dev'
-        run: echo "REVISION=-${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
-
-      - name: Feature branch
-        if: github.ref == 'refs/heads/feature/**'
-        run: echo "REVISION=-${{github.ref}}_${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
+      - name: Branch condition
+        run: |
+          if [ ${{ github.ref }} == refs/heads/feature/$BRANCH_NAME ];
+          then
+            echo "REVISION=-f-${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
+          else
+            if [ ${{ github.ref }} == refs/heads/release/$BRANCH_NAME ];
+            then
+              echo "REVISION=-rc-${{github.run_number}}" >> $GITHUB_ENV
+            else
+              if [ ${{ github.ref }} == refs/heads/dev ];
+              then
+                echo "REVISION=-${{github.run_number}}-SNAPSHOT" >> $GITHUB_ENV
+              else
+                if [ ${{ github.ref }} == refs/heads/master ];
+                then
+                  echo "REVISION=-${{github.run_number}}" >> $GITHUB_ENV
+                fi
+              fi
+            fi
+          fi
 
       - name: Build with Maven
         env:
