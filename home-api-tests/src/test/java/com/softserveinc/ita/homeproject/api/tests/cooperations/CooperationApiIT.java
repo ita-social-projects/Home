@@ -21,7 +21,10 @@ import com.softserveinc.ita.homeproject.client.model.CreateContact;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
+import com.softserveinc.ita.homeproject.client.model.ReadContact;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
+import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
 import com.softserveinc.ita.homeproject.client.model.UpdateContact;
 import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
@@ -265,6 +268,35 @@ class CooperationApiIT {
         assertEquals(update.getIban(), updated.getIban());
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
+        assertContacts(update.getContacts(), updated.getContacts());
+    }
+
+    private void assertContacts(List<UpdateContact> updateContactList, List<ReadContact> updatedContactList){
+
+        if(updateContactList.isEmpty() && updatedContactList.isEmpty()){
+            return;
+        }
+        for(UpdateContact update : updateContactList){
+            int index = updateContactList.indexOf(update);
+            ReadContact updated = updatedContactList.get(index);
+
+            if (update.getType().equals(ContactType.EMAIL) && updated.getType().equals(ContactType.EMAIL)){
+                UpdateEmailContact updateEmailContact = (UpdateEmailContact) update;
+                ReadEmailContact readEmailContact = (ReadEmailContact) updated;
+                String updateEmail = updateEmailContact.getEmail();
+                String updatedEmail = readEmailContact.getEmail();
+                assertEquals(updateEmail, updatedEmail);
+            }
+            else if (update.getType().equals(ContactType.PHONE) && updated.getType().equals(ContactType.PHONE)) {
+                UpdatePhoneContact updatePhoneContact = (UpdatePhoneContact) update;
+                ReadPhoneContact readPhoneContact = (ReadPhoneContact) updated;
+                String updatePhone = updatePhoneContact.getPhone();
+                String updatedPhone = readPhoneContact.getPhone();
+                assertEquals(updatePhone, updatedPhone);
+            }
+        }
+
+
     }
 
 }
