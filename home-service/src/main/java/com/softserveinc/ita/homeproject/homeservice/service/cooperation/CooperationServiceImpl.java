@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
