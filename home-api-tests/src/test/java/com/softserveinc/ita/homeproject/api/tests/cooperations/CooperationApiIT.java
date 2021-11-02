@@ -15,13 +15,14 @@ import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
+import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.ContactType;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
-import com.softserveinc.ita.homeproject.client.model.ReadContact;
+import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
 import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
@@ -32,10 +33,13 @@ import com.softserveinc.ita.homeproject.client.model.UpdatePhoneContact;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.CollectionUtils;
 
 class CooperationApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final CooperationContactApi cooperationContactApi = new CooperationContactApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void createCooperationTest() throws ApiException {
@@ -70,7 +74,7 @@ class CooperationApiIT {
                 .region("upd")
                 .street("upd")
                 .zipCode("upd"))
-            .contacts(updateContactList());
+            .contacts(createContactList());
 
         ApiResponse<ReadCooperation> response = cooperationApi
             .updateCooperationWithHttpInfo(savedCooperation.getId(), updateCoop);
@@ -260,7 +264,8 @@ class CooperationApiIT {
         assertEquals(expected.getAddress(), actual.getAddress());
     }
 
-    private void assertCooperation(ReadCooperation saved, UpdateCooperation update, ReadCooperation updated) {
+    private void assertCooperation(ReadCooperation saved, UpdateCooperation update, ReadCooperation updated)
+        throws ApiException {
         assertNotNull(saved);
         assertNotNull(update);
         assertNotNull(updated);
@@ -268,35 +273,50 @@ class CooperationApiIT {
         assertEquals(update.getIban(), updated.getIban());
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
-        assertContacts(update.getContacts(), updated.getContacts());
-    }
-
-    private void assertContacts(List<UpdateContact> updateContactList, List<ReadContact> updatedContactList){
-
-        if(updateContactList.isEmpty() && updatedContactList.isEmpty()){
-            return;
-        }
-        for(UpdateContact update : updateContactList){
-            int index = updateContactList.indexOf(update);
-            ReadContact updated = updatedContactList.get(index);
-
-            if (update.getType().equals(ContactType.EMAIL) && updated.getType().equals(ContactType.EMAIL)){
-                UpdateEmailContact updateEmailContact = (UpdateEmailContact) update;
-                ReadEmailContact readEmailContact = (ReadEmailContact) updated;
-                String updateEmail = updateEmailContact.getEmail();
-                String updatedEmail = readEmailContact.getEmail();
-                assertEquals(updateEmail, updatedEmail);
-            }
-            else if (update.getType().equals(ContactType.PHONE) && updated.getType().equals(ContactType.PHONE)) {
-                UpdatePhoneContact updatePhoneContact = (UpdatePhoneContact) update;
-                ReadPhoneContact readPhoneContact = (ReadPhoneContact) updated;
-                String updatePhone = updatePhoneContact.getPhone();
-                String updatedPhone = readPhoneContact.getPhone();
-                assertEquals(updatePhone, updatedPhone);
+        if (!CollectionUtils.isEmpty(update.getContacts())) {
+            for (var contact : update.getContacts()) {
+                if (contact.getType().equals(ContactType.EMAIL)) {
+                    CreateEmailContact updateEmailContact = (CreateEmailContact) contact;
+                    ReadEmailContact readContact =
+                        getUpdatedEmailContact(updated.getId(), updateEmailContact.getEmail(), contact.getType());
+                    assert readContact != null;
+                    assertEmailContact(updateEmailContact, readContact);
+                } else if (contact.getType().equals(ContactType.PHONE)) {
+                    CreatePhoneContact updatePhoneContact = (CreatePhoneContact) contact;
+                    ReadPhoneContact readContact =
+                        getUpdatedPhoneContact(updated.getId(), updatePhoneContact.getPhone(), contact.getType());
+                    assert readContact != null;
+                    assertPhoneContact(updatePhoneContact, readContact);
+                }
             }
         }
-
-
     }
 
+    private void assertEmailContact(CreateEmailContact update, ReadEmailContact updated) {
+        assertEquals(update.getEmail(), updated.getEmail());
+    }
+
+    private void assertPhoneContact(CreatePhoneContact update, ReadPhoneContact updated) {
+        assertEquals(update.getPhone(), updated.getPhone());
+}
+
+    private ReadEmailContact getUpdatedEmailContact(Long cooperationId, String email, ContactType type) throws ApiException {
+        var updatedContact =
+            cooperationContactApi.queryContactsOnCooperation(cooperationId, 1, 5, "id,asc", null, null, null,
+                email, null, type);
+        if(updatedContact.size()==0){
+            return null;
+        }
+        return (ReadEmailContact) updatedContact.stream().findFirst().orElseThrow();
+    }
+
+    private ReadPhoneContact getUpdatedPhoneContact(Long cooperationId, String phone, ContactType type) throws ApiException {
+        var updatedContact =
+            cooperationContactApi.queryContactsOnCooperation(cooperationId, 1, 5, "id,asc", null, null, phone,
+                null, null, type);
+        if(updatedContact.size()==0){
+            return null;
+        }
+        return (ReadPhoneContact) updatedContact.stream().findFirst().orElseThrow();
+    }
 }

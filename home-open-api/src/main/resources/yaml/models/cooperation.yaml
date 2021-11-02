@@ -156,4 +156,4 @@ UpdateCooperation:
         }
       ]
       items:
-        $ref: "contact.yaml#/UpdateContact"
+        $ref: "contact.yaml#/CreateContact"

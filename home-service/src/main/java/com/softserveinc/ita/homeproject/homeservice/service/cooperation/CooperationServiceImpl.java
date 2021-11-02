@@ -95,6 +95,7 @@ public class CooperationServiceImpl implements CooperationService {
             for(ContactDto contactDto : contactDtoList) {
                 Contact contact = mapper.convert(contactDto, Contact.class);
                 contact.setCooperation(fromDb);
+                contact.setEnabled(true);
                 fromDb.getContacts().add(contact);
             }
         }
