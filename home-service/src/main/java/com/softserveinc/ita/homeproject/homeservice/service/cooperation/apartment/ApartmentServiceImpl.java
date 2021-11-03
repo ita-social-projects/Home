@@ -42,19 +42,23 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDto createApartment(Long houseId, ApartmentDto createApartmentDto) {
 
-        var house = houseRepository.findById(houseId)
-                .filter(House::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(
-                        String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
+        if (apartmentRepository.findByApartmentNumberAndHouseId(createApartmentDto.getApartmentNumber(), houseId)
+            .isPresent()) {
+            throw new BadRequestHomeException("Apartment with number " + createApartmentDto.getApartmentNumber()
+                +" already exist in this house");
+        }
 
-        BigDecimal invitationSummaryOwnerPart = createApartmentDto.getInvitations().stream()
-                .map(ApartmentInvitationDto::getOwnershipPart)
+        var house = houseRepository.findById(houseId).filter(House::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
+
+        BigDecimal invitationSummaryOwnerPart =
+            createApartmentDto.getInvitations().stream().map(ApartmentInvitationDto::getOwnershipPart)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(
-                    "The sum of the entered area of the apartment = "
-                            + invitationSummaryOwnerPart + ". Area cannot be greater than 1");
+                "The sum of the entered area of the apartment = " + invitationSummaryOwnerPart
+                    + ". Area cannot be greater than 1");
         }
 
         var apartment = mapper.convert(createApartmentDto, Apartment.class);
@@ -80,11 +84,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
         var toUpdate = apartmentRepository.findById(apartmentId)
-                .filter(Apartment::getEnabled)
-                .filter(apartment -> apartment.getHouse().getId().equals(houseId))
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
+            .filter(Apartment::getEnabled)
+            .filter(apartment -> apartment.getHouse().getId().equals(houseId))
+            .orElseThrow(() ->
+                new NotFoundHomeException(
+                    String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
 
         if (updateApartmentDto.getApartmentNumber() != null) {
             toUpdate.setApartmentNumber(updateApartmentDto.getApartmentNumber());
@@ -101,11 +105,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void deactivateApartment(Long houseId, Long apartmentId) {
         Apartment toDelete = apartmentRepository.findById(apartmentId)
-                .filter(Apartment::getEnabled)
-                .filter(apartment -> apartment.getHouse().getId().equals(houseId))
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
+            .filter(Apartment::getEnabled)
+            .filter(apartment -> apartment.getHouse().getId().equals(houseId))
+            .orElseThrow(() ->
+                new NotFoundHomeException(
+                    String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
 
         toDelete.setEnabled(false);
         apartmentRepository.save(toDelete);
@@ -115,9 +119,9 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     public Page<ApartmentDto> findAll(Integer pageNumber, Integer pageSize, Specification<Apartment> specification) {
         specification = specification
-                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                        .equal(root.get("house").get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                .equal(root.get("house").get("enabled"), true));
         return apartmentRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
+            .map(apartment -> mapper.convert(apartment, ApartmentDto.class));
     }
 }
