@@ -141,3 +141,19 @@ UpdateCooperation:
       pattern: '^UA\d{27}$'
     address:
       $ref: 'address.yaml#/Address'
+    contacts:
+      type: array
+      example: [
+        {
+          "type": "email",
+          "email": "createUserEmail@example.com",
+          "main": false
+        },
+        {
+          "type": "phone",
+          "phone": "+380506617305",
+          "main": false
+        }
+      ]
+      items:
+        $ref: "contact.yaml#/CreateContact"

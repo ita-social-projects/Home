@@ -2,12 +2,15 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.role.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
@@ -86,9 +89,19 @@ public class CooperationServiceImpl implements CooperationService {
         if (updateCooperationDto.getAddress() != null) {
             fromDb.setAddress(updateCooperationDto.getAddress());
         }
+        if (updateCooperationDto.getContacts() != null) {
+            fromDb.getContacts().clear();
+            List<ContactDto> contactDtoList = updateCooperationDto.getContacts();
+            for(ContactDto contactDto : contactDtoList) {
+                Contact contact = mapper.convert(contactDto, Contact.class);
+                contact.setCooperation(fromDb);
+                contact.setEnabled(true);
+                fromDb.getContacts().add(contact);
+            }
+        }
         fromDb.setUpdateDate(LocalDateTime.now());
-        cooperationRepository.save(fromDb);
-        return mapper.convert(fromDb, CooperationDto.class);
+        Cooperation updatedCooperation = cooperationRepository.save(fromDb);
+        return mapper.convert(updatedCooperation, CooperationDto.class);
     }
 
     @Override
