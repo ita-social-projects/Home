@@ -21,9 +21,9 @@
     <packaging>pom</packaging>
 
     <properties>
-        <rev>-SNAPSHOT</rev>
+        <ci_revision>-SNAPSHOT</ci_revision>
         <java.version>11</java.version>
-        <revision>${revision.major}.${revision.minor}.${revision.patch}${rev}</revision>
+        <revision>${revision.major}.${revision.minor}.${revision.patch}${ci_revision}</revision>
         <revision.major>0</revision.major>
         <revision.minor>0</revision.minor>
         <revision.patch>1</revision.patch>
