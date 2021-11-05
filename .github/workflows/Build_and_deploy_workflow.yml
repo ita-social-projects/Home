@@ -1,20 +1,52 @@
-name: Packaging and Deploying
+name: Build and deploy workflow
 
 on:
   push:
-    branches: [ dev, master ]
+    branches:
+      - dev
+      - master
+      - 'release/**'
+      - 'hotfix/**'
+#      - 'feature/**'
 
 jobs:
   package:
     runs-on: ubuntu-latest
+    env:
+      REVISION: '-0-SNAPSHOT'
+      BRANCH_NAME: ''
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Set up JDK 1.11
         uses: actions/setup-java@v1
         with:
           java-version: 1.11
+
+      - name: Branch name
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Branch condition
+        run: |
+          if [ ${{ github.ref }} == refs/heads/master ];
+          then
+            echo "REVISION=-${{github.run_number}}" >> $GITHUB_ENV
+          else
+            if [ ${{ github.ref }} == refs/heads/dev ];
+            then
+              echo "REVISION=-${{github.run_number}}-dev" >> $GITHUB_ENV
+            else
+              if [ ${{ github.ref }} == refs/heads/release/$BRANCH_NAME ];
+              then
+                echo "REVISION=-${{github.run_number}}-rc" >> $GITHUB_ENV
+              else
+                echo "REVISION=-$(echo $GITHUB_REF | cut -d'/' -f 3)_$BRANCH_NAME-${{github.run_number}}" >> $GITHUB_ENV
+              fi
+            fi
+          fi
+
       - name: Sync readme with home-application repository
         uses: ms-jpq/sync-dockerhub-readme@v1
         with:
@@ -22,6 +54,7 @@ jobs:
           password: ${{secrets.DOCKER_PASSWORD}}
           repository: homeacademy/home-application
           readme: "home-docs/docker-readme.md"
+
       - name: Sync readme with data-migration repository
         uses: ms-jpq/sync-dockerhub-readme@v1
         with:
@@ -29,6 +62,7 @@ jobs:
           password: ${{secrets.DOCKER_PASSWORD}}
           repository: homeacademy/data-migration
           readme: "home-docs/docker-readme.md"
+
       - name: Publish to GitHub Packages and Docker Hub
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -48,6 +82,7 @@ jobs:
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
           -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
           -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
+          -Dci_revision=$REVISION
 
   deploy:
     needs: package
