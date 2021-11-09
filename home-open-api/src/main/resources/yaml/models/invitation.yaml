@@ -123,16 +123,3 @@ UpdateInvitation:
 UpdateCooperationInvitation:
   allOf:
     - $ref: '#/UpdateInvitation'
-UpdateApartmentInvitation:
-  allOf:
-    - $ref: '#/UpdateInvitation'
-  type: object
-  required:
-    - ownership_part
-  properties:
-    ownership_part:
-      type: number
-      minimum: 0.0001
-      maximum: 1.0
-      multipleOf: 1e-4
-      example: 0.6588
