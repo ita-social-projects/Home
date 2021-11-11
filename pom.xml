@@ -21,8 +21,12 @@
     <packaging>pom</packaging>
 
     <properties>
+        <ci_revision>-SNAPSHOT</ci_revision>
         <java.version>11</java.version>
-        <revision>0.0.1-SNAPSHOT</revision>
+        <revision>${revision.major}.${revision.minor}.${revision.patch}${ci_revision}</revision>
+        <revision.major>0</revision.major>
+        <revision.minor>0</revision.minor>
+        <revision.patch>1</revision.patch>
         <docker.revision>latest</docker.revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.3.8.RELEASE</spring.boot.version>
