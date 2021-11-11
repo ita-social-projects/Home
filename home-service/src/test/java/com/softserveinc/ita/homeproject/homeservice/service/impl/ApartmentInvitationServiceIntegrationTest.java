@@ -37,10 +37,6 @@ public class ApartmentInvitationServiceIntegrationTest {
         apartmentInvitationRepository.save(createOverdueProcessingApartmentInvitation());
         apartmentInvitationRepository.save(createNotOverdueAcceptedApartmentInvitation());
         apartmentInvitationRepository.save(createOverdueAcceptedApartmentInvitation());
-        apartmentInvitationRepository.save(createNotOverdueDeclinedApartmentInvitation());
-        apartmentInvitationRepository.save(createOverdueDeclinedApartmentInvitation());
-        apartmentInvitationRepository.save(createNotOverdueDeactivatedApartmentInvitation());
-        apartmentInvitationRepository.save(createOverdueDeactivatedApartmentInvitation());
         apartmentInvitationRepository.save(createOverdueApartmentInvitation());
         apartmentInvitationRepository.save(createNotOverdueErrorApartmentInvitation());
         apartmentInvitationRepository.save(createOverdueErrorApartmentInvitation());
@@ -107,34 +103,6 @@ public class ApartmentInvitationServiceIntegrationTest {
     private ApartmentInvitation createOverdueAcceptedApartmentInvitation() {
         var invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
-        invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
-        return invitation;
-    }
-
-    private ApartmentInvitation createNotOverdueDeclinedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
-        invitation.setStatus(InvitationStatus.DECLINED);
-        invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
-        return invitation;
-    }
-
-    private ApartmentInvitation createOverdueDeclinedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
-        invitation.setStatus(InvitationStatus.DECLINED);
-        invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
-        return invitation;
-    }
-
-    private ApartmentInvitation createNotOverdueDeactivatedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
-        invitation.setStatus(InvitationStatus.DEACTIVATED);
-        invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
-        return invitation;
-    }
-
-    private ApartmentInvitation createOverdueDeactivatedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
-        invitation.setStatus(InvitationStatus.DEACTIVATED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }

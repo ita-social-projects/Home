@@ -13,9 +13,7 @@ InvitationStatus:
     - pending
     - processing
     - accepted
-    - declined
     - overdue
-    - deactivated
     - error
 InvitationType:
   description: Indicates a type of an Invitation

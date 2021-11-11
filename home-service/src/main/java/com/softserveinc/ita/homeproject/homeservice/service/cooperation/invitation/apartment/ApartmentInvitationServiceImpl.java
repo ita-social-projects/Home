@@ -21,6 +21,7 @@ import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipReposit
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
@@ -177,15 +178,15 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
-        var apartmentInvitation = apartmentInvitationRepository.findById(id)
-            .filter(invitation -> invitation.getSentDatetime() == null
-                && invitation.getEnabled().equals(true)
-                && invitation.getApartment().getId().equals(apartmentId)
-                && invitation.getStatus().equals(InvitationStatus.PENDING))
+        ApartmentInvitation apartmentInvitation = apartmentInvitationRepository.findById(id)
+            .filter(invitation -> invitation.getEnabled().equals(true)
+                && invitation.getApartment().getId().equals(apartmentId))
             .orElseThrow(() ->
                 new NotFoundHomeException("Invitation with id:" + id + "not found."));
+        if (apartmentInvitation.getStatus().equals(InvitationStatus.ACCEPTED)) {
+            throw new BadRequestHomeException("Deactivating invitations with status ACCEPTED is forbidden");
+        }
         apartmentInvitation.setEnabled(false);
-        apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
 

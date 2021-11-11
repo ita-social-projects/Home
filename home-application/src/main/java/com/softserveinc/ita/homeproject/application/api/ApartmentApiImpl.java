@@ -18,7 +18,6 @@ import com.softserveinc.ita.homeproject.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.InvitationType;
 import com.softserveinc.ita.homeproject.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.ReadOwnership;
-import com.softserveinc.ita.homeproject.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.model.UpdateOwnership;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -111,18 +110,6 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         verifyExistence(apartmentId, apartmentService);
         Page<OwnershipDto> readOwnership = ownershipService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readOwnership, ReadOwnership.class);
-    }
-
-    @PreAuthorize(MANAGE_IN_COOPERATION)
-    @Override
-    public Response updateInvitation(Long apartmentId,
-                                     Long id,
-                                     UpdateApartmentInvitation updateApartmentInvitation) {
-        var updateInvitationDto = mapper.convert(updateApartmentInvitation,
-                ApartmentInvitationDto.class);
-        var toUpdate = invitationService.updateInvitation(apartmentId, id, updateInvitationDto);
-        var readInvitation = mapper.convert(toUpdate, ReadApartmentInvitation.class);
-        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @PreAuthorize(MANAGE_IN_COOPERATION)
