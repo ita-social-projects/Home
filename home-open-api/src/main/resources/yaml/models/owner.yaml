@@ -1,0 +1,25 @@
+ReadOwner:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    first_name:
+      type: string
+      example: "Petro"
+    middle_name:
+      type: string
+      example: "Petrovich"
+    last_name:
+      type: string
+      example: "Petrov"
+    contacts:
+      type: array
+      example: [
+        { "id": 1,
+          "type": "email",
+          "main": false,
+          "email": "readUserEmail@example.com"
+        }
+      ]
+      items:
+        $ref: 'contact.yaml#/ReadContact'
