@@ -55,6 +55,7 @@
         <github.packages.read.username>${Dgithub.packages.read.username}</github.packages.read.username>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
     </properties>
 
     <profiles>
@@ -227,7 +228,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>${maven.resources.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

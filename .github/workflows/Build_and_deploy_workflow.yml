@@ -1,4 +1,4 @@
-name: Packaging and Deploying
+name: Build and deploy workflow
 
 on:
   push:
