@@ -42,7 +42,7 @@ jobs:
               then
                 echo "REVISION=-${{github.run_number}}-rc" >> $GITHUB_ENV
               else
-                echo "REVISION=-$(echo $GITHUB_REF | cut -d'/' -f 3)_$BRANCH_NAME-${{github.run_number}}" >> $GITHUB_ENV
+                echo "REVISION=-${{github.run_number}}-$(echo $GITHUB_REF | cut -d'/' -f 3)_${BRANCH_NAME//#/-}" >> $GITHUB_ENV
               fi
             fi
           fi
@@ -83,6 +83,7 @@ jobs:
           -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
           -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
           -Dci_revision=$REVISION
+          -DbuildNumber=${{github.run_number}}
 
   deploy:
     needs: package
