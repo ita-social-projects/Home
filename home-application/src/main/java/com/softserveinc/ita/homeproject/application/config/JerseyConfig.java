@@ -35,7 +35,7 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         // register endpoints
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
-        property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, ".*/apidocs/.*");
+        property(ServletProperties.FILTER_STATIC_CONTENT_REGEX, "(.*/apidocs/.*)|(.*/version.json)");
         scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
         scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
         // register endpoints
