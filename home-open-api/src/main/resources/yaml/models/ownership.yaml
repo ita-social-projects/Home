@@ -3,8 +3,8 @@ ReadOwnership:
     - $ref: 'common.yaml#/BaseReadView'
   type: object
   properties:
-    user:
-      $ref: 'user.yaml#/ReadUser'
+    owner:
+      $ref: 'owner.yaml#/ReadOwner'
     ownership_part:
       type: number
       minimum: 0.0001

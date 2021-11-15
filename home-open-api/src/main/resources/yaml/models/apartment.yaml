@@ -74,7 +74,7 @@ ReadApartment:
       example: [
         {
           "id": 1,
-          "user": {
+          "owner": {
             "id": 1,
             "first_name": "Petro",
             "middle_name": "Petrovich",
@@ -98,7 +98,7 @@ ReadApartment:
         },
         {
           "id": 2,
-          "user": {
+          "owner": {
             "id": 2,
             "first_name": "Ivan",
             "middle_name": "Ivanovich",
