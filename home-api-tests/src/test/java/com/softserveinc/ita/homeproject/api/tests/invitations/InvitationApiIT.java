@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.invitations;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.InvitationApprovalUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,12 +51,14 @@ class InvitationApiIT {
 
     private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
+    private final int waitTime = 1000;
+
     @Test
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
         cooperationApi.createCooperationWithHttpInfo(createCoop);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
+        TimeUnit.MILLISECONDS.sleep(waitTime);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
@@ -71,14 +74,8 @@ class InvitationApiIT {
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartmentWithEmail(userEmail));
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        String apartmentInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
-
-        ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
+        TimeUnit.MILLISECONDS.sleep(waitTime);
+        ReadInvitation readInvitation = approveInvitation(userEmail);
 
         assertEquals(userEmail, readInvitation.getEmail());
         assertEquals(InvitationType.APARTMENT, readInvitation.getType());
@@ -91,24 +88,11 @@ class InvitationApiIT {
         createTestCooperationAndUserViaInvitationWithUserEmail(userEmail);
         createTestCooperationWithUserEmail(userEmail);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        String cooperationInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
-
-        ReadInvitation readInvitation = invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
-
+        TimeUnit.MILLISECONDS.sleep(waitTime);
+        ReadInvitation readInvitation = approveInvitation(userEmail);
         assertEquals(userEmail, readInvitation.getEmail());
         assertEquals(InvitationType.COOPERATION, readInvitation.getType());
         assertEquals(InvitationStatus.ACCEPTED,readInvitation.getStatus());
-    }
-
-    public InvitationToken buildInvitationPayload(String invitationToken){
-        InvitationToken token = new InvitationToken();
-        token.setInvitationToken(invitationToken);
-        return token;
     }
 
     @SneakyThrows
@@ -120,7 +104,7 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationAndUserViaInvitationWithUserEmail(String userEmail) {
         ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
-        TimeUnit.MILLISECONDS.sleep(5000);
+        TimeUnit.MILLISECONDS.sleep(waitTime);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
@@ -139,29 +123,6 @@ class InvitationApiIT {
                    .lastName("lastName")
                    .password("password")
                    .email( RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
-    }
-
-    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message="";
-        for (int i=0; i<response.getItems().size(); i++){
-            if(response.getItems().get(i).getContent().getHeaders().getTo().contains(email)){
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
-    private String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
     }
 
     private CreateCooperation createCooperationWithUserEmail(String email) {

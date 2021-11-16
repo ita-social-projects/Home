@@ -179,8 +179,9 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
         ApartmentInvitation apartmentInvitation = apartmentInvitationRepository.findById(id)
-            .filter(invitation -> invitation.getEnabled().equals(true)
-                && invitation.getApartment().getId().equals(apartmentId))
+            .filter(invitation -> invitation.getEnabled() != null
+                    & invitation.getEnabled().equals(true)
+                    & invitation.getApartment().getId().equals(apartmentId))
             .orElseThrow(() ->
                 new NotFoundHomeException("Invitation with id:" + id + "not found."));
         if (apartmentInvitation.getStatus().equals(InvitationStatus.ACCEPTED)) {
