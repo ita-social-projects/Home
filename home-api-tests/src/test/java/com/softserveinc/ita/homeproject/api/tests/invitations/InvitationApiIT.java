@@ -30,7 +30,6 @@ import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
 import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
-import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadHouse;
@@ -49,9 +48,7 @@ class InvitationApiIT {
 
     private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
-
-    private final int waitTime = 1000;
+    private final int waitTime = 5000;
 
     @Test
     void isEmailSentTest() throws Exception {

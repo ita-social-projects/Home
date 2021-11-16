@@ -29,7 +29,7 @@ public class ApartmentInvitationApiIT {
 
     private final CooperationApi cooperationApi = new CooperationApi();
 
-    private final int waitTime = 1000;
+    private final int waitTime = 5000;
 
     @Test
     void deactivateAcceptedApartmentInvitationTest() throws ApiException, IOException, InterruptedException {
