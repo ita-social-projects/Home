@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.invitations;
 
+import static com.softserveinc.ita.homeproject.api.tests.utils.CreateSampleUtil.createAddress;
 import static com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.InvitationApprovalUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -138,16 +139,6 @@ class InvitationApiIT {
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
                 .adminEmail(createBaseUser().getEmail())
                 .address(createAddress());
-    }
-
-    private Address createAddress() {
-        return new Address().city("Dnepr")
-                .district("District")
-                .houseBlock("block")
-                .houseNumber("number")
-                .region("Dnipro")
-                .street("street")
-                .zipCode("zipCode");
     }
 
     private CreateHouse createHouse() {
