@@ -117,7 +117,7 @@ class QueryOwnershipIT {
     void getAllOwnershipsByUserId() throws ApiException {
         ReadOwnership readOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, TEST_OWNERSHIP_ID);
 
-        Long userId = Objects.requireNonNull(readOwnership.getUser()).getId();
+        Long userId = Objects.requireNonNull(readOwnership.getOwner()).getId();
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
                 .apartmentId(TEST_APARTMENT_ID)
@@ -128,6 +128,7 @@ class QueryOwnershipIT {
                 .build().perform();
 
         queryResponse
-                .forEach(element -> assertEquals(element.getUser(), readOwnership.getUser()));
+                .forEach(element -> assertEquals(element.getOwner(), readOwnership.getOwner()));
     }
+
 }

@@ -16,6 +16,8 @@
         <json.name>openapi.json</json.name>
         <image.application.path>homeacademy/home-application</image.application.path>
         <home-application.package>com.softserveinc.ita.homeproject.application</home-application.package>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
 
     <dependencies>
@@ -283,6 +285,30 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/static/api/0</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/static/api/0</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>version.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

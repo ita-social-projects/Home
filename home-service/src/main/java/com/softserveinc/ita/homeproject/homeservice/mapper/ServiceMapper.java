@@ -1,12 +1,15 @@
 package com.softserveinc.ita.homeproject.homeservice.mapper;
 
+import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.AbstractTypeConverter;
+import com.softserveinc.ita.homeproject.homeservice.mapper.config.ServiceMappingConfig;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.spi.ConditionalConverter;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +23,10 @@ public class ServiceMapper {
 
     private ModelMapper modelMapper;
 
+    private final Set<ServiceMappingConfig<?,?>> serviceMappingConfigs;
+
     @PostConstruct
+    @SuppressWarnings({"unchecked cast", "rawtypes"})
     public void init() {
         modelMapper = new ModelMapper();
 
@@ -31,6 +37,12 @@ public class ServiceMapper {
 
         modelMapper.getConfiguration().getConverters().add(0, conditionalConverter);
         modelMapper.getConfiguration().getConverters().add(0, conditionalConverter2);
+
+        for (ServiceMappingConfig serviceMappingConfig : serviceMappingConfigs) {
+            TypeMap typeMap = modelMapper.typeMap(
+                    serviceMappingConfig.getSourceType(), serviceMappingConfig.getDestinationType());
+            serviceMappingConfig.addMappings(typeMap);
+        }
     }
 
     public <D> D convert(Object source, Class<D> destination) {

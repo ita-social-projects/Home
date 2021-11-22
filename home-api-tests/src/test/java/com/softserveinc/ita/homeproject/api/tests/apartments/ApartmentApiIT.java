@@ -66,6 +66,23 @@ class ApartmentApiIT {
     }
 
     @Test
+    void createApartmentWithExistingApartmentNumberTest() throws ApiException {
+        CreateApartment createApartment = createApartment();
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+
+        ApiResponse<ReadApartment> response = apartmentApi.createApartmentWithHttpInfo(createdHouse.getId(), createApartment);
+
+        CreateApartment createExistingApartment = createApartment();
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> apartmentApi
+                .createApartmentWithHttpInfo(createdHouse.getId(), createExistingApartment))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining("Apartment with number " + createExistingApartment.getNumber()
+                +" already exist in this house");
+    }
+
+    @Test
     void getApartmentTest() throws ApiException {
         CreateApartment createApartment = createApartment();
 

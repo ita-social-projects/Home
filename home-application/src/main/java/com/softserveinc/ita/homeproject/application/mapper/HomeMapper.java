@@ -2,8 +2,10 @@ package com.softserveinc.ita.homeproject.application.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 
+import com.softserveinc.ita.homeproject.application.mapper.config.HomeMappingConfig;
 import com.softserveinc.ita.homeproject.application.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.application.model.QuestionLookup;
 import com.softserveinc.ita.homeproject.application.model.ReadAdviceQuestion;
@@ -14,6 +16,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.MultipleCh
 import com.softserveinc.ita.homeproject.homeservice.mapper.config.AbstractTypeConverter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.spi.ConditionalConverter;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +32,8 @@ public class HomeMapper {
 
     private final Map<Class, Class> customTypeMappingMap = new HashMap<>();
 
+    private final Set<HomeMappingConfig<?,?>> homeMappingConfigs;
+
     {
         customTypeMappingMap.put(AdviceChoiceQuestionDto.class, ReadAdviceQuestion.class);
         customTypeMappingMap.put(CreateAdviceQuestion.class, AdviceChoiceQuestionDto.class);
@@ -37,6 +42,7 @@ public class HomeMapper {
     }
 
     @PostConstruct
+    @SuppressWarnings({"unchecked cast", "rawtypes"})
     public void init() {
         modelMapper = new ModelMapper();
 
@@ -67,6 +73,12 @@ public class HomeMapper {
 
         modelMapper.getConfiguration().getConverters().add(0, conditionalConverter);
         modelMapper.getConfiguration().getConverters().add(0, conditionalConverter2);
+
+        for (HomeMappingConfig homeMappingConfig : homeMappingConfigs) {
+            TypeMap typeMap =
+                    modelMapper.typeMap(homeMappingConfig.getSourceType(), homeMappingConfig.getDestinationType());
+            homeMappingConfig.addMappings(typeMap);
+        }
     }
 
     private static String getSimpleDomainName(Class<?> s) {
