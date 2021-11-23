@@ -37,7 +37,7 @@
         <rapidoc.version>8.1.0</rapidoc.version>
         <swagger.ui.version>3.52.3</swagger.ui.version>
         <redoc.version>2.0.0-rc.53</redoc.version>
-        <modelMapper.version>2.3.9</modelMapper.version>
+        <modelMapper.version>2.4.4</modelMapper.version>
         <jib.version>2.7.1</jib.version>
         <jib.goal>dockerBuild</jib.goal>
         <sonar.projectKey>ita-social-projects-home</sonar.projectKey>

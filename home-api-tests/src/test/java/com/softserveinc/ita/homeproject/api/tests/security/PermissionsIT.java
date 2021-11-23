@@ -20,6 +20,7 @@ import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
 import com.softserveinc.ita.homeproject.client.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
+import com.softserveinc.ita.homeproject.client.model.CreateVote;
 import com.softserveinc.ita.homeproject.client.model.HouseLookup;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
@@ -27,6 +28,7 @@ import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadVote;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.UpdateContact;
@@ -350,6 +352,10 @@ class PermissionsIT {
                 return createPoll(createAndReadCooperationForPoll());
             case "com.softserveinc.ita.homeproject.client.model.UpdatePoll":
                 return updatePoll();
+            case "com.softserveinc.ita.homeproject.client.model.CreateVote":
+                return createVote();
+            case "com.softserveinc.ita.homeproject.client.model.ReadVote":
+                return readVote();
             case "com.softserveinc.ita.homeproject.client.model.createAdviceQuestion":
             case "com.softserveinc.ita.homeproject.client.model.CreateQuestion":
                 return createAdviceQuestion();
@@ -516,7 +522,11 @@ class PermissionsIT {
             case "updateCooperationPoll":
             case "deleteCooperationPoll":
             case "createCooperationPoll":
+            case "readVote":
                 setPermission = new boolean[]{false, true, false, false};
+                break;
+            case "createVote":
+                setPermission = new boolean[]{false, false, true, false};
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -751,6 +761,16 @@ class PermissionsIT {
             .completionDate(completionDate)
             .addHousesItem(new HouseLookup().id(Objects.requireNonNull(readCooperation.getHouses()).get(0).getId()))
             .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(1).getId()));
+    }
+
+    @SneakyThrows
+    private static CreateVote createVote() {
+        return new CreateVote();
+    }
+
+    @SneakyThrows
+    private static ReadVote readVote() {
+        return new ReadVote();
     }
 
     private static List<CreateContact> createContactList() {

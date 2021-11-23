@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="Issue229.001" author="IhorSamoshost">
+        <createTable tableName="votes">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="POLL_ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.002" author="IhorSamoshost">
+        <createTable tableName="question_votes">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="VOTE_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="vote_fk"
+                             references="votes(ID)"/>
+            </column>
+            <column name="TYPE" type="VARCHAR(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="QUESTION_ID" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="question_fk"
+                             references="poll_questions(ID)"/>
+            </column>
+            <column name="ANSWER" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="advice_result_question_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.003" author="IhorSamoshost">
+        <createTable tableName="vote_question_variants">
+            <column name="ID" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="question_vote_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="question_vote_fk"
+                             references="question_votes(ID)"/>
+            </column>
+            <column name="answer_variant_id" type="BIGINT">
+                <constraints nullable="true"
+                             foreignKeyName="answer_variant_fk"
+                             references="answer_variants(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Issue229.004" author="IhorSamoshost">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="13"/>
+            <column name="name" value="READ_VOTE"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.005" author="SerhiiPakulia">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="permissions">
+            <column name="id" value="14"/>
+            <column name="name" value="MANAGE_VOTES"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.006" author="IhorSamoshost">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="2"/>
+            <column name="permission_id" value="13"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.007" author="SerhiiPakulia">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role_permissions">
+            <column name="role_id" value="3"/>
+            <column name="permission_id" value="14"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="Issue229.008" author="IhorSamoshost">
+        <createSequence incrementBy="50" sequenceName="votes_sequence"/>
+        <createSequence incrementBy="50" sequenceName="question_votes_sequence"/>
+        <createSequence incrementBy="50" sequenceName="vote_question_variants_sequence"/>
+    </changeSet>
+
+    <changeSet id="Issue229.009" author="IhorSamoshost">
+        <dropNotNullConstraint tableName="answer_variants"
+                               columnName="POLL_QUESTION_ID"/>
+    </changeSet>
+</databaseChangeLog>

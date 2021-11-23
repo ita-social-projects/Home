@@ -1,0 +1,23 @@
+polls-votes:
+  post:
+    tags:
+      - poll vote
+    summary: Create vote
+    description: Create a vote in poll. Vote can be created only if poll status is active.
+      Number of answers must be validated according to max_answer_count of the question
+    operationId: createVote
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_poll_id'
+    requestBody:
+      $ref: '../requests/requestBodies.yaml#/CreateVoteBody'
+    responses:
+      '201':
+        $ref: '../responses/responses.yaml#/VoteResponse'
+      '400':
+        $ref: '../responses/responses.yaml#/BadRequest'
+      '401':
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      '403':
+        $ref: '../responses/responses.yaml#/Forbidden'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

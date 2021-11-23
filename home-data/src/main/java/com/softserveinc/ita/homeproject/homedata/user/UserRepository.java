@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homedata.user;
 
 import java.util.Optional;
 
-import com.softserveinc.ita.homeproject.homedata.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

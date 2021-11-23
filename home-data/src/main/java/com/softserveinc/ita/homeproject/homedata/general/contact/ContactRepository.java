@@ -3,8 +3,6 @@ package com.softserveinc.ita.homeproject.homedata.general.contact;
 import java.util.List;
 import java.util.Optional;
 
-import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
-import com.softserveinc.ita.homeproject.homedata.general.contact.ContactType;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

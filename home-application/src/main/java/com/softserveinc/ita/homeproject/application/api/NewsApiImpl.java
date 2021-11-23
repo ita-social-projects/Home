@@ -7,12 +7,11 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.NewsApi;
+import com.softserveinc.ita.homeproject.application.model.CreateNews;
+import com.softserveinc.ita.homeproject.application.model.ReadNews;
+import com.softserveinc.ita.homeproject.application.model.UpdateNews;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.news.NewsDto;
 import com.softserveinc.ita.homeproject.homeservice.service.general.news.NewsService;
-import com.softserveinc.ita.homeproject.model.CreateNews;
-import com.softserveinc.ita.homeproject.model.ReadNews;
-import com.softserveinc.ita.homeproject.model.UpdateNews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;

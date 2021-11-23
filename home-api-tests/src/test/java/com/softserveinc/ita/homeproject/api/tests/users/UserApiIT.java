@@ -284,7 +284,7 @@ class UserApiIT {
 
     @Test
     void getNonExistentUserTest() {
-        Long userId = 100L;
+        Long userId = Long.valueOf(RandomStringUtils.randomNumeric(10));
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.getUserWithHttpInfo(userId))
@@ -422,7 +422,7 @@ class UserApiIT {
 
     @Test
     void deleteNonExistentUserTest() {
-        Long userId = 100L;
+        Long userId = Long.valueOf(RandomStringUtils.randomNumeric(10));
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.deleteUserWithHttpInfo(userId))
