@@ -210,7 +210,6 @@ class InvitationApiIT {
     private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.3))
                 .email( userEmail)
                 .type(InvitationType.APARTMENT));
         return createInvitations;

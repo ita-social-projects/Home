@@ -93,7 +93,6 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                     String filter,
                                     Long id,
                                     String email,
-                                    BigDecimal ownershipPart,
                                     String status) {
         verifyExistence(apartmentId, apartmentService);
         Page<ApartmentInvitationDto> readApartmentInvitation = invitationService

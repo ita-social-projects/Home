@@ -616,12 +616,10 @@ class PermissionsIT {
     private static List<CreateInvitation> createListOfInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT));
 
@@ -630,14 +628,12 @@ class PermissionsIT {
 
     private static CreateApartmentInvitation createApartmentInvitation() {
         return (CreateApartmentInvitation) new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT);
     }
 
     private static UpdateApartmentInvitation updateApartmentInvitation() {
         return new UpdateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(1))
             .email("test.receive.messages@gmail.com");
     }
 
