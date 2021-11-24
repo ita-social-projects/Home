@@ -247,7 +247,6 @@ class OwnershipApiIT {
     private List<CreateInvitation> createApartmentInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.3))
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT));
 

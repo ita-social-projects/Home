@@ -3,8 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.user.ownership;
 import java.math.BigDecimal;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
-import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipRepository;
@@ -27,8 +25,6 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     private final UserRepository userRepository;
 
-    private final ApartmentInvitationRepository invitationRepository;
-
     private final ServiceMapper mapper;
 
     private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
@@ -36,7 +32,7 @@ public class OwnershipServiceImpl implements OwnershipService {
     @Override
     public Ownership createOwnership(ApartmentInvitation apartmentInvitation) {
         var ownership = new Ownership();
-        ownership.setOwnershipPart(apartmentInvitation.getOwnershipPart());
+        ownership.setOwnershipPart(BigDecimal.ZERO);
         ownership.setApartment(apartmentInvitation.getApartment());
         ownership.setCooperation(apartmentInvitation.getApartment().getHouse().getCooperation());
 
@@ -89,18 +85,11 @@ public class OwnershipServiceImpl implements OwnershipService {
     }
 
     public void validateSumOwnershipPart(Long apartmentId, Ownership toUpdate, OwnershipDto updateOwnershipDto) {
-        BigDecimal activeInvitationsSumOwnerPart = invitationRepository
-                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
-                .stream()
-                .map(ApartmentInvitation::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
                 .stream()
                 .filter(Ownership::getEnabled)
                 .map(Ownership::getOwnershipPart)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .add(activeInvitationsSumOwnerPart)
                 .subtract(toUpdate.getOwnershipPart())
                 .add(updateOwnershipDto.getOwnershipPart());
 
