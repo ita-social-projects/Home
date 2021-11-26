@@ -185,7 +185,6 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             .orElseThrow(() ->
                 new NotFoundHomeException("Invitation with id:" + id + "not found."));
         apartmentInvitation.setEnabled(false);
-        apartmentInvitation.setStatus(InvitationStatus.DEACTIVATED);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
 

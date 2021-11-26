@@ -37,10 +37,6 @@ public class CooperationInvitationServiceIntegrationTest {
         cooperationInvitationRepository.save(createOverdueProcessingCooperationInvitation());
         cooperationInvitationRepository.save(createNotOverdueAcceptedCooperationInvitation());
         cooperationInvitationRepository.save(createOverdueAcceptedCooperationInvitation());
-        cooperationInvitationRepository.save(createNotOverdueDeclinedCooperationInvitation());
-        cooperationInvitationRepository.save(createOverdueDeclinedCooperationInvitation());
-        cooperationInvitationRepository.save(createNotOverdueDeactivatedCooperationInvitation());
-        cooperationInvitationRepository.save(createOverdueDeactivatedCooperationInvitation());
         cooperationInvitationRepository.save(createOverdueCooperationInvitation());
         cooperationInvitationRepository.save(createNotOverdueErrorCooperationInvitation());
         cooperationInvitationRepository.save(createOverdueErrorCooperationInvitation());
@@ -106,34 +102,6 @@ public class CooperationInvitationServiceIntegrationTest {
     private CooperationInvitation createOverdueAcceptedCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
-        invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
-        return invitation;
-    }
-
-    private CooperationInvitation createNotOverdueDeclinedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
-        invitation.setStatus(InvitationStatus.DECLINED);
-        invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
-        return invitation;
-    }
-
-    private CooperationInvitation createOverdueDeclinedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
-        invitation.setStatus(InvitationStatus.DECLINED);
-        invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
-        return invitation;
-    }
-
-    private CooperationInvitation createNotOverdueDeactivatedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
-        invitation.setStatus(InvitationStatus.DEACTIVATED);
-        invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
-        return invitation;
-    }
-
-    private CooperationInvitation createOverdueDeactivatedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
-        invitation.setStatus(InvitationStatus.DEACTIVATED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
