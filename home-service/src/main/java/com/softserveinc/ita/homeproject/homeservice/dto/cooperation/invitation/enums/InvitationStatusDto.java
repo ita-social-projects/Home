@@ -8,10 +8,6 @@ public enum InvitationStatusDto {
 
     ACCEPTED("accepted"),
 
-    DECLINED("declined"),
-
-    DEACTIVATED("deactivated"),
-
     OVERDUE("overdue"),
 
     ERROR("error");
