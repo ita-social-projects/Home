@@ -13,8 +13,13 @@ jobs:
   package:
     runs-on: ubuntu-latest
     env:
+      GITHUB_TOKEN: ${{ github.token }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      API_TESTS_VERBOSE_LOGGING: false
       REVISION: '-0-SNAPSHOT'
       BRANCH_NAME: ''
+      GITHUB_SHA_SHORT: ''
+      TAG_NAME: ''
     steps:
       - uses: actions/checkout@v2
         with:
@@ -25,8 +30,14 @@ jobs:
         with:
           java-version: 1.11
 
-      - name: Branch name
+      - name: Get branch name
         run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Get tag name
+        run: echo "TAG_NAME=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
+
+      - name: Get short git commit sha
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
       - name: Branch condition
         run: |
@@ -64,10 +75,7 @@ jobs:
           readme: "home-docs/docker-readme.md"
 
       - name: Publish to GitHub Packages and Docker Hub
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          API_TESTS_VERBOSE_LOGGING: false
+        if: "contains(env.TAG_NAME, 'dev') || contains(env.TAG_NAME, 'release')"
         run: >-
           mvn -V -e -B -ntp
           clean deploy sonar:sonar
@@ -79,6 +87,20 @@ jobs:
           -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Ddockerhub.username=${{secrets.DOCKER_USERNAME}}
           -Ddockerhub.password=${{secrets.DOCKER_PASSWORD}}
+          -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
+          -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
+          -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
+          -Dci_revision=$REVISION
+          -DbuildNumber=${{github.run_number}}
+          -Dgit_commit_sha=$GITHUB_SHA_SHORT
+
+      - name: Publish to GitHub Packages
+        if: "!contains(env.TAG_NAME, 'dev') && !contains(env.TAG_NAME, 'release')"
+        run: >-
+          mvn -V -e -B -ntp
+          clean deploy
+          -Dpostgres.user=${{secrets.POSTGRES_USER}}
+          -Dpostgres.password=${{secrets.POSTGRES_PASSWORD}}
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
           -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
           -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
