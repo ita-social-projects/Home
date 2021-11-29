@@ -75,7 +75,7 @@ jobs:
           readme: "home-docs/docker-readme.md"
 
       - name: Publish to GitHub Packages and Docker Hub
-        if: "contains(env.TAG_NAME, 'dev') || contains(env.TAG_NAME, 'release')"
+        if: "startsWith(env.TAG_NAME, 'dev') || startsWith(env.TAG_NAME, 'release')"
         run: >-
           mvn -V -e -B -ntp
           clean deploy sonar:sonar
@@ -95,7 +95,7 @@ jobs:
           -Dgit_commit_sha=$GITHUB_SHA_SHORT
 
       - name: Publish to GitHub Packages
-        if: "!contains(env.TAG_NAME, 'dev') && !contains(env.TAG_NAME, 'release')"
+        if: "!startsWith(env.TAG_NAME, 'dev') && !startsWith(env.TAG_NAME, 'release')"
         run: >-
           mvn -V -e -B -ntp
           clean deploy
