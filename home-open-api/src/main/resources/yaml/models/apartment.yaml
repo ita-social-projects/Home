@@ -23,13 +23,11 @@ CreateApartment:
       example: [
         {
           "email": "test.receive.messages@gmail.com",
-          "type": "apartment",
-          "ownership_part": 0.3
+          "type": "apartment"
         },
         {
           "email": "test.receive.messages@gmail.com",
-          "type": "apartment",
-          "ownership_part": 0.7
+          "type": "apartment"
         }
       ]
 UpdateApartment:

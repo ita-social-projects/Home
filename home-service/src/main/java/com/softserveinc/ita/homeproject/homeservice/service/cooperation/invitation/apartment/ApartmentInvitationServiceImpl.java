@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.fasterxml.uuid.Generators;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,8 +14,6 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartmen
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.QApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
-import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
-import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
@@ -37,27 +33,20 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private final ApartmentInvitationRepository apartmentInvitationRepository;
 
-    private final OwnershipRepository ownershipRepository;
-
     private final ApartmentRepository apartmentRepository;
 
     private final OwnershipService ownershipService;
 
     private final UserCooperationService userCooperationService;
 
-    private static final String INVALID_SUM_OWNERSHIP_AREA = "Entered sum of ownership parts = %.3f "
-        + "The sum of the entered ownership parts cannot be greater than 1";
-
     public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
                                           ServiceMapper mapper,
                                           ApartmentInvitationRepository apartmentInvitationRepository,
-                                          OwnershipRepository ownershipRepository,
                                           ApartmentRepository apartmentRepository,
                                           OwnershipService ownershipService,
                                           UserCooperationService userCooperationService) {
         super(invitationRepository, mapper);
         this.apartmentInvitationRepository = apartmentInvitationRepository;
-        this.ownershipRepository = ownershipRepository;
         this.apartmentRepository = apartmentRepository;
         this.ownershipService = ownershipService;
         this.userCooperationService = userCooperationService;
@@ -75,56 +64,10 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             .orElseThrow(() ->
                 new NotFoundHomeException("Invitation with id:" + id + "not found."));
 
-        validateSumOwnershipPart(apartmentId, toUpdate, updateInvitationDto);
-
-        toUpdate.setOwnershipPart(updateInvitationDto.getOwnershipPart());
         toUpdate.setEmail(updateInvitationDto.getEmail());
 
         invitationRepository.save(toUpdate);
         return toUpdate;
-    }
-
-    private void validateSumOwnershipPart(Long apartmentId,
-                                          ApartmentInvitation toUpdate,
-                                          ApartmentInvitationDto updateOwnershipDto) {
-        BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-            .stream()
-            .filter(Ownership::getEnabled)
-            .map(Ownership::getOwnershipPart)
-            .reduce(BigDecimal.ZERO, BigDecimal::add)
-            .add(getAllActiveInvitationsByApartmentId(apartmentId))
-            .subtract(toUpdate.getOwnershipPart())
-            .add(updateOwnershipDto.getOwnershipPart());
-
-        if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException(String.format(INVALID_SUM_OWNERSHIP_AREA, sumOfOwnerPartsWithNewInput));
-        }
-    }
-
-    private void validateSumOwnershipPart(Long apartmentId,
-                                          ApartmentInvitation toCreate) {
-        BigDecimal sumOfOwnerPartsWithNewInput = ownershipRepository.findAllByApartmentId(apartmentId)
-            .stream()
-            .filter(Ownership::getEnabled)
-            .map(Ownership::getOwnershipPart)
-            .reduce(BigDecimal.ZERO, BigDecimal::add)
-            .add(getAllActiveInvitationsByApartmentId(apartmentId))
-            .add(toCreate.getOwnershipPart());
-
-        if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException(String.format(INVALID_SUM_OWNERSHIP_AREA, sumOfOwnerPartsWithNewInput));
-        }
-    }
-
-    private BigDecimal getAllActiveInvitationsByApartmentId(Long apartmentId) {
-        return Stream.concat(apartmentInvitationRepository
-                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PROCESSING)
-                                .stream().filter(invitation -> invitation.getEnabled().equals(true)),
-                        apartmentInvitationRepository
-                                .findAllByApartmentIdAndStatus(apartmentId, InvitationStatus.PENDING)
-                                .stream().filter(invitation -> invitation.getEnabled().equals(true)))
-            .map(ApartmentInvitation::getOwnershipPart)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
@@ -142,7 +85,6 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
 
         if (isApartmentInvitationNonExists(invitationDto.getEmail(), apartmentId)) {
-            validateSumOwnershipPart(apartmentId, apartmentInvitation);
             invitationRepository.save(apartmentInvitation);
             return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
         }

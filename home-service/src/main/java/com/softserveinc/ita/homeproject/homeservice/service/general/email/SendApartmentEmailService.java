@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
@@ -37,7 +38,7 @@ public class SendApartmentEmailService extends BaseEmailService {
         mailDto.setEmail(invitation.getEmail());
         mailDto.setRegistrationToken(invitation.getRegistrationToken());
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
-        mailDto.setOwnershipPat(invitation.getOwnershipPart());
+        mailDto.setOwnershipPat(BigDecimal.ZERO);
         checkRegistration(invitation, mailDto);
         return mailDto;
     }

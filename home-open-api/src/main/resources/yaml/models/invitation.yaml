@@ -52,14 +52,6 @@ ReadCooperationInvitation:
 ReadApartmentInvitation:
   allOf:
     - $ref: '#/ReadInvitation'
-  type: object
-  properties:
-    ownership_part:
-      type: number
-      minimum: 0.0001
-      maximum: 1.0
-      multipleOf: 1e-4
-      example: 0.6588
 Role:
   description: User role
   type: string
@@ -96,16 +88,6 @@ CreateCooperationInvitation:
 CreateApartmentInvitation:
   allOf:
     - $ref: '#/CreateInvitation'
-  type: object
-  required:
-    - ownership_part
-  properties:
-    ownership_part:
-      type: number
-      minimum: 0.0001
-      maximum: 1.0
-      multipleOf: 1e-4
-      example: 0.6588
 
 UpdateInvitation:
   type: object

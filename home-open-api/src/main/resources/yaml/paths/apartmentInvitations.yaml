@@ -13,7 +13,6 @@ apartments-apartmentId-invitations:
       - $ref: '../parameters/parameters.yaml#/filter'
       - $ref: '../parameters/parameters.yaml#/id'
       - $ref: '../parameters/parameters.yaml#/email'
-      - $ref: '../parameters/parameters.yaml#/ownership_part'
       - $ref: '../parameters/parameters.yaml#/status'
     responses:
       200:

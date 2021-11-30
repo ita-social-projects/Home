@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,16 +49,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         var house = houseRepository.findById(houseId).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
-
-        BigDecimal invitationSummaryOwnerPart =
-            createApartmentDto.getInvitations().stream().map(ApartmentInvitationDto::getOwnershipPart)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        if (invitationSummaryOwnerPart.compareTo(BigDecimal.valueOf(1)) > 0) {
-            throw new BadRequestHomeException(
-                "The sum of the entered area of the apartment = " + invitationSummaryOwnerPart
-                    + ". Area cannot be greater than 1");
-        }
 
         var apartment = mapper.convert(createApartmentDto, Apartment.class);
         List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();

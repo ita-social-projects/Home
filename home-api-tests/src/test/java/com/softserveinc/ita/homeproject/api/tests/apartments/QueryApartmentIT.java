@@ -191,12 +191,10 @@ class QueryApartmentIT {
     private List<CreateInvitation> createApartmentInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.3))
                 .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.7))
                 .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
