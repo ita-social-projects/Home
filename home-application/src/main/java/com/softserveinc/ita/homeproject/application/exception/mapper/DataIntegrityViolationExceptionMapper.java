@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.model.ApiError;
+import com.softserveinc.ita.homeproject.application.model.ApiError;
 import org.postgresql.util.PSQLException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -33,18 +33,18 @@ public class DataIntegrityViolationExceptionMapper implements ExceptionMapper<Da
         if (UNIQUE_VIOLATION.getState().equals(sqlState)) {
             status = Response.Status.BAD_REQUEST;
             message = String.format("The %s must be unique. %s",
-                    psqlException.getServerErrorMessage().getTable(),
-                    psqlException.getServerErrorMessage().getDetail().replaceAll("[()]", "`"));
+                psqlException.getServerErrorMessage().getTable(),
+                psqlException.getServerErrorMessage().getDetail().replaceAll("[()]", "`"));
         } else if (NOT_NULL_VIOLATION.getState().equals(sqlState)) {
             status = Response.Status.BAD_REQUEST;
             message = String.format("Parameter `%s` is invalid - must not be null.",
-                    psqlException.getServerErrorMessage().getColumn());
+                psqlException.getServerErrorMessage().getColumn());
         }
         return Response.status(status)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(new ApiError()
-                        .responseCode(status.getStatusCode())
-                        .errorMessage(message))
-                .build();
+            .type(MediaType.APPLICATION_JSON_TYPE)
+            .entity(new ApiError()
+                .responseCode(status.getStatusCode())
+                .errorMessage(message))
+            .build();
     }
 }

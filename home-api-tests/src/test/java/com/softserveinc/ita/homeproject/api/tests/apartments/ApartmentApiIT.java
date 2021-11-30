@@ -128,18 +128,6 @@ class ApartmentApiIT {
     }
 
     @Test
-    void createApartmentWithInvalidAreaOwner() throws ApiException {
-        ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
-        CreateApartment createApartment = createApartment().invitations(createInvalidApartmentInvitation());
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), createApartment))
-                .matches((actual) -> actual.getCode() == BAD_REQUEST)
-                .withMessageContaining("The sum of the entered area of the apartment = 1.5. Area cannot be greater than 1");
-    }
-
-    @Test
     void createApartmentInvalidApartmentNumber() throws ApiException {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
@@ -298,27 +286,10 @@ class ApartmentApiIT {
     private List<CreateInvitation> createApartmentInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.3))
                 .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.7))
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        return createInvitations;
-    }
-
-    private List<CreateInvitation> createInvalidApartmentInvitation() {
-        List<CreateInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.8))
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.7))
                 .email("test.receive.messages@gmail.com")
                 .type(InvitationType.APARTMENT));
 

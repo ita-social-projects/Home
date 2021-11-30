@@ -20,6 +20,7 @@ import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
 import com.softserveinc.ita.homeproject.client.model.CreateQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
+import com.softserveinc.ita.homeproject.client.model.CreateVote;
 import com.softserveinc.ita.homeproject.client.model.HouseLookup;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
@@ -27,6 +28,7 @@ import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadVote;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.UpdateContact;
@@ -109,7 +111,10 @@ class PermissionsIT {
                     int param = 0;
                     int stab = 0;
                     try {
-                        if (acm.getMethod().getParameterCount() == ++count) {
+                        if (acm.getMethod().getParameterCount() == count) {
+                            return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName())
+                                .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient));
+                        } else if (acm.getMethod().getParameterCount() == ++count) {
                             return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
                                     acm.getMethod().getParameterTypes()[param])
                                 .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
@@ -350,6 +355,10 @@ class PermissionsIT {
                 return createPoll(createAndReadCooperationForPoll());
             case "com.softserveinc.ita.homeproject.client.model.UpdatePoll":
                 return updatePoll();
+            case "com.softserveinc.ita.homeproject.client.model.CreateVote":
+                return createVote();
+            case "com.softserveinc.ita.homeproject.client.model.ReadVote":
+                return readVote();
             case "com.softserveinc.ita.homeproject.client.model.createAdviceQuestion":
             case "com.softserveinc.ita.homeproject.client.model.CreateQuestion":
                 return createAdviceQuestion();
@@ -466,6 +475,7 @@ class PermissionsIT {
             case "deleteUser":
             case "getAllUsers":
             case "getContactOnUser":
+            case "getCurrentUser":
                 setPermission = new boolean[]{true, true, true, false};
                 break;
             case "createHouse":
@@ -516,7 +526,11 @@ class PermissionsIT {
             case "updateCooperationPoll":
             case "deleteCooperationPoll":
             case "createCooperationPoll":
+            case "readVote":
                 setPermission = new boolean[]{false, true, false, false};
+                break;
+            case "createVote":
+                setPermission = new boolean[]{false, false, true, false};
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -606,12 +620,10 @@ class PermissionsIT {
     private static List<CreateInvitation> createListOfInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT));
 
         createInvitations.add(new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT));
 
@@ -620,14 +632,12 @@ class PermissionsIT {
 
     private static CreateApartmentInvitation createApartmentInvitation() {
         return (CreateApartmentInvitation) new CreateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(0.1))
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT);
     }
 
     private static UpdateApartmentInvitation updateApartmentInvitation() {
         return new UpdateApartmentInvitation()
-            .ownershipPart(BigDecimal.valueOf(1))
             .email("test.receive.messages@gmail.com");
     }
 
@@ -751,6 +761,16 @@ class PermissionsIT {
             .completionDate(completionDate)
             .addHousesItem(new HouseLookup().id(Objects.requireNonNull(readCooperation.getHouses()).get(0).getId()))
             .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(1).getId()));
+    }
+
+    @SneakyThrows
+    private static CreateVote createVote() {
+        return new CreateVote();
+    }
+
+    @SneakyThrows
+    private static ReadVote readVote() {
+        return new ReadVote();
     }
 
     private static List<CreateContact> createContactList() {

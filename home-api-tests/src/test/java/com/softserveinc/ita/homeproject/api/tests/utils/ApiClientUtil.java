@@ -244,7 +244,6 @@ public final class ApiClientUtil {
     private static List<CreateInvitation> createApartmentInvitation() {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-                .ownershipPart(BigDecimal.valueOf(0.3))
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT));
 
@@ -255,13 +254,13 @@ public final class ApiClientUtil {
         if (Boolean.parseBoolean(VERBOSE_LOGGING)) {
             Logger logger = Logger.getLogger(ApiClient.class.getName());
             client.getHttpClient()
-                    .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
+                .register(new LoggingFeature(logger, Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 8192));
         }
     }
 
     private static void setServers(ApiClient client) {
         client.setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap<>())));
+            APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
     }
 
     @SneakyThrows

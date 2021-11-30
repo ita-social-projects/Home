@@ -188,3 +188,9 @@ QuestionsResponse:
         type: array
         items:
           $ref: "../models/question.yaml#/ReadQuestion"
+VoteResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        $ref: "../models/vote.yaml#/ReadVote"

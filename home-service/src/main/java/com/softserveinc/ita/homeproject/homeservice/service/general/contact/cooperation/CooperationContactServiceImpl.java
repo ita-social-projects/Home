@@ -15,7 +15,6 @@ import com.softserveinc.ita.homeproject.homeservice.service.general.contact.Base
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class CooperationContactServiceImpl extends BaseContactService implements CooperationContactService {
 

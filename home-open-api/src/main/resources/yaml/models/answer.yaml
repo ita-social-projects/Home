@@ -18,3 +18,10 @@ CreateUpdateAnswerVariant:
       minLength: 1
       maxLength: 255
       example: "Green"
+AnswerVariantLookup:
+  type: object
+  properties:
+    id:
+      type: integer
+      format: int64
+      example: 1

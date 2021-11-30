@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_VOTES;
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_POLL;
 
 import java.math.BigDecimal;
@@ -9,23 +10,26 @@ import java.time.LocalDateTime;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.api.PollsApi;
+import com.softserveinc.ita.homeproject.application.model.CreateQuestion;
+import com.softserveinc.ita.homeproject.application.model.CreateVote;
+import com.softserveinc.ita.homeproject.application.model.HouseLookup;
+import com.softserveinc.ita.homeproject.application.model.PollStatus;
+import com.softserveinc.ita.homeproject.application.model.PollType;
+import com.softserveinc.ita.homeproject.application.model.QuestionType;
+import com.softserveinc.ita.homeproject.application.model.ReadHouse;
+import com.softserveinc.ita.homeproject.application.model.ReadPoll;
+import com.softserveinc.ita.homeproject.application.model.ReadQuestion;
+import com.softserveinc.ita.homeproject.application.model.ReadVote;
+import com.softserveinc.ita.homeproject.application.model.UpdateQuestion;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.house.PollHouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.question.PollQuestionService;
-import com.softserveinc.ita.homeproject.model.CreateQuestion;
-import com.softserveinc.ita.homeproject.model.HouseLookup;
-import com.softserveinc.ita.homeproject.model.PollStatus;
-import com.softserveinc.ita.homeproject.model.PollType;
-import com.softserveinc.ita.homeproject.model.QuestionType;
-import com.softserveinc.ita.homeproject.model.ReadHouse;
-import com.softserveinc.ita.homeproject.model.ReadMultipleChoiceQuestion;
-import com.softserveinc.ita.homeproject.model.ReadPoll;
-import com.softserveinc.ita.homeproject.model.UpdateQuestion;
+import com.softserveinc.ita.homeproject.homeservice.service.poll.vote.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +50,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Autowired
     private PollQuestionService pollQuestionService;
 
+    @Autowired
+    private VoteService voteService;
+
     @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
@@ -59,8 +66,9 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
         var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
-        var readQuestionDto = pollQuestionService.createPollQuestion(pollId, createQuestionDto);
-        var readQuestion = mapper.convert(readQuestionDto, ReadMultipleChoiceQuestion.class);
+        createQuestionDto.setPollId(pollId);
+        var readQuestionDto = pollQuestionService.createPollQuestion(createQuestionDto);
+        var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
@@ -100,7 +108,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response getQuestion(Long pollId, Long id) {
         PollQuestionDto toGet = pollQuestionService.getOne(id, getSpecification());
-        var readQuestion = mapper.convert(toGet, ReadMultipleChoiceQuestion.class);
+        var readQuestion = mapper.convert(toGet, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
@@ -148,16 +156,29 @@ public class PollApiImpl extends CommonApi implements PollsApi {
                                   QuestionType type) {
         verifyExistence(pollId, pollService);
         Page<PollQuestionDto> readQuestion = pollQuestionService.findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readQuestion, ReadMultipleChoiceQuestion.class);
+        return buildQueryResponse(readQuestion, ReadQuestion.class);
     }
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
         var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
-        var toUpdate = pollQuestionService.updatePollQuestion(pollId, id, updateQuestionDto);
-        var readQuestion = mapper.convert(toUpdate, ReadMultipleChoiceQuestion.class);
+        updateQuestionDto.setId(id);
+        updateQuestionDto.setPollId(pollId);
+        var toUpdate = pollQuestionService.updatePollQuestion(updateQuestionDto);
+        var readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
+    }
+
+    @PreAuthorize(MANAGE_VOTES)
+    @Override
+    public Response createVote(Long pollId, CreateVote createVote) {
+        var createVoteDto = mapper.convert(createVote, VoteDto.class);
+        createVoteDto.setPollId(pollId);
+        var readVoteDto = voteService.createVote(createVoteDto);
+        var readVote = mapper.convert(readVoteDto, ReadVote.class);
+
+        return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
 }
