@@ -30,7 +30,6 @@ import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadVote;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
-import com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.UpdateContact;
 import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
@@ -386,8 +385,6 @@ class PermissionsIT {
                 return createBaseCooperation();
             case "com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation":
                 return createApartmentInvitation();
-            case "com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation":
-                return updateApartmentInvitation();
             case "com.softserveinc.ita.homeproject.client.model.InvitationToken":
                 return getInvitationToken();
             default:
@@ -634,11 +631,6 @@ class PermissionsIT {
         return (CreateApartmentInvitation) new CreateApartmentInvitation()
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT);
-    }
-
-    private static UpdateApartmentInvitation updateApartmentInvitation() {
-        return new UpdateApartmentInvitation()
-            .email("test.receive.messages@gmail.com");
     }
 
     private static CreateApartment createApartment() {
