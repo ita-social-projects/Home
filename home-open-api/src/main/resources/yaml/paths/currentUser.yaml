@@ -1,0 +1,18 @@
+current-user:
+  get:
+    tags:
+      - current user
+    summary: Return current User
+    description: Retrieves the current logged User.
+    operationId: getCurrentUser
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/UserResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

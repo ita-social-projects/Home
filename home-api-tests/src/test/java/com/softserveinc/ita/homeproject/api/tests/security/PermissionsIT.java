@@ -111,7 +111,10 @@ class PermissionsIT {
                     int param = 0;
                     int stab = 0;
                     try {
-                        if (acm.getMethod().getParameterCount() == ++count) {
+                        if (acm.getMethod().getParameterCount() == count) {
+                            return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName())
+                                .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient));
+                        } else if (acm.getMethod().getParameterCount() == ++count) {
                             return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
                                     acm.getMethod().getParameterTypes()[param])
                                 .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
@@ -472,6 +475,7 @@ class PermissionsIT {
             case "deleteUser":
             case "getAllUsers":
             case "getContactOnUser":
+            case "getCurrentUser":
                 setPermission = new boolean[]{true, true, true, false};
                 break;
             case "createHouse":
