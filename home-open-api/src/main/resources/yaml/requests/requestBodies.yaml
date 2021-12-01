@@ -109,13 +109,6 @@ CreateApartmentInvitationBody:
     application/json:
       schema:
         $ref: '../models/invitation.yaml#/CreateApartmentInvitation'
-UpdateApartmentInvitationBody:
-  description: A payload for updating an invitation for the apartment owner
-  content:
-    application/json:
-      schema:
-        $ref: '../models/invitation.yaml#/UpdateApartmentInvitation'
-  required: true
 CreatePollBody:
   description: A payload for creating a new cooperation poll
   content:

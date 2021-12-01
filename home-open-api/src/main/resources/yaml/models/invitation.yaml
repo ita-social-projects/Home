@@ -13,9 +13,7 @@ InvitationStatus:
     - pending
     - processing
     - accepted
-    - declined
     - overdue
-    - deactivated
     - error
 InvitationType:
   description: Indicates a type of an Invitation
@@ -105,7 +103,3 @@ UpdateInvitation:
 UpdateCooperationInvitation:
   allOf:
     - $ref: '#/UpdateInvitation'
-UpdateApartmentInvitation:
-  allOf:
-    - $ref: '#/UpdateInvitation'
-

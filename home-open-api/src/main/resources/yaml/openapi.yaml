@@ -18,6 +18,8 @@ tags:
     description: Invitations managment
   - name: news
     description: News management operations
+  - name: current user
+    description: Current user management operations
   - name: user
     description: User management operations
   - name: contact
@@ -56,6 +58,9 @@ paths:
 
   /news/{id}:
     $ref: './paths/news.yaml#/news-newsId'
+
+  /users/current:
+    $ref: './paths/currentUser.yaml#/current-user'
 
   /users:
     $ref: './paths/users.yaml#/users'

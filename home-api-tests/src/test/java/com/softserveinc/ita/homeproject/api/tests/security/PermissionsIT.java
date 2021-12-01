@@ -30,7 +30,6 @@ import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadVote;
 import com.softserveinc.ita.homeproject.client.model.UpdateApartment;
-import com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.UpdateContact;
 import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
@@ -111,7 +110,10 @@ class PermissionsIT {
                     int param = 0;
                     int stab = 0;
                     try {
-                        if (acm.getMethod().getParameterCount() == ++count) {
+                        if (acm.getMethod().getParameterCount() == count) {
+                            return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName())
+                                .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient));
+                        } else if (acm.getMethod().getParameterCount() == ++count) {
                             return (ApiResponse<?>) acm.getApi().getClass().getMethod(acm.getMethodName(),
                                     acm.getMethod().getParameterTypes()[param])
                                 .invoke(acm.getApi().getClass().getConstructor(ApiClient.class).newInstance(apiClient),
@@ -383,8 +385,6 @@ class PermissionsIT {
                 return createBaseCooperation();
             case "com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation":
                 return createApartmentInvitation();
-            case "com.softserveinc.ita.homeproject.client.model.UpdateApartmentInvitation":
-                return updateApartmentInvitation();
             case "com.softserveinc.ita.homeproject.client.model.InvitationToken":
                 return getInvitationToken();
             default:
@@ -472,6 +472,7 @@ class PermissionsIT {
             case "deleteUser":
             case "getAllUsers":
             case "getContactOnUser":
+            case "getCurrentUser":
                 setPermission = new boolean[]{true, true, true, false};
                 break;
             case "createHouse":
@@ -630,11 +631,6 @@ class PermissionsIT {
         return (CreateApartmentInvitation) new CreateApartmentInvitation()
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT);
-    }
-
-    private static UpdateApartmentInvitation updateApartmentInvitation() {
-        return new UpdateApartmentInvitation()
-            .email("test.receive.messages@gmail.com");
     }
 
     private static CreateApartment createApartment() {
