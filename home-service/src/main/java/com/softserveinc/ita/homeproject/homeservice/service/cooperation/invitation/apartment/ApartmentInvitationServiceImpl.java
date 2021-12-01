@@ -110,7 +110,7 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     @Override
     public List<ApartmentInvitationDto> getAllActiveInvitations() {
         List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
-            .findAllBySentDatetimeIsNullAndStatusEquals(
+            .findAllBySentDatetimeIsNullAndEnabledEqualsAndStatusEquals(true,
                 InvitationStatus.PENDING);
         return allNotSentInvitations.stream()
             .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
@@ -120,12 +120,12 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     @Override
     public void deactivateInvitationById(Long apartmentId, Long id) {
         var apartmentInvitation = apartmentInvitationRepository.findById(id)
-            .filter(invitation -> invitation.getSentDatetime() == null
+            .filter(invitation -> (invitation.getSentDatetime() != null
+                || invitation.getStatus().equals(InvitationStatus.PENDING))
                 && invitation.getEnabled().equals(true)
-                && invitation.getApartment().getId().equals(apartmentId)
-                && invitation.getStatus().equals(InvitationStatus.PENDING))
+                && invitation.getApartment().getId().equals(apartmentId))
             .orElseThrow(() ->
-                new NotFoundHomeException("Invitation with id:" + id + "not found."));
+                new NotFoundHomeException("Invitation with id: " + id + " not found."));
         apartmentInvitation.setEnabled(false);
         apartmentInvitationRepository.save(apartmentInvitation);
     }
