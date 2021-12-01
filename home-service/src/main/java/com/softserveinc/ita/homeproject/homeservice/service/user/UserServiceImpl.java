@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
+
+    private static final String CURRENT_USER_NOT_FOUND = "Current user is not found";
 
     private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent "
             + "does not match provided";
@@ -132,6 +136,21 @@ public class UserServiceImpl implements UserService {
         fromDB.setUpdateDate(LocalDateTime.now());
         userRepository.save(fromDB);
         return mapper.convert(fromDB, UserDto.class);
+    }
+
+    @Override
+    @Transactional
+    public UserDto getCurrentUser() {
+        return getCurrentUserByUsername();
+    }
+
+    private UserDto getCurrentUserByUsername() {
+        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) principal).getUsername();
+        var user = userRepository.findByEmail(username)
+            .filter(User::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(CURRENT_USER_NOT_FOUND));
+        return mapper.convert(user, UserDto.class);
     }
 
     private void validateEmailUniques(User user, UserDto userDto) {

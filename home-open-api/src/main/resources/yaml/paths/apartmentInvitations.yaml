@@ -68,30 +68,6 @@ apartments-apartmentId-invitations-invitationId:
         $ref: '../responses/responses.yaml#/NotFound'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
-  put:
-    tags:
-      - apartment invitation
-    summary: Update invitation
-    description: The endpoint updates an invitation for an apartment owner by ID. Email can be updated with Invitation status 'pending' only
-    operationId: updateInvitation
-    parameters:
-      - $ref: '../parameters/parameters.yaml#/p_apartment_id'
-      - $ref: '../parameters/parameters.yaml#/p_invitation_id'
-    requestBody:
-      $ref: '../requests/requestBodies.yaml#/UpdateApartmentInvitationBody'
-    responses:
-      200:
-        $ref: '../responses/responses.yaml#/ApartmentInvitationResponse'
-      400:
-        $ref: '../responses/responses.yaml#/BadRequest'
-      401:
-        $ref: '../responses/responses.yaml#/Unauthorized'
-      403:
-        $ref: '../responses/responses.yaml#/Forbidden'
-      404:
-        $ref: '../responses/responses.yaml#/NotFound'
-      default:
-        $ref: '../responses/responses.yaml#/InternalServerError'
   delete:
     tags:
       - apartment invitation

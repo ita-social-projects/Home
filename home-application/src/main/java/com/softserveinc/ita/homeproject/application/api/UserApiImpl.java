@@ -141,6 +141,14 @@ public class UserApiImpl extends CommonApi implements UsersApi {
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
+    @PreAuthorize(MANAGE_USER)
+    @Override
+    public Response getCurrentUser() {
+        UserDto readUserDto = userService.getCurrentUser();
+        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
+        return Response.status(Response.Status.OK).entity(readUser).build();
+    }
+
     /**
      * removeUser method is implementation of HTTP DELETE
      * method for deactivating user's account.
