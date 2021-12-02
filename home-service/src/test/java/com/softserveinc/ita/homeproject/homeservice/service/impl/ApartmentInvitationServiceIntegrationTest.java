@@ -133,7 +133,7 @@ public class ApartmentInvitationServiceIntegrationTest {
 
     @ParameterizedTest
     @EnumSource(value = InvitationStatus.class,
-        names = {"ACCEPTED", "PROCESSING", "OVERDUE"})
+        names = {"ACCEPTED", "PROCESSING", "OVERDUE", "ERROR"})
     void cannotDeactivateInvitationWhenStatusIsNotPendingAndEnableFalseTest(InvitationStatus status) {
         Apartment apartment = createApartment();
         ApartmentInvitation invitation = createInvitation(apartment);
