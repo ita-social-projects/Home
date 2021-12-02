@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -62,7 +61,6 @@ class OwnershipApiIT {
     void createOwnershipsAndAppartament() throws ApiException, InterruptedException, IOException {
         CreateApartment createApartment = createApartment(3);
 
-
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
@@ -90,7 +88,6 @@ class OwnershipApiIT {
             ownershipsID.add(ownershipList.get(i).getId());
         }
     }
-
 
     @Test
     void createUserAndOwnershipViaApartmentTest() throws ApiException, InterruptedException, IOException {
@@ -275,7 +272,6 @@ class OwnershipApiIT {
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
-
         return  Stream.generate(CreateInvitation::new)
                 .map(x -> x.email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")).type(InvitationType.APARTMENT))
                 .limit(numberOfInvitations)
