@@ -44,8 +44,6 @@ class QueryOwnershipIT {
     private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
 
-//    private static long TEST_OWNERSHIP_ID = 1L;
-
     private static long TEST_APARTMENT_ID = 1L;
 
     private static List<Long> ownershipsID = new ArrayList<>();
@@ -55,7 +53,6 @@ class QueryOwnershipIT {
     void createOwnershipsAndAppartament() throws ApiException, InterruptedException, IOException {
         CreateApartment createApartment = createApartment(3);
 
-
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
@@ -64,23 +61,34 @@ class QueryOwnershipIT {
 
         TimeUnit.MILLISECONDS.sleep(5000);
 
-        int num =  createApartment.getInvitations().size();
-        List <CreateUser> users = new ArrayList<>();
+        List<CreateUser> users = Stream.generate(CreateUser::new).map(x ->
+                x.firstName("firstName")
+                    .middleName("middleName")
+                    .lastName("middleName")
+                    .password("password")
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
+            .limit(3)
+            .collect(Collectors.toList());
+
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-        for (int i = 0; i < num; i++) {
-            users.add(createBaseUser());
-            users.get(i).setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-                    Objects.requireNonNull(createApartment.getInvitations().get(i)).getEmail())));
-            users.get(i).setEmail(Objects.requireNonNull(createApartment.getInvitations().get(i).getEmail()));
-            ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(users.get(i));
-        }
 
-        List<ReadOwnership> ownershipList = new ArrayList<>();
-        for(int i = 0; i < num; i++) {
-            ownershipList.add(ownershipApi.queryOwnership(TEST_APARTMENT_ID, null, null, null, null, null, null, null).get(i));
-            ownershipsID.add(ownershipList.get(i).getId());
-        }
+        users.forEach(x -> {
+            x.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
+                Objects.requireNonNull(
+                    createApartment.getInvitations().get(createApartment.getInvitations().size() - 1)).getEmail())));
+            x.setEmail(Objects.requireNonNull(
+                createApartment.getInvitations().get(createApartment.getInvitations().size() - 1).getEmail()));
+            try {
+                ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(x);
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+            createApartment.getInvitations().remove(createApartment.getInvitations().size() - 1);
+        });
+
+        ownershipApi.queryOwnership(TEST_APARTMENT_ID, null, null, null, null, null, null, null)
+            .forEach(x -> ownershipsID.add(x.getId()));
     }
 
     @Test
