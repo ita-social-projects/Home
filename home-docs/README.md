@@ -10,6 +10,10 @@
   all information and instructions how to run application in `DOCKER` you can find here
 
 
+- [stages-of-development-and-versioning.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/stages-of-development-and-versioning.md) -
+  all steps in developing a project using the `Git Flow` method. Describes the Versioning approach
+
+
 - [developer-checks.md](https://github.com/ita-social-projects/Home/blob/dev/home-docs/developer-checks.md) -
   links for checking application before `pull request`
 
