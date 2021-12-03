@@ -1,20 +1,26 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
+import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.Apartment;
+import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
@@ -28,6 +34,9 @@ public class ApartmentInvitationServiceIntegrationTest {
 
     @Autowired
     private ApartmentInvitationServiceImpl apartmentInvitationService;
+
+    @Autowired
+    private ApartmentRepository apartmentRepository;
 
     @BeforeEach
     public void initApartmentInvitationTestDB() {
@@ -63,6 +72,114 @@ public class ApartmentInvitationServiceIntegrationTest {
         assertEquals(InvitationStatus.PROCESSING, allApartmentInvitationsFromBeginningDB.get(3).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allApartmentInvitationsFromTransformedDB.get(1).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allApartmentInvitationsFromTransformedDB.get(3).getStatus());
+    }
+
+    @Test
+    void deactivatedApartmentInvitationWhenInvitationStatusPendingAndEnableTrueTest() {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+
+        invitation.setStatus(InvitationStatus.PENDING);
+        invitation.setEnabled(true);
+        invitation.setSentDatetime(null);
+        invitation = apartmentInvitationRepository.save(invitation);
+
+        apartmentInvitationService.deactivateInvitationById(apartment.getId(), invitation.getId());
+
+        Optional<ApartmentInvitation> deactivatedInvitation =
+            apartmentInvitationRepository.findById(invitation.getId());
+        assertTrue(deactivatedInvitation.isPresent(), "expected that deactivated invitation found");
+        assertEquals(false, deactivatedInvitation.get().getEnabled());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = InvitationStatus.class,
+        names = {"ACCEPTED", "PROCESSING", "OVERDUE"})
+    void deactivatedApartmentInvitationWhenInvitationStatusNotPendingAndEnableTrueTest(InvitationStatus status) {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+
+        invitation.setStatus(status);
+        invitation.setEnabled(true);
+        invitation.setSentDatetime(LocalDateTime.now());
+        invitation = apartmentInvitationRepository.save(invitation);
+
+        apartmentInvitationService.deactivateInvitationById(apartment.getId(), invitation.getId());
+
+        Optional <ApartmentInvitation> deactivetedInvitation =
+            apartmentInvitationRepository.findById(invitation.getId());
+        assertTrue(deactivetedInvitation.isPresent(), "expected that deactivated invitation found");
+        assertEquals(false, deactivetedInvitation.get().getEnabled());
+
+    }
+
+    @Test
+    void cannotDeactivateInvitationWhenStatusIsPendingAndEnableFalseTest() {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+
+        invitation.setStatus(InvitationStatus.PENDING);
+        invitation.setSentDatetime(null);
+        invitation.setEnabled(false);
+        invitation = apartmentInvitationRepository.save(invitation);
+
+        Long apartmentId = apartment.getId();
+        Long invitationId = invitation.getId();
+
+        NotFoundHomeException exception = Assertions.assertThrows(NotFoundHomeException.class, () ->
+            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+        assertEquals("Invitation with id: " + invitationId + " not found.", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = InvitationStatus.class,
+        names = {"ACCEPTED", "PROCESSING", "OVERDUE", "ERROR"})
+    void cannotDeactivateInvitationWhenStatusIsNotPendingAndEnableFalseTest(InvitationStatus status) {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+
+        invitation.setStatus(status);
+        invitation.setEnabled(false);
+        invitation.setSentDatetime(LocalDateTime.now());
+        invitation = apartmentInvitationRepository.save(invitation);
+
+        Long apartmentId = apartment.getId();
+        Long invitationId = invitation.getId();
+
+        NotFoundHomeException exception = Assertions.assertThrows(NotFoundHomeException.class, () ->
+            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+        assertEquals("Invitation with id: " + invitationId + " not found.", exception.getMessage());
+    }
+
+    @Test
+    void cannotDeactivateInvitationWhenStatusIsNotExistTest() {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+
+        invitation.setEnabled(true);
+
+        invitation.setStatus(null);
+        invitation = apartmentInvitationRepository.save(invitation);
+
+        Long apartmentId = apartment.getId();
+        Long invitationId = invitation.getId();
+
+        Assertions.assertThrows(NullPointerException.class, () ->
+            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+    }
+
+    private Apartment createApartment(){
+        Apartment apartment = new Apartment();
+        apartment.setApartmentNumber("123");
+        apartment = apartmentRepository.save(apartment);
+        return apartment;
+    }
+
+    private ApartmentInvitation createInvitation(Apartment apartment){
+        ApartmentInvitation invitation = new ApartmentInvitation();
+        invitation.setApartment(apartment);
+        invitation = apartmentInvitationRepository.save(invitation);
+        return invitation;
     }
 
     private ApartmentInvitation createNotOverduePendingApartmentInvitation() {
