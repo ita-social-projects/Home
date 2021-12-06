@@ -29,7 +29,6 @@
         <mail.port>1025</mail.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
-        <psql.script.cmd.command>psql postgresql://${postgres.user}:${postgres.password}@${docker.image.postgres}:${postgres.internal.port}/${postgres.db} -f /sql/test_script.sql</psql.script.cmd.command>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
         <commons-text-version>1.9</commons-text-version>
@@ -400,11 +399,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>

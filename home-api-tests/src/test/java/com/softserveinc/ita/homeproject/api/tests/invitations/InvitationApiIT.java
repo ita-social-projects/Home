@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.invitations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
+import com.softserveinc.ita.homeproject.client.api.ApartmentInvitationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.HouseApi;
 import com.softserveinc.ita.homeproject.client.api.InvitationsApi;
@@ -31,6 +32,8 @@ import com.softserveinc.ita.homeproject.client.model.CreateUser;
 import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
+import com.softserveinc.ita.homeproject.client.model.ReadApartment;
+import com.softserveinc.ita.homeproject.client.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
@@ -49,6 +52,8 @@ class InvitationApiIT {
     private final ApartmentApi apartmentApi = new ApartmentApi(ApiClientUtil.getCooperationAdminClient());
 
     private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
+
+    private final ApartmentInvitationApi apartmentInvitationApi = new ApartmentInvitationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void isEmailSentTest() throws Exception {
@@ -103,6 +108,45 @@ class InvitationApiIT {
         assertEquals(userEmail, readInvitation.getEmail());
         assertEquals(InvitationType.COOPERATION, readInvitation.getType());
         assertEquals(InvitationStatus.ACCEPTED,readInvitation.getStatus());
+    }
+
+    @Test
+    void isApartmentInvitationDeactivatedWhenStatusPendingTest() throws Exception {
+        String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
+        ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
+
+        ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
+        ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
+            createApartmentWithoutInvitation());
+
+        ReadApartmentInvitation invitation = apartmentInvitationApi.createInvitation(apartment.getId(),
+            (CreateApartmentInvitation) createApartmentInvitationWithEmail(userEmail).get(0));
+        invitation.getId();
+
+        ApiResponse<Void> response = apartmentInvitationApi.deleteInvitationWithHttpInfo(apartment.getId(), invitation.getId());
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
+    }
+
+    @Test
+    void isApartmentInvitationDeactivatedWhenStatusAccepted() throws Exception {
+        String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
+        ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
+
+        ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
+        ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
+            createApartmentWithoutInvitation());
+
+        ReadApartmentInvitation invitation = apartmentInvitationApi.createInvitation(apartment.getId(),
+            (CreateApartmentInvitation) createApartmentInvitationWithEmail(userEmail).get(0));
+        invitation.getId();
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+
+        ApiResponse<Void> response = apartmentInvitationApi.deleteInvitationWithHttpInfo(apartment.getId(), invitation.getId());
+
+        assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
     }
 
     public InvitationToken buildInvitationPayload(String invitationToken){
@@ -213,5 +257,10 @@ class InvitationApiIT {
                 .email( userEmail)
                 .type(InvitationType.APARTMENT));
         return createInvitations;
+    }
+    private CreateApartment createApartmentWithoutInvitation() {
+        return new CreateApartment()
+            .area(BigDecimal.valueOf(72.5))
+            .number("15");
     }
 }
