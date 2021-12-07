@@ -72,7 +72,7 @@ apartments-apartmentId-invitations-invitationId:
     tags:
       - apartment invitation
     summary: Delete invitation
-    description: The endpoint deletes an invitation for an apartment owner by ID with status 'pending' and 'error'
+    description: The endpoint deletes an invitation for an apartment owner by ID with any status
     operationId: deleteInvitation
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_apartment_id'
