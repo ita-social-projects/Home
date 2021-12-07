@@ -1,9 +1,11 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
+import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
@@ -150,6 +152,8 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findByEmail(username)
             .filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(CURRENT_USER_NOT_FOUND));
+        user.setContacts(user.getContacts().stream()
+            .filter(Contact::getEnabled).collect(Collectors.toList()));
         return mapper.convert(user, UserDto.class);
     }
 
@@ -165,8 +169,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
-        return userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(user -> mapper.convert(user, UserDto.class));
+        var users = userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
+        users.forEach(user -> user.setContacts(user.getContacts().stream()
+            .filter(Contact::getEnabled).collect(Collectors.toList())));
+        return users.map(user -> mapper.convert(user, UserDto.class));
     }
 
     @Override
