@@ -61,8 +61,8 @@ public abstract class InvitationServiceImpl implements InvitationService {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
             .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
 
-        if (!invitation.getStatus().equals(InvitationStatus.PROCESSING)) {
-            throw new InvitationException("Invitation status is not equal to processing");
+        if (!invitation.getEnabled().equals(true)) {
+            throw new InvitationException("Invitation is not active");
         }
         acceptUserInvitation(invitation);
     }
