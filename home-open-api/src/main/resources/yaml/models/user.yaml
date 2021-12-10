@@ -87,8 +87,6 @@ UpdateUser:
     - first_name
     - middle_name
     - last_name
-    - email
-    - password
   properties:
     first_name:
       pattern: '\w+'
@@ -108,15 +106,4 @@ UpdateUser:
       example: "Petrov"
       minLength: 1
       maxLength: 50
-    email:
-      minLength: 5
-      maxLength: 320
-      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-      type: string
-      example: "test.put.messages@gmail.com"
-    password:
-      pattern: '[a-zA-Z0-9]{8,}'
-      type: string
-      example: "mySuperStrongPass"
-      minLength: 8
-      maxLength: 128
+
