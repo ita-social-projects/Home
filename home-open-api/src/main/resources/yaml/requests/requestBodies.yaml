@@ -34,14 +34,14 @@ UpdateUserBody:
         $ref: '../models/user.yaml#/UpdateUser'
   required: true
 CreateContactBody:
-  description: A payload for creating a contact
+  description: A payload for creating a contact. Attention! Contact type can be "email" or "phone"
   content:
     application/json:
       schema:
         $ref: '../models/contact.yaml#/CreateContact'
   required: true
 UpdateContactBody:
-  description: A payload for updating an existing Contact
+  description: A payload for updating an existing Contact. Attention! Contact type can be "email" or "phone"
   content:
     application/json:
       schema:
