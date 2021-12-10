@@ -127,13 +127,6 @@ public class UserServiceImpl implements UserService {
             fromDB.setLastName(updateUserDto.getLastName());
         }
 
-        if (updateUserDto.getEmail() != null) {
-            fromDB.setEmail(updateUserDto.getEmail());
-        }
-
-        if (updateUserDto.getPassword() != null) {
-            fromDB.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
-        }
 
         fromDB.setUpdateDate(LocalDateTime.now());
         userRepository.save(fromDB);
