@@ -53,6 +53,9 @@ paths:
   /invitations/invitation-approval:
     $ref: './paths/invitations.yaml#/invitations-invitationApproval'
 
+  /invitations:
+    $ref: './paths/invitations.yaml#/invitations'
+
   /news:
     $ref: './paths/news.yaml#/news'
 

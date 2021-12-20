@@ -84,8 +84,8 @@ public abstract class BaseContactService implements ContactService {
     @Override
     public Page<ContactDto> findAll(Integer pageNumber, Integer pageSize, Specification<Contact> specification) {
         specification = updateSpecification(specification);
-        return contactRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(contact -> mapper.convert(contact, ContactDto.class));
+        var cont = contactRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
+        return   cont.map(contact -> mapper.convert(contact, ContactDto.class));
     }
 
     @Override

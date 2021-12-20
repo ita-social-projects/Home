@@ -58,6 +58,14 @@ Role:
   enum:
     - admin
     - user
+
+ReadInvitationWithApartment:
+  allOf:
+    - $ref: '#/ReadInvitation'
+  properties:
+    apartment:
+      $ref: 'apartment.yaml#/ReadApartmentForInvitation'
+
 CreateInvitation:
   type: object
   discriminator:
