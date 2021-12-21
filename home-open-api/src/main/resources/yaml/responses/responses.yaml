@@ -6,14 +6,14 @@ InvitationResponse:
     application/json:
       schema:
         $ref: "../models/invitation.yaml#/ReadInvitation"
-InvitationsWithApartmentResponse:
+InvitationsResponse:
   description: OK
   content:
     application/json:
       schema:
         type: array
         items:
-          $ref: "../models/invitation.yaml#/ReadInvitationWithApartment"
+          $ref: "../models/invitation.yaml#/ReadInvitation"
 BadRequest:
   description: Validation Exception.
   content:

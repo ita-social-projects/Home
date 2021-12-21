@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.InvitationsApi;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
 import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
-import com.softserveinc.ita.homeproject.client.model.ReadInvitationWithApartment;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class InvitationQuery extends BaseQuery {
 
     private InvitationsApi invitationsApi;
 
-    private InvitationType invitationType;
+    private InvitationType type;
 
     private Long cooperationId;
 
@@ -27,7 +26,7 @@ public class InvitationQuery extends BaseQuery {
     }
 
     public void setInvitationType(InvitationType invitationType) {
-        this.invitationType = invitationType;
+        this.type = invitationType;
     }
 
     public void setCooperationId(Long cooperationId) {
@@ -46,59 +45,60 @@ public class InvitationQuery extends BaseQuery {
         this.status = status;
     }
 
-    public List<ReadInvitationWithApartment> perfom() throws ApiException {
+    public List<ReadInvitation> perform() throws ApiException {
         return invitationsApi
-                .queryAllInvitations(invitationType,
-                        cooperationId,
-                        apartmentId,
-                        this.getPageNumber(),
-                        this.getPageSize(),
-                        this.getSort(),
-                        this.getFilter(),
-                        this.getId(),
-                        email,
-                        status
-                        );
+            .queryAllInvitations(type,
+                cooperationId,
+                apartmentId,
+                this.getPageNumber(),
+                this.getPageSize(),
+                this.getSort(),
+                this.getFilter(),
+                this.getId(),
+                email,
+                status
+            );
     }
 
-    public static class Builder extends BaseBuilder<InvitationQuery, Builder> {
+    public static class Builder extends BaseBuilder<InvitationQuery, InvitationQuery.Builder> {
 
-        public Builder(InvitationsApi invitationsApi){
-            queryClass.setInvitationsApi(invitationsApi);}
+        public Builder(InvitationsApi invitationsApi) {
+            queryClass.setInvitationsApi(invitationsApi);
+        }
 
-        public Builder invitationType(InvitationType invitationType) {
+        public InvitationQuery.Builder invitationType(InvitationType invitationType) {
             queryClass.setInvitationType(invitationType);
             return this;
         }
 
-        public Builder cooperationId(Long cooperationId) {
+        public InvitationQuery.Builder cooperationId(Long cooperationId) {
             queryClass.setCooperationId(cooperationId);
             return this;
         }
 
-        public Builder apartmentId(Long apartmentId) {
+        public InvitationQuery.Builder apartmentId(Long apartmentId) {
             queryClass.setApartmentId(apartmentId);
             return this;
         }
 
-        public Builder email(String email) {
+        public InvitationQuery.Builder email(String email) {
             queryClass.setEmail(email);
             return this;
         }
 
-        public Builder status(String status) {
+        public InvitationQuery.Builder status(String status) {
             queryClass.setStatus(status);
             return this;
         }
 
 
-    @Override
+        @Override
         protected InvitationQuery getActual() {
             return new InvitationQuery();
         }
 
         @Override
-        protected Builder getActualBuilder() {
+        protected InvitationQuery.Builder getActualBuilder() {
             return this;
         }
     }

@@ -2,9 +2,6 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_IN_COOPERATION;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -14,11 +11,7 @@ import com.softserveinc.ita.homeproject.application.model.InvitationType;
 import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.application.model.ReadCooperationInvitation;
 import com.softserveinc.ita.homeproject.application.model.ReadInvitation;
-import com.softserveinc.ita.homeproject.application.model.ReadInvitationWithApartment;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.apartment.ApartmentDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
@@ -85,7 +78,7 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
                                 .getHouseId())
                         .getAddress()));
 
-        return buildQueryResponse(readInvitation, ReadInvitationWithApartment.class);
+        return buildQueryResponse(readInvitation, ReadInvitation.class);
     }
 
     private ReadInvitation registerWithCorrectService(String token) {

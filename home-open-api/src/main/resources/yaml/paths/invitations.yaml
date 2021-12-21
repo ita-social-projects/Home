@@ -42,7 +42,7 @@ invitations:
 
     responses:
       200:
-        $ref: '../responses/responses.yaml#/InvitationsWithApartmentResponse'
+        $ref: '../responses/responses.yaml#/InvitationsResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
       401:
