@@ -74,9 +74,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
                 .middleName("updatedMiddleName")
-                .lastName("updatedLastName")
-                .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
-                .password("somePassword");
+                .lastName("updatedLastName");
 
         ApiResponse<ReadUser> response = userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
 
@@ -300,12 +298,6 @@ class UserApiIT {
                 .withMessageContaining("Missing the required parameter 'id' when calling getUser");
     }
 
-    @Test
-    void updateUserWithAlreadyExistEmail() {
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(this::updateUserWithExistEmail)
-                .withMessageContaining("User with email ").withMessageContaining(" is already exists");
-    }
 
     @Test
     void updateUserWithEmptyFirstNameAndMiddleNameAndLastNameTest() {
@@ -313,8 +305,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
                 .firstName("")
                 .middleName("")
-                .lastName("")
-                .email("mr.smith@gmail.com");
+                .lastName("");
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
@@ -330,8 +321,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
                 .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .middleName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
-                .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
-                .email("mr.smith@gmail.com");
+                .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet");
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
@@ -341,67 +331,6 @@ class UserApiIT {
                 .withMessageContaining("Parameter `lastName` is invalid - size must be between 1 and 50 signs.");
     }
 
-    @Test
-    void updateUserWithEmptyEmailTest() {
-        ReadUser savedUser = baseUserForTests;
-        UpdateUser updateUser = new UpdateUser()
-                .firstName("John")
-                .middleName("Johnovich")
-                .lastName("Smith")
-                .email("");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
-                .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
-    }
-
-    @Test
-    void updateUserWithInvalidEmailTest() {
-        ReadUser savedUser = baseUserForTests;
-        UpdateUser updateUser = new UpdateUser()
-                .firstName("John")
-                .middleName("Johnovich")
-                .lastName("Smith")
-                .email("mr.smith@");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
-                .withMessageContaining("Parameter `email` is invalid - must meet the rule.");
-    }
-
-    @Test
-    void updateUserWithEmptyPasswordTest() {
-        ReadUser savedUser = baseUserForTests;
-        UpdateUser updateUser = new UpdateUser()
-                .firstName("John")
-                .middleName("Johnovich")
-                .lastName("Smith")
-                .email("mr.smith@")
-                .password("");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
-                .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
-    }
-
-    @Test
-    void updateUserWithInvalidPasswordTest() {
-        ReadUser savedUser = baseUserForTests;
-        UpdateUser updateUser = new UpdateUser()
-                .firstName("John")
-                .middleName("Johnovich")
-                .lastName("Smith")
-                .email("mr.smith@")
-                .password("1234");
-
-        assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
-                .matches(exception -> exception.getCode() == BAD_REQUEST)
-                .withMessageContaining("Parameter `password` is invalid - must meet the rule.");
-    }
 
     @Test
     void updateUserWithNullParametersTest() {
@@ -409,15 +338,13 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
                 .firstName(null)
                 .middleName(null)
-                .lastName(null)
-                .email(null);
+                .lastName(null);
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining("Parameter `firstName` is invalid - must not be null.")
-                .withMessageContaining("Parameter `lastName` is invalid - must not be null.")
-                .withMessageContaining("Parameter `email` is invalid - must not be null.");
+                .withMessageContaining("Parameter `lastName` is invalid - must not be null.");
     }
 
     @Test
@@ -564,9 +491,7 @@ class UserApiIT {
         UpdateUser updateUser = new UpdateUser()
                 .firstName("updatedFirstName")
                 .middleName("middleName")
-                .lastName("updatedLastName")
-                .email(additional.getEmail())
-                .password("somePassword");
+                .lastName("updatedLastName");
 
         return userApi.updateUserWithHttpInfo(savedUser.getId(), updateUser);
     }
