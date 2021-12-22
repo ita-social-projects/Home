@@ -119,3 +119,16 @@ ReadApartment:
           "ownership_part": 0.38
         }
       ]
+ReadApartmentForInvitation:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    apartment_number:
+      type: string
+      minLength: 1
+      maxLength: 6
+      pattern: '^(?!(0))\d{1,4}(\-[a-zа-я])?$'
+      example: 15
+    address:
+      $ref: 'address.yaml#/Address'

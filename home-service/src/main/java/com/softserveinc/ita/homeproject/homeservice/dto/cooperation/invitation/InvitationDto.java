@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation;
 
+import com.softserveinc.ita.homeproject.homedata.general.address.Address;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
@@ -8,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class InvitationDto extends BaseDto {
+public abstract class InvitationDto extends BaseDto {
 
     private InvitationStatusDto status;
 
@@ -17,5 +18,7 @@ public class InvitationDto extends BaseDto {
     private String email;
 
     private String registrationToken;
+
+    private Address address;
 
 }

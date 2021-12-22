@@ -112,6 +112,22 @@ cooperation_id:
     format: int64
     minimum: 1
   example: 1
+cooperation_id_not_required:
+  in: query
+  name: cooperation_id
+  description: ID of the polled cooperation
+  schema:
+    type: integer
+    format: int64
+  example: 1
+apartment_id:
+  in: query
+  name: apartment_id
+  description: Apartment ID to which the ownership belongs
+  schema:
+    type: integer
+    format: int64
+  example: 1
 sort:
   in: query
   name: sort
@@ -195,6 +211,12 @@ type:
   schema:
     $ref: '../models/contact.yaml#/ContactType'
   description: Type of the Contact
+invitation_type:
+  in: query
+  name: type
+  schema:
+    $ref: '../models/invitation.yaml#/InvitationType'
+  description: Type of the Invitation
 name:
   in: query
   name: name

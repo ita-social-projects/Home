@@ -20,3 +20,33 @@ invitations-invitationApproval:
         $ref: '../responses/responses.yaml#/Conflict'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
+
+invitations:
+  get:
+    tags:
+      - invitations
+    summary: Get all invitations
+    description: The endpoint gets all invitations
+    operationId: queryAllInvitations
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/invitation_type'
+      - $ref: '../parameters/parameters.yaml#/cooperation_id_not_required'
+      - $ref: '../parameters/parameters.yaml#/apartment_id'
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/email'
+      - $ref: '../parameters/parameters.yaml#/status'
+
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/InvitationsResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
