@@ -186,11 +186,8 @@ class InvitationApiIT {
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> apartmentInvitationApi
                 .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
-            .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining(
-                "Bad json");
+            .matches(exception -> exception.getCode() == BAD_REQUEST);
     }
-
 
     @Test
     void CreateInvitationWhenAllIsOk() throws Exception {
