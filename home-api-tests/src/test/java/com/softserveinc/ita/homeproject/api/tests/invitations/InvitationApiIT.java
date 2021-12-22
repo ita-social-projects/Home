@@ -188,10 +188,7 @@ class InvitationApiIT {
                 .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining(
-                "Could not resolve type id 'cooperation' as a subtype of `com.softserveinc.ita.homeproject.application.model.CreateApartmentInvitation`:" +
-                    " Class `com.softserveinc.ita.homeproject.application.model.CreateCooperationInvitation` " +
-                    "not subtype of `com.softserveinc.ita.homeproject.application.model.CreateApartmentInvitation`\n" +
-                    " at [Source: (org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream); line: 1, column: 9]");
+                "Bad json");
     }
 
 
