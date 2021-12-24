@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>home</artifactId>
@@ -9,14 +10,10 @@
         <version>${revision}</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>home-api-tests</artifactId>
 
     <properties>
-        <surefire-version>3.0.0-M5</surefire-version>
-        <commons-lang3-version>3.11</commons-lang3-version>
-        <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
         <docker.image.data.migration>homeacademy/data-migration:${docker.revision}</docker.image.data.migration>
         <docker.image.application>homeacademy/home-application:${docker.revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
@@ -31,12 +28,11 @@
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <home.application.internal.port>8080</home.application.internal.port>
-        <commons-text-version>1.9</commons-text-version>
         <docker-files>${basedir}/target/docker</docker-files>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
-        <reflections.version>0.9.12</reflections.version>
     </properties>
+
     <profiles>
         <profile>
             <id>push.images</id>
@@ -54,7 +50,6 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-data-migration</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
@@ -72,13 +67,11 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-service</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-data</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -113,7 +106,6 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
                         <executions>
                             <execution>
                                 <id>collect-coverage</id>
@@ -160,7 +152,6 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>${fabric8io.docker.maven.plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <verbose>true</verbose>
@@ -334,7 +325,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${surefire-version}</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -367,43 +357,34 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-java-client</artifactId>
-            <version>${revision}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>${commons-text-version}</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>${reflections.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

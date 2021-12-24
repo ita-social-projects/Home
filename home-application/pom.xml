@@ -2,30 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>home</artifactId>
         <groupId>com.softserveinc.ita.homeproject</groupId>
         <version>${revision}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
+
     <packaging>jar</packaging>
     <artifactId>home-application</artifactId>
 
     <properties>
-        <surefire-version>3.0.0-M5</surefire-version>
         <json.name>openapi.json</json.name>
         <image.application.path>homeacademy/home-application</image.application.path>
         <home-application.package>com.softserveinc.ita.homeproject.application</home-application.package>
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-open-api</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>javax.mail</groupId>
@@ -44,24 +41,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-data-migration</artifactId>
-            <version>${revision}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.liquibase</groupId>
@@ -72,12 +59,10 @@
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-data</artifactId>
-            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-service</artifactId>
-            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,7 +71,6 @@
         <dependency>
             <groupId>tech.home-project-engineering</groupId>
             <artifactId>quartz-actuator</artifactId>
-            <version>${quartz-actuator.version}</version>
         </dependency>
     </dependencies>
 
@@ -95,7 +79,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>resource-dependencies-openapi-spec</id>
@@ -226,94 +209,30 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire-version}</version>
-                <configuration>
-                    <forkNode implementation="org.apache.maven.plugin.surefire.extensions.SurefireForkNodeFactory"/>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>${jib.version}</version>
                 <configuration>
                     <to>
                         <image>${image.application.path}</image>
-                        <tags>
-                            <tag>${project.version}-${git_commit_sha}</tag>
-                        </tags>
-                        <auth>
-                            <username>${docker.username}</username>
-                            <password>${docker.password}</password>
-                        </auth>
                     </to>
                     <container>
                         <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
-                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                     </container>
-                    <allowInsecureRegistries>true</allowInsecureRegistries>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>${jib.goal}</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resource-one</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/static/api/0</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources/static/api/0</directory>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>version.json</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
