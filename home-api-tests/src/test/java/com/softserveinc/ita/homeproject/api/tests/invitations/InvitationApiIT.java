@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.api.tests.invitations;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
-import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -189,7 +188,7 @@ class InvitationApiIT {
     }
 
     @Test
-    void CreateInvitationWhenAllIsOk() throws Exception {
+    void CreateInvitationApartmentWhenAllIsOk() throws Exception {
         String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
         ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
 
@@ -209,6 +208,37 @@ class InvitationApiIT {
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
         assertInvitation(createApartmentInvitation, response.getData());
+    }
+
+
+    @Test
+    void createInvitationForNonExistCooperation() throws Exception {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation()).id(10000000000000L);
+
+        CreateInvitation invitation = new CreateCooperationInvitation()
+            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .type(InvitationType.COOPERATION);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
+            .withMessageContaining("Parameter `cooperationId` is invalid - must not be null.");
+    }
+
+    @Test
+    void createInvitationForInvalidRole() throws Exception {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+
+        CreateInvitation invitation = new CreateCooperationInvitation()
+            .cooperationId(createdCooperation.getId())
+            .role(null)
+            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .type(InvitationType.COOPERATION);
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
+            .withMessageContaining("Parameter `role` is invalid - must not be null.");
     }
 
     @Test
