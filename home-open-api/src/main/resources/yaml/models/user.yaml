@@ -13,19 +13,19 @@ CreateUser:
       example: f8e20775-da55-11eb-a58d-775374b8f3a1
       minLength: 36
     first_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Petro"
       minLength: 1
       maxLength: 50
     middle_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Petrovich"
       minLength: 1
       maxLength: 50
     last_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Zinchenko"
       minLength: 1
