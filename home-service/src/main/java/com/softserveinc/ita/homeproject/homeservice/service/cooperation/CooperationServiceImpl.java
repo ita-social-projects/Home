@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
@@ -14,8 +15,8 @@ import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactD
 import com.softserveinc.ita.homeproject.homeservice.dto.user.role.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;
-import lombok.RequiredArgsConstructor;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,16 +24,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class CooperationServiceImpl implements CooperationService {
 
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
-    private final CooperationInvitationService invitationService;
+    private final InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService;
 
     private final CooperationRepository cooperationRepository;
 
     private final ServiceMapper mapper;
+
+    public CooperationServiceImpl(
+        @Qualifier("cooperationInvitationServiceImpl")
+            InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService,
+        CooperationRepository cooperationRepository,
+        ServiceMapper mapper) {
+        this.invitationService = invitationService;
+        this.cooperationRepository = cooperationRepository;
+        this.mapper = mapper;
+    }
 
     @Transactional
     @Override
@@ -74,8 +84,8 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
         Cooperation fromDb = cooperationRepository.findById(id)
-                .filter(Cooperation::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
+            .filter(Cooperation::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
 
         if (updateCooperationDto.getName() != null) {
             fromDb.setName(updateCooperationDto.getName());
@@ -92,7 +102,7 @@ public class CooperationServiceImpl implements CooperationService {
         if (updateCooperationDto.getContacts() != null) {
             fromDb.getContacts().clear();
             List<ContactDto> contactDtoList = updateCooperationDto.getContacts();
-            for(ContactDto contactDto : contactDtoList) {
+            for (ContactDto contactDto : contactDtoList) {
                 Contact contact = mapper.convert(contactDto, Contact.class);
                 contact.setCooperation(fromDb);
                 contact.setEnabled(true);

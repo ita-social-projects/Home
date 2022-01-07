@@ -49,4 +49,47 @@ invitations:
         $ref: '../responses/responses.yaml#/Unauthorized'
       default:
         $ref: '../responses/responses.yaml#/InternalServerError'
+delete-invitations:
+  delete:
+    tags:
+      - invitations
+    summary: Delete any invitation
+    description: The endpoint deletes an invitation by ID with any status
+    operationId: deleteAnyInvitation
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/invitation_id'
+    responses:
+      204:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+create-invitation:
+  post:
+    tags:
+      - invitations
+    summary: Create new Invitation
+    description: The endpoint creates a new Invitation
+    operationId: createInvitation
+    requestBody:
+        $ref: '../requests/requestBodies.yaml#/CreateInvitationBody'
+    responses:
+      201:
+        $ref: '../responses/responses.yaml#/InvitationResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      403:
+        $ref: '../responses/responses.yaml#/Forbidden'
+      409:
+        $ref: '../responses/responses.yaml#/Conflict'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
 

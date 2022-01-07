@@ -56,6 +56,12 @@ paths:
   /invitations:
     $ref: './paths/invitations.yaml#/invitations'
 
+  /invitations/create-invitation:
+   $ref: './paths/invitations.yaml#/create-invitation'
+
+  /invitations/delete-invitations:
+    $ref: './paths/invitations.yaml#/delete-invitations'
+
   /news:
     $ref: './paths/news.yaml#/news'
 
@@ -106,12 +112,6 @@ paths:
 
   /apartments/{apartment_id}/ownerships/{id}:
     $ref: './paths/apartmentOwnerships.yaml#/apartments-apartmentId-ownerships-ownershipId'
-
-  /apartments/{apartment_id}/invitations:
-    $ref: './paths/apartmentInvitations.yaml#/apartments-apartmentId-invitations'
-
-  /apartments/{apartment_id}/invitations/{id}:
-    $ref: './paths/apartmentInvitations.yaml#/apartments-apartmentId-invitations-invitationId'
 
   /cooperations/{cooperation_id}/polls:
     $ref: './paths/cooperationPolls.yaml#/cooperations-cooperationId-polls'

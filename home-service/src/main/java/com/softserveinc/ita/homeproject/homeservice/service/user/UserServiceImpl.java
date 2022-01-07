@@ -3,7 +3,10 @@ package com.softserveinc.ita.homeproject.homeservice.service.user;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.user.User;
@@ -12,13 +15,14 @@ import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;
-import lombok.RequiredArgsConstructor;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
+
 public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
@@ -37,7 +41,7 @@ public class UserServiceImpl implements UserService {
     private static final String CURRENT_USER_NOT_FOUND = "Current user is not found";
 
     private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent "
-            + "does not match provided";
+        + "does not match provided";
 
     private final UserRepository userRepository;
 
@@ -47,11 +51,33 @@ public class UserServiceImpl implements UserService {
 
     private final InvitationRepository invitationRepository;
 
-    private final ApartmentInvitationServiceImpl apartmentInvitationService;
+    private final InvitationService<ApartmentInvitation, ApartmentInvitationDto> apartmentInvitationService;
 
-    private final CooperationInvitationService cooperationInvitationService;
+    private final InvitationService<CooperationInvitation, CooperationInvitationDto> cooperationInvitationService;
 
     private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           UserCooperationRepository userCooperationRepository,
+                           InvitationRepository invitationRepository,
+                           @Qualifier("apartmentInvitationServiceImpl")
+                               InvitationService<ApartmentInvitation, ApartmentInvitationDto>
+                               apartmentInvitationService,
+                           @Qualifier("cooperationInvitationServiceImpl")
+                               InvitationService<CooperationInvitation, CooperationInvitationDto>
+                               cooperationInvitationService,
+                           PasswordEncoder passwordEncoder,
+                           ServiceMapper mapper) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userCooperationRepository = userCooperationRepository;
+        this.invitationRepository = invitationRepository;
+        this.apartmentInvitationService = apartmentInvitationService;
+        this.cooperationInvitationService = cooperationInvitationService;
+        this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+    }
 
     private final ServiceMapper mapper;
 
@@ -82,19 +108,19 @@ public class UserServiceImpl implements UserService {
 
     private void checkAndSaveUserByInvitation(UserDto userDto) {
 
-        var invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
-                .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING)
-                    && invitation1.getEnabled().equals(true))
-                .orElseThrow(() -> new NotFoundHomeException("Invitation with provided token not found"));
+        Invitation invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
+            .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING)
+                && invitation1.getEnabled().equals(true))
+            .orElseThrow(() -> new NotFoundHomeException("Invitation with provided token not found"));
 
         validateEmailsMatching(invitation.getEmail(), userDto.getEmail());
 
         switch (invitation.getType()) {
             case APARTMENT:
-                apartmentInvitationService.acceptUserInvitation(invitation);
+                apartmentInvitationService.acceptUserInvitation((ApartmentInvitation) invitation);
                 break;
             case COOPERATION:
-                cooperationInvitationService.acceptUserInvitation(invitation);
+                cooperationInvitationService.acceptUserInvitation((CooperationInvitation) invitation);
                 break;
             default:
                 throw new UnsupportedOperationException("Provided type not supported");
@@ -111,7 +137,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         User fromDB = userRepository.findById(id).filter(User::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
         validateEmailUniques(fromDB, updateUserDto);
 
@@ -152,12 +178,12 @@ public class UserServiceImpl implements UserService {
 
     private void validateEmailUniques(User user, UserDto userDto) {
         userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
-                .ifPresent(userByEmail -> {
-                    if (!user.getId().equals(userByEmail.getId())) {
-                        throw new BadRequestHomeException("User with email "
-                                + userDto.getEmail() + " is already exists");
-                    }
-                });
+            .ifPresent(userByEmail -> {
+                if (!user.getId().equals(userByEmail.getId())) {
+                    throw new BadRequestHomeException("User with email "
+                        + userDto.getEmail() + " is already exists");
+                }
+            });
     }
 
     @Override
@@ -172,16 +198,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
         var userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
         userCooperation.stream()
-                .map(UserCooperation::getRole).forEach(role -> {
-                    if (role.equals(roleRepository.findByName(RoleEnum.ADMIN.getName().toUpperCase()).orElseThrow())) {
-                        throw new BadRequestHomeException("User cannot be deleted");
-                    }
-                });
+            .map(UserCooperation::getRole).forEach(role -> {
+                if (role.equals(roleRepository.findByName(RoleEnum.ADMIN.getName().toUpperCase()).orElseThrow())) {
+                    throw new BadRequestHomeException("User cannot be deleted");
+                }
+            });
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));

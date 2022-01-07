@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
@@ -208,7 +210,7 @@ public final class ApiClientUtil {
 
     @SneakyThrows
     static ReadUser createOwnerUser() {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(1);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createBaseCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -234,20 +236,20 @@ public final class ApiClientUtil {
                 .address(createAddress());
     }
 
-    private static CreateApartment createApartment() {
+
+    private static CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
-                .area(BigDecimal.valueOf(72.5))
-                .number("15")
-                .invitations(createApartmentInvitation());
+            .area(BigDecimal.valueOf(72.5))
+            .number("15")
+            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
     }
 
-    private static List<CreateInvitation> createApartmentInvitation() {
-        List<CreateInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add(new CreateApartmentInvitation()
-                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-                .type(InvitationType.APARTMENT));
-
-        return createInvitations;
+    private static List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
     }
 
     private static void setLoggingFeature(ApiClient client) {

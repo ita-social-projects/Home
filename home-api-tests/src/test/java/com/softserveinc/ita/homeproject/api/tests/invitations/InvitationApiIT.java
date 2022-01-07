@@ -24,7 +24,6 @@ import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApi
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
-import com.softserveinc.ita.homeproject.client.api.ApartmentInvitationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.HouseApi;
 import com.softserveinc.ita.homeproject.client.api.InvitationsApi;
@@ -33,6 +32,7 @@ import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
@@ -40,10 +40,10 @@ import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
 import com.softserveinc.ita.homeproject.client.model.ReadApartment;
-import com.softserveinc.ita.homeproject.client.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
+import com.softserveinc.ita.homeproject.client.model.Role;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -60,8 +60,6 @@ class InvitationApiIT {
 
     private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final ApartmentInvitationApi apartmentInvitationApi =
-        new ApartmentInvitationApi(ApiClientUtil.getCooperationAdminClient());
 
     @Test
     void isEmailSentTest() throws Exception {
@@ -83,6 +81,7 @@ class InvitationApiIT {
 
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartmentWithEmail(userEmail));
+
 
         TimeUnit.MILLISECONDS.sleep(5000);
 
@@ -122,7 +121,7 @@ class InvitationApiIT {
 
     @Test
     void createInvitationForNonExistApatrment() throws Exception {
-        CreateApartment createApartment = createApartment(1);
+        CreateApartment createApartment = createApartment(0);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment)
@@ -132,28 +131,24 @@ class InvitationApiIT {
             .type(InvitationType.APARTMENT);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> apartmentInvitationApi
-                .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
-            .matches(exception -> exception.getCode() == NOT_FOUND);
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
+            .withMessageContaining("Parameter `apartmentId` is invalid - must not be null.");
     }
 
     @Test
-    void createInvitationWithNullEmail() throws Exception {
+    void createInvitationWithNullEmail() {
         CreateInvitation invitation = new CreateApartmentInvitation()
             .email(null)
             .type(InvitationType.APARTMENT);
 
-        CreateApartment createApartment = createApartment(0);
-        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
-        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
-
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> apartmentInvitationApi
-                .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining("Parameter `email` is invalid - must not be null.");
     }
+
 
     @Test
     void createInvitationWithInvalidEmail() throws Exception {
@@ -167,14 +162,16 @@ class InvitationApiIT {
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> apartmentInvitationApi
-                .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
             .matches(exception -> exception.getCode() == BAD_REQUEST);
     }
 
     @Test
-    void createInvitationWithInvalidType() throws Exception {
-        CreateInvitation invitation = new CreateApartmentInvitation()
+        //TODO: When we implements multiple roles for cooperation members logic, rework this test
+    void createCooperationInvitationWithInvalidRole() throws Exception {
+        CreateInvitation invitation = new CreateCooperationInvitation()
+            .role(Role.USER)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
             .type(InvitationType.COOPERATION);
 
@@ -184,9 +181,11 @@ class InvitationApiIT {
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> apartmentInvitationApi
-                .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) invitation))
+            .isThrownBy(() -> invitationApi
+                .createInvitation(invitation))
             .matches(exception -> exception.getCode() == BAD_REQUEST);
+
+        // проверить засетаеться ли роль кооперйшн админ если мы в кооп инвитейшн передадим другую роль
     }
 
     @Test
@@ -198,17 +197,18 @@ class InvitationApiIT {
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
             createApartmentWithoutInvitation());
 
-        CreateApartmentInvitation expectedInvitation = new CreateApartmentInvitation();
-        expectedInvitation.setEmail(userEmail);
-        expectedInvitation.setType(InvitationType.APARTMENT);
+        CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
+        createApartmentInvitation.setType(InvitationType.APARTMENT);
+        createApartmentInvitation.setEmail(userEmail);
+        createApartmentInvitation.setApartmentId(apartment.getId());
 
         TimeUnit.MILLISECONDS.sleep(5000);
 
-        ApiResponse<ReadApartmentInvitation> response =
-            apartmentInvitationApi.createInvitationWithHttpInfo(apartment.getId(), expectedInvitation);
+        ApiResponse<ReadInvitation> response =
+            invitationApi.createInvitationWithHttpInfo(createApartmentInvitation);
 
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
-        assertInvitation(expectedInvitation, response.getData());
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
+        assertInvitation(createApartmentInvitation, response.getData());
     }
 
     @Test
@@ -220,12 +220,18 @@ class InvitationApiIT {
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
             createApartmentWithoutInvitation());
 
-        ReadApartmentInvitation invitation = apartmentInvitationApi.createInvitation(apartment.getId(),
-            (CreateApartmentInvitation) createApartmentInvitationWithEmail(userEmail).get(0));
-        invitation.getId();
+        CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
+        createApartmentInvitation.setType(InvitationType.APARTMENT);
+        createApartmentInvitation.setEmail(userEmail);
+        createApartmentInvitation.setApartmentId(apartment.getId());
+
+        ReadInvitation invitation =
+            invitationApi.createInvitation(createApartmentInvitation);
+
+
 
         ApiResponse<Void> response =
-            apartmentInvitationApi.deleteInvitationWithHttpInfo(apartment.getId(), invitation.getId());
+            invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
     }
 
@@ -238,16 +244,18 @@ class InvitationApiIT {
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
             createApartmentWithoutInvitation());
 
-        ReadApartmentInvitation invitation = apartmentInvitationApi.createInvitation(apartment.getId(),
-            (CreateApartmentInvitation) createApartmentInvitationWithEmail(userEmail).get(0));
-        invitation.getId();
+        CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
+        createApartmentInvitation.setType(InvitationType.APARTMENT);
+        createApartmentInvitation.setEmail(userEmail);
+        createApartmentInvitation.setApartmentId(apartment.getId());
 
+        ReadInvitation invitation =
+            invitationApi.createInvitation(createApartmentInvitation);
         TimeUnit.MILLISECONDS.sleep(5000);
 
         invitation.setStatus(InvitationStatus.ACCEPTED);
-
         ApiResponse<Void> response =
-            apartmentInvitationApi.deleteInvitationWithHttpInfo(apartment.getId(), invitation.getId());
+            invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
     }
@@ -357,6 +365,7 @@ class InvitationApiIT {
     private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
+            .apartmentId(100L)
             .email(userEmail)
             .type(InvitationType.APARTMENT));
         return createInvitations;
@@ -383,7 +392,7 @@ class InvitationApiIT {
             .collect(Collectors.toList());
     }
 
-    private void assertInvitation(CreateApartmentInvitation expected, ReadApartmentInvitation actual) {
+    private void assertInvitation(CreateInvitation expected, ReadInvitation actual) {
         assertNotNull(expected);
         assertEquals(expected.getEmail(), actual.getEmail());
         assertEquals(expected.getType(), actual.getType());

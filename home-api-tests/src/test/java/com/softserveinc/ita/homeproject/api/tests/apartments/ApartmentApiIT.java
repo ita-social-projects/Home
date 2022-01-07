@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -41,7 +43,7 @@ class ApartmentApiIT {
 
     @Test
     void createApartmentTest() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -54,7 +56,7 @@ class ApartmentApiIT {
 
     @Test
     void createApartmentWithNonExistentHouse() {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         Long wrongId = 1000000L;
 
@@ -67,13 +69,13 @@ class ApartmentApiIT {
 
     @Test
     void createApartmentWithExistingApartmentNumberTest() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
 
         ApiResponse<ReadApartment> response = apartmentApi.createApartmentWithHttpInfo(createdHouse.getId(), createApartment);
 
-        CreateApartment createExistingApartment = createApartment();
+        CreateApartment createExistingApartment = createApartment(2);
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> apartmentApi
                 .createApartmentWithHttpInfo(createdHouse.getId(), createExistingApartment))
@@ -84,7 +86,7 @@ class ApartmentApiIT {
 
     @Test
     void getApartmentTest() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse expectedHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -112,7 +114,7 @@ class ApartmentApiIT {
 
     @Test
     void getApartmentWithNonExistentHouse() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -131,8 +133,8 @@ class ApartmentApiIT {
     void createApartmentInvalidApartmentNumber() throws ApiException {
         ReadCooperation readCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
-        CreateApartment emptyNumber = createApartment().number("");
-        CreateApartment longNumber = createApartment().number("1000000000-a");
+        CreateApartment emptyNumber = createApartment(2).number("");
+        CreateApartment longNumber = createApartment(2).number("1000000000-a");
 
         assertThatExceptionOfType(ApiException.class)
                 .isThrownBy(() -> apartmentApi.createApartment(readHouse.getId(), emptyNumber))
@@ -148,7 +150,7 @@ class ApartmentApiIT {
 
     @Test
     void updateApartmentTest() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -184,7 +186,7 @@ class ApartmentApiIT {
 
     @Test
     void updateApartmentWithNonExistentHouse() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -205,7 +207,7 @@ class ApartmentApiIT {
 
     @Test
     void deleteApartmentTest() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -220,7 +222,7 @@ class ApartmentApiIT {
 
     @Test
     void deleteApartmentWithNonExistentHouse() throws ApiException {
-        CreateApartment createApartment = createApartment();
+        CreateApartment createApartment = createApartment(2);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -276,25 +278,33 @@ class ApartmentApiIT {
                 .zipCode("zipCode");
     }
 
-    private CreateApartment createApartment() {
+    private CreateApartment createApartment(int numberOfApartmentInvitations) {
         return new CreateApartment()
                 .area(BigDecimal.valueOf(72.5))
                 .number("15")
-                .invitations(createApartmentInvitation());
+                .invitations(createApartmentInvitation(numberOfApartmentInvitations));
     }
 
-    private List<CreateInvitation> createApartmentInvitation() {
-        List<CreateInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add(new CreateApartmentInvitation()
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        createInvitations.add(new CreateApartmentInvitation()
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        return createInvitations;
+    private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
     }
+
+//    private List<CreateInvitation> createApartmentInvitation() {
+//        List<CreateInvitation> createInvitations = new ArrayList<>();
+//        createInvitations.add(new CreateApartmentInvitation()
+//                .email("test.receive.messages@gmail.com")
+//                .type(InvitationType.APARTMENT));
+//
+//        createInvitations.add(new CreateApartmentInvitation()
+//                .email("test.receive.messages@gmail.com")
+//                .type(InvitationType.APARTMENT));
+//
+//        return createInvitations;
+//    }
 
     private void assertApartment(CreateApartment expected, ReadApartment actual) {
         assertNotNull(expected);

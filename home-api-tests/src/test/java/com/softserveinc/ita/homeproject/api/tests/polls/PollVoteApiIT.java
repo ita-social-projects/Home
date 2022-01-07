@@ -84,6 +84,8 @@ class PollVoteApiIT {
 
     private final PollVoteApi pollVoteApi = new PollVoteApi(ApiClientUtil.getOwnerClient());
 
+//    private PollVoteApi pollVoteApi;
+
     private final static Long MIN_POLL_DURATION_IN_DAYS = 2L;
 
     private final static Random random = new Random();

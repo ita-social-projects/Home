@@ -242,11 +242,11 @@ class QueryOwnershipIT {
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
-
-        return  Stream.generate(CreateInvitation::new)
-                .map(x -> x.email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")).type(InvitationType.APARTMENT))
-                .limit(numberOfInvitations)
-                .collect(Collectors.toList());
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
     }
 
     private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {

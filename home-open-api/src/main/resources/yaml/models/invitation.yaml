@@ -15,6 +15,7 @@ InvitationStatus:
     - accepted
     - overdue
     - error
+  example: "processing"
 InvitationType:
   description: Indicates a type of an Invitation
   type: string
@@ -61,6 +62,7 @@ Role:
   enum:
     - admin
     - user
+  example: "user"
 
 CreateInvitation:
   type: object
@@ -80,18 +82,42 @@ CreateInvitation:
       pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
       type: string
       example: "test.receive.messages@gmail.com"
+  example:
+    {
+      "type": "cooperation",
+      "email": "test.put.messages@gmail.com",
+      "cooperation_id": 1,
+      "role": "user"
+    }
 CreateCooperationInvitation:
   allOf:
     - $ref: '#/CreateInvitation'
   type: object
   required:
     - role
+    - cooperation_id
   properties:
     role:
       $ref: '#/Role'
+    cooperation_id:
+      minLength: 1
+      maxLength: 100
+      type: integer
+      format: int64
+      example: 1
 CreateApartmentInvitation:
   allOf:
     - $ref: '#/CreateInvitation'
+  type: object
+  required:
+    - apartment_id
+  properties:
+    apartment_id:
+      minLength: 1
+      maxLength: 100
+      type: integer
+      format: int64
+      example: 1
 
 UpdateInvitation:
   type: object
