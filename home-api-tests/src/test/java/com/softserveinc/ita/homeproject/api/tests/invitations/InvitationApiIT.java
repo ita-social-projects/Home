@@ -3,6 +3,7 @@ package com.softserveinc.ita.homeproject.api.tests.invitations;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import javax.ws.rs.core.Response;
@@ -166,26 +167,6 @@ class InvitationApiIT {
             .matches(exception -> exception.getCode() == BAD_REQUEST);
     }
 
-    @Test
-        //TODO: When we implements multiple roles for cooperation members logic, rework this test
-    void createCooperationInvitationWithInvalidRole() throws Exception {
-        CreateInvitation invitation = new CreateCooperationInvitation()
-            .role(Role.USER)
-            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-            .type(InvitationType.COOPERATION);
-
-        CreateApartment createApartment = createApartment(0);
-        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
-        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
-
-        assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .matches(exception -> exception.getCode() == BAD_REQUEST);
-
-        // проверить засетаеться ли роль кооперйшн админ если мы в кооп инвитейшн передадим другую роль
-    }
 
     @Test
     void CreateInvitationApartmentWhenAllIsOk() throws Exception {
@@ -208,6 +189,31 @@ class InvitationApiIT {
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
         assertInvitation(createApartmentInvitation, response.getData());
+    }
+    
+    @Test
+    void CreateInvitationCooperationWhenAllIsOk() throws Exception {
+
+
+        CreateApartment createApartment = createApartment(0);
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
+        ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
+
+        CreateCooperationInvitation invitation = new CreateCooperationInvitation();
+        invitation.setCooperationId(createdCooperation.getId());
+        invitation.setRole(Role.USER);
+        invitation.setEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
+        invitation.setType(InvitationType.COOPERATION);
+
+
+        TimeUnit.MILLISECONDS.sleep(5000);
+
+        ApiResponse<ReadInvitation> response =
+            invitationApi.createInvitationWithHttpInfo(invitation);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
+        assertInvitation(invitation, response.getData());
     }
 
 

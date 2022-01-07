@@ -293,18 +293,6 @@ class ApartmentApiIT {
             .collect(Collectors.toList());
     }
 
-//    private List<CreateInvitation> createApartmentInvitation() {
-//        List<CreateInvitation> createInvitations = new ArrayList<>();
-//        createInvitations.add(new CreateApartmentInvitation()
-//                .email("test.receive.messages@gmail.com")
-//                .type(InvitationType.APARTMENT));
-//
-//        createInvitations.add(new CreateApartmentInvitation()
-//                .email("test.receive.messages@gmail.com")
-//                .type(InvitationType.APARTMENT));
-//
-//        return createInvitations;
-//    }
 
     private void assertApartment(CreateApartment expected, ReadApartment actual) {
         assertNotNull(expected);

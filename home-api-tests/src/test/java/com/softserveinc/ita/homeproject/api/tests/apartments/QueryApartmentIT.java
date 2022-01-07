@@ -178,12 +178,7 @@ class QueryApartmentIT {
             .forEach(element -> assertEquals(element.getApartmentNumber(), readApartment.getApartmentNumber()));
     }
 
-//    private CreateApartment createApartment() {
-//        return new CreateApartment()
-//                .area(BigDecimal.valueOf(100.5))
-//                .number("15")
-//                .invitations(createApartmentInvitation());
-//    }
+
 
     private CreateApartment createSecondApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
@@ -192,18 +187,6 @@ class QueryApartmentIT {
             .invitations(createApartmentInvitation(numberOfApartamentInvitations));
     }
 
-//    private List<CreateInvitation> createApartmentInvitation() {
-//        List<CreateInvitation> createInvitations = new ArrayList<>();
-//        createInvitations.add(new CreateApartmentInvitation()
-//                .email("test.receive.messages@gmail.com")
-//                .type(InvitationType.APARTMENT));
-//
-//        createInvitations.add(new CreateApartmentInvitation()
-//                .email("test.receive.messages@gmail.com")
-//                .type(InvitationType.APARTMENT));
-//
-//        return createInvitations;
-//    }
 
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()

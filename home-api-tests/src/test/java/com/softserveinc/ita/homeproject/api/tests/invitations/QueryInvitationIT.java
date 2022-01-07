@@ -153,6 +153,7 @@ public class QueryInvitationIT {
         queryResponse.forEach(element -> assertEquals(readInvitation.getId(), element.getId()));
     }
 
+
     @Test
     void getInvitationByEmail() throws ApiException {
         List<ReadInvitation> queryResponse = new InvitationQuery
@@ -185,6 +186,19 @@ public class QueryInvitationIT {
             .pageNumber(1)
             .pageSize(10)
             .apartmentId(wrongApartmentId)
+            .build().perform();
+        assertThat(queryResponse).isEmpty();
+    }
+
+    @Test
+    void getInvitationsFromNotExistingCooperation() throws ApiException {
+        Long wrongCooperationId = 999999999L;
+
+        List<ReadInvitation> queryResponse = new InvitationQuery
+            .Builder(invitationsApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .apartmentId(wrongCooperationId)
             .build().perform();
         assertThat(queryResponse).isEmpty();
     }
