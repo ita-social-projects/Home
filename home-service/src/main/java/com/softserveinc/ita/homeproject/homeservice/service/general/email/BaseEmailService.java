@@ -38,7 +38,7 @@ public abstract class BaseEmailService<T extends Invitation, D extends Invitatio
     }
 
     protected MailDto createMailDto(InvitationDto invitationDto) {
-        var mailDto = createBaseMailDto(invitationDto);
+        MailDto mailDto = createBaseMailDto(invitationDto);
         mailDto.setId(invitationDto.getId());
         mailDto.setEmail(invitationDto.getEmail());
         mailDto.setRegistrationToken(invitationDto.getRegistrationToken());

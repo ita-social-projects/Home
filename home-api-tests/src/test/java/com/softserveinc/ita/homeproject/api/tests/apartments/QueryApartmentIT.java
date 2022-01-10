@@ -35,6 +35,10 @@ import org.junit.jupiter.api.Test;
 
 class QueryApartmentIT {
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 2;
+
+    private final static Long APARTMENT_ID = 100L;
+
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
@@ -46,8 +50,8 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment(2));
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(2));
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -65,8 +69,8 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment(2));
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(2));
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -99,8 +103,8 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment(2));
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(2));
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
             .houseId(readHouse.getId())
@@ -122,7 +126,7 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(2));
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         Long apartmentId = Objects.requireNonNull(readApartment.getId());
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
@@ -140,7 +144,7 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(2));
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         BigDecimal apartmentArea = readApartment.getApartmentArea();
         List<ReadApartment> queryResponse = new ApartmentQuery
@@ -161,7 +165,7 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(2));
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         String apartmentNumber = readApartment.getApartmentNumber();
 
@@ -197,7 +201,7 @@ class QueryApartmentIT {
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateApartmentInvitation::new)
-            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());

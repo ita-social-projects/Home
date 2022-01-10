@@ -53,13 +53,17 @@ class OwnershipApiIT {
 
     private static List<Long> ownershipsID = new ArrayList<>();
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 3;
+
+    private final static Long APARTMENT_ID = 100L;
+
     private static long TEST_APARTMENT_ID = 3L;
 
     private static long TEST_DELETE_OWNERSHIP_APARTMENT_ID = 2L;
 
     @BeforeAll
     void createOwnershipsAndAppartament() throws ApiException, InterruptedException, IOException {
-        CreateApartment createApartment = createApartment(3);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -287,7 +291,7 @@ class OwnershipApiIT {
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateApartmentInvitation::new)
-            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());

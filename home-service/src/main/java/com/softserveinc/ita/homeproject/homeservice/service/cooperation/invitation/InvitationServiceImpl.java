@@ -54,9 +54,9 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     @Override
     public void markInvitationsAsOverdue() {
-        var qInvitation = QInvitation.invitation;
+        QInvitation qInvitation = QInvitation.invitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
-        var overdueApartmentInvitations = query.select(qInvitation).from(qInvitation)
+        List<Invitation> overdueApartmentInvitations = query.select(qInvitation).from(qInvitation)
             .where((qInvitation.status.eq(InvitationStatus.PENDING))
                     .or(qInvitation.status.eq(InvitationStatus.PROCESSING)),
                 qInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
@@ -69,7 +69,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     @Override
     public void updateSentDateTimeAndStatus(Long id) {
-        var invitation = findInvitationById(id);
+        Invitation invitation = findInvitationById(id);
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setSentDatetime(LocalDateTime.now());
         invitationRepository.save(invitation);

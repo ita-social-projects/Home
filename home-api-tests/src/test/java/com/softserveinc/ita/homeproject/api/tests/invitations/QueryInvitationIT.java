@@ -35,6 +35,10 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QueryInvitationIT {
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 1;
+
+    private final static Long APARTMENT_ID = 2L;
+
     private final InvitationsApi invitationsApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
@@ -49,7 +53,7 @@ public class QueryInvitationIT {
 
     @BeforeAll
     void createInvitation() throws ApiException {
-        CreateApartment createApartment = createApartment(1);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         CreateCooperation createCooperation = createCooperation();
 
         readCooperation = cooperationApi.createCooperation(createCooperation);
@@ -205,7 +209,7 @@ public class QueryInvitationIT {
 
     private CreateInvitation createInvitationApartment() {
         return new CreateApartmentInvitation()
-            .apartmentId(2L)
+            .apartmentId(APARTMENT_ID)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
             .type(InvitationType.APARTMENT);
     }
@@ -253,7 +257,7 @@ public class QueryInvitationIT {
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateApartmentInvitation::new)
-            .map(x -> x.apartmentId(2L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());

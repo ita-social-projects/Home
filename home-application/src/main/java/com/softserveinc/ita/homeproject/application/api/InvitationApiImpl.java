@@ -75,13 +75,13 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
             readInvitation.setType(InvitationType.APARTMENT);
             return Response.status(Response.Status.CREATED).entity(readInvitation).build();
         } else if (createInvitation.getType().equals(InvitationType.COOPERATION)) {
-            var invitationDto = mapper.convert(createInvitation, CooperationInvitationDto.class);
+            CooperationInvitationDto invitationDto = mapper.convert(createInvitation, CooperationInvitationDto.class);
 
             //TODO FIX IN ISSUE #377
             invitationDto.setId(null);
 
-            var invitation = cooperationInvitationService.createInvitation(invitationDto);
-            var readInvitation = mapper.convert(invitation, ReadCooperationInvitation.class);
+            CooperationInvitationDto invitation = cooperationInvitationService.createInvitation(invitationDto);
+            ReadCooperationInvitation readInvitation = mapper.convert(invitation, ReadCooperationInvitation.class);
             readInvitation.setType(InvitationType.COOPERATION);
             return Response.status(Response.Status.CREATED).entity(readInvitation).build();
         } else {

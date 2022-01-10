@@ -60,10 +60,10 @@ public class ApartmentServiceImpl implements ApartmentService {
                 + " already exist in this house");
         }
 
-        var house = houseRepository.findById(houseId).filter(House::getEnabled)
+        House house = houseRepository.findById(houseId).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
 
-        var apartment = mapper.convert(createApartmentDto, Apartment.class);
+        Apartment apartment = mapper.convert(createApartmentDto, Apartment.class);
         List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();
 
         apartment.setHouse(house);
@@ -85,7 +85,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
-        var toUpdate = apartmentRepository.findById(apartmentId)
+        Apartment toUpdate = apartmentRepository.findById(apartmentId)
             .filter(Apartment::getEnabled)
             .filter(apartment -> apartment.getHouse().getId().equals(houseId))
             .orElseThrow(() ->

@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.api.tests.invitations;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import javax.ws.rs.core.Response;
@@ -49,6 +48,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
+
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 0;
+
+    private final static Long APARTMENT_ID = 100L;
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
@@ -121,7 +124,7 @@ class InvitationApiIT {
 
     @Test
     void createInvitationForNonExistApatrment() throws Exception {
-        CreateApartment createApartment = createApartment(0);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment)
@@ -156,7 +159,7 @@ class InvitationApiIT {
             .email(null)
             .type(InvitationType.APARTMENT);
 
-        CreateApartment createApartment = createApartment(0);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
@@ -190,12 +193,12 @@ class InvitationApiIT {
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
         assertInvitation(createApartmentInvitation, response.getData());
     }
-    
+
     @Test
     void CreateInvitationCooperationWhenAllIsOk() throws Exception {
 
 
-        CreateApartment createApartment = createApartment(0);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
@@ -401,7 +404,7 @@ class InvitationApiIT {
     private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-            .apartmentId(100L)
+            .apartmentId(APARTMENT_ID)
             .email(userEmail)
             .type(InvitationType.APARTMENT));
         return createInvitations;

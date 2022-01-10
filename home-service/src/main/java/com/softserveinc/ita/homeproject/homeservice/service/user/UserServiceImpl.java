@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
@@ -166,9 +167,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto getCurrentUserByUsername() {
-        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
-        var user = userRepository.findByEmail(username)
+        User user = userRepository.findByEmail(username)
             .filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(CURRENT_USER_NOT_FOUND));
         user.setContacts(user.getContacts().stream()
@@ -188,7 +189,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findAll(Integer pageNumber, Integer pageSize, Specification<User> specification) {
-        var users = userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
+        Page<User> users = userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
         users.forEach(user -> user.setContacts(user.getContacts().stream()
             .filter(Contact::getEnabled).collect(Collectors.toList())));
         return users.map(user -> mapper.convert(user, UserDto.class));
@@ -200,7 +201,7 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
 
-        var userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
+        List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
         userCooperation.stream()
             .map(UserCooperation::getRole).forEach(role -> {

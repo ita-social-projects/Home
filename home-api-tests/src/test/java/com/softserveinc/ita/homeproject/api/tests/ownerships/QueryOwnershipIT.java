@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class QueryOwnershipIT {
+
+    private final static Long APARTMENT_ID = 100L;
 
     private final ApartmentOwnershipApi ownershipApi = new ApartmentOwnershipApi(ApiClientUtil.getCooperationAdminClient());
 
@@ -243,7 +244,7 @@ class QueryOwnershipIT {
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateApartmentInvitation::new)
-            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());

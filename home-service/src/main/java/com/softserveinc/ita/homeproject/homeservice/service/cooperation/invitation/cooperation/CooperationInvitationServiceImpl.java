@@ -119,12 +119,13 @@ public class CooperationInvitationServiceImpl
 
     @Override
     public void markInvitationsAsOverdue() {
-        var qCooperationInvitation = QCooperationInvitation.cooperationInvitation;
+        QCooperationInvitation qCooperationInvitation = QCooperationInvitation.cooperationInvitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
-        var overdueCooperationInvitations = query.select(qCooperationInvitation).from(qCooperationInvitation)
-            .where((qCooperationInvitation.status.eq(InvitationStatus.PENDING))
-                    .or(qCooperationInvitation.status.eq(InvitationStatus.PROCESSING)),
-                qCooperationInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+        List<CooperationInvitation> overdueCooperationInvitations =
+            query.select(qCooperationInvitation).from(qCooperationInvitation)
+                .where((qCooperationInvitation.status.eq(InvitationStatus.PENDING))
+                        .or(qCooperationInvitation.status.eq(InvitationStatus.PROCESSING)),
+                    qCooperationInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueCooperationInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             cooperationInvitationRepository.save(invitation);

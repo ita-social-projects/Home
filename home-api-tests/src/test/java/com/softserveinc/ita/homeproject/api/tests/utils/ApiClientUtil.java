@@ -59,6 +59,10 @@ public final class ApiClientUtil {
 
     public static final int NOT_FOUND = Response.Status.NOT_FOUND.getStatusCode();
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 1;
+
+    private final static Long APARTMENT_ID = 100L;
+
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
 
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
@@ -210,7 +214,7 @@ public final class ApiClientUtil {
 
     @SneakyThrows
     static ReadUser createOwnerUser() {
-        CreateApartment createApartment = createApartment(1);
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createBaseCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
@@ -246,7 +250,7 @@ public final class ApiClientUtil {
 
     private static List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateApartmentInvitation::new)
-            .map(x -> x.apartmentId(100L).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());

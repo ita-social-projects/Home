@@ -6,7 +6,7 @@
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
     <envs>
       <env name="MAIL_HOST" value="localhost" />
-      <env name="MAIL_PORT" value="1025 " />
+      <env name="MAIL_PORT" value="1025" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

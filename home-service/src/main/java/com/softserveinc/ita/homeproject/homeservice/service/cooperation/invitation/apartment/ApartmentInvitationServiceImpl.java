@@ -16,6 +16,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartmen
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.QApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
+import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
@@ -96,7 +97,7 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
 
     @Override
     public void acceptUserInvitation(ApartmentInvitation apartmentInvitation) {
-        var ownership = ownershipService.createOwnership(apartmentInvitation);
+        Ownership ownership = ownershipService.createOwnership(apartmentInvitation);
         userCooperationService.createUserCooperationForOwnership(ownership);
         apartmentInvitation.setStatus(InvitationStatus.ACCEPTED);
         apartmentInvitationRepository.save(apartmentInvitation);
@@ -140,12 +141,13 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
 
     @Override
     public void markInvitationsAsOverdue() {
-        var qApartmentInvitation = QApartmentInvitation.apartmentInvitation;
+        QApartmentInvitation qApartmentInvitation = QApartmentInvitation.apartmentInvitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
-        var overdueApartmentInvitations = query.select(qApartmentInvitation).from(qApartmentInvitation)
-            .where((qApartmentInvitation.status.eq(InvitationStatus.PENDING))
-                    .or(qApartmentInvitation.status.eq(InvitationStatus.PROCESSING)),
-                qApartmentInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+        List<ApartmentInvitation> overdueApartmentInvitations =
+            query.select(qApartmentInvitation).from(qApartmentInvitation)
+                .where((qApartmentInvitation.status.eq(InvitationStatus.PENDING))
+                        .or(qApartmentInvitation.status.eq(InvitationStatus.PROCESSING)),
+                    qApartmentInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueApartmentInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             apartmentInvitationRepository.save(invitation);
