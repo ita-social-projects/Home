@@ -334,6 +334,7 @@ class PermissionsIT {
             case "com.softserveinc.ita.homeproject.client.model.PollStatus":
             case "com.softserveinc.ita.homeproject.client.model.QuestionType":
             case "com.softserveinc.ita.homeproject.client.model.PollType":
+            case "com.softserveinc.ita.homeproject.client.model.InvitationType":
             case "java.time.LocalDateTime":
                 return null;
             case "java.lang.Integer":
@@ -513,6 +514,7 @@ class PermissionsIT {
             case "updateOwnership":
             case "updateInvitation":
             case "queryInvitation":
+            case "queryAllInvitations":
             case "getInvitation":
             case "deleteOwnership":
             case "deleteInvitation":

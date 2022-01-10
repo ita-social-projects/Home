@@ -14,23 +14,23 @@
     <artifactId>home-api-tests</artifactId>
 
     <properties>
+        <api.tests.verbose.logging>true</api.tests.verbose.logging>
+        <docker-files>${basedir}/target/docker</docker-files>
         <docker.image.data.migration>homeacademy/data-migration:${docker.revision}</docker.image.data.migration>
         <docker.image.application>homeacademy/home-application:${docker.revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.image.psql>governmentpaas/psql</docker.image.psql>
-        <api.tests.verbose.logging>true</api.tests.verbose.logging>
-        <postgres.internal.port>5432</postgres.internal.port>
+        <home.application.internal.port>8080</home.application.internal.port>
+        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
+        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <liquibase.internal.port>8000</liquibase.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
         <mail.host>mailhog</mail.host>
         <mail.port>1025</mail.port>
+        <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
-        <liquibase.internal.port>8000</liquibase.internal.port>
-        <home.application.internal.port>8080</home.application.internal.port>
-        <docker-files>${basedir}/target/docker</docker-files>
-        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
-        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
     </properties>
 
     <profiles>
@@ -355,8 +355,46 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-java-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -367,24 +405,18 @@
             <artifactId>junit-jupiter-params</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-java-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

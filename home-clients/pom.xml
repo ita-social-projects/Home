@@ -23,6 +23,10 @@
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-open-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
