@@ -3,6 +3,8 @@ package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitat
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.fasterxml.uuid.Generators;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -14,24 +16,36 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartmen
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.QApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
+import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implements ApartmentInvitationService {
+public class ApartmentInvitationServiceImpl implements InvitationService<ApartmentInvitation, ApartmentInvitationDto> {
+
+    private final ServiceMapper mapper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    private static final int EXPIRATION_TERM = 7;
+
+    protected final InvitationRepository invitationRepository;
 
     private final ApartmentInvitationRepository apartmentInvitationRepository;
+
+    private final InvitationService<Invitation, InvitationDto> invitationService;
 
     private final ApartmentRepository apartmentRepository;
 
@@ -39,41 +53,30 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
 
     private final UserCooperationService userCooperationService;
 
-    public ApartmentInvitationServiceImpl(InvitationRepository invitationRepository,
-                                          ServiceMapper mapper,
-                                          ApartmentInvitationRepository apartmentInvitationRepository,
-                                          ApartmentRepository apartmentRepository,
-                                          OwnershipService ownershipService,
-                                          UserCooperationService userCooperationService) {
-        super(invitationRepository, mapper);
+    public ApartmentInvitationServiceImpl(
+        ServiceMapper mapper,
+        ApartmentInvitationRepository apartmentInvitationRepository,
+        ApartmentRepository apartmentRepository,
+        EntityManager entityManager,
+        InvitationRepository invitationRepository,
+        InvitationService<Invitation, InvitationDto> invitationService,
+        OwnershipService ownershipService,
+        UserCooperationService userCooperationService) {
         this.apartmentInvitationRepository = apartmentInvitationRepository;
+        this.entityManager = entityManager;
+        this.mapper = mapper;
         this.apartmentRepository = apartmentRepository;
+        this.invitationRepository = invitationRepository;
+        this.invitationService = invitationService;
         this.ownershipService = ownershipService;
         this.userCooperationService = userCooperationService;
     }
 
-    @Override
-    public ApartmentInvitation updateInvitation(Long apartmentId,
-                                                Long id,
-                                                ApartmentInvitationDto updateInvitationDto) {
-        ApartmentInvitation toUpdate = apartmentInvitationRepository.findById(id)
-            .filter(invitation -> invitation.getSentDatetime() == null
-                && invitation.getEnabled().equals(true)
-                && invitation.getApartment().getId().equals(apartmentId)
-                && invitation.getStatus().equals(InvitationStatus.PENDING))
-            .orElseThrow(() ->
-                new NotFoundHomeException("Invitation with id:" + id + "not found."));
-
-        toUpdate.setEmail(updateInvitationDto.getEmail());
-
-        invitationRepository.save(toUpdate);
-        return toUpdate;
-    }
 
     @Override
-    public InvitationDto saveInvitation(InvitationDto invitationDto) {
-        var apartmentInvitation = mapper
-            .convert(invitationDto, ApartmentInvitation.class);
+    public ApartmentInvitationDto createInvitation(ApartmentInvitationDto apartmentInvitationDto) {
+        ApartmentInvitation apartmentInvitation = mapper
+            .convert(apartmentInvitationDto, ApartmentInvitation.class);
         apartmentInvitation.setStatus(InvitationStatus.PENDING);
         apartmentInvitation.setRegistrationToken(Generators.timeBasedGenerator().generate().toString());
         apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(EXPIRATION_TERM));
@@ -84,7 +87,8 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
             .findById(apartmentId)
             .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
 
-        if (isApartmentInvitationNonExists(invitationDto.getEmail(), apartmentId)) {
+
+        if (isApartmentInvitationNonExists(apartmentInvitationDto.getEmail(), apartmentId)) {
             invitationRepository.save(apartmentInvitation);
             return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
         }
@@ -92,11 +96,29 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     }
 
     @Override
-    public void acceptUserInvitation(Invitation invitation) {
-        var ownership = ownershipService.createOwnership((ApartmentInvitation) invitation);
+    public void acceptUserInvitation(ApartmentInvitation apartmentInvitation) {
+        Ownership ownership = ownershipService.createOwnership(apartmentInvitation);
         userCooperationService.createUserCooperationForOwnership(ownership);
-        invitation.setStatus(InvitationStatus.ACCEPTED);
-        invitationRepository.save(invitation);
+        apartmentInvitation.setStatus(InvitationStatus.ACCEPTED);
+        apartmentInvitationRepository.save(apartmentInvitation);
+    }
+
+    @Override
+    public void registerWithRegistrationToken(String token) {
+        Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+        ApartmentInvitation apartmentInvitation = mapper.convert(invitation, ApartmentInvitation.class);
+        if (!invitation.getEnabled().equals(true)) {
+            throw new InvitationException("Invitation is not active");
+        }
+        acceptUserInvitation(apartmentInvitation);
+    }
+
+    @Override
+    public InvitationDto findInvitationByRegistrationToken(String token) {
+        Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+        return mapper.convert(invitation, InvitationDto.class);
     }
 
     private boolean isApartmentInvitationNonExists(String email, Long id) {
@@ -110,51 +132,49 @@ public class ApartmentInvitationServiceImpl extends InvitationServiceImpl implem
     @Override
     public List<ApartmentInvitationDto> getAllActiveInvitations() {
         List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
-            .findAllBySentDatetimeIsNullAndEnabledEqualsAndStatusEquals(true,
-                InvitationStatus.PENDING);
+            .findAllBySentDatetimeIsNullAndEnabledEqualsAndStatusEqualsAndTypeEquals(true,
+                InvitationStatus.PENDING, InvitationType.APARTMENT);
         return allNotSentInvitations.stream()
             .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class))
             .collect(Collectors.toList());
     }
 
     @Override
-    public void deactivateInvitationById(Long apartmentId, Long id) {
-        var apartmentInvitation = apartmentInvitationRepository.findById(id)
-            .filter(invitation -> (invitation.getSentDatetime() != null
-                || invitation.getStatus().equals(InvitationStatus.PENDING))
-                && invitation.getEnabled().equals(true)
-                && invitation.getApartment().getId().equals(apartmentId))
-            .orElseThrow(() ->
-                new NotFoundHomeException("Invitation with id: " + id + " not found."));
-        apartmentInvitation.setEnabled(false);
-        apartmentInvitationRepository.save(apartmentInvitation);
-    }
-
-    @Transactional
-    @Override
-    public Page<ApartmentInvitationDto> findAll(Integer pageNumber,
-                                                Integer pageSize,
-                                                Specification<ApartmentInvitation> specification) {
-        Specification<ApartmentInvitation> apartmentInvitationSpecification = specification
-            .and((root, criteriaQuery, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("enabled"), true));
-        return apartmentInvitationRepository
-            .findAll(apartmentInvitationSpecification, PageRequest
-                .of(pageNumber - 1, pageSize))
-            .map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
-    }
-
-    @Override
     public void markInvitationsAsOverdue() {
-        var qApartmentInvitation = QApartmentInvitation.apartmentInvitation;
+        QApartmentInvitation qApartmentInvitation = QApartmentInvitation.apartmentInvitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
-        var overdueApartmentInvitations = query.select(qApartmentInvitation).from(qApartmentInvitation)
-            .where((qApartmentInvitation.status.eq(InvitationStatus.PENDING))
-                    .or(qApartmentInvitation.status.eq(InvitationStatus.PROCESSING)),
-                qApartmentInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+        List<ApartmentInvitation> overdueApartmentInvitations =
+            query.select(qApartmentInvitation).from(qApartmentInvitation)
+                .where((qApartmentInvitation.status.eq(InvitationStatus.PENDING))
+                        .or(qApartmentInvitation.status.eq(InvitationStatus.PROCESSING)),
+                    qApartmentInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueApartmentInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             apartmentInvitationRepository.save(invitation);
         });
     }
+
+    @Override
+    public void updateSentDateTimeAndStatus(Long id) {
+        invitationService.updateSentDateTimeAndStatus(id);
+    }
+
+    @Override
+    public void deactivateInvitation(Long id) {
+    }
+
+    @Override
+    public Page<ApartmentInvitationDto> findAll(Integer pageNumber,
+                                                Integer pageSize,
+                                                Specification<ApartmentInvitation> specification) {
+        Specification<ApartmentInvitation> invitationSpecification = specification
+            .and((root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("enabled"), true));
+        Page<ApartmentInvitation> pageCooperationInvitation = apartmentInvitationRepository
+            .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
+
+        return pageCooperationInvitation.map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
+    }
+
+
 }

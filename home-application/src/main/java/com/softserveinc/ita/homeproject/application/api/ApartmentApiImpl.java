@@ -8,15 +8,10 @@ import java.math.BigDecimal;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.softserveinc.ita.homeproject.application.model.CreateApartmentInvitation;
-import com.softserveinc.ita.homeproject.application.model.InvitationType;
-import com.softserveinc.ita.homeproject.application.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.application.model.ReadOwnership;
 import com.softserveinc.ita.homeproject.application.model.UpdateOwnership;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.ownership.OwnershipDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment.ApartmentService;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,48 +25,16 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Autowired
     private OwnershipService ownershipService;
 
-    @Autowired
-    private ApartmentInvitationService invitationService;
 
     @Autowired
     private ApartmentService apartmentService;
 
-    @PreAuthorize(MANAGE_IN_COOPERATION)
-    @Override
-    public Response createInvitation(Long apartmentId,
-                                     CreateApartmentInvitation createApartmentInvitation) {
-        var invitationDto = mapper.convert(createApartmentInvitation, ApartmentInvitationDto.class);
-        invitationDto.setApartmentId(apartmentId);
-        invitationDto.setApartmentNumber(apartmentService.getOne(apartmentId).getApartmentNumber());
-        var invitation = invitationService.createInvitation(invitationDto);
-        var readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
-        readInvitation.setType(InvitationType.APARTMENT);
-        return Response.status(Response.Status.OK).entity(readInvitation).build();
-    }
-
-    @PreAuthorize(MANAGE_IN_COOPERATION)
-    @Override
-    public Response deleteInvitation(Long apartmentId, Long id) {
-        invitationService.deactivateInvitationById(apartmentId, id);
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
 
     @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response deleteOwnership(Long apartmentId, Long id) {
         ownershipService.deactivateOwnershipById(apartmentId, id);
         return Response.status(Response.Status.NO_CONTENT).build();
-    }
-
-    @PreAuthorize(MANAGE_IN_COOPERATION) // TODO don't work issue# 299 / untested method issue# 300
-    @Override
-    public Response getInvitation(Long apartmentId, Long id) {
-
-        var toGet = invitationService.getOne(id, getSpecification());
-        var readApartmentInvitation = mapper
-            .convert(toGet, ReadApartmentInvitation.class);
-        return Response.status(Response.Status.OK)
-            .entity(readApartmentInvitation).build();
     }
 
     @PreAuthorize(READ_APARTMENT_INFO)
@@ -83,21 +46,6 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
 
-    @PreAuthorize(MANAGE_IN_COOPERATION)  // TODO don't work issue# 299 / untested method issue# 300
-    @Override
-    public Response queryInvitation(Long apartmentId,
-                                    Integer pageNumber,
-                                    Integer pageSize,
-                                    String sort,
-                                    String filter,
-                                    Long id,
-                                    String email,
-                                    String status) {
-        verifyExistence(apartmentId, apartmentService);
-        Page<ApartmentInvitationDto> readApartmentInvitation = invitationService
-            .findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readApartmentInvitation, ReadApartmentInvitation.class);
-    }
 
     @PreAuthorize(READ_APARTMENT_INFO)
     @Override

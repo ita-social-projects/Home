@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.softserveinc.ita.homeproject.api.tests.query.ApartmentQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
@@ -33,6 +35,10 @@ import org.junit.jupiter.api.Test;
 
 class QueryApartmentIT {
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 2;
+
+    private final static Long APARTMENT_ID = 100L;
+
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
@@ -44,16 +50,16 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment());
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,asc")
-                .build().perform();
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId));
     }
@@ -63,16 +69,16 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment());
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,desc")
-                .build().perform();
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,desc")
+            .build().perform();
 
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId).reversed());
     }
@@ -82,14 +88,14 @@ class QueryApartmentIT {
         Long wrongHouseId = 999999999L;
 
         assertThatExceptionOfType(ApiException.class)
-                .isThrownBy(() -> new ApartmentQuery
-                        .Builder(apartmentApi)
-                        .houseId(wrongHouseId)
-                        .pageNumber(1)
-                        .pageSize(10)
-                        .build().perform())
-                .matches(exception -> exception.getCode() == NOT_FOUND)
-                .withMessageContaining("House with 'id: " + wrongHouseId + "' is not found");
+            .isThrownBy(() -> new ApartmentQuery
+                .Builder(apartmentApi)
+                .houseId(wrongHouseId)
+                .pageNumber(1)
+                .pageSize(10)
+                .build().perform())
+            .matches(exception -> exception.getCode() == NOT_FOUND)
+            .withMessageContaining("House with 'id: " + wrongHouseId + "' is not found");
     }
 
     @Test
@@ -97,19 +103,21 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        apartmentApi.createApartment(readHouse.getId(), createApartment());
-        apartmentApi.createApartment(readHouse.getId(), createSecondApartment());
+        apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
+        apartmentApi.createApartment(readHouse.getId(), createSecondApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,asc")
-                .filter("apartmentArea=bt=(60,100)")
-                .build().perform();
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .filter("apartmentArea=bt=(60,100)")
+            .build().perform();
 
         queryResponse
-                .forEach(element -> assertTrue(Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 && element.getApartmentArea().compareTo(BigDecimal.valueOf(100)) < 0));
+            .forEach(element -> assertTrue(
+                Objects.requireNonNull(element.getApartmentArea()).compareTo(BigDecimal.valueOf(60)) > 0 &&
+                    element.getApartmentArea().compareTo(BigDecimal.valueOf(100)) < 0));
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadApartment::getId));
     }
 
@@ -118,16 +126,16 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         Long apartmentId = Objects.requireNonNull(readApartment.getId());
         List<ReadApartment> queryResponse = new ApartmentQuery.Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,desc")
-                .id(apartmentId)
-                .build().perform();
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,desc")
+            .id(apartmentId)
+            .build().perform();
         queryResponse.forEach(element -> assertEquals(element.getId(), readApartment.getId()));
     }
 
@@ -136,20 +144,20 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         BigDecimal apartmentArea = readApartment.getApartmentArea();
         List<ReadApartment> queryResponse = new ApartmentQuery
-                .Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,asc")
-                .apartmentArea(apartmentArea)
-                .build().perform();
+            .Builder(apartmentApi)
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .apartmentArea(apartmentArea)
+            .build().perform();
 
         queryResponse
-                .forEach(element -> assertEquals(element.getApartmentArea(), readApartment.getApartmentArea()));
+            .forEach(element -> assertEquals(element.getApartmentArea(), readApartment.getApartmentArea()));
     }
 
     @Test
@@ -157,75 +165,73 @@ class QueryApartmentIT {
         ReadCooperation readCoop = cooperationApi.createCooperation(createCooperation());
         ReadHouse readHouse = houseApi.createHouse(readCoop.getId(), createHouse());
 
-        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment());
+        ReadApartment readApartment = apartmentApi.createApartment(readHouse.getId(), createApartment(NUMBER_OF_APARTMENT_INVITATIONS));
 
         String apartmentNumber = readApartment.getApartmentNumber();
 
         List<ReadApartment> queryResponse = new ApartmentQuery
-                .Builder(apartmentApi)
-                .houseId(readHouse.getId())
-                .pageNumber(1)
-                .pageSize(10)
-                .sort("id,asc")
-                .apartmentNumber(apartmentNumber)
-                .build().perform();
+            .Builder(apartmentApi)
+            .houseId(readHouse.getId())
+            .pageNumber(1)
+            .pageSize(10)
+            .sort("id,asc")
+            .apartmentNumber(apartmentNumber)
+            .build().perform();
 
         queryResponse
-                .forEach(element -> assertEquals(element.getApartmentNumber(), readApartment.getApartmentNumber()));
+            .forEach(element -> assertEquals(element.getApartmentNumber(), readApartment.getApartmentNumber()));
     }
 
-    private CreateApartment createApartment() {
+
+
+    private CreateApartment createSecondApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
-                .area(BigDecimal.valueOf(100.5))
-                .number("15")
-                .invitations(createApartmentInvitation());
+            .area(BigDecimal.valueOf(65.5))
+            .number("16")
+            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
     }
 
-    private CreateApartment createSecondApartment() {
+
+    private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
-                .area(BigDecimal.valueOf(65.5))
-                .number("16")
-                .invitations(createApartmentInvitation());
+            .area(BigDecimal.valueOf(72.5))
+            .number("15")
+            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
     }
 
-    private List<CreateInvitation> createApartmentInvitation() {
-        List<CreateInvitation> createInvitations = new ArrayList<>();
-        createInvitations.add(new CreateApartmentInvitation()
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        createInvitations.add(new CreateApartmentInvitation()
-                .email("test.receive.messages@gmail.com")
-                .type(InvitationType.APARTMENT));
-
-        return createInvitations;
+    private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
     }
 
     private CreateHouse createHouse() {
         return new CreateHouse()
-                .adjoiningArea(500)
-                .houseArea(BigDecimal.valueOf(500.0))
-                .quantityFlat(50)
-                .address(createAddress());
+            .adjoiningArea(500)
+            .houseArea(BigDecimal.valueOf(500.0))
+            .quantityFlat(50)
+            .address(createAddress());
     }
 
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
-                .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
-                .usreo(RandomStringUtils.randomNumeric(8))
-                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .address(createAddress())
-                .adminEmail("test.receive.messages@gmail.com");
+            .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
+            .usreo(RandomStringUtils.randomNumeric(8))
+            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
+            .address(createAddress())
+            .adminEmail("test.receive.messages@gmail.com");
     }
 
     private Address createAddress() {
         return new Address().city("Dnepr")
-                .district("District")
-                .houseBlock("block")
-                .houseNumber("number")
-                .region("Dnipro")
-                .street("street")
-                .zipCode("zipCode");
+            .district("District")
+            .houseBlock("block")
+            .houseNumber("number")
+            .region("Dnipro")
+            .street("street")
+            .zipCode("zipCode");
     }
 }

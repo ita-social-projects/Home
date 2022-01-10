@@ -9,11 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.Apartment;
 import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.ApartmentRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +36,7 @@ public class ApartmentInvitationServiceIntegrationTest {
     private ApartmentInvitationRepository apartmentInvitationRepository;
 
     @Autowired
-    private ApartmentInvitationServiceImpl apartmentInvitationService;
+    private InvitationServiceImpl invitationServiceImpl;
 
     @Autowired
     private ApartmentRepository apartmentRepository;
@@ -62,7 +65,7 @@ public class ApartmentInvitationServiceIntegrationTest {
             StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        apartmentInvitationService.markInvitationsAsOverdue();
+        invitationServiceImpl.markInvitationsAsOverdue();
 
         List<ApartmentInvitation> allApartmentInvitationsFromTransformedDB =
             StreamSupport.stream(apartmentInvitationRepository.findAll().spliterator(), false)
@@ -84,7 +87,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         invitation.setSentDatetime(null);
         invitation = apartmentInvitationRepository.save(invitation);
 
-        apartmentInvitationService.deactivateInvitationById(apartment.getId(), invitation.getId());
+        invitationServiceImpl.deactivateInvitation(invitation.getId());
 
         Optional<ApartmentInvitation> deactivatedInvitation =
             apartmentInvitationRepository.findById(invitation.getId());
@@ -104,7 +107,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         invitation.setSentDatetime(LocalDateTime.now());
         invitation = apartmentInvitationRepository.save(invitation);
 
-        apartmentInvitationService.deactivateInvitationById(apartment.getId(), invitation.getId());
+        invitationServiceImpl.deactivateInvitation(invitation.getId());
 
         Optional <ApartmentInvitation> deactivetedInvitation =
             apartmentInvitationRepository.findById(invitation.getId());
@@ -127,7 +130,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         Long invitationId = invitation.getId();
 
         NotFoundHomeException exception = Assertions.assertThrows(NotFoundHomeException.class, () ->
-            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+            invitationServiceImpl.deactivateInvitation(invitationId));
         assertEquals("Invitation with id: " + invitationId + " not found.", exception.getMessage());
     }
 
@@ -147,7 +150,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         Long invitationId = invitation.getId();
 
         NotFoundHomeException exception = Assertions.assertThrows(NotFoundHomeException.class, () ->
-            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+            invitationServiceImpl.deactivateInvitation(invitationId));
         assertEquals("Invitation with id: " + invitationId + " not found.", exception.getMessage());
     }
 
@@ -165,7 +168,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         Long invitationId = invitation.getId();
 
         Assertions.assertThrows(NullPointerException.class, () ->
-            apartmentInvitationService.deactivateInvitationById(apartmentId, invitationId));
+            invitationServiceImpl.deactivateInvitation(invitationId));
     }
 
     private Apartment createApartment(){
