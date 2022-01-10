@@ -6,11 +6,12 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.softserveinc.ita.homeproject.api.tests.query.InvitationQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
-import com.softserveinc.ita.homeproject.client.api.ApartmentInvitationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.HouseApi;
 import com.softserveinc.ita.homeproject.client.api.InvitationsApi;
@@ -34,10 +35,11 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class QueryInvitationIT {
 
-    private final InvitationsApi invitationsApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 1;
 
-    private final ApartmentInvitationApi apartmentInvitationApi =
-        new ApartmentInvitationApi(ApiClientUtil.getCooperationAdminClient());
+    private final static Long APARTMENT_ID = 2L;
+
+    private final InvitationsApi invitationsApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
     private final HouseApi houseApi = new HouseApi(ApiClientUtil.getCooperationAdminClient());
 
@@ -45,21 +47,22 @@ public class QueryInvitationIT {
 
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
-    private ReadApartmentInvitation readApartmentInvitation;
+    private ReadInvitation readInvitation;
 
     private ReadCooperation readCooperation;
 
     @BeforeAll
     void createInvitation() throws ApiException {
-        CreateApartment createApartment = createApartmentWithoutInvitation();
+        CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         CreateCooperation createCooperation = createCooperation();
 
         readCooperation = cooperationApi.createCooperation(createCooperation);
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-        readApartmentInvitation = apartmentInvitationApi
-            .createInvitation(createdApartment.getId(), (CreateApartmentInvitation) createInvitationApartment());
+
+        readInvitation = invitationsApi
+            .createInvitation(createInvitationApartment());
     }
 
     @Test
@@ -79,6 +82,7 @@ public class QueryInvitationIT {
             .Builder(invitationsApi)
             .pageNumber(1)
             .pageSize(10)
+            .apartmentId(41L)
             .sort("id,asc")
             .build().perform();
 
@@ -103,9 +107,9 @@ public class QueryInvitationIT {
             .Builder(invitationsApi)
             .pageNumber(1)
             .pageSize(10)
-            .id(readApartmentInvitation.getId())
+            .id(readInvitation.getId())
             .build().perform();
-        queryResponse.forEach(element -> assertEquals(readApartmentInvitation.getId(), element.getId()));
+        queryResponse.forEach(element -> assertEquals(readInvitation.getId(), element.getId()));
     }
 
     @Test
@@ -114,10 +118,10 @@ public class QueryInvitationIT {
             .Builder(invitationsApi)
             .pageNumber(1)
             .pageSize(10)
-            .id(readApartmentInvitation.getId())
+            .id(readInvitation.getId())
             .invitationType(InvitationType.APARTMENT)
             .build().perform();
-        queryResponse.forEach(element -> assertEquals(readApartmentInvitation.getId(), element.getId()));
+        queryResponse.forEach(element -> assertEquals(readInvitation.getId(), element.getId()));
     }
 
     @Test
@@ -148,10 +152,11 @@ public class QueryInvitationIT {
             .Builder(invitationsApi)
             .pageNumber(1)
             .pageSize(10)
-            .apartmentId(Objects.requireNonNull(readApartmentInvitation.getApartment()).getId())
+            .id(Objects.requireNonNull(readInvitation).getId())
             .build().perform();
-        queryResponse.forEach(element -> assertEquals(readApartmentInvitation.getId(), element.getId()));
+        queryResponse.forEach(element -> assertEquals(readInvitation.getId(), element.getId()));
     }
+
 
     @Test
     void getInvitationByEmail() throws ApiException {
@@ -159,9 +164,9 @@ public class QueryInvitationIT {
             .Builder(invitationsApi)
             .pageNumber(1)
             .pageSize(10)
-            .email(readApartmentInvitation.getEmail())
+            .email(readInvitation.getEmail())
             .build().perform();
-        queryResponse.forEach(element -> assertEquals(readApartmentInvitation.getId(), element.getId()));
+        queryResponse.forEach(element -> assertEquals(readInvitation.getId(), element.getId()));
     }
 
     @Test
@@ -189,8 +194,22 @@ public class QueryInvitationIT {
         assertThat(queryResponse).isEmpty();
     }
 
+    @Test
+    void getInvitationsFromNotExistingCooperation() throws ApiException {
+        Long wrongCooperationId = 999999999L;
+
+        List<ReadInvitation> queryResponse = new InvitationQuery
+            .Builder(invitationsApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .apartmentId(wrongCooperationId)
+            .build().perform();
+        assertThat(queryResponse).isEmpty();
+    }
+
     private CreateInvitation createInvitationApartment() {
         return new CreateApartmentInvitation()
+            .apartmentId(APARTMENT_ID)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
             .type(InvitationType.APARTMENT);
     }
@@ -226,6 +245,22 @@ public class QueryInvitationIT {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
             .number("15");
+    }
+
+    private CreateApartment createApartment(int numberOfApartamentInvitations) {
+        return new CreateApartment()
+            .area(BigDecimal.valueOf(72.5))
+            .number("15")
+            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+    }
+
+
+    private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
     }
 
 }

@@ -1,57 +1,53 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
-import java.util.List;
-
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationService;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class SendCooperationEmailService extends BaseEmailService {
+
+public class SendCooperationEmailService extends BaseEmailService<CooperationInvitation, CooperationInvitationDto> {
 
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
-    private final CooperationInvitationService cooperationInvitationService;
+    private final InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService;
 
     private final CooperationRepository cooperationRepository;
 
-    @Override
-    @SneakyThrows
-    public void executeAllInvitationsByType() {
-        List<CooperationInvitationDto> invitations = cooperationInvitationService.getAllActiveInvitations();
-
-        for (InvitationDto invite : invitations) {
-            mailService.sendTextMessage(createMailDto(invite));
-            cooperationInvitationService.updateSentDateTimeAndStatus(invite.getId());
-        }
+    public SendCooperationEmailService(
+        @Qualifier(value = "cooperationInvitationServiceImpl")
+            InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService,
+        CooperationRepository cooperationRepository) {
+        this.invitationService = invitationService;
+        this.cooperationRepository = cooperationRepository;
     }
 
     @Override
-    protected MailDto createMailDto(InvitationDto invitationDto) {
+    protected MailDto createBaseMailDto(InvitationDto invitationDto) {
         CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
-
         Cooperation coop = cooperationRepository.findById(invitation.getCooperationId())
-                .filter(Cooperation::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(
-                        String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
+            .filter(Cooperation::getEnabled)
+            .orElseThrow(() -> new NotFoundHomeException(
+                String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
 
-        var mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.COOPERATION);
-        mailDto.setId(invitation.getId());
-        mailDto.setEmail(invitation.getEmail());
-        mailDto.setRegistrationToken(invitation.getRegistrationToken());
+        MailDto mailDto = new MailDto();
         mailDto.setRole(invitation.getRole().getName());
         mailDto.setCooperationName(coop.getName());
-        checkRegistration(invitation, mailDto);
+        mailDto.setType(InvitationTypeDto.COOPERATION);
         return mailDto;
+    }
+
+
+    @Override
+    protected InvitationService<CooperationInvitation, CooperationInvitationDto> getInvitationService() {
+        return invitationService;
     }
 }

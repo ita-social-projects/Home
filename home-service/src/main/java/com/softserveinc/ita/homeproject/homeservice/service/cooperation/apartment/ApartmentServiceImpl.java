@@ -7,13 +7,15 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.Apartment;
 import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.ApartmentRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.apartment.ApartmentDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,10 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
 
-    private final ApartmentInvitationService invitationService;
+    private final InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService;
 
     private final ApartmentRepository apartmentRepository;
 
@@ -36,6 +37,18 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private static final String APARTMENT_WITH_ID_NOT_FOUND = "Apartment with 'id: %d' is not found";
 
+    public ApartmentServiceImpl(
+        @Qualifier("apartmentInvitationServiceImpl") InvitationService<ApartmentInvitation, ApartmentInvitationDto>
+            invitationService,
+        ApartmentRepository apartmentRepository,
+        HouseRepository houseRepository,
+        ServiceMapper mapper) {
+        this.invitationService = invitationService;
+        this.apartmentRepository = apartmentRepository;
+        this.houseRepository = houseRepository;
+        this.mapper = mapper;
+    }
+
 
     @Transactional
     @Override
@@ -44,13 +57,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (apartmentRepository.findByApartmentNumberAndHouseId(createApartmentDto.getApartmentNumber(), houseId)
             .isPresent()) {
             throw new BadRequestHomeException("Apartment with number " + createApartmentDto.getApartmentNumber()
-                +" already exist in this house");
+                + " already exist in this house");
         }
 
-        var house = houseRepository.findById(houseId).filter(House::getEnabled)
+        House house = houseRepository.findById(houseId).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
 
-        var apartment = mapper.convert(createApartmentDto, Apartment.class);
+        Apartment apartment = mapper.convert(createApartmentDto, Apartment.class);
         List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();
 
         apartment.setHouse(house);
@@ -72,7 +85,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Transactional
     @Override
     public ApartmentDto updateApartment(Long houseId, Long apartmentId, ApartmentDto updateApartmentDto) {
-        var toUpdate = apartmentRepository.findById(apartmentId)
+        Apartment toUpdate = apartmentRepository.findById(apartmentId)
             .filter(Apartment::getEnabled)
             .filter(apartment -> apartment.getHouse().getId().equals(houseId))
             .orElseThrow(() ->

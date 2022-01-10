@@ -71,6 +71,10 @@ class PermissionsIT {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
+    private final static int NUMBER_OF_APARTMENT_INVITATIONS = 1;
+
+    private final static Long APARTMENT_ID = 100L;
+
     static private final List<ApiClientMethods> apiClientMethods =
         getAllApiClientMethods(listApiClientClassInstances());
 
@@ -386,6 +390,8 @@ class PermissionsIT {
                 return createBaseCooperation();
             case "com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation":
                 return createApartmentInvitation();
+            case "com.softserveinc.ita.homeproject.client.model.CreateInvitation":
+                return createInvitation();
             case "com.softserveinc.ita.homeproject.client.model.InvitationToken":
                 return getInvitationToken();
             default:
@@ -515,6 +521,7 @@ class PermissionsIT {
             case "updateInvitation":
             case "queryInvitation":
             case "queryAllInvitations":
+            case "deleteAnyInvitation":
             case "getInvitation":
             case "deleteOwnership":
             case "deleteInvitation":
@@ -629,8 +636,23 @@ class PermissionsIT {
         return createInvitations;
     }
 
+    private static List<CreateInvitation> createInvitationList(int numberOfInvitations) {
+        return Stream.generate(CreateApartmentInvitation::new)
+            .map(x -> x.apartmentId(APARTMENT_ID).email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT))
+            .limit(numberOfInvitations)
+            .collect(Collectors.toList());
+    }
+
     private static CreateApartmentInvitation createApartmentInvitation() {
         return (CreateApartmentInvitation) new CreateApartmentInvitation()
+            .email("test.receive.messages@gmail.com")
+            .type(InvitationType.APARTMENT);
+    }
+
+    private static CreateInvitation createInvitation() {
+        return  new CreateApartmentInvitation()
+            .apartmentId(APARTMENT_ID)
             .email("test.receive.messages@gmail.com")
             .type(InvitationType.APARTMENT);
     }
@@ -639,7 +661,7 @@ class PermissionsIT {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
             .number("15")
-            .invitations(createListOfInvitation());
+            .invitations(createInvitationList(NUMBER_OF_APARTMENT_INVITATIONS));
     }
 
     private static UpdatePoll updatePoll() {

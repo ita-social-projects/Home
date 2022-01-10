@@ -1,45 +1,40 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
 import java.math.BigDecimal;
-import java.util.List;
 
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationService;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class SendApartmentEmailService extends BaseEmailService {
 
-    private final ApartmentInvitationService apartmentInvitationService;
+public class SendApartmentEmailService extends BaseEmailService<ApartmentInvitation, ApartmentInvitationDto> {
 
-    @Override
-    @SneakyThrows
-    public void executeAllInvitationsByType() {
-        List<ApartmentInvitationDto> invitations = apartmentInvitationService.getAllActiveInvitations();
+    private final InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService;
 
-        for (InvitationDto invite : invitations) {
-            mailService.sendTextMessage(createMailDto(invite));
-            apartmentInvitationService.updateSentDateTimeAndStatus(invite.getId());
-        }
+    public SendApartmentEmailService(
+        @Qualifier(value = "apartmentInvitationServiceImpl")
+            InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService) {
+        this.invitationService = invitationService;
     }
 
     @Override
-    protected MailDto createMailDto(InvitationDto invitationDto) {
-        var invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
-        var mailDto = new MailDto();
+    protected MailDto createBaseMailDto(InvitationDto invitationDto) {
+        ApartmentInvitationDto invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
+        MailDto mailDto = new MailDto();
         mailDto.setType(InvitationTypeDto.APARTMENT);
-        mailDto.setId(invitation.getId());
-        mailDto.setEmail(invitation.getEmail());
-        mailDto.setRegistrationToken(invitation.getRegistrationToken());
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
         mailDto.setOwnershipPat(BigDecimal.ZERO);
-        checkRegistration(invitation, mailDto);
         return mailDto;
+    }
+
+    @Override
+    protected InvitationService<ApartmentInvitation, ApartmentInvitationDto> getInvitationService() {
+        return invitationService;
     }
 }

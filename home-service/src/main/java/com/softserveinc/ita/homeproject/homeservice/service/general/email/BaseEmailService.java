@@ -1,13 +1,23 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
+import java.util.List;
+
+import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.mail.MailService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class BaseEmailService {
+public abstract class BaseEmailService<T extends Invitation, D extends InvitationDto> {
+
+    @Autowired
+    protected CooperationRepository cooperationRepository;
+
     @Autowired
     protected ServiceMapper mapper;
 
@@ -17,17 +27,37 @@ public abstract class BaseEmailService {
     @Autowired
     private UserRepository userRepository;
 
-    protected abstract void executeAllInvitationsByType();
+    @SneakyThrows
+    public void executeAllInvitationsByType() {
+        List<D> invitations = getInvitationService().getAllActiveInvitations();
 
-    protected abstract MailDto createMailDto(InvitationDto invitationDto);
+        for (InvitationDto invite : invitations) {
+            mailService.sendTextMessage(createMailDto(invite));
+            getInvitationService().updateSentDateTimeAndStatus(invite.getId());
+        }
+    }
+
+    protected MailDto createMailDto(InvitationDto invitationDto) {
+        MailDto mailDto = createBaseMailDto(invitationDto);
+        mailDto.setId(invitationDto.getId());
+        mailDto.setEmail(invitationDto.getEmail());
+        mailDto.setRegistrationToken(invitationDto.getRegistrationToken());
+        checkRegistration(invitationDto, mailDto);
+        return mailDto;
+    }
+
+    protected abstract MailDto createBaseMailDto(InvitationDto invitationDto);
 
     protected void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
-        if(userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
             mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/users");
             mailDto.setIsRegistered(false);
         } else {
-            mailDto.setLink("https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
+            mailDto.setLink(
+                "https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
             mailDto.setIsRegistered(true);
         }
     }
+
+    protected abstract InvitationService<T, D> getInvitationService();
 }

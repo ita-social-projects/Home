@@ -103,6 +103,13 @@ UpdateOwnershipBody:
       schema:
         $ref: '../models/ownership.yaml#/UpdateOwnership'
   required: true
+CreateInvitationBody:
+  description: A payload for creating a invitation. Attention! Invitation type can be "apartment" or "cooperation"
+  content:
+    application/json:
+      schema:
+        $ref: '../models/invitation.yaml#/CreateInvitation'
+  required: true
 CreateApartmentInvitationBody:
   description: A payload for creating a new Invitation
   content:
