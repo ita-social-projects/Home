@@ -89,19 +89,19 @@ UpdateUser:
     - last_name
   properties:
     first_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Petro"
       minLength: 1
       maxLength: 50
     middle_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Petrovich"
       minLength: 1
       maxLength: 50
     last_name:
-      pattern: '\w+'
+      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
       type: string
       example: "Petrov"
       minLength: 1
