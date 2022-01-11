@@ -93,6 +93,24 @@ by this URL: http://localhost:8080/api/0/apidocs/index.html
 Detail info about other running options/running tests, you can read in 
 [hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
 
+### Authorization
+After accessing RapiDoc you are able to enter 'Cooperation' section
+where you need to use your personal email for 'admin_email' field
+and change 'iban' field to make it unique (simply change a few numbers in it)
+
+In your email inbox or in table 'invitations' of your local DB
+you should be able to find a registration token.
+
+Having completed all previous steps you can use the provided
+registration token in the 'registration_token' field to create a new user
+in the 'User' section  where you need to use the same email
+as you entered for 'admin_email' and create a new password
+Pay attention that you wouldn't be able to edit your
+email/password after registration
+
+Finally, you should be able to pass Basic Authentication
+with your own credentials
+
 ---
 
 ### Docker images
