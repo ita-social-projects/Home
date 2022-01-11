@@ -15,6 +15,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.In
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
@@ -40,6 +41,8 @@ public class ApartmentInvitationServiceIntegrationTest {
 
     @Autowired
     private ApartmentRepository apartmentRepository;
+
+    private final String registrationToken = "e5dde7f8-627a-11ec-8240-bbcc8fff1c40";
 
     @BeforeEach
     public void initApartmentInvitationTestDB() {
@@ -169,6 +172,30 @@ public class ApartmentInvitationServiceIntegrationTest {
 
         Assertions.assertThrows(NullPointerException.class, () ->
             invitationServiceImpl.deactivateInvitation(invitationId));
+    }
+
+    @Test
+    void cannotApproveOverdueInvitation() {
+        ApartmentInvitation invitation = createOverdueApartmentInvitation();
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setEnabled(true);
+        apartmentInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+                invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was overdue", exception.getMessage());
+    }
+
+    @Test
+    void cannotApproveDeletedInvitation() {
+        Apartment apartment = createApartment();
+        ApartmentInvitation invitation = createInvitation(apartment);
+        invitation.setEnabled(false);
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+        apartmentInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+                invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was deleted By Cooperation Admin", exception.getMessage());
     }
 
     private Apartment createApartment(){

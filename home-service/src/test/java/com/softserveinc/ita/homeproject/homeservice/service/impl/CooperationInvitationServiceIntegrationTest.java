@@ -11,8 +11,10 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperat
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class CooperationInvitationServiceIntegrationTest {
 
     @Autowired
     private CooperationInvitationServiceImpl cooperationInvitationService;
+
+    private final String registrationToken = "e5dde7f8-627a-11ec-8240-bbcc8fff1c40";
 
     @BeforeEach
     public void initCooperationInvitationTestDB() {
@@ -64,6 +68,30 @@ public class CooperationInvitationServiceIntegrationTest {
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(1).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(3).getStatus());
     }
+
+    @Test
+    void cannotApproveOverdueInvitation() {
+        CooperationInvitation invitation = createOverdueCooperationInvitation();
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setEnabled(true);
+        cooperationInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+                cooperationInvitationService.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was overdue", exception.getMessage());
+    }
+
+    @Test
+    void cannotApproveDeletedInvitation() {
+        CooperationInvitation invitation = createNotOverdueAcceptedCooperationInvitation();
+        invitation.setEnabled(false);
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+        cooperationInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+                cooperationInvitationService.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was deleted By Cooperation Admin", exception.getMessage());
+    }
+
     private CooperationInvitation createNotOverduePendingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
