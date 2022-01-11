@@ -31,7 +31,7 @@ public class CooperationInvitationServiceIntegrationTest {
     @Autowired
     private CooperationInvitationServiceImpl cooperationInvitationService;
 
-    private final String registrationToken = "e5dde7f8-627a-11ec-8240-bbcc8fff1c40";
+    private final String registrationToken = "4d45db2a-6970-11ec-a4bd-e75cc40d7df1";
 
     @BeforeEach
     public void initCooperationInvitationTestDB() {
@@ -70,7 +70,7 @@ public class CooperationInvitationServiceIntegrationTest {
     }
 
     @Test
-    void cannotApproveOverdueInvitation() {
+    void cannotApproveOverdueCooperationInvitation() {
         CooperationInvitation invitation = createOverdueCooperationInvitation();
         invitation.setRegistrationToken(registrationToken);
         invitation.setEnabled(true);
@@ -81,7 +81,7 @@ public class CooperationInvitationServiceIntegrationTest {
     }
 
     @Test
-    void cannotApproveDeletedInvitation() {
+    void cannotApproveDeletedICooperationInvitation() {
         CooperationInvitation invitation = createNotOverdueAcceptedCooperationInvitation();
         invitation.setEnabled(false);
         invitation.setRegistrationToken(registrationToken);
