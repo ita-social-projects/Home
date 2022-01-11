@@ -95,6 +95,20 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
                 new InvitationException("Invitation with id " + id + " was not found"));
     }
 
+    @Override
+    public void acceptUserInvitation(Invitation invitation) {
+        if (invitation.getType().equals(InvitationType.APARTMENT)
+        ) {
+            Ownership ownership = ownershipService.createOwnership((ApartmentInvitation) invitation);
+            userCooperationService.createUserCooperationForOwnership(ownership);
+            invitation.setStatus(InvitationStatus.ACCEPTED);
+            invitationRepository.save(invitation);
+        } else if (invitation.getType().equals(InvitationType.COOPERATION)) {
+            userCooperationService.createUserCooperationViaInvitation((CooperationInvitation) invitation);
+            invitation.setStatus(InvitationStatus.ACCEPTED);
+            invitationRepository.save(invitation);
+        }
+    }
 
     @Override
     public void registerWithRegistrationToken(String token) {
@@ -113,21 +127,6 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
                 .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
         anyInvitation.setEnabled(false);
         invitationRepository.save(anyInvitation);
-    }
-
-    @Override
-    public void acceptUserInvitation(Invitation invitation) {
-        if (invitation.getType().equals(InvitationType.APARTMENT)
-        ) {
-            Ownership ownership = ownershipService.createOwnership((ApartmentInvitation) invitation);
-            userCooperationService.createUserCooperationForOwnership(ownership);
-            invitation.setStatus(InvitationStatus.ACCEPTED);
-            invitationRepository.save(invitation);
-        } else if (invitation.getType().equals(InvitationType.COOPERATION)) {
-            userCooperationService.createUserCooperationViaInvitation((CooperationInvitation) invitation);
-            invitation.setStatus(InvitationStatus.ACCEPTED);
-            invitationRepository.save(invitation);
-        }
     }
 
 

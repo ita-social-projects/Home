@@ -133,11 +133,11 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
 
         switch (invitation.getType()) {
             case APARTMENT:
-                apartmentInvitationService.registerWithRegistrationToken(token);
+                invitationService.registerWithRegistrationToken(token);
                 readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
                 break;
             case COOPERATION:
-                cooperationInvitationService.registerWithRegistrationToken(token);
+                invitationService.registerWithRegistrationToken(token);
                 readInvitation = mapper.convert(invitation, ReadCooperationInvitation.class);
                 break;
             default:
