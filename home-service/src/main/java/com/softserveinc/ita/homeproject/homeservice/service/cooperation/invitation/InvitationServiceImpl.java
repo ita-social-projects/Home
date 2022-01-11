@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import com.querydsl.jpa.impl.JPAQuery;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
@@ -24,12 +31,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+
+
 
 @Service
 @RequiredArgsConstructor
