@@ -1,9 +1,11 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
-import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
+
+
 
 @Provider
 public class NotAcceptableInvitationExceptionMapper
