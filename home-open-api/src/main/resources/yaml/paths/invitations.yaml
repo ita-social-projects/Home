@@ -8,7 +8,7 @@ invitations-invitationApproval:
     requestBody:
       $ref: '../requests/requestBodies.yaml#/InvitationTokenBody'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/InvitationResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'

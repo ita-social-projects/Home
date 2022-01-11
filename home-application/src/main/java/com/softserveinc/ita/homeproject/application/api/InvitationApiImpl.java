@@ -58,7 +58,7 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
     @Override
     public Response approveInvitation(InvitationToken token) {
         ReadInvitation readInvitation = registerWithCorrectService(token.getInvitationToken());
-        return Response.status(Response.Status.CREATED).entity(readInvitation).build();
+        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @PreAuthorize(MANAGE_COOPERATION_DATA)
