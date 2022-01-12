@@ -58,7 +58,7 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
     @Override
     public Response approveInvitation(InvitationToken token) {
         ReadInvitation readInvitation = registerWithCorrectService(token.getInvitationToken());
-        return Response.status(Response.Status.CREATED).entity(readInvitation).build();
+        return Response.status(Response.Status.OK).entity(readInvitation).build();
     }
 
     @PreAuthorize(MANAGE_COOPERATION_DATA)
@@ -133,11 +133,11 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
 
         switch (invitation.getType()) {
             case APARTMENT:
-                apartmentInvitationService.registerWithRegistrationToken(token);
+                invitationService.registerWithRegistrationToken(token);
                 readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
                 break;
             case COOPERATION:
-                cooperationInvitationService.registerWithRegistrationToken(token);
+                invitationService.registerWithRegistrationToken(token);
                 readInvitation = mapper.convert(invitation, ReadCooperationInvitation.class);
                 break;
             default:

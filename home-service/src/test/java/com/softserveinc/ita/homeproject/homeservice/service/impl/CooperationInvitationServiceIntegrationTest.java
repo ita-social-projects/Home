@@ -11,8 +11,11 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperat
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
+import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,11 @@ public class CooperationInvitationServiceIntegrationTest {
 
     @Autowired
     private CooperationInvitationServiceImpl cooperationInvitationService;
+
+    @Autowired
+    private InvitationServiceImpl invitationServiceImpl;
+
+    private final String registrationToken = "4d45db2a-6970-11ec-a4bd-e75cc40d7df1";
 
     @BeforeEach
     public void initCooperationInvitationTestDB() {
@@ -50,20 +58,44 @@ public class CooperationInvitationServiceIntegrationTest {
     @Test
     void markAsOverdueCooperationInvitationsTest() {
         List<CooperationInvitation> allCooperationInvitationsFromBeginningDB =
-            StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+                StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
+                        .collect(Collectors.toList());
 
         cooperationInvitationService.markInvitationsAsOverdue();
 
         List<CooperationInvitation> allCooperationInvitationsFromTransformedDB =
-            StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+                StreamSupport.stream(cooperationInvitationRepository.findAll().spliterator(), false)
+                        .collect(Collectors.toList());
 
         assertEquals(InvitationStatus.PENDING, allCooperationInvitationsFromBeginningDB.get(1).getStatus());
         assertEquals(InvitationStatus.PROCESSING, allCooperationInvitationsFromBeginningDB.get(3).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(1).getStatus());
         assertEquals(InvitationStatus.OVERDUE, allCooperationInvitationsFromTransformedDB.get(3).getStatus());
     }
+
+    @Test
+    void cannotApproveOverdueCooperationInvitation() {
+        CooperationInvitation invitation = createOverdueCooperationInvitation();
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setEnabled(true);
+        cooperationInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class,
+                () -> invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was overdue", exception.getMessage());
+    }
+
+    @Test
+    void cannotApproveDeletedICooperationInvitation() {
+        CooperationInvitation invitation = createNotOverdueAcceptedCooperationInvitation();
+        invitation.setEnabled(false);
+        invitation.setRegistrationToken(registrationToken);
+        invitation.setStatus(InvitationStatus.ACCEPTED);
+        cooperationInvitationRepository.save(invitation);
+        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class,
+                () -> invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
+        assertEquals("Invitation was deleted By Cooperation Admin", exception.getMessage());
+    }
+
     private CooperationInvitation createNotOverduePendingCooperationInvitation() {
         var invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
