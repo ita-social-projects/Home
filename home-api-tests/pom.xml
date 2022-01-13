@@ -24,6 +24,7 @@
         <home.application.internal.port>8080</home.application.internal.port>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <jacoco.version>0.8.6</jacoco.version>
         <liquibase.internal.port>8000</liquibase.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
         <mail.host>mailhog</mail.host>
