@@ -8,7 +8,7 @@ invitations-invitationApproval:
     requestBody:
       $ref: '../requests/requestBodies.yaml#/InvitationTokenBody'
     responses:
-      201:
+      200:
         $ref: '../responses/responses.yaml#/InvitationResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
@@ -16,6 +16,8 @@ invitations-invitationApproval:
         $ref: '../responses/responses.yaml#/Unauthorized'
       403:
         $ref: '../responses/responses.yaml#/Forbidden'
+      406:
+        $ref: '../responses/responses.yaml#/NotAcceptableResponse'
       409:
         $ref: '../responses/responses.yaml#/Conflict'
       default:

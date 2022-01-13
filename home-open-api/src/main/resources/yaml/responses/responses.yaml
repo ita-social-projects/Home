@@ -202,3 +202,9 @@ VoteResponse:
     application/json:
       schema:
         $ref: "../models/vote.yaml#/ReadVote"
+NotAcceptableResponse:
+  description: Not Acceptable
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
