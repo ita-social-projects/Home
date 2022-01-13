@@ -109,7 +109,7 @@ Pay attention that you wouldn't be able to edit your
 email/password after registration
 
 Finally, you should be able to pass Basic Authentication
-with your own credentials
+with your own credentials.
 
 ---
 
