@@ -31,7 +31,6 @@
         <mail.port>1025</mail.port>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
-        <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
     </properties>
 
@@ -154,7 +153,6 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>${fabric8io.docker.maven.plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <verbose>true</verbose>
@@ -339,6 +337,10 @@
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <mailhog.external.port>${mailhog.external.port}</mailhog.external.port>
+                                <home.application.admin.username>${home.application.admin.username}
+                                </home.application.admin.username>
+                                <home.application.admin.password>${home.application.admin.password}
+                                </home.application.admin.password>
                                 <verbose.tests.logging>${api.tests.verbose.logging}</verbose.tests.logging>
                             </systemPropertyVariables>
                         </configuration>
