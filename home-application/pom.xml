@@ -31,6 +31,26 @@
             <groupId>com.softserveinc.ita.homeproject</groupId>
             <artifactId>home-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-open-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mailapi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-data-migration</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!--Spring dependencies-->
 
@@ -346,14 +366,6 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <configuration>
-                    <to>
-                        <image>${image.application.path}</image>
-                    </to>
-                    <container>
-                        <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
-                    </container>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

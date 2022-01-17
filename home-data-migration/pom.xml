@@ -92,14 +92,6 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <configuration>
-                    <to>
-                        <image>${image.liquibase.path}</image>
-                    </to>
-                    <container>
-                        <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
-                    </container>
-                </configuration>
             </plugin>
         </plugins>
     </build>
