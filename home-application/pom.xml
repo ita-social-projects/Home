@@ -366,18 +366,86 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+                <configuration>
+                    <to>
+                        <image>${image.application.path}</image>
+                        <tags>
+                            <tag>${project.version}-${git_commit_sha}</tag>
+                        </tags>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
+                    </to>
+                    <container>
+                        <mainClass>com.softserveinc.ita.homeproject.HomeApplication</mainClass>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>${jib.goal}</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/static/api/0</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/static/api/0</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>version.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

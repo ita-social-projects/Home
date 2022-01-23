@@ -557,27 +557,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>${exec-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>exec</goal>
-                            </goals>
-                            <phase>install</phase>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <executable>mvn</executable>
-                        <!-- optional -->
-                        <workingDirectory>${project.build.directory}/generated-sources/openapi/client</workingDirectory>
-                        <arguments>
-                            <argument>clean</argument>
-                            <argument>install</argument>
-                            <argument>-ntp</argument>
-                        </arguments>
-                        <environmentVariables>
-                            <LANG>en_US</LANG>
-                        </environmentVariables>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -611,50 +590,11 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>prepare-agent</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>report</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>report</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>com.google.cloud.tools</groupId>
                     <artifactId>jib-maven-plugin</artifactId>
                     <version>${jib.version}</version>
-                    <configuration>
-                        <to>
-                            <image>${image.liquibase.path}</image>
-                            <tags>
-                                <tag>${project.version}-${git_commit_sha}</tag>
-                            </tags>
-                            <auth>
-                                <username>${docker.username}</username>
-                                <password>${docker.password}</password>
-                            </auth>
-                        </to>
-                        <container>
-                            <mainClass>com.softserveinc.ita.homeproject.homedatamigration.migrations.LiquibaseRunner</mainClass>
-                            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                        </container>
-                        <allowInsecureRegistries>true</allowInsecureRegistries>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>${jib.goal}</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -761,27 +701,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven.resources.plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>copy-resource-one</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.build.outputDirectory}/static/api/0</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>src/main/resources/static/api/0</directory>
-                                        <filtering>true</filtering>
-                                        <includes>
-                                            <include>version.json</include>
-                                        </includes>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.openapitools</groupId>
@@ -852,13 +771,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>repackage</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>io.swagger.codegen.v3</groupId>
