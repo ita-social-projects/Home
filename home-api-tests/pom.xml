@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>home</artifactId>
@@ -9,34 +10,30 @@
         <version>${revision}</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <artifactId>home-api-tests</artifactId>
 
     <properties>
-        <surefire-version>3.0.0-M5</surefire-version>
-        <commons-lang3-version>3.11</commons-lang3-version>
-        <fabric8io.docker.maven.plugin.version>0.24.0</fabric8io.docker.maven.plugin.version>
+        <api.tests.verbose.logging>true</api.tests.verbose.logging>
+        <docker-files>${basedir}/target/docker</docker-files>
         <docker.image.data.migration>homeacademy/data-migration:${docker.revision}</docker.image.data.migration>
         <docker.image.application>homeacademy/home-application:${docker.revision}</docker.image.application>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.image.psql>governmentpaas/psql</docker.image.psql>
-        <api.tests.verbose.logging>true</api.tests.verbose.logging>
-        <postgres.internal.port>5432</postgres.internal.port>
+        <home.application.internal.port>8080</home.application.internal.port>
+        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
+        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
+        <jacoco.version>0.8.6</jacoco.version>
+        <liquibase.internal.port>8000</liquibase.internal.port>
         <mailhog.api.port>8025</mailhog.api.port>
         <mail.host>mailhog</mail.host>
         <mail.port>1025</mail.port>
+        <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
-        <liquibase.internal.port>8000</liquibase.internal.port>
-        <home.application.internal.port>8080</home.application.internal.port>
-        <commons-text-version>1.9</commons-text-version>
-        <docker-files>${basedir}/target/docker</docker-files>
-        <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
-        <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
-        <reflections.version>0.9.12</reflections.version>
     </properties>
+
     <profiles>
         <profile>
             <id>push.images</id>
@@ -54,7 +51,6 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-data-migration</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
@@ -72,13 +68,11 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-service</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-data</artifactId>
-                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -113,7 +107,6 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
                         <executions>
                             <execution>
                                 <id>collect-coverage</id>
@@ -160,7 +153,6 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>${fabric8io.docker.maven.plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <verbose>true</verbose>
@@ -334,7 +326,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${surefire-version}</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -365,45 +356,68 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-java-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-java-client</artifactId>
-            <version>${revision}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${commons-text-version}</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>${reflections.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
