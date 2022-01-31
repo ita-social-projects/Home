@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.user.ownership;
 
-import java.math.BigDecimal;
-
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
 import lombok.Getter;
@@ -13,5 +11,5 @@ public class OwnershipDto extends BaseDto {
 
     private UserDto user;
 
-    private BigDecimal ownershipPart;
+    private String ownershipPart;
 }

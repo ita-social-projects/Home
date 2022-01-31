@@ -67,6 +67,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.String.valueOf;
+
 class PermissionsIT {
 
     private final static CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
@@ -354,7 +356,7 @@ class PermissionsIT {
             case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
                 return new HouseLookup().id(1L);
             case "com.softserveinc.ita.homeproject.client.model.UpdateOwnership":
-                return new UpdateOwnership().ownershipPart(BigDecimal.valueOf(0.5));
+                return new UpdateOwnership().ownershipPart(valueOf(0.5));
             case "com.softserveinc.ita.homeproject.client.model.CreatePoll":
                 return createPoll(createAndReadCooperationForPoll());
             case "com.softserveinc.ita.homeproject.client.model.UpdatePoll":
