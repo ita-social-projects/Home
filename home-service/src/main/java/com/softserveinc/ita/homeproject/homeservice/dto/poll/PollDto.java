@@ -18,6 +18,8 @@ public class PollDto extends BaseDto {
 
     private LocalDateTime creationDate;
 
+    private String description;
+
     private LocalDateTime completionDate;
 
     private List<HouseDto> polledHouses;

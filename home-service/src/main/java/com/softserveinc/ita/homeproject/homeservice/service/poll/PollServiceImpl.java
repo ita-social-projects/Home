@@ -49,10 +49,10 @@ public class PollServiceImpl implements PollService {
     @Transactional
     public PollDto create(Long cooperationId, PollDto pollDto) {
         pollDto.getPolledHouses().forEach(houseDto -> validateHouse(cooperationId, houseDto));
+        pollDto.setCompletionDate(pollDto.getCreationDate().plusDays(15));
         Poll poll = mapper.convert(pollDto, Poll.class);
         Cooperation cooperation = getCooperationById(cooperationId);
-        poll.setCreationDate(LocalDateTime.now());
-        validateCompletionDate(pollDto.getCompletionDate(), poll.getCreationDate());
+        validateCompletionDate(poll.getCompletionDate(), poll.getCreationDate());
         poll.setCooperation(cooperation);
         poll.setStatus(PollStatus.DRAFT);
         poll.setEnabled(true);
