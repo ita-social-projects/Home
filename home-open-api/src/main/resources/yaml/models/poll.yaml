@@ -77,8 +77,8 @@ CreatePoll:
   type: object
   required:
     - header
-#    - completion_date
     - creation_date
+    #- completion_date
     - houses
     - type
     - description
@@ -96,7 +96,7 @@ CreatePoll:
     completion_date:
       type: string
       format: date-time
-      example: "2021-06-20T06:00:00Z"
+      example: "2021-05-20T06:00:00Z"
     houses:
       type: array
       items:
