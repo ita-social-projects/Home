@@ -171,7 +171,9 @@ class QueryQuestionIT {
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
-                .completionDate(completionDate);
+                .completionDate(completionDate)
+                .creationDate(LocalDateTime.now())
+                .description("Description");
     }
 
     private static Address createAddress() {
