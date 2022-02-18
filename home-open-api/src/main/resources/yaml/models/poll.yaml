@@ -24,7 +24,7 @@ ReadPoll:
       example: "New poll for our houses"
     description:
       type: string
-      example: "A description for the poll"
+      example: "Description for the poll"
     creation_date:
       type: string
       format: date-time
