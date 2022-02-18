@@ -182,14 +182,14 @@ PollsResponse:
         type: array
         items:
           $ref: "../models/poll.yaml#/ReadPoll"
-PollsResponseWithOutStatus:
+PollsShortenResponse:
   description: OK
   content:
     application/json:
       schema:
         type: array
         items:
-          $ref: "../models/poll.yaml#/ReadPollWithOutStatus"
+          $ref: "../models/poll.yaml#/ReadShortenPoll"
 QuestionResponse:
   description: OK
   content:

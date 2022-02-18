@@ -73,7 +73,7 @@ ReadPoll:
       $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
-ReadPollWithOutStatus:
+ReadShortenPoll:
   allOf:
     - $ref: 'common.yaml#/BaseReadView'
   type: object

@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PollDtoWithoutStatus extends BaseDto {
+public class PollShortenDto extends BaseDto {
     private String header;
 
     private LocalDateTime creationDate;

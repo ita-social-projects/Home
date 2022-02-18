@@ -5,7 +5,7 @@ import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.ReadPoll;
-import com.softserveinc.ita.homeproject.client.model.ReadPollWithOutStatus;
+import com.softserveinc.ita.homeproject.client.model.ReadShortenPoll;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +30,7 @@ public class CooperationPollQuery extends BaseQuery {
 
     private CooperationPollApi cooperationPollApi;
 
-    public List<ReadPollWithOutStatus> perform() throws ApiException {
+    public List<ReadShortenPoll> perform() throws ApiException {
         return cooperationPollApi
                 .queryCooperationPoll(cooperationId,
                         this.getPageNumber(),

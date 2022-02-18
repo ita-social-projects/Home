@@ -18,7 +18,7 @@ cooperations-cooperationId-polls:
       - $ref: '../parameters/parameters.yaml#/poll_type'
     responses:
       200:
-        $ref: '../responses/responses.yaml#/PollsResponseWithOutStatus'
+        $ref: '../responses/responses.yaml#/PollsShortenResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
       401:
