@@ -73,6 +73,63 @@ ReadPoll:
       $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
+ReadPollWithOutStatus:
+  allOf:
+    - $ref: 'common.yaml#/BaseReadView'
+  type: object
+  properties:
+    header:
+      type: string
+      example: "New poll for our houses"
+    description:
+      type: string
+      example: "Description for the poll"
+    creation_date:
+      type: string
+      format: date-time
+      example: "2021-05-30T08:30:00Z"
+    completion_date:
+      type: string
+      format: date-time
+      example: "2021-06-20T06:00:00Z"
+    polled_houses:
+      type: array
+      items:
+        $ref: 'house.yaml#/ReadHouse'
+      example: [
+        {
+          "id": "1,",
+          "quantity_flat": "45,",
+          "house_area": "25,",
+          "adjoining_area": "12,",
+          "address": {
+            "region": "Dnipropetrovsk region",
+            "city": "Dnipro",
+            "district": "Zavodskoy",
+            "street": "Kirova",
+            "house_block": "2/B",
+            "house_number": "23-B",
+            "zip_code": "52956"
+          }
+        },
+        {
+          "id": "2,",
+          "quantity_flat": "60,",
+          "house_area": "50,",
+          "adjoining_area": "20,",
+          "address": {
+            "region": "Dnipropetrovsk region",
+            "city": "Dnipro",
+            "district": "Zavodskoy",
+            "street": "Kirova",
+            "house_block": "2/C",
+            "house_number": "24-C",
+            "zip_code": "52956"
+          }
+        }
+      ]
+    type:
+      $ref: '#/PollType'
 CreatePoll:
   type: object
   required:

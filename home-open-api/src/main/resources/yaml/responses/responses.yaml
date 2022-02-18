@@ -182,6 +182,14 @@ PollsResponse:
         type: array
         items:
           $ref: "../models/poll.yaml#/ReadPoll"
+PollsResponseWithOutStatus:
+  description: OK
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: "../models/poll.yaml#/ReadPollWithOutStatus"
 QuestionResponse:
   description: OK
   content:

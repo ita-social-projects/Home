@@ -1,7 +1,36 @@
 package com.softserveinc.ita.homeproject.application.api;
 
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_DELETE_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_COOPERATION_DATA;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.READ_POLL;
+import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.UPDATE_COOPERATION;
 
-import com.softserveinc.ita.homeproject.application.model.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+import javax.annotation.security.PermitAll;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+
+import com.softserveinc.ita.homeproject.application.model.ContactType;
+import com.softserveinc.ita.homeproject.application.model.CreateContact;
+import com.softserveinc.ita.homeproject.application.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.application.model.CreateHouse;
+import com.softserveinc.ita.homeproject.application.model.CreatePoll;
+import com.softserveinc.ita.homeproject.application.model.HouseLookup;
+import com.softserveinc.ita.homeproject.application.model.PollStatus;
+import com.softserveinc.ita.homeproject.application.model.PollType;
+import com.softserveinc.ita.homeproject.application.model.ReadContact;
+import com.softserveinc.ita.homeproject.application.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.application.model.ReadHouse;
+import com.softserveinc.ita.homeproject.application.model.ReadPoll;
+import com.softserveinc.ita.homeproject.application.model.UpdateContact;
+import com.softserveinc.ita.homeproject.application.model.UpdateCooperation;
+import com.softserveinc.ita.homeproject.application.model.UpdateHouse;
+import com.softserveinc.ita.homeproject.application.model.UpdatePoll;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
@@ -14,15 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.security.PermitAll;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
-
-import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.*;
 
 @Provider
 @Component
@@ -180,8 +200,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
                                          LocalDateTime creationDate,
                                          LocalDateTime completionDate,
                                          String description,
-                                         PollType type,
-                                         PollStatus status) {
+                                         PollType type
+                                         ) {
         verifyExistence(cooperationId, cooperationService);
         Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readPoll, ReadPoll.class);
