@@ -15,9 +15,9 @@ This package created for local development.
 1. You should define Java and Maven in your PATH.
 2. You should build the project. Check [Maven](#Maven) section with **How to build** title.
 3. You should create database. You can see how to do it in [Docker](#Docker).
-4. If you did everything right, you will be able to launch the project. How to do it with Docker, check the [Docker](#Docker).
+4. If you have done everything right, you will be able to launch the project. How to do it with Docker, check the [Docker](#Docker).
 How to do it with IDEA and Maven, check the [Maven](#Maven).
-5. If you did everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
+5. If you have done everything correctly, you should be able to access RapiDoc by this URL: http://localhost:8080/api/0/apidocs/index.html
 
 
 ## Docker
@@ -27,7 +27,6 @@ How to do it with IDEA and Maven, check the [Maven](#Maven).
 For that purpose just type `docker-compose up` command in `home-dev/launch` package.
 After that you will have your container with database.
 After that you will have data-migration container for filling database and running application container and MailHog container.
-
 
 **How to close**
 
@@ -66,9 +65,6 @@ If you launch it at first then you have to initialize your database with data-mi
 
 ### How to run data migration
 You can update DB with CLI application. For that purpose you should run it from home-data-migration module if you use terminal.
-- Use full URL(--url) for connection to your DB
-
-   `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/postgres?user=user&password=password`
 
 - Use URL(--url), username(-u or --user) and password(-p or --password) for connection to your DB
 

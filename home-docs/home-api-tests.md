@@ -24,9 +24,8 @@ Terminal command should look like this:
   Don't forget to run home-data-migration after making database schema changes.
   Junit template VM options should look like this:
   
-  `-ea 
+  `
   -Dhome.application.external.port={your home-application external port} 
   -Dpostgres.user={your postgres superuser} 
-  -Dpostgres.password={your postgres superuser password} 
-  -Dhome.application.admin.username={your application admin username}
-  -Dhome.application.admin.password={your application admin password}`
+  -Dpostgres.password={your postgres superuser password}
+  -Dmailhog.external.port={your mailhog port}`
