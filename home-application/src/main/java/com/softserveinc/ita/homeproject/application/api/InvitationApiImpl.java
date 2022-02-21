@@ -114,14 +114,23 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
             .findAll(pageNumber, pageSize, getSpecification());
 
         readInvitation.stream()
-            .filter(inv -> mapper.convert(inv.getType(), InvitationType.class) == InvitationType.APARTMENT)
-            .forEach(inv -> inv.setAddress(houseService
-                .getOne(apartmentService
-                    .getOne(apartmentInvitationService
-                        .getOne(inv.getId())
-                        .getApartmentId())
-                    .getHouseId())
-                .getAddress()));
+                .filter(inv -> mapper.convert(inv.getType(), InvitationType.class) == InvitationType.APARTMENT)
+                .forEach(inv -> inv.setAddress(houseService
+                        .getOne(apartmentService
+                                .getOne(apartmentInvitationService
+                                        .getOne(inv.getId())
+                                        .getApartmentId())
+                                .getHouseId())
+                        .getAddress()));
+
+        readInvitation.stream()
+                .filter(inv -> mapper.convert(inv.getType(), InvitationType.class) == InvitationType.APARTMENT)
+                .forEach(inv -> inv.setHouseId(houseService
+                        .getOne(apartmentService
+                                .getOne(apartmentInvitationService
+                                        .getOne(inv.getId())
+                                        .getApartmentId())
+                                .getHouseId()).getId()));
 
         return buildQueryResponse(readInvitation, ReadInvitation.class);
     }
