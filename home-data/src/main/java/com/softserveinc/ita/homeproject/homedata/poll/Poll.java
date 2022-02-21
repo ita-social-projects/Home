@@ -43,6 +43,9 @@ public class Poll extends BaseEntity {
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToMany
     @JoinTable(name = "poll_house",
         joinColumns = @JoinColumn(name = "poll_id"),
