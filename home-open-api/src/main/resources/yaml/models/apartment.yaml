@@ -132,3 +132,5 @@ ReadApartmentForInvitation:
       example: 15
     address:
       $ref: 'address.yaml#/Address'
+    house_id:
+      $ref: 'house.yaml#/HouseLookup'
