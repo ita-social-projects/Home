@@ -6,7 +6,7 @@ ReadOwnership:
     owner:
       $ref: 'owner.yaml#/ReadOwner'
     ownership_part:
-      type: number
+      type: string
       minimum: 0.0001
       maximum: 1.0
       multipleOf: 1e-4
@@ -17,7 +17,7 @@ UpdateOwnership:
     - ownership_part
   properties:
     ownership_part:
-      type: number
+      type: string
       minimum: 0.0001
       maximum: 1.0
       multipleOf: 1e-4
