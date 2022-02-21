@@ -10,7 +10,7 @@ import java.util.List;
 public class OwnershipQuery extends BaseQuery {
     private Long apartmentId;
 
-    private BigDecimal ownershipPart;
+    private String ownershipPart;
 
     private ApartmentOwnershipApi ownershipApi;
 
@@ -33,7 +33,7 @@ public class OwnershipQuery extends BaseQuery {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    public void setOwnershipPart(BigDecimal ownershipPart) {
+    public void setOwnershipPart(String ownershipPart) {
         this.ownershipPart = ownershipPart;
     }
 
@@ -64,7 +64,7 @@ public class OwnershipQuery extends BaseQuery {
             return this;
         }
 
-        public OwnershipQuery.Builder ownershipPart(BigDecimal ownershipPart) {
+        public OwnershipQuery.Builder ownershipPart(String ownershipPart) {
             queryClass.setOwnershipPart(ownershipPart);
             return this;
         }

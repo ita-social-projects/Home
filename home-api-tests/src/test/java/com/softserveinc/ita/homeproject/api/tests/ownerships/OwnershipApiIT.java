@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.api.tests.ownerships;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -165,7 +166,7 @@ class OwnershipApiIT {
     @Test
     void updateOwnershipTest() throws ApiException {
         UpdateOwnership updateOwnership = new UpdateOwnership()
-            .ownershipPart(BigDecimal.valueOf(0.5));
+            .ownershipPart(valueOf(0.5));
 
         ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, ownershipsID.get(0));
 
@@ -179,9 +180,9 @@ class OwnershipApiIT {
     @Test
     void updateOwnershipWithInvalidOwnershipPart() throws ApiException {
         UpdateOwnership updateOwnership2 = new UpdateOwnership()
-            .ownershipPart(BigDecimal.valueOf(0.4));
+            .ownershipPart(valueOf(0.4));
         UpdateOwnership updateOwnership = new UpdateOwnership()
-            .ownershipPart(BigDecimal.valueOf(0.8));
+            .ownershipPart(valueOf(0.8));
         ownershipApi.updateOwnership(TEST_APARTMENT_ID, ownershipsID.get(1), updateOwnership2);
 
         ReadOwnership expectedOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, ownershipsID.get(0));
@@ -197,7 +198,7 @@ class OwnershipApiIT {
     @Test
     void updateNonExistentOwnershipTest() {
         UpdateOwnership updateOwnership = new UpdateOwnership()
-            .ownershipPart(BigDecimal.valueOf(0.5));
+            .ownershipPart(valueOf(0.5));
 
         Long wrongId = 2000000L;
 
@@ -211,7 +212,7 @@ class OwnershipApiIT {
     @Test
     void updateOwnershipWithNonExistentApartmentTest() {
         UpdateOwnership updateOwnership = new UpdateOwnership()
-            .ownershipPart(BigDecimal.valueOf(0.5));
+            .ownershipPart(valueOf(0.5));
 
         Long wrongId = 2000000L;
 
@@ -330,7 +331,7 @@ class OwnershipApiIT {
         assertNotNull(saved);
         assertNotNull(update);
         assertNotNull(updated);
-        assertEquals(update.getOwnershipPart(), updated.getOwnershipPart());
+        assertEquals(update.getOwnershipPart().toString(), updated.getOwnershipPart());
     }
 
     private void assertUser(CreateUser expected, ReadUser actual) {

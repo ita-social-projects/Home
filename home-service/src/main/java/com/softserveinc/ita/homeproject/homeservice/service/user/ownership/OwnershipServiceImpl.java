@@ -58,7 +58,7 @@ public class OwnershipServiceImpl implements OwnershipService {
 
         validateSumOwnershipPart(apartmentId, toUpdate, updateOwnershipDto);
 
-        toUpdate.setOwnershipPart(updateOwnershipDto.getOwnershipPart());
+        toUpdate.setOwnershipPart(new BigDecimal(updateOwnershipDto.getOwnershipPart()));
 
         ownershipRepository.save(toUpdate);
         return mapper.convert(toUpdate, OwnershipDto.class);
@@ -96,7 +96,7 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .map(Ownership::getOwnershipPart)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .subtract(toUpdate.getOwnershipPart())
-                .add(updateOwnershipDto.getOwnershipPart());
+                .add(new BigDecimal(updateOwnershipDto.getOwnershipPart()));
 
         if (sumOfOwnerPartsWithNewInput.compareTo(BigDecimal.valueOf(1)) > 0) {
             throw new BadRequestHomeException(

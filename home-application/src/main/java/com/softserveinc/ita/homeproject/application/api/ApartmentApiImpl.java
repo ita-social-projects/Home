@@ -56,7 +56,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
                                    String filter,
                                    Long id,
                                    Long userId,
-                                   BigDecimal ownershipPart) {
+                                   String ownershipPart) {
         verifyExistence(apartmentId, apartmentService);
         Page<OwnershipDto> readOwnership = ownershipService.findAll(pageNumber, pageSize, getSpecification());
         return buildQueryResponse(readOwnership, ReadOwnership.class);
