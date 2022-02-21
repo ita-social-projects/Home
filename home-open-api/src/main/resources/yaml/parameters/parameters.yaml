@@ -285,7 +285,7 @@ ownership_part:
   in: query
   name: ownership_part
   schema:
-    type: number
+    type: string
     minimum: 0.0001
     maximum: 1.0
     multipleOf: 1e-4
