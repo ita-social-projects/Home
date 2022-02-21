@@ -2,6 +2,8 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
@@ -107,6 +109,7 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
+    @Transactional
     public Page<PollShortenDto> findAllShorten(Integer pageNumber,
                                                Integer pageSize,
                                                Specification<Poll> specification) {
