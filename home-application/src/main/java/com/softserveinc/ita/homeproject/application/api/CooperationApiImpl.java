@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.security.PermitAll;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -270,12 +274,11 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll, String description,
-                                          List<Long> housesID, LocalDateTime creationDate) {
+    public Response updateCooperationPoll(Long cooperationId, Long id,  UpdatePoll updatePoll, List<Long> housesId,
+                                          String description, LocalDateTime creationDate) {
         PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
-        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto,description,housesID,creationDate);
+        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto,description,housesId,creationDate);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
-
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 }
