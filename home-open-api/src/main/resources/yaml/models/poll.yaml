@@ -121,9 +121,3 @@ UpdatePoll:
     header:
       type: string
       example: "New poll for our houses"
-    completion_date:
-      type: string
-      format: date-time
-      example: "2021-06-20T06:00:00Z"
-    status:
-      $ref: '#/PollStatus'

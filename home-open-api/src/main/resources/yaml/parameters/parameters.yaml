@@ -331,3 +331,18 @@ question_type:
     $ref: '../models/question.yaml#/QuestionType'
   description: Type of the Question
   example: "advice"
+description:
+  in: query
+  name: description
+  schema:
+    type: string
+  example: "A description for the poll"
+houses_id:
+  in: query
+  name: houses_id
+  schema:
+    type: array
+    items:
+      type: integer
+      format: int64
+    example: [1, 2]
