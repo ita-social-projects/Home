@@ -83,8 +83,8 @@ public class PollServiceImpl implements PollService {
         houseRepository.findAllById(housesID).forEach(houses::add);
         poll.setDescription(description);
         poll.setUpdateDate(LocalDateTime.now());
-        poll.setCreationDate(LocalDateTime.now());
-        poll.setCompletionDate(LocalDateTime.now().plusDays(15L));
+        poll.setCreationDate(creationDate);
+        poll.setCompletionDate(creationDate.plusDays(15L));
         pollRepository.save(poll);
         return mapper.convert(poll, PollDto.class);
     }
@@ -161,7 +161,7 @@ public class PollServiceImpl implements PollService {
                     "Poll has already started");
         } else if (creationDate.isBefore(LocalDateTime.now())) {
             throw new BadRequestHomeException(
-                    "Poll has already started");
+                    "Creation date must be in future");
         }
     }
 }
