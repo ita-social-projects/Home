@@ -116,16 +116,15 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByCompletionDate() throws ApiException {
 
-        LocalDateTime completionDateOne = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
-        LocalDateTime completionDateTwo = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime completionDate = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
 
-        createPollWithCompletionDate(completionDateOne);
-        createPollWithCompletionDate(completionDateTwo);
+        createPollWithCompletionDate(completionDate);
+        createPollWithCompletionDate(completionDate);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDateOne);
+        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDate);
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(completionDateOne, poll.getCompletionDate()));
+        queryPoll.forEach(poll -> assertEquals(completionDate, poll.getCompletionDate()));
     }
 
     @Test
