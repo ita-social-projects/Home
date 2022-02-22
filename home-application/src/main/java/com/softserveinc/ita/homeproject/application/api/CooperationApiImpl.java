@@ -11,6 +11,7 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
@@ -267,9 +268,10 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll) {
+    public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll, String description,
+                                          List<Long> housesID, LocalDateTime creationDate) {
         PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
-        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto);
+        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto,description,housesID,creationDate);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
 
         return Response.status(Response.Status.OK).entity(readPoll).build();

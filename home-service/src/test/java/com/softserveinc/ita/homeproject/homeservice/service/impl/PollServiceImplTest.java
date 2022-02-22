@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -58,7 +60,8 @@ class PollServiceImplTest {
         PollDto pollDto = new PollDto();
         pollDto.setStatus(PollStatusDto.SUSPENDED);
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
-        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
+        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto,
+                "",new ArrayList<>(), LocalDateTime.now()));
     }
 
     @Test
@@ -70,7 +73,8 @@ class PollServiceImplTest {
         PollDto pollDto = new PollDto();
         pollDto.setStatus(PollStatusDto.COMPLETED);
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
-        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
+        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto,
+                "",new ArrayList<>(), LocalDateTime.now()));
     }
 
     @Test
