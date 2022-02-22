@@ -336,7 +336,7 @@ description:
   name: description
   schema:
     type: string
-  example: "A description for the poll"
+  example: "Description for the Poll"
 houses_id:
   in: query
   name: houses_id
