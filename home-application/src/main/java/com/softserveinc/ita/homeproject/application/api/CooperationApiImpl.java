@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.application.api;
 
-
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.CREATE_DELETE_COOPERATION;
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_COOPERATION_DATA;
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_POLLS;
@@ -28,6 +27,7 @@ import com.softserveinc.ita.homeproject.application.model.ReadContact;
 import com.softserveinc.ita.homeproject.application.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.application.model.ReadHouse;
 import com.softserveinc.ita.homeproject.application.model.ReadPoll;
+import com.softserveinc.ita.homeproject.application.model.ReadShortenPoll;
 import com.softserveinc.ita.homeproject.application.model.UpdateContact;
 import com.softserveinc.ita.homeproject.application.model.UpdateCooperation;
 import com.softserveinc.ita.homeproject.application.model.UpdateHouse;
@@ -36,6 +36,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.CooperationD
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollShortenDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.CooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation.CooperationContactService;
@@ -200,11 +201,12 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
                                          Long id,
                                          LocalDateTime creationDate,
                                          LocalDateTime completionDate,
-                                         PollType type,
-                                         PollStatus status) {
+                                         String description,
+                                         PollType type
+                                         ) {
         verifyExistence(cooperationId, cooperationService);
-        Page<PollDto> readPoll = pollService.findAll(pageNumber, pageSize, getSpecification());
-        return buildQueryResponse(readPoll, ReadPoll.class);
+        Page<PollShortenDto> readPoll = pollService.findAllShorten(pageNumber, pageSize, getSpecification());
+        return buildQueryResponse(readPoll, ReadShortenPoll.class);
     }
 
     @PreAuthorize(CREATE_DELETE_COOPERATION)

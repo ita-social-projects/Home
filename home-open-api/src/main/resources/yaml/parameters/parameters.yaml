@@ -331,3 +331,9 @@ question_type:
     $ref: '../models/question.yaml#/QuestionType'
   description: Type of the Question
   example: "advice"
+description:
+  in: query
+  name: description
+  schema:
+    type: string
+  example: "Description for the Poll"
