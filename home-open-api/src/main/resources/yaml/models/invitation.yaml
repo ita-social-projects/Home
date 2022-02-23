@@ -109,8 +109,6 @@ CreateApartmentInvitation:
   allOf:
     - $ref: '#/CreateInvitation'
   type: object
-  required:
-    - apartment_id
   properties:
     apartment_id:
       minLength: 1
