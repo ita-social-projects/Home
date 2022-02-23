@@ -13,6 +13,6 @@ public class UpdatePollMappingConfig implements HomeMappingConfig<UpdatePoll, Po
 
     @Override
     public void addMappings(TypeMap<UpdatePoll, PollDto> typeMap) {
-        typeMap.addMapping(UpdatePoll::getIncluded, PollDto::setIncluded);
+        typeMap.addMapping(UpdatePoll::getIncludedHouses, PollDto::setIncludedHouses);
     }
 }

@@ -25,7 +25,7 @@ public class PollDto extends BaseDto {
 
     private List<HouseDto> polledHouses;
 
-    private List<Long> included = new ArrayList<>();
+    private List<Long> includedHouses = new ArrayList<>();
 
     private PollStatusDto status;
 

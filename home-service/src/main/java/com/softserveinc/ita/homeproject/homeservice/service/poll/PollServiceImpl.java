@@ -79,7 +79,7 @@ public class PollServiceImpl implements PollService {
             poll.setHeader(pollDto.getHeader());
         }
         List<House> houses = new ArrayList<>();
-        List<Long> housesId = pollDto.getIncluded();
+        List<Long> housesId = pollDto.getIncludedHouses();
         houseRepository.findAllById(housesId).forEach(houses::add);
         poll.setDescription(poll.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
