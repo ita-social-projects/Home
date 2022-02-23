@@ -1,16 +1,15 @@
 package com.softserveinc.ita.homeproject.api.tests.query;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.CooperationPollApi;
 import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.ReadPoll;
-import com.softserveinc.ita.homeproject.client.model.ReadShortenPoll;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,24 +23,22 @@ public class CooperationPollQuery extends BaseQuery {
 
     private PollStatus status;
 
-    private String description;
-
     private PollType type;
 
     private CooperationPollApi cooperationPollApi;
 
-    public List<ReadShortenPoll> perform() throws ApiException {
+    public List<ReadPoll> perform() throws ApiException {
         return cooperationPollApi
-                .queryCooperationPoll(cooperationId,
-                        this.getPageNumber(),
-                        this.getPageSize(),
-                        this.getSort(),
-                        this.getFilter(),
-                        this.getId(),
-                        this.getCreationDate(),
-                        this.getCompletionDate(),
-                        this.getDescription(),
-                        this.getType());
+            .queryCooperationPoll(cooperationId,
+                this.getPageNumber(),
+                this.getPageSize(),
+                this.getSort(),
+                this.getFilter(),
+                this.getId(),
+                this.getCreationDate(),
+                this.getCompletionDate(),
+                this.getType(),
+                this.getStatus());
     }
 
     public static class Builder extends BaseBuilder<CooperationPollQuery, CooperationPollQuery.Builder> {

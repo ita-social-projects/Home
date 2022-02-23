@@ -14,11 +14,11 @@ cooperations-cooperationId-polls:
       - $ref: '../parameters/parameters.yaml#/id'
       - $ref: '../parameters/parameters.yaml#/creation_date'
       - $ref: '../parameters/parameters.yaml#/completion_date'
-      - $ref: '../parameters/parameters.yaml#/description'
       - $ref: '../parameters/parameters.yaml#/poll_type'
+      - $ref: '../parameters/parameters.yaml#/poll_status'
     responses:
       200:
-        $ref: '../responses/responses.yaml#/PollsShortenResponse'
+        $ref: '../responses/responses.yaml#/PollsResponse'
       400:
         $ref: '../responses/responses.yaml#/BadRequest'
       401:
