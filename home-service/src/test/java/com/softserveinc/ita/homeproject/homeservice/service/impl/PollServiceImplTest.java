@@ -60,8 +60,7 @@ class PollServiceImplTest {
         PollDto pollDto = new PollDto();
         pollDto.setStatus(PollStatusDto.SUSPENDED);
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
-        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto,
-                "",new ArrayList<>(), LocalDateTime.now()));
+        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
     }
 
     @Test
@@ -73,8 +72,7 @@ class PollServiceImplTest {
         PollDto pollDto = new PollDto();
         pollDto.setStatus(PollStatusDto.COMPLETED);
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
-        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto,
-                "",new ArrayList<>(), LocalDateTime.now()));
+        assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
     }
 
     @Test

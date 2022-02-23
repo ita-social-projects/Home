@@ -10,13 +10,10 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.security.PermitAll;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
@@ -46,10 +43,12 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.Cooperat
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
 
 @Provider
 @Component
@@ -274,10 +273,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id,  UpdatePoll updatePoll, List<Long> housesId,
-                                          String description, LocalDateTime creationDate) {
-        PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
-        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto,description,housesId,creationDate);
+    public Response updateCooperationPoll(Long cooperationId, Long id,  UpdatePoll updatePoll) {
+        PollDto updatePollDto = mapper.convert(updatePoll,PollDto.class);
+        PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }

@@ -79,9 +79,6 @@ cooperations-cooperationId-polls-pollId:
     parameters:
       - $ref: '../parameters/parameters.yaml#/p_cooperation_id'
       - $ref: '../parameters/parameters.yaml#/p_id'
-      - $ref: '../parameters/parameters.yaml#/houses_id'
-      - $ref: '../parameters/parameters.yaml#/description'
-      - $ref: '../parameters/parameters.yaml#/creation_date'
     requestBody:
       $ref: '../requests/requestBodies.yaml#/UpdatePollBody'
     responses:

@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.poll;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
@@ -23,6 +24,8 @@ public class PollDto extends BaseDto {
     private LocalDateTime completionDate;
 
     private List<HouseDto> polledHouses;
+
+    private List<Long> included = new ArrayList<>();
 
     private PollStatusDto status;
 

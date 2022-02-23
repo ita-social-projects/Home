@@ -14,8 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 public interface PollService extends QueryableService<Poll, PollDto> {
     PollDto create(Long cooperationId, PollDto pollDto);
 
-    PollDto update(Long cooperationId, Long id, PollDto pollDto, String description,
-                   List<Long> housesID, LocalDateTime creationDate);
+    PollDto update(Long cooperationId, Long id, PollDto pollDto);
 
     Page<PollShortenDto> findAllShorten(Integer pageNumber, Integer pageSize, Specification<Poll> specification);
 

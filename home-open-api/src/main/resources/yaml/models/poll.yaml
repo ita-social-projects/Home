@@ -172,9 +172,20 @@ UpdatePoll:
   type: object
   required:
     - header
-    - completion_date
-    - status
   properties:
     header:
       type: string
       example: "New poll for our houses"
+    description:
+      type: string
+      example: "A description for the poll"
+    creation_date:
+      type: string
+      format: date-time
+      example: "2021-05-20T06:00:00Z"
+    included:
+      type: array
+      items:
+        type: integer
+        format: int64
+      example: [ 1, 2 ]

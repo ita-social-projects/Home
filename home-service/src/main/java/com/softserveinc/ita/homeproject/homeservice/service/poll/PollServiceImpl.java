@@ -68,23 +68,24 @@ public class PollServiceImpl implements PollService {
 
     @Override
     @Transactional
-    public PollDto update(Long cooperationId, Long id, PollDto pollDto,String description,
-                          List<Long> housesID, LocalDateTime creationDate) {
+    public PollDto update(Long cooperationId, Long id, PollDto pollDto) {
         Poll poll = pollRepository.findById(id)
                 .filter(Poll::getEnabled)
                 .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
                 .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, pollDto.getStatus());
-        validateCreationDate(poll, creationDate);
+        validateCreationDate(poll, pollDto.getCreationDate());
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
         }
         List<House> houses = new ArrayList<>();
-        houseRepository.findAllById(housesID).forEach(houses::add);
-        poll.setDescription(description);
+        List<Long> housesId = pollDto.getIncluded();
+        houseRepository.findAllById(housesId).forEach(houses::add);
+        poll.setDescription(poll.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
-        poll.setCreationDate(creationDate);
-        poll.setCompletionDate(creationDate.plusDays(15L));
+        poll.setCreationDate(pollDto.getCreationDate());
+        poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
+        poll.setPolledHouses(houses);
         pollRepository.save(poll);
         return mapper.convert(poll, PollDto.class);
     }
