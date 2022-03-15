@@ -10,21 +10,20 @@ import com.softserveinc.ita.homeproject.api.tests.query.CooperationPollQuery;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
-import com.softserveinc.ita.homeproject.client.model.ReadShortenPoll;
-import com.softserveinc.ita.homeproject.client.model.ReadShortenPoll;
+import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import org.junit.jupiter.api.Test;
 
-public class QueryCooperationPollIT extends QueryShortenPoll {
+public class QueryCooperationPollIT extends QueryPoll {
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {
+    List<ReadPoll> buildQueryPollWithCooperationId(Long cooperationId) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(cooperationId)
                 .build().perform();
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithSort(String sort) throws ApiException {
+    List<ReadPoll> buildQueryPollWithSort(String sort) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .sort(sort)
@@ -32,7 +31,7 @@ public class QueryCooperationPollIT extends QueryShortenPoll {
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithFilter(String filter) throws ApiException {
+    List<ReadPoll> buildQueryPollWithFilter(String filter) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .filter(filter)
@@ -40,7 +39,7 @@ public class QueryCooperationPollIT extends QueryShortenPoll {
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithPollIdAndCooperationId(Long pollId, Long cooperationId) throws ApiException {
+    List<ReadPoll> buildQueryPollWithPollIdAndCooperationId(Long pollId, Long cooperationId) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(cooperationId)
                 .id(pollId)
@@ -48,7 +47,7 @@ public class QueryCooperationPollIT extends QueryShortenPoll {
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithType(PollType type) throws ApiException {
+    List<ReadPoll> buildQueryPollWithType(PollType type) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
@@ -59,7 +58,7 @@ public class QueryCooperationPollIT extends QueryShortenPoll {
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
+    List<ReadPoll> buildQueryPollWithStatus(PollStatus status) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .pageNumber(1)
@@ -70,7 +69,7 @@ public class QueryCooperationPollIT extends QueryShortenPoll {
     }
 
     @Override
-    List<ReadShortenPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
+    List<ReadPoll> buildQueryPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
         return new CooperationPollQuery.Builder(COOPERATION_POLL_API)
                 .cooperationId(CooperationPollApiIT.COOPERATION_ID)
                 .completionDate(completionDate)

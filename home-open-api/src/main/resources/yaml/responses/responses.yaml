@@ -182,14 +182,6 @@ PollsResponse:
         type: array
         items:
           $ref: "../models/poll.yaml#/ReadPoll"
-PollsShortenResponse:
-  description: OK
-  content:
-    application/json:
-      schema:
-        type: array
-        items:
-          $ref: "../models/poll.yaml#/ReadShortenPoll"
 QuestionResponse:
   description: OK
   content:
