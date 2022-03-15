@@ -2,8 +2,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
@@ -13,7 +11,6 @@ import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollShortenDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -106,17 +103,6 @@ public class PollServiceImpl implements PollService {
             .equal(root.get("cooperation").get("enabled"), true));
         return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
             .map(news -> mapper.convert(news, PollDto.class));
-    }
-
-    @Override
-    @Transactional
-    public Page<PollShortenDto> findAllShorten(Integer pageNumber,
-                                               Integer pageSize,
-                                               Specification<Poll> specification) {
-        specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-            .equal(root.get("cooperation").get("enabled"), true));
-        return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(news -> mapper.convert(news, PollShortenDto.class));
     }
 
     private Cooperation getCooperationById(Long id) {
