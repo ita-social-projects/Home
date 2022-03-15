@@ -249,7 +249,9 @@ class QuestionApiIT {
         return new CreatePoll()
                 .header("Poll for our houses")
                 .type(PollType.SIMPLE)
-                .completionDate(completionDate);
+                .completionDate(completionDate)
+                .description("Description")
+                .creationDate(LocalDateTime.now());
     }
 
     private static Address createAddress() {

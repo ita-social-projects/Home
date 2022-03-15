@@ -60,9 +60,8 @@ public class QueryInvitationIT {
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-
         readInvitation = invitationsApi
-            .createInvitation(createInvitationApartment());
+            .createInvitation(createInvitationApartment(createdApartment.getId()));
     }
 
     @Test
@@ -207,9 +206,9 @@ public class QueryInvitationIT {
         assertThat(queryResponse).isEmpty();
     }
 
-    private CreateInvitation createInvitationApartment() {
+    private CreateInvitation createInvitationApartment(Long apartmentId) {
         return new CreateApartmentInvitation()
-            .apartmentId(APARTMENT_ID)
+            .apartmentId(apartmentId)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
             .type(InvitationType.APARTMENT);
     }

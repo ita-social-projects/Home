@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
+import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -145,7 +146,7 @@ class QueryOwnershipIT {
 
         queryResponse
                 .forEach(element -> assertTrue(Objects.requireNonNull(element.getOwnershipPart())
-                        .compareTo(BigDecimal.valueOf(0.2)) > 0 && element.getOwnershipPart().compareTo(BigDecimal.valueOf(0.6)) < 0));
+                        .compareTo(valueOf(0.2)) > 0 && element.getOwnershipPart().compareTo(valueOf(0.6)) < 0));
         assertThat(queryResponse).isSortedAccordingTo(Comparator.comparing(ReadOwnership::getId));
     }
 
@@ -164,10 +165,10 @@ class QueryOwnershipIT {
     @Test
     void getAllOwnershipsByOwnershipPart() throws ApiException {
         UpdateOwnership updateOwnership2 = new UpdateOwnership()
-                .ownershipPart(BigDecimal.valueOf(0.4));
+                .ownershipPart(valueOf(0.4));
         ownershipApi.updateOwnership(TEST_APARTMENT_ID,ownershipsID.get(0), updateOwnership2);
         ReadOwnership readOwnership = ownershipApi.getOwnership(TEST_APARTMENT_ID, ownershipsID.get(0));
-        BigDecimal ownershipPart = readOwnership.getOwnershipPart();
+        String ownershipPart = readOwnership.getOwnershipPart();
 
         List<ReadOwnership> queryResponse = new OwnershipQuery.Builder(ownershipApi)
                 .apartmentId(TEST_APARTMENT_ID)

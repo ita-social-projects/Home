@@ -86,15 +86,16 @@ abstract class QueryPoll {
         LocalDateTime completionDateOne = LocalDateTime.now().plusDays(10).truncatedTo(ChronoUnit.MINUTES);
         LocalDateTime completionDateTwo = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
         String completionDateOneString = completionDateOne.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        String completionDateTwoString = completionDateTwo.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         LocalDateTime fromDate = completionDateOne.minusDays(1);
         String fromDateString = fromDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
         createPollWithCompletionDate(completionDateOne);
         createPollWithCompletionDate(completionDateTwo);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithFilter("completion_date=bt=(" + fromDateString + "," + completionDateOneString + ")");
+        List<ReadPoll> queryPoll = buildQueryPollWithFilter("completion_date=bt=(" + fromDateString + "," + completionDateTwoString + ")");
 
-        assertCompletionDateInRange(queryPoll, fromDate, completionDateOne);
+        assertCompletionDateInRange(queryPoll, fromDate, completionDateTwo);
     }
 
     @Test
@@ -115,16 +116,15 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByCompletionDate() throws ApiException {
 
-        LocalDateTime completionDateOne = LocalDateTime.now().plusDays(5).truncatedTo(ChronoUnit.MINUTES);
-        LocalDateTime completionDateTwo = LocalDateTime.now().plusDays(7).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime completionDate = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
 
-        createPollWithCompletionDate(completionDateOne);
-        createPollWithCompletionDate(completionDateTwo);
+        createPollWithCompletionDate(completionDate);
+        createPollWithCompletionDate(completionDate);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDateOne);
+        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDate);
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(completionDateOne, poll.getCompletionDate()));
+        queryPoll.forEach(poll -> assertEquals(completionDate, poll.getCompletionDate()));
     }
 
     @Test

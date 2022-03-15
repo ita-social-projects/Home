@@ -21,4 +21,5 @@ public abstract class InvitationDto extends BaseDto {
 
     private Address address;
 
+    private Long houseId;
 }

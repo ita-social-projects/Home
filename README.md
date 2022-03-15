@@ -60,12 +60,14 @@ aspects of your communication with your home and neighbors.
 
 ## Installation
 ### Environmental variables
+
+First of all, you need to check and if it would any necessary to set environment variables
+at `application-home-data.properties` which contains in `home-application/src/main/java/source` module.
+
 ```properties
 spring.datasource.url=${DATASOURCE_URL}
 spring.datasource.username=${DATASOURCE_USER}
 spring.datasource.password=${DATASOURCE_PASSWORD}
-spring.mail.username=${EMAIL_ADDRESS}
-spring.mail.password=${EMAIL_PASSWORD}
 ```
 ### Required to install
 - Java 11
@@ -76,40 +78,55 @@ spring.mail.password=${EMAIL_PASSWORD}
 
 ### How to run local
 __Run with Docker__
-- use `docker-compose up` command `home-dev/init` 
-  in package to create  database
-- use `docker-compose up` command `home-dev/launch` in package to run 
-  application
+
+- if you compose it first time, you need to change `home_network external -> false`,
+  because it would try to use remote one that doesn't exist.
+  File is located in `home-dev/launch` package, named `docker-compose.yml`.
+
+```properties
+networks:
+  home_network:
+    external: false
+    name: home_network
+    driver: bridge
+```
+
+- use command `docker-compose up` in package `home-dev/launch` to run application.
 
 __Run with Maven + Intellij IDEA__
-- use `mvn clean install` command in the root directory to build project
-- use `java -jar ./target/home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/postgres -u=user -p=password`
-  command for connection to your local DB
-- run application with your IDEA
 
-If you did everything correctly, you should be able to access RapiDoc
-by this URL: http://localhost:8080/api/0/apidocs/index.html
+- if you don't have `mvn` like environment variable, you need to install it into your environment.
+- use `mvn clean install` command in the `project root` directory to build project.
 
-Detail info about other running options/running tests, you can read in 
-[hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.
+- when you use the command below, you will need to run your docker image named `launch` with container `launch-mailhog`.
+- change directory to `'project root'/home-data-migration/target` and use `java -jar home-data-migration-0.0.1-SNAPSHOT.jar --url=jdbc:postgresql://localhost:5432/postgres -u=user -p=password`
+  command for connection to your local DB.
+- after using this command you will need to choose - `would you like to receive notifications from community?`, there are three ways:
+  but you need to choose between: `enter your email` and `skip the request(default one)`.
+- run application with your IDEA.
+
+If you did everything correctly, you should be able to access RapiDoc by this
+URL: http://localhost:8080/api/0/apidocs/index.html
+
+**Detail info about other running options/running tests, you can read in
+[hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.**
 
 ### Authorization
-After accessing RapiDoc you are able to enter 'Cooperation' section
-where you need to use your personal email for 'admin_email' field
-and change 'iban' field to make it unique (simply change a few numbers in it)
+After accessing RapiDoc you are able to enter `Cooperation` section where you could `create Cooperation`:
+- there isn`t any need to authorize, because in your DB you don't have any created user and basic authentication will be requested any time you try to do something.
+- if you are already authenticated - make sure that you are working in a new session without being authorized(invalidate session).
 
-In your email inbox or in table 'invitations' of your local DB
-you should be able to find a registration token.
+When you have finished all previous steps:
+You need to use your personal email for `admin_email` field and change `iban` field to make it unique (simply change a few numbers in it).
 
-Having completed all previous steps you can use the provided
-registration token in the 'registration_token' field to create a new user
-in the 'User' section  where you need to use the same email
-as you entered for 'admin_email' and create a new password
-Pay attention that you wouldn't be able to edit your
-email/password after registration
+In your email inbox or in table `invitations` of your local DB you should be able to find a `registration token`.
 
-Finally, you should be able to pass Basic Authentication
-with your own credentials.
+Having completed all previous steps you can use the provided registration token in the `registration_token field`.
+You can create a new user in the `User section` where you need to use `the same email` as you entered for `admin_email` and change
+`password` on your own using for that `registration token`.
+
+**Pay attention that you wouldn't be able to edit your email/password after registration!**
+
 ---
 
 ### Docker images
@@ -132,7 +149,7 @@ Our [images](https://hub.docker.com/u/homeacademy) on Docker Hub:
 
 ## Contributing
 ### Git flow
-> TODO
+
 #### Step 1
 
 - **Option 1**
@@ -147,7 +164,7 @@ Our [images](https://hub.docker.com/u/homeacademy) on Docker Hub:
 
 Create your Feature Branch
 
-`git checkout -b name_for_new_branch`
+`git checkout -b 'name_for_new_branch'`
 
 #### Step 3
 Make changes and [test](https://github.com/ita-social-projects/Home/blob/dev/home-docs/home-api-tests.md)
@@ -160,7 +177,7 @@ Open a Pull Request with description of changes
 
 ## Team
 
-- Technical Expert of the project - [@kh0ma](https://github.com/kh0ma)
+- Technical Expert of the project - [@MrScors](https://github.com/MrScors)
 - Mentor of SoftServe ITA - [@DzigMS](https://github.com/DzigMS)
 
 Contributors that have worked on this project:
