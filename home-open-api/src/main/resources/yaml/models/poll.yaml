@@ -73,6 +73,9 @@ ReadPoll:
       $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
+    result:
+      type: string
+      example: "The result of the poll"
 CreatePoll:
   type: object
   required:
