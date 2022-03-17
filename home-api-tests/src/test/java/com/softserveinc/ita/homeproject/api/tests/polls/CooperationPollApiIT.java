@@ -119,6 +119,17 @@ class CooperationPollApiIT {
             .description("Description");
     }
 
+    static CreatePoll createPollWithCreationDate(LocalDateTime creationDate) {
+        return new CreatePoll()
+            .header("Poll for our houses")
+            .type(PollType.SIMPLE)
+            .creationDate(creationDate)
+            .completionDate(creationDate.plusDays(15))
+            .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
+            .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID))
+            .description("Description");
+    }
+
     private static CreatePoll createPollWithNonExistingHouse() {
         return createPoll()
             .addHousesItem(new HouseLookup().id(NONEXISTENT_HOUSE_ID));
@@ -172,6 +183,15 @@ class CooperationPollApiIT {
             .creationDate(LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.MINUTES))
             .status(PollStatus.DRAFT);
     }
+
+    static UpdatePoll updatePollWithCreationDate(LocalDateTime creationDate) {
+        return new UpdatePoll()
+            .header("header")
+            .description("updated description")
+            .creationDate(creationDate)
+            .status(PollStatus.DRAFT);
+    }
+
 
     @Test
     void createCooperationPollTest() throws ApiException {
@@ -325,10 +345,14 @@ class CooperationPollApiIT {
             .matches((actual) -> actual.getCode() == NOT_FOUND);
     }
 
+    //TODO
     @Test
     void updatePollTest() throws ApiException {
-        ReadPoll pollToUpdate = COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPoll());
-        UpdatePoll updatePoll = updatePoll();
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusDays(1L);
+        ReadPoll pollToUpdate =
+            COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPollWithCreationDate(creationDate));
+        UpdatePoll updatePoll =
+            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.MINUTES));
         ApiResponse<ReadPoll> response = COOPERATION_POLL_API
             .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
