@@ -109,6 +109,17 @@ class CooperationPollApiIT {
             .description("Description");
     }
 
+    static CreatePoll createPollWithCompletionDate(LocalDateTime completionDate) {
+        return new CreatePoll()
+            .header("Poll for our houses")
+            .type(PollType.SIMPLE)
+            .creationDate(completionDate)
+            .completionDate(completionDate)
+            .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
+            .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID))
+            .description("Description");
+    }
+
     private static CreatePoll createPollWithNonExistingHouse() {
         return createPoll()
             .addHousesItem(new HouseLookup().id(NONEXISTENT_HOUSE_ID));
