@@ -111,7 +111,6 @@ class PollVoteApiIT {
         CreateMultipleChoiceQuestion createdMultipleQuestion = createMultipleChoiceQuestion();
         ReadMultipleChoiceQuestion addedMultipleChoiceQuestion =
             (ReadMultipleChoiceQuestion) pollQuestionApi.createQuestion(createdPoll.getId(), createdMultipleQuestion);
-
         createdPoll.setStatus(PollStatus.ACTIVE);
         cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
             updatePoll(createdPoll));
@@ -392,15 +391,11 @@ class PollVoteApiIT {
     }
 
     private CreatePoll createPoll() {
-        LocalDateTime completionDate = LocalDateTime.now()
-            .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(MAX_POLL_DURATION_IN_DAYS);
         return new CreatePoll()
             .header(String.format("Poll #%d for vote test", ++pollNumber))
             .type(PollType.SIMPLE)
-            .creationDate(LocalDateTime.now()
+            .creationDate(LocalDateTime.now().plusDays(1)
                 .truncatedTo(ChronoUnit.MINUTES))
-            .completionDate(completionDate)
             .description("Description");
     }
 
@@ -408,8 +403,8 @@ class PollVoteApiIT {
     private UpdatePoll updatePoll(ReadPoll readPoll) {
         return new UpdatePoll()
             .header(readPoll.getHeader())
-            .description(readPoll.getDescription())
-            .creationDate(readPoll.getCreationDate());
+            .description("updated description")
+            .creationDate(readPoll.getCreationDate().plusDays(1L).truncatedTo(ChronoUnit.MINUTES));
     }
 
     private CreateAdviceQuestion createAdviceQuestion() {

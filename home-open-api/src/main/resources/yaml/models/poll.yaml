@@ -166,6 +166,8 @@ CreatePoll:
           "id": 2
         }
       ]
+    status:
+      $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
 UpdatePoll:
