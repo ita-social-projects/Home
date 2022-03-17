@@ -113,18 +113,6 @@ public class PollServiceImpl implements PollService {
             .map(news -> mapper.convert(news, PollDto.class));
     }
 
-    @Override
-    @Transactional
-    public Page<PollShortenDto> findAllShorten(Integer pageNumber,
-                                               Integer pageSize,
-                                               Specification<Poll> specification) {
-        specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-            .equal(root.get("cooperation").get("enabled"), true));
-        return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(news -> mapper.convert(news, PollShortenDto.class));
-    }
-
-
     private Cooperation getCooperationById(Long id) {
         return cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Cooperation", id)));
