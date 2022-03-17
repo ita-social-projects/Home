@@ -42,6 +42,11 @@ abstract class QueryPoll {
                 CooperationPollApiIT.createPollWithCompletionDate(completionDate));
     }
 
+    private ReadPoll createPollWithCreationDate(LocalDateTime creationDate) throws ApiException {
+       return COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiIT.COOPERATION_ID,
+            CooperationPollApiIT.createPollWithCreationDate(creationDate));
+    }
+
     private void assertCompletionDateInRange(List<ReadPoll> polls, LocalDateTime fromDate, LocalDateTime toDate){
         assertTrue(polls.size() > 0);
         polls.forEach(poll -> {
@@ -140,8 +145,10 @@ abstract class QueryPoll {
 
     @Test
     void getAllPollsByPollStatus() throws ApiException {
-        ReadPoll readPoll = createPoll();
-        UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
+
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusDays(1);
+        ReadPoll readPoll = createPollWithCreationDate(creationDate);
+        UpdatePoll updatePoll = CooperationPollApiIT.updatePollWithCreationDate(creationDate);
         COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);
 
         List<ReadPoll> queryPoll = buildQueryPollWithStatus(PollStatus.DRAFT);
