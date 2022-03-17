@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PollServiceImpl implements PollService {
 
     private static final String COMPLETION_DATE_VALIDATION_MESSAGE =
-            "Completion date of the poll has not to be less than %s days after creation";
+        "Completion date of the poll has not to be less than %s days after creation";
 
     private static final String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
 
@@ -70,9 +70,9 @@ public class PollServiceImpl implements PollService {
     @Transactional
     public PollDto update(Long cooperationId, Long id, PollDto pollDto) {
         Poll poll = pollRepository.findById(id)
-                .filter(Poll::getEnabled)
-                .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+            .filter(Poll::getEnabled)
+            .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, pollDto.getStatus());
         validateCreationDate(poll, pollDto.getCreationDate());
         if (pollDto.getHeader() != null) {
@@ -81,19 +81,25 @@ public class PollServiceImpl implements PollService {
         List<House> houses = new ArrayList<>();
         List<Long> housesId = pollDto.getIncludedHouses();
         houseRepository.findAllById(housesId).forEach(houses::add);
-        poll.setDescription(poll.getDescription());
+        poll.setDescription(pollDto.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
-        poll.setCreationDate(pollDto.getCreationDate());
-        poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
+        if (pollDto.getStatus() == null) {
+            poll.setCreationDate(pollDto.getCreationDate());
+            poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
+        } else if (pollDto.getStatus().equals(PollStatusDto.ACTIVE)){
+            poll.setCreationDate(LocalDateTime.now());
+            poll.setCompletionDate(LocalDateTime.now().plusDays(15L));
+            poll.setStatus(PollStatus.ACTIVE);
+        }
         poll.setPolledHouses(houses);
         pollRepository.save(poll);
-        return mapper.convert(poll, PollDto.class);
+      return mapper.convert(poll, PollDto.class);
     }
 
     @Override
     public void deactivate(Long id) {
         Poll poll = pollRepository.findById(id).filter(Poll::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, null);
         poll.setEnabled(false);
         pollRepository.save(poll);
@@ -102,9 +108,9 @@ public class PollServiceImpl implements PollService {
     @Override
     public Page<PollDto> findAll(Integer pageNumber, Integer pageSize, Specification<Poll> specification) {
         specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("cooperation").get("enabled"), true));
+            .equal(root.get("cooperation").get("enabled"), true));
         return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(news -> mapper.convert(news, PollDto.class));
+            .map(news -> mapper.convert(news, PollDto.class));
     }
 
     @Override
@@ -113,22 +119,22 @@ public class PollServiceImpl implements PollService {
                                                Integer pageSize,
                                                Specification<Poll> specification) {
         specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                .equal(root.get("cooperation").get("enabled"), true));
+            .equal(root.get("cooperation").get("enabled"), true));
         return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(news -> mapper.convert(news, PollShortenDto.class));
+            .map(news -> mapper.convert(news, PollShortenDto.class));
     }
 
 
     private Cooperation getCooperationById(Long id) {
         return cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Cooperation", id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Cooperation", id)));
     }
 
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
         if (days < minPollDurationInDays) {
             throw new BadRequestHomeException(
-                    String.format(COMPLETION_DATE_VALIDATION_MESSAGE, minPollDurationInDays));
+                String.format(COMPLETION_DATE_VALIDATION_MESSAGE, minPollDurationInDays));
         }
     }
 
@@ -136,10 +142,10 @@ public class PollServiceImpl implements PollService {
         Long id = houseDto.getId();
         Cooperation cooperation = getCooperationById(cooperationId);
         boolean isHousePresentInCooperation = cooperation.getHouses()
-                .stream()
-                .filter(House::getEnabled)
-                .map(House::getId)
-                .anyMatch(houseId -> houseId.equals(id));
+            .stream()
+            .filter(House::getEnabled)
+            .map(House::getId)
+            .anyMatch(houseId -> houseId.equals(id));
 
         if (!isHousePresentInCooperation) {
             throw new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "House", id));
@@ -149,20 +155,17 @@ public class PollServiceImpl implements PollService {
     private void validatePollStatus(Poll poll, PollStatusDto pollStatus) {
         if (!poll.getStatus().equals(PollStatus.DRAFT)) {
             throw new BadRequestHomeException(
-                    String.format(POLL_STATUS_VALIDATION_MESSAGE, poll.getStatus().toString()));
+                String.format(POLL_STATUS_VALIDATION_MESSAGE, poll.getStatus().toString()));
         } else if (pollStatus != null && pollStatus.equals(PollStatusDto.COMPLETED)) {
             throw new BadRequestHomeException(
-                    "Poll status can't be changed to 'completed'");
+                "Poll status can't be changed to 'completed'");
         }
     }
 
     private void validateCreationDate(Poll poll, LocalDateTime creationDate) {
         if (poll.getCreationDate().isBefore(LocalDateTime.now())) {
             throw new BadRequestHomeException(
-                    "Poll has already started");
-        } else if (creationDate.isBefore(LocalDateTime.now())) {
-            throw new BadRequestHomeException(
-                    "Creation date must be in future");
+                "Poll has already started");
         }
     }
 }

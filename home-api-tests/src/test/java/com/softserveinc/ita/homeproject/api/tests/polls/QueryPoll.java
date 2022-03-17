@@ -140,15 +140,14 @@ abstract class QueryPoll {
 
     @Test
     void getAllPollsByPollStatus() throws ApiException {
-
         ReadPoll readPoll = createPoll();
         UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
         COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithStatus(PollStatus.SUSPENDED);
+        List<ReadPoll> queryPoll = buildQueryPollWithStatus(PollStatus.DRAFT);
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(PollStatus.SUSPENDED, poll.getStatus()));
+        queryPoll.forEach(poll -> assertEquals(PollStatus.DRAFT, poll.getStatus()));
     }
 
     @Test

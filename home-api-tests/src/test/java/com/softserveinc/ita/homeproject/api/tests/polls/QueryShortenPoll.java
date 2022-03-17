@@ -144,13 +144,14 @@ public abstract class QueryShortenPoll {
     @Test
     void getAllPollsByPollStatus() throws ApiException {
 
-        ReadPoll ReadShortenPoll = createPoll();
+        ReadPoll readPoll = createPoll();
         UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
-        COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, ReadShortenPoll.getId(), updatePoll);
+        COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);
 
-        List<ReadShortenPoll> queryPoll = buildQueryPollWithStatus(PollStatus.SUSPENDED);
+        List<ReadShortenPoll> queryPoll = buildQueryPollWithStatus(PollStatus.DRAFT);
 
         assertTrue(queryPoll.size() > 0);
+
     }
 
     @Test

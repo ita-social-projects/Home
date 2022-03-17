@@ -73,6 +73,8 @@ class PollVoteApiIT {
 
     private static final String QUESTION_NOT_FOUND_MESSAGE = "Poll question with 'id: %d' is not found";
 
+    private static final String POLL_STATUS_DRAFT = "Can't create vote on poll with status: 'draft'";
+
     private static final PollStatus[] POLL_STATUSES_WITHOUT_ACTIVE_AND_COMPLETED =
         {PollStatus.DRAFT, PollStatus.SUSPENDED};
 
@@ -104,24 +106,23 @@ class PollVoteApiIT {
     @Test
     void createVoteSuccessTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(
+            createdCooperation.getId(), createPoll());
         CreateAdviceQuestion createdAdviceQuestion = createAdviceQuestion();
         ReadAdviceQuestion addedAdviceQuestion = (ReadAdviceQuestion)
             pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
         CreateMultipleChoiceQuestion createdMultipleQuestion = createMultipleChoiceQuestion();
         ReadMultipleChoiceQuestion addedMultipleChoiceQuestion =
             (ReadMultipleChoiceQuestion) pollQuestionApi.createQuestion(createdPoll.getId(), createdMultipleQuestion);
-        createdPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
+        ReadPoll updatedPoll = cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
             updatePoll(createdPoll));
-
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(addedAdviceQuestion))
             .addQuestionVotesItem(
                 createMultipleChoiceQuestionVote(addedMultipleChoiceQuestion));
-        ApiResponse<ReadVote> response = pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote);
+        ApiResponse<ReadVote> response = pollVoteApi.createVoteWithHttpInfo(updatedPoll.getId(), createdVote);
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
-        assertVote(createdPoll.getId(), createdVote, response.getData());
+        assertVote(updatedPoll.getId(), createdVote, response.getData());
     }
 
     @Test
@@ -132,8 +133,6 @@ class PollVoteApiIT {
         ReadAdviceQuestion addedAdviceQuestion = (ReadAdviceQuestion)
             pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
 
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
-            updatePoll(createdPoll));
         cooperationPollApi.deleteCooperationPoll(createdCooperation.getId(), createdPoll.getId());
 
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(addedAdviceQuestion));
@@ -152,16 +151,12 @@ class PollVoteApiIT {
         ReadAdviceQuestion addedAdviceQuestion = (ReadAdviceQuestion)
             pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
 
-        createdPoll.setStatus(POLL_STATUSES_WITHOUT_ACTIVE_AND_COMPLETED[random.nextInt(2)]);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
-            updatePoll(createdPoll));
-
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(addedAdviceQuestion));
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining(String.format(POLL_STATUS_VALIDATION_MESSAGE, createdPoll.getStatus()));
+            .withMessageContaining(POLL_STATUS_DRAFT, createdPoll.getStatus());
     }
 
     @Test
@@ -252,14 +247,14 @@ class PollVoteApiIT {
         saveSomeAdviceQuestionsAndAddToList(questionList, correctQuestionsNumber, otherPoll.getId());
 
         ourPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), ourPoll.getId(),
+        ReadPoll updatedPoll = cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), ourPoll.getId(),
             updatePoll(ourPoll));
         CreateVote createdVote = createVoteWithNotMatchingQuestions(questionList, correctQuestionsNumber);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(ourPoll.getId(), createdVote))
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(updatedPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining(String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, ourPoll.getId()));
+            .withMessageContaining(String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, updatedPoll.getId()));
     }
 
     @Test
@@ -271,7 +266,7 @@ class PollVoteApiIT {
             (ReadMultipleChoiceQuestion) pollQuestionApi.createQuestion(createdPoll.getId(), createdMultipleQuestion);
 
         createdPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
+        ReadPoll updatedPoll = cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
             updatePoll(createdPoll));
 
         int maxAnswersCount = Objects.requireNonNull(addedMultipleChoiceQuestion.getMaxAnswerCount());
@@ -279,7 +274,7 @@ class PollVoteApiIT {
             createExceedingAnswerCountMultipleChoiceQuestionVote(addedMultipleChoiceQuestion));
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(updatedPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining(
                 String.format(WRONG_ANSWER_COUNT_VALIDATION_MESSAGE, addedMultipleChoiceQuestion.getId(),
@@ -300,7 +295,7 @@ class PollVoteApiIT {
                 createMultipleChoiceQuestion());
 
         ourPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), ourPoll.getId(),
+        ReadPoll updatedPoll = cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), ourPoll.getId(),
             updatePoll(ourPoll));
 
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(
@@ -308,7 +303,7 @@ class PollVoteApiIT {
                 otherMultipleChoiceQuestion));
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(ourPoll.getId(), createdVote))
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(updatedPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
             .withMessageContaining(String.format(ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE,
                 ((CreateMultipleChoiceQuestionVote) createdVote.getQuestionVotes().get(0)).getAnswers().get(0).getId(),
@@ -322,13 +317,13 @@ class PollVoteApiIT {
         CreateAdviceQuestion createdAdviceQuestion = createAdviceQuestion();
         pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
         createdPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
+        ReadPoll updatedPoll = cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
             updatePoll(createdPoll));
         ReadAdviceQuestion missingQuestion = createMissingAdviceQuestion();
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(missingQuestion));
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(updatedPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining(String.format(QUESTION_NOT_FOUND_MESSAGE, missingQuestion.getId()));
     }
@@ -404,7 +399,8 @@ class PollVoteApiIT {
         return new UpdatePoll()
             .header(readPoll.getHeader())
             .description("updated description")
-            .creationDate(readPoll.getCreationDate().plusDays(1L).truncatedTo(ChronoUnit.MINUTES));
+            .creationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+            .status(PollStatus.ACTIVE);
     }
 
     private CreateAdviceQuestion createAdviceQuestion() {

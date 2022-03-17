@@ -100,11 +100,13 @@ class CooperationPollApiIT {
         return new CreatePoll()
             .header("Poll for our houses")
             .type(PollType.SIMPLE)
+            .creationDate(LocalDateTime.now()
+                .truncatedTo(ChronoUnit.MINUTES)
+                .plusDays(1L))
             .completionDate(completionDate)
             .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
             .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID))
-            .description("Description")
-            .creationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+            .description("Description");
     }
 
     private static CreatePoll createPollWithNonExistingHouse() {
@@ -152,17 +154,13 @@ class CooperationPollApiIT {
             .addHousesItem(createHouse());
     }
 
-    //TODO
+
     static UpdatePoll updatePoll() {
-        LocalDateTime creationDate = LocalDateTime.now()
-            .truncatedTo(ChronoUnit.MINUTES)
-            .plusDays(MIN_POLL_DURATION_IN_DAYS)
-            .plusMinutes(5L);
-        String description = "A description for a poll";
         return new UpdatePoll()
-            .header("Updated poll for our houses")
-            .creationDate(creationDate)
-            .description(description);
+            .header("header")
+            .description("updated description")
+            .creationDate(LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.MINUTES))
+            .status(PollStatus.DRAFT);
     }
 
     @Test
