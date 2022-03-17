@@ -14,7 +14,6 @@ import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollShortenDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -86,14 +85,14 @@ public class PollServiceImpl implements PollService {
         if (pollDto.getStatus() == null) {
             poll.setCreationDate(pollDto.getCreationDate());
             poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
-        } else if (pollDto.getStatus().equals(PollStatusDto.ACTIVE)){
+        } else if (pollDto.getStatus().equals(PollStatusDto.ACTIVE)) {
             poll.setCreationDate(LocalDateTime.now());
             poll.setCompletionDate(LocalDateTime.now().plusDays(15L));
             poll.setStatus(PollStatus.ACTIVE);
         }
         poll.setPolledHouses(houses);
         pollRepository.save(poll);
-      return mapper.convert(poll, PollDto.class);
+        return mapper.convert(poll, PollDto.class);
     }
 
     @Override
