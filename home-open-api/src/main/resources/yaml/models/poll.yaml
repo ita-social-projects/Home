@@ -12,6 +12,7 @@ PollType:
   type: string
   enum: &poll_type_values
     - simple
+    - major
   example: "simple"
 
 ReadPoll:
