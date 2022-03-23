@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  title: OAuth 2.0 Server
+  description: "This is a OAuth 2.0 Server Page sample of Home Project based on the OpenAPI 3.0 specification."
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/mit-license.php
+  version: 1.0.0
+servers:
+  - url: /oauth2/server
+
+tags:
+  - name: Authentication
+    description: API for managing OAuth 2.0.
+
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: AuthenticateUser
+      description: The endpoint generate access and refresh token
+      operationId: authenticateUser
+      requestBody:
+        $ref: '#/components/requestBodies/AuthenticationBody'
+      responses:
+        201:
+          $ref: '#/components/responses/AuthenticationResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        404:
+          $ref: '#/components/responses/NotFound'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+  /refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Update Access Token
+      description: The endpoint update current access token.
+      operationId: updateAccessToken
+      requestBody:
+        $ref: '#/components/requestBodies/RefreshTokenBody'
+      responses:
+        201:
+          $ref: '#/components/responses/AccessTokenResponse'
+        406:
+          $ref: '#/components/responses/NotAcceptable'
+        default:
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    BadRequest:
+      description: Validation Exception.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Unauthorized:
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Forbidden:
+      description: You do not have permission to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotFound:
+      description: The specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    InternalServerError:
+      description: Something went wrong.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    NotAcceptable:
+      description: Not Acceptable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    AuthenticationResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateToken'
+    AccessTokenResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccessToken'
+  requestBodies:
+    AuthenticationBody:
+      description: A payload for generating tokens
+      content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+    RefreshTokenBody:
+      description: A payload for updating refresh token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RefreshToken'
+  schemas:
+    UserCredentials:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 5
+          maxLength: 320
+        password:
+          pattern: '[a-zA-Z0-9]{8,}'
+          type: string
+          example: "mySuperStrongPass"
+          minLength: 8
+          maxLength: 128
+    CreateToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIzIiwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NDI2OTI3NjEsImV4cCI6MTY0Mjc3OTE2MX0.9wlQed0cO5hEwT2934sVZPD4PSrwSvpMyFEoeFg0v3d6misQD7QdD-fy5Ovb1TkCP81UC9mvuSQvDYBVStkxOg"
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIzIiwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NDI2OTI3NjIsImV4cCI6MTY0MzIzNDQwMH0.aUF-vGDOQRAZbTnA1KZiNY1unsbvipbplULb4azVPjO61YRZHIYwsWaYP5CiqiyHS_sO6LazinPdoLgVNrSucw"
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIzIiwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NDI2OTI3NjEsImV4cCI6MTY0Mjc3OTE2MX0.9wlQed0cO5hEwT2934sVZPD4PSrwSvpMyFEoeFg0v3d6misQD7QdD-fy5Ovb1TkCP81UC9mvuSQvDYBVStkxOg"
+    RefreshToken:
+      required:
+        - refresh_token
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIzIiwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NDI2OTI3NjIsImV4cCI6MTY0MzIzNDQwMH0.aUF-vGDOQRAZbTnA1KZiNY1unsbvipbplULb4azVPjO61YRZHIYwsWaYP5CiqiyHS_sO6LazinPdoLgVNrSucw"
+    ApiError:
+      type: object
+      properties:
+        response_code:
+          type: integer
+          example: 404
+        error_message:
+            type: string
+            example: "example"
