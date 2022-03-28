@@ -17,6 +17,9 @@ public class PollQuestionTypeAttributeConverter implements AttributeConverter<Po
                 return "advice";
             case MULTIPLE_CHOICE:
                 return "multiple_choice";
+            case DOUBLE_CHOICE:
+                return "double_choice";
+
             default:
                 throw new IllegalArgumentException(attribute + " not supported.");
         }
@@ -33,6 +36,9 @@ public class PollQuestionTypeAttributeConverter implements AttributeConverter<Po
                 return PollQuestionType.ADVICE;
             case "multiple_choice":
                 return PollQuestionType.MULTIPLE_CHOICE;
+            case "double_choice":
+                return PollQuestionType.DOUBLE_CHOICE;
+
             default:
                 throw new IllegalArgumentException(dbData + " not supported.");
         }

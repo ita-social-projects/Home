@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.question;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
@@ -9,6 +10,7 @@ import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AdviceChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.question.DoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
@@ -48,12 +50,23 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var question = mapper.convert(pollQuestionDto, PollQuestion.class);
         question.setEnabled(true);
         question.setPoll(poll);
-        pollQuestionRepository.save(question);
         if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
             ((MultipleChoiceQuestion) question).getAnswerVariants().forEach(answer -> {
                 answer.setQuestion(question);
-                answerRepository.save(answer);
             });
+        }
+        if (question.getType().equals(PollQuestionType.DOUBLE_CHOICE)) {
+            AnswerVariant positiveAnswer = new AnswerVariant();
+            AnswerVariant negativeAnswer = new AnswerVariant();
+
+            positiveAnswer.setAnswer("yes");
+            positiveAnswer.setQuestion(question);
+            negativeAnswer.setAnswer("no");
+            negativeAnswer.setQuestion(question);
+            ((DoubleChoiceQuestion) question).setMaxAnswerCount(1);
+            ((DoubleChoiceQuestion) question).setAnswerVariants(List.of(
+                positiveAnswer, negativeAnswer
+            ));
         }
         pollQuestionRepository.save(question);
         poll.getPollQuestions().add(question);
@@ -67,11 +80,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var poll = getPollById(updatePollQuestionDto.getPollId());
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
-                .filter(question -> question.getId().equals(updatePollQuestionDto.getId())).findFirst()
-                .filter(PollQuestion::getEnabled)
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                String.format(NOT_FOUND_MESSAGE, "PollQuestion", updatePollQuestionDto.getId())));
+            .filter(question -> question.getId().equals(updatePollQuestionDto.getId())).findFirst()
+            .filter(PollQuestion::getEnabled)
+            .orElseThrow(() ->
+                new NotFoundHomeException(
+                    String.format(NOT_FOUND_MESSAGE, "PollQuestion", updatePollQuestionDto.getId())));
 
         if (updatePollQuestionDto.getQuestion() != null) {
             toUpdate.setQuestion(updatePollQuestionDto.getQuestion());
@@ -89,7 +102,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     private PollQuestionDto updateQuestion(PollQuestion pollQuestion, PollQuestionDto updatePollQuestionDto) {
         if (pollQuestion.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
             return updateMultiChoiceQuestion((MultipleChoiceQuestion) pollQuestion,
-                    (MultipleChoiceQuestionDto) updatePollQuestionDto);
+                (MultipleChoiceQuestionDto) updatePollQuestionDto);
         } else if (pollQuestion.getType().equals(PollQuestionType.ADVICE)) {
             return updateAdviceChoiceQuestion((AdviceChoiceQuestion) pollQuestion);
         } else {
@@ -101,13 +114,13 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                                                       MultipleChoiceQuestionDto multipleChoiceQuestionDto) {
         if (multipleChoiceQuestionDto.getAnswerVariants() != null) {
             multipleChoiceQuestion.setAnswerVariants(
-                    multipleChoiceQuestionDto.getAnswerVariants().stream()
-                            .map(answerDto -> mapper.convert(answerDto, AnswerVariant.class))
-                            .peek(answer -> {
-                                answer.setQuestion(multipleChoiceQuestion);
-                                answerRepository.save(answer);
-                            })
-                            .collect(Collectors.toList()));
+                multipleChoiceQuestionDto.getAnswerVariants().stream()
+                    .map(answerDto -> mapper.convert(answerDto, AnswerVariant.class))
+                    .peek(answer -> {
+                        answer.setQuestion(multipleChoiceQuestion);
+                        answerRepository.save(answer);
+                    })
+                    .collect(Collectors.toList()));
         }
 
         if (multipleChoiceQuestionDto.getMaxAnswerCount() != null) {
@@ -128,11 +141,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
 
     private Poll getPollById(Long id) {
         return pollRepository.findById(id)
-                .filter(Poll::getEnabled)
-                .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
-                .orElseThrow(() ->
-                        new NotFoundHomeException(
-                                String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+            .filter(Poll::getEnabled)
+            .filter(poll1 -> poll1.getStatus().equals(PollStatus.DRAFT))
+            .orElseThrow(() ->
+                new NotFoundHomeException(
+                    String.format(NOT_FOUND_MESSAGE, "Poll", id)));
     }
 
     @Transactional
@@ -141,11 +154,11 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         var poll = getPollById(pollId);
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
-                .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
-                .filter(PollQuestion::getEnabled)
-                .orElseThrow(
-                        () -> new NotFoundHomeException(String
-                                .format(NOT_FOUND_MESSAGE, "PollQuestion", pollQuestionId)));
+            .filter(question -> question.getId().equals(pollQuestionId)).findFirst()
+            .filter(PollQuestion::getEnabled)
+            .orElseThrow(
+                () -> new NotFoundHomeException(String
+                    .format(NOT_FOUND_MESSAGE, "PollQuestion", pollQuestionId)));
 
         toDelete.setEnabled(false);
         pollQuestionRepository.save(toDelete);
@@ -156,9 +169,9 @@ public class PollQuestionServiceImpl implements PollQuestionService {
                                          Integer pageSize,
                                          Specification<PollQuestion> specification) {
         specification = specification
-                .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
-                        .equal(root.get("poll").get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
+                .equal(root.get("poll").get("enabled"), true));
         return pollQuestionRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-                .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
+            .map(pollQuestion -> mapper.convert(pollQuestion, PollQuestionDto.class));
     }
 }
