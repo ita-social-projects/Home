@@ -18,9 +18,6 @@ import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollType;
 import com.softserveinc.ita.homeproject.homedata.poll.question.DoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestionRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.MultipleChoiceQuestionVote;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVote;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVoteRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteQuestionVariant;
@@ -131,7 +128,7 @@ public class PollServiceImpl implements PollService {
         return cooperationRepository.findById(id).filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Cooperation", id)));
     }
-//TODO
+
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
         if (days < minPollDurationInDays) {
