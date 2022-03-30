@@ -22,7 +22,7 @@ ReadQuestion:
     propertyName: type
     mapping:
       multiple_choice: '#/ReadMultipleChoiceQuestion'
-      double_choise_question: '#/ReadDoubleChoiceQuestion'
+      double_choice: '#/ReadDoubleChoiceQuestion'
       advice: '#/ReadAdviceQuestion'
   properties:
     type:
