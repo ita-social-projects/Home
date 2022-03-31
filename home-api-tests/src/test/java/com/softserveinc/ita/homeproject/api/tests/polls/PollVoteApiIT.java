@@ -169,8 +169,7 @@ class PollVoteApiIT {
     @Test
     void votingOnExpiredPollThrowsExceptionTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
-        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(),
-            new CreatePoll()
+        CreatePoll createdPoll = new CreatePoll()
             .header(String.format("Poll #%d for vote test", ++pollNumber))
             .type(PollType.SIMPLE)
             .creationDate(LocalDateTime.now()
@@ -178,21 +177,22 @@ class PollVoteApiIT {
                 .truncatedTo(ChronoUnit.MINUTES))
             .completionDate(LocalDateTime.now()
                 .minusDays(1L))
-            .description("Description"));
+            .description("Description");
+        ReadPoll createPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createdPoll);
         CreateAdviceQuestion createdAdviceQuestion = createAdviceQuestion();
         ReadAdviceQuestion addedAdviceQuestion = (ReadAdviceQuestion)
 
-            pollQuestionApi.createQuestion(createdPoll.getId(), createdAdviceQuestion);
-        createdPoll.setStatus(PollStatus.ACTIVE);
-        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createdPoll.getId(),
-            updatePoll(createdPoll));
+            pollQuestionApi.createQuestion(createPoll.getId(), createdAdviceQuestion);
+        createPoll.setStatus(PollStatus.ACTIVE);
+        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createPoll.getId(),
+            updatePoll(createPoll));
 
         CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(addedAdviceQuestion));
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createPoll.getId(), createdVote))
             .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining(String.format(POLL_COMPLETION_DATE_VALIDATION_MESSAGE, createdPoll.getCompletionDate()));
+            .withMessageContaining(String.format(POLL_COMPLETION_DATE_VALIDATION_MESSAGE, createPoll.getCompletionDate()));
     }
 
     @Test
