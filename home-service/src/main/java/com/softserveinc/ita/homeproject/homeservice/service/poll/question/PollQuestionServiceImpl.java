@@ -100,8 +100,8 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     }
 
     private PollQuestionDto updateQuestion(PollQuestion pollQuestion, PollQuestionDto updatePollQuestionDto) {
-        if (pollQuestion.getType().equals(PollQuestionType.MULTIPLE_CHOICE) ||
-            pollQuestion.getType().equals(PollQuestionType.DOUBLE_CHOICE)) {
+        if (pollQuestion.getType().equals(PollQuestionType.MULTIPLE_CHOICE)
+            || pollQuestion.getType().equals(PollQuestionType.DOUBLE_CHOICE)) {
             return updateMultiChoiceQuestion((MultipleChoiceQuestion) pollQuestion,
                 (MultipleChoiceQuestionDto) updatePollQuestionDto);
         } else if (pollQuestion.getType().equals(PollQuestionType.ADVICE)) {
