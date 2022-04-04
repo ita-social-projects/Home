@@ -161,7 +161,7 @@ public class PollServiceImpl implements PollService {
         }
     }
 
-    private void calculateCompletedPollsResults() {
+    public void calculateCompletedPollsResults() {
         List<Poll> polls = new ArrayList<>();
 
         pollRepository.findAll().forEach(polls::add);
@@ -176,25 +176,34 @@ public class PollServiceImpl implements PollService {
     }
 
     private void calculatePollResult(Poll poll) {
-        int votesCount = questionVoteRepository.findAllByQuestion(poll.getPollQuestions().get(0)).size();
-        int amountOfNeededPeople = 0;
+        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(poll.getPollQuestions().get(0));
+        int votesCount = questionVotes.size();
+        final int[] totalOwnershipsQuantity = {0};
+        double amountOfNeededPeople = 0.0;
         Map<User, BigDecimal> ownedAreaByUser = getAllAreaOwnedByUser(poll);
         PollQuestion pollQuestion = poll.getPollQuestions().get(0);
 
+        poll.getPolledHouses().get(0).getApartments().forEach(apartment ->
+            apartment.getOwnerships().forEach(ownership -> totalOwnershipsQuantity[0]++)
+        );
+
         if (poll.getType().equals(PollType.MAJOR)) {
-            amountOfNeededPeople = votesCount / 3 * 2;
+            amountOfNeededPeople = totalOwnershipsQuantity[0] / 3.0 * 2;
         } else if (poll.getType().equals(PollType.SIMPLE)) {
-            amountOfNeededPeople = votesCount / 2 + 1;
+            amountOfNeededPeople = totalOwnershipsQuantity[0] / 2.0 + 1;
         }
 
+        poll.setStatus(PollStatus.COMPLETED);
+
         if (votesCount >= amountOfNeededPeople) {
-            poll.setStatus(PollStatus.COMPLETED);
             if (isOverHalfAreaOwner(ownedAreaByUser, poll)) {
-                saveResultByVotesQuantity(pollQuestion);
+                calculateResultByVotesQuantity(pollQuestion);
             } else {
-                saveResultByOwnershipArea(pollQuestion, ownedAreaByUser);
+                calculateResultByOwnershipArea(pollQuestion, ownedAreaByUser);
             }
         }
+
+        pollRepository.save(poll);
     }
 
     private Map<User, BigDecimal> getAllAreaOwnedByUser(Poll poll) {
@@ -233,43 +242,49 @@ public class PollServiceImpl implements PollService {
         return false;
     }
 
-    private void saveResultByOwnershipArea(PollQuestion question, Map<User, BigDecimal> totalOwnershipsArea) {
-        List<QuestionVote> votes = questionVoteRepository.findAllByQuestion(question);
+    private void calculateResultByOwnershipArea(PollQuestion question, Map<User, BigDecimal> totalOwnershipsArea) {
+        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(question);
         BigDecimal totalAreaOfPositiveVotes = new BigDecimal(0);
         BigDecimal votedHouseArea = BigDecimal.valueOf(question.getPoll().getPolledHouses().get(0).getHouseArea());
+        List<VoteQuestionVariant> voteQuestionVariants = new ArrayList<>();
 
-        for (QuestionVote questionVote : votes) {
-            VoteQuestionVariant voteQuestionVariant = voteQuestionVariantRepository.findByQuestionVote(questionVote);
+        questionVotes.forEach(
+                vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
+        );
+
+        for (VoteQuestionVariant voteQuestionVariant : voteQuestionVariants) {
             if (voteQuestionVariant.getAnswerVariant().getAnswer().equals("yes")) {
                 totalAreaOfPositiveVotes = totalAreaOfPositiveVotes
-                    .add(totalOwnershipsArea.get(questionVote.getVote().getUser()));
+                    .add(totalOwnershipsArea.get(voteQuestionVariant.getQuestionVote().getVote().getUser()));
             }
         }
 
         question.getPoll().setResult(String.valueOf(
-                totalAreaOfPositiveVotes
-                    .multiply(new BigDecimal(100))
-                    .divide(votedHouseArea, 10, RoundingMode.CEILING)
+            totalAreaOfPositiveVotes
+                .multiply(new BigDecimal(100))
+                .divide(votedHouseArea, 10, RoundingMode.CEILING)
         ));
-        pollRepository.save(question.getPoll());
     }
 
-    private void saveResultByVotesQuantity(PollQuestion question) {
-        List<QuestionVote> votes = questionVoteRepository.findAllByQuestion(question);
+    private void calculateResultByVotesQuantity(PollQuestion question) {
+        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(question);
         BigDecimal positiveAnswers = new BigDecimal(0);
+        List<VoteQuestionVariant> voteQuestionVariants = new ArrayList<>();
 
-        for (QuestionVote questionVote : votes) {
-            VoteQuestionVariant voteQuestionVariant = voteQuestionVariantRepository.findByQuestionVote(questionVote);
+        questionVotes.forEach(
+            vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
+        );
+
+        for (VoteQuestionVariant voteQuestionVariant : voteQuestionVariants) {
             if (voteQuestionVariant.getAnswerVariant().getAnswer().equals("yes")) {
-                positiveAnswers = positiveAnswers.add(new BigDecimal(0));
+                positiveAnswers = positiveAnswers.add(new BigDecimal(1));
             }
         }
 
         question.getPoll().setResult(String.valueOf(
             positiveAnswers
                 .multiply(new BigDecimal(100))
-                .divide(BigDecimal.valueOf(votes.size()), 10, RoundingMode.CEILING)
+                .divide(BigDecimal.valueOf(questionVotes.size()), 10, RoundingMode.CEILING)
         ));
-        pollRepository.save(question.getPoll());
     }
 }
