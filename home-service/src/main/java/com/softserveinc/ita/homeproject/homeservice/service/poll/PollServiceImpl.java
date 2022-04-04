@@ -161,6 +161,14 @@ public class PollServiceImpl implements PollService {
         }
     }
 
+
+    /**
+     * Calculates and saves the result and status to the database
+     * only for the votes specified below. Two possible scenarios
+     * for counting: by the number of voters and by the area of
+     * ownership of those who voted. Does not save the result for
+     * polls that do not have enough votes.
+     */
     public void calculateCompletedPollsResults() {
         List<Poll> polls = new ArrayList<>();
 
