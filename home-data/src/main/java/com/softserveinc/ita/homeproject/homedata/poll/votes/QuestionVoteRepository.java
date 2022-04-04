@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homedata.poll.votes;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
-import org.aspectj.weaver.patterns.TypePatternQuestions;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

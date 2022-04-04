@@ -1,7 +1,5 @@
 package com.softserveinc.ita.homeproject.homedata.poll.votes;
 
-import java.util.List;
-
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

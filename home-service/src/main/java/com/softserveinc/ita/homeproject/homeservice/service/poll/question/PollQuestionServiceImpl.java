@@ -51,9 +51,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         question.setEnabled(true);
         question.setPoll(poll);
         if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
-            ((MultipleChoiceQuestion) question).getAnswerVariants().forEach(answer -> {
-                answer.setQuestion(question);
-            });
+            ((MultipleChoiceQuestion) question).getAnswerVariants().forEach(answer -> answer.setQuestion(question));
         }
         if (question.getType().equals(PollQuestionType.DOUBLE_CHOICE)) {
             AnswerVariant positiveAnswer = new AnswerVariant();

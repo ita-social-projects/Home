@@ -8,11 +8,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.softserveinc.ita.homeproject.homedata.BaseEntity;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
