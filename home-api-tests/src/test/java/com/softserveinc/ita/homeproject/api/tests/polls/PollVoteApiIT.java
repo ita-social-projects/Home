@@ -73,6 +73,8 @@ class PollVoteApiIT {
 
     private static final String QUESTION_NOT_FOUND_MESSAGE = "Poll question with 'id: %d' is not found";
 
+    private static final String POLL_COMPLETION_DATE_VALIDATION_MESSAGE = "Can't create vote on outdated poll: '%s'";
+
     private static final PollStatus[] POLL_STATUSES_WITHOUT_ACTIVE_AND_COMPLETED =
             {PollStatus.DRAFT, PollStatus.SUSPENDED};
 
@@ -162,6 +164,35 @@ class PollVoteApiIT {
                 .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createdPoll.getId(), createdVote))
                 .matches(exception -> exception.getCode() == BAD_REQUEST)
                 .withMessageContaining(String.format(POLL_STATUS_VALIDATION_MESSAGE, createdPoll.getStatus()));
+    }
+
+    @Test
+    void votingOnExpiredPollThrowsExceptionTest() throws ApiException {
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        CreatePoll createdPoll = new CreatePoll()
+            .header(String.format("Poll #%d for vote test", ++pollNumber))
+            .type(PollType.SIMPLE)
+            .creationDate(LocalDateTime.now()
+                .minusDays(16L)
+                .truncatedTo(ChronoUnit.MINUTES))
+            .completionDate(LocalDateTime.now()
+                .minusDays(1L))
+            .description("Description");
+        ReadPoll createPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createdPoll);
+        CreateAdviceQuestion createdAdviceQuestion = createAdviceQuestion();
+        ReadAdviceQuestion addedAdviceQuestion = (ReadAdviceQuestion)
+
+            pollQuestionApi.createQuestion(createPoll.getId(), createdAdviceQuestion);
+        createPoll.setStatus(PollStatus.ACTIVE);
+        cooperationPollApi.updateCooperationPoll(createdCooperation.getId(), createPoll.getId(),
+            updatePoll(createPoll));
+
+        CreateVote createdVote = new CreateVote().addQuestionVotesItem(createAdviceQuestionVote(addedAdviceQuestion));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> pollVoteApi.createVoteWithHttpInfo(createPoll.getId(), createdVote))
+            .matches(exception -> exception.getCode() == BAD_REQUEST)
+            .withMessageContaining(String.format(POLL_COMPLETION_DATE_VALIDATION_MESSAGE, createPoll.getCompletionDate()));
     }
 
     @Test
