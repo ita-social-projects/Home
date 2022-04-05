@@ -671,7 +671,7 @@ class PermissionsIT {
     //TODO
     private static UpdatePoll updatePoll() {
         LocalDateTime creationDate = LocalDateTime.now()
-            .truncatedTo(ChronoUnit.MINUTES)
+            .truncatedTo(ChronoUnit.DAYS)
             .plusDays(2L)
             .plusMinutes(1L);
         String description = "description for a poll";
@@ -774,14 +774,14 @@ class PermissionsIT {
     private static CreatePoll createPoll(ReadCooperation readCooperation) {
 
         LocalDateTime completionDate = LocalDateTime.now()
-            .truncatedTo(ChronoUnit.MINUTES)
+            .truncatedTo(ChronoUnit.DAYS)
             .plusDays(MAX_POLL_DURATION_IN_DAYS);
         return new CreatePoll()
             .header("Poll for our houses")
             .type(PollType.SIMPLE)
             .description("Description")
             .completionDate(completionDate)
-            .creationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+            .creationDate(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))
             .addHousesItem(new HouseLookup().id(Objects.requireNonNull(readCooperation.getHouses()).get(0).getId()))
             .addHousesItem(new HouseLookup().id(readCooperation.getHouses().get(1).getId()));
     }

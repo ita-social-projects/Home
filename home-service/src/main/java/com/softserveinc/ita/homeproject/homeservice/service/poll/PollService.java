@@ -1,8 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;

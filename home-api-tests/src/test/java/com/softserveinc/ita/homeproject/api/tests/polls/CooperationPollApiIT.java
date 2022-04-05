@@ -95,13 +95,13 @@ class CooperationPollApiIT {
 
     static CreatePoll createPoll() {
         LocalDateTime completionDate = LocalDateTime.now()
-            .truncatedTo(ChronoUnit.MINUTES)
+            .truncatedTo(ChronoUnit.DAYS)
             .plusDays(MAX_POLL_DURATION_IN_DAYS);
         return new CreatePoll()
             .header("Poll for our houses")
             .type(PollType.SIMPLE)
             .creationDate(LocalDateTime.now()
-                .truncatedTo(ChronoUnit.MINUTES))
+                .truncatedTo(ChronoUnit.DAYS))
             .completionDate(completionDate)
             .addHousesItem(new HouseLookup().id(HOUSE_ONE_ID))
             .addHousesItem(new HouseLookup().id(HOUSE_TWO_ID))
@@ -175,12 +175,11 @@ class CooperationPollApiIT {
             .addHousesItem(createHouse());
     }
 
-
     static UpdatePoll updatePoll() {
         return new UpdatePoll()
             .header("header")
             .description("updated description")
-            .creationDate(LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.MINUTES))
+            .creationDate(LocalDateTime.now().plusDays(1L).truncatedTo(ChronoUnit.DAYS))
             .status(PollStatus.DRAFT);
     }
 
@@ -282,7 +281,6 @@ class CooperationPollApiIT {
                 String.format("House with id:%s already exists in poll with id:%s", HOUSE_ONE_ID, poll.getId()));
     }
 
-
     @Disabled("Specification requires exactly 15 days from start date")
     void createCooperationPollWithCompletionDateLessThanTwoDaysTest() {
         CreatePoll createPoll = createPollWithCompletionDateLessThanTwoDaysTest();
@@ -345,14 +343,13 @@ class CooperationPollApiIT {
             .matches((actual) -> actual.getCode() == NOT_FOUND);
     }
 
-    //TODO
     @Test
     void updatePollTest() throws ApiException {
-        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusDays(1L);
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusDays(1L);
         ReadPoll pollToUpdate =
             COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPollWithCreationDate(creationDate));
         UpdatePoll updatePoll =
-            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.MINUTES));
+            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.DAYS));
         ApiResponse<ReadPoll> response = COOPERATION_POLL_API
             .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
@@ -445,7 +442,6 @@ class CooperationPollApiIT {
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining(String.format(POLL_NOT_FOUND, poll.getId()));
     }
-
 
     private void assertPoll(CreatePoll expected, ReadPoll actual) {
         List<Long> expectedHouseIdList = expected.getHouses()

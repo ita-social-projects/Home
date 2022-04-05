@@ -121,7 +121,7 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByCompletionDate() throws ApiException {
 
-        LocalDateTime completionDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime completionDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
 
         createPollWithCompletionDate(completionDate);
         createPollWithCompletionDate(completionDate);
@@ -146,7 +146,7 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByPollStatus() throws ApiException {
 
-        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES).plusDays(1);
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusDays(1);
         ReadPoll readPoll = createPollWithCreationDate(creationDate);
         UpdatePoll updatePoll = CooperationPollApiIT.updatePollWithCreationDate(creationDate);
         COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);

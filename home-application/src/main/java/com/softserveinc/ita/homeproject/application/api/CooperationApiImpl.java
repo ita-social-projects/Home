@@ -11,8 +11,6 @@ import static com.softserveinc.ita.homeproject.application.security.constants.Pe
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
@@ -42,12 +40,10 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.Cooperat
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.house.HouseService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation.CooperationContactService;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.PollService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.ModelMap;
 
 @Provider
 @Component

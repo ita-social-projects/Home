@@ -4,17 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
+import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
-import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
-import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollStatusDto;
