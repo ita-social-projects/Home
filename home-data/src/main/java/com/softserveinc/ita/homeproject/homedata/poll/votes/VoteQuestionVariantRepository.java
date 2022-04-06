@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface VoteQuestionVariantRepository extends PagingAndSortingRepository<VoteQuestionVariant, Long> {
+    VoteQuestionVariant findByQuestionVote(QuestionVote questionVote);
 }

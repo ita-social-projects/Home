@@ -12,6 +12,7 @@ PollType:
   type: string
   enum: &poll_type_values
     - simple
+    - major
   example: "simple"
 
 ReadPoll:
@@ -73,6 +74,9 @@ ReadPoll:
       $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
+    result:
+      type: string
+      example: "The result of the poll"
 CreatePoll:
   type: object
   required:
