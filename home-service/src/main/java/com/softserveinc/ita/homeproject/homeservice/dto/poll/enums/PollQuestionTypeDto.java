@@ -4,7 +4,9 @@ public enum PollQuestionTypeDto {
 
     ADVICE("advice"),
 
-    MULTIPLE_CHOICE("multiple_choice");
+    MULTIPLE_CHOICE("multiple_choice"),
+
+    DOUBLE_CHOICE("double_choice");
 
     private String value;
 

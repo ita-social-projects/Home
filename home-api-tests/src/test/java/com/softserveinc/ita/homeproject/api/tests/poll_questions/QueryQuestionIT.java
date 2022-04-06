@@ -22,6 +22,7 @@ import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateDoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
 import com.softserveinc.ita.homeproject.client.model.CreateQuestion;
@@ -51,7 +52,7 @@ class QueryQuestionIT {
 
         pollQuestionApi.createQuestion(readPoll.getId(), createAdviceQuestion());
         pollQuestionApi.createQuestion(readPoll.getId(), createMultipleChoiceQuestion());
-
+        pollQuestionApi.createQuestion(readPoll.getId(), createDoubleChoiceQuestion());
 
         List<ReadQuestion> queryResponse = new PollQuestionQuery.Builder(pollQuestionApi)
                 .pollId(readPoll.getId())
@@ -70,6 +71,7 @@ class QueryQuestionIT {
 
         pollQuestionApi.createQuestion(readPoll.getId(), createAdviceQuestion());
         pollQuestionApi.createQuestion(readPoll.getId(), createMultipleChoiceQuestion());
+        pollQuestionApi.createQuestion(readPoll.getId(), createDoubleChoiceQuestion());
 
 
         List<ReadQuestion> queryResponse = new PollQuestionQuery.Builder(pollQuestionApi)
@@ -149,6 +151,12 @@ class QueryQuestionIT {
                 .answerVariants(createAnswerVariants())
                 .type(QuestionType.MULTIPLE_CHOICE)
                 .question("What color should we paint the door?");
+    }
+
+    private static CreateQuestion createDoubleChoiceQuestion() {
+        return new CreateDoubleChoiceQuestion()
+                .type(QuestionType.DOUBLE_CHOICE)
+                .question("Should we paint the door?");
     }
 
     private static List<CreateUpdateAnswerVariant> createAnswerVariants() {

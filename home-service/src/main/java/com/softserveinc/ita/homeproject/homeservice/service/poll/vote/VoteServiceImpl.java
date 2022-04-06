@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll.vote;
 
 import static com.softserveinc.ita.homeproject.homeservice.service.QueryableService.NOT_FOUND_MESSAGE;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +48,8 @@ public class VoteServiceImpl implements VoteService {
 
     private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't create vote on poll with status: '%s'";
 
+    private static final String POLL_COMPLETION_DATE_VALIDATION_MESSAGE = "Can't create vote on outdated poll: '%s'";
+
     private static final String USER_NOT_FOUND_MESSAGE = "User with 'login: %s' is not found";
 
     private static final String TRYING_TO_REVOTE_MESSAGE =
@@ -86,7 +89,9 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public VoteDto createVote(VoteDto voteDto) {
         Poll votedPoll = validatePollEnabled(voteDto);
+
         validatePollStatus(votedPoll);
+        validateCompletionDateTime(votedPoll);
         User currentUser = getVoter();
         validateReVoting(votedPoll, currentUser);
         validateQuestionVotesCount(voteDto, votedPoll);
@@ -126,6 +131,15 @@ public class VoteServiceImpl implements VoteService {
                 String.format(POLL_STATUS_VALIDATION_MESSAGE, votedPoll.getStatus()));
         }
     }
+
+    private void validateCompletionDateTime(Poll votedPoll) {
+        if (votedPoll.getCompletionDate().isBefore(LocalDateTime.now())) {
+            throw new BadRequestHomeException(
+                String.format(POLL_COMPLETION_DATE_VALIDATION_MESSAGE, votedPoll.getCompletionDate())
+            );
+        }
+    }
+
 
     private User getVoter() {
         String voter = SecurityContextHolder.getContext().getAuthentication().getName();

@@ -30,4 +30,6 @@ public class PollDto extends BaseDto {
     private PollStatusDto status;
 
     private PollTypeDto type;
+
+    private String result;
 }
