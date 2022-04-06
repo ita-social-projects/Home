@@ -457,7 +457,6 @@ class CooperationPollApiIT {
         assertEquals(expected.getCreationDate(), actual.getCreationDate());
     }
 
-    //TODO
     private void assertUpdatedPoll(UpdatePoll expected, ReadPoll actual) {
         assertNotNull(expected);
         assertNotNull(actual);

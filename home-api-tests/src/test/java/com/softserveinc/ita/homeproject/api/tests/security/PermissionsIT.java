@@ -668,7 +668,6 @@ class PermissionsIT {
             .invitations(createInvitationList(NUMBER_OF_APARTMENT_INVITATIONS));
     }
 
-    //TODO
     private static UpdatePoll updatePoll() {
         LocalDateTime creationDate = LocalDateTime.now()
             .truncatedTo(ChronoUnit.DAYS)

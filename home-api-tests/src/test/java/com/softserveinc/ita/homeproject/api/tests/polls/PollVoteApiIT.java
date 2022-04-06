@@ -394,7 +394,6 @@ class PollVoteApiIT {
             .description("Description");
     }
 
-    //TODO
     private UpdatePoll updatePoll(ReadPoll readPoll) {
         return new UpdatePoll()
             .header(readPoll.getHeader())
