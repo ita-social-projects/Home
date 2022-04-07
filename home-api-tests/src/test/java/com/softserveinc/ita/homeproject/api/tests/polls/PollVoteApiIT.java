@@ -44,6 +44,7 @@ import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import com.softserveinc.ita.homeproject.client.model.ReadVote;
 import com.softserveinc.ita.homeproject.client.model.UpdatePoll;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class PollVoteApiIT {
@@ -72,7 +73,6 @@ class PollVoteApiIT {
         "The answer variant with 'id: %d' cannot be chosen when voting on the question with 'id: %d'";
 
     private static final String QUESTION_NOT_FOUND_MESSAGE = "Poll question with 'id: %d' is not found";
-
 
     private static final String POLL_STATUS_DRAFT = "Can't create vote on poll with status: 'draft'";
   
@@ -162,6 +162,7 @@ class PollVoteApiIT {
             .withMessageContaining(POLL_STATUS_DRAFT, createdPoll.getStatus());
     }
 
+    @Disabled("Not valid test. Violates Issue#408 logic")
     @Test
     void votingOnExpiredPollThrowsExceptionTest() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
