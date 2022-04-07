@@ -33,13 +33,6 @@ public class VoteServiceImplTest {
     @Mock
     private PollRepository pollRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private VoteRepository voteRepository;
-
-
     @InjectMocks
     private VoteServiceImpl voteService;
 
