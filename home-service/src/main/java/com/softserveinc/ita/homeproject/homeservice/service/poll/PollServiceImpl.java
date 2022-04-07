@@ -89,7 +89,7 @@ public class PollServiceImpl implements PollService {
             .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, pollDto.getStatus());
-        validateCreationDate(poll, pollDto.getCreationDate());
+        validateCreationDate(poll);
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
         }
@@ -166,7 +166,7 @@ public class PollServiceImpl implements PollService {
         }
     }
 
-    private void validateCreationDate(Poll poll, LocalDateTime creationDate) {
+    private void validateCreationDate(Poll poll) {
         if (poll.getCreationDate().isBefore(LocalDateTime.now())) {
             throw new BadRequestHomeException(
                 "Poll has already started");
