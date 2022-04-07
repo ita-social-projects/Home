@@ -187,6 +187,11 @@
                 <version>${revision}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>com.softserveinc.ita.homeproject</groupId>
+                <artifactId>home-oauth-server</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
             <!--Spring dependencies-->
 

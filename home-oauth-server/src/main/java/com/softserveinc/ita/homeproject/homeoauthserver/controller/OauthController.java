@@ -8,7 +8,6 @@ import com.softserveinc.ita.homeproject.homeoauthserver.service.OauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +20,7 @@ public class OauthController {
 
     @PostMapping("/login")
     public ResponseEntity<Token> getToken(@RequestBody UserDetailsDto userDetailsDto) {
-       Token token = oauthService.generateToken(userDetailsDto);
+        Token token = oauthService.generateToken(userDetailsDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 

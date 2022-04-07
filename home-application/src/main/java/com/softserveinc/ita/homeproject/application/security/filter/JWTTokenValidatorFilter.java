@@ -10,14 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
+@Component
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
-    @Autowired
+
     private JWTProvider jwtProvider;
 
-    public JWTTokenValidatorFilter() {
+    @Autowired
+    public JWTTokenValidatorFilter(JWTProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Override

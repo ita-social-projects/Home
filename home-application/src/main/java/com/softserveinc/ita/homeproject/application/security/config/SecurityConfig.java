@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.security.config;
 
 import com.softserveinc.ita.homeproject.application.security.filter.JWTProvider;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTTokenValidatorFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,9 +35,11 @@ import org.springframework.web.cors.CorsConfiguration;
     jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final JWTProvider jwtProvider = getApplicationContext().getBean(JWTProvider.class);
 
     private final UserDetailsService userDetailsService;
 
+    @Autowired
     public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -64,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .httpBasic()
             .and()
-            .addFilterBefore(new JWTTokenValidatorFilter(),
+            .addFilterBefore(new JWTTokenValidatorFilter(jwtProvider),
                 BasicAuthenticationFilter.class);
     }
 

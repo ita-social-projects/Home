@@ -30,11 +30,6 @@ public class JwtProvider {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @PostConstruct
-    private void init() {
-        jwtSecret = Base64.encodeBase64String(jwtSecret.getBytes(StandardCharsets.UTF_8));
-    }
-
     public String generateToken(Long id, String email, int amountDays) {
         return Jwts.builder()
             .setId(String.valueOf(id))
