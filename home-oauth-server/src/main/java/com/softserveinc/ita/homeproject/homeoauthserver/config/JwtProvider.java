@@ -1,10 +1,14 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.config;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
+import javax.annotation.PostConstruct;
+
 import com.softserveinc.ita.homeproject.homeoauthserver.exception.NotAcceptableOauthException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,6 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,6 +29,11 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    @PostConstruct
+    private void init() {
+        jwtSecret = Base64.encodeBase64String(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(Long id, String email, int amountDays) {
         return Jwts.builder()
