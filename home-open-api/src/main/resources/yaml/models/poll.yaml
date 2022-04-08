@@ -113,21 +113,30 @@ CreatePoll:
           "id": 2
         }
       ]
+    status:
+      $ref: '#/PollStatus'
     type:
       $ref: '#/PollType'
 UpdatePoll:
   type: object
   required:
     - header
-    - completion_date
-    - status
   properties:
     header:
       type: string
       example: "New poll for our houses"
-    completion_date:
+    description:
+      type: string
+      example: "A description for the poll"
+    creation_date:
       type: string
       format: date-time
-      example: "2021-06-20T06:00:00Z"
+      example: "2021-05-20T06:00:00Z"
     status:
       $ref: '#/PollStatus'
+    included_houses:
+      type: array
+      items:
+        type: integer
+        format: int64
+      example: [ 1, 2 ]
