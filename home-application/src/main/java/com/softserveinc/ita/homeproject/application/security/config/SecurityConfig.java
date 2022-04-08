@@ -35,13 +35,14 @@ import org.springframework.web.cors.CorsConfiguration;
     jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JWTProvider jwtProvider = getApplicationContext().getBean(JWTProvider.class);
+    private final JWTProvider jwtProvider;
 
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService) {
+    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService, JWTProvider jwtProvider) {
         this.userDetailsService = userDetailsService;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override

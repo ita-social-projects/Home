@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.application.security.filter;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-
 import javax.annotation.PostConstruct;
 
 import io.jsonwebtoken.Claims;
@@ -30,10 +29,6 @@ public class JWTProvider {
         this.userDetailsService = userDetailsService;
     }
 
-    @PostConstruct
-    public void init() {
-        secret = Base64.encodeBase64String(secret.getBytes(StandardCharsets.UTF_8));
-    }
 
     public boolean validate(String token) {
         try {
