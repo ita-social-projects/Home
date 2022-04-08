@@ -5,7 +5,6 @@ import com.softserveinc.ita.homeproject.homeoauthserver.config.JwtProvider;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.AccessToken;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.Token;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
-
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.UserDetailsDto;
