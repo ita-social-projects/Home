@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="412.001" author="vladyslavyarets">
+        <createTable tableName="questions">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"
+                             nullable="false"/>
+            </column>
+            <column name="question" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_answer_count" type="integer"/>
+            <column name="enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="412.002" author="vladyslavyarets">
+        <addColumn tableName="votes">
+            <column name="type" type="varchar(31)">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+            </column>
+            <column name="advice_answer" type="varchar(255)"/>
+            <column name="answer_variant_id" type="bigint">
+                <constraints foreignKeyName="answer_variant_fk"
+                             references="answer_variants(id)"/>
+            </column>
+            <column name="question_id" type="bigint">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <constraints foreignKeyName="question_fk"
+                             references="questions(id)"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="votes"
+                                 baseColumnNames="poll_id"
+                                 constraintName="poll_fk"
+                                 referencedTableName="polls"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="412.003" author="vladyslavyarets">
+        <addColumn tableName="result_questions">
+            <column name="poll_question_id" type="bigint">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <!--TODO:add ForeignKey constraint references to "id" field of new table "poll_questions" after data migration in other changeset-->
+            </column>
+            <column name="answer_variant_id" type="bigint">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <constraints foreignKeyName="answer_variant_fk"
+                             references="answer_variants(id)"/>
+            </column>
+            <column name="percent_votes" type="varchar(20)">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="412.004" author="vladyslavyarets">
+        <addColumn tableName="answer_variants">
+            <column name="question_id" type="bigint">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <constraints foreignKeyName="question_fk"
+                             references="questions(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
