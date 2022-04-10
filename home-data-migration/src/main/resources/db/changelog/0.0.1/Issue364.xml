@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="Issue364.001" author="dksorex">
+    <changeSet id="Issue364.001" author="varhanov">
         <createTable tableName="users_credentials">
             <column name="ID" type="BIGINT">
                 <constraints nullable="false"
@@ -18,6 +18,28 @@
                 <constraints nullable="false"/>
             </column>
             <column name="ENABLED" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="Issue364.002" author="varhanov">
+        <createTable tableName="users_tokens">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="USER_ID" type="BIGINT">
+                <constraints nullable="false"
+                             foreignKeyName="user_fk"
+                             references="users(ID)"/>
+            </column>
+            <column name="ACCESS_TOKEN" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="REFRESH_TOKEN" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRE_DATE" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>
