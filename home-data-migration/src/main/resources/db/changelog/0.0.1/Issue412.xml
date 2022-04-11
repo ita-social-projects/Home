@@ -73,4 +73,14 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="412.005" author="vladyslavyarets">
+        <addColumn tableName="poll_questions">
+            <column name="question_id" type="bigint">
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <constraints foreignKeyName="question_fk"
+                             references="questions(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
