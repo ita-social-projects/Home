@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 public class UserDto extends BaseDto {
 
     private String firstName;
