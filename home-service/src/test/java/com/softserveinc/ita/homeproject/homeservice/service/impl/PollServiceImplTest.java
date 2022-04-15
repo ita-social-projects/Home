@@ -81,8 +81,8 @@ class PollServiceImplTest {
         poll.setStatus(PollStatus.ACTIVE);
         poll.setCooperation(cooperation);
         poll.setEnabled(true);
-        PollDto pollDto = new PollDto();
-        pollDto.setStatus(PollStatusDto.SUSPENDED);
+        PollDto pollDto = PollDto.builder()
+            .status(PollStatusDto.SUSPENDED).build();
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
         assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
     }
@@ -93,8 +93,8 @@ class PollServiceImplTest {
         poll.setStatus(PollStatus.DRAFT);
         poll.setCooperation(cooperation);
         poll.setEnabled(true);
-        PollDto pollDto = new PollDto();
-        pollDto.setStatus(PollStatusDto.COMPLETED);
+        PollDto pollDto = PollDto.builder()
+            .status(PollStatusDto.COMPLETED).build();
         when(pollRepository.findById(anyLong())).thenReturn(Optional.of(poll));
         assertThrows(BadRequestHomeException.class, () -> pollService.update(1L, 1L, pollDto));
     }
@@ -107,9 +107,9 @@ class PollServiceImplTest {
         poll.setEnabled(true);
         HouseDto houseDto = new HouseDto();
         houseDto.setId(1L);
-        PollDto pollDto = new PollDto();
-        pollDto.setStatus(PollStatusDto.DRAFT);
-        pollDto.setPolledHouses(Collections.singletonList(houseDto));
+        PollDto pollDto = PollDto.builder()
+            .status(PollStatusDto.DRAFT)
+            .polledHouses(Collections.singletonList(houseDto)).build();
         when(cooperationRepository.findById(anyLong())).thenReturn(Optional.of(cooperation));
         assertThrows(NotFoundHomeException.class, () -> pollService.create(1L, pollDto));
     }
@@ -128,8 +128,9 @@ class PollServiceImplTest {
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
 
         pollService.calculateCompletedPollsResults();
@@ -153,8 +154,9 @@ class PollServiceImplTest {
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
 
         pollService.calculateCompletedPollsResults();
@@ -178,8 +180,9 @@ class PollServiceImplTest {
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
 
         pollService.calculateCompletedPollsResults();
@@ -203,8 +206,9 @@ class PollServiceImplTest {
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
 
         pollService.calculateCompletedPollsResults();
@@ -227,8 +231,9 @@ class PollServiceImplTest {
         when(questionVoteRepository.findAllByQuestion(actualPoll.getPollQuestions().get(0))).thenReturn(
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
 
@@ -252,8 +257,9 @@ class PollServiceImplTest {
         when(questionVoteRepository.findAllByQuestion(actualPoll.getPollQuestions().get(0))).thenReturn(
             List.copyOf(votes));
         when(questionVoteRepository.findAllByQuestion(question)).thenReturn(List.copyOf(votes));
-        for ( int i = 0; i < votes.size(); i++) {
-            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(voteQuestionVariants.get(i));
+        for (int i = 0; i < votes.size(); i++) {
+            when(voteQuestionVariantRepository.findByQuestionVote(votes.get(i))).thenReturn(
+                voteQuestionVariants.get(i));
         }
         when(pollRepository.findAll()).thenReturn(List.of(actualPoll));
 

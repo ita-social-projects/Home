@@ -1,18 +1,19 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.poll;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollTypeDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class PollDto extends BaseDto {
 
     private String header;
@@ -25,7 +26,7 @@ public class PollDto extends BaseDto {
 
     private List<HouseDto> polledHouses;
 
-    private List<Long> includedHouses = new ArrayList<>();
+    private List<Long> includedHouses;
 
     private PollStatusDto status;
 
