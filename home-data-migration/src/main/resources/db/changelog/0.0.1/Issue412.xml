@@ -37,12 +37,12 @@
                                  referencedColumnNames="id"/>
         <addColumn tableName="votes">
             <column name="type" type="varchar(31)">
-                <constraints nullable="false"/>
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
             </column>
             <column name="advice_answer" type="varchar(255)"/>
             <column name="question_id" type="bigint">
-                <constraints nullable="false"
-                             foreignKeyName="question_fk"
+                <!--TODO:add NotNull constraint after data migration in other changeset-->
+                <constraints foreignKeyName="question_fk"
                              references="questions(id)"/>
             </column>
         </addColumn>
