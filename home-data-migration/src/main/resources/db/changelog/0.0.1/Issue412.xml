@@ -6,30 +6,6 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="412.001" author="vladyslavyarets">
-        <createTable tableName="questions">
-            <column name="id" type="bigint">
-                <constraints primaryKey="true"
-                             nullable="false"/>
-            </column>
-            <column name="question" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="type" type="varchar(31)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="max_answer_count" type="integer"/>
-            <column name="poll_id" type="bigint">
-                <constraints nullable="false"
-                             foreignKeyName="poll_fk"
-                             references="polls(id)"/>
-            </column>
-            <column name="enabled" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="412.002" author="vladyslavyarets">
         <addForeignKeyConstraint baseTableName="votes"
                                  baseColumnNames="poll_id"
                                  constraintName="poll_fk"
@@ -43,12 +19,12 @@
             <column name="question_id" type="bigint">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
                 <constraints foreignKeyName="question_fk"
-                             references="questions(id)"/>
+                             references="poll_questions(id)"/>
             </column>
         </addColumn>
     </changeSet>
 
-    <changeSet id="412.003" author="vladyslavyarets">
+    <changeSet id="412.002" author="vladyslavyarets">
         <addColumn tableName="result_questions">
             <column name="answer_variant_id" type="bigint">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
@@ -61,17 +37,17 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="412.004" author="vladyslavyarets">
+    <changeSet id="412.003" author="vladyslavyarets">
         <addColumn tableName="answer_variants">
             <column name="question_id" type="bigint">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
                 <constraints foreignKeyName="question_fk"
-                             references="questions(id)"/>
+                             references="poll_questions(id)"/>
             </column>
         </addColumn>
     </changeSet>
 
-    <changeSet id="412.005" author="vladyslavyarets">
+    <changeSet id="412.004" author="vladyslavyarets">
         <createTable tableName="votes_answer_variants">
             <column name="id" type="bigint">
                 <constraints nullable="false"
@@ -90,7 +66,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="412.006" author="vladyslavyarets">
+    <changeSet id="412.005" author="vladyslavyarets">
         <createSequence incrementBy="50" sequenceName="questions_sequence"/>
     </changeSet>
 </databaseChangeLog>
