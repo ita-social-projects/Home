@@ -50,12 +50,12 @@ public class VoteServiceImplTest {
     @Test
     void voteOnExpiredPollThrowsException() {
         Poll createdPoll = new Poll();
-        VoteDto voteDto = new VoteDto();
         createdPoll.setId(1L);
         createdPoll.setEnabled(true);
         createdPoll.setStatus(PollStatus.ACTIVE);
         createdPoll.setCompletionDate(LocalDateTime.now().minusDays(1L));
-        voteDto.setPollId(createdPoll.getId());
+        VoteDto voteDto = VoteDto.builder()
+            .pollId(createdPoll.getId()).build();
         when(pollRepository.findById(voteDto.getPollId())).thenReturn(Optional.of(createdPoll));
 
         assertThrows(BadRequestHomeException.class, () -> voteService.createVote(voteDto));
