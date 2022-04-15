@@ -30,38 +30,25 @@
     </changeSet>
 
     <changeSet id="412.002" author="vladyslavyarets">
-        <createTable tableName="answers">
-            <column name="id" type="bigint">
-                <constraints nullable="false"
-                             primaryKey="true"/>
-            </column>
-            <column name="type" type="varchar(31)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="advice_answer" type="varchar(255)"/>
-            <column name="answer_variant_id" type="bigint"/>
-            <column name="vote_id" type="bigint">
-                <constraints nullable="false"
-                             foreignKeyName="vote_fk"
-                             references="votes(id)"/>
-            </column>
-            <column name="question_id" type="bigint">
-                <constraints nullable="false"
-                             foreignKeyName="question_fk"
-                             references="questions(id)"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="412.003" author="vladyslavyarets">
         <addForeignKeyConstraint baseTableName="votes"
                                  baseColumnNames="poll_id"
                                  constraintName="poll_fk"
                                  referencedTableName="polls"
                                  referencedColumnNames="id"/>
+        <addColumn tableName="votes">
+            <column name="type" type="varchar(31)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="advice_answer" type="varchar(255)"/>
+            <column name="question_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="question_fk"
+                             references="questions(id)"/>
+            </column>
+        </addColumn>
     </changeSet>
 
-    <changeSet id="412.004" author="vladyslavyarets">
+    <changeSet id="412.003" author="vladyslavyarets">
         <addColumn tableName="result_questions">
             <column name="answer_variant_id" type="bigint">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
@@ -74,7 +61,7 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="412.005" author="vladyslavyarets">
+    <changeSet id="412.004" author="vladyslavyarets">
         <addColumn tableName="answer_variants">
             <column name="question_id" type="bigint">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
@@ -82,5 +69,28 @@
                              references="questions(id)"/>
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="412.005" author="vladyslavyarets">
+        <createTable tableName="votes_answer_variants">
+            <column name="id" type="bigint">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="vote_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="vote_fk"
+                             references="votes(id)"/>
+            </column>
+            <column name="answer_variant_id" type="bigint">
+                <constraints nullable="false"
+                             foreignKeyName="answer_variant_fk"
+                             references="answer_variants(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="412.006" author="vladyslavyarets">
+        <createSequence incrementBy="50" sequenceName="questions_sequence"/>
     </changeSet>
 </databaseChangeLog>
