@@ -68,5 +68,6 @@
 
     <changeSet id="412.005" author="vladyslavyarets">
         <createSequence incrementBy="50" sequenceName="questions_sequence"/>
+        <createSequence incrementBy="50" sequenceName="votes_answer_variants_sequence"/>
     </changeSet>
 </databaseChangeLog>
