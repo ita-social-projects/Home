@@ -33,6 +33,7 @@ CreateQuestionVote:
     propertyName: type
     mapping:
       multiple_choice: '#/CreateMultipleChoiceQuestionVote'
+      double_choice: '#/CreateDoubleChoiceQuestionVote'
       advice: '#/CreateAdviceQuestionVote'
   properties:
     type:
@@ -61,7 +62,15 @@ CreateMultipleChoiceQuestionVote:
             "id": 3
           }
         ]
-
+CreateDoubleChoiceQuestionVote:
+  allOf:
+    - $ref: '#/CreateQuestionVote'
+  type: object
+  required:
+    - answer
+  properties:
+    answer:
+      $ref: 'answer.yaml#/CreateUpdateAnswerVariant'
 CreateAdviceQuestionVote:
   allOf:
     - $ref: '#/CreateQuestionVote'

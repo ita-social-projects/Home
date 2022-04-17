@@ -70,4 +70,7 @@ public class Poll extends BaseEntity {
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.PERSIST)
     private List<PollQuestion> pollQuestions;
+
+    @Column(name = "result")
+    private String result;
 }

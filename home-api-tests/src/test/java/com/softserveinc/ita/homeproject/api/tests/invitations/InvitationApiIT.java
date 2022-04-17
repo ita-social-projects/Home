@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
@@ -45,6 +47,7 @@ import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
 import com.softserveinc.ita.homeproject.client.model.Role;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class InvitationApiIT {
@@ -94,7 +97,7 @@ class InvitationApiIT {
         String apartmentInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
 
         ReadInvitation readInvitation =
-            invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
+                invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
 
         assertEquals(userEmail, readInvitation.getEmail());
         assertEquals(InvitationType.APARTMENT, readInvitation.getType());
@@ -115,49 +118,50 @@ class InvitationApiIT {
         String cooperationInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
 
         ReadInvitation readInvitation =
-            invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
+                invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
 
         assertEquals(userEmail, readInvitation.getEmail());
         assertEquals(InvitationType.COOPERATION, readInvitation.getType());
         assertEquals(InvitationStatus.ACCEPTED, readInvitation.getStatus());
     }
 
+    @Disabled("ApartmentId is no longer required Issue#396")
     @Test
-    void createInvitationForNonExistApatrment() throws Exception {
+    void createInvitationForNonExistApartment() throws Exception {
         CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment)
-            .id(10006600000L);
+                .id(10006600000L);
         CreateInvitation invitation = new CreateApartmentInvitation()
-            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-            .type(InvitationType.APARTMENT);
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.APARTMENT);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .withMessageContaining("Parameter `apartmentId` is invalid - must not be null.");
+                .isThrownBy(() -> invitationApi
+                        .createInvitation(invitation))
+                .withMessageContaining("Parameter `apartmentId` is invalid - must not be null.");
     }
 
     @Test
     void createInvitationWithNullEmail() {
         CreateInvitation invitation = new CreateApartmentInvitation()
-            .email(null)
-            .type(InvitationType.APARTMENT);
+                .email(null)
+                .type(InvitationType.APARTMENT);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .matches(exception -> exception.getCode() == BAD_REQUEST)
-            .withMessageContaining("Parameter `email` is invalid - must not be null.");
+                .isThrownBy(() -> invitationApi
+                        .createInvitation(invitation))
+                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .withMessageContaining("Parameter `email` is invalid - must not be null.");
     }
 
 
     @Test
     void createInvitationWithInvalidEmail() throws Exception {
         CreateInvitation invitation = new CreateApartmentInvitation()
-            .email(null)
-            .type(InvitationType.APARTMENT);
+                .email(null)
+                .type(InvitationType.APARTMENT);
 
         CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
@@ -165,9 +169,9 @@ class InvitationApiIT {
         ReadApartment createdApartment = apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .matches(exception -> exception.getCode() == BAD_REQUEST);
+                .isThrownBy(() -> invitationApi
+                        .createInvitation(invitation))
+                .matches(exception -> exception.getCode() == BAD_REQUEST);
     }
 
 
@@ -178,7 +182,7 @@ class InvitationApiIT {
 
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
-            createApartmentWithoutInvitation());
+                createApartmentWithoutInvitation());
 
         CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
         createApartmentInvitation.setType(InvitationType.APARTMENT);
@@ -188,7 +192,7 @@ class InvitationApiIT {
         TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiResponse<ReadInvitation> response =
-            invitationApi.createInvitationWithHttpInfo(createApartmentInvitation);
+                invitationApi.createInvitationWithHttpInfo(createApartmentInvitation);
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
         assertInvitation(createApartmentInvitation, response.getData());
@@ -213,7 +217,7 @@ class InvitationApiIT {
         TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiResponse<ReadInvitation> response =
-            invitationApi.createInvitationWithHttpInfo(invitation);
+                invitationApi.createInvitationWithHttpInfo(invitation);
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
         assertInvitation(invitation, response.getData());
@@ -225,13 +229,13 @@ class InvitationApiIT {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation()).id(10000000000000L);
 
         CreateInvitation invitation = new CreateCooperationInvitation()
-            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-            .type(InvitationType.COOPERATION);
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.COOPERATION);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .withMessageContaining("Parameter `cooperationId` is invalid - must not be null.");
+                .isThrownBy(() -> invitationApi
+                        .createInvitation(invitation))
+                .withMessageContaining("Parameter `cooperationId` is invalid - must not be null.");
     }
 
     @Test
@@ -239,15 +243,15 @@ class InvitationApiIT {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
 
         CreateInvitation invitation = new CreateCooperationInvitation()
-            .cooperationId(createdCooperation.getId())
-            .role(null)
-            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-            .type(InvitationType.COOPERATION);
+                .cooperationId(createdCooperation.getId())
+                .role(null)
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .type(InvitationType.COOPERATION);
 
         assertThatExceptionOfType(ApiException.class)
-            .isThrownBy(() -> invitationApi
-                .createInvitation(invitation))
-            .withMessageContaining("Parameter `role` is invalid - must not be null.");
+                .isThrownBy(() -> invitationApi
+                        .createInvitation(invitation))
+                .withMessageContaining("Parameter `role` is invalid - must not be null.");
     }
 
     @Test
@@ -257,7 +261,7 @@ class InvitationApiIT {
 
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
-            createApartmentWithoutInvitation());
+                createApartmentWithoutInvitation());
 
         CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
         createApartmentInvitation.setType(InvitationType.APARTMENT);
@@ -265,12 +269,11 @@ class InvitationApiIT {
         createApartmentInvitation.setApartmentId(apartment.getId());
 
         ReadInvitation invitation =
-            invitationApi.createInvitation(createApartmentInvitation);
-
+                invitationApi.createInvitation(createApartmentInvitation);
 
 
         ApiResponse<Void> response =
-            invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
+                invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
     }
 
@@ -281,7 +284,7 @@ class InvitationApiIT {
 
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         ReadApartment apartment = apartmentApi.createApartment(createdHouse.getId(),
-            createApartmentWithoutInvitation());
+                createApartmentWithoutInvitation());
 
         CreateApartmentInvitation createApartmentInvitation = new CreateApartmentInvitation();
         createApartmentInvitation.setType(InvitationType.APARTMENT);
@@ -289,12 +292,12 @@ class InvitationApiIT {
         createApartmentInvitation.setApartmentId(apartment.getId());
 
         ReadInvitation invitation =
-            invitationApi.createInvitation(createApartmentInvitation);
+                invitationApi.createInvitation(createApartmentInvitation);
         TimeUnit.MILLISECONDS.sleep(5000);
 
         invitation.setStatus(InvitationStatus.ACCEPTED);
         ApiResponse<Void> response =
-            invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
+                invitationApi.deleteAnyInvitationWithHttpInfo(invitation.getId());
 
         assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatusCode());
     }
@@ -328,11 +331,11 @@ class InvitationApiIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-            .firstName("firstName")
-            .middleName("middleName")
-            .lastName("lastName")
-            .password("password")
-            .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
+                .firstName("firstName")
+                .middleName("middleName")
+                .lastName("lastName")
+                .password("password")
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
 
     private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
@@ -360,75 +363,75 @@ class InvitationApiIT {
 
     private CreateCooperation createCooperationWithUserEmail(String email) {
         return new CreateCooperation()
-            .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
-            .usreo(RandomStringUtils.randomNumeric(8))
-            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(email)
-            .address(createAddress());
+                .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
+                .adminEmail(email)
+                .address(createAddress());
     }
 
     private CreateCooperation createCooperation() {
         return new CreateCooperation()
-            .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
-            .usreo(RandomStringUtils.randomNumeric(8))
-            .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(createBaseUser().getEmail())
-            .address(createAddress());
+                .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
+                .usreo(RandomStringUtils.randomNumeric(8))
+                .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
+                .adminEmail(createBaseUser().getEmail())
+                .address(createAddress());
     }
 
     private Address createAddress() {
         return new Address().city("Dnepr")
-            .district("District")
-            .houseBlock("block")
-            .houseNumber("number")
-            .region("Dnipro")
-            .street("street")
-            .zipCode("zipCode");
+                .district("District")
+                .houseBlock("block")
+                .houseNumber("number")
+                .region("Dnipro")
+                .street("street")
+                .zipCode("zipCode");
     }
 
     private CreateHouse createHouse() {
         return new CreateHouse()
-            .adjoiningArea(500)
-            .houseArea(BigDecimal.valueOf(500.0))
-            .quantityFlat(50)
-            .address(createAddress());
+                .adjoiningArea(500)
+                .houseArea(BigDecimal.valueOf(500.0))
+                .quantityFlat(50)
+                .address(createAddress());
     }
 
     private CreateApartment createApartmentWithEmail(String userEmail) {
         return new CreateApartment()
-            .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitationWithEmail(userEmail));
+                .area(BigDecimal.valueOf(72.5))
+                .number("15")
+                .invitations(createApartmentInvitationWithEmail(userEmail));
     }
 
     private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
         List<CreateInvitation> createInvitations = new ArrayList<>();
         createInvitations.add(new CreateApartmentInvitation()
-            .apartmentId(APARTMENT_ID)
-            .email(userEmail)
-            .type(InvitationType.APARTMENT));
+                .apartmentId(APARTMENT_ID)
+                .email(userEmail)
+                .type(InvitationType.APARTMENT));
         return createInvitations;
     }
 
     private CreateApartment createApartmentWithoutInvitation() {
         return new CreateApartment()
-            .area(BigDecimal.valueOf(72.5))
-            .number("15");
+                .area(BigDecimal.valueOf(72.5))
+                .number("15");
     }
 
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
-            .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+                .area(BigDecimal.valueOf(72.5))
+                .number("15")
+                .invitations(createApartmentInvitation(numberOfApartamentInvitations));
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
         return Stream.generate(CreateInvitation::new)
-            .map(x -> x.email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
-                .type(InvitationType.APARTMENT))
-            .limit(numberOfInvitations)
-            .collect(Collectors.toList());
+                .map(x -> x.email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                        .type(InvitationType.APARTMENT))
+                .limit(numberOfInvitations)
+                .collect(Collectors.toList());
     }
 
     private void assertInvitation(CreateInvitation expected, ReadInvitation actual) {
