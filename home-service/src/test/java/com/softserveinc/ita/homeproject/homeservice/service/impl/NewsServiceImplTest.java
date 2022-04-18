@@ -36,7 +36,7 @@ class NewsServiceImplTest {
 
     @BeforeEach
     void setMocksBehavior() {
-        when(serviceMapper.convert(any(), any())).thenReturn(new NewsDto());
+        when(serviceMapper.convert(any(), any())).thenReturn(NewsDto.builder().build());
     }
 
     @Test
