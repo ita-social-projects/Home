@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.application.security.config;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import com.softserveinc.ita.homeproject.application.security.filter.JWTProvider;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTTokenValidatorFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +37,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTProvider jwtProvider;
 
-    private final UserDetailsService userDetailsService;
-
     @Autowired
-    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService, JWTProvider jwtProvider) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService,
+                          JWTProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(daoAuthenticationProvider());
     }
 
     @Override
@@ -53,17 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .csrf().disable()
-            .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/*/users").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/*/cooperations/**").permitAll()
-            .antMatchers("/api/*/apidocs/**").permitAll()
-            .antMatchers("/api/*/version.json").permitAll()
-            .anyRequest().authenticated()
-            .and()
             .cors().configurationSource(request ->
                 getCorsConfiguration())
-            .and()
-            .httpBasic()
             .and()
             .addFilterBefore(new JWTTokenValidatorFilter(jwtProvider),
                 BasicAuthenticationFilter.class);
@@ -81,12 +68,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
-    @Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() {
-        var daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        return daoAuthenticationProvider;
-    }
 }
+
