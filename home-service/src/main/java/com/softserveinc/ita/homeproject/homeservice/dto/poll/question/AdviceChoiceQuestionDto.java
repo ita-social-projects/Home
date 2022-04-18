@@ -1,10 +1,11 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.poll.question;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class AdviceChoiceQuestionDto extends PollQuestionDto {
 }
