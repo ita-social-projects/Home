@@ -141,10 +141,11 @@ paths:
     $ref: './paths/pollsVotes.yaml#/polls-votes'
 
 security:
-  - basicAuth: [ ]
+  - bearerAuth: [ ]
 
 components:
   securitySchemes:
-    basicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
