@@ -105,7 +105,7 @@ class PollServiceImplTest {
         poll.setStatus(PollStatus.DRAFT);
         poll.setCooperation(cooperation);
         poll.setEnabled(true);
-        HouseDto houseDto = new HouseDto();
+        HouseDto houseDto = HouseDto.builder().build();
         houseDto.setId(1L);
         PollDto pollDto = PollDto.builder()
             .status(PollStatusDto.DRAFT)
