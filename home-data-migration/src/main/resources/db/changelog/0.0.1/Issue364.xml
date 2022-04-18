@@ -23,15 +23,13 @@
         </createTable>
     </changeSet>
     <changeSet id="Issue364.002" author="varhanov">
-        <createTable tableName="users_tokens">
+        <createTable tableName="user_tokens">
             <column name="ID" type="BIGINT">
                 <constraints nullable="false"
                              primaryKey="true"/>
             </column>
             <column name="USER_ID" type="BIGINT">
-                <constraints nullable="false"
-                             foreignKeyName="user_fk"
-                             references="users(ID)"/>
+                <constraints nullable="false"/>
             </column>
             <column name="ACCESS_TOKEN" type="VARCHAR">
                 <constraints nullable="false"/>
@@ -43,5 +41,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+    <changeSet id="Issue364.003" author="varhanov">
+        <createSequence incrementBy="50" sequenceName="user_tokens_sequence"/>
     </changeSet>
 </databaseChangeLog>
