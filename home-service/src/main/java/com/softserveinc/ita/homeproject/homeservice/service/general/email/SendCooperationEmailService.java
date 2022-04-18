@@ -37,11 +37,10 @@ public class SendCooperationEmailService extends BaseEmailService<CooperationInv
             .filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(
                 String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
-
-        MailDto mailDto = new MailDto();
-        mailDto.setRole(invitation.getRole().getName());
-        mailDto.setCooperationName(coop.getName());
-        mailDto.setType(InvitationTypeDto.COOPERATION);
+        MailDto mailDto = MailDto.builder()
+            .role(invitation.getRole().getName())
+            .cooperationName(coop.getName())
+            .type(InvitationTypeDto.COOPERATION).build();
         return mailDto;
     }
 

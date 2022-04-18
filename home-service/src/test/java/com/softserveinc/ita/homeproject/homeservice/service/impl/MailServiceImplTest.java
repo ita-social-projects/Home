@@ -39,14 +39,13 @@ class MailServiceImplTest {
 
     @BeforeAll
     static void getConstants() {
-        mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.COOPERATION);
-        mailDto.setId(111L);
-        mailDto.setEmail("test.receive.messages@gmail.com");
-        mailDto.setRole("admin");
-        mailDto.setCooperationName("Test Cooperation");
-        mailDto.setIsRegistered(true);
-        mailDto.setLink("some-link");
+        MailDto.builder()
+            .type(InvitationTypeDto.COOPERATION)
+            .email("test.receive.messages@gmail.com")
+            .role("admin")
+            .cooperationName("Test Cooperation")
+            .isRegistered(true)
+            .link("some-link").build();
     }
 
     @BeforeEach

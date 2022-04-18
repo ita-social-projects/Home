@@ -5,17 +5,13 @@ import javax.validation.constraints.Email;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class MailDto extends BaseDto {
     @Email
     private String email;

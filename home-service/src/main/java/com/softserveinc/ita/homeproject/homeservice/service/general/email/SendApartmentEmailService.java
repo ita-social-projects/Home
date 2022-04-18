@@ -26,10 +26,10 @@ public class SendApartmentEmailService extends BaseEmailService<ApartmentInvitat
     @Override
     protected MailDto createBaseMailDto(InvitationDto invitationDto) {
         ApartmentInvitationDto invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
-        MailDto mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.APARTMENT);
-        mailDto.setApartmentNumber(invitation.getApartmentNumber());
-        mailDto.setOwnershipPat(BigDecimal.ZERO);
+        MailDto mailDto = MailDto.builder()
+            .type(InvitationTypeDto.APARTMENT)
+            .apartmentNumber(invitation.getApartmentNumber())
+            .ownershipPat(BigDecimal.ZERO).build();
         return mailDto;
     }
 
