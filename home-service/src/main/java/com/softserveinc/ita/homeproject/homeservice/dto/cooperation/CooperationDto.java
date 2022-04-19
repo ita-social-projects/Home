@@ -6,13 +6,13 @@ import com.softserveinc.ita.homeproject.homedata.general.address.Address;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.contact.ContactDto;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class CooperationDto extends BaseDto {
 
     private String name;

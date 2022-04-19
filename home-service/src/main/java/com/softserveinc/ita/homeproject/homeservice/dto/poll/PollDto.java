@@ -7,13 +7,13 @@ import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollTypeDto;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class PollDto extends BaseDto {
 
     private String header;

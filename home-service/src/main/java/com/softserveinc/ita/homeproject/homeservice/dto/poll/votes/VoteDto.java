@@ -3,13 +3,13 @@ package com.softserveinc.ita.homeproject.homeservice.dto.poll.votes;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class VoteDto extends BaseDto {
     private Long pollId;
 

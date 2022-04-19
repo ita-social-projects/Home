@@ -2,13 +2,13 @@ package com.softserveinc.ita.homeproject.homeservice.dto.poll.results;
 
 import java.util.List;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 public class MultipleResultQuestionDto extends ResultQuestionDto {
 
     private List<ResultQuestionVariantDto> variants;

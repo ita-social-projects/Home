@@ -6,9 +6,11 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.e
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 public abstract class InvitationDto extends BaseDto {
 
     private InvitationStatusDto status;
