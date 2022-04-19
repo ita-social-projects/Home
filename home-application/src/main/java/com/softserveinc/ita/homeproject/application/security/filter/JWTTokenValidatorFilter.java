@@ -1,9 +1,6 @@
 package com.softserveinc.ita.homeproject.application.security.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.servlet.FilterChain;
@@ -23,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
-    private JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
     @Autowired
     public JWTTokenValidatorFilter(JWTProvider jwtProvider) {
@@ -31,17 +28,20 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
         throws ServletException, IOException {
         String token = request.getHeader("Authorization");
 
         if (token != null && token.contains("Bearer ")) {
             token = token.substring(7);
         }
+
         jwtProvider.validate(token);
+
         String username = jwtProvider.getUsername(token);
         Authentication authentication = jwtProvider.getAuthentication(username);
+
         if (authentication != null) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -50,10 +50,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
         AtomicBoolean result = new AtomicBoolean(false);
-
         Map<String, String> urisWithHttpMethod = Map.of(
             "/api/*/users", HttpMethod.POST.name(),
             "/api/*/cooperations/**", HttpMethod.POST.name(),
@@ -70,7 +68,5 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             });
 
         return result.get();
-
     }
 }
-
