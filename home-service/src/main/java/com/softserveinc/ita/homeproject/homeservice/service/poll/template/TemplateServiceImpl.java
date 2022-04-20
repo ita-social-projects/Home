@@ -29,7 +29,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
-        var text = "";
+        String text = "";
         try (InputStream resource = new ClassPathResource(
                 getInvitationTemplate(mailDto).toString()).getInputStream();
              BufferedReader reader = new BufferedReader(

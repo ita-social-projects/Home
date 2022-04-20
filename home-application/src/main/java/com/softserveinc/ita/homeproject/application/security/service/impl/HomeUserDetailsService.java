@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.application.security.config.HomeUserWrapperDetails;
 import com.softserveinc.ita.homeproject.homedata.user.User;
+import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.permission.Permission;
@@ -41,11 +42,11 @@ public class HomeUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .filter(User::getEnabled)
                 .orElseThrow(() -> new UsernameNotFoundException("There is no user with given email!"));
 
-        var userCooperation = userCooperationRepository.findUserCooperationByUser(user);
+        List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(user);
 
 
         List<String> permissions = userCooperation.stream()

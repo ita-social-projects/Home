@@ -82,7 +82,7 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
         apartmentInvitation.setRequestEndTime(LocalDateTime.now().plusDays(EXPIRATION_TERM));
         apartmentInvitation.setEnabled(true);
 
-        var apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
+        Long apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
             .findById(apartmentId)
             .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));

@@ -41,7 +41,7 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @Override
     public Response getOwnership(Long apartmentId, Long id) {
         OwnershipDto toGet = ownershipService.getOne(id, getSpecification());
-        var readOwnership = mapper.convert(toGet, ReadOwnership.class);
+        ReadOwnership readOwnership = mapper.convert(toGet, ReadOwnership.class);
 
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }
@@ -65,9 +65,9 @@ public class ApartmentApiImpl extends CommonApi implements ApartmentsApi {
     @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateOwnership(Long apartmentId, Long id, UpdateOwnership updateOwnership) {
-        var updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
-        var toUpdate = ownershipService.updateOwnership(apartmentId, id, updateOwnershipDto);
-        var readOwnership = mapper.convert(toUpdate, ReadOwnership.class);
+        OwnershipDto updateOwnershipDto = mapper.convert(updateOwnership, OwnershipDto.class);
+        OwnershipDto toUpdate = ownershipService.updateOwnership(apartmentId, id, updateOwnershipDto);
+        ReadOwnership readOwnership = mapper.convert(toUpdate, ReadOwnership.class);
 
         return Response.status(Response.Status.OK).entity(readOwnership).build();
     }

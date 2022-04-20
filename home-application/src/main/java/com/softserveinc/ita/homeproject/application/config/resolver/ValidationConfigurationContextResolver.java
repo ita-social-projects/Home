@@ -11,7 +11,7 @@ public class ValidationConfigurationContextResolver implements ContextResolver<V
 
     @Override
     public ValidationConfig getContext(final Class<?> type) {
-        final var config = new ValidationConfig();
+        final ValidationConfig config = new ValidationConfig();
         config.parameterNameProvider(new JerseyParameterNameProvider());
         return config;
     }

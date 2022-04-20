@@ -37,7 +37,7 @@ public class UserCooperationImpl implements UserCooperationService {
 
     @Override
     public void createUserCooperationViaInvitation(CooperationInvitation invitation) {
-        var userCooperation = new UserCooperation();
+        UserCooperation userCooperation = new UserCooperation();
 
         userRepository.findByEmail(invitation.getEmail())
                 .ifPresent(userCooperation::setUser);
@@ -52,9 +52,9 @@ public class UserCooperationImpl implements UserCooperationService {
     }
 
     public void createUserCooperationForOwnership(Ownership ownership) {
-        var role = roleRepository.findByName(RoleEnum.OWNER.getName().toUpperCase())
+        Role role = roleRepository.findByName(RoleEnum.OWNER.getName().toUpperCase())
                 .orElseThrow(() -> new NotFoundHomeException("Role not found."));
-        var userCooperation = new UserCooperation();
+        UserCooperation userCooperation = new UserCooperation();
         if (isUserCooperationNonExists(ownership.getUser(), role, ownership.getCooperation())) {
             userCooperation.setUser(ownership.getUser());
             userCooperation.setCooperation(ownership.getCooperation());
@@ -64,7 +64,7 @@ public class UserCooperationImpl implements UserCooperationService {
     }
 
     private boolean isUserCooperationNonExists(User user, Role role, Cooperation cooperation) {
-        var qUserCooperation = QUserCooperation.userCooperation;
+        QUserCooperation qUserCooperation = QUserCooperation.userCooperation;
 
         JPAQuery<?> query = new JPAQuery<>(entityManager);
 

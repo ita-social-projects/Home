@@ -1,10 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user.ownership;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
+import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.OwnershipRepository;
@@ -33,7 +35,7 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     @Override
     public Ownership createOwnership(ApartmentInvitation apartmentInvitation) {
-        var ownership = new Ownership();
+        Ownership ownership = new Ownership();
         ownership.setOwnershipPart(BigDecimal.ZERO);
         ownership.setApartment(apartmentInvitation.getApartment());
         ownership.setCooperation(apartmentInvitation.getApartment().getHouse().getCooperation());
@@ -82,8 +84,9 @@ public class OwnershipServiceImpl implements OwnershipService {
     public Page<OwnershipDto> findAll(Integer pageNumber, Integer pageSize, Specification<Ownership> specification) {
         Specification<Ownership> ownershipSpecification = specification
             .and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("enabled"), true));
-        var ownerships = ownershipRepository.findAll(ownershipSpecification, PageRequest.of(pageNumber - 1, pageSize));
-        var users = ownerships.stream().map(Ownership::getUser).collect(Collectors.toList());
+        Page<Ownership> ownerships = ownershipRepository.findAll(ownershipSpecification,
+                PageRequest.of(pageNumber - 1, pageSize));
+        List<User> users = ownerships.stream().map(Ownership::getUser).collect(Collectors.toList());
         users.forEach(user -> user.setContacts(user.getContacts().stream()
             .filter(Contact::getEnabled).collect(Collectors.toList())));
         return ownerships.map(ownership -> mapper.convert(ownership, OwnershipDto.class));

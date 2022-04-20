@@ -33,7 +33,7 @@ public abstract class BaseContactService implements ContactService {
     @Transactional
     @Override
     public ContactDto createContact(Long parentEntityId, ContactDto createContactDto) {
-        var contact = mapper.convert(createContactDto, Contact.class);
+        Contact contact = mapper.convert(createContactDto, Contact.class);
         checkAndFillParentEntity(createContactDto, contact, parentEntityId);
         contact.setEnabled(true);
         contactRepository.save(contact);
@@ -45,7 +45,7 @@ public abstract class BaseContactService implements ContactService {
     @Override
     @Transactional
     public ContactDto updateContact(Long parentEntityId, Long id, ContactDto updateContactDto) {
-        var contact = checkAndGetContactByParentId(id, parentEntityId);
+        Contact contact = checkAndGetContactByParentId(id, parentEntityId);
 
         ContactTypeDto existingContactType = mapper.convert(contact.getType(), ContactTypeDto.class);
         if (existingContactType == updateContactDto.getType()) {
@@ -90,7 +90,7 @@ public abstract class BaseContactService implements ContactService {
 
     @Override
     public void deactivateContact(Long id) {
-        var contact = contactRepository.findById(id).filter(Contact::getEnabled)
+        Contact contact = contactRepository.findById(id).filter(Contact::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT, id)));
         contact.setEnabled(false);
         contactRepository.save(contact);

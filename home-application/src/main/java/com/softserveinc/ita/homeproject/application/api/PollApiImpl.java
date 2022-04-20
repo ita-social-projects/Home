@@ -56,7 +56,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response createPolledHouse(Long pollId, HouseLookup houseLookup) {
-        var lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
+        HouseDto lookupPolledHouseDto = mapper.convert(houseLookup, HouseDto.class);
         housePollService.add(lookupPolledHouseDto.getId(), pollId);
 
         return Response.status(Response.Status.NO_CONTENT).build();
@@ -65,10 +65,10 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response createQuestion(Long pollId, CreateQuestion createQuestion) {
-        var createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
+        PollQuestionDto createQuestionDto = mapper.convert(createQuestion, PollQuestionDto.class);
         createQuestionDto.setPollId(pollId);
-        var readQuestionDto = pollQuestionService.createPollQuestion(createQuestionDto);
-        var readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
+        PollQuestionDto readQuestionDto = pollQuestionService.createPollQuestion(createQuestionDto);
+        ReadQuestion readQuestion = mapper.convert(readQuestionDto, ReadQuestion.class);
 
         return Response.status(Response.Status.CREATED).entity(readQuestion).build();
     }
@@ -90,16 +90,16 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(READ_POLL)
     @Override
     public Response getPoll(Long id) {
-        var pollDto = pollService.getOne(id);
-        var readPoll = mapper.convert(pollDto, ReadPoll.class);
+        PollDto pollDto = pollService.getOne(id);
+        ReadPoll readPoll = mapper.convert(pollDto, ReadPoll.class);
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 
     @PreAuthorize(READ_POLL)
     @Override
     public Response getPolledHouse(Long pollId, Long id) {
-        var toGet = houseService.getOne(id, getSpecification());
-        var readHouse = mapper.convert(toGet, ReadHouse.class);
+        HouseDto toGet = houseService.getOne(id, getSpecification());
+        ReadHouse readHouse = mapper.convert(toGet, ReadHouse.class);
 
         return Response.status(Response.Status.OK).entity(readHouse).build();
     }
@@ -108,7 +108,7 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @Override
     public Response getQuestion(Long pollId, Long id) {
         PollQuestionDto toGet = pollQuestionService.getOne(id, getSpecification());
-        var readQuestion = mapper.convert(toGet, ReadQuestion.class);
+        ReadQuestion readQuestion = mapper.convert(toGet, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
@@ -162,11 +162,11 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(MANAGE_POLLS)
     @Override
     public Response updateQuestion(Long pollId, Long id, UpdateQuestion updateQuestion) {
-        var updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
+        PollQuestionDto updateQuestionDto = mapper.convert(updateQuestion, PollQuestionDto.class);
         updateQuestionDto.setId(id);
         updateQuestionDto.setPollId(pollId);
-        var toUpdate = pollQuestionService.updatePollQuestion(updateQuestionDto);
-        var readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
+        PollQuestionDto toUpdate = pollQuestionService.updatePollQuestion(updateQuestionDto);
+        ReadQuestion readQuestion = mapper.convert(toUpdate, ReadQuestion.class);
 
         return Response.status(Response.Status.OK).entity(readQuestion).build();
     }
@@ -174,10 +174,10 @@ public class PollApiImpl extends CommonApi implements PollsApi {
     @PreAuthorize(MANAGE_VOTES)
     @Override
     public Response createVote(Long pollId, CreateVote createVote) {
-        var createVoteDto = mapper.convert(createVote, VoteDto.class);
+        VoteDto createVoteDto = mapper.convert(createVote, VoteDto.class);
         createVoteDto.setPollId(pollId);
-        var readVoteDto = voteService.createVote(createVoteDto);
-        var readVote = mapper.convert(readVoteDto, ReadVote.class);
+        VoteDto readVoteDto = voteService.createVote(createVoteDto);
+        ReadVote readVote = mapper.convert(readVoteDto, ReadVote.class);
 
         return Response.status(Response.Status.CREATED).entity(readVote).build();
     }
