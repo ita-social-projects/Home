@@ -1,13 +1,13 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.service;
 
-import com.softserveinc.ita.homeproject.homeoauthserver.data.AccessToken;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.Token;
+import com.softserveinc.ita.homeproject.homeoauthserver.dto.AccessTokenDto;
+import com.softserveinc.ita.homeproject.homeoauthserver.dto.CreateTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
-import com.softserveinc.ita.homeproject.homeoauthserver.dto.UserDetailsDto;
+import com.softserveinc.ita.homeproject.homeoauthserver.dto.UserCredentialsDto;
 
 public interface OauthService {
 
-    Token generateToken(UserDetailsDto userDetailsDto);
+    CreateTokenDto generateToken(UserCredentialsDto userCredentialsDto);
 
-    AccessToken updateToken(RefreshTokenDto refreshTokenDto);
+    AccessTokenDto updateToken(RefreshTokenDto refreshTokenDto);
 }

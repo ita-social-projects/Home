@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService, JWTProvider jwtProvider) {
+    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService,
+                          JWTProvider jwtProvider) {
         this.userDetailsService = userDetailsService;
         this.jwtProvider = jwtProvider;
     }
