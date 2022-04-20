@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.config;
 
-import javax.persistence.SecondaryTable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -25,6 +24,7 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+
     @Getter
     @Setter
     private LocalDateTime date;
