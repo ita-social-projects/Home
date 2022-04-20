@@ -267,11 +267,10 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll) {
-        PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
+    public Response updateCooperationPoll(Long cooperationId, Long id,  UpdatePoll updatePoll) {
+        PollDto updatePollDto = mapper.convert(updatePoll,PollDto.class);
         PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
-
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 }

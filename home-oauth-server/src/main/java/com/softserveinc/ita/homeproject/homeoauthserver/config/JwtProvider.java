@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.config;
 
+import javax.persistence.SecondaryTable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -12,6 +13,8 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
+    @Getter
+    @Setter
+    private LocalDateTime date;
 
     public String generateToken(Long id, String email, int amountDays) {
         return Jwts.builder()
@@ -34,7 +40,7 @@ public class JwtProvider {
     }
 
     private Date getExpirationDate(int amountDays) {
-        LocalDateTime date = LocalDateTime.now().plusDays(amountDays);
+        date = LocalDateTime.now().plusDays(amountDays);
         return Date.from(date.atZone(ZoneId.systemDefault())
             .toInstant());
     }
@@ -64,5 +70,6 @@ public class JwtProvider {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
+
 }
 

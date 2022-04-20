@@ -7,18 +7,18 @@ info:
     url: https://opensource.org/licenses/mit-license.php
   version: 1.0.0
 servers:
-  - url: /oauth2/server
+  - url: /api/0/oauth2
 
 tags:
   - name: Authentication
     description: API for managing OAuth 2.0.
 
 paths:
-  /login:
+  /server/login:
     post:
       tags:
         - Authentication
-      summary: AuthenticateUser
+      summary: Authenticate User
       description: The endpoint generate access and refresh token
       operationId: authenticateUser
       requestBody:
@@ -26,17 +26,11 @@ paths:
       responses:
         201:
           $ref: '#/components/responses/AuthenticationResponse'
-        400:
-          $ref: '#/components/responses/BadRequest'
-        401:
-          $ref: '#/components/responses/Unauthorized'
-        403:
-          $ref: '#/components/responses/Forbidden'
         404:
           $ref: '#/components/responses/NotFound'
         default:
           $ref: '#/components/responses/InternalServerError'
-  /refresh:
+  /server/refresh:
     post:
       tags:
         - Authentication
@@ -55,24 +49,6 @@ paths:
 
 components:
   responses:
-    BadRequest:
-      description: Validation Exception.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Unauthorized:
-      description: Unauthorized.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Forbidden:
-      description: You do not have permission to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
     NotFound:
       description: The specified resource was not found.
       content:
@@ -126,7 +102,7 @@ components:
         email:
           pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
           type: string
-          example: "p.t.z@gmail.com"
+          example: "test@gmail.com"
           minLength: 5
           maxLength: 320
         password:
@@ -163,7 +139,7 @@ components:
       properties:
         response_code:
           type: integer
-          example: 404
+          example: 406
         error_message:
             type: string
             example: "example"

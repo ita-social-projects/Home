@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users_credentials")
+@Table(name = "user_credentials")
 public class UserCredentials {
     @Id
     private Long id;

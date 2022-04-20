@@ -74,6 +74,7 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
+    @Transactional
     public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id).filter(House::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
@@ -81,6 +82,7 @@ public class HouseServiceImpl implements HouseService {
             throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
         }
         toDelete.setEnabled(false);
+        toDelete.getApartments().forEach(apartment -> apartment.setEnabled(false));
         houseRepository.save(toDelete);
     }
 }

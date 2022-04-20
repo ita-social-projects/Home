@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="Issue364.001" author="varhanov">
-        <createTable tableName="users_credentials">
+        <createTable tableName="user_credentials">
             <column name="ID" type="BIGINT">
                 <constraints nullable="false"
                              primaryKey="true"/>

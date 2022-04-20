@@ -21,6 +21,7 @@ import com.softserveinc.ita.homeproject.client.api.PollQuestionApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateDoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
 import com.softserveinc.ita.homeproject.client.model.CreateQuestion;
@@ -28,9 +29,11 @@ import com.softserveinc.ita.homeproject.client.model.CreateUpdateAnswerVariant;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
+import com.softserveinc.ita.homeproject.client.model.ReadDoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.ReadMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.ReadPoll;
 import com.softserveinc.ita.homeproject.client.model.ReadQuestion;
+import com.softserveinc.ita.homeproject.client.model.UpdateDoubleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.UpdateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.UpdateQuestion;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -59,6 +62,20 @@ class QuestionApiIT {
 
         assertQuestion(createQuestion, (ReadMultipleChoiceQuestion) response.getData());
 
+    }
+
+    @Test
+    void createDoubleChoiceQuestionTest() throws ApiException{
+        CreateDoubleChoiceQuestion createQuestion = (CreateDoubleChoiceQuestion) createDoubleChoiceQuestion();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+
+        ApiResponse<ReadQuestion> response = pollQuestionApi.createQuestionWithHttpInfo(createdPoll.getId(), createQuestion);
+
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatusCode());
+
+        assertQuestion(createQuestion, (ReadDoubleChoiceQuestion) response.getData());
     }
 
     @Test
@@ -157,6 +174,25 @@ class QuestionApiIT {
     }
 
     @Test
+    void updateDoubleChoiceQuestionTest() throws ApiException {
+        CreateDoubleChoiceQuestion createQuestion = (CreateDoubleChoiceQuestion) createDoubleChoiceQuestion();
+
+        ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
+        ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
+        ReadQuestion createdQuestion = pollQuestionApi.createQuestion(createdPoll.getId(), createQuestion);
+
+        UpdateQuestion updateQuestion = new UpdateDoubleChoiceQuestion()
+            .type(QuestionType.DOUBLE_CHOICE)
+            .question("Do we need this poll");
+
+        ApiResponse<ReadQuestion> response = pollQuestionApi.updateQuestionWithHttpInfo(createdPoll.getId(), createdQuestion.getId(), updateQuestion);
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
+
+        assertDoubleQuestion(createdQuestion, (UpdateDoubleChoiceQuestion) updateQuestion, (ReadDoubleChoiceQuestion) response.getData());
+    }
+
+    @Test
     void updateNonExistentQuestion() throws ApiException {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadPoll createdPoll = cooperationPollApi.createCooperationPoll(createdCooperation.getId(), createPoll());
@@ -215,6 +251,12 @@ class QuestionApiIT {
                 .answerVariants(createAnswerVariants())
                 .type(QuestionType.MULTIPLE_CHOICE)
                 .question("What color should we paint the door?");
+    }
+
+    private static CreateQuestion createDoubleChoiceQuestion() {
+        return new CreateDoubleChoiceQuestion()
+            .type(QuestionType.DOUBLE_CHOICE)
+            .question("Should we paint the wall?");
     }
 
     private static List<CreateUpdateAnswerVariant> createAnswerVariants() {
@@ -304,6 +346,14 @@ class QuestionApiIT {
         assertEquals(update.getType(), updated.getType());
         assertAnswer(update, updated);
 
+    }
+
+    private void assertDoubleQuestion(ReadQuestion saved, UpdateDoubleChoiceQuestion update, ReadDoubleChoiceQuestion updated) {
+        assertNotNull(saved);
+        assertNotNull(update);
+        assertNotNull(updated);
+        assertEquals(update.getQuestion(), updated.getQuestion());
+        assertEquals(update.getType(), updated.getType());
     }
 
     private void assertAnswer(UpdateMultipleChoiceQuestion update,ReadMultipleChoiceQuestion updated) {
