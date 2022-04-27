@@ -61,12 +61,12 @@ public class JWTProvider {
         }
     }
 
-    public String getUsername(String token) {
+    String getUsername(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody()
             .getSubject();
     }
 
-    public Authentication getAuthentication(String username) {
+    Authentication getAuthentication(String username) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
