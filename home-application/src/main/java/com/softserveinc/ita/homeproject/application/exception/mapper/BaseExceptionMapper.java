@@ -26,7 +26,7 @@ public abstract class BaseExceptionMapper<T extends Throwable> implements Except
     @Override
     public Response toResponse(T exception) {
         log.info("Mapped error.", exception);
-        var throwable = exception.getCause();
+        Throwable throwable = exception.getCause();
 
         if (throwable instanceof BaseHomeException) {
             ExceptionMapper mapper = providers.getExceptionMapper(throwable.getClass());

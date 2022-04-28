@@ -33,8 +33,8 @@ public class PollHouseServiceImpl implements PollHouseService {
     @Override
     @Transactional
     public PollDto add(Long houseId, Long pollId) {
-        var poll = getDraftPollById(pollId);
-        var house = getHouseById(houseId);
+        Poll poll = getDraftPollById(pollId);
+        House house = getHouseById(houseId);
 
         if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();
@@ -56,8 +56,8 @@ public class PollHouseServiceImpl implements PollHouseService {
     @Override
     @Transactional
     public void remove(Long houseId, Long pollId) {
-        var poll = getDraftPollById(pollId);
-        var house = getHouseById(houseId);
+        Poll poll = getDraftPollById(pollId);
+        House house = getHouseById(houseId);
 
         if (validateHouse(poll, house)) {
             List<House> houses = poll.getPolledHouses();

@@ -213,63 +213,63 @@ public class ApartmentInvitationServiceIntegrationTest {
     }
 
     private ApartmentInvitation createNotOverduePendingApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createOverduePendingApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createNotOverdueProcessingApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createOverdueProcessingApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createNotOverdueAcceptedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createOverdueAcceptedApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createOverdueApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.OVERDUE);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createNotOverdueErrorApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private ApartmentInvitation createOverdueErrorApartmentInvitation() {
-        var invitation = new ApartmentInvitation();
+        ApartmentInvitation invitation = new ApartmentInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
