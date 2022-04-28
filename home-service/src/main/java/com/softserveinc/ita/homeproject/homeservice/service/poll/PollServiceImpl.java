@@ -192,11 +192,30 @@ public class PollServiceImpl implements PollService {
     }
 
     /**
-     * Calculates and saves the result and status to the database
-     * only for the votes specified below. Two possible scenarios
-     * for counting: by the number of voters and by the area of
-     * ownership of those who voted. Does not save the result for
-     * polls that do not have enough votes.
+     * Method that receive list of polls to be calculated. Calculates only polls that
+     * satisfy criteria defined by filtering using below. Calculation can be carried out
+     * with a sufficient number of votes in relation to the
+     * {@link com.softserveinc.ita.homeproject.homedata.poll.enums.PollType}. The
+     * calculation is made by next methods:
+     * <ul>
+     *     <li>By Ownership Area</li>
+     *     <p>Calculates the result by the area of ownership in the house for each
+     *     user who voted, if there is no user who owns more than half of the area
+     *     of the whole house</p>
+     *     <br/>
+     *     <li>By Votes Quantity</li>
+     *     <p>Calculates the result by the count of voted users if there is a user
+     *     ho owns more than half the area of the whole house</p>
+     * </ul>
+     * Creates the {@link com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion}
+     * objects for each answer variant and records its result for each question contained
+     * in the poll. Saves each object in the database.
+     * <br/>
+     * <br/>
+     * @param polls list of polls to be calculated
+     * @return list of
+     * {@link com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion}
+     * - results for polls that satisfied the criteria defined in the method below.
      */
     public List<ResultQuestion> calculateCompletedPollsResults(List<Poll> polls) {
         List<ResultQuestion> results = new ArrayList<>();
