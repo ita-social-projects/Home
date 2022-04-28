@@ -6,12 +6,11 @@ import java.util.List;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.Vote;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteAnswerVariant;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollQuestionTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.AdviceChoiceQuestionDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.MultipleChoiceQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.results.AnswerVariantDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.AdviceQuestionVoteDto;
@@ -19,11 +18,19 @@ import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.MultipleChoic
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.QuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.VoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.VoteQuestionVariantDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class VoteMapper {
 
     @Autowired
+    public VoteMapper(ServiceMapper mapper) {
+        this.mapper = mapper;
+    }
+
     private ServiceMapper mapper;
 
     public List<Vote> convertToList(VoteDto voteDto, Poll poll, User user) {
@@ -36,19 +43,22 @@ public class VoteMapper {
             vote.setPoll(poll);
             vote.setUser(user);
             vote.setType(mapper.convert(questionVoteDto.getType(), PollQuestionType.class));
+            vote.setQuestion(mapper.convert(questionDto, PollQuestion.class));
 
-            if (questionDto instanceof AdviceChoiceQuestionDto) {
-                vote.setType(PollQuestionType.ADVICE);
-                vote.setAdviceAnswer(questionVoteDto.getQuestion().getQuestion());
-            } else if (questionDto instanceof MultipleChoiceQuestionDto) {
+            if (questionVoteDto instanceof AdviceQuestionVoteDto) {
+                vote.setAdviceAnswer(((AdviceQuestionVoteDto) questionVoteDto).getAnswer());
+            } else if (questionVoteDto instanceof MultipleChoiceQuestionVoteDto) {
                 List<VoteAnswerVariant> answers = new ArrayList<>();
 
-                vote.setType(PollQuestionType.MULTIPLE_CHOICE);
-                ((MultipleChoiceQuestionDto) questionDto).getAnswerVariants()
+                ((MultipleChoiceQuestionVoteDto) questionVoteDto).getAnswers()
                     .forEach(answerVariantDto -> {
                         VoteAnswerVariant voteAnswerVariant = new VoteAnswerVariant();
+                        AnswerVariant answerVariant = new AnswerVariant();
+                        answerVariant.setId(answerVariantDto.getAnswerVariant().getId());
+                        answerVariant.setAnswer(answerVariantDto.getAnswerVariant().getAnswer());
+                        answerVariant.setQuestion(vote.getQuestion());
                         voteAnswerVariant.setVote(vote);
-                        voteAnswerVariant.setAnswerVariant(mapper.convert(answerVariantDto, AnswerVariant.class));
+                        voteAnswerVariant.setAnswerVariant(answerVariant);
                         answers.add(voteAnswerVariant);
                     });
                 vote.setVoteAnswerVariants(answers);
@@ -77,6 +87,8 @@ public class VoteMapper {
             } else if (vote.getType() == PollQuestionType.MULTIPLE_CHOICE) {
                 MultipleChoiceQuestionVoteDto multipleChoiceQuestionDto = new MultipleChoiceQuestionVoteDto();
                 List<VoteQuestionVariantDto> answers = new ArrayList<>();
+                multipleChoiceQuestionDto.setType(PollQuestionTypeDto.MULTIPLE_CHOICE);
+                multipleChoiceQuestionDto.setQuestion(mapper.convert(vote.getQuestion(), PollQuestionDto.class));
                 vote.getVoteAnswerVariants().forEach(voteAnswerVariant -> {
                     VoteQuestionVariantDto voteQuestionVariantDto = new VoteQuestionVariantDto();
                     voteQuestionVariantDto.setAnswerVariant(mapper.convert(voteAnswerVariant.getAnswerVariant(),
