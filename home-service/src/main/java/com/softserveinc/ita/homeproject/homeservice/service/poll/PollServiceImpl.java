@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
@@ -15,14 +17,16 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollType;
+import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.question.DoubleChoiceQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVoteRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteQuestionVariant;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteQuestionVariantRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestionRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.votes.Vote;
+import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteRepository;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.house.HouseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
@@ -38,6 +42,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -60,9 +65,11 @@ public class PollServiceImpl implements PollService {
 
     private final CooperationRepository cooperationRepository;
 
-    private final QuestionVoteRepository questionVoteRepository;
+    private final AnswerVariantRepository answerVariantRepository;
 
-    private final VoteQuestionVariantRepository voteQuestionVariantRepository;
+    private final VoteRepository voteRepository;
+
+    private final ResultQuestionRepository resultQuestionRepository;
 
     private final ServiceMapper mapper;
 
@@ -122,12 +129,23 @@ public class PollServiceImpl implements PollService {
 
     @Override
     public Page<PollDto> findAll(Integer pageNumber, Integer pageSize, Specification<Poll> specification) {
-        calculateCompletedPollsResults();
         specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
             .equal(root.get("cooperation").get("enabled"), true));
-        return pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize))
-            .map(news -> mapper.convert(news, PollDto.class));
+
+        Page<Poll> pollsPage = pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
+
+        List<ResultQuestion> resultQuestions = calculateCompletedPollsResults(pollsPage.getContent());
+        List<Poll> p = resultQuestions.stream().map(ResultQuestion::getPoll).collect(Collectors.toList());
+
+        return pollsPage.map(poll -> {
+            PollDto dto = mapper.convert(poll, PollDto.class);
+            if (p.contains(poll)) {
+                dto.setResult(resultQuestions.get(p.indexOf(poll)).getPercentVotes());
+            }
+            return dto;
+        });
     }
+
 
     private Cooperation getCooperationById(Long id) {
         return cooperationRepository.findById(id).filter(Cooperation::getEnabled)
@@ -180,10 +198,9 @@ public class PollServiceImpl implements PollService {
      * ownership of those who voted. Does not save the result for
      * polls that do not have enough votes.
      */
-    public void calculateCompletedPollsResults() {
-        List<Poll> polls = new ArrayList<>();
+    public List<ResultQuestion> calculateCompletedPollsResults(List<Poll> polls) {
+        List<ResultQuestion> results = new ArrayList<>();
 
-        pollRepository.findAll().forEach(polls::add);
         polls.stream()
             .filter(poll -> poll.getResult() == null)
             .filter(poll -> poll.getStatus().equals(PollStatus.ACTIVE))
@@ -191,16 +208,22 @@ public class PollServiceImpl implements PollService {
             .filter(poll -> poll.getEnabled().equals(true))
             .filter(poll -> poll.getPollQuestions().size() == 1)
             .filter(poll -> poll.getPollQuestions().get(0) instanceof DoubleChoiceQuestion)
-            .forEach(this::calculatePollResult);
+            .forEach(poll -> results.addAll(calculatePollResult(poll)));
+
+        return results;
     }
 
-    private void calculatePollResult(Poll poll) {
-        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(poll.getPollQuestions().get(0));
-        int votesCount = questionVotes.size();
+    private List<ResultQuestion> calculatePollResult(Poll poll) {
+        List<AnswerVariant> answerVariants = answerVariantRepository.findAllByQuestion(poll.getPollQuestions().get(0));
+        List<Vote> votes = voteRepository.findAllByPoll(poll);
+        List<ResultQuestion> results = new ArrayList<>();
+        Map<User, BigDecimal> ownedAreaByUser = getAllAreaOwnedByUser(poll);
+        Map<AnswerVariant, List<Vote>> answerVariantsToVotes = new HashMap<>();
+        int votesCount = votes.size();
         final int[] totalOwnershipsQuantity = {0};
         double amountOfNeededPeople = 0.0;
-        Map<User, BigDecimal> ownedAreaByUser = getAllAreaOwnedByUser(poll);
-        PollQuestion pollQuestion = poll.getPollQuestions().get(0);
+
+        initializeMapOfAnswerVariantIdToVotes(answerVariants, votes, answerVariantsToVotes);
 
         poll.getPolledHouses().get(0).getApartments().forEach(apartment ->
             apartment.getOwnerships().forEach(ownership -> totalOwnershipsQuantity[0]++)
@@ -216,17 +239,39 @@ public class PollServiceImpl implements PollService {
 
         if (votesCount >= amountOfNeededPeople) {
             if (isOverHalfAreaOwner(ownedAreaByUser, poll)) {
-                calculateResultByVotesQuantity(pollQuestion);
+                results = saveResultByVotesQuantity(answerVariantsToVotes, poll);
             } else {
-                calculateResultByOwnershipArea(pollQuestion, ownedAreaByUser);
+                results = saveResultByOwnershipArea(answerVariantsToVotes, ownedAreaByUser, poll);
             }
         }
 
-        pollRepository.save(poll);
+        return results;
+    }
+
+    private void initializeMapOfAnswerVariantIdToVotes(List<AnswerVariant> answerVariants, List<Vote> votes,
+                                                       Map<AnswerVariant, List<Vote>> answerVariantsIdToVotes) {
+        answerVariants.forEach(answerVariant ->
+            votes.forEach(vote ->
+                vote.getVoteAnswerVariants().forEach(voteAnswerVariant -> {
+                    if (answerVariant.equals(voteAnswerVariant.getAnswerVariant())) {
+
+                        if (!answerVariantsIdToVotes.containsKey(answerVariant)) {
+                            List<Vote> votes1 = new ArrayList<>();
+                            votes1.add(vote);
+                            answerVariantsIdToVotes.put(answerVariant, votes1);
+                        } else {
+                            answerVariantsIdToVotes.get(answerVariant).add(vote);
+                        }
+
+                    }
+                })
+            )
+        );
     }
 
     private Map<User, BigDecimal> getAllAreaOwnedByUser(Poll poll) {
         Map<User, BigDecimal> ownedAreaByUser = new HashMap<>();
+
         poll.getPolledHouses().forEach(
             house -> house.getApartments().forEach(
                 apartment -> apartment.getOwnerships().forEach(
@@ -239,8 +284,7 @@ public class PollServiceImpl implements PollService {
                             );
                         } else {
                             ownedAreaByUser.put(ownership.getUser(),
-                                (ownership.getOwnershipPart()).multiply(
-                                    ownership.getApartment().getApartmentArea()));
+                                (ownership.getOwnershipPart()).multiply(ownership.getApartment().getApartmentArea()));
                         }
                     }
                 )
@@ -262,50 +306,60 @@ public class PollServiceImpl implements PollService {
         return false;
     }
 
-    private void calculateResultByOwnershipArea(PollQuestion question, Map<User, BigDecimal> totalOwnershipsArea) {
-        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(question);
-        BigDecimal totalAreaOfPositiveVotes = new BigDecimal(0);
-        BigDecimal votedHouseArea = BigDecimal.valueOf(question.getPoll().getPolledHouses().get(0).getHouseArea());
-        List<VoteQuestionVariant> voteQuestionVariants = new ArrayList<>();
+    private List<ResultQuestion> saveResultByOwnershipArea(Map<AnswerVariant, List<Vote>> answerVariantsToVotes,
+                                                           Map<User, BigDecimal> ownedAreaByUser, Poll poll) {
+        List<ResultQuestion> results = new ArrayList<>();
+        BigDecimal votedHouseArea = BigDecimal.valueOf(poll.getPolledHouses().get(0).getHouseArea());
 
-        questionVotes.forEach(
-            vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
-        );
+        for (Map.Entry<AnswerVariant, List<Vote>> entry : answerVariantsToVotes.entrySet()) {
+            ResultQuestion resultQuestion = new ResultQuestion();
+            AtomicReference<BigDecimal> votedArea = new AtomicReference<>(new BigDecimal(0));
 
-        for (VoteQuestionVariant voteQuestionVariant : voteQuestionVariants) {
-            if (voteQuestionVariant.getAnswerVariant().getAnswer().equals("yes")) {
-                totalAreaOfPositiveVotes = totalAreaOfPositiveVotes
-                    .add(totalOwnershipsArea.get(voteQuestionVariant.getQuestionVote().getVote().getUser()));
-            }
+            entry.getValue().forEach(vote -> {
+                BigDecimal area = votedArea.get();
+                area = area.add(ownedAreaByUser.get(vote.getUser()));
+                votedArea.set(area);
+            });
+
+            resultQuestion.setAnswerVariant(entry.getKey());
+            resultQuestion.setPoll(poll);
+            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
+            resultQuestion.setVoteCount(entry.getValue().size());
+            resultQuestion.setPercentVotes(String.valueOf(
+                votedArea.get()
+                    .multiply(new BigDecimal(100))
+                    .divide(votedHouseArea, 10, RoundingMode.CEILING)
+            ));
+
+            results.add(resultQuestionRepository.save(resultQuestion));
         }
 
-        question.getPoll().setResult(String.valueOf(
-            totalAreaOfPositiveVotes
-                .multiply(new BigDecimal(100))
-                .divide(votedHouseArea, 10, RoundingMode.CEILING)
-        ));
+        return results;
     }
 
-    private void calculateResultByVotesQuantity(PollQuestion question) {
-        List<QuestionVote> questionVotes = questionVoteRepository.findAllByQuestion(question);
-        BigDecimal positiveAnswers = new BigDecimal(0);
-        List<VoteQuestionVariant> voteQuestionVariants = new ArrayList<>();
+    private List<ResultQuestion> saveResultByVotesQuantity(Map<AnswerVariant, List<Vote>> answerVariantsToVotes,
+                                                           Poll poll) {
+        int voteQuantity = 0;
+        List<ResultQuestion> results = new ArrayList<>();
 
-        questionVotes.forEach(
-            vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
-        );
+        for (Map.Entry<AnswerVariant, List<Vote>> entry : answerVariantsToVotes.entrySet()) {
+            voteQuantity += entry.getValue().size();
+        }
+        for (Map.Entry<AnswerVariant, List<Vote>> entry : answerVariantsToVotes.entrySet()) {
+            ResultQuestion resultQuestion = new ResultQuestion();
+            resultQuestion.setAnswerVariant(entry.getKey());
+            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
+            resultQuestion.setPoll(poll);
+            resultQuestion.setVoteCount(entry.getValue().size());
+            resultQuestion.setPercentVotes(String.valueOf(
+                new BigDecimal(resultQuestion.getVoteCount())
+                    .multiply(new BigDecimal(100))
+                    .divide(new BigDecimal(voteQuantity), 10, RoundingMode.CEILING)
+            ));
 
-        for (VoteQuestionVariant voteQuestionVariant : voteQuestionVariants) {
-            if (voteQuestionVariant.getAnswerVariant().getAnswer().equals("yes")) {
-                positiveAnswers = positiveAnswers.add(new BigDecimal(1));
-            }
+            results.add(resultQuestionRepository.save(resultQuestion));
         }
 
-        question.getPoll().setResult(String.valueOf(
-            positiveAnswers
-                .multiply(new BigDecimal(100))
-                .divide(BigDecimal.valueOf(questionVotes.size()), 10, RoundingMode.CEILING)
-        ));
+        return results;
     }
-
 }
