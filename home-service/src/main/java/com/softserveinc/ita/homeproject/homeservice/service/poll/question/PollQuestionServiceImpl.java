@@ -46,8 +46,8 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     @Transactional
     @Override
     public PollQuestionDto createPollQuestion(PollQuestionDto pollQuestionDto) {
-        var poll = getPollById(pollQuestionDto.getPollId());
-        var question = mapper.convert(pollQuestionDto, PollQuestion.class);
+        Poll poll = getPollById(pollQuestionDto.getPollId());
+        PollQuestion question = mapper.convert(pollQuestionDto, PollQuestion.class);
         question.setEnabled(true);
         question.setPoll(poll);
         if (question.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
@@ -75,7 +75,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     @Transactional
     @Override
     public PollQuestionDto updatePollQuestion(PollQuestionDto updatePollQuestionDto) {
-        var poll = getPollById(updatePollQuestionDto.getPollId());
+        Poll poll = getPollById(updatePollQuestionDto.getPollId());
 
         PollQuestion toUpdate = poll.getPollQuestions().stream()
             .filter(question -> question.getId().equals(updatePollQuestionDto.getId())).findFirst()
@@ -150,7 +150,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
     @Transactional
     @Override
     public void deactivatePollQuestion(Long pollId, Long pollQuestionId) {
-        var poll = getPollById(pollId);
+        Poll poll = getPollById(pollId);
 
         PollQuestion toDelete = poll.getPollQuestions().stream()
             .filter(question -> question.getId().equals(pollQuestionId)).findFirst()

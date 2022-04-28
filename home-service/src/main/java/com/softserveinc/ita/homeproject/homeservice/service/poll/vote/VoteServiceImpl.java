@@ -18,6 +18,7 @@ import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQue
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.results.AdviceResultQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.AdviceQuestionVote;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.MultipleChoiceQuestionVote;
@@ -96,11 +97,11 @@ public class VoteServiceImpl implements VoteService {
         validateReVoting(votedPoll, currentUser);
         validateQuestionVotesCount(voteDto, votedPoll);
 
-        var newVote = new Vote();
+        Vote newVote = new Vote();
         newVote.setPollId(votedPoll.getId());
         newVote.setUser(currentUser);
         voteRepository.save(newVote);
-        var newQuestionVotes = new ArrayList<QuestionVote>();
+        List<QuestionVote> newQuestionVotes = new ArrayList<>();
         for (QuestionVoteDto questionVoteDto : voteDto.getQuestionVotes()) {
             QuestionVote newQuestionVote;
             newQuestionVote = questionVoteDto.getType().equals(PollQuestionTypeDto.ADVICE)
@@ -179,9 +180,9 @@ public class VoteServiceImpl implements VoteService {
     }
 
     private AdviceQuestionVote createAdviceQuestionVote(AdviceQuestionVoteDto questionVoteDto) {
-        var newQuestionVote = new AdviceQuestionVote();
+        AdviceQuestionVote newQuestionVote = new AdviceQuestionVote();
         newQuestionVote.setType(PollQuestionType.ADVICE);
-        var question = getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId());
+        PollQuestion question = getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId());
         newQuestionVote.setQuestion(question);
         newQuestionVote.setAnswer(questionVoteDto.getAnswer().trim());
         checkExistenceAndSetResultQuestion(newQuestionVote, question);
@@ -189,12 +190,12 @@ public class VoteServiceImpl implements VoteService {
     }
 
     private MultipleChoiceQuestionVote createMultipleChoiceQuestionVote(MultipleChoiceQuestionVoteDto questionVoteDto) {
-        var newQuestionVote = new MultipleChoiceQuestionVote();
+        MultipleChoiceQuestionVote newQuestionVote = new MultipleChoiceQuestionVote();
         newQuestionVote.setType(PollQuestionType.MULTIPLE_CHOICE);
         newQuestionVote.setQuestion(getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId()));
-        var voteQuestionVariantList = new ArrayList<VoteQuestionVariant>();
+        List<VoteQuestionVariant> voteQuestionVariantList = new ArrayList<>();
         for (VoteQuestionVariantDto dto : questionVoteDto.getAnswers()) {
-            var voteVariant = new VoteQuestionVariant();
+            VoteQuestionVariant voteVariant = new VoteQuestionVariant();
             voteVariant.setQuestionVote(newQuestionVote);
             voteVariant.setAnswerVariant(getAnswerVariantByIdWithCheckItsExistence(dto.getAnswerVariant().getId()));
             voteQuestionVariantRepository.save(voteVariant);
@@ -251,7 +252,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     private void checkExistenceAndSetResultQuestion(AdviceQuestionVote questionVote, PollQuestion question) {
-        var checkedResultQuestion = resultQuestionRepository.findByQuestion(question);
+        ResultQuestion checkedResultQuestion = resultQuestionRepository.findByQuestion(question);
         AdviceResultQuestion adviceResultQuestion;
         if (checkedResultQuestion == null) {
             adviceResultQuestion = new AdviceResultQuestion();

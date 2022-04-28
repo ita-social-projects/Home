@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.mail;
 
 import java.time.LocalDateTime;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.poll.template.TemplateService;
@@ -26,10 +27,10 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public LocalDateTime sendTextMessage(MailDto mailDto) throws MessagingException {
-        var headline = "invitation to " + mailDto.getType();
+        String headline = "invitation to " + mailDto.getType();
         log.debug("Message with invitation type {} is being created", headline);
-        var message = mailSender.createMimeMessage();
-        var helper = new MimeMessageHelper(message, true, "UTF-8");
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(sender);
         helper.setTo(mailDto.getEmail());
         helper.setSubject(headline);

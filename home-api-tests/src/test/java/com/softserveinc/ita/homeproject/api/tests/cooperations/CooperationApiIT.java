@@ -16,20 +16,7 @@ import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationContactApi;
-import com.softserveinc.ita.homeproject.client.model.Address;
-import com.softserveinc.ita.homeproject.client.model.ContactType;
-import com.softserveinc.ita.homeproject.client.model.CreateContact;
-import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
-import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
-import com.softserveinc.ita.homeproject.client.model.CreateHouse;
-import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
-import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
-import com.softserveinc.ita.homeproject.client.model.ReadEmailContact;
-import com.softserveinc.ita.homeproject.client.model.ReadPhoneContact;
-import com.softserveinc.ita.homeproject.client.model.UpdateContact;
-import com.softserveinc.ita.homeproject.client.model.UpdateCooperation;
-import com.softserveinc.ita.homeproject.client.model.UpdateEmailContact;
-import com.softserveinc.ita.homeproject.client.model.UpdatePhoneContact;
+import com.softserveinc.ita.homeproject.client.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -274,7 +261,7 @@ class CooperationApiIT {
         assertEquals(update.getUsreo(), updated.getUsreo());
         assertEquals(update.getAddress(), updated.getAddress());
         if (!CollectionUtils.isEmpty(update.getContacts())) {
-            for (var contact : update.getContacts()) {
+            for (CreateContact contact : update.getContacts()) {
                 if (contact.getType().equals(ContactType.EMAIL)) {
                     CreateEmailContact updateEmailContact = (CreateEmailContact) contact;
                     ReadEmailContact readContact =
@@ -301,7 +288,7 @@ class CooperationApiIT {
 }
 
     private ReadEmailContact getUpdatedEmailContact(Long cooperationId, String email, ContactType type) throws ApiException {
-        var updatedContact =
+        List<ReadContact> updatedContact =
             cooperationContactApi.queryContactsOnCooperation(cooperationId, 1, 5, "id,asc", null, null, null,
                 email, null, type);
         if(updatedContact.size()==0){
@@ -311,7 +298,7 @@ class CooperationApiIT {
     }
 
     private ReadPhoneContact getUpdatedPhoneContact(Long cooperationId, String phone, ContactType type) throws ApiException {
-        var updatedContact =
+        List<ReadContact> updatedContact =
             cooperationContactApi.queryContactsOnCooperation(cooperationId, 1, 5, "id,asc", null, null, phone,
                 null, null, type);
         if(updatedContact.size()==0){

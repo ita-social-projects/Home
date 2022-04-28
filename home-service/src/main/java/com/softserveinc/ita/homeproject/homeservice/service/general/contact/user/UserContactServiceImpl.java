@@ -31,7 +31,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected void checkAndFillParentEntity(ContactDto contactDto, Contact createContact, Long parentEntityId) {
-        var user = getUserById(parentEntityId);
+        User user = getUserById(parentEntityId);
         if (Boolean.TRUE.equals(contactDto.getMain())) {
             List<Contact> allByUserIdAndType = contactRepository
                 .findAllByUserIdAndType(parentEntityId, mapper.convert(contactDto.getType(), ContactType.class));
@@ -49,7 +49,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     @Override
     protected Contact checkAndGetContactByParentId(Long id, Long parentEntityId) {
-        var user = getUserById(parentEntityId);
+        User user = getUserById(parentEntityId);
         return user.getContacts().stream()
             .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(id)).findFirst()
             .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + id + " is not found"));

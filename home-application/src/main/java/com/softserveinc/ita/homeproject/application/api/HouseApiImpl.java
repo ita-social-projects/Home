@@ -32,9 +32,9 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response createApartment(Long houseId, CreateApartment createApartment) {
-        var createApartmentDto = mapper.convert(createApartment, ApartmentDto.class);
-        var readApartmentDto = apartmentService.createApartment(houseId, createApartmentDto);
-        var readApartment = mapper.convert(readApartmentDto, ReadApartment.class);
+        ApartmentDto createApartmentDto = mapper.convert(createApartment, ApartmentDto.class);
+        ApartmentDto readApartmentDto = apartmentService.createApartment(houseId, createApartmentDto);
+        ReadApartment readApartment = mapper.convert(readApartmentDto, ReadApartment.class);
 
         return Response.status(Response.Status.CREATED).entity(readApartment).build();
     }
@@ -51,7 +51,7 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @Override
     public Response getApartment(Long houseId, Long id) {
         ApartmentDto toGet = apartmentService.getOne(id, getSpecification());
-        var readApartment = mapper.convert(toGet, ReadApartment.class);
+        ReadApartment readApartment = mapper.convert(toGet, ReadApartment.class);
 
         return Response.status(Response.Status.OK).entity(readApartment).build();
     }
@@ -74,9 +74,9 @@ public class HouseApiImpl extends CommonApi implements HousesApi {
     @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
     public Response updateApartment(Long houseId, Long id, UpdateApartment updateApartment) {
-        var updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
-        var toUpdate = apartmentService.updateApartment(houseId, id, updateApartmentDto);
-        var readApartment = mapper.convert(toUpdate, ReadApartment.class);
+        ApartmentDto updateApartmentDto = mapper.convert(updateApartment, ApartmentDto.class);
+        ApartmentDto toUpdate = apartmentService.updateApartment(houseId, id, updateApartmentDto);
+        ReadApartment readApartment = mapper.convert(toUpdate, ReadApartment.class);
 
         return Response.status(Response.Status.OK).entity(readApartment).build();
     }

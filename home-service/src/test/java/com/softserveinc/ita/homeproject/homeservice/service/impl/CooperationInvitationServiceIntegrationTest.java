@@ -97,63 +97,63 @@ public class CooperationInvitationServiceIntegrationTest {
     }
 
     private CooperationInvitation createNotOverduePendingCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createOverduePendingCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PENDING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createNotOverdueProcessingCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createOverdueProcessingCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.PROCESSING);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createNotOverdueAcceptedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createOverdueAcceptedCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ACCEPTED);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createOverdueCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.OVERDUE);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createNotOverdueErrorCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().plusDays(1));
         return invitation;
     }
 
     private CooperationInvitation createOverdueErrorCooperationInvitation() {
-        var invitation = new CooperationInvitation();
+        CooperationInvitation invitation = new CooperationInvitation();
         invitation.setStatus(InvitationStatus.ERROR);
         invitation.setRequestEndTime(LocalDateTime.now().minusDays(1));
         return invitation;
