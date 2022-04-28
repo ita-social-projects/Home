@@ -1,11 +1,13 @@
 package com.softserveinc.ita.homeproject.homedata.poll.votes;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -44,7 +46,7 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "question_id", nullable = false)
     private PollQuestion question;
 
-    @OneToOne(mappedBy = "vote")
-    private VoteAnswerVariant voteAnswerVariant;
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL)
+    private List<VoteAnswerVariant> voteAnswerVariants;
 
 }

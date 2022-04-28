@@ -1,15 +1,12 @@
 package com.softserveinc.ita.homeproject.homedata.poll.results;
 
-import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
+
+import java.util.Optional;
+
+import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * ResultQuestionRepository is the interface that is needed
- * for interaction with ResultQuestions in the database.
- *
- * @author Ihor Samoshost
- */
+@Repository
 public interface ResultQuestionRepository extends JpaRepository<ResultQuestion, Long> {
-
-    ResultQuestion findByQuestion(PollQuestion question);
 }

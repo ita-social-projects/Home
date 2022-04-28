@@ -1,10 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.poll.votes;
 
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,11 +19,11 @@ import lombok.Setter;
 @SequenceGenerator(name = "sequence", sequenceName = "votes_answer_variants_sequence")
 public class VoteAnswerVariant extends BaseEntity {
 
-    @OneToOne
-    @JoinColumn(name = "vote_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "vote_id")
     private Vote vote;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "answer_variant_id", nullable = false)
-    private List<AnswerVariant> answerVariants;
+    private AnswerVariant answerVariant;
 }
