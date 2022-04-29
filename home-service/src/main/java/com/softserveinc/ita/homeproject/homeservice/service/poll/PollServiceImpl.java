@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
@@ -22,7 +23,7 @@ import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollType;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.question.DoubleChoiceQuestion;
+import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.Vote;
@@ -132,16 +133,27 @@ public class PollServiceImpl implements PollService {
         specification = specification.and((root, criteriaQuery, criteriaBuilder) -> criteriaBuilder
             .equal(root.get("cooperation").get("enabled"), true));
 
-        Page<Poll> pollsPage = pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
+        Page<Poll> foundPollsPage = pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
 
-        List<ResultQuestion> resultQuestions = calculateCompletedPollsResults(pollsPage.getContent());
-        List<Poll> p = resultQuestions.stream().map(ResultQuestion::getPoll).collect(Collectors.toList());
+        List<ResultQuestion> resultOfFoundedPolls = new ArrayList<>();
+        Page<PollDto> pageToReturn = setPositiveResultIfPresent(foundPollsPage, resultOfFoundedPolls);
 
-        return pollsPage.map(poll -> {
+        foundPollsPage.getContent()
+            .forEach(poll -> resultOfFoundedPolls.addAll(resultQuestionRepository.findAllByPoll(poll)));
+        calculateCompletedPollsResults(foundPollsPage.getContent(), resultOfFoundedPolls);
+
+        return pageToReturn;
+    }
+
+    private Page<PollDto> setPositiveResultIfPresent(Page<Poll> foundPollsPage,
+                                                     List<ResultQuestion> resultOfFoundedPolls) {
+        return foundPollsPage.map(poll -> {
             PollDto dto = mapper.convert(poll, PollDto.class);
-            if (p.contains(poll)) {
-                dto.setResult(resultQuestions.get(p.indexOf(poll)).getPercentVotes());
-            }
+            Optional<ResultQuestion> positiveResultOptional = resultOfFoundedPolls.stream()
+                .filter(resultQuestion -> resultQuestion.getPoll().equals(poll))
+                .filter(resultQuestion -> resultQuestion.getAnswerVariant().getAnswer().equals("yes"))
+                .findAny();
+            positiveResultOptional.ifPresent(resultQuestion -> dto.setResult(resultQuestion.getPercentVotes()));
             return dto;
         });
     }
@@ -192,9 +204,9 @@ public class PollServiceImpl implements PollService {
     }
 
     /**
-     * Method that receive list of polls to be calculated. Calculates only polls that
-     * satisfy criteria defined by filtering using below. Calculation can be carried out
-     * with a sufficient number of votes in relation to the
+     * Method receive list of polls to be calculated and result list of polls which was calculated already.
+     * Calculates only polls that satisfy criteria defined by filtering using below. Calculation can
+     * be carried out with a sufficient number of votes in relation to the
      * {@link com.softserveinc.ita.homeproject.homedata.poll.enums.PollType}. The
      * calculation is made by next methods:
      * <ul>
@@ -209,27 +221,37 @@ public class PollServiceImpl implements PollService {
      * </ul>
      * Creates the {@link com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion}
      * objects for each answer variant and records its result for each question contained
-     * in the poll. Saves each object in the database.
+     * in the poll. Saves each object of
+     * {@link com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion} in the database.
      * <br/>
      * <br/>
-     * @param polls list of polls to be calculated
-     * @return list of
-     * {@link com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion}
-     * - results for polls that satisfied the criteria defined in the method below.
+     *
+     * @param polls           list of polls to be calculated
+     * @param resultQuestions result of votes which was calculated already
      */
-    public List<ResultQuestion> calculateCompletedPollsResults(List<Poll> polls) {
-        List<ResultQuestion> results = new ArrayList<>();
+    public void calculateCompletedPollsResults(List<Poll> polls, List<ResultQuestion> resultQuestions) {
 
         polls.stream()
-            .filter(poll -> poll.getResult() == null)
+            //below filter returns true if the poll has no results
+            .filter(poll -> {
+                AtomicBoolean isNotCalculated = new AtomicBoolean(false);
+                if (resultQuestions.isEmpty()) {
+                    isNotCalculated.set(true);
+                } else {
+                    resultQuestions.forEach(resultQuestion -> {
+                        if (!resultQuestion.getPoll().equals(poll)) {
+                            isNotCalculated.set(true);
+                        }
+                    });
+                }
+                return isNotCalculated.get();
+            })
             .filter(poll -> poll.getStatus().equals(PollStatus.ACTIVE))
             .filter(poll -> poll.getCompletionDate().isBefore(LocalDateTime.now()))
             .filter(poll -> poll.getEnabled().equals(true))
             .filter(poll -> poll.getPollQuestions().size() == 1)
-            .filter(poll -> poll.getPollQuestions().get(0) instanceof DoubleChoiceQuestion)
-            .forEach(poll -> results.addAll(calculatePollResult(poll)));
-
-        return results;
+            .filter(poll -> poll.getPollQuestions().get(0) instanceof MultipleChoiceQuestion)
+            .forEach(poll -> resultQuestions.addAll(calculatePollResult(poll)));
     }
 
     private List<ResultQuestion> calculatePollResult(Poll poll) {
