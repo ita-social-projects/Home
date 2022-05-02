@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.impl;
+package com.softserveinc.ita.homeproject.application.security.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -3,7 +3,7 @@ package com.softserveinc.ita.homeproject.application;
 import java.util.Properties;
 import javax.sql.DataSource;
 
-import com.softserveinc.ita.homeproject.application.impl.HomeUserDetailsService;
+import com.softserveinc.ita.homeproject.application.security.service.impl.HomeUserDetailsService;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTProvider;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
