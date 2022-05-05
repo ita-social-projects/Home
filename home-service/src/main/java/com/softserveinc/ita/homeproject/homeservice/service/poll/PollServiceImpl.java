@@ -69,10 +69,10 @@ public class PollServiceImpl implements PollService {
     @Override
     @Transactional
     public PollDto create(Long cooperationId, PollDto pollDto) {
+        validateCreationDate(pollDto.getCreationDate(), "Poll can`t be created in the past");
         pollDto.getPolledHouses().forEach(houseDto -> validateHouse(cooperationId, houseDto));
         pollDto.setCompletionDate(pollDto.getCreationDate().plusDays(15));
         Poll poll = mapper.convert(pollDto, Poll.class);
-        validateCreationDate(poll, "Poll can`t be created in the past");
         Cooperation cooperation = getCooperationById(cooperationId);
         validateCompletionDate(poll.getCompletionDate(), poll.getCreationDate());
         poll.setCooperation(cooperation);
@@ -90,7 +90,7 @@ public class PollServiceImpl implements PollService {
             .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, pollDto.getStatus());
-        validateCreationDate(poll, "Poll has already started");
+        validateCreationDate(poll.getCreationDate(), "Poll has already started");
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
         }
@@ -167,8 +167,8 @@ public class PollServiceImpl implements PollService {
         }
     }
 
-    private void validateCreationDate(Poll poll, String message) {
-        if (poll.getCreationDate().isBefore(LocalDateTime.now())) {
+    private void validateCreationDate(LocalDateTime creationDate, String message) {
+        if (creationDate.isBefore(LocalDateTime.now())) {
             throw new BadRequestHomeException( message);
         }
     }
