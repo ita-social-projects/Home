@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -168,8 +169,8 @@ public class PollServiceImpl implements PollService {
     }
 
     private void validateCreationDate(LocalDateTime creationDate, String message) {
-        if (creationDate.isBefore(LocalDateTime.now())) {
-            throw new BadRequestHomeException( message);
+        if (creationDate.isBefore(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS))){
+            throw new BadRequestHomeException(message);
         }
     }
 
