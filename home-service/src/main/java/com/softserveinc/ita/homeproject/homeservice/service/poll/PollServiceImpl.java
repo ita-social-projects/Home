@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.poll;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
