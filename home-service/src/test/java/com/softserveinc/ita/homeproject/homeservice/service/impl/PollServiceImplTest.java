@@ -116,14 +116,6 @@ class PollServiceImplTest {
     }
 
     @Test
-    void createPollWithCreationDateInPastTest(){
-        PollDto poll = new PollDto();
-        poll.setStatus(PollStatusDto.DRAFT);
-        poll.setCreationDate(LocalDateTime.now().minusDays(1));
-        assertThrows(BadRequestHomeException.class, () -> pollService.create(1L, poll));
-    }
-
-    @Test
     void calculateCompletedPollsResultsSavesMajorPollResultCalculatedByOwnershipArea() {
         Poll actualPoll = createPoll();
         PollQuestion question = actualPoll.getPollQuestions().get(0);
