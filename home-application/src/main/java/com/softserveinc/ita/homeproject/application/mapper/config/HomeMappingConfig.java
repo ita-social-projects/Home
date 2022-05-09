@@ -18,7 +18,7 @@ public interface HomeMappingConfig<S, D> {
 
     private Class<?>[] getResolvedClasses() {
         Class<?>[] typeArguments = GenericTypeResolver.resolveTypeArguments(this.getClass(), HomeMappingConfig.class);
-        final var expectedTypeArgumentsSize = 2;
+        final int expectedTypeArgumentsSize = 2;
         if (typeArguments == null || typeArguments.length != expectedTypeArgumentsSize) {
             throw new IllegalStateException("Something went wrong with resolving types. Try to provide it explicitly.");
         }

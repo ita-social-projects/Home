@@ -12,6 +12,7 @@ import java.util.Map;
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
+import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
@@ -55,6 +56,8 @@ public class PollServiceImpl implements PollService {
 
     private final PollRepository pollRepository;
 
+    private final HouseRepository houseRepository;
+
     private final CooperationRepository cooperationRepository;
 
     private final QuestionVoteRepository questionVoteRepository;
@@ -86,22 +89,24 @@ public class PollServiceImpl implements PollService {
             .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
         validatePollStatus(poll, pollDto.getStatus());
-
+        validateCreationDate(poll);
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
         }
-
-        if (pollDto.getCompletionDate() != null) {
-            LocalDateTime completionDate = pollDto.getCompletionDate();
-            validateCompletionDate(completionDate, poll.getCreationDate());
-            poll.setCompletionDate(completionDate);
-        }
-
-        if (pollDto.getStatus() != null) {
-            poll.setStatus(PollStatus.valueOf(pollDto.getStatus().name()));
-        }
-
+        List<House> houses = new ArrayList<>();
+        List<Long> housesId = pollDto.getIncludedHouses();
+        houseRepository.findAllById(housesId).forEach(houses::add);
+        poll.setDescription(pollDto.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
+        if (pollDto.getStatus() == null) {
+            poll.setCreationDate(pollDto.getCreationDate().truncatedTo(ChronoUnit.MINUTES));
+            poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
+        } else if (pollDto.getStatus().equals(PollStatusDto.ACTIVE)) {
+            poll.setCreationDate(LocalDateTime.now());
+            poll.setCompletionDate(LocalDateTime.now().plusDays(15L));
+            poll.setStatus(PollStatus.ACTIVE);
+        }
+        poll.setPolledHouses(houses);
         pollRepository.save(poll);
         return mapper.convert(poll, PollDto.class);
     }
@@ -161,6 +166,12 @@ public class PollServiceImpl implements PollService {
         }
     }
 
+    private void validateCreationDate(Poll poll) {
+        if (poll.getCreationDate().isBefore(LocalDateTime.now())) {
+            throw new BadRequestHomeException(
+                "Poll has already started");
+        }
+    }
 
     /**
      * Calculates and saves the result and status to the database
@@ -228,7 +239,8 @@ public class PollServiceImpl implements PollService {
                             );
                         } else {
                             ownedAreaByUser.put(ownership.getUser(),
-                                (ownership.getOwnershipPart()).multiply(ownership.getApartment().getApartmentArea()));
+                                (ownership.getOwnershipPart()).multiply(
+                                    ownership.getApartment().getApartmentArea()));
                         }
                     }
                 )
@@ -257,7 +269,7 @@ public class PollServiceImpl implements PollService {
         List<VoteQuestionVariant> voteQuestionVariants = new ArrayList<>();
 
         questionVotes.forEach(
-                vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
+            vote -> voteQuestionVariants.add(voteQuestionVariantRepository.findByQuestionVote(vote))
         );
 
         for (VoteQuestionVariant voteQuestionVariant : voteQuestionVariants) {
@@ -295,4 +307,5 @@ public class PollServiceImpl implements PollService {
                 .divide(BigDecimal.valueOf(questionVotes.size()), 10, RoundingMode.CEILING)
         ));
     }
+
 }

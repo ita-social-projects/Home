@@ -39,7 +39,12 @@ abstract class QueryPoll {
 
     private void createPollWithCompletionDate(LocalDateTime completionDate) throws ApiException {
         COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiIT.COOPERATION_ID,
-                CooperationPollApiIT.createPoll().completionDate(completionDate));
+                CooperationPollApiIT.createPollWithCompletionDate(completionDate));
+    }
+
+    private ReadPoll createPollWithCreationDate(LocalDateTime creationDate) throws ApiException {
+       return COOPERATION_POLL_API.createCooperationPoll(CooperationPollApiIT.COOPERATION_ID,
+            CooperationPollApiIT.createPollWithCreationDate(creationDate));
     }
 
     private void assertCompletionDateInRange(List<ReadPoll> polls, LocalDateTime fromDate, LocalDateTime toDate){
@@ -116,15 +121,15 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByCompletionDate() throws ApiException {
 
-        LocalDateTime completionDate = LocalDateTime.now().plusDays(15).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime completionDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
 
         createPollWithCompletionDate(completionDate);
         createPollWithCompletionDate(completionDate);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDate);
+        List<ReadPoll> queryPoll = buildQueryPollWithCompletionDate(completionDate.plusDays(15L));
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(completionDate, poll.getCompletionDate()));
+        queryPoll.forEach(poll -> assertEquals(completionDate.plusDays(15L), poll.getCompletionDate()));
     }
 
     @Test
@@ -141,14 +146,15 @@ abstract class QueryPoll {
     @Test
     void getAllPollsByPollStatus() throws ApiException {
 
-        ReadPoll readPoll = createPoll();
-        UpdatePoll updatePoll = CooperationPollApiIT.updatePoll();
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusDays(1);
+        ReadPoll readPoll = createPollWithCreationDate(creationDate);
+        UpdatePoll updatePoll = CooperationPollApiIT.updatePollWithCreationDate(creationDate);
         COOPERATION_POLL_API.updateCooperationPoll(CooperationPollApiIT.COOPERATION_ID, readPoll.getId(), updatePoll);
 
-        List<ReadPoll> queryPoll = buildQueryPollWithStatus(PollStatus.SUSPENDED);
+        List<ReadPoll> queryPoll = buildQueryPollWithStatus(PollStatus.DRAFT);
 
         assertTrue(queryPoll.size() > 0);
-        queryPoll.forEach(poll -> assertEquals(PollStatus.SUSPENDED, poll.getStatus()));
+        queryPoll.forEach(poll -> assertEquals(PollStatus.DRAFT, poll.getStatus()));
     }
 
     @Test

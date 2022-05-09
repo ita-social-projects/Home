@@ -4,6 +4,7 @@ import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.PollDto;
 import com.softserveinc.ita.homeproject.homeservice.service.QueryableService;
 
+
 public interface PollService extends QueryableService<Poll, PollDto> {
     PollDto create(Long cooperationId, PollDto pollDto);
 

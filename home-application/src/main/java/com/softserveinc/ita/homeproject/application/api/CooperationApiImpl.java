@@ -85,9 +85,9 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
     @Override
     public Response createContactOnCooperation(Long cooperationId,
                                                CreateContact createCooperationContact) {
-        var createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
-        var readContactDto = contactService.createContact(cooperationId, createContactDto);
-        var readContact = mapper.convert(readContactDto, ReadContact.class);
+        ContactDto createContactDto = mapper.convert(createCooperationContact, ContactDto.class);
+        ContactDto readContactDto = contactService.createContact(cooperationId, createContactDto);
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.CREATED).entity(readContact).build();
     }
@@ -128,8 +128,8 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
     @PreAuthorize(READ_COOPERATION_DATA)
     @Override
     public Response getContactOnCooperation(Long cooperationId, Long id) {
-        var readContactDto = contactService.getOne(id, getSpecification());
-        var readContact = mapper.convert(readContactDto, ReadContact.class);
+        ContactDto readContactDto = contactService.getOne(id, getSpecification());
+        ReadContact readContact = mapper.convert(readContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
@@ -258,20 +258,19 @@ public class CooperationApiImpl extends CommonApi implements CooperationsApi {
     @PreAuthorize(MANAGE_COOPERATION_DATA)
     @Override
     public Response updateContactOnCooperation(Long cooperationId, Long id, UpdateContact updateContact) {
-        var updateContactDto = mapper.convert(updateContact, ContactDto.class);
-        var updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
-        var readContact = mapper.convert(updatedContactDto, ReadContact.class);
+        ContactDto updateContactDto = mapper.convert(updateContact, ContactDto.class);
+        ContactDto updatedContactDto = contactService.updateContact(cooperationId, id, updateContactDto);
+        ReadContact readContact = mapper.convert(updatedContactDto, ReadContact.class);
 
         return Response.status(Response.Status.OK).entity(readContact).build();
     }
 
     @PreAuthorize(MANAGE_POLLS)
     @Override
-    public Response updateCooperationPoll(Long cooperationId, Long id, UpdatePoll updatePoll) {
-        PollDto updatePollDto = mapper.convert(updatePoll, PollDto.class);
+    public Response updateCooperationPoll(Long cooperationId, Long id,  UpdatePoll updatePoll) {
+        PollDto updatePollDto = mapper.convert(updatePoll,PollDto.class);
         PollDto updatedPollDto = pollService.update(cooperationId, id, updatePollDto);
         ReadPoll readPoll = mapper.convert(updatedPollDto, ReadPoll.class);
-
         return Response.status(Response.Status.OK).entity(readPoll).build();
     }
 }
