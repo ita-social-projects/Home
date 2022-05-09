@@ -134,15 +134,13 @@ public class PollServiceImpl implements PollService {
             .equal(root.get("cooperation").get("enabled"), true));
 
         Page<Poll> foundPollsPage = pollRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
-
         List<ResultQuestion> resultOfFoundedPolls = new ArrayList<>();
-        Page<PollDto> pageToReturn = setPositiveResultIfPresent(foundPollsPage, resultOfFoundedPolls);
 
         foundPollsPage.getContent()
             .forEach(poll -> resultOfFoundedPolls.addAll(resultQuestionRepository.findAllByPoll(poll)));
         calculateCompletedPollsResults(foundPollsPage.getContent(), resultOfFoundedPolls);
 
-        return pageToReturn;
+        return setPositiveResultIfPresent(foundPollsPage, resultOfFoundedPolls);
     }
 
     private Page<PollDto> setPositiveResultIfPresent(Page<Poll> foundPollsPage,
