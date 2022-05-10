@@ -13,7 +13,7 @@
         <groupId>com.softserveinc.ita.homeproject</groupId>
         <version>${revision}</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>home-oauth-server</artifactId>
 
     <name>home-oauth-server</name>
@@ -106,7 +106,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.softserveinc.ita.homeproject</groupId>
-                                    <artifactId>home-oauth-server</artifactId>
+                                    <artifactId>home-open-api</artifactId>
                                     <version>${revision}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
@@ -116,7 +116,7 @@
                                     <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*/openapi.yaml,*/openapi.json</includes>
+                            <includes>*/oauth-openapi.yaml,*/oauth-openapi.json</includes>
                         </configuration>
                     </execution>
                     <execution>
@@ -160,8 +160,7 @@
                                     <fileMappers>
                                         <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
                                     </fileMappers>
-                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/swagger-ui
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/swagger-ui</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                             <includes>**/3.52.3/*</includes>
@@ -203,7 +202,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi.yaml</inputSpec>
+                            <inputSpec>${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <configOptions>
                                 <java8>true</java8>

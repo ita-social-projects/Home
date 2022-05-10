@@ -373,6 +373,10 @@
             <artifactId>home-java-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-oauth-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <scope>test</scope>

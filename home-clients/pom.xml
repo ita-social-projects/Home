@@ -27,6 +27,10 @@
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-oauth-server</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -86,6 +90,38 @@
                             </configOptions>
                             <templateDirectory>${project.build.resources[0].directory}/mustaches/client</templateDirectory>
                             <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi/client</output>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Oauth</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <library>spring-boot</library>
+                                <artifactId>home-oauth-client</artifactId>
+                                <artifactVersion>${revision}</artifactVersion>
+                                <groupId>${project.groupId}</groupId>
+                                <modelPackage>${home-client.package}.model</modelPackage>
+                                <apiPackage>${home-client.package}.api</apiPackage>
+                                <invokerPackage>${home-client.package}</invokerPackage>
+                                <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
+                                <parentGroupId>${project.parent.groupId}</parentGroupId>
+                                <parentVersion>${project.parent.version}</parentVersion>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi/client</output>
                         </configuration>
                     </execution>
