@@ -21,6 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <springfox-version>2.9.2</springfox-version>
+        <home-oauth.package>com.softserveinc.ita.homeproject.homeoauthserver</home-oauth.package>
     </properties>
     <dependencies>
         <dependency>
@@ -225,19 +226,18 @@
                             <inputSpec>
                                 ${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml
                             </inputSpec>
-                            <generatorName>java</generatorName>
+                            <generatorName>spring</generatorName>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
-                                <library>jersey2</library>
                                 <sourceFolder>/</sourceFolder>
-                                <artifactId>home-oauth-client</artifactId>
-                                <artifactVersion>${revision}</artifactVersion>
-                                <modelPackage>com.softserveinc.ita.homeproject.homeoauthserver.model</modelPackage>
-                                <apiPackage>com.softserveinc.ita.homeproject.homeoauthserver.api</apiPackage>
-                                <invokerPackage>com.softserveinc.ita.homeproject.homeoauthserver</invokerPackage>
+                                <artifactId>home-oauth-server</artifactId>
+                                <ArtifactVersion>${revision}</ArtifactVersion>
+                                <modelPackage>${home-oauth.package}.model</modelPackage>
+                                <apiPackage>${home-oauth.package}.api</apiPackage>
+                                <invokerPackage>${home-oauth.package}</invokerPackage>
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
@@ -246,7 +246,7 @@
                                 <returnResponse>true</returnResponse>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
-                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi</output>
                         </configuration>
                     </execution>
@@ -260,18 +260,19 @@
                             <inputSpec>
                                 ${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml
                             </inputSpec>
-                            <generatorName>spring</generatorName>
+                            <generatorName>java</generatorName>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
+                                <library>jersey2</library>
                                 <sourceFolder>/</sourceFolder>
                                 <artifactId>home-oauth-client</artifactId>
-                                <ArtifactVersion>${revision}</ArtifactVersion>
-                                <modelPackage>com.softserveinc.ita.homeproject.homeoauthserver.model</modelPackage>
-                                <apiPackage>com.softserveinc.ita.homeproject.homeoauthserver.api</apiPackage>
-                                <invokerPackage>com.softserveinc.ita.homeproject.homeoauthserver</invokerPackage>
+                                <artifactVersion>${revision}</artifactVersion>
+                                <modelPackage>${home-oauth.package}.model</modelPackage>
+                                <apiPackage>${home-oauth.package}.api</apiPackage>
+                                <invokerPackage>${home-oauth.package}</invokerPackage>
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
@@ -280,7 +281,7 @@
                                 <returnResponse>true</returnResponse>
                                 <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
-                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
                             <output>${project.build.directory}/generated-sources/openapi</output>
                         </configuration>
                     </execution>
@@ -313,5 +314,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

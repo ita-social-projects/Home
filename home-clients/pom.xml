@@ -27,10 +27,6 @@
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-oauth-server</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

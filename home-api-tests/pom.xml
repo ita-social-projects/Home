@@ -374,7 +374,7 @@
         </dependency>
         <dependency>
             <groupId>com.softserveinc.ita.homeproject</groupId>
-            <artifactId>home-oauth-client</artifactId>
+            <artifactId>home-oauth-server</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
