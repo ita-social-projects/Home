@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -36,7 +37,7 @@ public class Vote extends BaseEntity {
     private User user;
 
     @Convert(converter = PollQuestionTypeAttributeConverter.class)
-    @Column(name = "type", insertable = false, updatable = false)
+    @Column(name = "type", updatable = false)
     private PollQuestionType type;
 
     @Column(name = "advice_answer")
