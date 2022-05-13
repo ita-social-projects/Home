@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="Issue426.001" author="vladyslavyarets">
+        <dropForeignKeyConstraint baseTableName="result_question_variants" constraintName="result_question_fk"/>
+        <dropForeignKeyConstraint baseTableName="result_question_variants" constraintName="answer_variant_fk"/>
+        <dropTable tableName="result_question_variants" cascadeConstraints="true"/>
+    </changeSet>
+
+    <changeSet id="Issue426.002" author="vladyslavyarets">
+        <dropForeignKeyConstraint baseTableName="question_votes" constraintName="vote_fk"/>
+        <dropForeignKeyConstraint baseTableName="question_votes" constraintName="question_fk"/>
+        <dropTable tableName="question_votes" cascadeConstraints="true"/>
+    </changeSet>
+
+    <changeSet id="Issue426.003" author="vladyslavyarets">
+        <dropForeignKeyConstraint baseTableName="vote_question_variants" constraintName="answer_variant_fk"/>
+        <dropTable tableName="vote_question_variants" cascadeConstraints="true"/>
+    </changeSet>
+
+    <changeSet id="Issue426.004" author="vladyslavyarets">
+        <dropForeignKeyConstraint baseTableName="result_questions" constraintName="question_fk"/>
+        <dropColumn tableName="result_questions" columnName="question_id"/>
+        <dropColumn tableName="result_questions" columnName="type"/>
+        <addNotNullConstraint tableName="result_questions" columnName="answer_variant_id"/>
+        <addNotNullConstraint tableName="result_questions" columnName="poll_id"/>
+        <addNotNullConstraint tableName="result_questions" columnName="percent_votes"/>
+    </changeSet>
+
+    <changeSet id="Issue426.005" author="vladyslavyarets">
+        <addNotNullConstraint tableName="votes" columnName="type"/>
+        <addNotNullConstraint tableName="votes" columnName="question_id"/>
+    </changeSet>
+
+    <changeSet id="Issue426.006" author="vladyslavyarets">
+        <dropColumn tableName="answer_variants" columnName="question_id"/>
+    </changeSet>
+
+    <changeSet id="Issue426.007" author="vladyslavyarets">
+        <dropSequence sequenceName="result_question_variants_sequence"/>
+        <dropSequence sequenceName="question_votes_sequence"/>
+        <dropSequence sequenceName="vote_question_variants_sequence"/>
+    </changeSet>
+
+</databaseChangeLog>
