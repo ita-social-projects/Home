@@ -8,8 +8,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.softserveinc.ita.homeproject.application.security.exception.NotAcceptableOauthException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,13 +39,17 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
             token = token.substring(7);
         }
 
-        jwtProvider.validate(token);
+        try {
+            jwtProvider.validate(token);
+            String username = jwtProvider.getUsername(token);
+            Authentication authentication = jwtProvider.getAuthentication(username);
 
-        String username = jwtProvider.getUsername(token);
-        Authentication authentication = jwtProvider.getAuthentication(username);
-
-        if (authentication != null) {
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }catch (NotAcceptableOauthException exception) {
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.setHeader("message", exception.getMessage());
         }
 
         filterChain.doFilter(request, response);
@@ -69,4 +75,6 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
         return result.get();
     }
+
+
 }
