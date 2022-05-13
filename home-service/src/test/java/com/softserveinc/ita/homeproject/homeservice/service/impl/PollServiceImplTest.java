@@ -110,6 +110,7 @@ class PollServiceImplTest {
         PollDto pollDto = new PollDto();
         pollDto.setStatus(PollStatusDto.DRAFT);
         pollDto.setPolledHouses(Collections.singletonList(houseDto));
+        pollDto.setCreationDate(LocalDateTime.now());
         when(cooperationRepository.findById(anyLong())).thenReturn(Optional.of(cooperation));
         assertThrows(NotFoundHomeException.class, () -> pollService.create(1L, pollDto));
     }
