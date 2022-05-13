@@ -29,11 +29,6 @@ public class ResultQuestion extends BaseEntity {
     @JoinColumn(name = "answer_variant_id")
     private AnswerVariant answerVariant;
 
-    //TODO: this field needs to be removed in task #417
-    @Convert(converter = PollQuestionTypeAttributeConverter.class)
-    @JoinColumn(name = "type")
-    private PollQuestionType type;
-
     @ManyToOne
     @JoinColumn(name = "poll_id")
     private Poll poll;
