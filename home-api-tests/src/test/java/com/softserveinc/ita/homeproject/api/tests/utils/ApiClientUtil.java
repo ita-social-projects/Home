@@ -130,14 +130,16 @@ public final class ApiClientUtil {
     private static ReadUser createCooperationAdmin() {
         CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
+        String token = getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), createCoop.getAdminEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
         expectedUser.setEmail(createCoop.getAdminEmail());
         return userApi.createUser(expectedUser);
     }
@@ -219,14 +221,17 @@ public final class ApiClientUtil {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createBaseCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-                Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail())));
-
+        String token = getToken(getDecodedMessageByEmail(mailResponse,
+            Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class),
+                Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
         expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
 
         return userApi.createUser(expectedUser);

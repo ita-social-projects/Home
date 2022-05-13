@@ -112,13 +112,17 @@ class OwnershipApiIT {
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-            Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail())));
+        String token = getToken(getDecodedMessageByEmail(mailResponse,
+            Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class),
+                Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
 
         expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
 

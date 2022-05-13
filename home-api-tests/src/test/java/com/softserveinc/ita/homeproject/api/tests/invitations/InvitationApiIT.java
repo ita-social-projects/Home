@@ -89,7 +89,7 @@ class InvitationApiIT {
         apartmentApi.createApartment(createdHouse.getId(), createApartmentWithEmail(userEmail));
 
 
-        TimeUnit.MILLISECONDS.sleep(5000);
+        TimeUnit.MILLISECONDS.sleep(10000);
 
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
@@ -109,14 +109,14 @@ class InvitationApiIT {
         String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
         createTestCooperationAndUserViaInvitationWithUserEmail(userEmail);
         createTestCooperationWithUserEmail(userEmail);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         String cooperationInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
-
+        while (cooperationInvitationToken.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            cooperationInvitationToken = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), userEmail));
+        }
         ReadInvitation readInvitation =
                 invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
 
@@ -317,13 +317,16 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationAndUserViaInvitationWithUserEmail(String userEmail) {
         ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, userEmail)));
+        String token = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), userEmail));
+        }
+        expectedUser.setRegistrationToken(token);
         expectedUser.setEmail(userEmail);
         userApi.createUser(expectedUser);
         return readCooperation;

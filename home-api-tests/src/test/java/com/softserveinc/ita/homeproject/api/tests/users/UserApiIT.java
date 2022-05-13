@@ -500,14 +500,16 @@ class UserApiIT {
     private static ReadUser createBaseUserForTests() {
         CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(10_000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
+        String token = getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), createCoop.getAdminEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
         expectedUser.setEmail(createCoop.getAdminEmail());
         return userApi.createUser(expectedUser);
     }
@@ -515,14 +517,16 @@ class UserApiIT {
     private ReadUser createNotMatchingUser() throws ApiException, InterruptedException, IOException {
         CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(10_000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
+        String token = getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), createCoop.getAdminEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
         return userApi.createUser(expectedUser);
     }
 

@@ -58,14 +58,16 @@ class ContactApiIT {
     private ReadUser createTestUserViaInvitation() {
         CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         ApiUsageFacade api = new ApiUsageFacade();
         MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
+        String token = getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail()));
+        while (token.length() < 36) {
+            TimeUnit.MILLISECONDS.sleep(1000);
+            token = getToken(getDecodedMessageByEmail(api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class), createCoop.getAdminEmail()));
+        }
+        expectedUser.setRegistrationToken(token);
         expectedUser.setEmail(createCoop.getAdminEmail());
         return userApi.createUser(expectedUser);
     }
