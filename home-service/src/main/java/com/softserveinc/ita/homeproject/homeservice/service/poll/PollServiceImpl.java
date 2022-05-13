@@ -362,7 +362,6 @@ public class PollServiceImpl implements PollService {
 
             resultQuestion.setAnswerVariant(entry.getKey());
             resultQuestion.setPoll(poll);
-            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
             resultQuestion.setVoteCount(entry.getValue().size());
             resultQuestion.setPercentVotes(String.valueOf(
                 votedArea.get()
@@ -388,7 +387,6 @@ public class PollServiceImpl implements PollService {
         for (Map.Entry<AnswerVariant, List<Vote>> entry : answerVariantsToVotes.entrySet()) {
             ResultQuestion resultQuestion = new ResultQuestion();
             resultQuestion.setAnswerVariant(entry.getKey());
-            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
             resultQuestion.setPoll(poll);
             resultQuestion.setVoteCount(entry.getValue().size());
             resultQuestion.setPercentVotes(String.valueOf(
