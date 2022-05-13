@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.poll.results;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,8 +10,6 @@ import javax.persistence.Table;
 
 import com.softserveinc.ita.homeproject.homedata.BaseEntity;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
-import com.softserveinc.ita.homeproject.homedata.poll.converters.PollQuestionTypeAttributeConverter;
-import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
 import lombok.Getter;
 import lombok.Setter;
