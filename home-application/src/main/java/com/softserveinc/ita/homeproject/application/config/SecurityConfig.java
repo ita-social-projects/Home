@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
  * SecurityConfig class configures security in application.
@@ -33,8 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTProvider jwtProvider;
 
     @Autowired
-    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService,
-                          JWTProvider jwtProvider) {
+    public SecurityConfig(JWTProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
 
@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .addFilterBefore(new JWTTokenValidatorFilter(jwtProvider),
                 BasicAuthenticationFilter.class);
+
     }
 
     private CorsConfiguration getCorsConfiguration() {

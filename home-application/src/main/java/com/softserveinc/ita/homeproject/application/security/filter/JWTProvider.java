@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class JWTProvider {
 
-    private final static String NOT_ACCEPTABLE_TOKEN_MESSAGE = "Token is not correct";
+    private static final String NOT_ACCEPTABLE_TOKEN_MESSAGE = "Token is not correct";
 
     @Value("${jwt.token.secret}")
     private String secret;
