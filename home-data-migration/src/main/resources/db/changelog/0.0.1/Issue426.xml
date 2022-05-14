@@ -41,6 +41,10 @@
     </changeSet>
 
     <changeSet id="Issue426.007" author="vladyslavyarets">
+        <dropColumn tableName="polls" columnName="result"/>
+    </changeSet>
+
+    <changeSet id="Issue426.008" author="vladyslavyarets">
         <dropSequence sequenceName="result_question_variants_sequence"/>
         <dropSequence sequenceName="question_votes_sequence"/>
         <dropSequence sequenceName="vote_question_variants_sequence"/>
