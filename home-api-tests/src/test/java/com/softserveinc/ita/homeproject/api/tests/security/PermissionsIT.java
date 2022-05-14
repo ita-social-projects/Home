@@ -86,8 +86,7 @@ class PermissionsIT {
     void testCooperationAdmin(Function<ApiClient, ApiResponse<?>> action, String x,
                               boolean admin, boolean coopAdmin) {
 
-        ApiClient cooperationAdmin = ApiClientUtil.getCooperationAdminClient();
-        int statusCode = getStatusCode(action, cooperationAdmin);
+        int statusCode = getStatusCode(action, ApiClientUtil.getCooperationAdminClient());
         checkUser(coopAdmin, statusCode);
     }
 
