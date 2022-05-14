@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_USER;
 
-import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -11,7 +10,6 @@ import com.softserveinc.ita.homeproject.homeservice.service.user.UserSessionServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 @Provider
 @Component
