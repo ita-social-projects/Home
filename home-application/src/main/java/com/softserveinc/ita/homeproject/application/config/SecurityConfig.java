@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.application.security.config;
+package com.softserveinc.ita.homeproject.application.config;
 
 import com.softserveinc.ita.homeproject.application.security.filter.JWTProvider;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTTokenValidatorFilter;
@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
  * SecurityConfig class configures security in application.
@@ -34,18 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTProvider jwtProvider;
 
-    private final UserDetailsService userDetailsService;
-
     @Autowired
-    public SecurityConfig(@Qualifier("homeUserDetailsService") UserDetailsService userDetailsService,
-                          JWTProvider jwtProvider) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfig(JWTProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(daoAuthenticationProvider());
     }
 
     @Override
@@ -54,24 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .csrf().disable()
-            .authorizeRequests()
-            .antMatchers(HttpMethod.POST, "/api/*/users").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/*/cooperations/**").permitAll()
-            .antMatchers("/api/*/apidocs/**").permitAll()
-            .antMatchers("/api/*/version.json").permitAll()
-            .anyRequest().authenticated()
-            .and()
             .cors().configurationSource(request ->
                 getCorsConfiguration())
             .and()
-            .httpBasic()
-            .and()
             .addFilterBefore(new JWTTokenValidatorFilter(jwtProvider),
                 BasicAuthenticationFilter.class);
+
     }
 
     private CorsConfiguration getCorsConfiguration() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        var corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
         corsConfiguration.addAllowedMethod(HttpMethod.PUT);
         corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
         return corsConfiguration;
@@ -80,14 +62,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-
-    @Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        return daoAuthenticationProvider;
     }
 }

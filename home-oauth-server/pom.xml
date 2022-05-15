@@ -13,7 +13,7 @@
         <groupId>com.softserveinc.ita.homeproject</groupId>
         <version>${revision}</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>home-oauth-server</artifactId>
 
     <name>home-oauth-server</name>
@@ -21,6 +21,7 @@
     <properties>
         <java.version>11</java.version>
         <springfox-version>2.9.2</springfox-version>
+        <home-oauth.package>com.softserveinc.ita.homeproject.homeoauthserver</home-oauth.package>
     </properties>
     <dependencies>
         <dependency>
@@ -88,6 +89,22 @@
             <artifactId>modelmapper</artifactId>
             <version>2.4.4</version>
         </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -106,17 +123,18 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.softserveinc.ita.homeproject</groupId>
-                                    <artifactId>home-oauth-server</artifactId>
+                                    <artifactId>home-open-api</artifactId>
                                     <version>${revision}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <fileMappers>
                                         <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
                                     </fileMappers>
-                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/
+                                    </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <includes>*/openapi.yaml,*/openapi.json</includes>
+                            <includes>*/oauth-openapi.yaml,*/oauth-openapi.json</includes>
                         </configuration>
                     </execution>
                     <execution>
@@ -136,7 +154,8 @@
                                     <fileMappers>
                                         <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
                                     </fileMappers>
-                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/rapidoc</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/rapidoc
+                                    </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                             <includes>**/dist/*</includes>
@@ -185,7 +204,8 @@
                                     <fileMappers>
                                         <org.codehaus.plexus.components.io.filemappers.FlattenFileMapper/>
                                     </fileMappers>
-                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/redoc</outputDirectory>
+                                    <outputDirectory>${project.build.outputDirectory}/static/api/0/oauth2/redoc
+                                    </outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                             <includes>**/bundles/*</includes>
@@ -203,15 +223,56 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi/openapi.yaml</inputSpec>
+                            <inputSpec>
+                                ${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml
+                            </inputSpec>
                             <generatorName>spring</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
                             <configOptions>
                                 <java8>true</java8>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
                                 <sourceFolder>/</sourceFolder>
-                                <modelPackage>com.softserveinc.ita.homeproject.homeoauthserver.model</modelPackage>
-                                <apiPackage>com.softserveinc.ita.homeproject.homeoauthserver.api</apiPackage>
-                                <invokerPackage>com.softserveinc.ita.homeproject.homeoauthserver</invokerPackage>
+                                <artifactId>home-oauth-server</artifactId>
+                                <ArtifactVersion>${revision}</ArtifactVersion>
+                                <modelPackage>${home-oauth.package}.model</modelPackage>
+                                <apiPackage>${home-oauth.package}.api</apiPackage>
+                                <invokerPackage>${home-oauth.package}</invokerPackage>
+                                <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
+                                <parentGroupId>${project.parent.groupId}</parentGroupId>
+                                <parentVersion>${project.parent.version}</parentVersion>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>second</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.parent.basedir}/home-open-api/src/main/resources/yaml/oauth-openapi.yaml
+                            </inputSpec>
+                            <generatorName>java</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <java8>true</java8>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <library>jersey2</library>
+                                <sourceFolder>/</sourceFolder>
+                                <artifactId>home-oauth-client</artifactId>
+                                <artifactVersion>${revision}</artifactVersion>
+                                <modelPackage>${home-oauth.package}.model</modelPackage>
+                                <apiPackage>${home-oauth.package}.api</apiPackage>
+                                <invokerPackage>${home-oauth.package}</invokerPackage>
                                 <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
                                 <parentGroupId>${project.parent.groupId}</parentGroupId>
                                 <parentVersion>${project.parent.version}</parentVersion>
@@ -226,7 +287,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>mvn</executable>
+                    <!-- optional -->
+                    <workingDirectory>${project.build.directory}/generated-sources/openapi</workingDirectory>
+                    <arguments>
+                        <argument>clean</argument>
+                        <argument>install</argument>
+                        <argument>-ntp</argument>
+                    </arguments>
+                    <environmentVariables>
+                        <LANG>en_US</LANG>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
