@@ -288,29 +288,33 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <configuration>
+                    <to>
+                        <image>homeacademy/home-oauth-server</image>
+                        <tags>
+                            <tag>${project.version}-${git_commit_sha}</tag>
+                        </tags>
+                        <auth>
+                            <username>${docker.username}</username>
+                            <password>${docker.password}</password>
+                        </auth>
+                    </to>
+                    <container>
+                        <mainClass>com.softserveinc.ita.homeproject.homeoauthserver.HomeOauthServerApplication</mainClass>
+                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+                    </container>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
+                </configuration>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>${jib.goal}</goal>
                         </goals>
-                        <phase>install</phase>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>mvn</executable>
-                    <!-- optional -->
-                    <workingDirectory>${project.build.directory}/generated-sources/openapi</workingDirectory>
-                    <arguments>
-                        <argument>clean</argument>
-                        <argument>install</argument>
-                        <argument>-ntp</argument>
-                    </arguments>
-                    <environmentVariables>
-                        <LANG>en_US</LANG>
-                    </environmentVariables>
-                </configuration>
             </plugin>
         </plugins>
     </build>

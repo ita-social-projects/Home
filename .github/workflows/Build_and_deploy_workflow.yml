@@ -74,6 +74,14 @@ jobs:
           repository: homeacademy/data-migration
           readme: "home-docs/docker-readme.md"
 
+      - name: Sync readme with home-oauth-server repository
+        uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+          repository: homeacademy/home-oauth-server
+          readme: "home-docs/docker-readme.md"
+
       - name: Publish to GitHub Packages and Docker Hub
         if: "startsWith(env.TAG_NAME, 'dev') || startsWith(env.TAG_NAME, 'release')"
         run: >-

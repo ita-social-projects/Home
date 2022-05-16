@@ -1,8 +1,7 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,7 +14,9 @@ import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSession;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homeoauthserver.dto.AccessTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.CreateTokenDto;
+import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.UserCredentialsDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ class OauthServiceImplIT {
 
     @Test
     void generateTokenShouldReturnTokens() {
-        //arrange
+
         UserCredentialsDto userCredentialsDto = new UserCredentialsDto();
         CreateTokenDto expectedCreateTokenDto = new CreateTokenDto();
         UserCredentials userCredentials = new UserCredentials();
@@ -64,10 +65,35 @@ class OauthServiceImplIT {
         when(jwtProvider.generateToken(1000L, "test@gmail.com", 7))
             .thenReturn(("456"));
         when(jwtProvider.getDate()).thenReturn(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
-        //act
+
         CreateTokenDto actualCreateTokenDto = oauthService.generateToken(userCredentialsDto);
-        //assert
+
         assertThat(actualCreateTokenDto).usingRecursiveComparison().isEqualTo(expectedCreateTokenDto);
+    }
+
+    @Test
+    void updateTokenShouldReturnToken(){
+        RefreshTokenDto refreshTokenDto = new RefreshTokenDto();
+        UserSession userSession = new UserSession();
+        refreshTokenDto.setRefreshToken("456");
+        String accessToken = "123";
+        AccessTokenDto expectedAccessTokenDto = new AccessTokenDto();
+        expectedAccessTokenDto.setAccessToken(accessToken);
+        userSession.setAccessToken(accessToken);
+        userSession.setId(1000L);
+
+        when(userSessionRepository.findByRefreshToken("456"))
+            .thenReturn(Optional.of(userSession));
+        when(jwtProvider.getEmailFromToken("456")).thenReturn("test@gmail.com");
+        doNothing().when(jwtProvider).validateToken(refreshTokenDto.getRefreshToken());
+        when(jwtProvider.generateToken(1000L, "test@gmail.com", 1))
+            .thenReturn((accessToken));
+
+        AccessTokenDto actualAccessTokenDto = oauthService.updateToken(refreshTokenDto);
+
+        verify(userSessionRepository, times(1)).save(userSession);
+
+        assertThat(actualAccessTokenDto).usingRecursiveComparison().isEqualTo(expectedAccessTokenDto);
     }
 
 }
