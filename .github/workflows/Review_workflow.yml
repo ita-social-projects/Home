@@ -23,7 +23,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           API_TESTS_VERBOSE_LOGGING: false
         run: >-
-          mvn -X -V -e -B -ntp
+          mvn -V -e -B -ntp
           clean install sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
@@ -33,3 +33,4 @@ jobs:
           -Dapi.tests.verbose.logging=${{env.API_TESTS_VERBOSE_LOGGING}}
           -Dgithub.packages.read.username=${{secrets.PACKAGES_READ_USERNAME}}
           -Dgithub.packages.read.token=${{secrets.PACKAGES_READ_TOKEN}}
+          -Dhome.oauth.external.port=9000
