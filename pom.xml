@@ -18,6 +18,7 @@
         <module>home-clients</module>
         <module>home-api-tests</module>
         <module>home-data-migration</module>
+        <module>home-gateway</module>
     </modules>
 
     <properties>
