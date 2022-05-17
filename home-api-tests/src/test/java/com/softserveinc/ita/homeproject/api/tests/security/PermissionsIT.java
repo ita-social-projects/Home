@@ -351,7 +351,7 @@ class PermissionsIT {
             case "java.math.BigDecimal":
                 return new BigDecimal(1);
             case "com.softserveinc.ita.homeproject.client.model.UpdateUser":
-                return new UpdateUser();
+                return new UpdateUser().firstName("Test").lastName("Test").middleName("Test");
             case "com.softserveinc.ita.homeproject.client.model.CreateUser":
                 return new CreateUser();
             case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
