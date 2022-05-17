@@ -248,8 +248,8 @@
                                             <link>${docker.image.postgres}</link>
                                         </links>
                                         <wait>
-                                            <log>Started HomeOAuthServer</log>
-                                            <time>30000</time>
+                                            <log>Started HomeOauthServerApplication</log>
+                                            <time>300000</time>
                                         </wait>
                                         <log>
                                             <enabled>${api.tests.verbose.logging}</enabled>

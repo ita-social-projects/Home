@@ -6,7 +6,7 @@
 - This image starts an application in docker container:  
   `homeacademy/home-application`
 
-This image starts an authorization server in docker container
+- This image starts an authorization server in docker container
   `homeacademy/home-oauth-server`
 
 - This variable allows you to specify datasource URL and database name:
@@ -29,7 +29,7 @@ This image starts an authorization server in docker container
 
 `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}'-e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homeacademy/home-application`
 
-## How to launch application in container
+## How to launch oauth server in container
 
 `$ docker pull homeacademy/home-oauth-server`
 
