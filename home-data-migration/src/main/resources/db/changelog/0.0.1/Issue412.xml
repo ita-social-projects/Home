@@ -34,10 +34,6 @@
             <column name="percent_votes" type="varchar(20)">
                 <!--TODO:add NotNull constraint after data migration in other changeset-->
             </column>
-            <column name="poll_id" type="bigint">
-                <constraints foreignKeyName="poll_fk"
-                             references="polls(id)"/>
-            </column>
         </addColumn>
     </changeSet>
 
