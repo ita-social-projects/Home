@@ -366,7 +366,7 @@
                             <systemPropertyVariables>
                                 <home.application.external.port>${home.application.external.port}
                                 </home.application.external.port>
-                                <home.oauth.server.external.port>${home.oauth.external.port}</home.oauth.server.external.port>
+                                <home.oauth.external.port>${home.oauth.external.port}</home.oauth.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
                                 <mailhog.external.port>${mailhog.external.port}</mailhog.external.port>
