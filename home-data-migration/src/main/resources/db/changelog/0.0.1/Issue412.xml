@@ -70,4 +70,13 @@
         <createSequence incrementBy="50" sequenceName="questions_sequence"/>
         <createSequence incrementBy="50" sequenceName="votes_answer_variants_sequence"/>
     </changeSet>
+
+    <changeSet id="412.006" author="vladyslavyarets">
+        <addColumn tableName="result_questions">
+            <column name="poll_id" type="bigint">
+                <constraints foreignKeyName="poll_fk"
+                             references="polls(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
