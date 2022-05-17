@@ -23,7 +23,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           API_TESTS_VERBOSE_LOGGING: false
         run: >-
-          mvn -V -e -B -ntp
+          mvn -X -V -e -B -ntp
           clean install sonar:sonar
           -Papi-tests-infrastructure
           -Papi-tests
