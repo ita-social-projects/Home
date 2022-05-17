@@ -242,7 +242,7 @@
                                             <DATASOURCE_PASSWORD>${postgres.password}</DATASOURCE_PASSWORD>
                                         </env>
                                         <ports>
-                                            <port>${home.oauth.server.external.port}:${home.oauth.server.internal.port}</port>
+                                            <port>${home.oauth.external.port}:${home.oauth.server.internal.port}</port>
                                         </ports>
                                         <links>
                                             <link>${docker.image.postgres}</link>
