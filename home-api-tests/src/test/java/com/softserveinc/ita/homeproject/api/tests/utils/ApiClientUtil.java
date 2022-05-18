@@ -155,7 +155,7 @@ public final class ApiClientUtil {
 
     @SneakyThrows
     static ReadUser createCooperationAdmin() {
-        CreateCooperation createCoop = createBaseCooperation();
+                CreateCooperation createCoop = createBaseCooperation();
         cooperationApi.createCooperation(createCoop);
 
         TimeUnit.MILLISECONDS.sleep(5000);
