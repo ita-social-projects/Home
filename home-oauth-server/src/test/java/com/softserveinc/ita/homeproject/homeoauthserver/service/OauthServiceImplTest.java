@@ -25,7 +25,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-class OauthServiceImplIT {
+class OauthServiceImplTest {
 
     @Mock
     private static UserSessionRepository userSessionRepository;
