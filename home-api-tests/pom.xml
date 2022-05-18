@@ -78,6 +78,11 @@
                     <artifactId>home-data</artifactId>
                     <scope>provided</scope>
                 </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-oauth-server</artifactId>
+                    <scope>provided</scope>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
