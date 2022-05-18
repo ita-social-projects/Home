@@ -12,12 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
 import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.client.ApiClient;
-import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ServerConfiguration;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.UserApi;
@@ -30,8 +28,6 @@ import com.softserveinc.ita.homeproject.client.model.CreatePhoneContact;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
 import com.softserveinc.ita.homeproject.client.model.ReadUser;
 import com.softserveinc.ita.homeproject.homeoauthserver.api.AuthenticationApi;
-import com.softserveinc.ita.homeproject.homeoauthserver.model.AccessToken;
-import com.softserveinc.ita.homeproject.homeoauthserver.model.CreateToken;
 import com.softserveinc.ita.homeproject.homeoauthserver.model.UserCredentials;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -47,7 +43,7 @@ public class LoginIT {
 
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
 
-    private static final String USER_EMAIL = "test.receive.apartment@gmail.com";
+    private static final String USER_EMAIL = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
 
     private static final String USER_PASSWORD = "password";
 
