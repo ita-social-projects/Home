@@ -396,7 +396,6 @@ class PollServiceImplTest {
 
         positiveResult.setAnswerVariant(question.getAnswerVariants().get(0));
         positiveResult.setPoll(poll);
-        positiveResult.setType(PollQuestionType.MULTIPLE_CHOICE);
         positiveResult.setVoteCount(answerCount - negativeAnswers);
         positiveResult.setPercentVotes(String.valueOf(
             new BigDecimal(answerCount - negativeAnswers)
@@ -407,7 +406,6 @@ class PollServiceImplTest {
 
         negativeResult.setAnswerVariant(question.getAnswerVariants().get(1));
         negativeResult.setPoll(poll);
-        negativeResult.setType(PollQuestionType.MULTIPLE_CHOICE);
         negativeResult.setVoteCount(negativeAnswers);
         negativeResult.setPercentVotes(String.valueOf(
             new BigDecimal(negativeAnswers)
