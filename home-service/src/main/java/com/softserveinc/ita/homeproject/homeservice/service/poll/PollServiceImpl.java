@@ -18,7 +18,6 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.HouseRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.poll.PollRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.enums.PollQuestionType;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollStatus;
 import com.softserveinc.ita.homeproject.homedata.poll.enums.PollType;
 import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariant;
@@ -362,7 +361,6 @@ public class PollServiceImpl implements PollService {
 
             resultQuestion.setAnswerVariant(entry.getKey());
             resultQuestion.setPoll(poll);
-            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
             resultQuestion.setVoteCount(entry.getValue().size());
             resultQuestion.setPercentVotes(String.valueOf(
                 votedArea.get()
@@ -388,7 +386,6 @@ public class PollServiceImpl implements PollService {
         for (Map.Entry<AnswerVariant, List<Vote>> entry : answerVariantsToVotes.entrySet()) {
             ResultQuestion resultQuestion = new ResultQuestion();
             resultQuestion.setAnswerVariant(entry.getKey());
-            resultQuestion.setType(PollQuestionType.MULTIPLE_CHOICE);//TODO:needs to be removed in task #417
             resultQuestion.setPoll(poll);
             resultQuestion.setVoteCount(entry.getValue().size());
             resultQuestion.setPercentVotes(String.valueOf(

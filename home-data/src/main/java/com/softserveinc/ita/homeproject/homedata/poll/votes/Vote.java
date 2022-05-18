@@ -36,7 +36,7 @@ public class Vote extends BaseEntity {
     private User user;
 
     @Convert(converter = PollQuestionTypeAttributeConverter.class)
-    @Column(name = "type", insertable = false, updatable = false)
+    @Column(name = "type", updatable = false)
     private PollQuestionType type;
 
     @Column(name = "advice_answer")
