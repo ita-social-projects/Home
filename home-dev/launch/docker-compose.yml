@@ -40,11 +40,49 @@ services:
     networks:
       - home_network
 
+# home-reader:
+#   image: homeacademy/home-reader
+#   environment:
+#     DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+#   ports:
+#     - 8082:8082
+#   networks:
+#     - home_network
+
   mailhog:
     image: mailhog/mailhog
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    networks:
+      - home_network
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+        - 8082:8082
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpassword
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - home_network
+
+volumes:
+    data: {}
 
 networks:
   home_network:
