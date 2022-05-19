@@ -6,5 +6,6 @@ zuul:
     homeApplication:
       path: /home/**
       url: http://localhost:8080/api/0/
+  sensitiveHeaders: Cookie,Set-Cookie
 server:
   port: 8081
