@@ -35,7 +35,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LoginIT {
+class LoginIT {
 
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
 
