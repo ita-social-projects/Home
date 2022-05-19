@@ -65,6 +65,8 @@ public final class ApiClientUtil {
 
     private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
 
+    private static final String GATEWAY_EXTERNAL_PORT = "8081";
+
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
 
     private static final String USER_PASSWORD = "password";
@@ -266,7 +268,7 @@ public final class ApiClientUtil {
 
     private static void setServers(ApiClient client) {
         client.setServers(List.of(new ServerConfiguration("http://localhost:" +
-            APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
+            GATEWAY_EXTERNAL_PORT + "/home", "No description provided", new HashMap())));
     }
 
     @SneakyThrows
