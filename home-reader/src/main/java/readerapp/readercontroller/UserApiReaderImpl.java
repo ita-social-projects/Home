@@ -1,28 +1,31 @@
 package readerapp.readercontroller;
 
+import java.util.List;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import readerapp.readermodels.UserForMongo;
-import readerapp.readerservice.UserReaderServise;
+import readerapp.readerrepository.UserReaderRepository;
 
-@Provider
-@Component
-public class UserApiReaderImpl implements UserApiReader{
 
-    private UserReaderServise userReaderServise;
+@RestController
+public class UserApiReaderImpl {
 
-    @Override
-    public Response getUser(Long id) {
-        userReaderServise.findAll();
-        return Response.status(Response.Status.OK).build();
+    //    private UserReaderServise userReaderServise;
+    @Autowired
+    private UserReaderRepository userReaderRepository;
+
+    @GetMapping("/users")
+    public List<UserForMongo> getUsers() {
+        return userReaderRepository.findAll();
     }
 
-    @Override
-    public Response createUser(UserForMongo createUser) {
 
-        return Response.status(Response.Status.CREATED).build();
+    @PostMapping("/users")
+    public void saveUsers(@RequestBody UserForMongo userForMongo) {
+        userReaderRepository.save(userForMongo);
     }
 }

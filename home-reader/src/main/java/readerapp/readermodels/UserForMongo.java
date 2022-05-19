@@ -15,6 +15,9 @@ public class UserForMongo {
 
     private String surname;
 
+    public UserForMongo() {
+    }
+
     public UserForMongo(String id, int age, String name, String surname) {
         this.id = id;
         this.age = age;

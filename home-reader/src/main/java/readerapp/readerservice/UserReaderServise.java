@@ -34,7 +34,8 @@ public class UserReaderServise {
         return userReaderRepository.findAll();
     }
 
-//    public UserForMongo findById() {
-//      return   userReaderRepository.findById();
-//    }
+    public void createUser() {
+        userReaderRepository.save(new UserForMongo("myIdCOOL", 1003, "Good", "Job"));
+    }
+
 }
