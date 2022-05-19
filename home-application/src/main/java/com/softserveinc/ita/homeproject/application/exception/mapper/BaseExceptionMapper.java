@@ -7,6 +7,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Providers;
 
 import com.softserveinc.ita.homeproject.application.model.ApiError;
+import com.softserveinc.ita.homeproject.application.security.exception.BaseOauthException;
 import com.softserveinc.ita.homeproject.homeservice.exception.BaseHomeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +29,7 @@ public abstract class BaseExceptionMapper<T extends Throwable> implements Except
         log.info("Mapped error.", exception);
         Throwable throwable = exception.getCause();
 
-        if (throwable instanceof BaseHomeException) {
+        if (throwable instanceof BaseHomeException || throwable instanceof BaseOauthException) {
             ExceptionMapper mapper = providers.getExceptionMapper(throwable.getClass());
             if (mapper != null) {
                 return mapper.toResponse(throwable);
