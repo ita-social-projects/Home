@@ -60,8 +60,6 @@ public final class ApiClientUtil {
 
     private final static Long APARTMENT_ID = 100L;
 
-    private static final String APPLICATION_EXTERNAL_PORT = System.getProperty("home.application.external.port");
-
     private static final String GATEWAY_EXTERNAL_PORT = "8081";
 
     private static final String OAUTH_APPLICATION_EXTERNAL_PORT = System.getProperty("home.oauth.external.port");
@@ -305,7 +303,7 @@ public final class ApiClientUtil {
     static <T> void setServers(T client) {
         if (client instanceof ApiClient) {
             ((ApiClient) client).setServers(List.of(new ServerConfiguration("http://localhost:" +
-                APPLICATION_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
+                GATEWAY_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
         } else if (client instanceof com.softserveinc.ita.homeproject.homeoauthserver.ApiClient) {
             ((com.softserveinc.ita.homeproject.homeoauthserver.ApiClient) client).setServers(List.of
                 (new com.softserveinc.ita.homeproject.homeoauthserver.ServerConfiguration("http://localhost:" +

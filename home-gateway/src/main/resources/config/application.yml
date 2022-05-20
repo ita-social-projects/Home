@@ -1,3 +1,5 @@
+home.application.url: http://localhost:8080
+
 zuul:
   routes:
     foos:
@@ -5,7 +7,7 @@ zuul:
       url: http://localhost:8081/spring-zuul-foos-resource/foos
     homeApplication:
       path: /**
-      url: http://localhost:8080
+      url: ${home.application.url}
   sensitiveHeaders: Cookie,Set-Cookie
   forceOriginalQueryStringEncoding: true
 server:
