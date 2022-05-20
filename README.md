@@ -6,7 +6,7 @@ ___
 [![Coverage Status](https://img.shields.io/sonar/coverage/ita-social-projects-home?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/component_measures?id=ita-social-projects-home&metric=coverage&view=treemap)
 [![Github Issues](https://img.shields.io/github/issues/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/issues)
 [![Pending Pull-Requests](https://img.shields.io/github/issues-pr/ita-social-projects/Home?style=flat-square)](https://github.com/ita-social-projects/Home/pulls)
-[![Docker Pulls](https://img.shields.io/docker/pulls/homeacademy/home-application)](https://hub.docker.com/r/homeacademy/home-application)
+[![Docker Pulls](https://img.shields.io/docker/pulls/homebayraktar/home-application)](https://hub.docker.com/r/homebayraktar/home-application)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 ___
 

@@ -16,9 +16,9 @@
     <properties>
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <docker-files>${basedir}/target/docker</docker-files>
-        <docker.image.data.migration>homeacademy/data-migration:${docker.revision}</docker.image.data.migration>
-        <docker.image.application>homeacademy/home-application:${docker.revision}</docker.image.application>
-        <docker.image.oauth-server>homeacademy/home-oauth-server:${docker.revision}</docker.image.oauth-server>
+        <docker.image.data.migration>homebayraktar/data-migration:${docker.revision}</docker.image.data.migration>
+        <docker.image.application>homebayraktar/home-application:${docker.revision}</docker.image.application>
+        <docker.image.oauth-server>homebayraktar/home-oauth-server:${docker.revision}</docker.image.oauth-server>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.image.psql>governmentpaas/psql</docker.image.psql>
