@@ -1,14 +1,13 @@
-package com.softserveinc.ita.homeproject.readerApp.service;
+package com.softserveinc.ita.homeproject.readerapp.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 
+import com.softserveinc.ita.homeproject.readerapp.models.UserForMongo;
+import com.softserveinc.ita.homeproject.readerapp.repositories.UserReaderRepository;
 import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.softserveinc.ita.homeproject.readerApp.models.UserForMongo;
-import com.softserveinc.ita.homeproject.readerApp.repositories.UserReaderRepository;
-
 
 @Service
 public class UserReaderServise {

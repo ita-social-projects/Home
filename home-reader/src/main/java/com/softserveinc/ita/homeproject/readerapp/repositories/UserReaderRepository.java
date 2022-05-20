@@ -1,6 +1,6 @@
-package com.softserveinc.ita.homeproject.readerApp.repositories;
+package com.softserveinc.ita.homeproject.readerapp.repositories;
 
-import com.softserveinc.ita.homeproject.readerApp.models.UserForMongo;
+import com.softserveinc.ita.homeproject.readerapp.models.UserForMongo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

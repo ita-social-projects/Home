@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.readerApp.models;
+package com.softserveinc.ita.homeproject.readerapp.models;
 
 
 import org.springframework.data.annotation.Id;
