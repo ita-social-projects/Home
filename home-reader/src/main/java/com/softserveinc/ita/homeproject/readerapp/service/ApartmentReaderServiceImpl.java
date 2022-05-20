@@ -20,6 +20,6 @@ public class ApartmentReaderServiceImpl implements ApartmentReaderService {
 
     @Override
     public void createApartmentReader(ApartmentReader apartmentReader) {
-        apartmentReaderRepository.save(new ApartmentReader("15", true));
+        apartmentReaderRepository.save(apartmentReader);
     }
 }
