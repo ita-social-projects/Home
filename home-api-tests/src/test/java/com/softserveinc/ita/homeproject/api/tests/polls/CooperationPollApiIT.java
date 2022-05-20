@@ -135,6 +135,10 @@ class CooperationPollApiIT {
             .addHousesItem(new HouseLookup().id(NONEXISTENT_HOUSE_ID));
     }
 
+    private static CreatePoll createPollWithCreationDateInPast(){
+        return createPoll().creationDate(LocalDateTime.now().minusDays(1));
+    }
+
     private static CreatePoll createPollWithCompletionDateLessThanTwoDaysTest() {
         return createPoll()
             .completionDate(LocalDateTime.now().plusDays(1L));
@@ -248,6 +252,16 @@ class CooperationPollApiIT {
                 .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
             .matches(exception -> exception.getCode() == NOT_FOUND)
             .withMessageContaining("House with 'id: " + HOUSE_ID_FROM_NON_RELATED_COOPERATION + "' is not found");
+    }
+
+    @Test
+    void createCooperationPollWithCreationDateInPast() {
+        CreatePoll createPoll = createPollWithCreationDateInPast();
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> COOPERATION_POLL_API
+                        .createCooperationPollWithHttpInfo(COOPERATION_ID, createPoll))
+                .matches(exception -> exception.getCode() == BAD_REQUEST)
+                .withMessageContaining("Poll can`t be created in the past");
     }
 
     @Test

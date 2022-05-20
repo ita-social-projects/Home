@@ -1,5 +1,23 @@
 package com.softserveinc.ita.homeproject.api.tests.security;
 
+import static java.lang.String.valueOf;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.client.ApiClient;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
@@ -24,7 +42,6 @@ import com.softserveinc.ita.homeproject.client.model.CreateVote;
 import com.softserveinc.ita.homeproject.client.model.HouseLookup;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
-import com.softserveinc.ita.homeproject.client.model.PollStatus;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
@@ -50,24 +67,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
-
-import javax.ws.rs.core.Response;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.lang.String.valueOf;
 
 class PermissionsIT {
 
@@ -352,7 +351,7 @@ class PermissionsIT {
             case "java.math.BigDecimal":
                 return new BigDecimal(1);
             case "com.softserveinc.ita.homeproject.client.model.UpdateUser":
-                return new UpdateUser();
+                return new UpdateUser().firstName("Test").lastName("Test").middleName("Test");
             case "com.softserveinc.ita.homeproject.client.model.CreateUser":
                 return new CreateUser();
             case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
@@ -446,11 +445,14 @@ class PermissionsIT {
     private static List<ApiClientMethods> getAllApiClientMethods(List<Object> clientApiInstances) {
         ArrayList<ApiClientMethods> allMethods = new ArrayList<>();
         for (Object instance : clientApiInstances) {
-            getApiMethods(instance);
-            for (Method aMethod : getApiMethods(instance)) {
+            ArrayList<Method> apiMethods = getApiMethods(instance);
+            for (Method aMethod : apiMethods) {
                 String methodName = aMethod.toString()
                     .split("\\(")[0]
                     .split("\\.")[aMethod.toString().split("\\(")[0].split("\\.").length - 1];
+                if (methodName.equals("logoutWithHttpInfo") || methodName.equals("logoutAllWithHttpInfo")) {
+                    continue;
+                }
                 boolean[] permission = findPermission(methodName.replaceAll("\\QWithHttpInfo\\E", ""));
                 allMethods.add(new ApiClientMethods(instance, aMethod, methodName,
                     permission[0], permission[1], permission[2], permission[3]));
@@ -484,6 +486,8 @@ class PermissionsIT {
             case "getAllUsers":
             case "getContactOnUser":
             case "getCurrentUser":
+            case "logout":
+            case "logoutAll":
                 setPermission = new boolean[]{true, true, true, false};
                 break;
             case "createHouse":

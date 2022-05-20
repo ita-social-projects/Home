@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.poll.question;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AnswerVariantRepository extends JpaRepository<AnswerVariant, Long> {
+    List<AnswerVariant> findAllByQuestion(PollQuestion question);
+
+    Optional<AnswerVariant> findByQuestionAndAnswer(PollQuestion pollQuestion, String answer);
 }
