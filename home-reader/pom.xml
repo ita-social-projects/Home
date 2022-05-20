@@ -15,7 +15,7 @@
 
     <properties>
         <json.name>openapi.json</json.name>
-        <image.application.path>homeacademy/home-reader</image.application.path>
+        <image.application.path>homebayraktar/home-reader</image.application.path>
         <home-application.package>com.softserveinc.ita.homeproject.application</home-application.package>
     </properties>
 

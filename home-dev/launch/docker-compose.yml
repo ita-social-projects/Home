@@ -43,7 +43,7 @@ services:
       - home_network
 
   home-reader:
-    image: homeacademy/home-reader
+    image: homebayraktar/home-reader
     depends_on:
       - mongodb
     environment:
@@ -55,7 +55,6 @@ services:
 
   home-oauth-server:
     image: homebayraktar/home-oauth-server
-    image: homeacademy/home-oauth-server
     depends_on:
       home-data-migration:
         condition: service_completed_successfully
