@@ -1,10 +1,8 @@
-package readerapp.readerrepository;
+package com.softserveinc.ita.homeproject.readerApp.repositories;
 
-import java.util.Optional;
-
+import com.softserveinc.ita.homeproject.readerApp.models.UserForMongo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import readerapp.readermodels.UserForMongo;
 
 @Repository
 public interface UserReaderRepository extends MongoRepository<UserForMongo, String> {

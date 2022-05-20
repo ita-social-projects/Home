@@ -40,14 +40,15 @@ services:
     networks:
       - home_network
 
-# home-reader:
-#   image: homeacademy/home-reader
-#   environment:
-#     DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-#   ports:
-#     - 8082:8082
-#   networks:
-#     - home_network
+  home-reader:
+    image: homeacademy/home-reader
+    environment:
+      - spring.data.mongodb.host=mongodb
+    ports:
+      - 8099:8099
+    depends_on: mongodb
+    networks:
+      - home_network
 
   mailhog:
     image: mailhog/mailhog

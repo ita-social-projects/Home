@@ -1,4 +1,4 @@
-package readerapp.readercontroller;
+package com.softserveinc.ita.homeproject.readerApp.controllers;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import readerapp.readermodels.UserForMongo;
-import readerapp.readerrepository.UserReaderRepository;
+import com.softserveinc.ita.homeproject.readerApp.models.UserForMongo;
+import com.softserveinc.ita.homeproject.readerApp.repositories.UserReaderRepository;
 
 
 @RestController
