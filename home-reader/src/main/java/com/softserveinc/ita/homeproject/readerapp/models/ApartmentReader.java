@@ -1,13 +1,13 @@
 package com.softserveinc.ita.homeproject.readerapp.models;
 
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import javax.persistence.SequenceGenerator;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.SequenceGenerator;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
