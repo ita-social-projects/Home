@@ -42,11 +42,12 @@ services:
 
   home-reader:
     image: homeacademy/home-reader
+    depends_on:
+      - mongodb
     environment:
       - spring.data.mongodb.host=mongodb
     ports:
       - 8099:8099
-    depends_on: mongodb
     networks:
       - home_network
 
