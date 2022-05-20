@@ -44,3 +44,4 @@
 `-Xss<size>` - Set thread stack size
 
  Example: `-e JAVA_OPTS="-Xmx300m"`
+ 
