@@ -1,0 +1,37 @@
+logout:
+  post:
+    tags:
+      - logout
+    summary: Logout from current device
+    description: Logout from current device
+    operationId: logout
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+logout-all:
+  post:
+    tags:
+      - logout
+    summary: Logout from all devices
+    description: Logout from all devices
+    operationId: logoutAll
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NoContentResponse'
+      400:
+        $ref: '../responses/responses.yaml#/BadRequest'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

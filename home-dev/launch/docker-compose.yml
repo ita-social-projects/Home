@@ -51,6 +51,15 @@ services:
     networks:
       - home_network
 
+  home-oauth-server:
+    image: homeacademy/home-oauth-server
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    ports:
+      - 9000:9000
+    networks:
+      - home_network
+
   mailhog:
     image: mailhog/mailhog
     ports:

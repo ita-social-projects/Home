@@ -429,7 +429,7 @@ class NewsApiIT {
 
     @Test
     void deleteNonExistentNewsTest() {
-        Long wrongId = 100L;
+        Long wrongId = 10000L;
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.deleteNewsWithHttpInfo(wrongId))
