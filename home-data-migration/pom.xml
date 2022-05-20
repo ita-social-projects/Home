@@ -15,7 +15,7 @@
 
     <properties>
         <checkstyle.configLocation>src/main/resources/checkstyle-configuration.xml</checkstyle.configLocation>
-        <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
+        <image.liquibase.path>homebayraktar/data-migration</image.liquibase.path>
     </properties>
 
     <profiles>
