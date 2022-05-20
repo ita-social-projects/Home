@@ -18,9 +18,6 @@ public class UserApiReaderImpl {
     @Autowired
     private UserReaderService userReaderService;
 
-//    @Autowired
-//    UserReaderRepository userReaderRepository;
-
     @GetMapping("/users")
     public List<ReaderUser> getUsers() {
         return userReaderService.findAll();
