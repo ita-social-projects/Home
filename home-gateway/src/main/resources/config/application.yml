@@ -4,8 +4,9 @@ zuul:
       path: /foos/**
       url: http://localhost:8081/spring-zuul-foos-resource/foos
     homeApplication:
-      path: /home/**
-      url: http://localhost:8080/api/0/
+      path: /**
+      url: http://localhost:8080
   sensitiveHeaders: Cookie,Set-Cookie
+  forceOriginalQueryStringEncoding: true
 server:
   port: 8081

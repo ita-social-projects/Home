@@ -268,7 +268,7 @@ public final class ApiClientUtil {
 
     private static void setServers(ApiClient client) {
         client.setServers(List.of(new ServerConfiguration("http://localhost:" +
-            GATEWAY_EXTERNAL_PORT + "/home", "No description provided", new HashMap())));
+            GATEWAY_EXTERNAL_PORT + "/api/0", "No description provided", new HashMap())));
     }
 
     @SneakyThrows
