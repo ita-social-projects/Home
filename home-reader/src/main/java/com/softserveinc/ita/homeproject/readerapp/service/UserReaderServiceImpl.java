@@ -20,5 +20,4 @@ public class UserReaderServiceImpl implements UserReaderService{
     public void saveUser(ReaderUser user) {
         userReaderRepository.save(user);
     }
-
 }
