@@ -2,7 +2,7 @@ package com.softserveinc.ita.homeproject.readerapp.service;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.readerapp.models.ReaderUser;
+import com.softserveinc.ita.homeproject.readerapp.models.UserReader;
 import com.softserveinc.ita.homeproject.readerapp.repositories.UserReaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ public class UserReaderServiceImpl implements UserReaderService{
     @Autowired
     UserReaderRepository userReaderRepository;
 
-    public List<ReaderUser> findAll() {
+    public List<UserReader> findAll() {
         return userReaderRepository.findAll();
     }
 
-    public void saveUser(ReaderUser user) {
+    public void saveUser(UserReader user) {
         userReaderRepository.save(user);
     }
 }

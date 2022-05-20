@@ -19,3 +19,16 @@ paths:
       responses:
         "200":
           description: "OK"
+  /apartments:
+    get:
+      summary: "GET apartments"
+      operationId: "getApartments"
+      responses:
+        "200":
+          description: "OK"
+    post:
+      summary: "POST apartments"
+      operationId: "createApartmentReader"
+      responses:
+        "200":
+          description: "OK"

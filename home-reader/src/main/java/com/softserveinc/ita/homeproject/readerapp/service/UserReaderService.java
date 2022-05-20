@@ -2,11 +2,11 @@ package com.softserveinc.ita.homeproject.readerapp.service;
 
 import java.util.List;
 
-import com.softserveinc.ita.homeproject.readerapp.models.ReaderUser;
+import com.softserveinc.ita.homeproject.readerapp.models.UserReader;
 
 public interface UserReaderService {
 
-    List<ReaderUser> findAll();
+    List<UserReader> findAll();
 
-    void saveUser(ReaderUser user);
+    void saveUser(UserReader user);
 }
