@@ -131,9 +131,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <rapidoc.version>8.4.9</rapidoc.version>
         <redoc.version>2.0.0-rc.53</redoc.version>
-        <sonar.projectKey>ita-social-projects-home</sonar.projectKey>
+        <sonar.projectKey>ITA-Dnipro_Java-Home-Project-CQRS-Bayraktar</sonar.projectKey>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
-        <sonar.organization>ita-social-projects</sonar.organization>
+        <sonar.organization>ita-dnipro</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <spring-boot-maven-plugin.version>2.6.1</spring-boot-maven-plugin.version>
         <swagger-codegen-maven-plugin.version>3.0.26</swagger-codegen-maven-plugin.version>
