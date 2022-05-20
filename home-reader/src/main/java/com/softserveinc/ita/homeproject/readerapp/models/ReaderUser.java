@@ -1,11 +1,15 @@
 package com.softserveinc.ita.homeproject.readerapp.models;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Getter
+@Setter
 @Document
-public class UserForMongo {
+public class ReaderUser {
     @Id
     private String id;
 
@@ -15,10 +19,10 @@ public class UserForMongo {
 
     private String surname;
 
-    public UserForMongo() {
+    public ReaderUser() {
     }
 
-    public UserForMongo(String id, int age, String name, String surname) {
+    public ReaderUser(String id, int age, String name, String surname) {
         this.id = id;
         this.age = age;
         this.name = name;
