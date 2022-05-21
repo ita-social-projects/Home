@@ -38,7 +38,7 @@ services:
       MAIL_HOST: mailhog
       MAIL_PORT: 1025
     ports:
-      - 8080:8080
+      - 8081:8081
     networks:
       - home_network
 
@@ -51,6 +51,15 @@ services:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
     ports:
       - 9000:9000
+    networks:
+      - home_network
+
+  home-gateway:
+    image: homebayraktar/home-gateway
+    environment:
+      HOME_APPLICATION_URL: http://home-application:8081
+    ports:
+      - 8080:8080
     networks:
       - home_network
 

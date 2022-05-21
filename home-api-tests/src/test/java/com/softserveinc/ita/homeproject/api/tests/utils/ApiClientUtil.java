@@ -60,7 +60,7 @@ public final class ApiClientUtil {
 
     private final static Long APARTMENT_ID = 100L;
 
-    private static final String GATEWAY_EXTERNAL_PORT = "8081";
+    private static final String GATEWAY_EXTERNAL_PORT = System.getProperty("home.gateway.external.port");
 
     private static final String OAUTH_APPLICATION_EXTERNAL_PORT = System.getProperty("home.oauth.external.port");
 
