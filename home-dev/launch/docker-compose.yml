@@ -41,13 +41,22 @@ services:
       - home_network
 
   home-reader:
-    image: homeacademy/home-reader
+    image: homeacademy/home-reader2
     depends_on:
       - mongodb
     environment:
       - spring.data.mongodb.host=mongodb
     ports:
       - 8099:8099
+    networks:
+      - home_network
+
+  home-oauth-server:
+    image: homeacademy/home-oauth-server
+    environment:
+      DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+    ports:
+      - 9000:9000
     networks:
       - home_network
 
@@ -63,10 +72,10 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - data:/data
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=rootuser
-      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+      - MONGO_INITDB_ROOT_USERNAME=testUser
+      - MONGO_INITDB_ROOT_PASSWORD=pwd
     networks:
       - home_network
 

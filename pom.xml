@@ -15,6 +15,7 @@
         <module>home-open-api</module>
         <module>home-service</module>
         <module>home-reader</module>
+        <module>home-oauth-server</module>
         <module>home-application</module>
         <module>home-clients</module>
         <module>home-api-tests</module>
@@ -148,6 +149,7 @@
             <properties>
                 <image.liquibase.path>homeacademy/data-migration</image.liquibase.path>
                 <image.application.path>homeacademy/home-application</image.application.path>
+                <image.oauth.server.path>homeacademy/home-oauth-server</image.oauth.server.path>
                 <docker.username>${dockerhub.username}</docker.username>
                 <docker.password>${dockerhub.password}</docker.password>
                 <jib.goal>build</jib.goal>
@@ -184,6 +186,12 @@
             <dependency>
                 <groupId>com.softserveinc.ita.homeproject</groupId>
                 <artifactId>home-java-client</artifactId>
+                <version>${revision}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.softserveinc.ita.homeproject</groupId>
+                <artifactId>home-oauth-server</artifactId>
                 <version>${revision}</version>
                 <scope>test</scope>
             </dependency>

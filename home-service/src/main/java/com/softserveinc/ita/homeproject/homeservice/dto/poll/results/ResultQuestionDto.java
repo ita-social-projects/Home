@@ -1,18 +1,16 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.poll.results;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollQuestionTypeDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class ResultQuestionDto extends BaseDto {
+public class ResultQuestionDto extends BaseDto {
 
-    private PollQuestionTypeDto type;
+    private AnswerVariantDto answerVariantDto;
 
-    private PollQuestionDto question;
+    private String percentVotes;
 
     private int voteCount;
 }

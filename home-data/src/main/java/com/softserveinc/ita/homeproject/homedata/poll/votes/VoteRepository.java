@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homedata.poll.votes;
 
+import java.util.List;
+
+import com.softserveinc.ita.homeproject.homedata.poll.Poll;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +16,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VoteRepository extends PagingAndSortingRepository<Vote, Long> {
     Vote findByPollIdAndUser(Long pollId, User user);
+
+    List<Vote> findAllByPoll(Poll poll);
 }

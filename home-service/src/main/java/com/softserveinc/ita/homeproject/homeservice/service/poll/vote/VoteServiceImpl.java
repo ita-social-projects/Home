@@ -17,20 +17,15 @@ import com.softserveinc.ita.homeproject.homedata.poll.question.AnswerVariantRepo
 import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.results.AdviceResultQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestion;
-import com.softserveinc.ita.homeproject.homedata.poll.results.ResultQuestionRepository;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.AdviceQuestionVote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.MultipleChoiceQuestionVote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.QuestionVoteRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.Vote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteQuestionVariant;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteQuestionVariantRepository;
+import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteAnswerVariant;
+import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteAnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteRepository;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.enums.PollQuestionTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.question.PollQuestionDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.poll.results.AnswerVariantDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.AdviceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.MultipleChoiceQuestionVoteDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.QuestionVoteDto;
@@ -39,9 +34,11 @@ import com.softserveinc.ita.homeproject.homeservice.dto.poll.votes.VoteQuestionV
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.mapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -78,47 +75,39 @@ public class VoteServiceImpl implements VoteService {
 
     private final UserRepository userRepository;
 
-    private final VoteQuestionVariantRepository voteQuestionVariantRepository;
+    private final VoteMapper voteMapper;
 
-    private final ResultQuestionRepository resultQuestionRepository;
-
-    private final QuestionVoteRepository questionVoteRepository;
-
-    private final ServiceMapper mapper;
+    private final ServiceMapper serviceMapper;
 
     @Transactional
     @Override
     public VoteDto createVote(VoteDto voteDto) {
         Poll votedPoll = validatePollEnabled(voteDto);
+        User currentUser = getVoter();
+        List<QuestionVoteDto> newQuestionVotes = new ArrayList<>();
+
+        for (QuestionVoteDto questionVoteDto : voteDto.getQuestionVotes()) {
+            QuestionVoteDto newQuestionVoteDto;
+            newQuestionVoteDto = questionVoteDto.getType().equals(PollQuestionTypeDto.ADVICE)
+                ? createAdviceQuestionVote((AdviceQuestionVoteDto) questionVoteDto)
+                : createMultipleChoiceQuestionVote((MultipleChoiceQuestionVoteDto) questionVoteDto);
+            newQuestionVotes.add(newQuestionVoteDto);
+        }
+
+        voteDto.setQuestionVotes(newQuestionVotes);
+        validateQuestionVotesCount(voteDto, votedPoll);
+
+        List<Vote> votes = voteMapper.convertToList(voteDto, votedPoll, currentUser);
 
         validatePollStatus(votedPoll);
         validateCompletionDateTime(votedPoll);
-        User currentUser = getVoter();
         validateReVoting(votedPoll, currentUser);
-        validateQuestionVotesCount(voteDto, votedPoll);
+        validatePollQuestionsMatching(votes, votedPoll);
+        validateAnswerCounts(votes);
+        validateAnswersMatching(votes);
+        voteRepository.saveAll(votes);
 
-        Vote newVote = new Vote();
-        newVote.setPollId(votedPoll.getId());
-        newVote.setUser(currentUser);
-        voteRepository.save(newVote);
-        List<QuestionVote> newQuestionVotes = new ArrayList<>();
-        for (QuestionVoteDto questionVoteDto : voteDto.getQuestionVotes()) {
-            QuestionVote newQuestionVote;
-            newQuestionVote = questionVoteDto.getType().equals(PollQuestionTypeDto.ADVICE)
-                ? createAdviceQuestionVote((AdviceQuestionVoteDto) questionVoteDto)
-                : createMultipleChoiceQuestionVote((MultipleChoiceQuestionVoteDto) questionVoteDto);
-            newQuestionVote.setVote(newVote);
-            newQuestionVotes.add(newQuestionVote);
-        }
-
-        validatePollQuestionsMatching(newQuestionVotes, votedPoll);
-        validateAnswerCounts(newQuestionVotes);
-        validateAnswersMatching(newQuestionVotes);
-
-        newVote.setQuestionVotes(newQuestionVotes);
-        voteRepository.save(newVote);
-
-        return mapper.convert(newVote, VoteDto.class);
+        return voteMapper.convertToDto(votes);
     }
 
     private Poll validatePollEnabled(VoteDto voteDto) {
@@ -164,70 +153,86 @@ public class VoteServiceImpl implements VoteService {
         }
     }
 
-    private void validatePollQuestionsMatching(List<QuestionVote> questionVotes, Poll votedPoll) {
-        int votedQuestionsCount = questionVotes.size();
+    private void validatePollQuestionsMatching(List<Vote> votes, Poll votedPoll) {
+        int votedQuestionsCount = votes.size();
         int controlNumber = 0;
-        for (QuestionVote questionVote : questionVotes) {
-            Long questionPollId = questionVote.getQuestion().getPoll().getId();
+
+        for (Vote vote : votes) {
+            Long questionPollId = vote.getQuestion().getPoll().getId();
             if (questionPollId.equals(votedPoll.getId())) {
                 controlNumber++;
             }
         }
+
         if (votedQuestionsCount != controlNumber) {
             throw new BadRequestHomeException(
                 String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, votedPoll.getId()));
         }
     }
 
-    private AdviceQuestionVote createAdviceQuestionVote(AdviceQuestionVoteDto questionVoteDto) {
-        AdviceQuestionVote newQuestionVote = new AdviceQuestionVote();
-        newQuestionVote.setType(PollQuestionType.ADVICE);
-        PollQuestion question = getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId());
-        newQuestionVote.setQuestion(question);
-        newQuestionVote.setAnswer(questionVoteDto.getAnswer().trim());
-        checkExistenceAndSetResultQuestion(newQuestionVote, question);
-        return newQuestionVote;
+    private AdviceQuestionVoteDto createAdviceQuestionVote(AdviceQuestionVoteDto questionVoteDto) {
+        AdviceQuestionVoteDto newQuestionVoteDto = new AdviceQuestionVoteDto();
+        PollQuestionDto question =
+            serviceMapper.convert(getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId()),
+                PollQuestionDto.class);
+
+        newQuestionVoteDto.setType(PollQuestionTypeDto.ADVICE);
+        newQuestionVoteDto.setQuestion(question);
+        newQuestionVoteDto.setAnswer(questionVoteDto.getAnswer().trim());
+
+        return newQuestionVoteDto;
     }
 
-    private MultipleChoiceQuestionVote createMultipleChoiceQuestionVote(MultipleChoiceQuestionVoteDto questionVoteDto) {
-        MultipleChoiceQuestionVote newQuestionVote = new MultipleChoiceQuestionVote();
-        newQuestionVote.setType(PollQuestionType.MULTIPLE_CHOICE);
-        newQuestionVote.setQuestion(getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId()));
-        List<VoteQuestionVariant> voteQuestionVariantList = new ArrayList<>();
+    private MultipleChoiceQuestionVoteDto createMultipleChoiceQuestionVote(
+        MultipleChoiceQuestionVoteDto questionVoteDto) {
+        MultipleChoiceQuestionVoteDto newQuestionVoteDto = new MultipleChoiceQuestionVoteDto();
+        List<VoteQuestionVariantDto> voteQuestionVariantDtos = new ArrayList<>();
+
+        newQuestionVoteDto.setType(PollQuestionTypeDto.MULTIPLE_CHOICE);
+        newQuestionVoteDto.setQuestion(
+            serviceMapper.convert(getQuestionByIdWithCheckItsExistence(questionVoteDto.getQuestion().getId()),
+                PollQuestionDto.class));
+
         for (VoteQuestionVariantDto dto : questionVoteDto.getAnswers()) {
-            VoteQuestionVariant voteVariant = new VoteQuestionVariant();
-            voteVariant.setQuestionVote(newQuestionVote);
-            voteVariant.setAnswerVariant(getAnswerVariantByIdWithCheckItsExistence(dto.getAnswerVariant().getId()));
-            voteQuestionVariantRepository.save(voteVariant);
-            voteQuestionVariantList.add(voteVariant);
+            VoteQuestionVariantDto voteQuestionVariantDto = new VoteQuestionVariantDto();
+            AnswerVariantDto answerVariantDto = new AnswerVariantDto();
+
+            AnswerVariant answerVariant = getAnswerVariantByIdWithCheckItsExistence(dto.getAnswerVariant().getId());
+            answerVariantDto.setId(dto.getId());
+            answerVariantDto.setAnswer(answerVariant.getAnswer());
+            voteQuestionVariantDto.setAnswerVariant(answerVariantDto);
+            voteQuestionVariantDtos.add(voteQuestionVariantDto);
         }
-        newQuestionVote.setAnswers(voteQuestionVariantList);
-        return questionVoteRepository.save(newQuestionVote);
+
+        newQuestionVoteDto.setAnswers(voteQuestionVariantDtos);
+
+        return newQuestionVoteDto;
     }
 
-    private void validateAnswerCounts(List<QuestionVote> questionVotes) {
-        for (QuestionVote questionVote : questionVotes) {
-            if (questionVote.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
-                Integer maxAnswerCount = ((MultipleChoiceQuestion) questionVote.getQuestion()).getMaxAnswerCount();
-                int realAnswerCount = ((MultipleChoiceQuestionVote) questionVote).getAnswers().size();
+    private void validateAnswerCounts(List<Vote> votes) {
+        for (Vote vote : votes) {
+            if (vote.getQuestion().getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
+                Integer maxAnswerCount = ((MultipleChoiceQuestion) vote.getQuestion()).getMaxAnswerCount();
+                int realAnswerCount = vote.getVoteAnswerVariants().size();
                 if (realAnswerCount < 1 || realAnswerCount > maxAnswerCount) {
                     throw new BadRequestHomeException(
-                        String.format(WRONG_ANSWER_COUNT_VALIDATION_MESSAGE, questionVote.getQuestion().getId(),
+                        String.format(WRONG_ANSWER_COUNT_VALIDATION_MESSAGE, vote.getQuestion().getId(),
                             maxAnswerCount));
                 }
             }
         }
     }
 
-    private void validateAnswersMatching(List<QuestionVote> questionVotes) {
-        for (QuestionVote questionVote : questionVotes) {
-            if (questionVote.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
-                PollQuestion question = questionVote.getQuestion();
+    private void validateAnswersMatching(List<Vote> votes) {
+        for (Vote vote : votes) {
+            if (vote.getType().equals(PollQuestionType.MULTIPLE_CHOICE)) {
+                PollQuestion question = vote.getQuestion();
                 List<Long> questionAnswersIds = ((MultipleChoiceQuestion) question).getAnswerVariants().stream()
                     .map(AnswerVariant::getId).collect(Collectors.toList());
                 List<Long> questionVoteAnswersIds =
-                    ((MultipleChoiceQuestionVote) questionVote).getAnswers().stream()
+                    vote.getVoteAnswerVariants().stream()
                         .map(votedVariant -> votedVariant.getAnswerVariant().getId()).collect(Collectors.toList());
+
                 questionVoteAnswersIds.forEach(answerId -> {
                     if (!questionAnswersIds.contains(answerId)) {
                         throw new BadRequestHomeException(
@@ -249,26 +254,5 @@ public class VoteServiceImpl implements VoteService {
         return answerVariantRepository.findById(answerId)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE,
                 "Answer variant", answerId)));
-    }
-
-    private void checkExistenceAndSetResultQuestion(AdviceQuestionVote questionVote, PollQuestion question) {
-        ResultQuestion checkedResultQuestion = resultQuestionRepository.findByQuestion(question);
-        AdviceResultQuestion adviceResultQuestion;
-        if (checkedResultQuestion == null) {
-            adviceResultQuestion = new AdviceResultQuestion();
-            adviceResultQuestion.setType(PollQuestionType.ADVICE);
-            adviceResultQuestion.setQuestion(question);
-            ArrayList<AdviceQuestionVote> answerList = new ArrayList<>();
-            answerList.add(questionVote);
-            adviceResultQuestion.setAnswers(answerList);
-        } else {
-            adviceResultQuestion = (AdviceResultQuestion) checkedResultQuestion;
-            List<AdviceQuestionVote> answerList = adviceResultQuestion.getAnswers();
-            answerList.add(questionVote);
-            adviceResultQuestion.setAnswers(answerList);
-        }
-        adviceResultQuestion.setVoteCount(adviceResultQuestion.getAnswers().size());
-        resultQuestionRepository.save(adviceResultQuestion);
-        questionVote.setResultQuestion(adviceResultQuestion);
     }
 }
