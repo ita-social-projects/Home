@@ -290,7 +290,7 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <configuration>
                     <to>
-                        <image>homeacademy/home-oauth-server</image>
+                        <image>homebayraktar/home-oauth-server</image>
                         <tags>
                             <tag>${project.version}-${git_commit_sha}</tag>
                         </tags>

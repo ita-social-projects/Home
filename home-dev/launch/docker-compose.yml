@@ -20,7 +20,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: homeacademy/data-migration
+    image: homebayraktar/data-migration
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres?user=postgres&password=password
     ports:
@@ -29,19 +29,21 @@ services:
       - home_network
 
   home-application:
-    image: homeacademy/home-application
+    image: homebayraktar/home-application
     depends_on:
       home-data-migration:
         condition: service_completed_successfully
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
     ports:
       - 8080:8080
     networks:
       - home_network
 
   home-reader:
-    image: homeacademy/home-reader2
+    image: homebayraktar/home-reader
     depends_on:
       - mongodb
     environment:
@@ -52,7 +54,10 @@ services:
       - home_network
 
   home-oauth-server:
-    image: homeacademy/home-oauth-server
+    image: homebayraktar/home-oauth-server
+    depends_on:
+      home-data-migration:
+        condition: service_completed_successfully
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
     ports:
@@ -65,6 +70,9 @@ services:
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+    networks:
+      - home_network
+
 
   mongodb:
     image: mongo
@@ -73,9 +81,6 @@ services:
       - 27017:27017
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=testUser
-      - MONGO_INITDB_ROOT_PASSWORD=pwd
     networks:
       - home_network
 
