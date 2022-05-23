@@ -43,6 +43,7 @@
         <profile>
             <id>push.images</id>
             <properties>
+                <docker.image.gateway>${image.gateway.path}</docker.image.gateway>
                 <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
                 <docker.image.application>${image.application.path}</docker.image.application>
                 <docker.image.oauth.server>${image.oauth.server.path}</docker.image.oauth.server>
