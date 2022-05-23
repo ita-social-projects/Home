@@ -26,4 +26,5 @@ public class ApartmentReader {
 
     public ApartmentReader() {
     }
+
 }
