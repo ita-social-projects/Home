@@ -1,0 +1,12 @@
+home.application.url: http://localhost:8081
+
+zuul:
+  routes:
+    homeApplication:
+      path: /**
+      url: ${home.application.url}
+  sensitiveHeaders: Cookie,Set-Cookie
+  forceOriginalQueryStringEncoding: true
+
+server:
+  port: ${PORT:8080}
