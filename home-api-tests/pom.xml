@@ -16,13 +16,16 @@
     <properties>
         <api.tests.verbose.logging>true</api.tests.verbose.logging>
         <docker-files>${basedir}/target/docker</docker-files>
+        <docker.image.gateway>homebayraktar/home-gateway:${docker.revision}</docker.image.gateway>
         <docker.image.data.migration>homebayraktar/data-migration:${docker.revision}</docker.image.data.migration>
         <docker.image.application>homebayraktar/home-application:${docker.revision}</docker.image.application>
         <docker.image.oauth-server>homebayraktar/home-oauth-server:${docker.revision}</docker.image.oauth-server>
         <docker.image.postgres>postgres</docker.image.postgres>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
-        <docker.image.psql>governmentpaas/psql</docker.image.psql>
-        <home.application.internal.port>8080</home.application.internal.port>
+        <docker.alias.data.migration>home-data-migration</docker.alias.data.migration>
+        <docker.alias.application>home-application</docker.alias.application>
+        <home.gateway.internal.port>8080</home.gateway.internal.port>
+        <home.application.internal.port>8081</home.application.internal.port>
         <home.oauth.server.internal.port>9000</home.oauth.server.internal.port>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
@@ -40,6 +43,7 @@
         <profile>
             <id>push.images</id>
             <properties>
+                <docker.image.gateway>${image.gateway.path}</docker.image.gateway>
                 <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
                 <docker.image.application>${image.application.path}</docker.image.application>
                 <docker.image.oauth.server>${image.oauth.server.path}</docker.image.oauth.server>
@@ -81,6 +85,12 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-oauth-server</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-gateway</artifactId>
+                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
@@ -148,6 +158,7 @@
                                 <phase>process-resources</phase>
                                 <configuration>
                                     <portNames>
+                                        <portName>home.gateway.external.port</portName>
                                         <portName>home.application.external.port</portName>
                                         <portName>home.oauth.external.port</portName>
                                         <portName>jacoco.agent.external.port</portName>
@@ -205,7 +216,7 @@
                                     </run>
                                 </image>
                                 <image>
-                                    <alias>${docker.image.data.migration}</alias>
+                                    <alias>${docker.alias.data.migration}</alias>
                                     <name>${docker.image.data.migration}</name>
                                     <build>
                                         <from>${docker.image.data.migration}</from>
@@ -252,6 +263,9 @@
                                         <links>
                                             <link>${docker.image.postgres}</link>
                                         </links>
+                                        <dependsOn>
+                                            <container>${docker.alias.data.migration}</container>
+                                        </dependsOn>
                                         <wait>
                                             <log>Started HomeOauthServerApplication</log>
                                             <time>300000</time>
@@ -263,34 +277,7 @@
                                     </run>
                                 </image>
                                 <image>
-                                    <alias>${docker.image.psql}</alias>
-                                    <name>${docker.image.psql}</name>
-                                    <run>
-                                        <volumes>
-                                            <bind>
-                                                <volume>${project.build.testOutputDirectory}:/sql</volume>
-                                            </bind>
-                                        </volumes>
-                                        <cmd>
-                                            <exec>
-                                                <arg>/bin/sh</arg>
-                                                <arg>-c</arg>
-                                                <arg>${psql.script.cmd.command}</arg>
-                                            </exec>
-                                        </cmd>
-                                        <links>
-                                            <link>${docker.image.postgres}</link>
-                                        </links>
-                                        <dependsOn>
-                                            <container>${docker.image.data.migration}</container>
-                                        </dependsOn>
-                                        <wait>
-                                            <time>5000</time>
-                                        </wait>
-                                    </run>
-                                </image>
-                                <image>
-                                    <alias>${docker.image.application}</alias>
+                                    <alias>${docker.alias.application}</alias>
                                     <name>${docker.image.application}</name>
                                     <build>
                                         <from>${docker.image.application}</from>
@@ -322,9 +309,39 @@
                                             <link>${docker.image.postgres}</link>
                                             <link>${docker.image.mailhog}</link>
                                         </links>
+                                        <dependsOn>
+                                            <container>${docker.alias.data.migration}</container>
+                                        </dependsOn>
                                         <wait>
                                             <log>Started HomeApplication</log>
                                             <time>300000</time>
+                                        </wait>
+                                        <log>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
+                                            <date>default</date>
+                                        </log>
+                                    </run>
+                                </image>
+                                <image>
+                                    <name>${docker.image.gateway}</name>
+                                    <build>
+                                        <from>${docker.image.gateway}</from>
+                                    </build>
+                                    <run>
+                                        <env>
+                                            <HOME_APPLICATION_URL>
+                                                http://${docker.alias.application}:${home.application.internal.port}
+                                            </HOME_APPLICATION_URL>
+                                        </env>
+                                        <ports>
+                                            <port>${home.gateway.external.port}:${home.gateway.internal.port}</port>
+                                        </ports>
+                                        <links>
+                                            <link>${docker.alias.application}</link>
+                                        </links>
+                                        <wait>
+                                            <log>Started HomeGatewayApplication</log>
+                                            <time>60000</time>
                                         </wait>
                                         <log>
                                             <enabled>${api.tests.verbose.logging}</enabled>
@@ -369,8 +386,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <home.application.external.port>${home.application.external.port}
-                                </home.application.external.port>
+                                <home.gateway.external.port>${home.gateway.external.port}</home.gateway.external.port>
                                 <home.oauth.external.port>${home.oauth.external.port}</home.oauth.external.port>
                                 <postgres.external.port>${postgres.external.port}</postgres.external.port>
                                 <liquibase.external.port>${liquibase.external.port}</liquibase.external.port>
