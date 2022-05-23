@@ -150,6 +150,7 @@
                 <image.liquibase.path>homebayraktar/data-migration</image.liquibase.path>
                 <image.application.path>homebayraktar/home-application</image.application.path>
                 <image.oauth.server.path>homebayraktar/home-oauth-server</image.oauth.server.path>
+                <image.reader.path>homebayraktar/home-reader</image.reader.path>
                 <docker.username>${dockerhub.username}</docker.username>
                 <docker.password>${dockerhub.password}</docker.password>
                 <jib.goal>build</jib.goal>

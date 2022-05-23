@@ -117,7 +117,7 @@
                 <version>${jib.version}</version>
                 <configuration>
                     <to>
-                        <image>${image.application.path}</image>
+                        <image>homebayraktar/home-reader</image>
                         <tags>
                             <tag>${project.version}-${git_commit_sha}</tag>
                         </tags>
