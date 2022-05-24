@@ -42,6 +42,17 @@ services:
     networks:
       - home_network
 
+  home-reader:
+    image: homebayraktar/home-reader
+    depends_on:
+      - mongodb
+    environment:
+      - spring.data.mongodb.host=mongodb
+    ports:
+      - 8099:8099
+    networks:
+      - home_network
+
   home-oauth-server:
     image: homebayraktar/home-oauth-server
     depends_on:
@@ -70,6 +81,17 @@ services:
       - 8025:8025 # web ui
     networks:
       - home_network
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - home_network
+
 
 networks:
   home_network:

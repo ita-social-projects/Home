@@ -20,12 +20,16 @@
         <docker.image.data.migration>homebayraktar/data-migration:${docker.revision}</docker.image.data.migration>
         <docker.image.application>homebayraktar/home-application:${docker.revision}</docker.image.application>
         <docker.image.oauth-server>homebayraktar/home-oauth-server:${docker.revision}</docker.image.oauth-server>
+        <docker.image.reader>homebayraktar/home-reader:${docker.revision}</docker.image.reader>
         <docker.image.postgres>postgres</docker.image.postgres>
+        <docker.image.mongo>mongo</docker.image.mongo>
         <docker.image.mailhog>mailhog/mailhog</docker.image.mailhog>
         <docker.alias.data.migration>home-data-migration</docker.alias.data.migration>
         <docker.alias.application>home-application</docker.alias.application>
         <home.gateway.internal.port>8080</home.gateway.internal.port>
         <home.application.internal.port>8081</home.application.internal.port>
+        <home.reader.internal.port>8099</home.reader.internal.port>
+        <mongo.internal.port>27017</mongo.internal.port>
         <home.oauth.server.internal.port>9000</home.oauth.server.internal.port>
         <jacoco-agent-name>jacocoagent.jar</jacoco-agent-name>
         <jacoco.agent.internal.port>6300</jacoco.agent.internal.port>
@@ -36,7 +40,9 @@
         <mail.port>1025</mail.port>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
+        <mongo.db>mongodb</mongo.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
+        <mongo.uri>mongodb://${docker.image.mongo}:${mongo.internal.port}/${mongo.db}</mongo.uri>
     </properties>
 
     <profiles>
@@ -45,6 +51,7 @@
             <properties>
                 <docker.image.gateway>${image.gateway.path}</docker.image.gateway>
                 <docker.image.data.migration>${image.liquibase.path}</docker.image.data.migration>
+                <docker.image.reader>${image.reader.path}</docker.image.reader>
                 <docker.image.application>${image.application.path}</docker.image.application>
                 <docker.image.oauth.server>${image.oauth.server.path}</docker.image.oauth.server>
             </properties>
@@ -80,6 +87,12 @@
                 <dependency>
                     <groupId>com.softserveinc.ita.homeproject</groupId>
                     <artifactId>home-data</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.softserveinc.ita.homeproject</groupId>
+                    <artifactId>home-reader</artifactId>
+                    <version>${revision}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
@@ -161,9 +174,11 @@
                                         <portName>home.gateway.external.port</portName>
                                         <portName>home.application.external.port</portName>
                                         <portName>home.oauth.external.port</portName>
+                                        <portName>home.reader.external.port</portName>
                                         <portName>jacoco.agent.external.port</portName>
                                         <portName>liquibase.external.port</portName>
                                         <portName>postgres.external.port</portName>
+                                        <portName>mongo.external.port</portName>
                                         <portName>mailhog.external.port</portName>
                                     </portNames>
                                 </configuration>
@@ -207,6 +222,26 @@
                                         </ports>
                                         <wait>
                                             <log>database system is ready to accept connections</log>
+                                            <time>25000</time>
+                                        </wait>
+                                        <log>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
+                                            <date>default</date>
+                                        </log>
+                                    </run>
+                                </image>
+                                <image>
+                                    <alias>${docker.image.mongo}</alias>
+                                    <name>${docker.image.mongo}</name>
+                                    <build>
+                                        <from>${docker.image.mongo}</from>
+                                    </build>
+                                    <run>
+                                        <ports>
+                                            <port>${mongo.external.port}:${mongo.internal.port}</port>
+                                        </ports>
+                                        <wait>
+                                            <log>Waiting for connections</log>
                                             <time>25000</time>
                                         </wait>
                                         <log>
@@ -314,6 +349,33 @@
                                         </dependsOn>
                                         <wait>
                                             <log>Started HomeApplication</log>
+                                            <time>300000</time>
+                                        </wait>
+                                        <log>
+                                            <enabled>${api.tests.verbose.logging}</enabled>
+                                            <date>default</date>
+                                        </log>
+                                    </run>
+                                </image>
+                                <image>
+                                    <alias>${docker.image.reader}</alias>
+                                    <name>${docker.image.reader}</name>
+                                    <build>
+                                        <from>${docker.image.reader}</from>
+                                    </build>
+                                    <run>
+                                        <env>
+                                            <MONGO_URI>${mongo.uri}</MONGO_URI>
+                                        </env>
+                                        <ports>
+                                            <port>${home.reader.external.port}:${home.reader.internal.port}
+                                            </port>
+                                        </ports>
+                                        <links>
+                                            <link>${docker.image.mongo}</link>
+                                        </links>
+                                        <wait>
+                                            <log>Started HomeReader</log>
                                             <time>300000</time>
                                         </wait>
                                         <log>
