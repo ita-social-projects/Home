@@ -2,7 +2,6 @@ package com.softserveinc.ita.homeproject.readerapp.controllers;
 
 import java.util.List;
 
-
 import com.softserveinc.ita.homeproject.readerapp.models.UserReader;
 import com.softserveinc.ita.homeproject.readerapp.service.UserReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,9 @@ public class UserApiReaderImpl {
     private UserReaderService userReaderService;
 
     @GetMapping("/users")
-    public List<UserReader> getUsers() {return userReaderService.findAll(); }
+    public List<UserReader> getUsers() {
+        return userReaderService.findAll();
+    }
 
     @PostMapping("/users")
     public void saveUsers(@RequestBody UserReader user) {
