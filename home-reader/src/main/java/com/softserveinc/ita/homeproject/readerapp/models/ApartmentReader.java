@@ -3,13 +3,14 @@ package com.softserveinc.ita.homeproject.readerapp.models;
 
 import javax.persistence.SequenceGenerator;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Document
 @SequenceGenerator(name = "sequence", sequenceName = "apartments_sequence")
 public class ApartmentReader {
@@ -18,12 +19,4 @@ public class ApartmentReader {
     private String apartmentNumber;
 
     private Boolean enabled;
-
-    public ApartmentReader(String apartmentNumber, Boolean enabled) {
-        this.apartmentNumber = apartmentNumber;
-        this.enabled = enabled;
-    }
-
-    public ApartmentReader() {
-    }
 }

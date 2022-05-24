@@ -8,5 +8,5 @@ public interface ApartmentReaderService {
 
     List<ApartmentReader> findAll();
 
-    void createApartmentReader(ApartmentReader apartmentReader);
+    ApartmentReader createApartmentReader(ApartmentReader apartmentReader);
 }

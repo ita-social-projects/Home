@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ApartmentReaderController {
+public class ApartmentApiReaderImpl {
 
     @Autowired
     ApartmentReaderService apartmentReaderService;
 
     @GetMapping("/apartments")
     public List<ApartmentReader> getUsers() {
+
         return apartmentReaderService.findAll();
     }
 

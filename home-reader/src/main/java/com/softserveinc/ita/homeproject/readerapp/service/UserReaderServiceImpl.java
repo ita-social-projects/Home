@@ -17,7 +17,7 @@ public class UserReaderServiceImpl implements UserReaderService{
         return userReaderRepository.findAll();
     }
 
-    public void saveUser(UserReader user) {
-        userReaderRepository.save(user);
+    public UserReader saveUser(UserReader user) {
+        return userReaderRepository.save(user);
     }
 }

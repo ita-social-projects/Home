@@ -8,5 +8,5 @@ public interface UserReaderService {
 
     List<UserReader> findAll();
 
-    void saveUser(UserReader user);
+    UserReader saveUser(UserReader user);
 }
