@@ -13,10 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(SpringExtension.class)
-public class ApartmentServiceImplTest {
+class ApartmentServiceImplTest {
 
     @Mock
     private ApartmentReaderRepository apartmentReaderRepository;
