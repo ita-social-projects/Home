@@ -1,8 +1,6 @@
 package com.softserveinc.ita.homeproject.readerapp.models;
 
 
-import javax.persistence.SequenceGenerator;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -11,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document
-@SequenceGenerator(name = "sequence", sequenceName = "apartments_sequence")
 public class ApartmentReader {
 
     @Id

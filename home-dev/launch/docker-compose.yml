@@ -92,8 +92,6 @@ services:
     networks:
       - home_network
 
-volumes:
-    data: {}
 
 networks:
   home_network:
