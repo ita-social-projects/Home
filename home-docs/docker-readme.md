@@ -35,6 +35,12 @@
 
 `$ docker run -e DATASOURCE_URL='jdbc:postgresql://{host_or_ip}:{port}/{db_name}'-e DATASOURCE_USER='{user}' -e DATASOURCE_PASSWORD='{password}' -d homebayraktar/home-oauth-server`
 
+## How to launch gateway in container
+
+`$ docker pull homebayraktar/home-gateway`
+
+`$ docker run -e HOME_APPLICATION_URL=http://{app_host}:{app_port} -d homebayraktar/home-gateway`
+
 ## Java Heap size configuration inside of container
 
 `-Xms<size>` - Set initial heap size
