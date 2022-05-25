@@ -47,7 +47,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - spring.data.mongodb.host=mongodb
+      MONGO_URI: mongodb://mongodb:27017/mongodb
     ports:
       - 8099:8099
     networks:

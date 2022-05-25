@@ -18,10 +18,8 @@ public class ApartmentApiReaderImpl {
 
     @GetMapping("/apartments")
     public List<ApartmentReader> getUsers() {
-
         return apartmentReaderService.findAll();
     }
-
 
     @PostMapping("/apartments")
     public void saveUsers(@RequestBody ApartmentReader apartmentReader) {

@@ -37,5 +37,4 @@ public class UserReader extends BaseModel{
 
     private LocalDateTime updateDate;
 
-
 }
