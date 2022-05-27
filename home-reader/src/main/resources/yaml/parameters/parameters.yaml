@@ -1,0 +1,64 @@
+p_id:
+  name: id
+  in: path
+  description: The ID
+  required: true
+  schema:
+    type: integer
+    format: int64
+  example: 1
+filter:
+  in: query
+  name: filter
+  schema:
+    type: string
+id:
+  in: query
+  name: id
+  schema:
+    type: integer
+    format: int64
+  example: 1
+page_number:
+  in: query
+  name: page_number
+  schema:
+    type: integer
+    minimum: 1
+    default: 1
+  required: false
+  description: The number of current page.
+page_size:
+  in: query
+  name: page_size
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 10
+    default: 5
+  required: false
+  description: The number of items to return.
+sort:
+  in: query
+  name: sort
+  schema:
+    type: string
+    default: id,asc
+source:
+  in: query
+  name: source
+  schema:
+    type: string
+  description: The source of the News
+text:
+  in: query
+  name: text
+  schema:
+    type: string
+  description: The content of the News
+title:
+  in: query
+  name: title
+  schema:
+    type: string
+  description: The title of the News

@@ -1,0 +1,52 @@
+NoContentResponse:
+  description: The request was succesfully processed.
+BadRequest:
+  description: Validation Exception.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+Unauthorized:
+  description: Unauthorized.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+Forbidden:
+  description: You do not have permission to perform this action.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+NotFound:
+  description: The specified resource was not found.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+Conflict:
+  description: Conflict with current state of the resource.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+InternalServerError:
+  description: Something went wrong.
+  content:
+    application/json:
+      schema:
+        $ref: '../models/common.yaml#/ApiError'
+NewsResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        $ref: '../models/news.yaml#/ReadNews'
+NewsListResponse:
+  description: OK
+  content:
+    application/json:
+      schema:
+        type: array
+        items:
+          $ref: '../models/news.yaml#/ReadNews'

@@ -1,0 +1,25 @@
+openapi: 3.0.3
+
+info:
+  title: HomePage - OpenAPI 3.0
+  description: "This is a Home Page sample of Home CQRS Project based on the OpenAPI 3.0 specification."
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/mit-license.php
+  contact:
+    url: https://github.com/ITA-Dnipro/Java-Home-Project-CQRS-Bayraktar
+  version: 1.0.0
+
+servers:
+  - url: /api/0
+
+tags:
+  - name: news
+    description: News management operations
+
+paths:
+  /news:
+    $ref: './paths/news.yaml#/news'
+
+  /news/{id}:
+    $ref: './paths/news.yaml#/news-newsId'

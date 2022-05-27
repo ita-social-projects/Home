@@ -1,0 +1,17 @@
+BaseReadView:
+  type: object
+  properties:
+    id:
+      type: integer
+      format: int64
+      example: 1
+
+ApiError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 404
+    error_message:
+      type: string
+      example: "example"

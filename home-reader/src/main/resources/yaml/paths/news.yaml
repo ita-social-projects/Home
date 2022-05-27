@@ -1,0 +1,44 @@
+news:
+  get:
+    tags:
+      - news
+    summary: Get all News to the home page
+    description: This endpoint delivers all News to the Home Page
+    operationId: getAllNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/page_number'
+      - $ref: '../parameters/parameters.yaml#/page_size'
+      - $ref: '../parameters/parameters.yaml#/sort'
+      - $ref: '../parameters/parameters.yaml#/filter'
+      - $ref: '../parameters/parameters.yaml#/id'
+      - $ref: '../parameters/parameters.yaml#/title'
+      - $ref: '../parameters/parameters.yaml#/text'
+      - $ref: '../parameters/parameters.yaml#/source'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NewsListResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'
+
+news-newsId:
+  get:
+    tags:
+      - news
+    summary: Get an existing news by its ID
+    description: View an existing news by its ID
+    operationId: getNews
+    parameters:
+      - $ref: '../parameters/parameters.yaml#/p_id'
+    responses:
+      200:
+        $ref: '../responses/responses.yaml#/NewsResponse'
+      401:
+        $ref: '../responses/responses.yaml#/Unauthorized'
+      404:
+        $ref: '../responses/responses.yaml#/NotFound'
+      default:
+        $ref: '../responses/responses.yaml#/InternalServerError'

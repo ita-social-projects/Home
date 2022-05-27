@@ -15,8 +15,10 @@
 
     <properties>
         <json.name>openapi.json</json.name>
+        <springfox-version>2.9.2</springfox-version>
         <image.application.path>homebayraktar/home-reader</image.application.path>
         <home-application.package>com.softserveinc.ita.homeproject.application</home-application.package>
+        <home-reader.package>com.softserveinc.ita.homeproject.homereader</home-reader.package>
     </properties>
 
     <dependencies>
@@ -65,6 +67,25 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -80,6 +101,45 @@
                     <source>11</source>
                     <target>11</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.parent.basedir}/home-reader/src/main/resources/yaml/openapi.yaml
+                            </inputSpec>
+                            <generatorName>spring</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <configOptions>
+                                <java8>true</java8>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <sourceFolder>/</sourceFolder>
+                                <artifactId>home-reader</artifactId>
+                                <ArtifactVersion>${revision}</ArtifactVersion>
+                                <modelPackage>${home-reader.package}.model</modelPackage>
+                                <apiPackage>${home-reader.package}.api</apiPackage>
+                                <invokerPackage>${home-reader.package}</invokerPackage>
+                                <parentArtifactId>${project.parent.artifactId}</parentArtifactId>
+                                <parentGroupId>${project.parent.groupId}</parentGroupId>
+                                <parentVersion>${project.parent.version}</parentVersion>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useSwaggerAnnotations>false</useSwaggerAnnotations>
+                                <returnResponse>true</returnResponse>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
