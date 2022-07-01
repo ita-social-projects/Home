@@ -55,8 +55,6 @@ class PollVoteApiIT {
 
     private static final String POLL_NOT_FOUND_MESSAGE = "Poll with 'id: %s' is not found";
 
-    private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't create vote on poll with status: '%s'";
-
     private static final String TRYING_TO_REVOTE_MESSAGE =
         "You are trying to re-vote on a poll with 'id: %d' that you have already voted";
 
