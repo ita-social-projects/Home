@@ -6,7 +6,6 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.c
 import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class CooperationInvitationDTOMappingConfig
     implements HomeMappingConfig<CreateCooperationInvitation, CooperationInvitationDto> {

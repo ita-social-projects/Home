@@ -66,14 +66,12 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
     public Response createInvitation(CreateInvitation createInvitation) {
         if (createInvitation.getType().equals(InvitationType.APARTMENT)) {
             ApartmentInvitationDto invitationDto = mapper.convert(createInvitation, ApartmentInvitationDto.class);
-
             ApartmentInvitationDto invitation = apartmentInvitationService.createInvitation(invitationDto);
             ReadApartmentInvitation readInvitation = mapper.convert(invitation, ReadApartmentInvitation.class);
             readInvitation.setType(InvitationType.APARTMENT);
             return Response.status(Response.Status.CREATED).entity(readInvitation).build();
         } else if (createInvitation.getType().equals(InvitationType.COOPERATION)) {
             CooperationInvitationDto invitationDto = mapper.convert(createInvitation, CooperationInvitationDto.class);
-
             CooperationInvitationDto invitation = cooperationInvitationService.createInvitation(invitationDto);
             ReadCooperationInvitation readInvitation = mapper.convert(invitation, ReadCooperationInvitation.class);
             readInvitation.setType(InvitationType.COOPERATION);
@@ -89,7 +87,6 @@ public class InvitationApiImpl extends CommonApi implements InvitationsApi {
         invitationService.deactivateInvitation(invitationId);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
-
 
     @PreAuthorize(MANAGE_IN_COOPERATION)
     @Override
