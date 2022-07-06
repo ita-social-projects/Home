@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class OauthServiceImpl implements OauthService {
 
@@ -26,6 +27,8 @@ public class OauthServiceImpl implements OauthService {
 
     @Autowired
     private UserSessionRepository userSessionRepository;
+
+    public static final String BAD_CREDENTIAL_ERROR_MESSAGE = "Bad credentials";
 
     @Override
     public CreateTokenDto generateToken(UserCredentialsDto userCredentialsDto) {
@@ -70,11 +73,13 @@ public class OauthServiceImpl implements OauthService {
     private UserCredentials findByEmailAndPassword(String email, String password) {
         UserCredentials userCredentials =
             userCredentialsRepository.findByEmail(email).filter(UserCredentials::getEnabled)
-                .orElseThrow(() -> new NotFoundOauthException("User is not found"));
+                .orElseThrow(() -> new NotFoundOauthException(BAD_CREDENTIAL_ERROR_MESSAGE));
+
         if (BCrypt.checkpw(password, userCredentials.getPassword())) {
             return userCredentials;
         }
-        throw new NotFoundOauthException("Wrong password");
+
+        throw new NotFoundOauthException(BAD_CREDENTIAL_ERROR_MESSAGE);
     }
 
     private UserSession getUserSession(String refreshToken) {

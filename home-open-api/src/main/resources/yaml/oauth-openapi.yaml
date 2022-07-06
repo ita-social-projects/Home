@@ -54,7 +54,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiError'
+            $ref: '#/components/schemas/NotFoundError'
     InternalServerError:
       description: Something went wrong.
       content:
@@ -66,7 +66,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiError'
+            $ref: '#/components/schemas/NotAcceptableError'
     AuthenticationResponse:
       description: OK
       content:
@@ -134,12 +134,30 @@ components:
         refresh_token:
           type: string
           example: "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIzIiwic3ViIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NDI2OTI3NjIsImV4cCI6MTY0MzIzNDQwMH0.aUF-vGDOQRAZbTnA1KZiNY1unsbvipbplULb4azVPjO61YRZHIYwsWaYP5CiqiyHS_sO6LazinPdoLgVNrSucw"
-    ApiError:
+    NotFoundError:
+      type: object
+      properties:
+        response_code:
+          type: integer
+          example: 404
+        error_message:
+          type: string
+          example: "Bad credentials"
+    NotAcceptableError:
       type: object
       properties:
         response_code:
           type: integer
           example: 406
         error_message:
+          type: string
+          example: "Token is invalid"
+    ApiError:
+      type: object
+      properties:
+        response_code:
+          type: integer
+          example: 400
+        error_message:
             type: string
-            example: "example"
+            example: "Something went wrong. Please contact support"
