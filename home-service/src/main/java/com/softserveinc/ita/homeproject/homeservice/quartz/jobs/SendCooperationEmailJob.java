@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@QuartzJobBeanAutoConfiguration(cron = "0/5 * * * * ?")
+@QuartzJobBeanAutoConfiguration(cron = "${home.jobs.send-cooperation-email.cron}")
 public class SendCooperationEmailJob extends QuartzJobBean {
 
     private final SendCooperationEmailService sendCooperationEmailJob;

@@ -9,10 +9,19 @@ import org.quartz.Trigger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 @Configuration
-public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor {
+public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor, EnvironmentAware {
+
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -32,7 +41,8 @@ public class QuartzBeanPostProcessor implements BeanFactoryPostProcessor {
                         ? name + "Trigger" : quartzConfig.triggerName();
 
                 JobDetail jobDetail = createJobDetail(clazz, jobName,quartzConfig.group());
-                Trigger trigger = createCronTrigger(jobDetail, quartzConfig.cron(), triggerName,quartzConfig.group());
+                String cronExpression = environment.resolvePlaceholders(quartzConfig.cron());
+                Trigger trigger = createCronTrigger(jobDetail, cronExpression, triggerName, quartzConfig.group());
 
                 configurableListableBeanFactory.registerSingleton(name + "JobDetail", jobDetail);
                 configurableListableBeanFactory.registerSingleton(name + "Trigger", trigger);

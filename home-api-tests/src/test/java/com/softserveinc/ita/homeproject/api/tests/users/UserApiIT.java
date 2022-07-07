@@ -8,21 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD_REQUEST;
 import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.NOT_FOUND;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.MailUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.ResponseEmailItem;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
@@ -445,29 +438,6 @@ class UserApiIT {
                 .zipCode("zipCode");
     }
 
-    private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
-    private static String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
-    }
-
     private ApiResponse<ReadUser> createUserWithExistEmail() throws ApiException {
         ReadUser user = baseUserForTests;
 
@@ -498,32 +468,22 @@ class UserApiIT {
 
     @SneakyThrows
     private static ReadUser createBaseUserForTests() {
-        CreateCooperation createCoop = createBaseCooperation();
-        cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(10_000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
-        expectedUser.setEmail(createCoop.getAdminEmail());
-        return userApi.createUser(expectedUser);
+        CreateCooperation coop = createBaseCooperation();
+        CreateUser user = createBaseUser();
+        return ApiClientUtil.createCooperationAdmin(cooperationApi, coop, userApi, user);
     }
 
-    private ReadUser createNotMatchingUser() throws ApiException, InterruptedException, IOException {
-        CreateCooperation createCoop = createBaseCooperation();
-        cooperationApi.createCooperation(createCoop);
+    @SneakyThrows
+    private ReadUser createNotMatchingUser()  {
+        CreateCooperation coop = createBaseCooperation();
+        cooperationApi.createCooperation(coop);
+        String email = coop.getAdminEmail();
 
-        TimeUnit.MILLISECONDS.sleep(10_000);
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
 
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
-        return userApi.createUser(expectedUser);
+        CreateUser user = createBaseUser();
+        user.setRegistrationToken(MailUtil.getToken(letter));
+        return userApi.createUser(user);
     }
 
     private void assertUser(ReadUser expected, ReadUser actual) {

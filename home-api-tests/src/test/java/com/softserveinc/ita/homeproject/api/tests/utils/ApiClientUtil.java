@@ -1,25 +1,19 @@
 package com.softserveinc.ita.homeproject.api.tests.utils;
 
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.MailUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.ResponseEmailItem;
 import com.softserveinc.ita.homeproject.client.ApiClient;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ServerConfiguration;
@@ -152,21 +146,24 @@ public final class ApiClientUtil {
         return client;
     }
 
-
     @SneakyThrows
     static ReadUser createCooperationAdmin() {
-                CreateCooperation createCoop = createBaseCooperation();
-        cooperationApi.createCooperation(createCoop);
+        CreateCooperation coop = createBaseCooperation();
+        CreateUser user = createBaseUser();
+        return createCooperationAdmin(cooperationApi, coop, userApi, user);
+    }
 
-        TimeUnit.MILLISECONDS.sleep(5000);
+    @SneakyThrows
+    public static ReadUser createCooperationAdmin(CooperationApi cooperationApi, CreateCooperation coop,
+                                                  UserApi userApi, CreateUser user) {
+        cooperationApi.createCooperation(coop);
+        String email = coop.getAdminEmail();
 
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
 
-        CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, createCoop.getAdminEmail())));
-        expectedUser.setEmail(createCoop.getAdminEmail());
-        return userApi.createUser(expectedUser);
+        user.setRegistrationToken(MailUtil.getToken(letter));
+        user.setEmail(email);
+        return userApi.createUser(user);
     }
 
     private static CreateCooperation createBaseCooperation() {
@@ -247,14 +244,11 @@ public final class ApiClientUtil {
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-            Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail())));
-
-        expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
+        String email = Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail();
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
+        expectedUser.setRegistrationToken(MailUtil.getToken(letter));
+        expectedUser.setEmail(email);
 
         return userApi.createUser(expectedUser);
     }
@@ -314,28 +308,5 @@ public final class ApiClientUtil {
     @SneakyThrows
     public static String getErrorMessage(ApiException apiException) {
         return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
-    }
-
-    private static String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
-    }
-
-    private static String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
     }
 }
