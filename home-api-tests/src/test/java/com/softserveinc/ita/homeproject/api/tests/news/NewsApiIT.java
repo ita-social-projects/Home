@@ -232,7 +232,7 @@ class NewsApiIT {
 
     @Test
     void getNonExistentNewsTest() {
-        Long wrongId = 100L;
+        Long wrongId = 1_000_000L;
 
         assertThatExceptionOfType(ApiException.class)
             .isThrownBy(() -> newsApi.getNewsWithHttpInfo(wrongId))

@@ -4,24 +4,17 @@ import static com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil.BAD
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.MailUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.ResponseEmailItem;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
@@ -71,13 +64,7 @@ class InvitationApiIT {
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
         cooperationApi.createCooperationWithHttpInfo(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse response = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        assertTrue(response.getCount() > 0);
+        MailUtil.waitLetterForEmail(createCoop.getAdminEmail());
     }
 
     @Test
@@ -88,13 +75,9 @@ class InvitationApiIT {
         ReadHouse createdHouse = houseApi.createHouse(readCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartmentWithEmail(userEmail));
 
+        ResponseEmailItem letter = MailUtil.waitLetter(MailUtil.predicate().email(userEmail).subject("apartment"));
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        String apartmentInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
+        String apartmentInvitationToken = MailUtil.getToken(letter);
 
         ReadInvitation readInvitation =
                 invitationApi.approveInvitation(buildInvitationPayload(apartmentInvitationToken));
@@ -108,14 +91,9 @@ class InvitationApiIT {
     void isCooperationTokenAccepted() throws Exception {
         String userEmail = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
         createTestCooperationAndUserViaInvitationWithUserEmail(userEmail);
-        createTestCooperationWithUserEmail(userEmail);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        String cooperationInvitationToken = getToken(getDecodedMessageByEmail(mailResponse, userEmail));
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(userEmail);
+        String cooperationInvitationToken = MailUtil.getToken(letter);
 
         ReadInvitation readInvitation =
                 invitationApi.approveInvitation(buildInvitationPayload(cooperationInvitationToken));
@@ -189,8 +167,6 @@ class InvitationApiIT {
         createApartmentInvitation.setEmail(userEmail);
         createApartmentInvitation.setApartmentId(apartment.getId());
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         ApiResponse<ReadInvitation> response =
                 invitationApi.createInvitationWithHttpInfo(createApartmentInvitation);
 
@@ -212,9 +188,6 @@ class InvitationApiIT {
         invitation.setRole(Role.USER);
         invitation.setEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
         invitation.setType(InvitationType.COOPERATION);
-
-
-        TimeUnit.MILLISECONDS.sleep(5000);
 
         ApiResponse<ReadInvitation> response =
                 invitationApi.createInvitationWithHttpInfo(invitation);
@@ -293,7 +266,8 @@ class InvitationApiIT {
 
         ReadInvitation invitation =
                 invitationApi.createInvitation(createApartmentInvitation);
-        TimeUnit.MILLISECONDS.sleep(5000);
+
+        MailUtil.waitLetter(MailUtil.predicate().email(userEmail).subject("apartment"));
 
         invitation.setStatus(InvitationStatus.ACCEPTED);
         ApiResponse<Void> response =
@@ -317,13 +291,11 @@ class InvitationApiIT {
     @SneakyThrows
     private ReadCooperation createTestCooperationAndUserViaInvitationWithUserEmail(String userEmail) {
         ReadCooperation readCooperation = createTestCooperationWithUserEmail(userEmail);
-        TimeUnit.MILLISECONDS.sleep(5000);
 
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(userEmail);
 
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse, userEmail)));
+        expectedUser.setRegistrationToken(MailUtil.getToken(letter));
         expectedUser.setEmail(userEmail);
         userApi.createUser(expectedUser);
         return readCooperation;
@@ -336,29 +308,6 @@ class InvitationApiIT {
                 .lastName("lastName")
                 .password("password")
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
-    }
-
-    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
-    private String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
     }
 
     private CreateCooperation createCooperationWithUserEmail(String email) {

@@ -5,20 +5,12 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
 import com.softserveinc.ita.homeproject.api.tests.utils.QueryFilterUtils;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
 import com.softserveinc.ita.homeproject.api.tests.query.UserQuery;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
@@ -295,45 +287,12 @@ class QueryUserIT {
                 .zipCode("zipCode");
     }
 
-    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message="";
-        for (int i=0; i<response.getItems().size(); i++){
-            if(response.getItems().get(i).getContent().getHeaders().getTo().contains(email)){
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
-    private String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
-    }
-
     @SneakyThrows
     private ReadUser createBaseUserForTests() {
-        CreateCooperation createCoop = createBaseCooperation();
-        cooperationApi.createCooperation(createCoop);
-
-        TimeUnit.MILLISECONDS.sleep(5000);
-
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
-        CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,createCoop.getAdminEmail())));
-        expectedUser.setEmail(createCoop.getAdminEmail());
-        return userApi.createUser(expectedUser);
+        CreateCooperation coop = createBaseCooperation();
+        CreateUser user = createBaseUser();
+        return ApiClientUtil.createCooperationAdmin(cooperationApi, coop, userApi, user);
     }
-
 
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);

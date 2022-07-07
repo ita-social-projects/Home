@@ -9,22 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.ws.rs.core.Response;
 
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiMailHogUtil;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.ApiUsageFacade;
-import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.MailHogApiResponse;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.MailUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.dto.ResponseEmailItem;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.ApiResponse;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
@@ -64,6 +58,7 @@ class OwnershipApiIT {
 
     @BeforeAll
     void createOwnershipsAndAppartament() throws ApiException, InterruptedException, IOException {
+        int numInvitations = 3;
         CreateApartment createApartment = createApartment(NUMBER_OF_APARTMENT_INVITATIONS);
 
         ReadCooperation createdCooperation = cooperationApi.createCooperation(createCooperation());
@@ -73,26 +68,21 @@ class OwnershipApiIT {
         TEST_APARTMENT_ID = createdApartment.getId();
         TEST_DELETE_OWNERSHIP_APARTMENT_ID = createdApartment.getId();
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-
         List<CreateUser> users = Stream.generate(CreateUser::new).map(x ->
                 x.firstName("firstName")
                     .middleName("middleName")
                     .lastName("middleName")
                     .password("password")
                     .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
-            .limit(3)
+            .limit(numInvitations)
             .collect(Collectors.toList());
 
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
-
         users.forEach(x -> {
-            x.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-                Objects.requireNonNull(
-                    createApartment.getInvitations().get(createApartment.getInvitations().size() - 1)).getEmail())));
-            x.setEmail(Objects.requireNonNull(
-                createApartment.getInvitations().get(createApartment.getInvitations().size() - 1).getEmail()));
+            String email = Objects.requireNonNull(
+                    createApartment.getInvitations().get(createApartment.getInvitations().size() - 1)).getEmail();
+            ResponseEmailItem letter = MailUtil.waitLetter(MailUtil.predicate().email(email).subject("apartment"));
+            x.setRegistrationToken(MailUtil.getToken(letter));
+            x.setEmail(email);
             try {
                 ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(x);
             } catch (ApiException e) {
@@ -113,14 +103,11 @@ class OwnershipApiIT {
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-        TimeUnit.MILLISECONDS.sleep(5000);
-        ApiUsageFacade api = new ApiUsageFacade();
-        MailHogApiResponse mailResponse = api.getMessages(new ApiMailHogUtil(), MailHogApiResponse.class);
+        String email = Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail();
+        ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
         CreateUser expectedUser = createBaseUser();
-        expectedUser.setRegistrationToken(getToken(getDecodedMessageByEmail(mailResponse,
-            Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail())));
-
-        expectedUser.setEmail(Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail());
+        expectedUser.setRegistrationToken(MailUtil.getToken(letter));
+        expectedUser.setEmail(email);
 
         ApiResponse<ReadUser> response = userApi.createUserWithHttpInfo(expectedUser);
 
@@ -296,29 +283,6 @@ class OwnershipApiIT {
                 .type(InvitationType.APARTMENT))
             .limit(numberOfInvitations)
             .collect(Collectors.toList());
-    }
-
-    private String getDecodedMessageByEmail(MailHogApiResponse response, String email) {
-        String message = "";
-        for (int i = 0; i < response.getItems().size(); i++) {
-            if (response.getItems().get(i).getContent().getHeaders().getTo().contains(email)) {
-                message = response.getItems().get(i).getMime().getParts().get(0).getMime().getParts().get(0).getBody();
-                break;
-            }
-        }
-        return new String(Base64.getMimeDecoder().decode(message), StandardCharsets.UTF_8);
-    }
-
-    private String getToken(String str) {
-        Pattern pattern = Pattern.compile("(?<=:) .* (?=<)");
-        Matcher matcher = pattern.matcher(str);
-
-        String result = "";
-        if (matcher.find()) {
-            result = matcher.group();
-        }
-
-        return result.trim();
     }
 
     private void assertApartment(ReadOwnership expected, ReadOwnership actual) {

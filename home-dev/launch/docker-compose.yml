@@ -35,6 +35,12 @@ services:
         condition: service_completed_successfully
     environment:
       DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+      # speed up cron jobs for faster responses during tests
+      # uncomment for API tests
+      #HOME_JOBS_SENDAPARTMENTEMAIL_CRON: "* * * * * ?"
+      #HOME_JOBS_SENDCOOPERATIONEMAIL_CRON: "* * * * * ?"
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
     ports:
       - 8080:8080
     networks:
@@ -54,6 +60,8 @@ services:
     ports:
       - 1025:1025 # smtp server
       - 8025:8025 # web ui
+    networks:
+      - home_network
 
 networks:
   home_network:

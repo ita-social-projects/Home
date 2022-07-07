@@ -136,7 +136,7 @@ class CooperationPollApiIT {
     }
 
     private static CreatePoll createPollWithCreationDateInPast(){
-        return createPoll().creationDate(LocalDateTime.now().minusDays(1));
+        return createPoll().creationDate(LocalDateTime.now().minusDays(2));
     }
 
     private static CreatePoll createPollWithCompletionDateLessThanTwoDaysTest() {
