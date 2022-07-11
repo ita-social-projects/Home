@@ -148,3 +148,17 @@ CreateVoteBody:
       schema:
         $ref: '../models/vote.yaml#/CreateVote'
   required: true
+PasswordRestorationRequestBody:
+  description: A payload for request password restoration procedure
+  content:
+    application/json:
+      schema:
+        $ref: '../models/passwordRestoration.yaml#/PasswordRestorationRequest'
+  required: true
+PasswordRestorationApprovalBody:
+  description: A payload for complete password restoration procedure
+  content:
+    application/json:
+      schema:
+        $ref: '../models/passwordRestoration.yaml#/PasswordRestorationApproval'
+  required: true
