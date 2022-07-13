@@ -6,6 +6,11 @@ BaseReadView:
       format: int64
       example: 1
 
+ErrorMessageExample:
+  type: string
+  example: "example"
+
+
 ApiError:
   type: object
   properties:
@@ -13,5 +18,14 @@ ApiError:
       type: integer
       example: 404
     error_message:
-      type: string
-      example: "example"
+      $ref: '#/ErrorMessageExample'
+
+
+ForbiddenError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 403
+    error_message:
+      $ref: '#/ErrorMessageExample'

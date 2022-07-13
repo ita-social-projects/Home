@@ -31,7 +31,7 @@ Forbidden:
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/ForbiddenError'
 NotFound:
   description: The specified resource was not found.
   content:
