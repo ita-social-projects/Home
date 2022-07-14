@@ -24,7 +24,7 @@ public class PasswordRecoveryToken extends BaseEntity {
     private String recoveryToken;
 
     @Column(name = "expiration_datetime")
-    private LocalDateTime tokenExpirationDateTime;
+    private LocalDateTime sentDateTime;
 
     @Column(name = "enabled")
     private Boolean enabled;
