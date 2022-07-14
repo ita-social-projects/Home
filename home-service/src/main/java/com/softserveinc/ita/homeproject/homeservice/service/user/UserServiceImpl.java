@@ -23,8 +23,10 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.c
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.PasswordException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import com.softserveinc.ita.homeproject.homeservice.util.ValidationHelper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -62,6 +64,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserCredentialsRepository userCredentialsRepository;
 
+    private final ValidationHelper validationHelper;
+
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
                            UserCooperationRepository userCooperationRepository,
@@ -74,7 +78,8 @@ public class UserServiceImpl implements UserService {
                                cooperationInvitationService,
                            PasswordEncoder passwordEncoder,
                            UserCredentialsRepository userCredentialsRepository,
-                           ServiceMapper mapper) {
+                           ServiceMapper mapper,
+                           ValidationHelper validationHelper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userCooperationRepository = userCooperationRepository;
@@ -84,6 +89,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
         this.userCredentialsRepository = userCredentialsRepository;
         this.mapper = mapper;
+        this.validationHelper = validationHelper;
     }
 
     private final ServiceMapper mapper;
@@ -93,6 +99,11 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto createUserDto) {
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
+
+            if(!validationHelper.isValidPassword(createUserDto.getPassword())) {
+                throw new PasswordException();
+            }
+
             User toCreate = mapper.convert(createUserDto, User.class);
 
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
