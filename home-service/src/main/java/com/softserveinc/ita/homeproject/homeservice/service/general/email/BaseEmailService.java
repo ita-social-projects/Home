@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+
 public abstract class BaseEmailService {
 
     @Autowired
@@ -55,7 +56,7 @@ public abstract class BaseEmailService {
             mailDto.setIsRegistered(false);
         } else {
             mailDto.setLink(
-                "https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
+                uiHost + "/api/0/apidocs/index.html#post-/invitations/invitation-approval");
             mailDto.setIsRegistered(true);
         }
     }
