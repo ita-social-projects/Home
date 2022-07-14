@@ -17,7 +17,7 @@
             <column name="recovery_token" type="varchar(36)">
                 <constraints nullable="false"/>
             </column>
-            <column name="expiration_datetime" type="datetime">
+            <column name="sent_datetime" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="enabled" type="boolean">
