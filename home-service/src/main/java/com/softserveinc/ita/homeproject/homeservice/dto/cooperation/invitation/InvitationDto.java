@@ -4,12 +4,13 @@ import com.softserveinc.ita.homeproject.homedata.general.address.Address;
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.Mailable;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class InvitationDto extends BaseDto {
+public abstract class InvitationDto extends Mailable {
 
     private InvitationStatusDto status;
 
