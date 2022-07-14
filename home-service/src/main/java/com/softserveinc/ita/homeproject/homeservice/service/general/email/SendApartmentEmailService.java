@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 import java.math.BigDecimal;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
@@ -11,9 +10,9 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitati
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Component
 
-public class SendApartmentEmailService extends BaseEmailService<ApartmentInvitation, ApartmentInvitationDto> {
+@Component
+public class SendApartmentEmailService extends BaseEmailService {
 
     private final InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService;
 
@@ -24,8 +23,8 @@ public class SendApartmentEmailService extends BaseEmailService<ApartmentInvitat
     }
 
     @Override
-    protected MailDto createBaseMailDto(InvitationDto invitationDto) {
-        ApartmentInvitationDto invitation = mapper.convert(invitationDto, ApartmentInvitationDto.class);
+    protected MailDto createBaseMailDto(Mailable letter) {
+        ApartmentInvitationDto invitation = mapper.convert(letter, ApartmentInvitationDto.class);
         MailDto mailDto = new MailDto();
         mailDto.setType(InvitationTypeDto.APARTMENT);
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
@@ -34,7 +33,7 @@ public class SendApartmentEmailService extends BaseEmailService<ApartmentInvitat
     }
 
     @Override
-    protected InvitationService<ApartmentInvitation, ApartmentInvitationDto> getInvitationService() {
+    protected InvitationService<ApartmentInvitation, ApartmentInvitationDto> getMailableService() {
         return invitationService;
     }
 }
