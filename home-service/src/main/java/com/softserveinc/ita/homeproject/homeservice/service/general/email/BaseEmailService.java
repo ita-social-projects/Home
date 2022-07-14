@@ -3,17 +3,15 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.general.mail.MailService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
-public abstract class BaseEmailService<T extends Invitation, D extends InvitationDto> {
+public abstract class BaseEmailService {
 
     @Autowired
     protected CooperationRepository cooperationRepository;
@@ -27,32 +25,32 @@ public abstract class BaseEmailService<T extends Invitation, D extends Invitatio
     @Autowired
     private UserRepository userRepository;
 
-    private static final String UI_HOST = "https://home-project-ui.herokuapp.com";
-
+    @Value("${home.project.ui.host}")
+    private String uiHost;
 
     @SneakyThrows
     public void executeAllInvitationsByType() {
-        List<D> invitations = getInvitationService().getAllActiveInvitations();
+        List<? extends Mailable> letters = getMailableService().getAllUnsentLetters();
 
-        for (InvitationDto invite : invitations) {
-            mailService.sendTextMessage(createMailDto(invite));
-            getInvitationService().updateSentDateTimeAndStatus(invite.getId());
+        for (Mailable letter : letters) {
+            mailService.sendTextMessage(createMailDto(letter));
+            getMailableService().updateSentDateTimeAndStatus(letter.getId());
         }
     }
 
-    protected MailDto createMailDto(InvitationDto invitationDto) {
-        MailDto mailDto = createBaseMailDto(invitationDto);
-        mailDto.setId(invitationDto.getId());
-        mailDto.setEmail(invitationDto.getEmail());
-        mailDto.setRegistrationToken(invitationDto.getRegistrationToken());
-        checkRegistration(invitationDto, mailDto);
+    protected MailDto createMailDto(Mailable letter) {
+        MailDto mailDto = createBaseMailDto(letter);
+        mailDto.setId(letter.getId());
+        mailDto.setEmail(letter.getEmail());
+        mailDto.setRegistrationToken(letter.getRegistrationToken());
+        checkRegistration(letter, mailDto);
         return mailDto;
     }
 
-    protected abstract MailDto createBaseMailDto(InvitationDto invitationDto);
+    protected abstract MailDto createBaseMailDto(Mailable letter);
 
-    protected void checkRegistration(InvitationDto invitationDto, MailDto mailDto) {
-        if (userRepository.findByEmail(invitationDto.getEmail()).isEmpty()) {
+    protected void checkRegistration(Mailable letter, MailDto mailDto) {
+        if (userRepository.findByEmail(letter.getEmail()).isEmpty()) {
             mailDto.setLink(getRegistrationUrl(mailDto));
             mailDto.setIsRegistered(false);
         } else {
@@ -63,9 +61,9 @@ public abstract class BaseEmailService<T extends Invitation, D extends Invitatio
     }
 
     protected String getRegistrationUrl(MailDto mailDto) {
-        return UI_HOST + String.format("/register-user?email=%s&token=%s", mailDto.getEmail(),
+        return uiHost + String.format("/register-user?email=%s&token=%s", mailDto.getEmail(),
             mailDto.getRegistrationToken());
     }
 
-    protected abstract InvitationService<T, D> getInvitationService();
+    protected abstract MailableService getMailableService();
 }

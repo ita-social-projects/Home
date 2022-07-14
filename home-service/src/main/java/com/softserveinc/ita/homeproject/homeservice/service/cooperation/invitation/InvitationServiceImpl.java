@@ -32,8 +32,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
-
-
 @Service
 @RequiredArgsConstructor
 @Primary
@@ -60,7 +58,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     }
 
     @Override
-    public List<InvitationDto> getAllActiveInvitations() {
+    public List<InvitationDto> getAllUnsentLetters() {
         List<Invitation> allNotSentInvitations = invitationRepository
                 .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEquals(
                         InvitationStatus.PENDING, true);
@@ -91,7 +89,6 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
         invitation.setSentDatetime(LocalDateTime.now());
         invitationRepository.save(invitation);
     }
-
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
@@ -131,7 +128,6 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
         anyInvitation.setEnabled(false);
         invitationRepository.save(anyInvitation);
     }
-
 
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {

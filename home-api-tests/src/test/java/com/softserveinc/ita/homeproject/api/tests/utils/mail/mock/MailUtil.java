@@ -44,7 +44,7 @@ public class MailUtil {
 
     @SneakyThrows
     private static <T> T waitFor(Supplier<T> supplier) {
-        int timeout = 5000;
+        int timeout = 15000;
         int pauseTime = 200;
         int n = timeout / pauseTime;
         T result = null;

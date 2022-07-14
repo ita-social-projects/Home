@@ -130,7 +130,7 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
     }
 
     @Override
-    public List<ApartmentInvitationDto> getAllActiveInvitations() {
+    public List<ApartmentInvitationDto> getAllUnsentLetters() {
         List<ApartmentInvitation> allNotSentInvitations = apartmentInvitationRepository
             .findAllBySentDatetimeIsNullAndEnabledEqualsAndStatusEqualsAndTypeEquals(true,
                 InvitationStatus.PENDING, InvitationType.APARTMENT);
