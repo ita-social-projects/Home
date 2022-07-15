@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
 
-            if(!validationHelper.isValidPassword(createUserDto.getPassword())) {
-                throw new PasswordException();
+            if(!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
+                throw new PasswordException("Password too weak");
             }
 
             User toCreate = mapper.convert(createUserDto, User.class);
