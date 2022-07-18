@@ -305,6 +305,7 @@ public final class ApiClientUtil {
         }
     }
 
+
     @SneakyThrows
     public static String getErrorMessage(ApiException apiException) {
         return new ObjectMapper().readValue(apiException.getMessage(), ApiError.class).getErrorMessage();
