@@ -10,6 +10,95 @@ ErrorMessageExample:
   type: string
   example: "example"
 
+BadRequestError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 400
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+UnauthorizedError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 401
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+ForbiddenError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 403
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+NotFoundError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 404
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+MethodNotAllowedError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 405
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+NotAcceptableError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 406
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+ProxyAuthenticationRequiredError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 407
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+RequestTimeoutError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 408
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+ConflictError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 409
+    error_message:
+      $ref: '#/ErrorMessageExample'
+
+InternalServerError:
+  type: object
+  properties:
+    response_code:
+      type: integer
+      example: 500
+    error_message:
+      $ref: '#/ErrorMessageExample'
 
 ApiError:
   type: object
@@ -20,12 +109,3 @@ ApiError:
     error_message:
       $ref: '#/ErrorMessageExample'
 
-
-ForbiddenError:
-  type: object
-  properties:
-    response_code:
-      type: integer
-      example: 403
-    error_message:
-      $ref: '#/ErrorMessageExample'
