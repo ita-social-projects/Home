@@ -106,7 +106,7 @@ components:
           minLength: 5
           maxLength: 320
         password:
-          pattern: '[a-zA-Z0-9]{8,}'
+          $ref: 'models/common.yaml#/PasswordPattern'
           type: string
           example: "mySuperStrongPass"
           minLength: 8
