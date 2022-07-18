@@ -99,7 +99,6 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto createUserDto) {
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
-
             if(!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
                 throw new PasswordException("Password too weak");
             }
