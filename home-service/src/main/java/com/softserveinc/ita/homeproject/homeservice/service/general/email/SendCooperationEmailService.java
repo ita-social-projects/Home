@@ -3,7 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
@@ -12,15 +11,13 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitati
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-@Component
 
-public class SendCooperationEmailService extends BaseEmailService<CooperationInvitation, CooperationInvitationDto> {
+@Component
+public class SendCooperationEmailService extends BaseEmailService {
 
     private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
     private final InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService;
-
-    private final CooperationRepository cooperationRepository;
 
     public SendCooperationEmailService(
         @Qualifier(value = "cooperationInvitationServiceImpl")
@@ -31,13 +28,12 @@ public class SendCooperationEmailService extends BaseEmailService<CooperationInv
     }
 
     @Override
-    protected MailDto createBaseMailDto(InvitationDto invitationDto) {
-        CooperationInvitationDto invitation = mapper.convert(invitationDto, CooperationInvitationDto.class);
+    protected MailDto createBaseMailDto(Mailable letter) {
+        CooperationInvitationDto invitation = mapper.convert(letter, CooperationInvitationDto.class);
         Cooperation coop = cooperationRepository.findById(invitation.getCooperationId())
             .filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(
                 String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
-
         MailDto mailDto = new MailDto();
         mailDto.setRole(invitation.getRole().getName());
         mailDto.setCooperationName(coop.getName());
@@ -45,9 +41,8 @@ public class SendCooperationEmailService extends BaseEmailService<CooperationInv
         return mailDto;
     }
 
-
     @Override
-    protected InvitationService<CooperationInvitation, CooperationInvitationDto> getInvitationService() {
+    protected InvitationService<CooperationInvitation, CooperationInvitationDto> getMailableService() {
         return invitationService;
     }
 }

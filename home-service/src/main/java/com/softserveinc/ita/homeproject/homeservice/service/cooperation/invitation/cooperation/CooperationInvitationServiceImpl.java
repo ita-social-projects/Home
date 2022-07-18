@@ -142,7 +142,7 @@ public class CooperationInvitationServiceImpl
     }
 
     @Override
-    public List<CooperationInvitationDto> getAllActiveInvitations() {
+    public List<CooperationInvitationDto> getAllUnsentLetters() {
         List<CooperationInvitation> allNotSentInvitations = cooperationInvitationRepository
             .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEqualsAndTypeEquals(
                 InvitationStatus.PENDING, true, InvitationType.COOPERATION);
