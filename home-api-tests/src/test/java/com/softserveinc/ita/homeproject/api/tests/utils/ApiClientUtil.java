@@ -60,7 +60,7 @@ public final class ApiClientUtil {
 
     private static final String VERBOSE_LOGGING = System.getProperty("verbose.tests.logging", "true");
 
-    private static final String USER_PASSWORD = "password";
+    public static final String VALID_USER_PASSWORD = "Str0ngUs3rP@ssVV0rd";
 
     private static final AuthenticationApi authenticationApi = new AuthenticationApi(getAuthenticationApi());
 
@@ -94,7 +94,7 @@ public final class ApiClientUtil {
     static String getAuthentication(ReadUser readUser) {
         UserCredentials userCredentials = new UserCredentials();
         userCredentials.email(readUser.getEmail())
-            .password(USER_PASSWORD);
+            .password(VALID_USER_PASSWORD);
         CreateToken token = authenticationApi.authenticateUser(userCredentials);
 
         return token.getAccessToken();
@@ -191,7 +191,7 @@ public final class ApiClientUtil {
             .firstName("firstName")
             .middleName("middleName")
             .lastName("lastName")
-            .password(USER_PASSWORD)
+            .password(VALID_USER_PASSWORD)
             .email("test.receive.apartment@gmail.com")
             .contacts(createContactList());
     }
