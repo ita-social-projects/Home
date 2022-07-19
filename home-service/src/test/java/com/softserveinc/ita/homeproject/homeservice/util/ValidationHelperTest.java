@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ValidationHelperTest {
+class ValidationHelperTest {
 
     private ValidationHelper validationHelper;
 
@@ -17,43 +17,43 @@ public class ValidationHelperTest {
     }
 
     @Test
-    public void testWithValidPassword() {
+    void testWithValidPassword() {
         String password = "Ab1$1234";
         assertTrue(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithValidPasswordWithLengthMoreThan8() {
+    void testWithValidPasswordWithLengthMoreThan8() {
         String password = "Ab1$1234678";
         assertTrue(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithMissingUpperCaseLetter() {
+    void testWithMissingUpperCaseLetter() {
         String password = "ab1$1234";
         assertFalse(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithMissingLowerCaseLetter() {
+    void testWithMissingLowerCaseLetter() {
         String password = "AB1$1234";
         assertFalse(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithMissingSpecialLetter() {
+    void testWithMissingSpecialLetter() {
         String password = "AB123456";
         assertFalse(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithPasswordLengthLesserThan8() {
+    void testWithPasswordLengthLesserThan8() {
         String password = "Ab1$123";
         assertFalse(validationHelper.validatePasswordComplexity(password));
     }
 
     @Test
-    public void testWithValidPasswordUsingSpecialCharacters() {
+    void testWithValidPasswordUsingSpecialCharacters() {
         char[] specialCharacters = "!\"#$%&'()*+,-./:;<=>?@[]^_`{|}~".toCharArray();
         assertEquals(31, specialCharacters.length);
         for (char specialCharacter : specialCharacters) {

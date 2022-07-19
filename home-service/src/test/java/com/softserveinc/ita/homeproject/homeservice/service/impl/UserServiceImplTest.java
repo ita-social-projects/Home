@@ -25,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
@@ -74,7 +74,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testCreateUserWithInvalidPassword() {
+    void testCreateUserWithInvalidPassword() {
         UserDto userDto = new UserDto();
         userDto.setPassword("Ab$1234");
         userDto.setEmail("test@gmail.com");
@@ -86,7 +86,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testCreateUserWithValidPassword() {
+    void testCreateUserWithValidPassword() {
         UserDto userDto = new UserDto();
         userDto.setPassword("Ab1$1234");
         userDto.setEmail("test@gmail.com");
