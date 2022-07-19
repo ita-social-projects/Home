@@ -12,11 +12,12 @@ public class ValidationHelper {
      * (?=.*[A-Z])         # an upper case letter must occur at least once
      * (?=.*[^a-zA-Z0-9])  # a special character must occur at least once
      * (?=\S+$)            # no whitespace allowed in the entire string
+     * (?=\s*\S).*         # empty password not allowed
      * .{8,}               # anything, at least eight places though
      * $                   # end-of-string
      */
     private static final String PASSWORD_VALIDATION_REGEX
-            = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?=\\S+$).{8,}$";
+            = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?=\\S+$)(?=\\s*\\S).*.{8,}$";
 
     public boolean validatePasswordComplexity(String password) {
         return password != null && password.matches(PASSWORD_VALIDATION_REGEX);
