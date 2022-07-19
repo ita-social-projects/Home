@@ -126,7 +126,7 @@ class UserApiIT {
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
                 .middleName("MiddleName")
                 .lastName("LastName")
-                .password("somePassword")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("walker@email.com");
 
         assertThatExceptionOfType(ApiException.class)
