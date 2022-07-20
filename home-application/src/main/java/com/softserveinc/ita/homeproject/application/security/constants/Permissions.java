@@ -41,3 +41,4 @@ public final class Permissions {
     public static final String MANAGE_VOTES = "hasAuthority('MANAGE_VOTES')";
 
 }
+
