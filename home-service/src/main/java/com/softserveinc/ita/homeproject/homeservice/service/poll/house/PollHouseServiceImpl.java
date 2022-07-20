@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.house;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_HOUSE_EXIST_IN_POLL_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .INVALID_HOUSE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_MESSAGE;
+
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.house.House;
@@ -22,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PollHouseServiceImpl implements PollHouseService {
-    private static final String WRONG_HOUSE = "Can't add or remove house, invalid poll_id or house_id";
 
     private final PollRepository pollRepository;
 
@@ -41,7 +47,7 @@ public class PollHouseServiceImpl implements PollHouseService {
 
             if (houses.contains(house)) {
                 throw new BadRequestHomeException(
-                        String.format("House with id:%s already exists in poll with id:%s", houseId, pollId));
+                        String.format(ALERT_HOUSE_EXIST_IN_POLL_MESSAGE, houseId, pollId));
             }
 
             houses.add(house);
@@ -88,8 +94,7 @@ public class PollHouseServiceImpl implements PollHouseService {
         if (pollCooperationId.equals(houseCooperationId)) {
             return true;
         } else {
-            throw new NotFoundHomeException(WRONG_HOUSE);
+            throw new NotFoundHomeException(INVALID_HOUSE_MESSAGE);
         }
     }
-
 }

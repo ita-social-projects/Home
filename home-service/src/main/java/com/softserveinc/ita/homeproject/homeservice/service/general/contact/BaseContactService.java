@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.contact;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_CONTACT_FORMAT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_TYPE_CONTACT_FORMAT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_MATCH_TYPE_CONTACT_FORMAT_MESSAGE;
+
 import javax.transaction.Transactional;
 
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
@@ -23,8 +30,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public abstract class BaseContactService implements ContactService {
-
-    private static final String NOT_FOUND_CONTACT_FORMAT = "Can't find contact with given ID:%d";
 
     protected final ContactRepository contactRepository;
 
@@ -51,7 +56,7 @@ public abstract class BaseContactService implements ContactService {
         if (existingContactType == updateContactDto.getType()) {
             return updateContact(contact, updateContactDto);
         } else {
-            throw new BadRequestHomeException("Type of the contact doesn't match");
+            throw new BadRequestHomeException(NOT_MATCH_TYPE_CONTACT_FORMAT_MESSAGE);
         }
     }
 
@@ -61,7 +66,7 @@ public abstract class BaseContactService implements ContactService {
         } else if (contact.getType().equals(ContactType.EMAIL)) {
             return updateEmail((EmailContact) contact, (EmailContactDto) updateContactDto);
         } else {
-            throw new NotFoundHomeException("Type of the contact is not found");
+            throw new NotFoundHomeException(NOT_FOUND_TYPE_CONTACT_FORMAT_MESSAGE);
         }
     }
 
@@ -91,7 +96,7 @@ public abstract class BaseContactService implements ContactService {
     @Override
     public void deactivateContact(Long id) {
         Contact contact = contactRepository.findById(id).filter(Contact::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_FORMAT_MESSAGE, id)));
         contact.setEnabled(false);
         contactRepository.save(contact);
     }

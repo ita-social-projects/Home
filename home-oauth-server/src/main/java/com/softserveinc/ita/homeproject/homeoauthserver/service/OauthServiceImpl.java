@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.service;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_CREDENTIAL_ERROR_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.INVALID_TOKEN_MESSAGE;
+
 import com.softserveinc.ita.homeproject.homeoauthserver.config.JwtProvider;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
 import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 
+
 @Service
 public class OauthServiceImpl implements OauthService {
 
@@ -27,8 +31,6 @@ public class OauthServiceImpl implements OauthService {
 
     @Autowired
     private UserSessionRepository userSessionRepository;
-
-    public static final String BAD_CREDENTIAL_ERROR_MESSAGE = "Bad credentials";
 
     @Override
     public CreateTokenDto generateToken(UserCredentialsDto userCredentialsDto) {
@@ -84,6 +86,6 @@ public class OauthServiceImpl implements OauthService {
 
     private UserSession getUserSession(String refreshToken) {
         return userSessionRepository.findByRefreshToken(refreshToken)
-            .orElseThrow(() -> new NotAcceptableOauthException("Invalid token"));
+            .orElseThrow(() -> new NotAcceptableOauthException(INVALID_TOKEN_MESSAGE));
     }
 }
