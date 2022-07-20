@@ -130,7 +130,7 @@ public class ExceptionMessages {
 
     public static final String ALERT_HOUSE_EXIST_IN_POLL_MESSAGE = "House with id:%s already exists in poll with id:%s";
 
-    public static final String NOT_FOUND_APARTMENT_ID_MESSAGE = "Apartment with id: %d not found";
+    public static final String NOT_FOUND_APARTMENT_ID_MESSAGE = "Apartment with 'id: %d' is not found";
 
     public static final String NOT_FOUND_HOUSE_WITH_ID_IN_COOPERATION_MESSAGE = "House with id: %d not found "
         + "in this cooperation";
