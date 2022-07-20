@@ -106,7 +106,7 @@ components:
           minLength: 5
           maxLength: 320
         password:
-          pattern: '[a-zA-Z0-9]{8,}'
+          pattern: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?=\S+$).{8,}$'
           type: string
           example: "mySuperStrongPass"
           minLength: 8

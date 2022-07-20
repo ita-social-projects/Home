@@ -126,7 +126,7 @@ class UserApiIT {
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
                 .middleName("MiddleName")
                 .lastName("LastName")
-                .password("somePassword")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("walker@email.com");
 
         assertThatExceptionOfType(ApiException.class)
@@ -404,7 +404,7 @@ class UserApiIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
                 .contacts(createContactList());
     }
@@ -424,7 +424,7 @@ class UserApiIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
 
@@ -445,7 +445,7 @@ class UserApiIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(user.getEmail())
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
                 .contacts(createContactList());

@@ -306,7 +306,7 @@ class InvitationApiIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
 
