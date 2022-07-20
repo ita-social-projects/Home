@@ -39,8 +39,6 @@ class LoginIT {
 
     private static final String USER_EMAIL = RandomStringUtils.randomAlphabetic(10).concat("@gmail.com");
 
-    private static final String USER_PASSWORD = "password";
-
     private static final CooperationApi cooperationApi = new CooperationApi(getCooperationAdminClient());
 
     private static final UserApi userApi = new UserApi(getUserGuestClient());
@@ -54,7 +52,7 @@ class LoginIT {
         createCooperationAdmin();
         UserCredentials userCredentials = new UserCredentials()
             .email(USER_EMAIL)
-            .password(USER_PASSWORD);
+            .password(ApiClientUtil.VALID_USER_PASSWORD);
         authenticationApi = new AuthenticationApi(getAuthenticationApi());
 
 
@@ -107,7 +105,7 @@ class LoginIT {
             .firstName("firstName")
             .middleName("middleName")
             .lastName("lastName")
-            .password(USER_PASSWORD)
+            .password(ApiClientUtil.VALID_USER_PASSWORD)
             .email(USER_EMAIL)
             .contacts(createContactList());
     }

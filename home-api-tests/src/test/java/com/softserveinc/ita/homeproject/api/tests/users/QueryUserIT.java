@@ -34,7 +34,7 @@ class QueryUserIT {
             .firstName("Bill")
             .middleName("Billievich")
             .lastName("White")
-            .password("password");
+            .password(ApiClientUtil.VALID_USER_PASSWORD);
 
     @Test
     void getAllUsers() throws ApiException {
@@ -227,35 +227,35 @@ class QueryUserIT {
                 middleName("Alexovich").
                 lastName("Young").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+                password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
                 firstName("Bob").
                 middleName("Bobovich").
                 lastName("Smith").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+                password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
                 firstName("Jack").
                 middleName("Jackovich").
                 lastName("Gray").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+                password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
                 firstName("Sindy").
                 middleName("Sindivna").
                 lastName("Black").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+                password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
                 firstName("Victor").
                 middleName("Viktorovich").
                 lastName("Along").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
-                password("password")
+                password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         return list;
     }
@@ -273,7 +273,7 @@ class QueryUserIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
 
