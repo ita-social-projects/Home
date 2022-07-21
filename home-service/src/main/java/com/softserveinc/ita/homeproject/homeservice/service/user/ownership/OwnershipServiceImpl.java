@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user.ownership;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_OWNERSHIP_WITH_ID_MESSAGE;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,8 +33,6 @@ public class OwnershipServiceImpl implements OwnershipService {
 
     private final ServiceMapper mapper;
 
-    private static final String OWNERSHIP_WITH_ID_NOT_FOUND = "Ownership with 'id: %d' is not found";
-
     @Override
     public Ownership createOwnership(ApartmentInvitation apartmentInvitation) {
         Ownership ownership = new Ownership();
@@ -56,7 +56,7 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .filter(Ownership::getEnabled)
                 .filter(ownership -> ownership.getApartment().getId().equals(apartmentId))
                 .orElseThrow(() ->
-                        new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
+                        new NotFoundHomeException(String.format(NOT_FOUND_OWNERSHIP_WITH_ID_MESSAGE, id)));
 
         validateSumOwnershipPart(apartmentId, toUpdate, updateOwnershipDto);
 
@@ -72,7 +72,7 @@ public class OwnershipServiceImpl implements OwnershipService {
                 .filter(Ownership::getEnabled)
                 .filter(ownership -> ownership.getApartment().getId().equals(apartmentId))
                 .orElseThrow(() ->
-                        new NotFoundHomeException(String.format(OWNERSHIP_WITH_ID_NOT_FOUND, id)));
+                        new NotFoundHomeException(String.format(NOT_FOUND_OWNERSHIP_WITH_ID_MESSAGE, id)));
 
 
         toDelete.setEnabled(false);

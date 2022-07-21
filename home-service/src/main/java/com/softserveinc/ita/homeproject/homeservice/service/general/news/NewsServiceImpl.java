@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.news;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_NEWS_MESSAGE;
+
 import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.general.news.News;
@@ -17,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
-
-    private static final String NOT_FOUND_NEWS = "Can't find news with given ID:";
 
     private static final String FORMAT = "%s %d";
 
@@ -43,7 +43,7 @@ public class NewsServiceImpl implements NewsService {
     public NewsDto update(Long id, NewsDto newsDto) {
         News fromDB = newsRepository.findById(id)
             .filter(News::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS_MESSAGE, id)));
 
         if (newsDto.getTitle() != null) {
             fromDB.setTitle(newsDto.getTitle());
@@ -79,7 +79,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void deactivateNews(Long id) {
         News toDelete = newsRepository.findById(id).filter(News::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(FORMAT, NOT_FOUND_NEWS_MESSAGE, id)));
         toDelete.setEnabled(false);
         newsRepository.save(toDelete);
     }

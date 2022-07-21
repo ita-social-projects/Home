@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeoauthserver.exception.handler;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.UNKNOWN_ERROR_APPEARED_MESSAGE;
+
 import com.softserveinc.ita.homeproject.homeoauthserver.exception.NotAcceptableOauthException;
 import com.softserveinc.ita.homeproject.homeoauthserver.exception.NotFoundOauthException;
 import com.softserveinc.ita.homeproject.homeoauthserver.model.ApiError;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,7 +35,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ApiError> handleError400() {
         ApiError apiError = new ApiError();
         apiError.setResponseCode(400);
-        apiError.setErrorMessage("The unknown error appeared. Check your payload or contact support.");
+        apiError.setErrorMessage(UNKNOWN_ERROR_APPEARED_MESSAGE);
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }

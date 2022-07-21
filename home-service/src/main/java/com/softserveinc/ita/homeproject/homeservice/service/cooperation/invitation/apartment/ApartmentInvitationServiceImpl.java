@@ -1,5 +1,13 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_ALREADY_EXIST_APARTMENT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_APARTMENT_ID_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +38,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class ApartmentInvitationServiceImpl implements InvitationService<ApartmentInvitation, ApartmentInvitationDto> {
@@ -72,7 +81,6 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
         this.userCooperationService = userCooperationService;
     }
 
-
     @Override
     public ApartmentInvitationDto createInvitation(ApartmentInvitationDto apartmentInvitationDto) {
         ApartmentInvitation apartmentInvitation = mapper
@@ -85,14 +93,14 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
         Long apartmentId = mapper.convert(apartmentInvitation, ApartmentInvitationDto.class).getApartmentId();
         apartmentInvitation.setApartment(apartmentRepository
             .findById(apartmentId)
-            .orElseThrow(() -> new NotFoundHomeException("Apartment with id: " + apartmentId + " not found")));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_APARTMENT_ID_MESSAGE, apartmentId))));
 
 
         if (isApartmentInvitationNonExists(apartmentInvitationDto.getEmail(), apartmentId)) {
             invitationRepository.save(apartmentInvitation);
             return mapper.convert(apartmentInvitation, ApartmentInvitationDto.class);
         }
-        throw new BadRequestHomeException("Invitation already exist for apartment");
+        throw new BadRequestHomeException(ALERT_INVITATION_ALREADY_EXIST_APARTMENT_MESSAGE);
     }
 
     @Override
@@ -106,10 +114,10 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         ApartmentInvitation apartmentInvitation = mapper.convert(invitation, ApartmentInvitation.class);
         if (!invitation.getEnabled().equals(true)) {
-            throw new InvitationException("Invitation is not active");
+            throw new InvitationException(ALERT_INVITATION_NOT_ACTIVE_MESSAGE);
         }
         acceptUserInvitation(apartmentInvitation);
     }
@@ -117,7 +125,7 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         return mapper.convert(invitation, InvitationDto.class);
     }
 
@@ -175,6 +183,4 @@ public class ApartmentInvitationServiceImpl implements InvitationService<Apartme
 
         return pageCooperationInvitation.map(invitation -> mapper.convert(invitation, ApartmentInvitationDto.class));
     }
-
-
 }

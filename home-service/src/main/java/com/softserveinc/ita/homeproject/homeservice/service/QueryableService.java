@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_MORE_THAN_ONE_ELEMENT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_MESSAGE;
+
 import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.BaseEntity;
@@ -18,10 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @param <D> - DTO type
  */
 public interface QueryableService<T extends BaseEntity, D extends BaseDto> {
-    String NOT_FOUND_MESSAGE = "%s with 'id: %s' is not found";
-
-    String MORE_THAN_ONE_ELEMENT_MESSAGE =
-        "Result of the request that require to return one element, contains more than one element";
 
     int DEFAULT_PAGE_NUMBER = 1;
 
@@ -70,7 +69,7 @@ public interface QueryableService<T extends BaseEntity, D extends BaseDto> {
         } else if (page.getTotalElements() == 0) {
             throw new NotFoundHomeException(getMessage(id));
         } else {
-            throw new IllegalStateException(MORE_THAN_ONE_ELEMENT_MESSAGE);
+            throw new IllegalStateException(ALERT_MORE_THAN_ONE_ELEMENT_MESSAGE);
         }
     }
 
