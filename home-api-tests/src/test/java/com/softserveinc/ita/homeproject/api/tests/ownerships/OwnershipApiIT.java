@@ -72,7 +72,7 @@ class OwnershipApiIT {
                 x.firstName("firstName")
                     .middleName("middleName")
                     .lastName("middleName")
-                    .password("password")
+                    .password(ApiClientUtil.VALID_USER_PASSWORD)
                     .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .limit(numInvitations)
             .collect(Collectors.toList());
@@ -239,7 +239,7 @@ class OwnershipApiIT {
             .firstName("firstName")
             .middleName("middleName")
             .lastName("lastName")
-            .password("password")
+            .password(ApiClientUtil.VALID_USER_PASSWORD)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
 

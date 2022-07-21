@@ -19,37 +19,37 @@ BadRequest:
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/BadRequestError'
 Unauthorized:
   description: Unauthorized.
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/UnauthorizedError'
 Forbidden:
   description: You do not have permission to perform this action.
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/ForbiddenError'
 NotFound:
   description: The specified resource was not found.
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/NotFoundError'
 Conflict:
   description: Conflict with current state of the resource.
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/ConflictError'
 InternalServerError:
   description: Something went wrong.
   content:
     application/json:
       schema:
-        $ref: '../models/common.yaml#/ApiError'
+        $ref: '../models/common.yaml#/InternalServerError'
 NewsResponse:
   description: OK
   content:

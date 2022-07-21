@@ -306,7 +306,7 @@ class QueryContactIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
                 .contacts(createContactList());
     }
@@ -325,7 +325,7 @@ class QueryContactIT {
                 .firstName("firstName")
                 .middleName("middleName")
                 .lastName("lastName")
-                .password("password")
+                .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com")
                 .contacts(createContactList());
     }
