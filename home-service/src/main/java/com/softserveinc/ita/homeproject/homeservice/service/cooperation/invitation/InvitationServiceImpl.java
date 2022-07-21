@@ -1,13 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation;
 
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_OVERDUE_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_INVITATION_FORMAT;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_OVERDUE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_INVITATION_FORMAT;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +24,6 @@ import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.user.role.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -41,7 +36,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -103,11 +97,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
-            << <<<<<HEAD
-        new InvitationException("Invitation with id " + id + " was not found"));
-=======
         new InvitationException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
->>>>>>>f96dca86fe7e002f798cb6d32d422c0b3e85e201
     }
 
     @Override
@@ -147,11 +137,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            <<<<<<<HEAD
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
-=======
-                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
->>>>>>>f96dca86fe7e002f798cb6d32d422c0b3e85e201
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         return mapper.convert(invitation, InvitationDto.class);
     }
 
