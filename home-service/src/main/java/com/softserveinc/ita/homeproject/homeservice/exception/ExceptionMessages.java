@@ -138,5 +138,4 @@ public class ExceptionMessages {
     public static final String NOT_FOUND_COOPERATION_WITH_ID_MESSAGE = "Can't find cooperation with given ID: %d";
 
     public static final String NOT_FOUND_HOUSE_WITH_ID_MESSAGE = "House with 'id: %d' is not found";
-
 }
