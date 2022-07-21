@@ -51,17 +51,17 @@ public abstract class BaseEmailService {
 
     protected void checkRegistration(Mailable letter, MailDto mailDto) {
         if (userRepository.findByEmail(letter.getEmail()).isEmpty()) {
-            mailDto.setLink(getRegistrationUrl(mailDto));
+            mailDto.setLink(getRegistrationUrl(mailDto, "register-user"));
             mailDto.setIsRegistered(false);
         } else {
             mailDto.setLink(
-                "https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
+                    getRegistrationUrl(mailDto, "register-cooperation"));
             mailDto.setIsRegistered(true);
         }
     }
 
-    protected String getRegistrationUrl(MailDto mailDto) {
-        return uiHost + String.format("/register-user?email=%s&token=%s", mailDto.getEmail(),
+    protected String getRegistrationUrl(MailDto mailDto, String endpoint) {
+        return uiHost + String.format("/%s?email=%s&token=%s", endpoint, mailDto.getEmail(),
             mailDto.getRegistrationToken());
     }
 
