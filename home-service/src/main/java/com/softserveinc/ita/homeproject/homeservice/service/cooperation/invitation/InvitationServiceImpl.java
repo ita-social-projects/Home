@@ -46,16 +46,16 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     protected final InvitationRepository invitationRepository;
 
+    protected final ServiceMapper mapper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Autowired
     OwnershipService ownershipService;
 
     @Autowired
     UserCooperationService userCooperationService;
-
-    @PersistenceContext
-    protected EntityManager entityManager;
-
-    protected final ServiceMapper mapper;
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
@@ -65,11 +65,11 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public List<InvitationDto> getAllUnsentLetters() {
         List<Invitation> allNotSentInvitations = invitationRepository
-                .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEquals(
-                        InvitationStatus.PENDING, true);
+            .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEquals(
+                InvitationStatus.PENDING, true);
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, InvitationDto.class))
-                .collect(Collectors.toList());
+            .map(invitation -> mapper.convert(invitation, InvitationDto.class))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -77,9 +77,9 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
         QInvitation qInvitation = QInvitation.invitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
         List<Invitation> overdueApartmentInvitations = query.select(qInvitation).from(qInvitation)
-                .where((qInvitation.status.eq(InvitationStatus.PENDING))
-                                .or(qInvitation.status.eq(InvitationStatus.PROCESSING)),
-                        qInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+            .where((qInvitation.status.eq(InvitationStatus.PENDING))
+                    .or(qInvitation.status.eq(InvitationStatus.PROCESSING)),
+                qInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueApartmentInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             invitationRepository.save(invitation);
@@ -97,7 +97,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
-                new InvitationException("Invitation with id " + id + " was not found"));
+            new InvitationException("Invitation with id " + id + " was not found"));
     }
 
     @Override
@@ -118,7 +118,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
         validateInvitation(invitation);
         acceptUserInvitation(invitation);
     }
@@ -126,10 +126,10 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public void deactivateInvitation(Long id) {
         Invitation anyInvitation = invitationRepository.findById(id)
-                .filter(invitation -> (invitation.getSentDatetime() != null
-                        || invitation.getStatus().equals(InvitationStatus.PENDING))
-                        && invitation.getEnabled().equals(true))
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
+            .filter(invitation -> (invitation.getSentDatetime() != null
+                || invitation.getStatus().equals(InvitationStatus.PENDING))
+                && invitation.getEnabled().equals(true))
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
         anyInvitation.setEnabled(false);
         invitationRepository.save(anyInvitation);
     }
@@ -137,7 +137,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
         return mapper.convert(invitation, InvitationDto.class);
     }
 
@@ -147,13 +147,12 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
                                        Integer pageSize,
                                        Specification<Invitation> specification) {
         Specification<Invitation> invitationSpecification = specification
-                .and((root, criteriaQuery, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("enabled"), true));
         Page<Invitation> pageCooperationInvitation = invitationRepository
-                .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
+            .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
 
-        return new PageImpl<>(pageCooperationInvitation.getContent().
-            stream()
+        return new PageImpl<>(pageCooperationInvitation.getContent().stream()
             .map(this::getInvitationDto)
             .collect(Collectors.toList()));
     }
