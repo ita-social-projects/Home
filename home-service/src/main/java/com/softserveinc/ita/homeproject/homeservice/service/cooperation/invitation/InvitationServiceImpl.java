@@ -17,6 +17,9 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.In
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.role.RoleDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -27,7 +30,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -147,7 +152,27 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
         Page<Invitation> pageCooperationInvitation = invitationRepository
                 .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
 
-        return pageCooperationInvitation.map(invitation -> mapper.convert(invitation, InvitationDto.class));
+        return new PageImpl<>(pageCooperationInvitation.getContent().
+            stream()
+            .map(this::getInvitationDto)
+            .collect(Collectors.toList()));
+    }
+
+    private InvitationDto getInvitationDto(Invitation invitation) {
+        if (invitation instanceof ApartmentInvitation) {
+            ApartmentInvitationDto converted =
+                mapper.convert(invitation, ApartmentInvitationDto.class);
+
+            converted.setAddress(((ApartmentInvitation) invitation).getApartment().getHouse().getAddress());
+            converted.setHouseId(((ApartmentInvitation) invitation).getApartment().getHouse().getId());
+
+            return converted;
+
+        } else if (invitation instanceof CooperationInvitation) {
+            return mapper.convert(invitation, CooperationInvitationDto.class);
+        }
+
+        return mapper.convert(invitation, InvitationDto.class);
     }
 
     private void validateInvitation(Invitation invitation) {

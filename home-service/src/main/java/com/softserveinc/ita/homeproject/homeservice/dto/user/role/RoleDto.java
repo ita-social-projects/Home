@@ -7,15 +7,13 @@ public enum RoleDto {
     OWNER("owner"),
     COOPERATION_ADMIN("cooperation_admin");
 
-    private final String name;
+    private final String value;
 
-    RoleDto(String name) {
-        this.name = name;
+    RoleDto(String value) {
+        this.value = value;
     }
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
-
-
 }

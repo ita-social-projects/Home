@@ -35,9 +35,11 @@ public class SendCooperationEmailService extends BaseEmailService {
             .orElseThrow(() -> new NotFoundHomeException(
                 String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
         MailDto mailDto = new MailDto();
-        mailDto.setRole(invitation.getRole().getName());
+
+        mailDto.setRole(invitation.getRole().getValue());
         mailDto.setCooperationName(coop.getName());
         mailDto.setType(InvitationTypeDto.COOPERATION);
+
         return mailDto;
     }
 
