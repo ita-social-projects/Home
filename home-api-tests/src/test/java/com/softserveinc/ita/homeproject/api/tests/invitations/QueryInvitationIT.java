@@ -8,8 +8,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.ws.rs.core.Response;
+
 import com.softserveinc.ita.homeproject.api.tests.query.InvitationQuery;
 import com.softserveinc.ita.homeproject.api.tests.utils.ApiClientUtil;
+import com.softserveinc.ita.homeproject.api.tests.utils.mail.mock.MailUtil;
 import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.ApartmentApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
@@ -21,12 +24,14 @@ import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
+import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
 import com.softserveinc.ita.homeproject.client.model.ReadApartment;
 import com.softserveinc.ita.homeproject.client.model.ReadApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import com.softserveinc.ita.homeproject.client.model.ReadHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadInvitation;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -132,6 +137,20 @@ public class QueryInvitationIT {
             .invitationType(InvitationType.APARTMENT)
             .build().perform();
         queryResponse.forEach(element -> assertEquals(InvitationType.APARTMENT, element.getType()));
+    }
+
+    @Test
+    @SneakyThrows
+    @SuppressWarnings("NullPointerException.class")
+    void getInvitationByApartmentInvitationContainsAddress() {
+        List<ReadInvitation> queryResponse = new InvitationQuery
+            .Builder(invitationsApi)
+            .pageNumber(1)
+            .pageSize(10)
+            .invitationType(InvitationType.APARTMENT)
+            .build().perform();
+        queryResponse.forEach(element -> assertThat(((ReadApartmentInvitation)element).getApartment().getAddress())
+            .usingRecursiveComparison().isEqualTo(createAddress()));
     }
 
     @Test
