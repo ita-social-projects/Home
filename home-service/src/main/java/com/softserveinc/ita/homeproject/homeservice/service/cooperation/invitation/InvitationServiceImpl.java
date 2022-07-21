@@ -1,5 +1,14 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_OVERDUE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_INVITATION_FORMAT;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,13 +45,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 @Primary
 public class InvitationServiceImpl implements InvitationService<Invitation, InvitationDto> {
-
-    private static final String NOT_FOUND_INVITATION_FORMAT = "Invitation with id: %d not found.";
 
     protected final InvitationRepository invitationRepository;
 
@@ -97,7 +103,11 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
-            new InvitationException("Invitation with id " + id + " was not found"));
+            << <<<<<HEAD
+        new InvitationException("Invitation with id " + id + " was not found"));
+=======
+        new InvitationException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
+>>>>>>>f96dca86fe7e002f798cb6d32d422c0b3e85e201
     }
 
     @Override
@@ -118,7 +128,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         validateInvitation(invitation);
         acceptUserInvitation(invitation);
     }
@@ -137,7 +147,11 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
+            <<<<<<<HEAD
             .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+=======
+                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
+>>>>>>>f96dca86fe7e002f798cb6d32d422c0b3e85e201
         return mapper.convert(invitation, InvitationDto.class);
     }
 
@@ -176,10 +190,10 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private void validateInvitation(Invitation invitation) {
         if (invitation.getStatus().equals(InvitationStatus.OVERDUE)) {
-            throw new NotAcceptableInvitationException("Invitation was overdue");
+            throw new NotAcceptableInvitationException(ALERT_INVITATION_OVERDUE_MESSAGE);
         }
         if (!invitation.getEnabled().equals(true)) {
-            throw new NotAcceptableInvitationException("Invitation was deleted By Cooperation Admin");
+            throw new NotAcceptableInvitationException(ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE);
         }
     }
 }
