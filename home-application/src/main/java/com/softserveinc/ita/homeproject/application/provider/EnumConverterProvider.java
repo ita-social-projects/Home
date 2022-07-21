@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.application.provider;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_REQUEST_HOME_WITH_PARAMETER_TYPE_MESSAGE;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -35,7 +37,7 @@ public class EnumConverterProvider implements ParamConverterProvider {
                     }
                 }
 
-                throw new BadRequestHomeException(String.format("The parameter type must be one of the values: %s",
+                throw new BadRequestHomeException(String.format(BAD_REQUEST_HOME_WITH_PARAMETER_TYPE_MESSAGE,
                     Arrays.toString(constants)));
             }
 

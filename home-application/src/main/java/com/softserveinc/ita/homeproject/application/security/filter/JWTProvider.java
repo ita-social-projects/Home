@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.application.security.filter;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_ACCEPTABLE_TOKEN_MESSAGE;
+
 import com.softserveinc.ita.homeproject.application.security.exception.NotAcceptableOauthException;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserSessionService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -16,12 +18,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @Slf4j
 public class JWTProvider {
-
-    private static final String NOT_ACCEPTABLE_TOKEN_MESSAGE = "Token is not correct";
 
     @Value("${jwt.token.secret}")
     private String secret;

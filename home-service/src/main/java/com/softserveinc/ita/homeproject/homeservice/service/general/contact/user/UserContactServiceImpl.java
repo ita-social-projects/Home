@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.contact.user;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_USER_HAS_MAIN_CONTACT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_CONTACT_ID_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_USER_FORMAT_MESSAGE;
+
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
@@ -17,8 +24,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserContactServiceImpl extends BaseContactService implements UserContactService {
-
-    private static final String NOT_FOUND_MESSAGE = "User with 'id: %s' is not found";
 
     private final UserRepository userRepository;
 
@@ -40,8 +45,8 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
                 .filter(Contact::getMain)
                 .findAny()
                 .ifPresent(contact -> {
-                    throw new BadRequestHomeException("User with id "
-                        + parentEntityId + " already has main " + contactDto.getType() + " contact");
+                    throw new BadRequestHomeException(String.format(ALERT_USER_HAS_MAIN_CONTACT_MESSAGE,
+                            parentEntityId, contactDto.getType()));
                 });
         }
         createContact.setUser(user);
@@ -52,7 +57,7 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
         User user = getUserById(parentEntityId);
         return user.getContacts().stream()
             .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(id)).findFirst()
-            .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_CONTACT_ID_MESSAGE, id)));
     }
 
     @Override
@@ -63,6 +68,6 @@ public class UserContactServiceImpl extends BaseContactService implements UserCo
 
     private User getUserById(Long id) {
         return userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
     }
 }

@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_ROLE_MESSAGE;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -46,14 +48,14 @@ public class UserCooperationImpl implements UserCooperationService {
                 .ifPresent(userCooperation::setCooperation);
 
         userCooperation.setRole(roleRepository.findByName(invitation.getRole().getName().toUpperCase())
-                .orElseThrow(() -> new NotFoundHomeException("Role not found.")));
+                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_ROLE_MESSAGE)));
 
         userCooperationRepository.save(userCooperation);
     }
 
     public void createUserCooperationForOwnership(Ownership ownership) {
         Role role = roleRepository.findByName(RoleEnum.OWNER.getName().toUpperCase())
-                .orElseThrow(() -> new NotFoundHomeException("Role not found."));
+                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_ROLE_MESSAGE));
         UserCooperation userCooperation = new UserCooperation();
         if (isUserCooperationNonExists(ownership.getUser(), role, ownership.getCooperation())) {
             userCooperation.setUser(ownership.getUser());

@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.question;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_QUESTION_TYPE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_MATCH_POLL_QUESTION_TYPE_MESSAGE;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,10 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PollQuestionServiceImpl implements PollQuestionService {
-
-    private static final String UPDATE_QUESTION_TYPE_MISMATCH_MESSAGE = "Type of the PollQuestion doesn't match";
-
-    private static final String QUESTION_TYPE_NOT_FOUND_MESSAGE = "Type of the PollQuestion is not found";
 
     private final PollQuestionRepository pollQuestionRepository;
 
@@ -93,7 +96,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         if (existingQuestionType == updatePollQuestionDto.getType()) {
             return updateQuestion(toUpdate, updatePollQuestionDto);
         } else {
-            throw new BadRequestHomeException(UPDATE_QUESTION_TYPE_MISMATCH_MESSAGE);
+            throw new BadRequestHomeException(NOT_MATCH_POLL_QUESTION_TYPE_MESSAGE);
         }
     }
 
@@ -105,7 +108,7 @@ public class PollQuestionServiceImpl implements PollQuestionService {
         } else if (pollQuestion.getType().equals(PollQuestionType.ADVICE)) {
             return updateAdviceChoiceQuestion((AdviceChoiceQuestion) pollQuestion);
         } else {
-            throw new NotFoundHomeException(QUESTION_TYPE_NOT_FOUND_MESSAGE);
+            throw new NotFoundHomeException(NOT_FOUND_QUESTION_TYPE_MESSAGE);
         }
     }
 
