@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.contact.cooperation;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_COOPERATION_HAS_MAIN_CONTACT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_COOPERATION_MESSAGE;
+
 import java.util.List;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
@@ -17,8 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CooperationContactServiceImpl extends BaseContactService implements CooperationContactService {
-
-    private static final String NOT_FOUND_MESSAGE = "Cooperation with 'id: %s' is not found";
 
     private final CooperationRepository cooperationRepository;
 
@@ -40,8 +41,8 @@ public class CooperationContactServiceImpl extends BaseContactService implements
                 .filter(Contact::getMain)
                 .findAny()
                 .ifPresent(contact -> {
-                    throw new BadRequestHomeException("Cooperation with id "
-                        + parentEntityId + " already has main " + contactDto.getType() + " contact");
+                    throw new BadRequestHomeException(String.format(ALERT_COOPERATION_HAS_MAIN_CONTACT_MESSAGE,
+                            parentEntityId, contactDto.getType()));
                 });
         }
 
@@ -53,7 +54,7 @@ public class CooperationContactServiceImpl extends BaseContactService implements
         Cooperation cooperation = getCooperationById(parentEntityId);
         return cooperation.getContacts().stream()
             .filter(Contact::getEnabled).filter(contact -> contact.getId().equals(id)).findFirst()
-            .orElseThrow(() -> new NotFoundHomeException("Contact with id:" + id + " is not found"));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_MESSAGE, id)));
     }
 
     @Override
@@ -64,6 +65,6 @@ public class CooperationContactServiceImpl extends BaseContactService implements
 
     private Cooperation getCooperationById(Long id) {
         return cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_MESSAGE, id)));
     }
 }

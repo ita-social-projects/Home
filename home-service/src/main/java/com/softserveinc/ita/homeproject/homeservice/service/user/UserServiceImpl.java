@@ -1,5 +1,13 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_REQUEST_USER_EXISTS_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_CURRENT_USER_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_INVITATION_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_USER_FORMAT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_MATCH_EMAILS_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_SUPPORTED_PROVIDED_TYPE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.USER_CANT_BE_DELETED_MESSAGE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,13 +48,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 
 public class UserServiceImpl implements UserService {
-
-    private static final String USER_NOT_FOUND_FORMAT = "User with id: %d is not found";
-
-    private static final String CURRENT_USER_NOT_FOUND = "Current user is not found";
-
-    private static final String EMAILS_NOT_MATCH = "The e-mail to which the token was sent "
-        + "does not match provided";
 
     private final UserRepository userRepository;
 
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
             checkAndSaveUserByInvitation(createUserDto);
             return mapper.convert(toCreate, UserDto.class);
         }
-        throw new BadRequestHomeException("User with email " + createUserDto.getEmail() + " is already exists");
+        throw new BadRequestHomeException(String.format(BAD_REQUEST_USER_EXISTS_MESSAGE, createUserDto.getEmail()));
     }
 
     private void checkAndSaveUserByInvitation(UserDto userDto) {
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
             .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING)
                 && invitation1.getEnabled().equals(true))
-            .orElseThrow(() -> new NotFoundHomeException("Invitation with provided token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_INVITATION_MESSAGE));
 
         validateEmailsMatching(invitation.getEmail(), userDto.getEmail());
 
@@ -142,13 +143,13 @@ public class UserServiceImpl implements UserService {
                 cooperationInvitationService.acceptUserInvitation((CooperationInvitation) invitation);
                 break;
             default:
-                throw new UnsupportedOperationException("Provided type not supported");
+                throw new UnsupportedOperationException(NOT_SUPPORTED_PROVIDED_TYPE_MESSAGE);
         }
     }
 
     private void validateEmailsMatching(String invitationEmail, String email) {
         if (!invitationEmail.equals(email)) {
-            throw new BadRequestHomeException(EMAILS_NOT_MATCH);
+            throw new BadRequestHomeException(NOT_MATCH_EMAILS_MESSAGE);
         }
     }
 
@@ -156,7 +157,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto updateUser(Long id, UserDto updateUserDto) {
         User fromDB = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
 
         validateEmailUniques(fromDB, updateUserDto);
 
@@ -189,7 +190,7 @@ public class UserServiceImpl implements UserService {
         String username = ((UserDetails) principal).getUsername();
         User user = userRepository.findByEmail(username)
             .filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(CURRENT_USER_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_CURRENT_USER_MESSAGE));
         user.setContacts(user.getContacts().stream()
             .filter(Contact::getEnabled).collect(Collectors.toList()));
         return mapper.convert(user, UserDto.class);
@@ -199,8 +200,8 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmail(userDto.getEmail()).filter(User::getEnabled)
             .ifPresent(userByEmail -> {
                 if (!user.getId().equals(userByEmail.getId())) {
-                    throw new BadRequestHomeException("User with email "
-                        + userDto.getEmail() + " is already exists");
+                    throw new BadRequestHomeException(String.format(BAD_REQUEST_USER_EXISTS_MESSAGE,
+                        userDto.getEmail()));
                 }
             });
     }
@@ -217,17 +218,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deactivateUser(Long id) {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
 
         UserCredentials userCredentials = userCredentialsRepository.findById(id).filter(UserCredentials::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(USER_NOT_FOUND_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
 
         List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
         userCooperation.stream()
             .map(UserCooperation::getRole).forEach(role -> {
                 if (role.equals(roleRepository.findByName(RoleEnum.ADMIN.getName().toUpperCase()).orElseThrow())) {
-                    throw new BadRequestHomeException("User cannot be deleted");
+                    throw new BadRequestHomeException(USER_CANT_BE_DELETED_MESSAGE);
                 }
             });
 

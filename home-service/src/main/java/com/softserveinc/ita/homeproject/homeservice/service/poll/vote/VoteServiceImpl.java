@@ -1,6 +1,20 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.vote;
 
-import static com.softserveinc.ita.homeproject.homeservice.service.QueryableService.NOT_FOUND_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_TRYING_TO_REVOTE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_WRONG_ANSWER_COUNT_VALIDATION_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_WRONG_QUESTIONS_FOR_POLL_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .CANT_CREATE_VOTE_OUTDATED_POLL_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .CANT_CREATE_VOTE_POLL_STATUS_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_USER_LOGIN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_MATCH_ANSWER_VOTING_QUESTION_VALIDATION_MESSAGE;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,8 +32,6 @@ import com.softserveinc.ita.homeproject.homedata.poll.question.MultipleChoiceQue
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestion;
 import com.softserveinc.ita.homeproject.homedata.poll.question.PollQuestionRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.Vote;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteAnswerVariant;
-import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteAnswerVariantRepository;
 import com.softserveinc.ita.homeproject.homedata.poll.votes.VoteRepository;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
@@ -39,31 +51,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
-
-    private static final String POLL_STATUS_VALIDATION_MESSAGE = "Can't create vote on poll with status: '%s'";
-
-    private static final String POLL_COMPLETION_DATE_VALIDATION_MESSAGE = "Can't create vote on outdated poll: '%s'";
-
-    private static final String USER_NOT_FOUND_MESSAGE = "User with 'login: %s' is not found";
-
-    private static final String TRYING_TO_REVOTE_MESSAGE =
-        "You are trying to re-vote on a poll with 'id: %d' that you have already voted";
-
-    private static final String WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE =
-        "The number of voted questions does not equal the number of questions in the poll with 'id: %d'";
-
-    private static final String WRONG_QUESTIONS_FOR_POLL_MESSAGE =
-        "Some of the questions you are trying to vote do not match the poll with 'id: %d'";
-
-    private static final String WRONG_ANSWER_COUNT_VALIDATION_MESSAGE =
-        "Wrong count of selected answers to poll question with 'id: %d' (there is should be min 1, max %d)";
-
-    private static final String ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE =
-        "The answer variant with 'id: %d' cannot be chosen when voting on the question with 'id: %d'";
 
     private final AnswerVariantRepository answerVariantRepository;
 
@@ -118,29 +108,28 @@ public class VoteServiceImpl implements VoteService {
     private void validatePollStatus(Poll votedPoll) {
         if (!votedPoll.getStatus().equals(PollStatus.ACTIVE)) {
             throw new BadRequestHomeException(
-                String.format(POLL_STATUS_VALIDATION_MESSAGE, votedPoll.getStatus()));
+                String.format(CANT_CREATE_VOTE_POLL_STATUS_MESSAGE, votedPoll.getStatus()));
         }
     }
 
     private void validateCompletionDateTime(Poll votedPoll) {
         if (votedPoll.getCompletionDate().isBefore(LocalDateTime.now())) {
             throw new BadRequestHomeException(
-                String.format(POLL_COMPLETION_DATE_VALIDATION_MESSAGE, votedPoll.getCompletionDate())
+                String.format(CANT_CREATE_VOTE_OUTDATED_POLL_MESSAGE, votedPoll.getCompletionDate())
             );
         }
     }
 
-
     private User getVoter() {
         String voter = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByEmail(voter).orElseThrow(
-            () -> new NotFoundHomeException(String.format(USER_NOT_FOUND_MESSAGE, voter)));
+            () -> new NotFoundHomeException(String.format(NOT_FOUND_USER_LOGIN_MESSAGE, voter)));
     }
 
     private void validateReVoting(Poll votedPoll, User currentUser) {
         if (voteRepository.findByPollIdAndUser(votedPoll.getId(), currentUser) != null) {
             throw new BadRequestHomeException(
-                String.format(TRYING_TO_REVOTE_MESSAGE, votedPoll.getId()));
+                String.format(ALERT_TRYING_TO_REVOTE_MESSAGE, votedPoll.getId()));
         }
     }
 
@@ -149,7 +138,7 @@ public class VoteServiceImpl implements VoteService {
         int questionsCount = votedPoll.getPollQuestions().size();
         if (questionVotesCount != questionsCount) {
             throw new BadRequestHomeException(
-                String.format(WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE, votedPoll.getId()));
+                String.format(ALERT_WRONG_QUESTIONS_COUNT_FOR_POLL_MESSAGE, votedPoll.getId()));
         }
     }
 
@@ -166,7 +155,7 @@ public class VoteServiceImpl implements VoteService {
 
         if (votedQuestionsCount != controlNumber) {
             throw new BadRequestHomeException(
-                String.format(WRONG_QUESTIONS_FOR_POLL_MESSAGE, votedPoll.getId()));
+                String.format(ALERT_WRONG_QUESTIONS_FOR_POLL_MESSAGE, votedPoll.getId()));
         }
     }
 
@@ -216,7 +205,7 @@ public class VoteServiceImpl implements VoteService {
                 int realAnswerCount = vote.getVoteAnswerVariants().size();
                 if (realAnswerCount < 1 || realAnswerCount > maxAnswerCount) {
                     throw new BadRequestHomeException(
-                        String.format(WRONG_ANSWER_COUNT_VALIDATION_MESSAGE, vote.getQuestion().getId(),
+                        String.format(ALERT_WRONG_ANSWER_COUNT_VALIDATION_MESSAGE, vote.getQuestion().getId(),
                             maxAnswerCount));
                 }
             }
@@ -236,7 +225,7 @@ public class VoteServiceImpl implements VoteService {
                 questionVoteAnswersIds.forEach(answerId -> {
                     if (!questionAnswersIds.contains(answerId)) {
                         throw new BadRequestHomeException(
-                            String.format(ANSWER_DOES_NOT_MATCH_QUESTION_VALIDATION_MESSAGE, answerId,
+                            String.format(NOT_MATCH_ANSWER_VOTING_QUESTION_VALIDATION_MESSAGE, answerId,
                                 question.getId()));
                     }
                 });

@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_COOPERATION_FORMAT_MESSAGE;
+
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.CooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
@@ -11,11 +13,8 @@ import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitati
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class SendCooperationEmailService extends BaseEmailService {
-
-    private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
     private final InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService;
 
@@ -33,7 +32,7 @@ public class SendCooperationEmailService extends BaseEmailService {
         Cooperation coop = cooperationRepository.findById(invitation.getCooperationId())
             .filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(
-                String.format(NOT_FOUND_COOPERATION_FORMAT, invitation.getCooperationId())));
+                String.format(NOT_FOUND_COOPERATION_FORMAT_MESSAGE, invitation.getCooperationId())));
         MailDto mailDto = new MailDto();
 
         mailDto.setRole(invitation.getRole().getValue());

@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.application.exception.mapper;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.SERVER_ERROR_MESSAGE;
 import static org.postgresql.util.PSQLState.NOT_NULL_VIOLATION;
 import static org.postgresql.util.PSQLState.UNIQUE_VIOLATION;
 
@@ -14,8 +15,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 @Provider
 public class DataIntegrityViolationExceptionMapper implements ExceptionMapper<DataIntegrityViolationException> {
-
-    public final static String SERVER_ERROR_MESSAGE = "Unknown error. Please contact support.";
 
     @Override
     public Response toResponse(DataIntegrityViolationException exception) {

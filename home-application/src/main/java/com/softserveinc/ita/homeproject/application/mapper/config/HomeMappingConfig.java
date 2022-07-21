@@ -1,7 +1,10 @@
 package com.softserveinc.ita.homeproject.application.mapper.config;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ILLEGAL_STATE_RESOLVING_TYPE_MESSAGE;
+
 import org.modelmapper.TypeMap;
 import org.springframework.core.GenericTypeResolver;
+
 
 public interface HomeMappingConfig<S, D> {
     void addMappings(TypeMap<S, D> typeMap);
@@ -20,7 +23,7 @@ public interface HomeMappingConfig<S, D> {
         Class<?>[] typeArguments = GenericTypeResolver.resolveTypeArguments(this.getClass(), HomeMappingConfig.class);
         final int expectedTypeArgumentsSize = 2;
         if (typeArguments == null || typeArguments.length != expectedTypeArgumentsSize) {
-            throw new IllegalStateException("Something went wrong with resolving types. Try to provide it explicitly.");
+            throw new IllegalStateException(ILLEGAL_STATE_RESOLVING_TYPE_MESSAGE);
         }
         return typeArguments;
     }

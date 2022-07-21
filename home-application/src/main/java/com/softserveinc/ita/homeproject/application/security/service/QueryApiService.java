@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.application.security.service;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_REQUEST_HOME_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_REQUEST_HOME_WITH_QUERY_PARAM_MESSAGE;
 import static java.util.function.Predicate.not;
 
 import java.util.Arrays;
@@ -44,7 +46,7 @@ public interface QueryApiService<T extends BaseEntity> {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (v1, v2) -> {
-                            throw new BadRequestHomeException("Request contains same path and query params");
+                            throw new BadRequestHomeException(BAD_REQUEST_HOME_MESSAGE);
                         },
                         MultivaluedHashMap::new
                 ));
@@ -52,7 +54,7 @@ public interface QueryApiService<T extends BaseEntity> {
 
     private static void validateQueryParamValue(String queryParamName, List<String> queryParamValue) {
         if (queryParamValue.size() > 1) {
-            throw new BadRequestHomeException("Query param '" + queryParamName + "' has more than one value");
+            throw new BadRequestHomeException(String.format(BAD_REQUEST_HOME_WITH_QUERY_PARAM_MESSAGE, queryParamName));
         }
     }
 
