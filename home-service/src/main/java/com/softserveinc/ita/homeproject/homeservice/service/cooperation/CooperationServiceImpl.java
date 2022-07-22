@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_COOPERATION_FORMAT_MESSAGE;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CooperationServiceImpl implements CooperationService {
-
-    private static final String NOT_FOUND_COOPERATION_FORMAT = "Can't find cooperation with given ID: %d";
 
     private final InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService;
 
@@ -85,7 +85,7 @@ public class CooperationServiceImpl implements CooperationService {
     public CooperationDto updateCooperation(Long id, CooperationDto updateCooperationDto) {
         Cooperation fromDb = cooperationRepository.findById(id)
             .filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT_MESSAGE, id)));
 
         if (updateCooperationDto.getName() != null) {
             fromDb.setName(updateCooperationDto.getName());
@@ -124,7 +124,7 @@ public class CooperationServiceImpl implements CooperationService {
     @Override
     public void deactivateCooperation(Long id) {
         Cooperation toDelete = cooperationRepository.findById(id).filter(Cooperation::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_COOPERATION_FORMAT_MESSAGE, id)));
         toDelete.setEnabled(false);
         cooperationRepository.save(toDelete);
     }

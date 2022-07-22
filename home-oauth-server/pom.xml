@@ -103,6 +103,10 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.softserveinc.ita.homeproject</groupId>
+            <artifactId>home-service</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

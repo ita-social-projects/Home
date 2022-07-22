@@ -1,5 +1,12 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_ALREADY_EXIST_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class CooperationInvitationServiceImpl
@@ -80,7 +88,7 @@ public class CooperationInvitationServiceImpl
             cooperationInvitationDto.setId(cooperationInvitation.getId());
             return cooperationInvitationDto;
         }
-        throw new IllegalStateException("Invitation already exist for cooperation");
+        throw new IllegalStateException(ALERT_INVITATION_ALREADY_EXIST_MESSAGE);
     }
 
     @Override
@@ -93,10 +101,10 @@ public class CooperationInvitationServiceImpl
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         CooperationInvitation cooperationInvitation = mapper.convert(invitation, CooperationInvitation.class);
         if (!invitation.getEnabled().equals(true)) {
-            throw new InvitationException("Invitation is not active");
+            throw new InvitationException(ALERT_INVITATION_NOT_ACTIVE_MESSAGE);
         }
         acceptUserInvitation(cooperationInvitation);
     }
@@ -105,7 +113,7 @@ public class CooperationInvitationServiceImpl
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-            .orElseThrow(() -> new NotFoundHomeException("Registration token not found"));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         return mapper.convert(invitation, InvitationDto.class);
     }
 

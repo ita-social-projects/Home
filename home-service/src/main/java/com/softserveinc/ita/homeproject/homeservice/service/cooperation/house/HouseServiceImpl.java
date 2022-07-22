@@ -1,5 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.house;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_COOPERATION_WITH_ID_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_HOUSE_WITH_ID_IN_COOPERATION_MESSAGE;
+
 import java.time.LocalDateTime;
 
 import com.softserveinc.ita.homeproject.homedata.cooperation.Cooperation;
@@ -16,11 +19,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class HouseServiceImpl implements HouseService {
-
-    private static final String HOUSE_WITH_ID_NOT_FOUND = "House with id: %d not found in this cooperation";
 
     private final HouseRepository houseRepository;
 
@@ -35,7 +37,7 @@ public class HouseServiceImpl implements HouseService {
         Cooperation cooperation = cooperationRepository.findById(cooperationId)
             .filter(Cooperation::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(
-                String.format("Can't find cooperation with given ID: %d", cooperationId)));
+                String.format(NOT_FOUND_COOPERATION_WITH_ID_MESSAGE, cooperationId)));
         house.setCooperation(cooperation);
         house.setCreateDate(LocalDateTime.now());
         house.setEnabled(true);
@@ -48,7 +50,8 @@ public class HouseServiceImpl implements HouseService {
     public HouseDto updateHouse(Long id, HouseDto updateHouseDto) {
         House fromDb = houseRepository.findById(id)
             .filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_HOUSE_WITH_ID_IN_COOPERATION_MESSAGE,
+                id)));
 
         if (updateHouseDto.getQuantityFlat() != null) {
             fromDb.setQuantityFlat(updateHouseDto.getQuantityFlat());
@@ -77,9 +80,10 @@ public class HouseServiceImpl implements HouseService {
     @Transactional
     public void deactivateById(Long coopId, Long id) {
         House toDelete = houseRepository.findById(id).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id)));
+            .orElseThrow(() -> new NotFoundHomeException(
+                String.format(NOT_FOUND_HOUSE_WITH_ID_IN_COOPERATION_MESSAGE, id)));
         if (!toDelete.getCooperation().getId().equals(coopId)) {
-            throw new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, id));
+            throw new NotFoundHomeException(String.format(NOT_FOUND_HOUSE_WITH_ID_IN_COOPERATION_MESSAGE, id));
         }
         toDelete.setEnabled(false);
         toDelete.getApartments().forEach(apartment -> apartment.setEnabled(false));

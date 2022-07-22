@@ -1,5 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.poll.template;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_WRONG_INVITATION_TYPE_MESSAGE;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +53,7 @@ public class TemplateServiceImpl implements TemplateService {
                 case "apartment":
                     return Path.of(apartmentTemplatePath);
                 default:
-                    throw new InvitationException("Wrong invitation type.");
+                    throw new InvitationException(ALERT_WRONG_INVITATION_TYPE_MESSAGE);
             }
         } else {
             return Path.of(registrationTemplatePath);

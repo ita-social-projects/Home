@@ -1,5 +1,10 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.apartment;
 
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
+    .ALERT_APARTMENT_WITH_NUMBER_EXIST_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_APARTMENT_ID_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_HOUSE_WITH_ID_MESSAGE;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +19,6 @@ import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeExce
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,10 +36,6 @@ public class ApartmentServiceImpl implements ApartmentService {
     private final HouseRepository houseRepository;
 
     private final ServiceMapper mapper;
-
-    private static final String HOUSE_WITH_ID_NOT_FOUND = "House with 'id: %d' is not found";
-
-    private static final String APARTMENT_WITH_ID_NOT_FOUND = "Apartment with 'id: %d' is not found";
 
     public ApartmentServiceImpl(
         @Qualifier("apartmentInvitationServiceImpl") InvitationService<ApartmentInvitation, ApartmentInvitationDto>
@@ -56,12 +56,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         if (apartmentRepository.findByApartmentNumberAndHouseId(createApartmentDto.getApartmentNumber(), houseId)
             .isPresent()) {
-            throw new BadRequestHomeException("Apartment with number " + createApartmentDto.getApartmentNumber()
-                + " already exist in this house");
+            throw new BadRequestHomeException(String.format(ALERT_APARTMENT_WITH_NUMBER_EXIST_MESSAGE,
+                createApartmentDto.getApartmentNumber()));
         }
 
         House house = houseRepository.findById(houseId).filter(House::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(HOUSE_WITH_ID_NOT_FOUND, houseId)));
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_HOUSE_WITH_ID_MESSAGE, houseId)));
 
         Apartment apartment = mapper.convert(createApartmentDto, Apartment.class);
         List<ApartmentInvitationDto> invitations = createApartmentDto.getInvitations();
@@ -90,7 +90,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             .filter(apartment -> apartment.getHouse().getId().equals(houseId))
             .orElseThrow(() ->
                 new NotFoundHomeException(
-                    String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
+                    String.format(NOT_FOUND_APARTMENT_ID_MESSAGE, apartmentId)));
 
         if (updateApartmentDto.getApartmentNumber() != null) {
             toUpdate.setApartmentNumber(updateApartmentDto.getApartmentNumber());
@@ -111,7 +111,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             .filter(apartment -> apartment.getHouse().getId().equals(houseId))
             .orElseThrow(() ->
                 new NotFoundHomeException(
-                    String.format(APARTMENT_WITH_ID_NOT_FOUND, apartmentId)));
+                    String.format(NOT_FOUND_APARTMENT_ID_MESSAGE, apartmentId)));
 
         toDelete.setEnabled(false);
         apartmentRepository.save(toDelete);
