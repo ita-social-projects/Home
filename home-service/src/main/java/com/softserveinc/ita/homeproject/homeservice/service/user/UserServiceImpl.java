@@ -326,7 +326,7 @@ public class UserServiceImpl implements UserService {
         validationHelper.validatePasswordComplexity(approvalDto.getNewPassword());
 
 
-        //TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic. Fix it in very further task
+        //TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic. Will fix in task #471
         User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_NAME_MESSAGE));
         UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())
