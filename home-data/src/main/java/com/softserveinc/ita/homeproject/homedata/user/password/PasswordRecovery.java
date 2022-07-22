@@ -23,7 +23,7 @@ public class PasswordRecoveryToken extends BaseEntity {
     @Column(name = "recovery_token")
     private String recoveryToken;
 
-    @Column(name = "expiration_datetime")
+    @Column(name = "sent_datetime")
     private LocalDateTime sentDateTime;
 
     @Column(name = "enabled")
