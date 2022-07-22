@@ -21,4 +21,8 @@ public class ValidationHelper {
     public boolean validatePasswordComplexity(String password) {
         return password != null && password.matches(PASSWORD_VALIDATION_REGEX);
     }
+
+    public boolean validatePasswordConfirmation(String password, String passwordConfirmation) {
+        return password != null && password.equals(passwordConfirmation);
+    }
 }
