@@ -18,6 +18,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sent_datetime" type="datetime">
+            </column>
+            <column name="status" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
             <column name="enabled" type="boolean">
