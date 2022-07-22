@@ -31,9 +31,8 @@ When the function is completed, the corresponding branch is merged with the "**d
 branch.
 
 
- - **hotfix branch** this is a branch for patches. It should contain only immediate
-fixes for released versions that cannot wait for the next scheduled product release. 
-When the fix is ready, it is merged back into the "**dev**" and "**master**" branches.
+ - **bugfix branch** this is a branch for fixing bugs. When fixing is completed, 
+the corresponding branch is merged with the "**dev**" branch.
 
 
 On the Home project at this stage of development there are no **master** and **release** branches yet.
@@ -48,7 +47,7 @@ ___
  3. Make a new branch off of dev:
     > git checkout -b your-feature
 
-A branch name must start with a tag `feature/`, `release/`, `hotfix/` and then the
+A branch name must start with a tag `feature/`, `release/`, `bugfix/` and then the
 word `Issue#123` with number of your task Branch names should be lower-case and 
 use hyphens to separate words. Use descriptive branch names.
 
@@ -57,7 +56,7 @@ Example:
 ```
 Good:
     feature/Issue#123-Create-some-new-feature
-    hotfix/Issue#123-Fix-problem-with-something
+    bugfix/Issue#123-Fix-problem-with-something
     release/Issue#123-Release-new-features
     
 Bad:
@@ -66,7 +65,7 @@ Bad:
     Issue#123-Create-some-new-feature
     Feature/issue#123-Create-Some-New-Feature
     feature/Issue#123_Create_some_new_feature
-    hotfix/Issue#123-Fix-problem-with-something-(problem-with-method)
+    bugfix/Issue#123-Fix-problem-with-something-(problem-with-method)
 ```
 
 ### Make changes
@@ -158,7 +157,6 @@ will be generated:
 
  - dev ⟶ 0.0.1-10-dev 
  - release ⟶ 0.0.1-10-rc
- - hotfix ⟶ 0.0.1-10_hotfix-branchName
  - other ⟶ 0.0.1-10_tagName-branchName
 
 

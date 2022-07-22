@@ -6,7 +6,7 @@ on:
       - dev
       - master
       - 'release/**'
-      - 'hotfix/**'
+#      - 'bugfix/**'
 #      - 'feature/**'
 
 jobs:
