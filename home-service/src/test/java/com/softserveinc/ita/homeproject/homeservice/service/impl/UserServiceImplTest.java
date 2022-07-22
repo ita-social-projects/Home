@@ -6,6 +6,9 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperat
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecoveryRepository;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
@@ -31,6 +34,9 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
+    private UserSessionRepository userSessionRepository;
+
+    @Mock
     private RoleRepository roleRepository;
 
     @Mock
@@ -52,6 +58,9 @@ class UserServiceImplTest {
     private UserCredentialsRepository userCredentialsRepository;
 
     @Mock
+    private PasswordRecoveryRepository passwordRecoveryRepository;
+
+    @Mock
     private ServiceMapper mapper;
 
     private UserServiceImpl userService;
@@ -60,16 +69,18 @@ class UserServiceImplTest {
     public void init() {
         ValidationHelper validationHelper = new ValidationHelper();
         userService = new UserServiceImpl(
-                userRepository,
-                roleRepository,
-                userCooperationRepository,
-                invitationRepository,
-                apartmentInvitationService,
-                cooperationInvitationService,
-                passwordEncoder,
-                userCredentialsRepository,
-                mapper,
-                validationHelper
+            userRepository,
+            userSessionRepository,
+            roleRepository,
+            userCooperationRepository,
+            invitationRepository,
+            apartmentInvitationService,
+            cooperationInvitationService,
+            passwordEncoder,
+            userCredentialsRepository,
+            mapper,
+            validationHelper,
+            passwordRecoveryRepository
         );
     }
 
@@ -80,8 +91,8 @@ class UserServiceImplTest {
         userDto.setEmail("test@gmail.com");
 
         assertThrows(
-                PasswordException.class,
-                () -> userService.createUser(userDto)
+            PasswordException.class,
+            () -> userService.createUser(userDto)
         );
     }
 
@@ -92,8 +103,8 @@ class UserServiceImplTest {
         userDto.setEmail("test@gmail.com");
 
         assertThrows(
-                NullPointerException.class,
-                () -> userService.createUser(userDto)
+            NullPointerException.class,
+            () -> userService.createUser(userDto)
         );
     }
 }
