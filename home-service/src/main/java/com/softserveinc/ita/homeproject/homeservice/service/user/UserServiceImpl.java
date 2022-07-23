@@ -81,6 +81,8 @@ public class UserServiceImpl implements UserService {
 
     private final ValidationHelper validationHelper;
 
+    public static final Long PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION = 3L;
+
     public UserServiceImpl(UserRepository userRepository,
                            UserSessionRepository userSessionRepository,
                            RoleRepository roleRepository,
@@ -119,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
             if (!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
-                throw new PasswordException("Password too weak");
+                throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
             }
 
             User toCreate = mapper.convert(createUserDto, User.class);
@@ -272,7 +274,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void requestPasswordRestoration(PasswordRestorationRequestDto passwordRestorationRequestDto) {
         User user = userRepository.findByEmail(passwordRestorationRequestDto.getEmail())
-            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_NAME_MESSAGE));
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.PASSWORD_RESTORATION_REQUEST_NOT_FOUND));
         PasswordRecovery passwordRecovery = new PasswordRecovery();
 
         /*
@@ -321,16 +323,23 @@ public class UserServiceImpl implements UserService {
 
         validateRestorationRecoveryForm(passwordRecovery);
 
-        validationHelper.validatePasswordConfirmation(approvalDto.getNewPassword(),
-            approvalDto.getPasswordConfirmation());
-        validationHelper.validatePasswordComplexity(approvalDto.getNewPassword());
+        if (!validationHelper.validatePasswordConfirmation(approvalDto.getNewPassword(),
+            approvalDto.getPasswordConfirmation())) {
+            throw new PasswordException(ExceptionMessages.MISMATHED_PASSWORDS);
+        }
+        if (!validationHelper.validatePasswordComplexity(approvalDto.getNewPassword())) {
+            throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
+        }
 
 
-        //TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic. Will fix in task #471
+        /*
+        TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic.
+        Will fix in task #471
+         */
         User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
-            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_NAME_MESSAGE));
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
         UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())
-            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_NAME_MESSAGE));
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
 
         editedUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
         editedOauthUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
@@ -345,9 +354,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateRestorationRecoveryForm(PasswordRecovery info) {
-        if (!(info.getEnabled()) ||
-            !(info.getStatus().equals(PasswordRecoveryTokenStatus.ACTIVE)) ||
-            info.getSentDateTime().plusHours(3L).isBefore(LocalDateTime.now())) {
+        if (!(info.getEnabled())
+                || !(info.getStatus().equals(PasswordRecoveryTokenStatus.ACTIVE))
+                || info.getSentDateTime().plusHours(PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION)
+                    .isBefore(LocalDateTime.now())) {
             throw new PasswordRestorationException(ExceptionMessages.INVALID_TOKEN_MESSAGE);
         }
     }
