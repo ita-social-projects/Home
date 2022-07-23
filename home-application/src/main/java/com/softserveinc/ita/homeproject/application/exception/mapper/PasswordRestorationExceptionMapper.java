@@ -7,7 +7,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.PasswordRestoratio
 
 
 @Provider
-public class PasswordRestorationExceptionMapper  extends BaseHomeExceptionMapper<PasswordRestorationException>{
+public class PasswordRestorationExceptionMapper extends BaseHomeExceptionMapper<PasswordRestorationException> {
 
     @Override
     protected Response.Status getStatus() {

@@ -29,6 +29,8 @@ public class TemplateServiceImpl implements TemplateService {
 
     private static String apartmentTemplatePath;
 
+    private static String passwordRestorationTemplatePath;
+
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
         String text = "";
@@ -47,11 +49,13 @@ public class TemplateServiceImpl implements TemplateService {
 
     private Path getInvitationTemplate(MailDto mailDto) {
         if (mailDto.getIsRegistered()) {
-            switch (mailDto.getType().toString()) {
+            switch (mailDto.getType()) {
                 case "cooperation":
                     return Path.of(cooperationTemplatePath);
                 case "apartment":
                     return Path.of(apartmentTemplatePath);
+                case "passwordRestoration" :
+                    return Path.of(passwordRestorationTemplatePath);
                 default:
                     throw new InvitationException(ALERT_WRONG_INVITATION_TYPE_MESSAGE);
             }
@@ -73,5 +77,10 @@ public class TemplateServiceImpl implements TemplateService {
     @Value("${home.service.template.invitation.path.apartment}")
     public void setApartmentTemplatePath(String path) {
         TemplateServiceImpl.apartmentTemplatePath = path;
+    }
+
+    @Value("${home.service.template.password.restoration.path}")
+    public void setPasswordRestorationTemplatePath(String path) {
+        TemplateServiceImpl.passwordRestorationTemplatePath = path;
     }
 }

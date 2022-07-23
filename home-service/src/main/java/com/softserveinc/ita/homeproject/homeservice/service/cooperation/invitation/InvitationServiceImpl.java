@@ -1,13 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation;
 
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_OVERDUE_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_INVITATION_FORMAT;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_OVERDUE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_INVITATION_FORMAT;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +26,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.InvitationExceptio
 import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +40,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class InvitationServiceImpl implements InvitationService<Invitation, InvitationDto> {
+public class InvitationServiceImpl implements InvitationService<Invitation, InvitationDto>, MailableService {
 
     protected final InvitationRepository invitationRepository;
 

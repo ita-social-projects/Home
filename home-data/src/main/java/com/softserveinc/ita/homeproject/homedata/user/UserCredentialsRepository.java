@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Component
 public interface UserCredentialsRepository extends JpaRepository<UserCredentials, Long> {
 
-    Optional<UserCredentials> findByEmail(String Email);
+    Optional<UserCredentials> findByEmail(String email);
 }

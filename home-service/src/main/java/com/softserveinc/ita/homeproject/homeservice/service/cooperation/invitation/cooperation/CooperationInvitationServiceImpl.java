@@ -1,11 +1,8 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation;
 
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_ALREADY_EXIST_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_ALREADY_EXIST_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,6 +26,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.InvitationExceptio
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +36,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CooperationInvitationServiceImpl
-    implements InvitationService<CooperationInvitation, CooperationInvitationDto> {
+    implements InvitationService<CooperationInvitation, CooperationInvitationDto>, MailableService {
 
 
     @PersistenceContext
