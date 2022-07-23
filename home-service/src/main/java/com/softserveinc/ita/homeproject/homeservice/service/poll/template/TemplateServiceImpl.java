@@ -23,12 +23,16 @@ import org.springframework.stereotype.Service;
 @PropertySource(value = "classpath:/home-service.properties")
 public class TemplateServiceImpl implements TemplateService {
 
-    private static String registrationTemplatePath;
+    @Value("${home.service.template.invitation.path.registration}")
+    private String registrationTemplatePath;
 
-    private static String cooperationTemplatePath;
+    @Value("${home.service.template.invitation.path.cooperation}")
+    private String cooperationTemplatePath;
 
-    private static String apartmentTemplatePath;
+    @Value("${home.service.template.invitation.path.apartment}")
+    private String apartmentTemplatePath;
 
+    @Value("${home.service.template.password.restoration.path}")
     private static String passwordRestorationTemplatePath;
 
     @Override
@@ -62,25 +66,5 @@ public class TemplateServiceImpl implements TemplateService {
         } else {
             return Path.of(registrationTemplatePath);
         }
-    }
-
-    @Value("${home.service.template.invitation.path.registration}")
-    public void setRegistrationTemplatePath(String path) {
-        TemplateServiceImpl.registrationTemplatePath = path;
-    }
-
-    @Value("${home.service.template.invitation.path.cooperation}")
-    public void setCooperationTemplatePath(String path) {
-        TemplateServiceImpl.cooperationTemplatePath = path;
-    }
-
-    @Value("${home.service.template.invitation.path.apartment}")
-    public void setApartmentTemplatePath(String path) {
-        TemplateServiceImpl.apartmentTemplatePath = path;
-    }
-
-    @Value("${home.service.template.password.restoration.path}")
-    public void setPasswordRestorationTemplatePath(String path) {
-        TemplateServiceImpl.passwordRestorationTemplatePath = path;
     }
 }
