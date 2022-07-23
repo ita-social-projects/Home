@@ -1,7 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation;
 
 import com.softserveinc.ita.homeproject.homedata.general.address.Address;
-import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationStatusDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.service.general.email.Mailable;
@@ -18,7 +17,7 @@ public abstract class InvitationDto extends Mailable {
 
     private String email;
 
-    private String registrationToken;
+    private String token;
 
     private Address address;
 

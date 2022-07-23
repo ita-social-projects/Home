@@ -43,7 +43,7 @@ public abstract class BaseEmailService {
         MailDto mailDto = createBaseMailDto(letter);
         mailDto.setId(letter.getId());
         mailDto.setEmail(letter.getEmail());
-        mailDto.setRegistrationToken(letter.getRegistrationToken());
+        mailDto.setRegistrationToken(letter.getToken());
         checkRegistration(letter, mailDto);
         return mailDto;
     }

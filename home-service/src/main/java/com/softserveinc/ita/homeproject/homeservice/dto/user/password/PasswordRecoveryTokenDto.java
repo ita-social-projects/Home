@@ -2,18 +2,18 @@ package com.softserveinc.ita.homeproject.homeservice.dto.user.password;
 
 import java.time.LocalDateTime;
 
-import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.Mailable;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
-public class PasswordRecoveryTokenDto extends BaseDto {
+public class PasswordRecoveryTokenDto extends Mailable {
 
     private String email;
 
-    private String recoveryToken;
+    private String token;
 
     private LocalDateTime sentDateTime;
 
