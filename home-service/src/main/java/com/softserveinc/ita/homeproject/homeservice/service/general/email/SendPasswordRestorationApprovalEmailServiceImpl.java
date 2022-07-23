@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
+import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -32,11 +33,12 @@ public class SendPasswordRestorationApprovalEmailServiceImpl extends BaseEmailSe
 
     @Override
     protected void generateLink(Mailable letter, MailDto mailDto) {
-        userRepository.findByEmail(letter.getEmail())
+        User user = userRepository.findByEmail(letter.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
 
         mailDto.setLink(swaggerHost
-            + "/api/0/apidocs/swagger-ui/index.html#/reset%20password/passwordRestorationApproval");
+            + "/api/0/apidocs/swagger-ui/index.html#/reset%20password/passwordRestorationApproval?"
+            + "email=" + user.getEmail() + "&token=" + letter.getToken());
         mailDto.setIsRegistered(true);
     }
 

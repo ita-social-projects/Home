@@ -354,7 +354,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateRestorationRecoveryForm(PasswordRecovery info) {
-        if (!(info.getEnabled())
+        if (Boolean.TRUE.equals(!(info.getEnabled()))
                 || !(info.getStatus().equals(PasswordRecoveryTokenStatus.ACTIVE))
                 || info.getSentDateTime().plusHours(PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION)
                     .isBefore(LocalDateTime.now())) {

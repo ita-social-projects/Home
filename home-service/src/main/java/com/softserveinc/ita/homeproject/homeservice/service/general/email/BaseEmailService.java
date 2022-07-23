@@ -31,7 +31,7 @@ public abstract class BaseEmailService {
     @Value("${home.project.swagger.host}")
     protected String swaggerHost;
 
-    public BaseEmailService(MailService mailService) {
+    protected BaseEmailService(MailService mailService) {
         this.mailService = mailService;
     }
 
