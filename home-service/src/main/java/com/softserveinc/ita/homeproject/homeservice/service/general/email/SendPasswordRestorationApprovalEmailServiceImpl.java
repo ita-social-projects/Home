@@ -1,6 +1,5 @@
 package com.softserveinc.ita.homeproject.homeservice.service.general.email;
 
-import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;

@@ -11,6 +11,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.user.password.PasswordRe
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.general.email.Mailable;
 import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
+import com.softserveinc.ita.homeproject.homeservice.service.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +42,12 @@ public class PasswordRestorationServiceImpl implements MailableService {
             LocalDateTime.now(),
             PasswordRecoveryTokenStatus.ACTIVE
         );
+    }
+
+    @Transactional
+    public void deleteAllExpiredAndDisabledPasswordRestorationTokens() {
+        passwordRecoveryRepository.deleteAllExpiredAndDisabledPasswordRestorationTokens(
+            LocalDateTime.now().minusHours(UserServiceImpl.PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION),
+            PasswordRecoveryTokenStatus.EXPIRED, false);
     }
 }

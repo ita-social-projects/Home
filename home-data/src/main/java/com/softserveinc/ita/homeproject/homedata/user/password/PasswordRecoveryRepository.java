@@ -25,4 +25,12 @@ public interface PasswordRecoveryRepository extends JpaRepository<PasswordRecove
     void updateSentDateTimeAndStatus(@Param("id") Long id,
                                      @Param("sent_datetime") LocalDateTime dateTime,
                                      @Param("status") PasswordRecoveryTokenStatus status);
+
+    @Modifying
+    @Query(value = "delete from PasswordRecovery token where token.sentDateTime < :expirationDeadline "
+        + "or token.status = :expired or token.enabled = :disabled")
+    void deleteAllExpiredAndDisabledPasswordRestorationTokens(
+        @Param("expirationDeadline") LocalDateTime expirationDeadline,
+        @Param("expired") PasswordRecoveryTokenStatus expiredStatus,
+        @Param("disabled") Boolean disabled);
 }
