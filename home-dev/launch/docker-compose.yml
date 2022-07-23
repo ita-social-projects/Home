@@ -39,6 +39,7 @@ services:
       # uncomment for API tests
       #HOME_JOBS_SENDAPARTMENTEMAIL_CRON: "* * * * * ?"
       #HOME_JOBS_SENDCOOPERATIONEMAIL_CRON: "* * * * * ?"
+      #HOME_JOBS_SENDPASSWORDRESTORATIONEMAIL_CRON: "* * * * * ?"
       MAIL_HOST: mailhog
       MAIL_PORT: 1025
     ports:

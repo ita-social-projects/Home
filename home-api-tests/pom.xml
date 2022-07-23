@@ -33,6 +33,7 @@
         <mail.port>1025</mail.port>
         <cron.send.apartment.email>* * * * * ?</cron.send.apartment.email>
         <cron.send.cooperation.email>* * * * * ?</cron.send.cooperation.email>
+        <cron.send.password.restoration.email>* * * * * ?</cron.send.password.restoration.email>
         <postgres.internal.port>5432</postgres.internal.port>
         <postgres.db>postgres</postgres.db>
         <postgres.url>jdbc:postgresql://${docker.image.postgres}:${postgres.internal.port}/${postgres.db}</postgres.url>
@@ -311,6 +312,7 @@
                                             <MAIL_PORT>${mail.port}</MAIL_PORT>
                                             <HOME_JOBS_SENDAPARTMENTEMAIL_CRON>${cron.send.apartment.email}</HOME_JOBS_SENDAPARTMENTEMAIL_CRON>
                                             <HOME_JOBS_SENDCOOPERATIONEMAIL_CRON>${cron.send.cooperation.email}</HOME_JOBS_SENDCOOPERATIONEMAIL_CRON>
+                                            <HOME_JOBS_SENDPASSWORDRESTORATIONEMAIL_CRON>${cron.send.password.restoration.email}</HOME_JOBS_SENDPASSWORDRESTORATIONEMAIL_CRON>
                                         </env>
                                         <volumes>
                                             <bind>
