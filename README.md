@@ -103,10 +103,19 @@ __Run with Maven + Intellij IDEA__
   command for connection to your local DB.
 - after using this command you will need to choose - `would you like to receive notifications from community?`, there are three ways:
   but you need to choose between: `enter your email` and `skip the request(default one)`.
+- also, you need to mark following directories in project structure as a Generated Sources Root:
+  - ```home-application/target/generated-sources/openapi```
+  - ```home-oauth-server/target/generated-sources/openapi```
+  - ```home-clients/target/generated-sources/openapi```
+  - ```home-data/target/generated-sources/java```
+- if your API documentation doesn't display correctly try to mark  
+  ```home-application/target/classes/static``` directory as Resources Root.
 - run application with your IDEA.
 
 If you did everything correctly, you should be able to access RapiDoc by this
 URL: http://localhost:8080/api/0/apidocs/index.html
+
+Authorization server can be accessed by this URL: http://localhost:9000/api/0/oauth2/index.html
 
 **Detail info about other running options/running tests, you can read in
 [hom-dev](https://github.com/ita-social-projects/Home/tree/dev/home-dev) package.**
