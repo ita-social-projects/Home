@@ -22,6 +22,8 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.In
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationType;
 import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -44,16 +47,16 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     protected final InvitationRepository invitationRepository;
 
+    protected final ServiceMapper mapper;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Autowired
     OwnershipService ownershipService;
 
     @Autowired
     UserCooperationService userCooperationService;
-
-    @PersistenceContext
-    protected EntityManager entityManager;
-
-    protected final ServiceMapper mapper;
 
     @Override
     public InvitationDto createInvitation(InvitationDto invitationDto) {
@@ -63,11 +66,11 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public List<InvitationDto> getAllUnsentLetters() {
         List<Invitation> allNotSentInvitations = invitationRepository
-                .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEquals(
-                        InvitationStatus.PENDING, true);
+            .findAllBySentDatetimeIsNullAndStatusEqualsAndEnabledEquals(
+                InvitationStatus.PENDING, true);
         return allNotSentInvitations.stream()
-                .map(invitation -> mapper.convert(invitation, InvitationDto.class))
-                .collect(Collectors.toList());
+            .map(invitation -> mapper.convert(invitation, InvitationDto.class))
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -75,9 +78,9 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
         QInvitation qInvitation = QInvitation.invitation;
         JPAQuery<?> query = new JPAQuery<>(entityManager);
         List<Invitation> overdueApartmentInvitations = query.select(qInvitation).from(qInvitation)
-                .where((qInvitation.status.eq(InvitationStatus.PENDING))
-                                .or(qInvitation.status.eq(InvitationStatus.PROCESSING)),
-                        qInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
+            .where((qInvitation.status.eq(InvitationStatus.PENDING))
+                    .or(qInvitation.status.eq(InvitationStatus.PROCESSING)),
+                qInvitation.requestEndTime.before(LocalDateTime.now())).fetch();
         overdueApartmentInvitations.forEach(invitation -> {
             invitation.setStatus(InvitationStatus.OVERDUE);
             invitationRepository.save(invitation);
@@ -95,7 +98,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private Invitation findInvitationById(Long id) {
         return invitationRepository.findById(id).orElseThrow(() ->
-                new InvitationException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
+        new InvitationException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
     }
 
     @Override
@@ -116,7 +119,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public void registerWithRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         validateInvitation(invitation);
         acceptUserInvitation(invitation);
     }
@@ -124,10 +127,10 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public void deactivateInvitation(Long id) {
         Invitation anyInvitation = invitationRepository.findById(id)
-                .filter(invitation -> (invitation.getSentDatetime() != null
-                        || invitation.getStatus().equals(InvitationStatus.PENDING))
-                        && invitation.getEnabled().equals(true))
-                .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
+            .filter(invitation -> (invitation.getSentDatetime() != null
+                || invitation.getStatus().equals(InvitationStatus.PENDING))
+                && invitation.getEnabled().equals(true))
+            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_INVITATION_FORMAT, id)));
         anyInvitation.setEnabled(false);
         invitationRepository.save(anyInvitation);
     }
@@ -135,7 +138,7 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
     @Override
     public InvitationDto findInvitationByRegistrationToken(String token) {
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(token)
-                .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
+            .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_REGISTRATION_TOKEN_MESSAGE));
         return mapper.convert(invitation, InvitationDto.class);
     }
 
@@ -145,12 +148,31 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
                                        Integer pageSize,
                                        Specification<Invitation> specification) {
         Specification<Invitation> invitationSpecification = specification
-                .and((root, criteriaQuery, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("enabled"), true));
+            .and((root, criteriaQuery, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("enabled"), true));
         Page<Invitation> pageCooperationInvitation = invitationRepository
-                .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
+            .findAll(invitationSpecification, PageRequest.of(pageNumber - 1, pageSize));
 
-        return pageCooperationInvitation.map(invitation -> mapper.convert(invitation, InvitationDto.class));
+        return new PageImpl<>(pageCooperationInvitation.getContent().stream()
+            .map(this::getInvitationDto)
+            .collect(Collectors.toList()));
+    }
+
+    private InvitationDto getInvitationDto(Invitation invitation) {
+        if (invitation instanceof ApartmentInvitation) {
+            ApartmentInvitationDto converted =
+                mapper.convert(invitation, ApartmentInvitationDto.class);
+
+            converted.setAddress(((ApartmentInvitation) invitation).getApartment().getHouse().getAddress());
+            converted.setHouseId(((ApartmentInvitation) invitation).getApartment().getHouse().getId());
+
+            return converted;
+
+        } else if (invitation instanceof CooperationInvitation) {
+            return mapper.convert(invitation, CooperationInvitationDto.class);
+        }
+
+        return mapper.convert(invitation, InvitationDto.class);
     }
 
     private void validateInvitation(Invitation invitation) {

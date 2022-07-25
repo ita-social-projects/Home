@@ -59,7 +59,6 @@ class InvitationApiIT {
 
     private final InvitationsApi invitationApi = new InvitationsApi(ApiClientUtil.getCooperationAdminClient());
 
-
     @Test
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();

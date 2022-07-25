@@ -23,11 +23,11 @@ public abstract class CommonApi {
 
     private static final String PAGING_TOTAL_COUNT = "Paging-total-count";
 
-    @Context
-    private UriInfo uriInfo;
-
     @Autowired
     protected HomeMapper mapper;
+
+    @Context
+    private UriInfo uriInfo;
 
     @Autowired
     private QueryApiService queryApiService;
@@ -53,7 +53,7 @@ public abstract class CommonApi {
         return queryApiService.getSpecification(uriInfo);
     }
 
-    public void verifyExistence(Long parentId, QueryableService service){
+    public void verifyExistence(Long parentId, QueryableService service) {
         service.getOne(parentId);
     }
 }
