@@ -33,7 +33,7 @@ public class TemplateServiceImpl implements TemplateService {
     private String apartmentTemplatePath;
 
     @Value("${home.service.template.password.restoration.path}")
-    private static String passwordRestorationTemplatePath;
+    private String passwordRestorationTemplatePath;
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {

@@ -27,6 +27,7 @@ public class SendPasswordRestorationApprovalEmailServiceImpl extends BaseEmailSe
     protected MailDto createBaseMailDto(Mailable letter) {
         MailDto mailDto = new MailDto();
         mailDto.setType("passwordRestoration");
+        mailDto.setToken(letter.getToken());
 
         return mailDto;
     }
