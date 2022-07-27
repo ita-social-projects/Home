@@ -142,7 +142,7 @@ public class ExceptionMessages {
     public static final String WEAK_PASSWORD_EXCEPTION = "Password too weak";
 
     public static final String PASSWORD_RESTORATION_REQUEST_NOT_FOUND =
-        "Password restoration request with 'id: %d' not found";
+        "Password restoration request not found";
 
-    public static final String MISMATHED_PASSWORDS = "Passwords not equals";
+    public static final String MISMATCHED_PASSWORDS = "Passwords not equals";
 }

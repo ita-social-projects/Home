@@ -325,7 +325,7 @@ public class UserServiceImpl implements UserService {
 
         if (!validationHelper.validatePasswordConfirmation(approvalDto.getNewPassword(),
             approvalDto.getPasswordConfirmation())) {
-            throw new PasswordException(ExceptionMessages.MISMATHED_PASSWORDS);
+            throw new PasswordException(ExceptionMessages.MISMATCHED_PASSWORDS);
         }
         if (!validationHelper.validatePasswordComplexity(approvalDto.getNewPassword())) {
             throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
