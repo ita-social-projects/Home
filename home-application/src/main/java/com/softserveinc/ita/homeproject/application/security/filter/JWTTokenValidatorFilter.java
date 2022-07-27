@@ -61,6 +61,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         Map<String, String> urisWithHttpMethod = Map.of(
             "/api/*/users", HttpMethod.POST.name(),
             "/api/*/cooperations", HttpMethod.POST.name(),
+            "/api/*/file", HttpMethod.GET.name(),
             "/api/*/apidocs/**", "",
             "/api/*/version.json", ""
         );

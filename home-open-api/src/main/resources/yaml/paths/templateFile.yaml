@@ -1,0 +1,15 @@
+template-file:
+  get:
+    tags:
+      - template file
+    summary: Return template file
+    description: Retrieves the template file.
+    operationId: getTemplateFile
+    responses:
+      200:
+        description: OK
+        content:
+          application/vnd.ms-excel:
+            schema:
+              type: string
+              format: binary

@@ -48,6 +48,8 @@ tags:
     description: Polled house management operations
   - name: poll vote
     description: Poll vote management operations
+  - name: template file
+    description: Download template file
   - name: logout
     description: Log out from current/all device(s)
 
@@ -141,6 +143,9 @@ paths:
 
   /polls/{poll_id}/votes:
     $ref: './paths/pollsVotes.yaml#/polls-votes'
+
+  /file:
+    $ref: './paths/templateFile.yaml#/template-file'
 
   /logout:
     $ref: './paths/logout.yaml#/logout'
