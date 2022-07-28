@@ -50,6 +50,8 @@ public final class ApiClientUtil {
 
     public static final int NOT_FOUND = Response.Status.NOT_FOUND.getStatusCode();
 
+    public static final int NOT_ACCEPTABLE = Response.Status.NOT_ACCEPTABLE.getStatusCode();
+
     private final static int NUMBER_OF_APARTMENT_INVITATIONS = 1;
 
     private final static Long APARTMENT_ID = 100L;
@@ -79,7 +81,7 @@ public final class ApiClientUtil {
     private static ApiClient authorizedOwnerAdminClient;
 
 
-    private static com.softserveinc.ita.homeproject.homeoauthserver.ApiClient getAuthenticationApi() {
+    public static com.softserveinc.ita.homeproject.homeoauthserver.ApiClient getAuthenticationApi() {
         com.softserveinc.ita.homeproject.homeoauthserver.ApiClient oauthClient =
             new com.softserveinc.ita.homeproject.homeoauthserver.ApiClient();
         AuthenticationApi authenticationApi = new AuthenticationApi();

@@ -7,5 +7,5 @@ public abstract class Mailable extends BaseDto {
 
     public abstract String getEmail();
 
-    public abstract String getRegistrationToken();
+    public abstract String getToken();
 }

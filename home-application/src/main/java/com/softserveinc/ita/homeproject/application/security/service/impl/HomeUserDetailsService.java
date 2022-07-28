@@ -1,6 +1,6 @@
 package com.softserveinc.ita.homeproject.application.security.service.impl;
 
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_USER_NAME_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ public class HomeUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .filter(User::getEnabled)
-                .orElseThrow(() -> new UsernameNotFoundException(NOT_FOUND_USER_NAME_MESSAGE));
+                .orElseThrow(() -> new UsernameNotFoundException(NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
 
         List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(user);
 

@@ -28,6 +28,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.InvitationExceptio
 import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Primary
-public class InvitationServiceImpl implements InvitationService<Invitation, InvitationDto> {
+public class InvitationServiceImpl implements InvitationService<Invitation, InvitationDto>, MailableService {
 
     protected final InvitationRepository invitationRepository;
 

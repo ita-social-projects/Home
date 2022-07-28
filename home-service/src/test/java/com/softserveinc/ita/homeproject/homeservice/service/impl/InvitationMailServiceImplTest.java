@@ -40,7 +40,7 @@ class InvitationMailServiceImplTest {
     @BeforeAll
     static void getConstants() {
         mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.COOPERATION);
+        mailDto.setType(InvitationTypeDto.COOPERATION.toString());
         mailDto.setId(111L);
         mailDto.setEmail("test.receive.messages@gmail.com");
         mailDto.setRole("admin");

@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+
 public abstract class BaseEmailService {
 
     @Autowired
@@ -19,14 +20,20 @@ public abstract class BaseEmailService {
     @Autowired
     protected ServiceMapper mapper;
 
-    @Autowired
     protected MailService mailService;
 
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
     @Value("${home.project.ui.host}")
-    private String uiHost;
+    protected String uiHost;
+
+    @Value("${home.project.swagger.host}")
+    protected String swaggerHost;
+
+    protected BaseEmailService(MailService mailService) {
+        this.mailService = mailService;
+    }
 
     @SneakyThrows
     public void executeAllInvitationsByType() {
@@ -42,27 +49,27 @@ public abstract class BaseEmailService {
         MailDto mailDto = createBaseMailDto(letter);
         mailDto.setId(letter.getId());
         mailDto.setEmail(letter.getEmail());
-        mailDto.setRegistrationToken(letter.getRegistrationToken());
-        checkRegistration(letter, mailDto);
+        mailDto.setToken(letter.getToken());
+        generateLink(letter, mailDto);
         return mailDto;
     }
 
     protected abstract MailDto createBaseMailDto(Mailable letter);
 
-    protected void checkRegistration(Mailable letter, MailDto mailDto) {
+    protected void generateLink(Mailable letter, MailDto mailDto) {
         if (userRepository.findByEmail(letter.getEmail()).isEmpty()) {
             mailDto.setLink(getRegistrationUrl(mailDto));
             mailDto.setIsRegistered(false);
         } else {
             mailDto.setLink(
-                "https://home-project-academy.herokuapp.com/api/0/apidocs/index.html#post-/invitations/invitation-approval");
+                uiHost + "/api/0/apidocs/index.html#post-/invitations/invitation-approval");
             mailDto.setIsRegistered(true);
         }
     }
 
     protected String getRegistrationUrl(MailDto mailDto) {
         return uiHost + String.format("/register-user?email=%s&token=%s", mailDto.getEmail(),
-            mailDto.getRegistrationToken());
+            mailDto.getToken());
     }
 
     protected abstract MailableService getMailableService();

@@ -31,4 +31,5 @@
     <include file="Issue404.xml" relativeToChangelogFile="true"/>
     <include file="Issue412.xml" relativeToChangelogFile="true"/>
     <include file="Issue426.xml" relativeToChangelogFile="true"/>
+    <include file="Issue451.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

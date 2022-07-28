@@ -1,12 +1,9 @@
 package com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment;
 
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_ALREADY_EXIST_APARTMENT_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_ALREADY_EXIST_APARTMENT_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.ALERT_INVITATION_NOT_ACTIVE_MESSAGE;
 import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_APARTMENT_ID_MESSAGE;
-import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages
-    .NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
+import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.NOT_FOUND_REGISTRATION_TOKEN_MESSAGE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +29,7 @@ import com.softserveinc.ita.homeproject.homeservice.exception.InvitationExceptio
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserCooperationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.ownership.OwnershipService;
 import org.springframework.data.domain.Page;
@@ -41,7 +39,8 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class ApartmentInvitationServiceImpl implements InvitationService<ApartmentInvitation, ApartmentInvitationDto> {
+public class ApartmentInvitationServiceImpl
+    implements InvitationService<ApartmentInvitation, ApartmentInvitationDto>, MailableService {
 
     private final ServiceMapper mapper;
 
