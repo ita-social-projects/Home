@@ -44,6 +44,8 @@ public class HomeUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+
         User user = userRepository.findByEmail(email)
                 .filter(User::getEnabled)
                 .orElseThrow(() -> new UsernameNotFoundException(NOT_FOUND_USER_NAME_MESSAGE));

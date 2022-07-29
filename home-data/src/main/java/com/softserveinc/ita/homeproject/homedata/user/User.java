@@ -5,7 +5,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,6 +23,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
+@SecondaryTable(name = "user_credentials", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 @SequenceGenerator(name = "sequence", sequenceName = "users_sequence")
 public class User extends BaseEntity {
 

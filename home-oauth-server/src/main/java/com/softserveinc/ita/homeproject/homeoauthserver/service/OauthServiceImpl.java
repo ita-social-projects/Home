@@ -3,11 +3,11 @@ package com.softserveinc.ita.homeproject.homeoauthserver.service;
 import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_CREDENTIAL_ERROR_MESSAGE;
 import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.INVALID_TOKEN_MESSAGE;
 
+import com.softserveinc.ita.homeproject.homedata.user.User;
+import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.config.JwtProvider;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSession;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.AccessTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.CreateTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
@@ -26,24 +26,24 @@ public class OauthServiceImpl implements OauthService {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private UserCredentialsRepository userCredentialsRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private UserSessionRepository userSessionRepository;
 
     @Override
     public CreateTokenDto generateToken(UserCredentialsDto userCredentialsDto) {
-        UserCredentials userCredentials =
+        User user =
             findByEmailAndPassword(userCredentialsDto.getEmail(), userCredentialsDto.getPassword());
         CreateTokenDto createTokenDto = new CreateTokenDto();
         UserSession userSession = new UserSession();
 
         createTokenDto
-            .setAccessToken(jwtProvider.generateToken(userCredentials.getId(), userCredentials.getEmail(), 1));
+            .setAccessToken(jwtProvider.generateToken(user.getId(), user.getEmail(), 1));
         createTokenDto
-            .setRefreshToken(jwtProvider.generateToken(userCredentials.getId(), userCredentials.getEmail(), 7));
+            .setRefreshToken(jwtProvider.generateToken(user.getId(), user.getEmail(), 7));
 
-        userSession.setUserId(userCredentials.getId());
+        userSession.setUserId(user.getId());
         userSession.setAccessToken(createTokenDto.getAccessToken());
         userSession.setRefreshToken(createTokenDto.getRefreshToken());
         userSession.setExpireDate(jwtProvider.getDate());
@@ -71,13 +71,13 @@ public class OauthServiceImpl implements OauthService {
         return accessTokenDto;
     }
 
-    private UserCredentials findByEmailAndPassword(String email, String password) {
-        UserCredentials userCredentials =
-            userCredentialsRepository.findByEmail(email).filter(UserCredentials::getEnabled)
+    private User findByEmailAndPassword(String email, String password) {
+        User user =
+            userRepository.findByEmail(email).filter(User::getEnabled)
                 .orElseThrow(() -> new NotFoundOauthException(BAD_CREDENTIAL_ERROR_MESSAGE));
 
-        if (BCrypt.checkpw(password, userCredentials.getPassword())) {
-            return userCredentials;
+        if (BCrypt.checkpw(password, user.getPassword())) {
+            return user;
         }
 
         throw new NotFoundOauthException(BAD_CREDENTIAL_ERROR_MESSAGE);

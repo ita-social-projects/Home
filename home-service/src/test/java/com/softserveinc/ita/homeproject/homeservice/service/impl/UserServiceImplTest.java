@@ -4,7 +4,6 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitati
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
@@ -49,9 +48,6 @@ class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private UserCredentialsRepository userCredentialsRepository;
-
-    @Mock
     private ServiceMapper mapper;
 
     private UserServiceImpl userService;
@@ -67,7 +63,6 @@ class UserServiceImplTest {
                 apartmentInvitationService,
                 cooperationInvitationService,
                 passwordEncoder,
-                userCredentialsRepository,
                 mapper,
                 validationHelper
         );
