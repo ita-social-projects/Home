@@ -62,6 +62,23 @@ class UserApiIT {
     }
 
     @Test
+    @SneakyThrows
+    void createNewUserWithWeakPassword() {
+        ReadUser savedUser = createBaseUserForTests();
+        CreateUser createdUser = new CreateUser()
+                .firstName("firstName")
+                .middleName("middleName")
+                .lastName("lastName")
+                .password("123456789")
+                .email("test.receive.apartment@gmail.com");
+
+        assertThatExceptionOfType(ApiException.class)
+                .isThrownBy(() -> userApi.createUserWithHttpInfo(createdUser))
+                .matches(e -> e.getCode() == BAD_REQUEST)
+                .withMessageContaining("Parameter `password` is invalid - must meet the rule");
+    }
+
+    @Test
     void updateUserTest() throws ApiException {
         ReadUser savedUser = createBaseUserForTests();
         UpdateUser updateUser = new UpdateUser()
@@ -474,7 +491,7 @@ class UserApiIT {
     }
 
     @SneakyThrows
-    private ReadUser createNotMatchingUser()  {
+    private ReadUser createNotMatchingUser() {
         CreateCooperation coop = createBaseCooperation();
         cooperationApi.createCooperation(coop);
         String email = coop.getAdminEmail();
