@@ -23,11 +23,17 @@ import org.springframework.stereotype.Service;
 @PropertySource(value = "classpath:/home-service.properties")
 public class TemplateServiceImpl implements TemplateService {
 
-    private static String registrationTemplatePath;
+    @Value("${home.service.template.invitation.path.registration}")
+    private String registrationTemplatePath;
 
-    private static String cooperationTemplatePath;
+    @Value("${home.service.template.invitation.path.cooperation}")
+    private String cooperationTemplatePath;
 
-    private static String apartmentTemplatePath;
+    @Value("${home.service.template.invitation.path.apartment}")
+    private String apartmentTemplatePath;
+
+    @Value("${home.service.template.password.restoration.path}")
+    private String passwordRestorationTemplatePath;
 
     @Override
     public String createMessageTextFromTemplate(MailDto mailDto) {
@@ -47,31 +53,18 @@ public class TemplateServiceImpl implements TemplateService {
 
     private Path getInvitationTemplate(MailDto mailDto) {
         if (mailDto.getIsRegistered()) {
-            switch (mailDto.getType().toString()) {
+            switch (mailDto.getType()) {
                 case "cooperation":
                     return Path.of(cooperationTemplatePath);
                 case "apartment":
                     return Path.of(apartmentTemplatePath);
+                case "passwordRestoration" :
+                    return Path.of(passwordRestorationTemplatePath);
                 default:
                     throw new InvitationException(ALERT_WRONG_INVITATION_TYPE_MESSAGE);
             }
         } else {
             return Path.of(registrationTemplatePath);
         }
-    }
-
-    @Value("${home.service.template.invitation.path.registration}")
-    public void setRegistrationTemplatePath(String path) {
-        TemplateServiceImpl.registrationTemplatePath = path;
-    }
-
-    @Value("${home.service.template.invitation.path.cooperation}")
-    public void setCooperationTemplatePath(String path) {
-        TemplateServiceImpl.cooperationTemplatePath = path;
-    }
-
-    @Value("${home.service.template.invitation.path.apartment}")
-    public void setApartmentTemplatePath(String path) {
-        TemplateServiceImpl.apartmentTemplatePath = path;
     }
 }

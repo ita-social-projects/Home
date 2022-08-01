@@ -7,6 +7,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.a
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.mail.MailService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,11 @@ public class SendApartmentEmailService extends BaseEmailService {
 
     public SendApartmentEmailService(
         @Qualifier(value = "apartmentInvitationServiceImpl")
-            InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService) {
+            InvitationService<ApartmentInvitation, ApartmentInvitationDto> invitationService,
+        @Qualifier(value = "invitationMailServiceImpl")
+        MailService mailService) {
+
+        super(mailService);
         this.invitationService = invitationService;
     }
 
@@ -26,14 +31,15 @@ public class SendApartmentEmailService extends BaseEmailService {
     protected MailDto createBaseMailDto(Mailable letter) {
         ApartmentInvitationDto invitation = mapper.convert(letter, ApartmentInvitationDto.class);
         MailDto mailDto = new MailDto();
-        mailDto.setType(InvitationTypeDto.APARTMENT);
+        mailDto.setType(InvitationTypeDto.APARTMENT.toString());
         mailDto.setApartmentNumber(invitation.getApartmentNumber());
         mailDto.setOwnershipPat(BigDecimal.ZERO);
+
         return mailDto;
     }
 
     @Override
-    protected InvitationService<ApartmentInvitation, ApartmentInvitationDto> getMailableService() {
+    protected MailableService getMailableService() {
         return invitationService;
     }
 }

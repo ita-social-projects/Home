@@ -42,6 +42,8 @@ import com.softserveinc.ita.homeproject.client.model.CreateVote;
 import com.softserveinc.ita.homeproject.client.model.HouseLookup;
 import com.softserveinc.ita.homeproject.client.model.InvitationToken;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
+import com.softserveinc.ita.homeproject.client.model.PasswordRestorationApproval;
+import com.softserveinc.ita.homeproject.client.model.PasswordRestorationRequest;
 import com.softserveinc.ita.homeproject.client.model.PollType;
 import com.softserveinc.ita.homeproject.client.model.QuestionType;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
@@ -354,6 +356,10 @@ class PermissionsIT {
                 return new UpdateUser().firstName("Test").lastName("Test").middleName("Test");
             case "com.softserveinc.ita.homeproject.client.model.CreateUser":
                 return new CreateUser();
+            case "com.softserveinc.ita.homeproject.client.model.PasswordRestorationApproval":
+                return new PasswordRestorationApproval();
+            case "com.softserveinc.ita.homeproject.client.model.PasswordRestorationRequest":
+                return new PasswordRestorationRequest();
             case "com.softserveinc.ita.homeproject.client.model.HouseLookup":
                 return new HouseLookup().id(1L);
             case "com.softserveinc.ita.homeproject.client.model.UpdateOwnership":
@@ -466,6 +472,8 @@ class PermissionsIT {
         switch (methodName) {
             case "createUser":
             case "createCooperation":
+            case "passwordRestorationApproval":
+            case "passwordRestorationRequest":
                 setPermission = new boolean[]{true, true, true, true};
                 break;
             case "createContactOnUser":

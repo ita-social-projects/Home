@@ -10,6 +10,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.e
 import com.softserveinc.ita.homeproject.homeservice.dto.general.mail.MailDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
+import com.softserveinc.ita.homeproject.homeservice.service.general.mail.MailService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,10 @@ public class SendCooperationEmailService extends BaseEmailService {
     public SendCooperationEmailService(
         @Qualifier(value = "cooperationInvitationServiceImpl")
             InvitationService<CooperationInvitation, CooperationInvitationDto> invitationService,
-        CooperationRepository cooperationRepository) {
+        CooperationRepository cooperationRepository,
+        @Qualifier(value = "invitationMailServiceImpl")
+        MailService mailService) {
+        super(mailService);
         this.invitationService = invitationService;
         this.cooperationRepository = cooperationRepository;
     }
@@ -37,13 +41,12 @@ public class SendCooperationEmailService extends BaseEmailService {
 
         mailDto.setRole(invitation.getRole().getValue());
         mailDto.setCooperationName(coop.getName());
-        mailDto.setType(InvitationTypeDto.COOPERATION);
-
+        mailDto.setType(InvitationTypeDto.COOPERATION.toString());
         return mailDto;
     }
 
     @Override
-    protected InvitationService<CooperationInvitation, CooperationInvitationDto> getMailableService() {
+    protected MailableService getMailableService() {
         return invitationService;
     }
 }

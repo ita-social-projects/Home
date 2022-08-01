@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.uuid.Generators;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
@@ -24,14 +25,23 @@ import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecovery;
+import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecoveryRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.enums.PasswordRecoveryTokenStatus;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.password.PasswordRestorationApprovalDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.password.PasswordRestorationRequestDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.BadRequestHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.PasswordException;
+import com.softserveinc.ita.homeproject.homeservice.exception.PasswordRestorationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.util.ValidationHelper;
@@ -45,17 +55,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final UserSessionRepository userSessionRepository;
 
     private final RoleRepository roleRepository;
 
     private final UserCooperationRepository userCooperationRepository;
 
     private final InvitationRepository invitationRepository;
+
+    private final PasswordRecoveryRepository passwordRecoveryRepository;
 
     private final InvitationService<ApartmentInvitation, ApartmentInvitationDto> apartmentInvitationService;
 
@@ -67,21 +81,26 @@ public class UserServiceImpl implements UserService {
 
     private final ValidationHelper validationHelper;
 
+    public static final Long PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION = 3L;
+
     public UserServiceImpl(UserRepository userRepository,
+                           UserSessionRepository userSessionRepository,
                            RoleRepository roleRepository,
                            UserCooperationRepository userCooperationRepository,
                            InvitationRepository invitationRepository,
                            @Qualifier("apartmentInvitationServiceImpl")
-                               InvitationService<ApartmentInvitation, ApartmentInvitationDto>
+                           InvitationService<ApartmentInvitation, ApartmentInvitationDto>
                                apartmentInvitationService,
                            @Qualifier("cooperationInvitationServiceImpl")
-                               InvitationService<CooperationInvitation, CooperationInvitationDto>
+                           InvitationService<CooperationInvitation, CooperationInvitationDto>
                                cooperationInvitationService,
                            PasswordEncoder passwordEncoder,
                            UserCredentialsRepository userCredentialsRepository,
                            ServiceMapper mapper,
-                           ValidationHelper validationHelper) {
+                           ValidationHelper validationHelper,
+                           PasswordRecoveryRepository passwordRecoveryRepository) {
         this.userRepository = userRepository;
+        this.userSessionRepository = userSessionRepository;
         this.roleRepository = roleRepository;
         this.userCooperationRepository = userCooperationRepository;
         this.invitationRepository = invitationRepository;
@@ -91,6 +110,7 @@ public class UserServiceImpl implements UserService {
         this.userCredentialsRepository = userCredentialsRepository;
         this.mapper = mapper;
         this.validationHelper = validationHelper;
+        this.passwordRecoveryRepository = passwordRecoveryRepository;
     }
 
     private final ServiceMapper mapper;
@@ -100,8 +120,8 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto createUserDto) {
 
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
-            if(!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
-                throw new PasswordException("Password too weak");
+            if (!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
+                throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
             }
 
             User toCreate = mapper.convert(createUserDto, User.class);
@@ -236,5 +256,120 @@ public class UserServiceImpl implements UserService {
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
         userCredentials.setEnabled(false);
         userRepository.save(toDelete);
+    }
+
+    /**
+     * Method generates token for further password changing process. First-of-all
+     * it checks whether the user existed or not. If not it throws
+     * {@link NotFoundHomeException} with appropriate message. If exist all tokens
+     * which was generated before and wasn't used will be disabled before
+     * further generation. If all previous steps was passed successfully new
+     * token will be generated and stored to DataBase with
+     * {@link PasswordRecoveryTokenStatus#PENDING}  status for further sending in
+     * email.
+     *
+     * @param passwordRestorationRequestDto one field class which stores email of user who wants
+     *                                      to change the password.
+     */
+    @Override
+    public void requestPasswordRestoration(PasswordRestorationRequestDto passwordRestorationRequestDto) {
+        User user = userRepository.findByEmail(passwordRestorationRequestDto.getEmail())
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.PASSWORD_RESTORATION_REQUEST_NOT_FOUND));
+        PasswordRecovery passwordRecovery = new PasswordRecovery();
+
+        /*
+            if the user requests a password change again and the
+            previous token was not used, it should be disabled
+            before the next token is generated
+        */
+        disableExistedTokenIfPresent(user.getEmail());
+
+        passwordRecovery.setEmail(user.getEmail());
+        passwordRecovery.setRecoveryToken(Generators.timeBasedGenerator().generate().toString());
+        passwordRecovery.setStatus(PasswordRecoveryTokenStatus.PENDING);
+        passwordRecovery.setEnabled(true);
+
+        passwordRecoveryRepository.save(passwordRecovery);
+    }
+
+    /**
+     * Changes password after a few validation step. First-of-all checks whether
+     * the token stores in the database or not. After this validates token for
+     * expiration and avoiding for reusing the same token second time. Next step
+     * passwords equality and complexity validation. if all this steps passed
+     * successfully method reset password for current user and cleans all bearer
+     * tokens for this user (emulating log outing for all devices). As a result
+     * set enabled as false for current token and saves it into DataBase.
+     * On validation steps can throw:
+     * <ul>
+     *     <li>
+     *         {@link NotFoundHomeException} if there is no pair token/email found
+     *         in the Database
+     *      </li>
+     *      <li>
+     *          {@link PasswordException} if password not meet the rule or passwords
+     *          not equal
+     *      </li>
+     *</ul>
+     *
+     * @param approvalDto password restoration form.
+     */
+    @Transactional
+    @Override
+    public void changePassword(PasswordRestorationApprovalDto approvalDto) {
+        PasswordRecovery passwordRecovery =
+            passwordRecoveryRepository.findByRecoveryTokenAndEmail(approvalDto.getToken(), approvalDto.getEmail())
+                .orElseThrow(() -> new PasswordRestorationException(ExceptionMessages.INVALID_TOKEN_MESSAGE));
+
+        validateRestorationRecoveryForm(passwordRecovery);
+
+        if (!validationHelper.validatePasswordConfirmation(approvalDto.getNewPassword(),
+            approvalDto.getPasswordConfirmation())) {
+            throw new PasswordException(ExceptionMessages.MISMATCHED_PASSWORDS);
+        }
+        if (!validationHelper.validatePasswordComplexity(approvalDto.getNewPassword())) {
+            throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
+        }
+
+
+        /*
+        TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic.
+        Will fix in task #471
+         */
+        User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
+        UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())
+            .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
+
+        editedUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
+        editedOauthUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
+        userRepository.save(editedUser);
+        userCredentialsRepository.save(editedOauthUser);
+
+        List<UserSession> bearerTokens = userSessionRepository.findAllByUserId(editedUser.getId());
+
+        userSessionRepository.deleteAll(bearerTokens);
+        passwordRecovery.setEnabled(false);
+        passwordRecoveryRepository.save(passwordRecovery);
+    }
+
+    private void validateRestorationRecoveryForm(PasswordRecovery info) {
+        if (Boolean.TRUE.equals(!(info.getEnabled()))
+                || !(info.getStatus().equals(PasswordRecoveryTokenStatus.ACTIVE))
+                || info.getSentDateTime().plusHours(PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION)
+                    .isBefore(LocalDateTime.now())) {
+            throw new PasswordRestorationException(ExceptionMessages.INVALID_TOKEN_MESSAGE);
+        }
+    }
+
+    private void disableExistedTokenIfPresent(String email) {
+        List<PasswordRecovery> passwordRecoveryTokens =
+            passwordRecoveryRepository.findAllByEmail(email).stream()
+                .filter(PasswordRecovery::getEnabled)
+                .collect(Collectors.toList());
+
+        passwordRecoveryTokens.forEach(token -> token.setEnabled(false));
+
+        passwordRecoveryRepository.saveAll(passwordRecoveryTokens);
     }
 }

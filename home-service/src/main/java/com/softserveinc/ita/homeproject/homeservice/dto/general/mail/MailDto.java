@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import javax.validation.constraints.Email;
 
 import com.softserveinc.ita.homeproject.homeservice.dto.BaseDto;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.enums.InvitationTypeDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +31,7 @@ public class MailDto extends BaseDto {
 
     private Boolean isRegistered;
 
-    private InvitationTypeDto type;
+    private String type;
 
-    private String registrationToken;
+    private String token;
 }

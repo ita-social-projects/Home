@@ -16,6 +16,6 @@ public abstract class InvitationDto extends Mailable {
 
     private String email;
 
-    private String registrationToken;
+    private String token;
 
 }

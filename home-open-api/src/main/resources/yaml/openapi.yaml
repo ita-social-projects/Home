@@ -52,6 +52,8 @@ tags:
     description: Download template file
   - name: logout
     description: Log out from current/all device(s)
+  - name: reset password
+    description: Password restoration procedure
 
 paths:
   /invitations/invitation-approval:
@@ -152,6 +154,12 @@ paths:
 
   /logout/all:
     $ref: './paths/logout.yaml#/logout-all'
+
+  /reset-password/request:
+    $ref: './paths/passwordRestoration.yaml#/reset-password-request'
+
+  /reset-password/approval:
+    $ref: './paths/passwordRestoration.yaml#/reset-password-approval'
 
 security:
   - bearerAuth: [ ]

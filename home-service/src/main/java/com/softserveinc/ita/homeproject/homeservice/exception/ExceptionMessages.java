@@ -15,7 +15,7 @@ public class ExceptionMessages {
     public static final String UNKNOWN_ERROR_APPEARED_MESSAGE =
             "The unknown error appeared. Check your payload or contact support.";
 
-    public static final String NOT_FOUND_USER_NAME_MESSAGE = "There is no user with given email!";
+    public static final String NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE = "There is no user with given email!";
 
     public static final String BAD_REQUEST_HOME_MESSAGE = "Request contains same path and query params";
 
@@ -138,4 +138,11 @@ public class ExceptionMessages {
     public static final String NOT_FOUND_COOPERATION_WITH_ID_MESSAGE = "Can't find cooperation with given ID: %d";
 
     public static final String NOT_FOUND_HOUSE_WITH_ID_MESSAGE = "House with 'id: %d' is not found";
+
+    public static final String WEAK_PASSWORD_EXCEPTION = "Password too weak";
+
+    public static final String PASSWORD_RESTORATION_REQUEST_NOT_FOUND =
+        "Password restoration request not found";
+
+    public static final String MISMATCHED_PASSWORDS = "Passwords not equals";
 }
