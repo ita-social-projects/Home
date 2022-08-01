@@ -474,6 +474,7 @@ class PermissionsIT {
             case "createCooperation":
             case "passwordRestorationApproval":
             case "passwordRestorationRequest":
+            case "getTemplateFile":
                 setPermission = new boolean[]{true, true, true, true};
                 break;
             case "createContactOnUser":
