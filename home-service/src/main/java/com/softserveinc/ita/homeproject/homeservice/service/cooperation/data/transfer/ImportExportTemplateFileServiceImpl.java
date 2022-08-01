@@ -1,4 +1,4 @@
-package com.softserveinc.ita.homeproject.homeservice.service.cooperation.data_damping;
+package com.softserveinc.ita.homeproject.homeservice.service.cooperation.data.transfer;
 
 import java.io.File;
 
