@@ -22,8 +22,6 @@ import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
-import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSession;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
@@ -77,8 +75,6 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final UserCredentialsRepository userCredentialsRepository;
-
     private final ValidationHelper validationHelper;
 
     public static final Long PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION = 3L;
@@ -95,7 +91,6 @@ public class UserServiceImpl implements UserService {
                            InvitationService<CooperationInvitation, CooperationInvitationDto>
                                cooperationInvitationService,
                            PasswordEncoder passwordEncoder,
-                           UserCredentialsRepository userCredentialsRepository,
                            ServiceMapper mapper,
                            ValidationHelper validationHelper,
                            PasswordRecoveryRepository passwordRecoveryRepository) {
@@ -107,7 +102,6 @@ public class UserServiceImpl implements UserService {
         this.apartmentInvitationService = apartmentInvitationService;
         this.cooperationInvitationService = cooperationInvitationService;
         this.passwordEncoder = passwordEncoder;
-        this.userCredentialsRepository = userCredentialsRepository;
         this.mapper = mapper;
         this.validationHelper = validationHelper;
         this.passwordRecoveryRepository = passwordRecoveryRepository;
@@ -138,8 +132,6 @@ public class UserServiceImpl implements UserService {
             });
 
             userRepository.save(toCreate);
-            userCredentialsRepository.save(new UserCredentials(toCreate.getId(), toCreate.getEmail(),
-                toCreate.getPassword(), true));
             checkAndSaveUserByInvitation(createUserDto);
             return mapper.convert(toCreate, UserDto.class);
         }
@@ -240,9 +232,6 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
 
-        UserCredentials userCredentials = userCredentialsRepository.findById(id).filter(UserCredentials::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
-
         List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
         userCooperation.stream()
@@ -254,7 +243,6 @@ public class UserServiceImpl implements UserService {
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
-        userCredentials.setEnabled(false);
         userRepository.save(toDelete);
     }
 
