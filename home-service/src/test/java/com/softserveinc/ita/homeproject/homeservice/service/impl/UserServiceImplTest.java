@@ -4,7 +4,10 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitati
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecoveryRepository;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
@@ -28,6 +31,15 @@ class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private UserCredentialRepository userCredentialRepository;
+
+    @Mock
+    private PasswordRecoveryRepository passwordRecoveryRepository;
+
+    @Mock
+    private UserSessionRepository userSessionRepository;
 
     @Mock
     private RoleRepository roleRepository;
@@ -57,6 +69,8 @@ class UserServiceImplTest {
         ValidationHelper validationHelper = new ValidationHelper();
         userService = new UserServiceImpl(
                 userRepository,
+                userCredentialRepository,
+                userSessionRepository,
                 roleRepository,
                 userCooperationRepository,
                 invitationRepository,
@@ -64,7 +78,8 @@ class UserServiceImplTest {
                 cooperationInvitationService,
                 passwordEncoder,
                 mapper,
-                validationHelper
+                validationHelper,
+                passwordRecoveryRepository
         );
     }
 

@@ -18,7 +18,6 @@
                                  constraintName="user_credentials_fk"
                                  referencedTableName="user_credentials"
                                  referencedColumnNames="id"/>
-
     </changeSet>
 
 </databaseChangeLog>

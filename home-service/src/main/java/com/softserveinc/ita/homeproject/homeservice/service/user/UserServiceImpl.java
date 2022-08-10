@@ -22,6 +22,8 @@ import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSession;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final UserCredentialRepository userCredentialRepository;
+
     private final UserSessionRepository userSessionRepository;
 
     private final RoleRepository roleRepository;
@@ -80,6 +84,7 @@ public class UserServiceImpl implements UserService {
     public static final Long PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION = 3L;
 
     public UserServiceImpl(UserRepository userRepository,
+                           UserCredentialRepository userCredentialRepository,
                            UserSessionRepository userSessionRepository,
                            RoleRepository roleRepository,
                            UserCooperationRepository userCooperationRepository,
@@ -95,6 +100,7 @@ public class UserServiceImpl implements UserService {
                            ValidationHelper validationHelper,
                            PasswordRecoveryRepository passwordRecoveryRepository) {
         this.userRepository = userRepository;
+        this.userCredentialRepository = userCredentialRepository;
         this.userSessionRepository = userSessionRepository;
         this.roleRepository = roleRepository;
         this.userCooperationRepository = userCooperationRepository;
@@ -319,20 +325,15 @@ public class UserServiceImpl implements UserService {
             throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
         }
 
-
-        /*
-        TODO: Bug. User password stores in the few tables. Applications uses different data for the same logic.
-        Will fix in task #471
-         */
         User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
-        UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())
+        UserCredentials editedOauthUser = userCredentialRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
 
         editedUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
         editedOauthUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
         userRepository.save(editedUser);
-        userCredentialsRepository.save(editedOauthUser);
+        userCredentialRepository.save(editedOauthUser);
 
         List<UserSession> bearerTokens = userSessionRepository.findAllByUserId(editedUser.getId());
 

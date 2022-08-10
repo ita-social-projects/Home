@@ -23,7 +23,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
-@SecondaryTable(name = "user_credentials", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 @SequenceGenerator(name = "sequence", sequenceName = "users_sequence")
 public class User extends BaseEntity {
 
@@ -59,6 +58,10 @@ public class User extends BaseEntity {
 
     @Column(name = "update_date")
     private LocalDateTime updateDate;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_credentials_id", referencedColumnName = "id")
+    private UserCredentials userCredentials;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Contact> contacts;

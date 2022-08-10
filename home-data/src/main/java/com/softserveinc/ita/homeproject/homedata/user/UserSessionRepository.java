@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.homedata.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface UserSessionRepository extends JpaRepository<UserSession, Long> 
     void deleteByUserId(Long userId);
 
     Optional<UserSession> findByRefreshToken(String refreshToken);
+
+    List<UserSession> findAllByUserId(Long id);
 
 }
