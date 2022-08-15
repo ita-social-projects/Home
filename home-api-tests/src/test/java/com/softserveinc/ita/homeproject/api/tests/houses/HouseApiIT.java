@@ -20,6 +20,7 @@ import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.ContactType;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
@@ -255,7 +256,7 @@ class HouseApiIT {
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList())
             .contacts(createContactList());

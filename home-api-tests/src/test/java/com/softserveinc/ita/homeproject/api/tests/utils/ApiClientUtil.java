@@ -28,6 +28,7 @@ import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
@@ -159,7 +160,7 @@ public final class ApiClientUtil {
     public static ReadUser createCooperationAdmin(CooperationApi cooperationApi, CreateCooperation coop,
                                                   UserApi userApi, CreateUser user) {
         cooperationApi.createCooperation(coop);
-        String email = coop.getAdminEmail();
+        String email = coop.getAdminData().getEmail();
 
         ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
 
@@ -173,7 +174,8 @@ public final class ApiClientUtil {
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .address(createAddress());
     }
 

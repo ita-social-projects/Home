@@ -83,4 +83,3 @@ UpdateUser:
       example: "Petrov"
       minLength: 1
       maxLength: 50
-

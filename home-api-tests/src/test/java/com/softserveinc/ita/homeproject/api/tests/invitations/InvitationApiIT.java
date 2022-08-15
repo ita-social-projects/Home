@@ -26,6 +26,7 @@ import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperationInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
@@ -63,7 +64,7 @@ class InvitationApiIT {
     void isEmailSentTest() throws Exception {
         CreateCooperation createCoop = createCooperation();
         cooperationApi.createCooperationWithHttpInfo(createCoop);
-        MailUtil.waitLetterForEmail(createCoop.getAdminEmail());
+        MailUtil.waitLetterForEmail(createCoop.getAdminData().getEmail());
     }
 
     @Test
@@ -311,7 +312,7 @@ class InvitationApiIT {
                 .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(email)
+                .adminData(new CreateCooperationAdminData().email(email))
                 .address(createAddress());
     }
 
@@ -320,7 +321,7 @@ class InvitationApiIT {
                 .name(RandomStringUtils.randomAlphabetic(10).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(createBaseUser().getEmail())
+                .adminData(new CreateCooperationAdminData().email(createBaseUser().getEmail()))
                 .address(createAddress());
     }
 

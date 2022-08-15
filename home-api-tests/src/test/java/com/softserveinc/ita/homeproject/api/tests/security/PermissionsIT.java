@@ -30,6 +30,7 @@ import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateContact;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateEmailContact;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
@@ -742,7 +743,8 @@ class PermissionsIT {
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com")))
             .address(createAddress())
             .contacts(createContactList());
     }
@@ -752,7 +754,8 @@ class PermissionsIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com")))
             .address(createAddress())
             .addHousesItem(createHouse())
             .addHousesItem(createHouse())

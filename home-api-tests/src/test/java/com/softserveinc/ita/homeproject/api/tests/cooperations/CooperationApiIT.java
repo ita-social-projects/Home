@@ -89,7 +89,7 @@ class CooperationApiIT {
             .name("Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation Cooperation")
             .usreo("25252525")
             .iban("UA250820210147250819980000000")
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList());
 
@@ -105,7 +105,7 @@ class CooperationApiIT {
             .name("name")
             .usreo("123456789101112131415")
             .iban("UA250820210147250819980000000")
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList());
 
@@ -121,7 +121,7 @@ class CooperationApiIT {
             .name("name")
             .usreo("25252525")
             .iban("12345678910111213141516171819202122232425")
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList());
 
@@ -140,7 +140,7 @@ class CooperationApiIT {
             .name("name")
             .usreo("26573474")
             .iban(createCoop.getIban())
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList());
 
@@ -157,7 +157,7 @@ class CooperationApiIT {
             .name("name")
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddressWithNull());
 
         assertThatExceptionOfType(ApiException.class)
@@ -171,7 +171,7 @@ class CooperationApiIT {
             .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(createAddress())
             .houses(createHouseList())
             .contacts(createContactList());

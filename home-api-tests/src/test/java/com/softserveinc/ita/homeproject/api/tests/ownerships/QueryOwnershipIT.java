@@ -199,7 +199,8 @@ class QueryOwnershipIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .adminData(new CreateCooperationAdminData()
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
                 .address(createAddress());
     }
 

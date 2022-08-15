@@ -26,6 +26,7 @@ import com.softserveinc.ita.homeproject.client.model.AnswerVariantLookup;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateAdviceQuestionVote;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestion;
 import com.softserveinc.ita.homeproject.client.model.CreateMultipleChoiceQuestionVote;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
@@ -402,7 +403,8 @@ class PollVoteApiIT {
             .name(String.format("Cooperation #%d for vote test", ++cooperationNumber))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(12).concat("@gmail.com")))
             .address(createAddress());
     }
 

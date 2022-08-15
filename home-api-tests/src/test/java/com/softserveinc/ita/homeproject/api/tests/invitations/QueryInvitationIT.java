@@ -22,6 +22,7 @@ import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
 import com.softserveinc.ita.homeproject.client.model.InvitationStatus;
@@ -237,7 +238,8 @@ public class QueryInvitationIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .address(createAddress());
     }
 

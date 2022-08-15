@@ -22,6 +22,7 @@ import com.softserveinc.ita.homeproject.client.api.PollApi;
 import com.softserveinc.ita.homeproject.client.api.PolledHouseApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreatePoll;
 import com.softserveinc.ita.homeproject.client.model.HouseLookup;
@@ -172,7 +173,8 @@ class CooperationPollApiIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .address(createAddress())
             .addHousesItem(createHouse())
             .addHousesItem(createHouse())

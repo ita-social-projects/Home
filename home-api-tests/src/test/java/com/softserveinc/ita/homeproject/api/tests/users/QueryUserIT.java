@@ -17,6 +17,7 @@ import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.UserApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
 import com.softserveinc.ita.homeproject.client.model.ReadUser;
 import lombok.SneakyThrows;
@@ -243,7 +244,8 @@ class QueryUserIT {
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .adminData(new CreateCooperationAdminData()
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
                 .address(createAddress());
     }
 
