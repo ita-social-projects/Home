@@ -78,8 +78,7 @@ class OwnershipApiIT {
             .collect(Collectors.toList());
 
         users.forEach(x -> {
-            String email = Objects.requireNonNull(
-                    createApartment.getInvitations().get(createApartment.getInvitations().size() - 1)).getEmail();
+            String email = "mailmock@mailbox.com";
             ResponseEmailItem letter = MailUtil.waitLetter(MailUtil.predicate().email(email).subject("apartment"));
             x.setRegistrationToken(MailUtil.getToken(letter));
             x.setEmail(email);
@@ -88,7 +87,6 @@ class OwnershipApiIT {
             } catch (ApiException e) {
                 e.printStackTrace();
             }
-            createApartment.getInvitations().remove(createApartment.getInvitations().size() - 1);
         });
 
         ownershipApi.queryOwnership(TEST_APARTMENT_ID, null, null, null, null, null, null, null)
@@ -103,7 +101,7 @@ class OwnershipApiIT {
         ReadHouse createdHouse = houseApi.createHouse(createdCooperation.getId(), createHouse());
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
-        String email = Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail();
+        String email = "mailmock@mailbox.com";
         ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
         CreateUser expectedUser = createBaseUser();
         expectedUser.setRegistrationToken(MailUtil.getToken(letter));
@@ -273,8 +271,7 @@ class OwnershipApiIT {
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+            .number("15");
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {

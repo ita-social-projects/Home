@@ -22,3 +22,33 @@ UpdateOwnership:
       maximum: 1.0
       multipleOf: 1e-4
       example: 0.6588
+CreateOwnership:
+  type: object
+  required:
+    - type
+    - ownership_part
+  properties:
+    type:
+      type: string
+      example: person
+    first_name:
+      type: string
+      example: John
+    last_name:
+      type: string
+      example: Doe
+    middle_name:
+      type: string
+      example: middleName
+    name:
+      type: string
+      example: Company Inc.
+    edrpou:
+      type: integer
+      example: 12345678
+    ownership_part:
+      type: string
+      minimum: 0.0001
+      maximum: 1.0
+      multipleOf: 1e-4
+      example: 0.6588

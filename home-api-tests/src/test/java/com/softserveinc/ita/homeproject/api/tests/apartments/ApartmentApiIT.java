@@ -284,8 +284,7 @@ class ApartmentApiIT {
     private CreateApartment createApartment(int numberOfApartmentInvitations) {
         return new CreateApartment()
                 .area(BigDecimal.valueOf(72.5))
-                .number("15")
-                .invitations(createApartmentInvitation(numberOfApartmentInvitations));
+                .number("15");
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
