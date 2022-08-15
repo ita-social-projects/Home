@@ -2,6 +2,7 @@ CreateApartment:
   required:
     - number
     - area
+    - ownerships
   type: object
   properties:
     number:
@@ -16,18 +17,23 @@ CreateApartment:
       maximum: 1000
       multipleOf: 1e-2
       example: 75.28
-    invitations:
+    ownerships:
       type: array
       items:
-        $ref: 'invitation.yaml#/CreateInvitation'
+        $ref: 'ownership.yaml#/CreateOwnership'
       example: [
         {
-          "email": "test.receive.messages@gmail.com",
-          "type": "apartment"
+          "type": "person",
+          "first_name": "Ivan",
+          "last_name": "Ivanov",
+          "middle_name": "Ivanovich",
+          "ownership_part": 0.3
         },
         {
-          "email": "test.receive.messages@gmail.com",
-          "type": "apartment"
+          "type": "legal_entity",
+          "name": "Company Inc.",
+          "edrpou": "12345678",
+          "ownership_part": 0.7
         }
       ]
 UpdateApartment:
