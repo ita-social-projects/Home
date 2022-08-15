@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface UserCredentialRepository extends PagingAndSortingRepository<UserCredentials, Long>,
+public interface UserCredentialsRepository extends PagingAndSortingRepository<UserCredentials, Long>,
     JpaSpecificationExecutor<UserCredentials> {
 
     /**

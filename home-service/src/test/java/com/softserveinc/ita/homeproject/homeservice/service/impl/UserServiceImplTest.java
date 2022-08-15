@@ -1,10 +1,11 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.user.UserCredentialRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecoveryRepository;
@@ -24,8 +25,6 @@ import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @ExtendWith(SpringExtension.class)
 class UserServiceImplTest {
 
@@ -33,7 +32,7 @@ class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private UserCredentialRepository userCredentialRepository;
+    private UserCredentialsRepository userCredentialsRepository;
 
     @Mock
     private PasswordRecoveryRepository passwordRecoveryRepository;
@@ -69,7 +68,7 @@ class UserServiceImplTest {
         ValidationHelper validationHelper = new ValidationHelper();
         userService = new UserServiceImpl(
                 userRepository,
-                userCredentialRepository,
+            userCredentialsRepository,
                 userSessionRepository,
                 roleRepository,
                 userCooperationRepository,

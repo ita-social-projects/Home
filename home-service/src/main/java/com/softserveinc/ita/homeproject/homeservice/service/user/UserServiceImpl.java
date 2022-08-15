@@ -22,8 +22,8 @@ import com.softserveinc.ita.homeproject.homedata.general.contact.Contact;
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
-import com.softserveinc.ita.homeproject.homedata.user.UserCredentialRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSession;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final UserCredentialRepository userCredentialRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
 
     private final UserSessionRepository userSessionRepository;
 
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     public static final Long PASSWORD_RESTORATION_TOKEN_HOURS_ACTIVITY_DURATION = 3L;
 
     public UserServiceImpl(UserRepository userRepository,
-                           UserCredentialRepository userCredentialRepository,
+                           UserCredentialsRepository userCredentialsRepository,
                            UserSessionRepository userSessionRepository,
                            RoleRepository roleRepository,
                            UserCooperationRepository userCooperationRepository,
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
                            ValidationHelper validationHelper,
                            PasswordRecoveryRepository passwordRecoveryRepository) {
         this.userRepository = userRepository;
-        this.userCredentialRepository = userCredentialRepository;
+        this.userCredentialsRepository = userCredentialsRepository;
         this.userSessionRepository = userSessionRepository;
         this.roleRepository = roleRepository;
         this.userCooperationRepository = userCooperationRepository;
@@ -124,8 +124,12 @@ public class UserServiceImpl implements UserService {
                 throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
             }
 
+            UserCredentials userCredentials = new UserCredentials();
             User toCreate = mapper.convert(createUserDto, User.class);
 
+            userCredentials.setEmail(createUserDto.getEmail());
+            userCredentials.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
+            userCredentials.setEnabled(true);
             toCreate.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             toCreate.setEnabled(true);
             toCreate.setExpired(false);
@@ -137,6 +141,9 @@ public class UserServiceImpl implements UserService {
                 contact.setEnabled(true);
             });
 
+
+            userCredentialsRepository.save(userCredentials);
+            toCreate.setUserCredentials(userCredentials);
             userRepository.save(toCreate);
             checkAndSaveUserByInvitation(createUserDto);
             return mapper.convert(toCreate, UserDto.class);
@@ -327,13 +334,13 @@ public class UserServiceImpl implements UserService {
 
         User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
-        UserCredentials editedOauthUser = userCredentialRepository.findByEmail(passwordRecovery.getEmail())
+        UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
 
         editedUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
         editedOauthUser.setPassword(passwordEncoder.encode(approvalDto.getNewPassword()));
         userRepository.save(editedUser);
-        userCredentialRepository.save(editedOauthUser);
+        userCredentialsRepository.save(editedOauthUser);
 
         List<UserSession> bearerTokens = userSessionRepository.findAllByUserId(editedUser.getId());
 
