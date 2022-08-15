@@ -246,7 +246,7 @@ public final class ApiClientUtil {
         apartmentApi.createApartment(createdHouse.getId(), createApartment);
 
         CreateUser expectedUser = createBaseUser();
-        String email = Objects.requireNonNull(createApartment.getInvitations()).get(0).getEmail();
+        String email = "emailmock@mailbox.com";
         ResponseEmailItem letter = MailUtil.waitLetterForEmail(email);
         expectedUser.setRegistrationToken(MailUtil.getToken(letter));
         expectedUser.setEmail(email);
@@ -266,8 +266,7 @@ public final class ApiClientUtil {
     private static CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+            .number("15");
     }
 
     private static List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {

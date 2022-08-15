@@ -678,8 +678,7 @@ class PermissionsIT {
     private static CreateApartment createApartment() {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createInvitationList(NUMBER_OF_APARTMENT_INVITATIONS));
+            .number("15");
     }
 
     private static UpdatePoll updatePoll() {

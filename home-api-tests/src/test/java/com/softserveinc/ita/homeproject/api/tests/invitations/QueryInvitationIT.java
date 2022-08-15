@@ -270,8 +270,7 @@ public class QueryInvitationIT {
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+            .number("15");
     }
 
 

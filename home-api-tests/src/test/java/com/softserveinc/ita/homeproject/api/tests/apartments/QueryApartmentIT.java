@@ -188,16 +188,14 @@ class QueryApartmentIT {
     private CreateApartment createSecondApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
             .area(BigDecimal.valueOf(65.5))
-            .number("16")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+            .number("16");
     }
 
 
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
             .area(BigDecimal.valueOf(72.5))
-            .number("15")
-            .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+            .number("15");
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {

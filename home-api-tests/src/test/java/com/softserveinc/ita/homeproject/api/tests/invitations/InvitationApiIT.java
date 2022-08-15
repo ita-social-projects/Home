@@ -346,8 +346,7 @@ class InvitationApiIT {
     private CreateApartment createApartmentWithEmail(String userEmail) {
         return new CreateApartment()
                 .area(BigDecimal.valueOf(72.5))
-                .number("15")
-                .invitations(createApartmentInvitationWithEmail(userEmail));
+                .number("15");
     }
 
     private List<CreateInvitation> createApartmentInvitationWithEmail(String userEmail) {
@@ -368,8 +367,7 @@ class InvitationApiIT {
     private CreateApartment createApartment(int numberOfApartamentInvitations) {
         return new CreateApartment()
                 .area(BigDecimal.valueOf(72.5))
-                .number("15")
-                .invitations(createApartmentInvitation(numberOfApartamentInvitations));
+                .number("15");
     }
 
     private List<CreateInvitation> createApartmentInvitation(int numberOfInvitations) {
