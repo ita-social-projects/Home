@@ -190,12 +190,9 @@ public final class ApiClientUtil {
     private static CreateUser createBaseUser() {
 
         return new CreateUser()
-            .firstName("firstName")
-            .middleName("middleName")
-            .lastName("lastName")
             .password(VALID_USER_PASSWORD)
             .email("test.receive.apartment@gmail.com")
-            .contacts(createContactList());
+            .phoneNumber("380501112233");
     }
 
     private static List<CreateContact> createContactList() {

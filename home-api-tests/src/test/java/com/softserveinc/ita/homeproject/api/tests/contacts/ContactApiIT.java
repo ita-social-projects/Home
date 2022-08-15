@@ -511,9 +511,6 @@ class ContactApiIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
@@ -526,16 +523,6 @@ class ContactApiIT {
                 .region("Dnipro")
                 .street("street")
                 .zipCode("zipCode");
-    }
-
-    private CreateUser createTestUser() {
-        return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
-                .password(ApiClientUtil.VALID_USER_PASSWORD)
-                .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
-                .contacts(createContactList());
     }
 
     private void assertEmailContact(CreateContact expected, ReadContact actual) {

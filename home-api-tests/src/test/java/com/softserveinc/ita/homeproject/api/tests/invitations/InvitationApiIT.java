@@ -302,9 +302,6 @@ class InvitationApiIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }

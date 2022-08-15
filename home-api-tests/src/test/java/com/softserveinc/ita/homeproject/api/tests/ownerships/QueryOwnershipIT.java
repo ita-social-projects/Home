@@ -59,17 +59,13 @@ class QueryOwnershipIT {
         TEST_APARTMENT_ID = createdApartment.getId();
 
         List<CreateUser> users = Stream.generate(CreateUser::new).map(x ->
-                x.firstName("firstName")
-                    .middleName("middleName")
-                    .lastName("middleName")
-                    .password(ApiClientUtil.VALID_USER_PASSWORD)
+                x.password(ApiClientUtil.VALID_USER_PASSWORD)
                     .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .limit(numInvitations)
             .collect(Collectors.toList());
 
         users.forEach(x -> {
-            String email = Objects.requireNonNull(
-                    createApartment.getInvitations().get(createApartment.getInvitations().size() - 1)).getEmail();
+            String email = "mail@mail.com";
             ResponseEmailItem letter = MailUtil.waitLetter(MailUtil.predicate().email(email).subject("apartment"));
             x.setRegistrationToken(MailUtil.getToken(letter));
             x.setEmail(email);
@@ -194,9 +190,6 @@ class QueryOwnershipIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }

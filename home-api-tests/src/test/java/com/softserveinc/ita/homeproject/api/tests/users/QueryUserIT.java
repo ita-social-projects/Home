@@ -30,12 +30,6 @@ class QueryUserIT {
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
 
-    private final CreateUser expectedUser = new CreateUser()
-            .firstName("Bill")
-            .middleName("Billievich")
-            .lastName("White")
-            .password(ApiClientUtil.VALID_USER_PASSWORD);
-
     @Test
     void getAllUsers() throws ApiException {
         List<ReadUser> expectedListUser = saveListUser();
@@ -223,37 +217,22 @@ class QueryUserIT {
     private List<CreateUser> createUsersList() {
         List<CreateUser> list = new ArrayList<>();
         list.add(new CreateUser().
-                firstName("Alex").
-                middleName("Alexovich").
-                lastName("Young").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Bob").
-                middleName("Bobovich").
-                lastName("Smith").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Jack").
-                middleName("Jackovich").
-                lastName("Gray").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Sindy").
-                middleName("Sindivna").
-                lastName("Black").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Victor").
-                middleName("Viktorovich").
-                lastName("Along").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
@@ -270,9 +249,6 @@ class QueryUserIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
@@ -293,13 +269,4 @@ class QueryUserIT {
         CreateUser user = createBaseUser();
         return ApiClientUtil.createCooperationAdmin(cooperationApi, coop, userApi, user);
     }
-
-    private void assertUser(CreateUser expected, ReadUser actual) {
-        assertNotNull(expected);
-        assertEquals(expected.getFirstName(), actual.getFirstName());
-        assertEquals(expected.getMiddleName(), actual.getMiddleName());
-        assertEquals(expected.getLastName(), actual.getLastName());
-        assertEquals(expected.getEmail(), actual.getEmail());
-    }
-
 }

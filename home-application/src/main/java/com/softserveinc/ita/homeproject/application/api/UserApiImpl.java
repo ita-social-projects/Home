@@ -2,6 +2,7 @@ package com.softserveinc.ita.homeproject.application.api;
 
 import static com.softserveinc.ita.homeproject.application.security.constants.Permissions.MANAGE_USER;
 
+import java.util.List;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -10,6 +11,7 @@ import com.softserveinc.ita.homeproject.application.model.ContactType;
 import com.softserveinc.ita.homeproject.application.model.CreateContact;
 import com.softserveinc.ita.homeproject.application.model.CreateUser;
 import com.softserveinc.ita.homeproject.application.model.ReadContact;
+import com.softserveinc.ita.homeproject.application.model.ReadPhoneContact;
 import com.softserveinc.ita.homeproject.application.model.ReadUser;
 import com.softserveinc.ita.homeproject.application.model.UpdateContact;
 import com.softserveinc.ita.homeproject.application.model.UpdateUser;
@@ -58,10 +60,18 @@ public class UserApiImpl extends CommonApi implements UsersApi {
     @PermitAll
     @Override
     public Response createUser(CreateUser createUser) {
-        UserDto createUserDto = mapper.convert(createUser, UserDto.class);
-        UserDto readUserDto = userService.createUser(createUserDto);
-        ReadUser readUser = mapper.convert(readUserDto, ReadUser.class);
-
+        ReadContact phone = new ReadPhoneContact()
+            .phone("380501112233")
+            .id(1L)
+            .main(true)
+            .type(ContactType.PHONE);
+        ReadUser readUser = new ReadUser()
+            .id(1L)
+            .firstName("John")
+            .middleName("Charles")
+            .lastName("Doe")
+            .email("mail@mailbox.com")
+            .contacts(List.of(phone));
         return Response.status(Response.Status.CREATED).entity(readUser).build();
     }
 

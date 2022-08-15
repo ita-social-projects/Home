@@ -100,14 +100,10 @@ class LoginIT {
     }
 
     private static CreateUser createBaseUser() {
-
         return new CreateUser()
-            .firstName("firstName")
-            .middleName("middleName")
-            .lastName("lastName")
             .password(ApiClientUtil.VALID_USER_PASSWORD)
             .email(USER_EMAIL)
-            .contacts(createContactList());
+            .phoneNumber("380501112233");
     }
 
     private static List<CreateContact> createContactList() {

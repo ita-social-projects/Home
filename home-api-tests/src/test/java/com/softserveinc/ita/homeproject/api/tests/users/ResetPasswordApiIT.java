@@ -230,9 +230,6 @@ class ResetPasswordApiIT {
 
     private static CreateUser createBaseUser() {
         return new CreateUser()
-            .firstName("firstName")
-            .middleName("middleName")
-            .lastName("lastName")
             .password(ApiClientUtil.VALID_USER_PASSWORD)
             .email("test.receive.apartment@gmail.com");
     }

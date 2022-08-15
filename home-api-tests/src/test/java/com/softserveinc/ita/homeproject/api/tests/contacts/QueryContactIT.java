@@ -301,16 +301,6 @@ class QueryContactIT {
         return createContactList;
     }
 
-    private CreateUser createTestUser() {
-        return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
-                .password(ApiClientUtil.VALID_USER_PASSWORD)
-                .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
-                .contacts(createContactList());
-    }
-
     private CreateCooperation createBaseCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
@@ -322,12 +312,9 @@ class QueryContactIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com")
-                .contacts(createContactList());
+                .phoneNumber("380501112233");
     }
 
     private Address createAddress() {

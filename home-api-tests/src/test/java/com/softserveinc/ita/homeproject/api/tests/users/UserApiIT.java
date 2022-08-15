@@ -66,9 +66,6 @@ class UserApiIT {
     void createNewUserWithWeakPassword() {
         ReadUser savedUser = createBaseUserForTests();
         CreateUser createdUser = new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password("123456789")
                 .email("test.receive.apartment@gmail.com");
 
@@ -139,10 +136,7 @@ class UserApiIT {
     @Test
     void createUserWithNonExistRegistrationToken() {
         CreateUser createUser = new CreateUser()
-                .firstName("FirstName")
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
-                .middleName("MiddleName")
-                .lastName("LastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("walker@email.com");
 
@@ -155,9 +149,6 @@ class UserApiIT {
     @Test
     void createUserWithRegistrationTokenNull() {
         CreateUser createUser = new CreateUser()
-                .firstName("FirstName")
-                .middleName("MiddleName")
-                .lastName("LastName")
                 .password("somePassword")
                 .email("walker@email.com");
 
@@ -170,9 +161,6 @@ class UserApiIT {
     @Test
     void createUserWithEmptyFirstNameAndMiddleNameAndLastNameTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("")
-                .middleName("")
-                .lastName("")
                 .password("somePassword")
                 .email("walker@email.com");
 
@@ -187,9 +175,6 @@ class UserApiIT {
     @Test
     void createUserWithInvalidFirstNameAndMiddleNameAndLastNameTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
-                .middleName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
-                .lastName("AhmudIbnSalimDeAlpachinoStyleCreatedInAmericaStreet")
                 .password("somePassword")
                 .email("walker@email.com");
 
@@ -204,9 +189,6 @@ class UserApiIT {
     @Test
     void createUserWithEmptyEmailTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("alan")
-                .middleName("alanovich")
-                .lastName("walker")
                 .password("somePassword")
                 .email("");
 
@@ -219,9 +201,6 @@ class UserApiIT {
     @Test
     void createUserInvalidEmailTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("alan")
-                .middleName("alanovich")
-                .lastName("walker")
                 .password("somePassword")
                 .email("email.com");
 
@@ -234,9 +213,6 @@ class UserApiIT {
     @Test
     void createUserWithEmptyPasswordTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("alan")
-                .middleName("alanovich")
-                .lastName("walker")
                 .password("")
                 .email("email@example.com");
 
@@ -249,9 +225,6 @@ class UserApiIT {
     @Test
     void createUserInvalidPasswordTest() {
         CreateUser createUser = new CreateUser()
-                .firstName("alan")
-                .middleName("alanovich")
-                .lastName("walker")
                 .password("some password")
                 .email("email@example.com");
 
@@ -264,9 +237,6 @@ class UserApiIT {
     @Test
     void createUserWithAllNullParametersTest() {
         CreateUser createUser = new CreateUser()
-                .firstName(null)
-                .middleName(null)
-                .lastName(null)
                 .email(null)
                 .password(null);
 
@@ -418,12 +388,9 @@ class UserApiIT {
     private CreateUser createTestUser() {
         return new CreateUser()
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
-                .contacts(createContactList());
+                .phoneNumber("380501112233");
     }
 
     private static CreateCooperation createBaseCooperation() {
@@ -438,9 +405,6 @@ class UserApiIT {
 
     private static CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
@@ -459,13 +423,10 @@ class UserApiIT {
         ReadUser user = baseUserForTests;
 
         CreateUser userWithExistEmail = new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(user.getEmail())
                 .registrationToken(RandomStringUtils.randomAlphabetic(36))
-                .contacts(createContactList());
+                .phoneNumber("380501112233");
 
         return userApi.createUserWithHttpInfo(userWithExistEmail);
     }
