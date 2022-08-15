@@ -6,6 +6,7 @@ import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.ReadCooperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -197,7 +198,7 @@ class QueryCooperationIT {
             .name(RandomStringUtils.randomAlphabetic(10))
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail("test.receive.messages@gmail.com")
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"))
             .address(new Address()
                 .city("Dnepr")
                 .district("District")

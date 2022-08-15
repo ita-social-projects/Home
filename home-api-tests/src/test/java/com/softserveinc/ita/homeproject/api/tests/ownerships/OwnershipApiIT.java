@@ -69,10 +69,7 @@ class OwnershipApiIT {
         TEST_DELETE_OWNERSHIP_APARTMENT_ID = createdApartment.getId();
 
         List<CreateUser> users = Stream.generate(CreateUser::new).map(x ->
-                x.firstName("firstName")
-                    .middleName("middleName")
-                    .lastName("middleName")
-                    .password(ApiClientUtil.VALID_USER_PASSWORD)
+                x.password(ApiClientUtil.VALID_USER_PASSWORD)
                     .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .limit(numInvitations)
             .collect(Collectors.toList());
@@ -234,9 +231,6 @@ class OwnershipApiIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-            .firstName("firstName")
-            .middleName("middleName")
-            .lastName("lastName")
             .password(ApiClientUtil.VALID_USER_PASSWORD)
             .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
@@ -246,7 +240,8 @@ class OwnershipApiIT {
             .name("newCooperationTest")
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-            .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+            .adminData(new CreateCooperationAdminData()
+                .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .address(createAddress());
     }
 
@@ -297,9 +292,6 @@ class OwnershipApiIT {
 
     private void assertUser(CreateUser expected, ReadUser actual) {
         assertNotNull(expected);
-        assertEquals(expected.getFirstName(), actual.getFirstName());
-        assertEquals(expected.getMiddleName(), actual.getMiddleName());
-        assertEquals(expected.getLastName(), actual.getLastName());
         assertEquals(expected.getEmail(), actual.getEmail());
     }
 }

@@ -17,6 +17,7 @@ import com.softserveinc.ita.homeproject.client.ApiException;
 import com.softserveinc.ita.homeproject.client.api.ContactApi;
 import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.UserApi;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.ReadContact;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.ContactType;
@@ -301,33 +302,21 @@ class QueryContactIT {
         return createContactList;
     }
 
-    private CreateUser createTestUser() {
-        return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
-                .password(ApiClientUtil.VALID_USER_PASSWORD)
-                .email(RandomStringUtils.randomAlphabetic(5).concat("@example.com"))
-                .contacts(createContactList());
-    }
-
     private CreateCooperation createBaseCooperation() {
         return new CreateCooperation()
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .adminData(new CreateCooperationAdminData()
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
                 .address(createAddress());
     }
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com")
-                .contacts(createContactList());
+                .phoneNumber("380501112233");
     }
 
     private Address createAddress() {

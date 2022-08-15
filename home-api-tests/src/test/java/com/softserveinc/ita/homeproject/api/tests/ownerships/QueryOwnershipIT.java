@@ -59,16 +59,13 @@ class QueryOwnershipIT {
         TEST_APARTMENT_ID = createdApartment.getId();
 
         List<CreateUser> users = Stream.generate(CreateUser::new).map(x ->
-                x.firstName("firstName")
-                    .middleName("middleName")
-                    .lastName("middleName")
-                    .password(ApiClientUtil.VALID_USER_PASSWORD)
+                x.password(ApiClientUtil.VALID_USER_PASSWORD)
                     .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
             .limit(numInvitations)
             .collect(Collectors.toList());
 
         users.forEach(x -> {
-            String email = "emailmock@mailbox.com";
+            String email = "mail@mail.com";
             ResponseEmailItem letter = MailUtil.waitLetter(MailUtil.predicate().email(email).subject("apartment"));
             x.setRegistrationToken(MailUtil.getToken(letter));
             x.setEmail(email);
@@ -192,9 +189,6 @@ class QueryOwnershipIT {
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"));
     }
@@ -204,7 +198,8 @@ class QueryOwnershipIT {
                 .name("newCooperationTest")
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .adminData(new CreateCooperationAdminData()
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
                 .address(createAddress());
     }
 

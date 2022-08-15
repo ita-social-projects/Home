@@ -24,6 +24,7 @@ import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateApartment;
 import com.softserveinc.ita.homeproject.client.model.CreateApartmentInvitation;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateHouse;
 import com.softserveinc.ita.homeproject.client.model.CreateInvitation;
 import com.softserveinc.ita.homeproject.client.model.InvitationType;
@@ -220,7 +221,7 @@ class QueryApartmentIT {
             .usreo(RandomStringUtils.randomNumeric(8))
             .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
             .address(createAddress())
-            .adminEmail("test.receive.messages@gmail.com");
+            .adminData(new CreateCooperationAdminData().email("test.receive.messages@gmail.com"));
     }
 
     private Address createAddress() {

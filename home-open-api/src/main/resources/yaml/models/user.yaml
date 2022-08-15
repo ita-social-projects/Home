@@ -1,35 +1,19 @@
 CreateUser:
   required:
+    - id
     - registration_token
-    - first_name
-    - middle_name
-    - last_name
     - email
     - password
+    - phone_number
   type: object
   properties:
+    id:
+      type: integer
+      example: 1
     registration_token:
       type: string
       example: f8e20775-da55-11eb-a58d-775374b8f3a1
       minLength: 36
-    first_name:
-      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
-      type: string
-      example: "Petro"
-      minLength: 1
-      maxLength: 50
-    middle_name:
-      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
-      type: string
-      example: "Petrovich"
-      minLength: 1
-      maxLength: 50
-    last_name:
-      pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
-      type: string
-      example: "Zinchenko"
-      minLength: 1
-      maxLength: 50
     email:
       pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
       type: string
@@ -39,20 +23,13 @@ CreateUser:
     password:
       pattern: '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$'
       type: string
-      example: "mySuperStrongPass"
+      example: "mySuperStrongPass2"
       minLength: 8
       maxLength: 128
-    contacts:
-      type: array
-      example: [
-        {
-          "type": "email",
-          "main": false,
-          "email": "createUserEmail@example.com"
-        }
-      ]
-      items:
-        $ref: 'contact.yaml#/CreateContact'
+    phone_number:
+      type: string
+      example: 380501112233
+      minimum: 10
 ReadUser:
   allOf:
     - $ref: 'common.yaml#/BaseReadView'
@@ -106,4 +83,3 @@ UpdateUser:
       example: "Petrov"
       minLength: 1
       maxLength: 50
-

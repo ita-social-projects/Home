@@ -1,7 +1,7 @@
 CreateCooperation:
   required:
     - usreo
-    - admin_email
+    - admin_data
   type: object
   properties:
     name:
@@ -17,12 +17,40 @@ CreateCooperation:
       type: string
       example: "UA213223130000026007233566001"
       pattern: '^UA\d{27}$'
-    admin_email:
-      type: string
-      minLength: 5
-      maxLength: 320
-      pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
-      example: "test.receive.messages@gmail.com"
+    admin_data:
+      type: object
+      properties:
+        first_name:
+          pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
+          type: string
+          example: "Petro"
+          minLength: 1
+          maxLength: 50
+        middle_name:
+          pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
+          type: string
+          example: "Petrovich"
+          minLength: 1
+          maxLength: 50
+        last_name:
+          pattern: '^([A-Za-zА-Яа-яґҐЁёІіЇїЄє''’ʼ]+[\s-]?)*'
+          type: string
+          example: "Zinchenko"
+          minLength: 1
+          maxLength: 50
+        email:
+          pattern: '^([\w!#$%&''*+\/=?{|}~^-]|\.){1,60}@(?!-)(?:[a-zA-Z0-9-]{2,250}+\.)+[a-zA-Z]{2,6}$'
+          type: string
+          example: "p.t.z@gmail.com"
+          minLength: 5
+          maxLength: 320
+      example: {
+        "first_name": "John",
+        "middle_name": "Charles",
+        "last_name": "Doe",
+        "email": "mail@mailbox.com"
+      }
+
     address:
       $ref: 'address.yaml#/Address'
     houses:

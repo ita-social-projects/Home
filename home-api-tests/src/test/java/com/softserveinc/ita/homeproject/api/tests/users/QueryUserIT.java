@@ -17,6 +17,7 @@ import com.softserveinc.ita.homeproject.client.api.CooperationApi;
 import com.softserveinc.ita.homeproject.client.api.UserApi;
 import com.softserveinc.ita.homeproject.client.model.Address;
 import com.softserveinc.ita.homeproject.client.model.CreateCooperation;
+import com.softserveinc.ita.homeproject.client.model.CreateCooperationAdminData;
 import com.softserveinc.ita.homeproject.client.model.CreateUser;
 import com.softserveinc.ita.homeproject.client.model.ReadUser;
 import lombok.SneakyThrows;
@@ -29,12 +30,6 @@ class QueryUserIT {
     private final CooperationApi cooperationApi = new CooperationApi(ApiClientUtil.getCooperationAdminClient());
 
     private final UserApi userApi = new UserApi(ApiClientUtil.getCooperationAdminClient());
-
-    private final CreateUser expectedUser = new CreateUser()
-            .firstName("Bill")
-            .middleName("Billievich")
-            .lastName("White")
-            .password(ApiClientUtil.VALID_USER_PASSWORD);
 
     @Test
     void getAllUsers() throws ApiException {
@@ -223,37 +218,22 @@ class QueryUserIT {
     private List<CreateUser> createUsersList() {
         List<CreateUser> list = new ArrayList<>();
         list.add(new CreateUser().
-                firstName("Alex").
-                middleName("Alexovich").
-                lastName("Young").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Bob").
-                middleName("Bobovich").
-                lastName("Smith").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Jack").
-                middleName("Jackovich").
-                lastName("Gray").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Sindy").
-                middleName("Sindivna").
-                lastName("Black").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
         list.add(new CreateUser().
-                firstName("Victor").
-                middleName("Viktorovich").
-                lastName("Along").
                 email(RandomStringUtils.randomAlphabetic(5).concat("@example.com")).
                 password(ApiClientUtil.VALID_USER_PASSWORD)
         );
@@ -264,15 +244,13 @@ class QueryUserIT {
                 .name(RandomStringUtils.randomAlphabetic(5).concat(" Cooperation"))
                 .usreo(RandomStringUtils.randomNumeric(8))
                 .iban("UA".concat(RandomStringUtils.randomNumeric(27)))
-                .adminEmail(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com"))
+                .adminData(new CreateCooperationAdminData()
+                    .email(RandomStringUtils.randomAlphabetic(10).concat("@gmail.com")))
                 .address(createAddress());
     }
 
     private CreateUser createBaseUser() {
         return new CreateUser()
-                .firstName("firstName")
-                .middleName("middleName")
-                .lastName("lastName")
                 .password(ApiClientUtil.VALID_USER_PASSWORD)
                 .email("test.receive.apartment@gmail.com");
     }
@@ -293,13 +271,4 @@ class QueryUserIT {
         CreateUser user = createBaseUser();
         return ApiClientUtil.createCooperationAdmin(cooperationApi, coop, userApi, user);
     }
-
-    private void assertUser(CreateUser expected, ReadUser actual) {
-        assertNotNull(expected);
-        assertEquals(expected.getFirstName(), actual.getFirstName());
-        assertEquals(expected.getMiddleName(), actual.getMiddleName());
-        assertEquals(expected.getLastName(), actual.getLastName());
-        assertEquals(expected.getEmail(), actual.getEmail());
-    }
-
 }
