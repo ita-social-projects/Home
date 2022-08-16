@@ -28,8 +28,9 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     private UserCredentials getUserFromSecurityContext() {
-        return userCredentialsRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
-            () -> new UsernameNotFoundException("User not found")
+        return userCredentialsRepository.findByEmail(
+            SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
+                () -> new UsernameNotFoundException("User not found")
         );
     }
 
