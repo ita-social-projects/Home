@@ -118,7 +118,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(UserDto createUserDto) {
-
         if (userRepository.findByEmail(createUserDto.getEmail()).isEmpty()) {
             if (!validationHelper.validatePasswordComplexity(createUserDto.getPassword())) {
                 throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
@@ -141,7 +140,6 @@ public class UserServiceImpl implements UserService {
                 contact.setEnabled(true);
             });
 
-
             userCredentialsRepository.save(userCredentials);
             toCreate.setUserCredentials(userCredentials);
             userRepository.save(toCreate);
@@ -152,7 +150,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkAndSaveUserByInvitation(UserDto userDto) {
-
         Invitation invitation = invitationRepository.findInvitationByRegistrationToken(userDto.getRegistrationToken())
             .filter(invitation1 -> invitation1.getStatus().equals(InvitationStatus.PROCESSING)
                 && invitation1.getEnabled().equals(true))
@@ -218,6 +215,7 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new NotFoundHomeException(NOT_FOUND_CURRENT_USER_MESSAGE));
         user.setContacts(user.getContacts().stream()
             .filter(Contact::getEnabled).collect(Collectors.toList()));
+
         return mapper.convert(user, UserDto.class);
     }
 
@@ -236,6 +234,7 @@ public class UserServiceImpl implements UserService {
         Page<User> users = userRepository.findAll(specification, PageRequest.of(pageNumber - 1, pageSize));
         users.forEach(user -> user.setContacts(user.getContacts().stream()
             .filter(Contact::getEnabled).collect(Collectors.toList())));
+
         return users.map(user -> mapper.convert(user, UserDto.class));
     }
 
@@ -332,6 +331,9 @@ public class UserServiceImpl implements UserService {
             throw new PasswordException(ExceptionMessages.WEAK_PASSWORD_EXCEPTION);
         }
 
+        /*
+        TODO: Bug. User credentials stores in the few tables. Applications uses different data for the same logic.
+         */
         User editedUser = userRepository.findByEmail(passwordRecovery.getEmail())
             .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_USER_WITH_CURRENT_EMAIL_MESSAGE));
         UserCredentials editedOauthUser = userCredentialsRepository.findByEmail(passwordRecovery.getEmail())

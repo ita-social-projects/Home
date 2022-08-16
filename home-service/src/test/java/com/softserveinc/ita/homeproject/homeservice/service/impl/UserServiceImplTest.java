@@ -1,6 +1,11 @@
 package com.softserveinc.ita.homeproject.homeservice.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.InvitationRepository;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitation;
@@ -8,12 +13,16 @@ import com.softserveinc.ita.homeproject.homedata.user.UserCooperationRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecovery;
 import com.softserveinc.ita.homeproject.homedata.user.password.PasswordRecoveryRepository;
+import com.softserveinc.ita.homeproject.homedata.user.password.enums.PasswordRecoveryTokenStatus;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.user.UserDto;
+import com.softserveinc.ita.homeproject.homeservice.dto.user.password.PasswordRestorationApprovalDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.PasswordException;
+import com.softserveinc.ita.homeproject.homeservice.exception.PasswordRestorationException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationService;
 import com.softserveinc.ita.homeproject.homeservice.service.user.UserServiceImpl;
@@ -104,5 +113,47 @@ class UserServiceImplTest {
                 NullPointerException.class,
                 () -> userService.createUser(userDto)
         );
+    }
+
+    @Test
+    void testUpdatePasswordWithExpiredStatusToken() {
+        PasswordRestorationApprovalDto approvalDto = new PasswordRestorationApprovalDto();
+        PasswordRecovery recoveryToken = new PasswordRecovery();
+
+        approvalDto.setEmail("email@mailbox.com");
+        approvalDto.setToken("e550d31e-0dbe-11ed-8502-6547419ef7e6");
+        approvalDto.setNewPassword("n3wPassword");
+        approvalDto.setPasswordConfirmation("n3wPassword");
+        recoveryToken.setEmail("email@mailbox.com");
+        recoveryToken.setRecoveryToken("e550d31e-0dbe-11ed-8502-6547419ef7e6");
+        recoveryToken.setSentDateTime(LocalDateTime.now().minusMinutes(1L));
+        recoveryToken.setStatus(PasswordRecoveryTokenStatus.EXPIRED);
+        recoveryToken.setEnabled(true);
+        when(passwordRecoveryRepository.findByRecoveryTokenAndEmail(approvalDto.getEmail(),
+            approvalDto.getToken())).thenReturn(Optional.of(recoveryToken));
+
+        assertThrows(PasswordRestorationException.class,
+            () -> userService.changePassword(approvalDto));
+    }
+
+    @Test
+    void testUpdatePasswordWithExpiredToken() {
+        PasswordRestorationApprovalDto approvalDto = new PasswordRestorationApprovalDto();
+        PasswordRecovery recoveryToken = new PasswordRecovery();
+
+        approvalDto.setEmail("email@mailbox.com");
+        approvalDto.setToken("e550d31e-0dbe-11ed-8502-6547419ef7e6");
+        approvalDto.setNewPassword("n3wPassword");
+        approvalDto.setPasswordConfirmation("n3wPassword");
+        recoveryToken.setEmail("email@mailbox.com");
+        recoveryToken.setRecoveryToken("e550d31e-0dbe-11ed-8502-6547419ef7e6");
+        recoveryToken.setSentDateTime(LocalDateTime.now().minusDays(1L));
+        recoveryToken.setStatus(PasswordRecoveryTokenStatus.ACTIVE);
+        recoveryToken.setEnabled(true);
+        when(passwordRecoveryRepository.findByRecoveryTokenAndEmail(approvalDto.getEmail(),
+            approvalDto.getToken())).thenReturn(Optional.of(recoveryToken));
+
+        assertThrows(PasswordRestorationException.class,
+            () -> userService.changePassword(approvalDto));
     }
 }
