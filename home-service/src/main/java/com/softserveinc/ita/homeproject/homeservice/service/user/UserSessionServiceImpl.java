@@ -1,7 +1,7 @@
 package com.softserveinc.ita.homeproject.homeservice.service.user;
 
-import com.softserveinc.ita.homeproject.homedata.user.User;
-import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,13 +13,13 @@ public class UserSessionServiceImpl implements UserSessionService {
 
     private final UserSessionRepository userSessionRepository;
 
-    private final UserRepository userRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
 
     public UserSessionServiceImpl(
         UserSessionRepository userSessionRepository,
-        UserRepository userRepository) {
+        UserCredentialsRepository userCredentialsRepository) {
         this.userSessionRepository = userSessionRepository;
-        this.userRepository = userRepository;
+        this.userCredentialsRepository = userCredentialsRepository;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class UserSessionServiceImpl implements UserSessionService {
         return userSessionRepository.existsUserSessionByAccessToken(accessToken);
     }
 
-    private User getUserFromSecurityContext() {
-        return userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
+    private UserCredentials getUserFromSecurityContext() {
+        return userCredentialsRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
             () -> new UsernameNotFoundException("User not found")
         );
     }
