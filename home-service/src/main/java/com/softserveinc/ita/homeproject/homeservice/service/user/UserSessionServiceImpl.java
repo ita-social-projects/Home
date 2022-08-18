@@ -3,8 +3,6 @@ package com.softserveinc.ita.homeproject.homeservice.service.user;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
 import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
-import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,9 +28,8 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     private UserCredentials getUserFromSecurityContext() {
-        return userCredentialsRepository.findByEmail(
-            SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
-                () -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_CURRENT_USER_MESSAGE)
+        return userCredentialsRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(
+            () -> new UsernameNotFoundException("User not found")
         );
     }
 
