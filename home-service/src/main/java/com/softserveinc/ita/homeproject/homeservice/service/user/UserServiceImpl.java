@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService {
             UserCredentials userCredentials = new UserCredentials();
             User toCreate = mapper.convert(createUserDto, User.class);
 
+            userCredentials.setId(toCreate.getId());
             userCredentials.setEmail(createUserDto.getEmail());
             userCredentials.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
             userCredentials.setEnabled(true);
