@@ -1,5 +1,6 @@
 package com.softserveinc.ita.homeproject.application.config;
 
+import com.softserveinc.ita.homeproject.application.security.AuthorizationValidatorFilter;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTProvider;
 import com.softserveinc.ita.homeproject.application.security.filter.JWTTokenValidatorFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 getCorsConfiguration())
             .and()
             .addFilterBefore(new JWTTokenValidatorFilter(jwtProvider),
-                BasicAuthenticationFilter.class);
+                BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthorizationValidatorFilter(), JWTTokenValidatorFilter.class);
 
     }
 

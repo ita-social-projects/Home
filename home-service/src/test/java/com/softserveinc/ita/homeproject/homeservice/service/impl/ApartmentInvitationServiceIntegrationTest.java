@@ -9,16 +9,13 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.Apartment;
 import com.softserveinc.ita.homeproject.homedata.cooperation.apatment.ApartmentRepository;
-import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.Invitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitation;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.apartment.ApartmentInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
-import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.InvitationDto;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
-import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.apartment.ApartmentInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -180,7 +177,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         invitation.setRegistrationToken(registrationToken);
         invitation.setEnabled(true);
         apartmentInvitationRepository.save(invitation);
-        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+        NotAcceptableHomeException exception = Assertions.assertThrows(NotAcceptableHomeException.class, () ->
                 invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
         assertEquals("Invitation was overdue", exception.getMessage());
     }
@@ -193,7 +190,7 @@ public class ApartmentInvitationServiceIntegrationTest {
         invitation.setRegistrationToken(registrationToken);
         invitation.setStatus(InvitationStatus.ACCEPTED);
         apartmentInvitationRepository.save(invitation);
-        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class, () ->
+        NotAcceptableHomeException exception = Assertions.assertThrows(NotAcceptableHomeException.class, () ->
                 invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
         assertEquals("Invitation was deleted By Cooperation Admin", exception.getMessage());
     }

@@ -18,6 +18,7 @@ import com.softserveinc.ita.homeproject.homedata.user.ownership.Ownership;
 import com.softserveinc.ita.homeproject.homedata.user.role.Role;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleEnum;
 import com.softserveinc.ita.homeproject.homedata.user.role.RoleRepository;
+import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,12 @@ public class UserCooperationImpl implements UserCooperationService {
             userCooperation.setRole(role);
             userCooperationRepository.save(userCooperation);
         }
+    }
+
+    @Override
+    public UserCooperation getUserCooperationByUserId(Long id) {
+        return userCooperationRepository.findByUserId(id)
+                .orElseThrow(() -> new NotFoundHomeException(ExceptionMessages.NOT_FOUND_COOPERATION_MESSAGE));
     }
 
     private boolean isUserCooperationNonExists(User user, Role role, Cooperation cooperation) {

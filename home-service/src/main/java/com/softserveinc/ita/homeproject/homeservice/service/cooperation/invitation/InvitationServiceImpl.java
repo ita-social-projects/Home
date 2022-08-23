@@ -25,7 +25,7 @@ import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.I
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.apartment.ApartmentInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.dto.cooperation.invitation.cooperation.CooperationInvitationDto;
 import com.softserveinc.ita.homeproject.homeservice.exception.InvitationException;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableHomeException;
 import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import com.softserveinc.ita.homeproject.homeservice.mapper.ServiceMapper;
 import com.softserveinc.ita.homeproject.homeservice.service.general.email.MailableService;
@@ -177,10 +177,10 @@ public class InvitationServiceImpl implements InvitationService<Invitation, Invi
 
     private void validateInvitation(Invitation invitation) {
         if (invitation.getStatus().equals(InvitationStatus.OVERDUE)) {
-            throw new NotAcceptableInvitationException(ALERT_INVITATION_OVERDUE_MESSAGE);
+            throw new NotAcceptableHomeException(ALERT_INVITATION_OVERDUE_MESSAGE);
         }
         if (!invitation.getEnabled().equals(true)) {
-            throw new NotAcceptableInvitationException(ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE);
+            throw new NotAcceptableHomeException(ALERT_INVITATION_DELETED_BY_ADMIN_MESSAGE);
         }
     }
 }

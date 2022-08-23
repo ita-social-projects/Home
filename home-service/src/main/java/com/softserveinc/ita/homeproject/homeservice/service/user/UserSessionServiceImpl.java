@@ -2,7 +2,11 @@ package com.softserveinc.ita.homeproject.homeservice.service.user;
 
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
 import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
+import com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableHomeException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotFoundHomeException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -43,5 +47,11 @@ public class UserSessionServiceImpl implements UserSessionService {
     @Transactional
     public void logoutAll() {
         userSessionRepository.deleteByUserId(getUserFromSecurityContext().getId());
+    }
+
+    @Override
+    public UserSession getByAccessToken(String token) {
+        return userSessionRepository.findByAccessToken(token)
+                .orElseThrow(() -> new NotAcceptableHomeException(ExceptionMessages.NOT_ACCEPTABLE_TOKEN_MESSAGE));
     }
 }

@@ -1,6 +1,7 @@
 package com.softserveinc.ita.homeproject.homedata.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.softserveinc.ita.homeproject.homedata.user.User;
 import com.softserveinc.ita.homeproject.homedata.user.UserCooperation;
@@ -15,4 +16,5 @@ public interface UserCooperationRepository  extends PagingAndSortingRepository<U
 
     List<UserCooperation> findUserCooperationByUser(User user);
 
+    Optional<UserCooperation> findByUserId(Long id);
 }

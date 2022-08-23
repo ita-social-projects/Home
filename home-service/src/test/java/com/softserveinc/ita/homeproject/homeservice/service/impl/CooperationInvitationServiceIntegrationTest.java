@@ -11,7 +11,7 @@ import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperat
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.enums.InvitationStatus;
 import com.softserveinc.ita.homeproject.homedata.cooperation.invitation.cooperation.CooperationInvitationRepository;
 import com.softserveinc.ita.homeproject.homeservice.HomeServiceTestContextConfig;
-import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableInvitationException;
+import com.softserveinc.ita.homeproject.homeservice.exception.NotAcceptableHomeException;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.InvitationServiceImpl;
 import com.softserveinc.ita.homeproject.homeservice.service.cooperation.invitation.cooperation.CooperationInvitationServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -79,7 +79,7 @@ public class CooperationInvitationServiceIntegrationTest {
         invitation.setRegistrationToken(registrationToken);
         invitation.setEnabled(true);
         cooperationInvitationRepository.save(invitation);
-        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class,
+        NotAcceptableHomeException exception = Assertions.assertThrows(NotAcceptableHomeException.class,
                 () -> invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
         assertEquals("Invitation was overdue", exception.getMessage());
     }
@@ -91,7 +91,7 @@ public class CooperationInvitationServiceIntegrationTest {
         invitation.setRegistrationToken(registrationToken);
         invitation.setStatus(InvitationStatus.ACCEPTED);
         cooperationInvitationRepository.save(invitation);
-        NotAcceptableInvitationException exception = Assertions.assertThrows(NotAcceptableInvitationException.class,
+        NotAcceptableHomeException exception = Assertions.assertThrows(NotAcceptableHomeException.class,
                 () -> invitationServiceImpl.registerWithRegistrationToken(invitation.getRegistrationToken()));
         assertEquals("Invitation was deleted By Cooperation Admin", exception.getMessage());
     }
