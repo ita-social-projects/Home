@@ -61,6 +61,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final UserCredentialsRepository userCredentialsRepository;
+
     private final UserSessionRepository userSessionRepository;
 
     private final RoleRepository roleRepository;
@@ -76,8 +78,6 @@ public class UserServiceImpl implements UserService {
     private final InvitationService<CooperationInvitation, CooperationInvitationDto> cooperationInvitationService;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final UserCredentialsRepository userCredentialsRepository;
 
     private final ValidationHelper validationHelper;
 
@@ -95,10 +95,10 @@ public class UserServiceImpl implements UserService {
                            InvitationService<CooperationInvitation, CooperationInvitationDto>
                                cooperationInvitationService,
                            PasswordEncoder passwordEncoder,
-                           UserCredentialsRepository userCredentialsRepository,
                            ServiceMapper mapper,
                            ValidationHelper validationHelper,
-                           PasswordRecoveryRepository passwordRecoveryRepository) {
+                           PasswordRecoveryRepository passwordRecoveryRepository,
+                           UserCredentialsRepository userCredentialsRepository) {
         this.userRepository = userRepository;
         this.userSessionRepository = userSessionRepository;
         this.roleRepository = roleRepository;
@@ -107,10 +107,10 @@ public class UserServiceImpl implements UserService {
         this.apartmentInvitationService = apartmentInvitationService;
         this.cooperationInvitationService = cooperationInvitationService;
         this.passwordEncoder = passwordEncoder;
-        this.userCredentialsRepository = userCredentialsRepository;
         this.mapper = mapper;
         this.validationHelper = validationHelper;
         this.passwordRecoveryRepository = passwordRecoveryRepository;
+        this.userCredentialsRepository = userCredentialsRepository;
     }
 
     private final ServiceMapper mapper;
@@ -240,9 +240,6 @@ public class UserServiceImpl implements UserService {
         User toDelete = userRepository.findById(id).filter(User::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
 
-        UserCredentials userCredentials = userCredentialsRepository.findById(id).filter(UserCredentials::getEnabled)
-            .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_USER_FORMAT_MESSAGE, id)));
-
         List<UserCooperation> userCooperation = userCooperationRepository.findUserCooperationByUser(toDelete);
 
         userCooperation.stream()
@@ -254,7 +251,6 @@ public class UserServiceImpl implements UserService {
 
         toDelete.setEnabled(false);
         toDelete.getContacts().forEach(contact -> contact.setEnabled(false));
-        userCredentials.setEnabled(false);
         userRepository.save(toDelete);
     }
 
