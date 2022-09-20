@@ -103,6 +103,7 @@ public class PollServiceImpl implements PollService {
 
         validatePollStatus(poll, pollDto.getStatus());
         validateCreationDate(poll.getCreationDate(), "Poll has already started");
+        validateCreationDate(pollDto.getCreationDate(), "Poll can`t be created in the past");
 
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
@@ -114,6 +115,7 @@ public class PollServiceImpl implements PollService {
         houseRepository.findAllById(housesId).forEach(houses::add);
         poll.setDescription(pollDto.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
+        poll.setCreationDate(pollDto.getCreationDate());
 
         if (pollDto.getStatus() == null) {
             poll.setCreationDate(pollDto.getCreationDate().truncatedTo(ChronoUnit.MINUTES));
