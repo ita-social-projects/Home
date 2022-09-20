@@ -89,10 +89,10 @@ class UserServiceImplTest {
             apartmentInvitationService,
             cooperationInvitationService,
             passwordEncoder,
-            userCredentialsRepository,
             mapper,
             validationHelper,
-            passwordRecoveryRepository
+            passwordRecoveryRepository,
+            userCredentialsRepository
         );
     }
 
@@ -103,8 +103,8 @@ class UserServiceImplTest {
         userDto.setEmail("test@gmail.com");
 
         assertThrows(
-            PasswordException.class,
-            () -> userService.createUser(userDto)
+                PasswordException.class,
+                () -> userService.createUser(userDto)
         );
     }
 
@@ -115,8 +115,8 @@ class UserServiceImplTest {
         userDto.setEmail("test@gmail.com");
 
         assertThrows(
-            NullPointerException.class,
-            () -> userService.createUser(userDto)
+                NullPointerException.class,
+                () -> userService.createUser(userDto)
         );
     }
 

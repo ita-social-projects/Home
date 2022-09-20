@@ -9,11 +9,12 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.config.JwtProvider;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSession;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.AccessTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.CreateTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
