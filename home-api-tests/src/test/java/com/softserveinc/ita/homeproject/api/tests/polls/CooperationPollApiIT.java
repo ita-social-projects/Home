@@ -363,11 +363,26 @@ class CooperationPollApiIT {
         ReadPoll pollToUpdate =
             COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPollWithCreationDate(creationDate));
         UpdatePoll updatePoll =
-            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.DAYS));
+            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.DAYS).plusDays(3L));
         ApiResponse<ReadPoll> response = COOPERATION_POLL_API
             .updateCooperationPollWithHttpInfo(COOPERATION_ID, pollToUpdate.getId(), updatePoll);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatusCode());
         assertUpdatedPoll(updatePoll, response.getData());
+    }
+
+    @Test
+    void updatePollWithPastCreationDateTest() throws ApiException {
+        LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS).plusDays(1L);
+        ReadPoll createdPoll =
+            COOPERATION_POLL_API.createCooperationPoll(COOPERATION_ID, createPollWithCreationDate(creationDate));
+        UpdatePoll updatePoll =
+            updatePollWithCreationDate(creationDate.truncatedTo(ChronoUnit.DAYS).minusDays(3L));
+
+        assertThatExceptionOfType(ApiException.class)
+            .isThrownBy(() -> COOPERATION_POLL_API
+                .updateCooperationPollWithHttpInfo(COOPERATION_ID, createdPoll.getId(), updatePoll))
+            .matches(response -> response.getCode() == BAD_REQUEST)
+            .withMessageContaining("Poll can`t be created in the past");
     }
 
     @Test
