@@ -80,13 +80,16 @@ public class PollServiceImpl implements PollService {
         validateCreationDate(pollDto.getCreationDate(), "Poll can`t be created in the past");
         pollDto.getPolledHouses().forEach(houseDto -> validateHouse(cooperationId, houseDto));
         pollDto.setCompletionDate(pollDto.getCreationDate().plusDays(15));
+
         Poll poll = mapper.convert(pollDto, Poll.class);
         Cooperation cooperation = getCooperationById(cooperationId);
+
         validateCompletionDate(poll.getCompletionDate(), poll.getCreationDate());
         poll.setCooperation(cooperation);
         poll.setStatus(PollStatus.DRAFT);
         poll.setEnabled(true);
         pollRepository.save(poll);
+
         return mapper.convert(poll, PollDto.class);
     }
 
@@ -97,16 +100,23 @@ public class PollServiceImpl implements PollService {
             .filter(Poll::getEnabled)
             .filter(poll1 -> poll1.getCooperation().getId().equals(cooperationId))
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+
         validatePollStatus(poll, pollDto.getStatus());
         validateCreationDate(poll.getCreationDate(), "Poll has already started");
+        validateCreationDate(pollDto.getCreationDate(), "Poll can`t be created in the past");
+
         if (pollDto.getHeader() != null) {
             poll.setHeader(pollDto.getHeader());
         }
+
         List<House> houses = new ArrayList<>();
         List<Long> housesId = pollDto.getIncludedHouses();
+
         houseRepository.findAllById(housesId).forEach(houses::add);
         poll.setDescription(pollDto.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
+        poll.setCreationDate(pollDto.getCreationDate());
+
         if (pollDto.getStatus() == null) {
             poll.setCreationDate(pollDto.getCreationDate().truncatedTo(ChronoUnit.MINUTES));
             poll.setCompletionDate(pollDto.getCreationDate().plusDays(15L));
@@ -115,8 +125,10 @@ public class PollServiceImpl implements PollService {
             poll.setCompletionDate(LocalDateTime.now().plusDays(15L));
             poll.setStatus(PollStatus.ACTIVE);
         }
+
         poll.setPolledHouses(houses);
         pollRepository.save(poll);
+
         return mapper.convert(poll, PollDto.class);
     }
 
@@ -124,6 +136,7 @@ public class PollServiceImpl implements PollService {
     public void deactivate(Long id) {
         Poll poll = pollRepository.findById(id).filter(Poll::getEnabled)
             .orElseThrow(() -> new NotFoundHomeException(String.format(NOT_FOUND_MESSAGE, "Poll", id)));
+
         validatePollStatus(poll, null);
         poll.setEnabled(false);
         pollRepository.save(poll);
@@ -153,6 +166,7 @@ public class PollServiceImpl implements PollService {
                 .filter(resultQuestion -> resultQuestion.getAnswerVariant().getAnswer().equals("yes"))
                 .findAny();
             positiveResultOptional.ifPresent(resultQuestion -> dto.setResult(resultQuestion.getPercentVotes()));
+
             return dto;
         });
     }
@@ -165,6 +179,7 @@ public class PollServiceImpl implements PollService {
 
     private void validateCompletionDate(LocalDateTime completionDate, LocalDateTime creationDate) {
         long days = ChronoUnit.DAYS.between(creationDate, completionDate);
+
         if (days < minPollDurationInDays) {
             throw new BadRequestHomeException(
                 String.format(ALERT_COMPLETION_DATE_VALIDATION_MESSAGE, minPollDurationInDays));
