@@ -3,11 +3,11 @@ package com.softserveinc.ita.homeproject.homeoauthserver.service;
 import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.BAD_CREDENTIAL_ERROR_MESSAGE;
 import static com.softserveinc.ita.homeproject.homeservice.exception.ExceptionMessages.INVALID_TOKEN_MESSAGE;
 
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentials;
+import com.softserveinc.ita.homeproject.homedata.user.UserCredentialsRepository;
+import com.softserveinc.ita.homeproject.homedata.user.UserSession;
+import com.softserveinc.ita.homeproject.homedata.user.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.config.JwtProvider;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentials;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserCredentialsRepository;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSession;
-import com.softserveinc.ita.homeproject.homeoauthserver.data.UserSessionRepository;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.AccessTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.CreateTokenDto;
 import com.softserveinc.ita.homeproject.homeoauthserver.dto.RefreshTokenDto;
