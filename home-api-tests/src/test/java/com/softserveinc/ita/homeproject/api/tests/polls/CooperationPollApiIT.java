@@ -491,6 +491,7 @@ class CooperationPollApiIT {
         assertNotNull(actual);
         assertEquals(expected.getHeader(), actual.getHeader());
         assertEquals(expected.getCreationDate(), actual.getCreationDate());
+        assertEquals(expected.getCreationDate().plusDays(15L), actual.getCompletionDate());
         assertEquals(expected.getHeader(), actual.getHeader());
         assertEquals(expected.getDescription(), actual.getDescription());
     }

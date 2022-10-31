@@ -116,6 +116,7 @@ public class PollServiceImpl implements PollService {
         poll.setDescription(pollDto.getDescription());
         poll.setUpdateDate(LocalDateTime.now());
         poll.setCreationDate(pollDto.getCreationDate());
+        poll.setCompletionDate(pollDto.getCreationDate().plusDays(15));
 
         if (pollDto.getStatus() == null) {
             poll.setCreationDate(pollDto.getCreationDate().truncatedTo(ChronoUnit.MINUTES));
