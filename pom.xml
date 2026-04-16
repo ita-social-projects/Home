@@ -45,7 +45,7 @@
         <commons-text-version>1.9</commons-text-version>
         <h2.version>1.4.200</h2.version>
         <hibernate-validator.version>6.1.7.Final</hibernate-validator.version>
-        <jakarta.mail.version>1.6.5</jakarta.mail.version>
+        <jakarta.mail.version>1.6.8</jakarta.mail.version>
         <jakarta.annotation-api.version>1.3.5</jakarta.annotation-api.version>
         <jakarta.persistence-api.version>2.2.3</jakarta.persistence-api.version>
         <jakarta.transaction-api.version>1.3.3</jakarta.transaction-api.version>
