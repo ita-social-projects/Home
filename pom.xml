@@ -98,7 +98,7 @@
         <spring-web.version>5.2.12.RELEASE</spring-web.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
         <swagger-parser-v3.version>2.0.26</swagger-parser-v3.version>
-        <tomcat-embed-core.version>9.0.41</tomcat-embed-core.version>
+        <tomcat-embed-core.version>9.0.118</tomcat-embed-core.version>
         <uuid-version>4.0.1</uuid-version>
         <validation-api.version>2.0.1.Final</validation-api.version>
 
